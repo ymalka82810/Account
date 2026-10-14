@@ -7,6 +7,7 @@ export default function Balances({ people, debts }) {
     bal.set(d.creditor, bal.get(d.creditor) + d.amount);
     bal.set(d.debtor, bal.get(d.debtor) - d.amount);
   });
+  const max = Math.max(1, ...people.map((p) => Math.abs(bal.get(p.id) || 0)));
   return (
     <div id="balances" className="balances">
       {people.map((p) => {
@@ -16,6 +17,9 @@ export default function Balances({ people, debts }) {
             <div className="name">{p.avatar ? `${p.avatar} ` : ''}{p.name}</div>
             <div className="num">{money(Math.abs(v))}</div>
             <div className="what">{v > 0 ? 'מגיע לו/ה' : v < 0 ? 'חייב/ת' : 'הכול מסודר'}</div>
+            {v !== 0 && (
+              <div className="bal-bar"><div className="bal-bar-fill" style={{ width: `${(Math.abs(v) / max) * 100}%` }} /></div>
+            )}
           </div>
         );
       })}

@@ -1,30 +1,30 @@
 :root {
   color-scheme: light dark;
-  --ink: #1d2b4f;
-  --ink-soft: #55628a;
-  --bg: #eef5fb;
+  --ink: #4a4468;
+  --ink-soft: #8d84ab;
+  --bg: #fbf3f7;
   --card: #ffffff;
-  --line: #d5e1ee;
-  --coin: #f6c945;
-  --coin-deep: #c99a0f;
-  --owe: #e0485f;
-  --owe-bg: #fde6ea;
-  --get: #1f9d74;
-  --get-bg: #dff5ec;
-  --radius: 14px;
+  --line: #f1e1ec;
+  --coin: #ffd97d;
+  --coin-deep: #e0a640;
+  --owe: #f4978e;
+  --owe-bg: #fde2e4;
+  --get: #74c69d;
+  --get-bg: #e2f6ec;
+  --radius: 16px;
   font-family: "Rubik", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-    --ink: #eaf0ff;
-    --ink-soft: #a6b3d6;
-    --bg: #121a33;
-    --card: #1c2750;
-    --line: #2f3d70;
-    --owe-bg: #4a2432;
-    --get-bg: #17413a;
+    --ink: #ece7fb;
+    --ink-soft: #b3a9d6;
+    --bg: #211d33;
+    --card: #2e2847;
+    --line: #413a5e;
+    --owe-bg: #4a2f33;
+    --get-bg: #1c3e37;
   }
 }
 
@@ -96,6 +96,10 @@ h2 { font-size: 1.1rem; margin: 22px 0 10px; }
 .bal.plus { border-inline-start: 6px solid var(--get); }
 .bal.minus { border-inline-start: 6px solid var(--owe); }
 .bal.zero { border-inline-start: 6px solid var(--line); }
+.bal-bar { height: 5px; border-radius: 99px; background: var(--line); margin-top: 8px; overflow: hidden; }
+.bal-bar-fill { height: 100%; border-radius: 99px; }
+.bal.plus .bal-bar-fill { background: var(--get); }
+.bal.minus .bal-bar-fill { background: var(--owe); }
 .plus .num { color: var(--get); }
 .minus .num { color: var(--owe); }
 
@@ -429,6 +433,21 @@ button.small.okbtn { background: var(--get-bg); color: var(--get); border-color:
 .teen-card { display: grid; gap: 4px; margin-bottom: 12px; }
 .teen-card .row:last-child { border-bottom: 0; }
 
+/* ===== חידוד: ילדים (ברירת מחדל) ===== */
+body:not([data-theme]) .card,
+body:not([data-theme]) .tile,
+body:not([data-theme]) .sum,
+body:not([data-theme]) .bigbtn,
+body:not([data-theme]) .bal,
+body:not([data-theme]) .debt,
+body:not([data-theme]) .person {
+  box-shadow: 0 4px 14px rgba(74, 68, 104, .08);
+}
+body:not([data-theme]) button.primary {
+  background: linear-gradient(135deg, var(--coin), #ffb4a2);
+  box-shadow: 0 4px 14px rgba(224, 166, 64, .25);
+}
+
 /* ===== ערכת נושא: הורים ===== */
 body[data-theme="parent"] {
   --ink: #1f2933; --ink-soft: #5f6c7b; --bg: #f5f6f8; --card: #ffffff; --line: #dfe3e8;
@@ -477,9 +496,11 @@ body[data-theme="teen"] .tab { border: 0; border-radius: 99px; padding: 9px 16px
 body[data-theme="teen"] .tab.active { background: var(--coin); color: #fff; }
 body[data-theme="teen"] .sum { border-radius: 20px; }
 body[data-theme="teen"] .sum .num { font-size: 1.9rem; letter-spacing: -.01em; }
-body[data-theme="teen"] .bigbtn { border-radius: 22px; background: var(--card); border-width: 2px; }
+body[data-theme="teen"] .bigbtn { border-radius: 22px; background: var(--card); border-width: 2px; transition: box-shadow .25s ease; }
 body[data-theme="teen"] .bigbtn.owe:hover, body[data-theme="teen"] .bigbtn.owe:focus-visible { box-shadow: 0 0 0 1px var(--owe), 0 8px 24px rgba(255, 107, 138, .15); }
 body[data-theme="teen"] .bigbtn.get:hover, body[data-theme="teen"] .bigbtn.get:focus-visible { box-shadow: 0 0 0 1px var(--get), 0 8px 24px rgba(53, 224, 161, .15); }
+body[data-theme="teen"] .bigbtn.owe:active { box-shadow: 0 0 0 1px var(--owe), 0 4px 12px rgba(255, 107, 138, .08); }
+body[data-theme="teen"] .bigbtn.get:active { box-shadow: 0 0 0 1px var(--get), 0 4px 12px rgba(53, 224, 161, .08); }
 body[data-theme="teen"] .card, body[data-theme="teen"] .debt, body[data-theme="teen"] .person, body[data-theme="teen"] .bal { border-color: var(--line); }
 body[data-theme="teen"] button.primary { border-radius: 16px; background: linear-gradient(135deg, #7c5cff, #5b8cff); }
 body[data-theme="teen"] .chip, body[data-theme="teen"] .av, body[data-theme="teen"] .tile { border-radius: 99px; }
