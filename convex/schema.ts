@@ -17,7 +17,7 @@ export default defineSchema({
     // חסר רק אצל נתונים מהגרסה של משפחה אחת. הם עוברים למשפחה בכניסה הראשונה של הורה.
     familyId: v.optional(v.id("families")),
     name: v.string(),
-    role: v.union(v.literal("parent"), v.literal("child")),
+    role: v.union(v.literal("parent"), v.literal("child"), v.literal("teen")),
     avatar: v.optional(v.string()),
     // קוד סודי (נשמר כגיבוב בלבד). אם חסר - הילד/ה בוחר/ת קוד בכניסה הראשונה.
     pinHash: v.optional(v.string()),
@@ -33,7 +33,13 @@ export default defineSchema({
     // להתראה להורה: כמה נעילות היו ומתי הייתה האחרונה. מתאפס כשקובעים קוד חדש.
     lockCount: v.optional(v.number()),
     lastLockAt: v.optional(v.number()),
-  }).index("by_family", ["familyId"]),
+    // מצב חברים (לבני נוער בלבד). חייב אישור הורה. friendEmail = המייל שדרכו חברים מוסיפים אותו/ה.
+    friendsEnabled: v.optional(v.boolean()),
+    friendsRequested: v.optional(v.boolean()),
+    friendEmail: v.optional(v.string()),
+  })
+    .index("by_family", ["familyId"])
+    .index("by_friendEmail", ["friendEmail"]),
 
   sessions: defineTable({
     personId: v.id("people"),
@@ -71,6 +77,31 @@ export default defineSchema({
     status: v.optional(v.literal("pending")),
   })
     .index("by_family", ["familyId"])
+    .index("by_from", ["from"])
+    .index("by_to", ["to"]),
+
+  // חברות בין בני נוער (גם ממשפחות שונות). a ביקש/ה, b צריך/ה לאשר.
+  friendships: defineTable({
+    a: v.id("people"),
+    b: v.id("people"),
+    status: v.union(v.literal("pending"), v.literal("accepted")),
+    createdAt: v.number(),
+  })
+    .index("by_a", ["a"])
+    .index("by_b", ["b"]),
+
+  // חובות והחזרים בין חברים. רשומה חדשה ממתינה לאישור של החבר/ה השני/ה ולא נספרת ביתרות.
+  friendEntries: defineTable({
+    kind: v.union(v.literal("debt"), v.literal("payment")),
+    from: v.id("people"),
+    to: v.id("people"),
+    amount: v.number(), // באגורות
+    note: v.string(),
+    date: v.string(), // YYYY-MM-DD
+    createdBy: v.id("people"),
+    createdAt: v.number(),
+    status: v.optional(v.literal("pending")),
+  })
     .index("by_from", ["from"])
     .index("by_to", ["to"]),
 

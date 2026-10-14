@@ -127,6 +127,7 @@
 
   <nav class="tabs" role="tablist" aria-label="תפריט ראשי">
     <button role="tab" class="tab active" data-tab="home" aria-selected="true">🏠 הכסף שלי</button>
+    <button role="tab" class="tab teen-only" data-tab="friends" aria-selected="false" hidden>🤝 חברים</button>
     <button role="tab" class="tab" data-tab="history" aria-selected="false">📜 מה היה</button>
     <button role="tab" class="tab parent-only" data-tab="family" aria-selected="false" hidden>👨‍👩‍👧 המשפחה</button>
   </nav>
@@ -153,11 +154,51 @@
       <button id="emailBtn" class="ghost linkish parent-only" type="button">✉️ הוספת מייל לשחזור קוד</button>
     </section>
 
+    <section id="tab-friends" class="panel">
+      <div id="friendsLocked" class="card friends-lock" hidden>
+        <div class="big-emoji" aria-hidden="true">🔒</div>
+        <h3>מצב חברים</h3>
+        <p class="hint">כאן רושמים חובות עם חברים: מי קנה למי, ומי צריך להחזיר. החבר/ה צריכים גם הם את האפליקציה, וההורים שלך צריכים לאשר.</p>
+        <p id="friendsLockNote" class="hint"></p>
+        <button id="friendsRequestBtn" class="primary" type="button">בקשת אישור מההורים</button>
+      </div>
+
+      <div id="friendsOn" hidden>
+        <div class="summary">
+          <div class="sum owe"><div class="lbl">אני חייב/ת לחברים</div><div id="fSumOwe" class="num"></div></div>
+          <div class="sum get"><div class="lbl">חברים חייבים לי</div><div id="fSumGet" class="num"></div></div>
+        </div>
+        <div class="bigbtns">
+          <button id="btnFriendIOwe" class="bigbtn owe" type="button"><span aria-hidden="true">💸</span>אני חייב/ת לחבר/ה</button>
+          <button id="btnFriendOwesMe" class="bigbtn get" type="button"><span aria-hidden="true">🤝</span>חבר/ה חייב/ת לי</button>
+        </div>
+
+        <div id="friendsInbox"></div>
+
+        <h2>החברים שלי</h2>
+        <div id="friendsList"></div>
+
+        <form id="friendForm" class="form card" autocomplete="off">
+          <h3>הוספת חבר/ה</h3>
+          <p class="hint">כתבו את המייל שהחבר/ה רשמו אצל ההורים שלהם באפליקציה. נשלחת להם בקשה, והם צריכים לאשר. זה עובד רק אם גם לחבר/ה יש מצב חברים.</p>
+          <label class="field"><span>המייל של החבר/ה</span>
+            <input id="friendEmailInput" type="email" dir="ltr" maxlength="254" autocomplete="off" placeholder="name@example.com" required></label>
+          <p id="friendError" class="error" role="alert" hidden></p>
+          <button class="primary" type="submit">שליחת בקשה</button>
+          <p class="hint">המייל שלך לחברים: <span id="myFriendEmail" dir="ltr"></span></p>
+        </form>
+
+        <h2>היסטוריה עם חברים</h2>
+        <div id="friendHistory"></div>
+      </div>
+    </section>
+
     <section id="tab-history" class="panel">
       <div id="myHistory"></div>
     </section>
 
     <section id="tab-family" class="panel">
+      <div id="pendingBoxParent"></div>
       <div id="legacyBox"></div>
       <div id="codesBox"></div>
       <h2>יתרות</h2>
@@ -183,13 +224,19 @@
         <button class="primary" type="submit">הוספה</button>
       </form>
 
+      <div id="teenFriendsSection" hidden>
+        <h2>מה הנוער רושם עם חברים</h2>
+        <p class="hint">לקריאה בלבד. כל רישום עם חבר/ה ממתין גם לאישור שלהם.</p>
+        <div id="teenFriendsBox"></div>
+      </div>
+
       <h2>בני המשפחה</h2>
       <div id="peopleList"></div>
       <form id="personForm" class="form card" autocomplete="off">
         <h3>הוספת בן/בת משפחה</h3>
         <label class="field"><span>שם</span><input id="personName" type="text" maxlength="20" required></label>
         <label class="field"><span>תפקיד</span>
-          <select id="personRole"><option value="child">ילד/ה</option><option value="parent">הורה</option></select></label>
+          <select id="personRole"><option value="child">ילד/ה</option><option value="teen">נער/ה</option><option value="parent">הורה</option></select></label>
         <div class="field"><span>דמות</span><div id="personAvatars" class="avatars"></div></div>
         <label class="field"><span>קוד סודי (לא חובה — אפשר שהילד/ה יבחרו לבד)</span>
           <input id="personPin" type="password" inputmode="numeric" pattern="\d{4}" maxlength="4" autocomplete="new-password"></label>

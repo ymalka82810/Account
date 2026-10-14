@@ -7,7 +7,7 @@
   const CODE_KEY = 'kupa-code';
   const DEVICE_KEY = 'kupa-device';
   const UNDO_MS = 10 * 60 * 1000;
-  const AVATARS = ['🦊', '🐼', '🦁', '🐯', '🐸', '🐵', '🦄', '🐙', '🐨', '🐶', '🐱', '🚀'];
+  const AVATARS = ['🦊', '🐼', '🦁', '🐯', '🐸', '🐵', '🦄', '🐙', '🐨', '🐶', '🐱', '🚀', '😎', '🎧', '🛹', '⚡', '🔥', '🎮'];
 
   const fmt = new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS' });
   const money = (agorot) => fmt.format(agorot / 100);
@@ -24,6 +24,9 @@
   let pinFlow = null;     // {person, legacy, mode:'login'|'new', first, entered, busy}
   let unsubData = null;
   let migrating = false;
+  let fdata = null;        // נתוני מצב חברים (friends:get): בני נוער רואים חברים, הורים רואים סקירה
+  let unsubFriends = null;
+  let tabInit = false;     // הלשונית ההתחלתית נבחרת פעם אחת בכל כניסה
 
   // ---------- helpers ----------
   function el(tag, props = {}, ...kids) {
@@ -88,13 +91,18 @@
 
   function show(name) {
     document.querySelectorAll('.screen').forEach((s) => s.classList.toggle('active', s.id === 'screen-' + name));
+    if (name !== 'app') applyTheme('');
     window.scrollTo({ top: 0 });
   }
 
   // ---------- חישובים ----------
-  const person = (id) => (data ? data.people.find((p) => p.id === id) : null);
+  const person = (id) => (data
+    ? (data.people.find((p) => p.id === id) || (fdata && fdata.people && fdata.people[id]) || null)
+    : null);
   const isMe = (id) => !!data && id === data.me.id;
   const isParent = () => !!data && data.me.role === 'parent';
+  const isTeen = () => !!data && data.me.role === 'teen';
+  const roleLabel = (r) => (r === 'parent' ? 'הורה' : r === 'teen' ? 'נער/ה' : 'ילד/ה');
   const nameOf = (id) => (person(id) ? person(id).name : 'לא ידוע');
   const subjectWord = (id) => (isMe(id) ? 'אני' : nameOf(id));
   const toWord = (id) => (isMe(id) ? 'לי' : 'ל' + nameOf(id));
@@ -103,9 +111,9 @@
   const isPending = (e) => e.status === 'pending';
 
   // כמה a חייב ל-b (יכול להיות שלילי)
-  function pairOwes(a, b) {
+  function pairOwes(a, b, list = data.entries) {
     let sum = 0;
-    for (const e of data.entries) {
+    for (const e of list) {
       if (isPending(e)) continue;
       const sign = e.kind === 'debt' ? 1 : -1;
       if (e.from === a && e.to === b) sum += sign * e.amount;
@@ -145,8 +153,14 @@
 
   function subscribeData() {
     if (unsubData) { unsubData(); unsubData = null; }
+    if (unsubFriends) { unsubFriends(); unsubFriends = null; }
     data = undefined;
+    fdata = null;
     if (!token) return;
+    unsubFriends = client.onUpdate('friends:get', { token }, (d) => {
+      fdata = d || null;
+      if (data) renderApp();
+    }, () => {});
     unsubData = client.onUpdate('data:get', { token }, (d) => {
       if (d === null) { dropSession(); return; }
       if (d.legacy) { handleLegacySession(d); return; }
@@ -177,7 +191,10 @@
     token = '';
     localStorage.removeItem(TOKEN_KEY);
     if (unsubData) { unsubData(); unsubData = null; }
+    if (unsubFriends) { unsubFriends(); unsubFriends = null; }
     data = undefined;
+    fdata = null;
+    tabInit = false;
     pinFlow = null;
     closeSheet();
     codeChecked = false;
@@ -472,7 +489,7 @@
 
     function stepPerson() {
       const fixed = st.from || st.to;
-      const others = data.people.filter((p) => p.id !== fixed);
+      const others = (opts.people || data.people).filter((p) => p.id !== fixed);
       const q = opts.kind === 'debt'
         ? (isMe(st.from) ? 'למי אני חייב/ת?' : 'מי חייב/ת לי?')
         : 'עם מי?';
@@ -534,6 +551,7 @@
           const agorot = Math.round(parseFloat(st.amount || '0') * 100);
           if (!Number.isFinite(agorot) || agorot <= 0) { err.textContent = 'כתבו סכום גדול מאפס.'; return; }
           if (agorot > 1_000_000) { err.textContent = 'הסכום גדול מדי.'; return; }
+          if (opts.maxEntry && agorot > opts.maxEntry) { err.textContent = `בין חברים אפשר לרשום עד ${money(opts.maxEntry)} בכל פעם.`; return; }
           if (maxAmount && agorot > maxAmount) { err.textContent = `אפשר להחזיר עד ${money(maxAmount)}.`; return; }
           st.agorot = agorot;
           stepFinal();
@@ -559,13 +577,13 @@
       saveBtn.addEventListener('click', async () => {
         saveBtn.disabled = true;
         try {
-          await call('entries:add', {
+          await call(opts.endpoint || 'entries:add', {
             token, kind: opts.kind, from: st.from, to: st.to, amount: st.agorot,
             note: isDebt ? st.note.trim() : (st.note.trim() || 'החזר'), date: today(),
           });
           closeSheet();
-          toast(!isParent() ? 'נשלח להורה לאישור ⏳' : isDebt ? 'החוב נשמר ✅' : 'ההחזר נשמר ✅');
-          switchTab('home');
+          toast(opts.doneToast || (!isParent() ? 'נשלח להורה לאישור ⏳' : isDebt ? 'החוב נשמר ✅' : 'ההחזר נשמר ✅'));
+          switchTab(opts.returnTab || 'home');
         } catch (e) { err.textContent = errMsg(e); saveBtn.disabled = false; }
       });
 
@@ -626,7 +644,7 @@
   const canDelete = (e) => isParent()
     || (e.createdBy === data.me.id && (isPending(e) || Date.now() - e.createdAt < UNDO_MS));
 
-  function renderEntries(box, list, emptyText) {
+  function renderEntries(box, list, emptyText, opts = {}) {
     box.replaceChildren();
     if (!list.length) { box.append(el('div', { class: 'empty', text: emptyText })); return; }
     [...list].sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt).forEach((e) => {
@@ -635,7 +653,7 @@
       const row = el('div', { class: 'row' + (isPending(e) ? ' pending' : '') },
         el('div', { class: 'text' },
           el('div', {}, el('span', { class: 'tag ' + e.kind, text: isDebt ? 'חוב' : 'החזר' }),
-            isPending(e) ? el('span', { class: 'tag pending', text: '⏳ ממתין לאישור' }) : null, ' ', title),
+            isPending(e) ? el('span', { class: 'tag pending', text: opts.pendingLabel ? opts.pendingLabel(e) : '⏳ ממתין לאישור' }) : null, ' ', title),
           el('div', { class: 'meta', text: [fmtDate(e.date), e.note].filter(Boolean).join(' • ') })),
         el('strong', { text: money(e.amount) }));
       if (canDelete(e)) {
@@ -643,7 +661,7 @@
           class: 'small danger', type: 'button', text: isParent() ? 'מחיקה' : 'ביטול',
           onclick: async () => {
             if (!confirm(isParent() ? 'למחוק את הרשומה הזאת?' : 'לבטל את מה שרשמת?')) return;
-            try { await call('entries:remove', { token, id: e.id }); toast('הרשומה נמחקה'); }
+            try { await call(opts.removeEndpoint || 'entries:remove', { token, id: e.id }); toast('הרשומה נמחקה'); }
             catch (err) { toast(errMsg(err)); }
           },
         }));
@@ -653,16 +671,42 @@
   }
 
   // ---------- ממתין לאישור ----------
+  const friendRequests = () => (isParent() ? data.people.filter((p) => p.friendsRequested) : []);
+  const parentPendingCount = () => data.entries.filter(isPending).length + friendRequests().length;
+
   function renderPending() {
-    const box = $('pendingBox');
+    const parentView = isParent();
+    // להורים האישורים בראש הסקירה המשפחתית. לאחרים, בדף הבית.
+    const box = parentView ? $('pendingBoxParent') : $('pendingBox');
+    (parentView ? $('pendingBox') : $('pendingBoxParent')).replaceChildren();
     box.replaceChildren();
     const list = data.entries.filter(isPending);
-    if (!list.length) return;
-    if (!isParent()) {
+    if (!parentView) {
+      if (!list.length) return;
       box.append(el('div', { class: 'card notice' },
         el('p', { text: `⏳ ${list.length === 1 ? 'רישום אחד מחכה' : list.length + ' רישומים מחכים'} לאישור של הורה. אפשר לראות אותם ב"מה היה".` })));
       return;
     }
+
+    const reqs = friendRequests();
+    if (reqs.length) {
+      const card = el('div', { class: 'card pending-card' }, el('h3', { text: `🤝 בקשות למצב חברים (${reqs.length})` }));
+      reqs.forEach((p) => card.append(el('div', { class: 'row' },
+        el('div', { class: 'text' },
+          el('div', { text: `${p.name} מבקש/ת לרשום חובות עם חברים` }),
+          el('div', { class: 'meta', text: 'חברים נוספים לפי כתובת מייל. תראו כל מה שנרשם בסקירה.' })),
+        el('div', { class: 'acts' },
+          el('button', { class: 'small okbtn', type: 'button', text: '✅ אישור', onclick: () => openFriendApprove(p) }),
+          el('button', {
+            class: 'small danger', type: 'button', text: 'דחייה', onclick: async () => {
+              try { await call('friends:declineAccess', { token, personId: p.id }); toast('הבקשה נדחתה'); }
+              catch (err) { toast(errMsg(err)); }
+            },
+          })))));
+      box.append(card);
+    }
+
+    if (!list.length) return;
     const card = el('div', { class: 'card pending-card' }, el('h3', { text: `⏳ ממתין לאישור (${list.length})` }));
     [...list].sort((x, y) => x.createdAt - y.createdAt).forEach((e) => {
       const isDebt = e.kind === 'debt';
@@ -687,6 +731,27 @@
           }))));
     });
     box.append(card);
+  }
+
+  // הורה מאשר מצב חברים לנער/ה וקובע את המייל שדרכו חברים יוסיפו אותו/ה.
+  function openFriendApprove(p) {
+    const email = el('input', { type: 'email', dir: 'ltr', autocomplete: 'off', placeholder: 'name@example.com', maxlength: '254' });
+    email.value = p.friendEmail || '';
+    const err = el('p', { class: 'error', role: 'alert' });
+    openSheet('מצב חברים ל' + p.name, el('div', { class: 'form' },
+      el('p', { class: 'hint', text: `${p.name} יוכל/תוכל להוסיף חברים לפי מייל ולרשום איתם חובות. כל רישום ממתין גם לאישור של החבר/ה, ואתם רואים אותם בסקירה. אפשר לכבות בכל רגע.` }),
+      el('label', { class: 'field' }, el('span', { text: `המייל של ${p.name}` }), email),
+      el('p', { class: 'hint', text: 'חברים מוסיפים את הנער/ה לפי המייל הזה. לא נשלח אליו שום דבר, הוא משמש רק לחיפוש.' }),
+      err,
+      el('button', {
+        class: 'primary', type: 'button', text: 'אישור מצב חברים', onclick: async () => {
+          try {
+            await call('friends:approveAccess', { token, personId: p.id, email: email.value });
+            closeSheet();
+            toast('מצב חברים אושר ✅');
+          } catch (e) { err.textContent = errMsg(e); }
+        },
+      })));
   }
 
   // ---------- התראות (Push) ----------
@@ -860,9 +925,28 @@
     $('peopleList').replaceChildren(...data.people.map((p) => el('div', { class: 'person' },
       el('span', { class: 'avatar-md', 'aria-hidden': 'true', text: p.avatar }),
       el('div', { class: 'text' }, p.name, ' ',
-        el('span', { class: 'meta', text: (p.role === 'parent' ? 'הורה' : 'ילד/ה') + (p.hasPin ? '' : ' • עוד לא בחר/ה קוד') }),
-        p.lockAlert ? el('div', { class: 'meta', style: 'color:#b45309', text: `⚠️ הקוד של ${p.name} ננעל ${p.lockAlert.count === 1 ? 'פעם אחת' : p.lockAlert.count + ' פעמים'} אחרי ניסיונות שגויים. אם זה לא הוא/היא, כדאי לקבוע קוד חדש.` }) : null),
+        el('span', { class: 'meta', text: roleLabel(p.role) + (p.hasPin ? '' : ' • עוד לא בחר/ה קוד') }),
+        p.lockAlert ? el('div', { class: 'meta', style: 'color:#b45309', text: `⚠️ הקוד של ${p.name} ננעל ${p.lockAlert.count === 1 ? 'פעם אחת' : p.lockAlert.count + ' פעמים'} אחרי ניסיונות שגויים. אם זה לא הוא/היא, כדאי לקבוע קוד חדש.` }) : null,
+        p.role === 'teen' && p.friendsEnabled ? el('div', { class: 'meta', text: `🤝 מצב חברים פעיל • ${p.friendEmail || ''}` }) : null),
       el('button', { class: 'small', type: 'button', text: 'קוד חדש', onclick: () => openResetPin(p) }),
+      p.role === 'parent' ? null : el('button', {
+        class: 'small', type: 'button', text: p.role === 'teen' ? 'חזרה לילד/ה' : 'הפיכה לנער/ה',
+        onclick: async () => {
+          const toRole = p.role === 'teen' ? 'child' : 'teen';
+          if (toRole === 'child' && p.friendsEnabled && !confirm(`${p.name} יאבד/תאבד את מצב החברים. להמשיך?`)) return;
+          try { await call('people:setRole', { token, id: p.id, role: toRole }); toast(toRole === 'teen' ? `${p.name} עכשיו נער/ה` : `${p.name} עכשיו ילד/ה`); }
+          catch (e) { toast(errMsg(e)); }
+        },
+      }),
+      p.role === 'teen' && p.friendsEnabled ? el('button', {
+        class: 'small danger', type: 'button', text: 'כיבוי חברים',
+        onclick: async () => {
+          if (!confirm(`לכבות את מצב החברים של ${p.name}? אי אפשר יהיה להוסיף רישומים חדשים עם חברים.`)) return;
+          try { await call('friends:disableAccess', { token, personId: p.id }); toast('מצב חברים כובה'); }
+          catch (e) { toast(errMsg(e)); }
+        },
+      }) : null,
+
       p.id === data.me.id ? null : el('button', {
         class: 'small danger', type: 'button', text: 'הסרה', 'aria-label': 'הסרת ' + p.name,
         onclick: async () => {
@@ -873,10 +957,178 @@
       }))));
 
     renderEntries($('allHistory'), data.entries, 'עדיין אין רשומות.');
+    renderTeenOverview();
     renderRecurring();
     renderCodes();
     renderLegacy();
   }
+
+  // ---------- סקירה להורים: מה הנוער רושם עם חברים ----------
+  function renderTeenOverview() {
+    const teens = fdata && fdata.kind === 'parent' ? fdata.teens : [];
+    $('teenFriendsSection').hidden = teens.length === 0;
+    $('teenFriendsBox').replaceChildren(...teens.map((t) => el('div', { class: 'card teen-card' },
+      el('h3', { text: `🤝 ${t.name}` }),
+      el('div', { class: 'meta', text: t.friends.length ? 'חברים: ' + t.friends.join(', ') : 'עוד אין חברים מאושרים' }),
+      ...(t.entries.length ? t.entries.map((e) => el('div', { class: 'row' },
+        el('div', { class: 'text' },
+          el('div', {},
+            el('span', { class: 'tag ' + e.kind, text: e.kind === 'debt' ? 'חוב' : 'החזר' }),
+            e.status === 'pending' ? el('span', { class: 'tag pending', text: '⏳ ממתין לחבר/ה' }) : null,
+            ' ', `${e.fromName} ${e.kind === 'debt' ? 'חייב/ת' : 'החזיר/ה'} ל${e.toName}`),
+          el('div', { class: 'meta', text: [fmtDate(e.date), e.note].filter(Boolean).join(' • ') })),
+        el('strong', { text: money(e.amount) })))
+        : [el('div', { class: 'empty', text: 'עוד לא נרשם כלום.' })]))));
+  }
+
+  // ---------- מצב חברים (בני נוער) ----------
+  const FRIEND_MAX = 50000; // באגורות, כמו בשרת
+  const friendList = () => (fdata && fdata.kind === 'teen' && fdata.enabled
+    ? fdata.friendships.filter((f) => f.status === 'accepted').map((f) => fdata.people[f.other]).filter(Boolean)
+    : []);
+  const friendFlow = (opts) => ({
+    ...opts, people: friendList(), endpoint: 'friends:addEntry', maxEntry: FRIEND_MAX,
+    doneToast: 'נשלח לחבר/ה לאישור ⏳', returnTab: 'friends',
+  });
+  const friendsInboxCount = () => (fdata && fdata.kind === 'teen' && fdata.enabled
+    ? fdata.friendships.filter((f) => f.status === 'pending' && f.incoming).length
+      + fdata.entries.filter((e) => isPending(e) && e.createdBy !== data.me.id).length
+    : 0);
+
+  function startFriendFlow(opts) {
+    if (!friendList().length) { toast('עוד אין חברים מאושרים. הוסיפו חבר/ה לפי המייל שלהם.'); return; }
+    openEntryFlow(friendFlow(opts));
+  }
+
+  async function removeFriendship(f, p) {
+    if (!confirm(`להסיר את ${p.name} מהחברים?`)) return;
+    try { await call('friends:removeFriend', { token, friendshipId: f.id }); toast('החבר/ה הוסרו'); }
+    catch (e) { toast(errMsg(e)); }
+  }
+
+  function renderFriends() {
+    const locked = $('friendsLocked'), on = $('friendsOn');
+    if (!fdata || fdata.kind !== 'teen') { locked.hidden = true; on.hidden = true; return; }
+    if (!fdata.enabled) {
+      locked.hidden = false; on.hidden = true;
+      $('friendsRequestBtn').hidden = fdata.requested;
+      $('friendsLockNote').textContent = fdata.requested ? '⏳ הבקשה נשלחה להורים. נעדכן אותך כשיאשרו.' : '';
+      return;
+    }
+    locked.hidden = true; on.hidden = false;
+    const me = data.me.id;
+    const entries = fdata.entries;
+    let owe = 0, get = 0;
+    const cards = [];
+    for (const f of fdata.friendships) {
+      const p = fdata.people[f.other];
+      if (!p) continue;
+      if (f.status !== 'accepted') {
+        if (f.incoming) continue; // בקשות נכנסות מוצגות בתיבה למעלה
+        cards.push(el('div', { class: 'debt' },
+          el('span', { class: 'avatar-md', 'aria-hidden': 'true', text: p.avatar }),
+          el('div', { class: 'text' },
+            el('div', { class: 'who', text: p.name }),
+            el('div', { class: 'meta', text: '⏳ ממתין שיאשרו את הבקשה' })),
+          el('button', { class: 'small', type: 'button', text: 'ביטול', onclick: () => removeFriendship(f, p) })));
+        continue;
+      }
+      const n = pairOwes(me, p.id, entries);
+      const iOwe = n > 0;
+      const amount = Math.abs(n);
+      if (n > 0) owe += amount; else if (n < 0) get += amount;
+      cards.push(el('div', { class: 'debt' + (n === 0 ? '' : iOwe ? ' owe' : ' get') },
+        el('span', { class: 'avatar-md', 'aria-hidden': 'true', text: p.avatar }),
+        el('div', { class: 'text' },
+          el('div', { class: 'who', text: n === 0 ? p.name : iOwe ? `אני חייב/ת ל${p.name}` : `${p.name} חייב/ת לי` }),
+          el('div', { class: 'amt', text: n === 0 ? 'הכול מסודר ✅' : money(amount) })),
+        n === 0 ? null : el('button', {
+          class: 'small strongbtn', type: 'button', text: iOwe ? '💰 שילמתי' : '💰 קיבלתי',
+          onclick: () => openEntryFlow(friendFlow(iOwe
+            ? { kind: 'payment', from: me, to: p.id, suggest: amount }
+            : { kind: 'payment', from: p.id, to: me, suggest: amount })),
+        }),
+        el('button', { class: 'small danger', type: 'button', text: 'הסרה', 'aria-label': 'הסרת ' + p.name, onclick: () => removeFriendship(f, p) })));
+    }
+    $('fSumOwe').textContent = money(owe);
+    $('fSumGet').textContent = money(get);
+    const list = $('friendsList');
+    list.replaceChildren();
+    if (!cards.length) list.append(el('div', { class: 'empty' }, el('div', { class: 'big-emoji', text: '🤝', 'aria-hidden': 'true' }), 'עוד אין חברים. הוסיפו חבר/ה לפי המייל שלהם.'));
+    else cards.forEach((c) => list.append(c));
+
+    // תיבת נכנס: בקשות חברות, ורישומים שחבר/ה רשמו וממתינים לאישור שלך.
+    const inbox = [];
+    const incoming = fdata.friendships.filter((f) => f.status === 'pending' && f.incoming);
+    if (incoming.length) {
+      inbox.push(el('div', { class: 'card pending-card' }, el('h3', { text: `🤝 בקשות חברות (${incoming.length})` }),
+        incoming.map((f) => {
+          const p = fdata.people[f.other];
+          return el('div', { class: 'row' },
+            el('span', { class: 'avatar-md', 'aria-hidden': 'true', text: p ? p.avatar : '🙂' }),
+            el('div', { class: 'text', text: `${p ? p.name : 'מישהו'} רוצה להוסיף אותך` }),
+            el('div', { class: 'acts' },
+              el('button', {
+                class: 'small okbtn', type: 'button', text: '✅ אישור', onclick: async () => {
+                  try { await call('friends:respondFriend', { token, friendshipId: f.id, accept: true }); toast('חבר/ה נוספו ✅'); }
+                  catch (err) { toast(errMsg(err)); }
+                },
+              }),
+              el('button', {
+                class: 'small danger', type: 'button', text: 'דחייה', onclick: async () => {
+                  try { await call('friends:respondFriend', { token, friendshipId: f.id, accept: false }); toast('הבקשה נדחתה'); }
+                  catch (err) { toast(errMsg(err)); }
+                },
+              })));
+        })));
+    }
+    const waiting = entries.filter((e) => isPending(e) && e.createdBy !== me);
+    if (waiting.length) {
+      inbox.push(el('div', { class: 'card pending-card' }, el('h3', { text: `⏳ ממתין לאישור שלך (${waiting.length})` }),
+        [...waiting].sort((x, y) => x.createdAt - y.createdAt).map((e) => el('div', { class: 'row' },
+          el('div', { class: 'text' },
+            el('div', { text: `${nameOf(e.createdBy)} רשם/ה: ${subjectWord(e.from)} ${e.kind === 'debt' ? 'חייב/ת' : 'החזיר/ה'} ${toWord(e.to)}` }),
+            el('div', { class: 'meta', text: [money(e.amount), fmtDate(e.date), e.note].filter(Boolean).join(' • ') })),
+          el('div', { class: 'acts' },
+            el('button', {
+              class: 'small okbtn', type: 'button', text: '✅ נכון', onclick: async () => {
+                try { await call('friends:confirmEntry', { token, id: e.id }); toast('אושר ✅'); }
+                catch (err) { toast(errMsg(err)); }
+              },
+            }),
+            el('button', {
+              class: 'small danger', type: 'button', text: 'לא נכון', onclick: async () => {
+                if (!confirm('לדחות? הרישום יימחק.')) return;
+                try { await call('friends:rejectEntry', { token, id: e.id }); toast('הרישום נדחה'); }
+                catch (err) { toast(errMsg(err)); }
+              },
+            }))))));
+    }
+    $('friendsInbox').replaceChildren(...inbox);
+
+    $('myFriendEmail').textContent = fdata.email || '';
+    renderEntries($('friendHistory'), entries, 'עוד לא נרשם כלום עם חברים.', {
+      removeEndpoint: 'friends:removeEntry',
+      pendingLabel: (e) => (e.createdBy === me ? '⏳ ממתין לחבר/ה' : '⏳ ממתין לאישור שלך'),
+    });
+  }
+
+  $('friendsRequestBtn').addEventListener('click', async () => {
+    try { await call('friends:requestAccess', { token }); toast('הבקשה נשלחה להורים ⏳'); }
+    catch (e) { toast(errMsg(e)); }
+  });
+  $('btnFriendIOwe').addEventListener('click', () => startFriendFlow({ kind: 'debt', from: data.me.id }));
+  $('btnFriendOwesMe').addEventListener('click', () => startFriendFlow({ kind: 'debt', to: data.me.id }));
+  $('friendForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const err = $('friendError');
+    err.hidden = true;
+    try {
+      await call('friends:addFriend', { token, email: $('friendEmailInput').value });
+      $('friendEmailInput').value = '';
+      toast('אם לחבר/ה יש מצב חברים, נשלחה להם בקשה 🤝');
+    } catch (e) { err.textContent = errMsg(e); err.hidden = false; }
+  });
 
   // ---------- קודי הצטרפות ----------
   async function shareCode(title, code) {
@@ -1128,21 +1380,54 @@
       })));
   }
 
+  // ---------- ערכות נושא ותוויות ----------
+  const THEME_COLOR = { parent: '#1f2933', child: '#1d2b4f', teen: '#2a1b6e' };
+  const TAB_LABELS = {
+    parent: { family: 'סקירה משפחתית', home: 'הכסף שלי', history: 'היסטוריה' },
+    child: { home: '🏠 הכסף שלי', history: '📜 מה היה' },
+    teen: { home: '💰 הכסף שלי', friends: '🤝 חברים', history: '📜 היסטוריה' },
+  };
+
+  function applyTheme(role) {
+    if (role) document.body.dataset.theme = role; else delete document.body.dataset.theme;
+    const tc = document.querySelector('meta[name="theme-color"]');
+    if (tc) tc.setAttribute('content', THEME_COLOR[role] || THEME_COLOR.child);
+  }
+
   // ---------- הרכבת המסך הראשי ----------
   function renderApp() {
+    const role = data.me.role;
+    applyTheme(role);
     $('meAvatar').textContent = data.me.avatar;
     $('meName').textContent = data.me.name;
     $('familyName').textContent = data.family.name;
     if (isParent()) localStorage.setItem(CODE_KEY, data.family.childCode);
     document.querySelectorAll('.parent-only').forEach((n) => (n.hidden = !isParent()));
+    document.querySelectorAll('.teen-only').forEach((n) => (n.hidden = !isTeen()));
     $('emailBtn').textContent = data.me.email ? '✉️ מייל לשחזור: ' + data.me.email : '✉️ הוספת מייל לשחזור קוד';
+
+    const labels = TAB_LABELS[role] || TAB_LABELS.child;
+    document.querySelectorAll('.tab').forEach((t) => {
+      const count = t.dataset.tab === 'family' ? (isParent() ? parentPendingCount() : 0)
+        : t.dataset.tab === 'friends' ? friendsInboxCount() : 0;
+      t.replaceChildren(...[labels[t.dataset.tab] || t.textContent, count ? el('span', { class: 'badge', text: String(count) }) : null].filter((x) => x !== null));
+    });
+
     renderHome();
     renderPending();
     renderPushBtn();
     syncPush();
     renderEntries($('myHistory'), data.entries.filter((e) => e.from === data.me.id || e.to === data.me.id), 'עדיין לא נרשם כלום.');
     if (isParent()) renderFamily();
-    else if (document.querySelector('.tab.active').dataset.tab === 'family') switchTab('home');
+    if (isTeen()) renderFriends();
+
+    if (!tabInit) {
+      tabInit = true;
+      switchTab(isParent() ? 'family' : 'home');
+    } else {
+      const active = document.querySelector('.tab.active').dataset.tab;
+      if ((active === 'family' && !isParent()) || (active === 'friends' && !isTeen())) switchTab('home');
+    }
   }
 
   function switchTab(name) {

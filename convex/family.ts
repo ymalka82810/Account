@@ -1,5 +1,6 @@
 import { mutation } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
+import { purgeFriends } from "./friends";
 import { cleanFamilyName, freshCode, requireParent } from "./lib";
 
 export const rename = mutation({
@@ -42,6 +43,7 @@ export const remove = mutation({
       for (const s of await ctx.db.query("pushSubs").withIndex("by_person", (q) => q.eq("personId", p._id)).collect()) {
         await ctx.db.delete(s._id);
       }
+      await purgeFriends(ctx, p._id);
       await ctx.db.delete(p._id);
     }
     await ctx.db.delete(familyId);

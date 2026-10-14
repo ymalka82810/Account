@@ -41,6 +41,10 @@ export const get = query({
         lockAlert: me.role === "parent" && !!p.lastLockAt && Date.now() - p.lastLockAt < ALERT_WINDOW_MS
           ? { count: p.lockCount ?? 1, at: p.lastLockAt }
           : null,
+        // מצב חברים (בני נוער). המייל והבקשות מוצגים להורים בלבד.
+        friendsEnabled: !!p.friendsEnabled,
+        friendsRequested: me.role === "parent" ? !!p.friendsRequested : false,
+        friendEmail: me.role === "parent" ? p.friendEmail ?? null : null,
       })),
       entries: entries.map((e) => ({
         id: e._id, kind: e.kind, from: e.from, to: e.to, amount: e.amount, note: e.note,
