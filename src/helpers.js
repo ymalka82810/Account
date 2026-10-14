@@ -1,12 +1,15 @@
 // ---------- עזרים כלליים ----------
 
 let toastTimer;
+let toastMsg = '';
+const toastListeners = new Set();
+export const subscribeToast = (fn) => { toastListeners.add(fn); return () => toastListeners.delete(fn); };
+export const toastMessage = () => toastMsg;
+function setToast(m) { toastMsg = m; toastListeners.forEach((fn) => fn()); }
 export function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.hidden = false;
+  setToast(msg);
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => (t.hidden = true), 2800);
+  toastTimer = setTimeout(() => setToast(''), 2800);
 }
 
 export const today = () => {

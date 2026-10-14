@@ -3,9 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { ConvexProvider } from 'convex/react';
 import { client } from './lib/client.js';
 import { SheetProvider } from './components/Sheet.jsx';
+import Toast from './components/Toast.jsx';
 import App from './App.jsx';
 
-const tree = <SheetProvider><App /></SheetProvider>;
+const tree = <SheetProvider><App /><Toast /></SheetProvider>;
 createRoot(document.getElementById('root')).render(client ? <ConvexProvider client={client}>{tree}</ConvexProvider> : tree);
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
