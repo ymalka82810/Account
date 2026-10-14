@@ -206,11 +206,13 @@ function Root() {
 // לגודל מטבע חצי שקל (0.9 שנ' בסך הכול). אז מבזיקים ניצוצות והוא שוקע לאחור ונעלם
 // במהירות (כ-0.35 שנ'), ולבסוף האריח האמיתי נפתח וגדל מאותה נקודה (1.5 שנ').
 const COIN_SIZE = 192; // הגודל הסופי של גלגל השיניים לפני השקיעה
-function GearLaunch({ fromRect, onDone }) {
+function GearLaunch({ fromRect, onSinking, onDone }) {
   const [phase, setPhase] = useState('start'); // start -> flying -> sinking
   // onDone ב-ref כדי שרינדור מחדש של ההורה לא יאפס את הטיימר של הסיום
   const onDoneRef = useRef(onDone);
   onDoneRef.current = onDone;
+  const onSinkingRef = useRef(onSinking);
+  onSinkingRef.current = onSinking;
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setPhase('flying'));
@@ -223,6 +225,7 @@ function GearLaunch({ fromRect, onDone }) {
   }, [phase]);
   useEffect(() => {
     if (phase !== 'sinking') return;
+    onSinkingRef.current();
     const t = setTimeout(() => onDoneRef.current(), 350);
     return () => clearTimeout(t);
   }, [phase]);
@@ -240,15 +243,26 @@ function GearLaunch({ fromRect, onDone }) {
           <span className="gear-launch-icon">⚙️</span>
         </div>
       </div>
-      {/* הניצוצות בשכבה נפרדת, כדי שלא ידהו ולא יסתובבו יחד עם הגלגל השוקע */}
-      {phase === 'sinking' && (
-        <div className="gear-sparks" aria-hidden="true">
-          {Array.from({ length: 14 }, (_, i) => (
-            <span key={i} className={'spark' + (i % 2 ? ' spark--short' : '')} style={{ '--ang': `${i * (360 / 14)}deg`, animationDelay: `${(i % 3) * 15}ms` }} />
-          ))}
-        </div>
-      )}
     </>
+  );
+}
+
+// הניצוצות בשכבה נפרדת מהגלגל (לא מסתובבים ולא נעלמים איתו), וממשיכים לעוף
+// ולדהות גם אחרי שהגלגל נעלם ואחרי שהאריח נפתח, עד שהם יוצאים מהמסך.
+const SPARKS_MS = 1100;
+function GearSparks({ onEnd }) {
+  const onEndRef = useRef(onEnd);
+  onEndRef.current = onEnd;
+  useEffect(() => {
+    const t = setTimeout(() => onEndRef.current(), SPARKS_MS + 60);
+    return () => clearTimeout(t);
+  }, []);
+  return (
+    <div className="gear-sparks" aria-hidden="true">
+      {Array.from({ length: 14 }, (_, i) => (
+        <span key={i} className={'spark' + (i % 2 ? ' spark--short' : '')} style={{ '--ang': `${i * (360 / 14)}deg`, animationDelay: `${(i % 3) * 15}ms` }} />
+      ))}
+    </div>
   );
 }
 
@@ -281,6 +295,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
     if (gearRef.current) setLaunchRect(gearRef.current.getBoundingClientRect());
     else sheet.open('', <AccountSheet />);
   };
+  const [sparksOn, setSparksOn] = useState(false);
   const finishLaunch = useCallback(() => {
     setLaunchRect(null);
     sheet.open('', <AccountSheet />, { x: window.innerWidth / 2, y: window.innerHeight / 2 });
@@ -300,7 +315,8 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
           <span ref={gearRef} aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'bottom', overflow: 'hidden', whiteSpace: 'nowrap', transition: 'max-width .3s ease, opacity .2s ease, margin .3s ease', ...(launchRect ? { maxWidth: 0, opacity: 0, marginInlineStart: '-.3em' } : { maxWidth: '2em' }) }}>⚙️</span> החשבון שלי
         </button>
       </header>
-      {launchRect && <GearLaunch fromRect={launchRect} onDone={finishLaunch} />}
+      {launchRect && <GearLaunch fromRect={launchRect} onSinking={() => setSparksOn(true)} onDone={finishLaunch} />}
+      {sparksOn && <GearSparks onEnd={() => setSparksOn(false)} />}
 
       <nav className="tabs" role="tablist" aria-label="תפריט ראשי">
         {tabs.map((t) => (
