@@ -301,51 +301,51 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
 .hint { color: var(--ink-soft); margin: 4px 0 0; }
 .big-emoji { font-size: 3.4rem; line-height: 1.1; }
 
-/* אנימציית מטבע במסך הטעינה: חריץ אפור נפתח תוך כדי שהמטבע מסתובב באיטיות
-   ויורד; "השמיים" שמעל החריץ חתוכים בדיוק בקו החריץ (coin-drop__mask), כך
-   שהמטבע נעלם ממש בתוכו מלמטה כלפי מעלה, כמו מטבע אמיתי שנכנס לחריץ של
-   קופת חיסכון. בסיום הוא מופיע מראש האזור ונופל בחזרה למקומו עם קפיצה קלה */
+/* אנימציית מטבע במסך הטעינה: המטבע מרחף ומסתובב סיבוב אחד איטי, נעצר עם
+   הפנים קדימה ואז שוקע ישר לתוך חריץ קבוע (שלא זז) בראש קופת החיסכון.
+   "השמיים" שמעל החריץ חתוכים בדיוק בשפה הקדמית (התחתונה) של החריץ
+   (coin-drop__mask), והמטבע מצויר מעל החלל הכהה של החריץ - כך החלק התחתון
+   שלו נבלע בחריץ ונעלם בהדרגה עד שכולו בפנים, כמו מטבע אמיתי.
+   בסיום הוא מופיע מראש האזור ונופל בחזרה למקומו עם קפיצה קלה */
 .coin-drop { position: relative; width: 110px; height: 128px; margin: 0 auto; perspective: 500px; }
-/* גובה המסכה = גובה המיכל פחות מרווח הרצפה מהתחתית פחות גובה החריץ, כך שקו
-   החיתוך העליון של המסכה נופל בדיוק על השפה העליונה של החריץ. */
-.coin-drop__mask { position: absolute; inset-inline: 0; top: 0; height: 98px; overflow: hidden; }
+/* גובה המסכה = top של גג הקופה (92) + מרווח החריץ (6) + גובה החריץ (7), כך שקו
+   החיתוך נופל בדיוק על השפה הקדמית של החריץ. */
+.coin-drop__mask { position: absolute; inset-inline: 0; top: 0; height: 105px; overflow: hidden; z-index: 2; }
 .coin-drop__coin {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
   font-size: 3.4rem; line-height: 1; transform-style: preserve-3d;
-  animation: coin-drop-cycle 4s cubic-bezier(.4, 0, .2, 1) infinite;
+  animation: coin-drop-cycle 5s infinite;
 }
+/* גג הקופה (::before) והחריץ הכהה שבתוכו (::after) */
 .coin-drop__floor {
-  position: absolute; left: 50%; bottom: 20px; width: 78px; height: 10px; transform: translateX(-50%);
-  z-index: 2;
+  position: absolute; left: 50%; top: 92px; width: 100px; height: 24px; transform: translateX(-50%);
 }
-.coin-drop__floor::before, .coin-drop__floor::after {
-  content: ''; position: absolute; top: 0; width: 50%; height: 100%; background: var(--ink-soft);
-  animation: coin-slot-cycle 4s cubic-bezier(.4, 0, .2, 1) infinite;
+.coin-drop__floor::before {
+  content: ''; position: absolute; inset: 0; border-radius: 14px 14px 8px 8px;
+  background: var(--ink-soft); opacity: .28;
 }
-.coin-drop__floor::before { left: 0; border-radius: 5px 0 0 5px; transform-origin: left center; }
-.coin-drop__floor::after  { right: 0; border-radius: 0 5px 5px 0; transform-origin: right center; }
+.coin-drop__floor::after {
+  content: ''; position: absolute; left: 50%; top: 6px; width: 70px; height: 7px; transform: translateX(-50%);
+  border-radius: 4px; background: var(--ink); box-shadow: inset 0 2px 3px rgba(0, 0, 0, .6);
+}
+/* כל keyframe מציין את כל רשימת ה-transform (כולל rotateY) - אחרת הדפדפן
+   משלים identity ומייצר סיבוב מהיר לא מכוון בין הפריימים */
 @keyframes coin-drop-cycle {
-  0%    { transform: translateY(0)    rotateY(0deg)   scale(1); }
-  12%   { transform: translateY(3px)  rotateY(60deg)  scale(.97); }
-  30%   { transform: translateY(24px) rotateY(180deg) scale(.9); }
-  45%   { transform: translateY(55px) rotateY(290deg) scale(.78); }
-  56%   { transform: translateY(84px) rotateY(360deg) scale(.65); }
-  61%   { transform: translateY(84px)   rotateY(360deg) scale(.65); }
-  61.3% { transform: translateY(-120px) rotateY(360deg) scale(1); }
-  76%   { transform: translateY(0)      rotateY(360deg) scale(1); }
-  84%   { transform: translateY(-13px); }
-  90%   { transform: translateY(0); }
-  95%   { transform: translateY(-5px); }
-  100%  { transform: translateY(0); }
-}
-@keyframes coin-slot-cycle {
-  0%, 15%   { transform: scaleX(1); }
-  28%, 54%  { transform: scaleX(.6); }
-  64%, 100% { transform: scaleX(1); }
+  0%    { transform: translateY(0)      rotateY(0deg);   animation-timing-function: ease-in-out; }
+  20%   { transform: translateY(-5px)   rotateY(180deg); animation-timing-function: ease-in-out; }
+  40%   { transform: translateY(0)      rotateY(360deg); animation-timing-function: ease-out; }
+  45%   { transform: translateY(-6px)   rotateY(360deg); animation-timing-function: cubic-bezier(.55, 0, .85, .45); }
+  68%   { transform: translateY(96px)   rotateY(360deg); }
+  72%   { transform: translateY(96px)   rotateY(360deg); }
+  72.1% { transform: translateY(-120px) rotateY(0deg);   animation-timing-function: ease-in; }
+  86%   { transform: translateY(0)      rotateY(0deg);   animation-timing-function: ease-out; }
+  91%   { transform: translateY(-12px)  rotateY(0deg);   animation-timing-function: ease-in; }
+  95%   { transform: translateY(0)      rotateY(0deg);   animation-timing-function: ease-out; }
+  98%   { transform: translateY(-4px)   rotateY(0deg);   animation-timing-function: ease-in; }
+  100%  { transform: translateY(0)      rotateY(0deg); }
 }
 @media (prefers-reduced-motion: reduce) {
   .coin-drop__coin { animation: none; }
-  .coin-drop__floor::before, .coin-drop__floor::after { animation: none; }
 }
 .card-narrow { max-width: 460px; margin: 0 auto; padding: calc(28px + env(safe-area-inset-top, 0)) 20px 28px; text-align: center; display: grid; gap: 10px; }
 .card-narrow .form { text-align: start; margin-top: 8px; }
@@ -500,22 +500,29 @@ button.small { min-height: 40px; }
 .gear-launch.sinking { transition: width .35s ease-in, height .35s ease-in, opacity .35s ease-in; }
 /* הסיבוב רץ בדיב נפרד כדי שתמיד יתבצע כאנימציית keyframes אמיתית (מעבר transition בין rotate(0) ל-rotate(360) לא זז בפועל) */
 .gear-launch-spin { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-.gear-launch-spin.flying { animation: gear-spin-slow 3s linear; }
-.gear-launch-spin.sinking { animation: gear-spin-fast .35s ease-in forwards; }
-@keyframes gear-spin-slow { to { transform: rotate(450deg); } }
-@keyframes gear-spin-fast { to { transform: rotate(90deg); } }
+/* סיבוב איטי שמתחיל במהירות הקודמת (150°/שנ') ומאט בהדרגה עד עצירה מלאה
+   (האטה ריבועית: שיפוע התחלתי 2, לכן 225° ב-3 שנ'). בשקיעה הגלגל מתגלגל
+   אחורה מאותה זווית, ומאיץ עד הרבה מעבר למהירות ההתחלתית. */
+.gear-launch-spin.flying { animation: gear-spin-slow 3s cubic-bezier(.33, .67, .67, 1) forwards; }
+.gear-launch-spin.sinking { animation: gear-spin-back .35s cubic-bezier(.5, 0, .9, .6) forwards; }
+@keyframes gear-spin-slow { from { transform: rotate(0deg); } to { transform: rotate(225deg); } }
+@keyframes gear-spin-back { from { transform: rotate(225deg); } to { transform: rotate(-45deg); } }
 .gear-launch-icon { font-size: 1.3rem; transition: font-size 3s cubic-bezier(.22, .8, .2, 1); }
 .gear-launch-spin.flying .gear-launch-icon { font-size: 5.7rem; }
 .gear-launch-spin.sinking .gear-launch-icon { transition: font-size .35s ease-in; font-size: 0; }
-.gear-launch .spark {
-  position: absolute; left: 50%; top: 50%; width: 3px; height: 15px; border-radius: 2px;
-  background: linear-gradient(#fff6c8, #ffb020); opacity: 0; pointer-events: none;
-  transform: rotate(var(--ang)) translateY(0) scaleY(.6);
-  animation: spark-burst .35s ease-out forwards;
+.gear-sparks { position: fixed; left: 50%; top: 50%; width: 0; height: 0; z-index: 22; pointer-events: none; }
+.gear-sparks .spark {
+  position: absolute; left: -3px; top: -14px; width: 6px; height: 28px; border-radius: 3px;
+  background: linear-gradient(#fffbe6, #ffd54a 45%, #ff8a00);
+  box-shadow: 0 0 6px 2px rgba(255, 200, 60, .9), 0 0 14px 4px rgba(255, 140, 0, .55);
+  opacity: 0; transform: rotate(var(--ang)) translateY(-60px) scaleY(.5);
+  animation: spark-burst .35s cubic-bezier(.2, .7, .3, 1) forwards;
 }
+.gear-sparks .spark--short { width: 5px; height: 18px; left: -2.5px; top: -9px; }
 @keyframes spark-burst {
-  0% { opacity: 1; transform: rotate(var(--ang)) translateY(-30px) scaleY(.6); }
-  100% { opacity: 0; transform: rotate(var(--ang)) translateY(-130px) scaleY(1); }
+  0%   { opacity: 1; transform: rotate(var(--ang)) translateY(-60px)  scaleY(.5); }
+  60%  { opacity: 1; }
+  100% { opacity: 0; transform: rotate(var(--ang)) translateY(-185px) scaleY(1.2); }
 }
 
 /* חלון קופץ */

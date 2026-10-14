@@ -40,7 +40,7 @@ export const WEEKDAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'ח
 export const THEME_COLOR = { parent: '#1f2933', child: '#fbf3f7', teen: '#2a1b6e' };
 export const TAB_LABELS = {
   parent: { family: 'סקירה משפחתית', home: 'הכסף שלי', history: 'היסטוריה', manage: 'ניהול' },
-  child: { home: '🏠 הכסף שלי', history: '📜 מה היה' },
+  child: { home: '💰 הכסף שלי', history: '📜 מה היה' },
   teen: { home: '💰 הכסף שלי', friends: '🤝 חברים', history: '📜 היסטוריה' },
 };
 

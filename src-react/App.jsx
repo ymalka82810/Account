@@ -40,11 +40,11 @@ function applyTheme(role) {
 const TAB_IDS = ['home', 'friends', 'history', 'family', 'manage'];
 const tabFromHash = () => { const h = location.hash.slice(1); return TAB_IDS.includes(h) ? h : null; };
 
-const DEFAULT_LABELS = { home: '🏠 הכסף שלי', friends: '🤝 חברים', history: '📜 מה היה', family: '👨‍👩‍👧 המשפחה', manage: 'ניהול' };
+const DEFAULT_LABELS = { home: '💰 הכסף שלי', friends: '🤝 חברים', history: '📜 מה היה', family: '👨‍👩‍👧 המשפחה', manage: 'ניהול' };
 
 // משך האנימציה של מסך הטעינה (coin-drop-cycle ב-style.css) - מסך הטעינה
 // נשאר מוצג לפחות עד שקטע אנימציה שלם אחד מסתיים, גם אם הטעינה עצמה הסתיימה קודם.
-const LOADING_MIN_MS = 3600;
+const LOADING_MIN_MS = 4500;
 
 export default function App() {
   if (!client) {
@@ -217,14 +217,21 @@ function GearLaunch({ fromRect, onDone }) {
       : { left: '50%', top: '50%', width: 0, height: 0, opacity: 0 };
 
   return (
-    <div className={'gear-launch' + (phase === 'sinking' ? ' sinking' : '')} style={style} aria-hidden="true">
-      <div className={'gear-launch-spin' + (phase === 'flying' ? ' flying' : '') + (phase === 'sinking' ? ' sinking' : '')}>
-        <span className="gear-launch-icon">⚙️</span>
-        {phase === 'sinking' && Array.from({ length: 8 }, (_, i) => (
-          <span key={i} className="spark" style={{ '--ang': `${i * 45}deg`, animationDelay: `${i * 12}ms` }} />
-        ))}
+    <>
+      <div className={'gear-launch' + (phase === 'sinking' ? ' sinking' : '')} style={style} aria-hidden="true">
+        <div className={'gear-launch-spin' + (phase === 'flying' ? ' flying' : '') + (phase === 'sinking' ? ' sinking' : '')}>
+          <span className="gear-launch-icon">⚙️</span>
+        </div>
       </div>
-    </div>
+      {/* הניצוצות בשכבה נפרדת, כדי שלא ידהו ולא יסתובבו יחד עם הגלגל השוקע */}
+      {phase === 'sinking' && (
+        <div className="gear-sparks" aria-hidden="true">
+          {Array.from({ length: 14 }, (_, i) => (
+            <span key={i} className={'spark' + (i % 2 ? ' spark--short' : '')} style={{ '--ang': `${i * (360 / 14)}deg`, animationDelay: `${(i % 3) * 15}ms` }} />
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 
