@@ -103,6 +103,8 @@ export default defineSchema({
     createdBy: v.id("people"),
     createdAt: v.number(),
     status: v.optional(v.literal("pending")),
+    // החזר שקשור לחוב מסוים בין חברים (debtId = רשומת החוב). חסר = החזר כללי.
+    debtId: v.optional(v.id("friendEntries")),
   })
     .index("by_from", ["from"])
     .index("by_to", ["to"]),

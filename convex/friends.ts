@@ -179,6 +179,8 @@ export const addEntry = mutation({
     amount: v.number(),
     note: v.string(),
     date: v.string(),
+    // החזר על חוב מסוים (חוב שכבר אושר על ידי שני הצדדים).
+    debtId: v.optional(v.id("friendEntries")),
   },
   handler: async (ctx, { token, ...e }) => {
     const me = await requireFriendsOn(ctx, token);
@@ -194,6 +196,19 @@ export const addEntry = mutation({
     const other = await ctx.db.get(otherId);
     const fr = await findFriendship(ctx, me._id, otherId);
     if (!other || !other.friendsEnabled || !fr || fr.status !== "accepted") throw new ConvexError("אפשר לרשום רק עם חברים מאושרים");
+    // החזר שמקושר לחוב: חוב מאושר, באותו כיוון, ובלי לעבור את מה שנשאר ממנו.
+    if (e.debtId) {
+      if (e.kind !== "payment") throw new ConvexError("אפשר לקשר לחוב רק החזר");
+      const debt = await ctx.db.get(e.debtId);
+      if (!debt || debt.kind !== "debt" || debt.status === "pending" || debt.from !== e.from || debt.to !== e.to) {
+        throw new ConvexError("החוב לא נמצא");
+      }
+      const mine = await allFriendEntries(ctx, me._id);
+      const paid = mine.filter((x) => x.kind === "payment" && x.debtId === e.debtId).reduce((sum, x) => sum + x.amount, 0);
+      const remaining = debt.amount - paid;
+      if (remaining <= 0) throw new ConvexError("החוב הזה כבר שולם");
+      if (e.amount > remaining) throw new ConvexError("אי אפשר להחזיר יותר ממה שנשאר מהחוב");
+    }
     const key = "friend-entry:" + me._id;
     if (await isThrottled(ctx, key, 30, HOUR_MS)) throw new ConvexError("יותר מדי רישומים. נסו שוב מאוחר יותר");
     await noteHit(ctx, key, HOUR_MS);
@@ -249,6 +264,10 @@ export const removeEntry = mutation({
     if (e.status !== "pending" && Date.now() - e.createdAt >= UNDO_MS) {
       throw new ConvexError("אפשר לבטל רק ב-10 הדקות הראשונות. כדי לתקן, רשמו החזר");
     }
+    // מחיקת חוב: ההחזרים שקושרו אליו נשארים כהחזרים כלליים.
+    if (e.kind === "debt") {
+      for (const x of await allFriendEntries(ctx, me._id)) if (x.debtId === id) await ctx.db.patch(x._id, { debtId: undefined });
+    }
     await ctx.db.delete(id);
   },
 });
@@ -258,6 +277,7 @@ export const removeEntry = mutation({
 const entryOut = (e: Doc<"friendEntries">) => ({
   id: e._id, kind: e.kind, from: e.from, to: e.to, amount: e.amount, note: e.note,
   date: e.date, createdBy: e.createdBy, createdAt: e.createdAt, status: e.status ?? "approved",
+  debtId: e.debtId ?? null,
 });
 
 // מידע ציבורי על חבר/ה: שם ודמות בלבד.

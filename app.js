@@ -517,6 +517,7 @@
       return isMe(st.from) ? 'שילמתי' : isMe(st.to) ? 'קיבלתי כסף' : 'רישום החזר';
     };
 
+    const entriesNow = () => (opts.entries ? opts.entries() : data.entries);
     const pickDebt = (x) => {
       st.debtId = x.debt.id; st.debtRemaining = x.remaining; st.debtName = debtLabel(x.debt);
       stepAmount();
@@ -526,10 +527,10 @@
     function afterPeople() {
       if (opts.kind !== 'payment' || opts.noDebtPick) return stepAmount();
       if (opts.debtId) {
-        const hit = openDebtsOf(st.from, st.to).find((x) => x.debt.id === opts.debtId);
+        const hit = openDebtsOf(st.from, st.to, entriesNow()).find((x) => x.debt.id === opts.debtId);
         if (hit) return pickDebt(hit);
       }
-      const open = openDebtsOf(st.from, st.to);
+      const open = openDebtsOf(st.from, st.to, entriesNow());
       if (open.length === 1) return pickDebt(open[0]);
       if (open.length > 1) return stepDebt(open);
       return stepAmount();
@@ -630,7 +631,7 @@
       const debtInfo = st.debtId
         ? el('div', { class: 'debt-info', text: `על: ${st.debtName} • נשאר ${money(st.debtRemaining)}` })
         : null;
-      const backToDebt = st.debtId && !opts.debtId && openDebtsOf(st.from, st.to).length > 1
+      const backToDebt = st.debtId && !opts.debtId && openDebtsOf(st.from, st.to, entriesNow()).length > 1
         ? el('button', { type: 'button', class: 'ghost', text: '→ בחירת חוב אחר', onclick: () => { st.debtId = null; st.debtRemaining = null; afterPeople(); } })
         : null;
       body.replaceChildren(
@@ -739,8 +740,7 @@
   function renderEntries(box, list, emptyText, opts = {}) {
     box.replaceChildren();
     if (!list.length) { box.append(el('div', { class: 'empty', text: emptyText })); return; }
-    // מצב החובות מחושב מרשומות המשפחה בלבד (לא מרשימות החברים).
-    const debtMap = opts.removeEndpoint ? null : debtStates();
+    const debtMap = debtStates(opts.debtList || data.entries);
     [...list].sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt).forEach((e) => {
       const isDebt = e.kind === 'debt';
       const title = `${subjectWord(e.from)} ${isDebt ? 'חייב/ת' : 'החזיר/ה'} ${toWord(e.to)}`;
@@ -1090,7 +1090,7 @@
     ? fdata.friendships.filter((f) => f.status === 'accepted').map((f) => fdata.people[f.other]).filter(Boolean)
     : []);
   const friendFlow = (opts) => ({
-    ...opts, noDebtPick: true, people: friendList(), endpoint: 'friends:addEntry', maxEntry: FRIEND_MAX,
+    ...opts, entries: () => fdata.entries, people: friendList(), endpoint: 'friends:addEntry', maxEntry: FRIEND_MAX,
     doneToast: 'נשלח לחבר/ה לאישור ⏳', returnTab: 'friends',
   });
   const friendsInboxCount = () => (fdata && fdata.kind === 'teen' && fdata.enabled
@@ -1140,11 +1140,23 @@
       const iOwe = n > 0;
       const amount = Math.abs(n);
       if (n > 0) owe += amount; else if (n < 0) get += amount;
-      cards.push(el('div', { class: 'debt' + (n === 0 ? '' : iOwe ? ' owe' : ' get') },
+      // החובות הפתוחים בכיוון הזה, כל אחד עם מה שנשאר ממנו וכפתור החזר משלו.
+      const [dFrom, dTo] = iOwe ? [me, p.id] : [p.id, me];
+      const open = n === 0 ? [] : openDebtsOf(dFrom, dTo, entries);
+      const lines = open.map((x) => el('div', { class: 'debt-line' },
+        el('div', { class: 'dl-text' },
+          el('div', { class: 'dl-name', text: debtLabel(x.debt) }),
+          el('div', { class: 'dl-rem', text: x.paid > 0 ? `נשאר ${money(x.remaining)} מתוך ${money(x.debt.amount)}` : money(x.remaining) })),
+        el('button', {
+          class: 'small', type: 'button', text: iOwe ? 'שילמתי' : 'קיבלתי',
+          onclick: () => openEntryFlow(friendFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })),
+        })));
+      cards.push(el('div', { class: 'debt' + (n === 0 ? '' : iOwe ? ' owe' : ' get') + (lines.length > 1 ? ' multi' : '') },
         el('span', { class: 'avatar-md', 'aria-hidden': 'true', text: p.avatar }),
         el('div', { class: 'text' },
           el('div', { class: 'who', text: n === 0 ? p.name : iOwe ? `אני חייב/ת ל${p.name}` : `${p.name} חייב/ת לי` }),
-          el('div', { class: 'amt', text: n === 0 ? 'הכול מסודר ✅' : money(amount) })),
+          el('div', { class: 'amt', text: n === 0 ? 'הכול מסודר ✅' : money(amount) }),
+          lines.length > 1 ? el('div', { class: 'debt-lines' }, lines) : null),
         n === 0 ? null : el('button', {
           class: 'small strongbtn', type: 'button', text: iOwe ? '💰 שילמתי' : '💰 קיבלתי',
           onclick: () => openEntryFlow(friendFlow(iOwe
@@ -1212,6 +1224,7 @@
     $('myFriendEmail').textContent = fdata.email || '';
     renderEntries($('friendHistory'), entries, 'עוד לא נרשם כלום עם חברים.', {
       removeEndpoint: 'friends:removeEntry',
+      debtList: entries,
       pendingLabel: (e) => (e.createdBy === me ? '⏳ ממתין לחבר/ה' : '⏳ ממתין לאישור שלך'),
     });
   }
