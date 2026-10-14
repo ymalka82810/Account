@@ -8,10 +8,11 @@ import { renderPushBtn, syncPush, releasePushDevice } from './push.js';
 import { switchTab } from './tabs.js';
 import { route, show, subscribeData, setToken, dropSession, wireSession } from './session.js';
 
-import { renderWelcome, renderLogin, initSetup, initJoin, startPin, restoreFamily } from './screens/auth.js';
+import { startPin, restoreFamily } from './screens/auth.js';
 import { openChangePinEmail } from './screens/emailAuth.js';
 import { cleanPayload } from './screens/legacy.js';
 import { mountHomeTab } from '../src-react/mountHome.jsx';
+import { mountAuth } from '../src-react/mountAuth.jsx';
 
 // ---------- ערכות נושא ----------
 function applyTheme(role) {
@@ -21,7 +22,7 @@ function applyTheme(role) {
 }
 
 // מזריקים ל-session.js את הפונקציות שהוא צריך, כדי להימנע מתלות מעגלית.
-wireSession({ renderApp, renderWelcome, renderLogin, initSetup, initJoin, startPin, applyTheme, restoreFamily });
+wireSession({ renderApp, startPin, applyTheme, restoreFamily });
 
 // ---------- הרכבת המסך הראשי ----------
 function renderApp() {
@@ -166,6 +167,7 @@ $('importFile').addEventListener('change', async (ev) => {
 function init() {
   if (!window.CONVEX_URL || typeof convex === 'undefined') { show('noserver'); return; }
   state.client = new convex.ConvexClient(window.CONVEX_URL);
+  mountAuth();
   state.client.onUpdate('auth:legacyRoster', {}, (r) => {
     state.legacyPeople = r;
     if (state.pinFlow && state.pinFlow.legacy) {

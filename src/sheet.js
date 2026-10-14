@@ -18,3 +18,9 @@ export function closeSheet() {
   if (state.sheetReturnFocus && state.sheetReturnFocus.focus) state.sheetReturnFocus.focus();
   state.sheetReturnFocus = null;
 }
+
+$('sheetClose').addEventListener('click', closeSheet);
+$('sheetBg').addEventListener('click', closeSheet);
+document.addEventListener('keydown', (ev) => {
+  if (ev.key === 'Escape' && !$('sheetWrap').hidden) closeSheet();
+});

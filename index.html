@@ -26,91 +26,20 @@
   <p class="hint">הורה צריך להגדיר את כתובת Convex בקובץ <code>config.js</code>.</p>
 </section>
 
-<!-- מסך פתיחה: קוד משפחה -->
-<section id="screen-welcome" class="screen">
-  <div class="card-narrow">
-    <div class="big-emoji" aria-hidden="true">🪙</div>
-    <h1>הקופה המשפחתית</h1>
-    <p class="hint">יש לכם קוד משפחה? כתבו אותו כאן. ילדים: בקשו מההורים את קוד הילדים.</p>
-    <form id="codeForm" class="form" autocomplete="off">
-      <label class="field"><span>קוד משפחה</span>
-        <input id="codeInput" class="code-input" type="text" dir="ltr" maxlength="14" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="XXXXX-XXXXX" required></label>
-      <p id="codeError" class="error" role="alert" hidden></p>
-      <button class="primary" type="submit">כניסה</button>
-    </form>
-    <div id="legacyLogin" class="card notice" hidden>
-      <p><strong>כבר משתמשים בקופה?</strong> הורה נכנס כאן, ואז מקבלים קודים לשאר המשפחה.</p>
-      <div id="legacyTiles" class="tiles"></div>
-    </div>
-    <button id="newFamilyBtn" class="ghost linkish" type="button">👨‍👩‍👧 אני הורה ורוצה להקים קופה חדשה</button>
-    <p class="legal"><a href="terms.html">תנאי שימוש</a> · <a href="privacy.html">מדיניות פרטיות</a></p>
-  </div>
-</section>
+<!-- מסכי הכניסה (welcome/setup/login/join/pin) מצוירים ע"י React: src-react/components/Auth.jsx -->
+<section id="screen-welcome" class="screen"></section>
 
 <!-- הקמת משפחה חדשה (להורים) -->
-<section id="screen-setup" class="screen">
-  <button id="setupBack" class="ghost back" type="button">→ חזרה</button>
-  <div class="card-narrow">
-    <div class="big-emoji" aria-hidden="true">🏠</div>
-    <h1>הקמת קופה משפחתית</h1>
-    <p class="hint">להורים בלבד. מי שמקים הוא ההורה הראשון. אחר כך מקבלים קוד להורים וקוד לילדים, ומוסיפים את כולם.</p>
-    <form id="setupForm" class="form" autocomplete="off">
-      <label class="field"><span>שם המשפחה</span>
-        <input id="setupFamily" type="text" maxlength="30" placeholder="למשל: משפחת כהן" required></label>
-      <label class="field"><span>איך קוראים לך?</span>
-        <input id="setupName" type="text" maxlength="20" required></label>
-      <div class="field"><span>בחר/י דמות</span><div id="setupAvatars" class="avatars"></div></div>
-      <label class="field"><span>קוד סודי (4 ספרות)</span>
-        <input id="setupPin" type="password" inputmode="numeric" pattern="\d{4}" maxlength="4" required autocomplete="new-password"></label>
-      <label class="check"><input id="setupTerms" type="checkbox" required>
-        <span>קראתי ואני מסכים/ה ל<a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ול<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a></span></label>
-      <p id="setupError" class="error" role="alert" hidden></p>
-      <button class="primary" type="submit">הקמת הקופה</button>
-    </form>
-  </div>
-</section>
+<section id="screen-setup" class="screen"></section>
 
 <!-- בחירת מי נכנס -->
-<section id="screen-login" class="screen center">
-  <button id="loginBack" class="ghost back" type="button">→ משפחה אחרת</button>
-  <div class="big-emoji" aria-hidden="true">🪙</div>
-  <h1 id="loginFamily">הקופה המשפחתית</h1>
-  <p class="hint">מי נכנס/ת?</p>
-  <div id="loginTiles" class="tiles"></div>
-</section>
+<section id="screen-login" class="screen center"></section>
 
 <!-- הצטרפות עם קוד -->
-<section id="screen-join" class="screen">
-  <button id="joinBack" class="ghost back" type="button">→ חזרה</button>
-  <div class="card-narrow">
-    <div class="big-emoji" aria-hidden="true">👋</div>
-    <h1>מצטרפים לקופה</h1>
-    <p id="joinHint" class="hint"></p>
-    <form id="joinForm" class="form" autocomplete="off">
-      <label class="field"><span>איך קוראים לך?</span>
-        <input id="joinName" type="text" maxlength="20" required></label>
-      <div class="field"><span>בחר/י דמות</span><div id="joinAvatars" class="avatars"></div></div>
-      <label class="field"><span>קוד סודי משלך (4 ספרות)</span>
-        <input id="joinPin" type="password" inputmode="numeric" pattern="\d{4}" maxlength="4" required autocomplete="new-password"></label>
-      <label class="check"><input id="joinTerms" type="checkbox" required>
-        <span>קראתי ואני מסכים/ה ל<a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ול<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a>. ילדים מצטרפים בהסכמת הורה</span></label>
-      <p id="joinError" class="error" role="alert" hidden></p>
-      <button class="primary" type="submit">הצטרפות</button>
-    </form>
-  </div>
-</section>
+<section id="screen-join" class="screen"></section>
 
 <!-- קוד סודי -->
-<section id="screen-pin" class="screen center">
-  <button id="pinBack" class="ghost back" type="button">→ חזרה</button>
-  <div id="pinAvatar" class="avatar-xl" aria-hidden="true"></div>
-  <h1 id="pinName"></h1>
-  <p id="pinTitle" class="hint"></p>
-  <div id="pinDots" class="dots" aria-hidden="true"></div>
-  <p id="pinError" class="error" role="alert" aria-live="assertive"></p>
-  <div id="pinPad" class="pad"></div>
-  <button id="forgotPinBtn" class="ghost linkish" type="button" hidden>שכחתי את הקוד</button>
-</section>
+<section id="screen-pin" class="screen center"></section>
 
 <!-- האפליקציה -->
 <section id="screen-app" class="screen">

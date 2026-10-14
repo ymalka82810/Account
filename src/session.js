@@ -3,12 +3,12 @@ import { $, toast } from './helpers.js';
 import { call } from './api.js';
 import { closeSheet } from './sheet.js';
 import { notifyTokenChange } from '../src-react/mountHome.jsx';
+import { bumpAuth } from './authStore.js';
 
-// renderApp, renderWelcome, renderLogin, initSetup, initJoin, startPin, applyTheme
-// מוזרקים מ-app.js כדי להימנע מתלות מעגלית בין המודולים.
-let renderApp, renderWelcome, renderLogin, initSetup, initJoin, startPin, applyTheme, restoreFamily;
+// renderApp, startPin, applyTheme, restoreFamily מוזרקים מ-app.js כדי להימנע מתלות מעגלית בין המודולים.
+let renderApp, startPin, applyTheme, restoreFamily;
 export function wireSession(fns) {
-  ({ renderApp, renderWelcome, renderLogin, initSetup, initJoin, startPin, applyTheme, restoreFamily } = fns);
+  ({ renderApp, startPin, applyTheme, restoreFamily } = fns);
 }
 
 export function show(name) {
@@ -19,6 +19,7 @@ export function show(name) {
 
 // ---------- ניתוב בין מסכים ----------
 export function route() {
+  bumpAuth();
   if (state.token) {
     if (state.data === undefined) return show('loading');
     renderApp();
@@ -26,15 +27,13 @@ export function route() {
   }
   if (state.legacyPeople === null || !state.codeChecked) return show('loading');
   if (state.pinFlow) return show('pin');
-  if (state.view === 'setup') { initSetup(); return show('setup'); }
-  if (state.view === 'join' && state.fam) { initJoin(); return show('join'); }
+  if (state.view === 'setup') return show('setup');
+  if (state.view === 'join' && state.fam) return show('join');
   if (state.fam) {
     const skip = autoSkipPerson();
     if (skip) { startPin(skip, false); return; }
-    renderLogin();
     return show('login');
   }
-  renderWelcome();
   show('welcome');
 }
 
