@@ -1,3 +1,2 @@
-// כתובת הפריסה של Convex, למשל: https://happy-animal-123.convex.cloud
-// משאירים ריק כדי לעבוד מקומית בלבד (localStorage).
-window.CONVEX_URL = "";
+// כתובת הפריסה של Convex (production)
+window.CONVEX_URL = "https://flippant-mule-694.eu-west-1.convex.cloud";

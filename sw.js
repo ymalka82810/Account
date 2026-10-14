@@ -1,4 +1,4 @@
-const CACHE = 'kupa-v2';
+const CACHE = 'kupa-v3';
 const FILES = ['./', 'index.html', 'style.css', 'app.js', 'config.js', 'vendor/convex-browser.bundle.js', 'manifest.webmanifest', 'icon.svg'];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)));
