@@ -97,7 +97,9 @@ function Root() {
   }, [token, data]);
 
   const rawScreen = currentScreen(data);
-  const [screen, setScreen] = useState(rawScreen);
+  const [shownScreen, setScreen] = useState(rawScreen);
+  // יציאה מהאפליקציה מוצגת מיד: בלי הנתונים אי אפשר לרנדר את המסך הראשי אפילו פעם אחת.
+  const screen = shownScreen === 'app' && rawScreen !== 'app' ? rawScreen : shownScreen;
   const loadingSince = useRef(rawScreen === 'loading' ? Date.now() : null);
   useEffect(() => {
     if (rawScreen === 'loading') {
