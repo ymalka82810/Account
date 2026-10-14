@@ -75,7 +75,7 @@
       return d;
     } catch (e) { return undefined; }
   }
-  const AUTH_CALLS = ['auth:enter', 'auth:join', 'auth:login', 'auth:claimProfile'];
+  const AUTH_CALLS = ['auth:enter', 'auth:join', 'auth:login', 'auth:claimProfile', 'emailAuth:requestResetCode', 'emailAuth:resetWithCode'];
   const call = (name, args) => client.mutation(name, AUTH_CALLS.includes(name) ? { ...args, device: deviceId() } : args);
 
   // "דקה", "5 דקות", "שעה"... לפי מספר השניות שנשארו בנעילה.
@@ -352,6 +352,7 @@
       : f.first ? 'כתבו את הקוד שוב, לאישור' : 'בחרו קוד סודי חדש (4 ספרות)';
     $('pinDots').replaceChildren(...[0, 1, 2, 3].map((i) => el('span', { class: 'dot' + (i < f.entered.length ? ' on' : '') })));
     $('pinError').textContent = error;
+    $('forgotPinBtn').hidden = !(f.mode === 'login' && f.person.role === 'parent' && !f.legacy);
   }
 
   function shake() {
@@ -909,26 +910,165 @@
   }
 
   function openResetPin(p) {
-    const input = el('input', { type: 'password', inputmode: 'numeric', maxlength: '4', autocomplete: 'new-password' });
-    const err = el('p', { class: 'error', role: 'alert' });
-    const run = async (pin) => {
-      try {
-        await call('auth:resetPin', { token, personId: p.id, pin });
-        closeSheet();
-        toast(pin ? `הקוד של ${p.name} עודכן` : `${p.name} יבחר/תבחר קוד חדש בכניסה הבאה`);
-      } catch (e) { err.textContent = errMsg(e); }
+    const emailRequired = !!data.me.email;
+    const build = () => {
+      const input = pinField('new-password');
+      const codeIn = emailRequired ? codeField() : null;
+      const err = el('p', { class: 'error', role: 'alert' });
+      const run = async (pin) => {
+        try {
+          const res = await call('auth:resetPin', { token, personId: p.id, pin, emailCode: codeIn ? codeIn.value : undefined });
+          if (res && res.ok === false) { err.textContent = 'קוד האימות מהמייל שגוי או שפג תוקפו.'; return; }
+          closeSheet();
+          toast(pin ? `הקוד של ${p.name} עודכן` : `${p.name} יבחר/תבחר קוד חדש בכניסה הבאה`);
+        } catch (e) { err.textContent = errMsg(e); }
+      };
+      openSheet('קוד סודי ל' + p.name, el('div', { class: 'form' },
+        codeIn ? el('label', { class: 'field' }, el('span', { text: 'קוד אימות מהמייל' }), codeIn) : null,
+        el('label', { class: 'field' }, el('span', { text: 'קוד חדש (4 ספרות)' }), input),
+        err,
+        el('button', {
+          class: 'primary', type: 'button', text: 'קביעת הקוד', onclick: () => {
+            if (!/^\d{4}$/.test(input.value)) { err.textContent = 'הקוד צריך להיות 4 ספרות.'; return; }
+            run(input.value);
+          },
+        }),
+        el('button', { class: 'ghost', type: 'button', text: 'לאפס, ושיבחרו לבד בכניסה הבאה', onclick: () => run(undefined) })));
     };
-    openSheet('קוד סודי ל' + p.name, el('div', { class: 'form' },
-      el('label', { class: 'field' }, el('span', { text: 'קוד חדש (4 ספרות)' }), input),
+    if (!emailRequired) { build(); return; }
+    const err = el('p', { class: 'error', role: 'alert' });
+    openSheet('אישור במייל', el('div', { class: 'form' },
+      el('p', { class: 'hint', text: `כדי לקבוע קוד חדש ל${p.name} נשלח קוד אימות ל-${data.me.email}.` }),
       err,
       el('button', {
-        class: 'primary', type: 'button', text: 'קביעת הקוד', onclick: () => {
-          if (!/^\d{4}$/.test(input.value)) { err.textContent = 'הקוד צריך להיות 4 ספרות.'; return; }
-          run(input.value);
+        class: 'primary', type: 'button', text: 'שליחת קוד למייל', onclick: async () => {
+          try { await call('emailAuth:requestChildResetCode', { token }); build(); }
+          catch (e) { err.textContent = errMsg(e); }
         },
-      }),
-      el('button', { class: 'ghost', type: 'button', text: 'לאפס, ושיבחרו לבד בכניסה הבאה', onclick: () => run(undefined) })));
+      })));
   }
+
+  // ---------- אימות במייל ----------
+  const codeField = () => el('input', { type: 'text', inputmode: 'numeric', maxlength: '6', autocomplete: 'one-time-code', placeholder: '6 ספרות', dir: 'ltr' });
+  const pinField = (ac) => el('input', { type: 'password', inputmode: 'numeric', maxlength: '4', autocomplete: ac });
+
+  // הוספה או החלפה של מייל להורה: כתובת, ואז קוד אימות שנשלח אליה.
+  function openEmailSheet() {
+    const current = data.me.email;
+    const stepCode = (addr) => {
+      const code = codeField();
+      const err = el('p', { class: 'error', role: 'alert' });
+      openSheet('אימות המייל', el('div', { class: 'form' },
+        el('p', { class: 'hint', text: `שלחנו קוד בן 6 ספרות אל ${addr}. הוא תקף ל-10 דקות.` }),
+        el('label', { class: 'field' }, el('span', { text: 'הקוד מהמייל' }), code),
+        err,
+        el('button', {
+          class: 'primary', type: 'button', text: 'אימות', onclick: async () => {
+            try {
+              const res = await call('emailAuth:confirmEmail', { token, code: code.value });
+              if (res.ok) { closeSheet(); toast('המייל אומת ✅'); }
+              else err.textContent = 'הקוד שגוי או שפג תוקפו.';
+            } catch (e) { err.textContent = errMsg(e); }
+          },
+        }),
+        el('button', { class: 'ghost', type: 'button', text: 'כתובת אחרת', onclick: stepEmail })));
+    };
+    const stepEmail = () => {
+      const email = el('input', { type: 'email', autocomplete: 'email', placeholder: 'name@example.com', dir: 'ltr' });
+      const err = el('p', { class: 'error', role: 'alert' });
+      openSheet('מייל לשחזור הקוד', el('div', { class: 'form' },
+        el('p', { class: 'hint', text: current
+          ? `המייל הנוכחי: ${current}. מייל חדש יחליף אותו רק אחרי אימות.`
+          : 'נשלח אליו קוד כשמשנים או מאפסים קוד סודי, וגם התראה כשהקוד של מישהו במשפחה ננעל.' }),
+        el('label', { class: 'field' }, el('span', { text: 'כתובת מייל' }), email),
+        err,
+        el('button', {
+          class: 'primary', type: 'button', text: 'שליחת קוד אימות', onclick: async () => {
+            err.textContent = '';
+            try {
+              await call('emailAuth:requestVerify', { token, email: email.value });
+              stepCode(email.value.trim().toLowerCase());
+            } catch (e) { err.textContent = errMsg(e); }
+          },
+        })));
+    };
+    stepEmail();
+  }
+
+  // שינוי הקוד הסודי של הורה עם מייל מאומת: קוד מהמייל במקום הקוד הנוכחי.
+  function openChangePinEmail() {
+    const stepForm = () => {
+      const code = codeField();
+      const newPin = pinField('new-password');
+      const err = el('p', { class: 'error', role: 'alert' });
+      openSheet('שינוי הקוד הסודי', el('div', { class: 'form' },
+        el('label', { class: 'field' }, el('span', { text: 'הקוד מהמייל' }), code),
+        el('label', { class: 'field' }, el('span', { text: 'קוד חדש (4 ספרות)' }), newPin),
+        err,
+        el('button', {
+          class: 'primary', type: 'button', text: 'שמירה', onclick: async () => {
+            if (!/^\d{4}$/.test(newPin.value)) { err.textContent = 'הקוד החדש צריך להיות 4 ספרות.'; return; }
+            try {
+              const res = await call('emailAuth:changePinWithCode', { token, code: code.value, newPin: newPin.value });
+              if (res.ok) { closeSheet(); toast('הקוד שונה ✅'); }
+              else err.textContent = 'קוד האימות שגוי או שפג תוקפו.';
+            } catch (e) { err.textContent = errMsg(e); }
+          },
+        })));
+    };
+    const err = el('p', { class: 'error', role: 'alert' });
+    openSheet('שינוי הקוד הסודי', el('div', { class: 'form' },
+      el('p', { class: 'hint', text: `לאישור נשלח קוד אימות ל-${data.me.email}.` }),
+      err,
+      el('button', {
+        class: 'primary', type: 'button', text: 'שליחת קוד למייל', onclick: async () => {
+          try { await call('emailAuth:requestChangeCode', { token }); stepForm(); }
+          catch (e) { err.textContent = errMsg(e); }
+        },
+      })));
+  }
+
+  // שכחתי קוד (הורה, במסך הכניסה): קוד למייל המאומת, ואז בוחרים קוד חדש ונכנסים.
+  function openForgotPin() {
+    const f = pinFlow;
+    if (!f || f.legacy) return;
+    const stepReset = () => {
+      const emailCode = codeField();
+      const newPin = pinField('new-password');
+      const err = el('p', { class: 'error', role: 'alert' });
+      openSheet('קוד סודי חדש', el('div', { class: 'form' },
+        el('label', { class: 'field' }, el('span', { text: 'הקוד מהמייל' }), emailCode),
+        el('label', { class: 'field' }, el('span', { text: 'קוד חדש (4 ספרות)' }), newPin),
+        err,
+        el('button', {
+          class: 'primary', type: 'button', text: 'קביעת הקוד והכניסה', onclick: async () => {
+            if (!/^\d{4}$/.test(newPin.value)) { err.textContent = 'הקוד החדש צריך להיות 4 ספרות.'; return; }
+            try {
+              const res = await call('emailAuth:resetWithCode', { code: fam.code, personId: f.person.id, emailCode: emailCode.value, newPin: newPin.value });
+              if (res.ok) { pinFlow = null; setToken(res.token); return; }
+              if (res.reason === 'code') { closeSheet(); codeGone(); return; }
+              err.textContent = res.reason === 'throttled' ? 'יותר מדי ניסיונות. נסו שוב עוד כמה דקות.' : 'קוד האימות שגוי או שפג תוקפו.';
+            } catch (e) { err.textContent = errMsg(e); }
+          },
+        })));
+    };
+    const err = el('p', { class: 'error', role: 'alert' });
+    openSheet('שכחתי את הקוד', el('div', { class: 'form' },
+      el('p', { class: 'hint', text: 'אם הוגדר מייל מאומת להורה הזה, נשלח אליו קוד אימות. אם לא הוגדר מייל, הורה אחר יכול לקבוע לך קוד חדש.' }),
+      err,
+      el('button', {
+        class: 'primary', type: 'button', text: 'שליחת קוד למייל', onclick: async () => {
+          try {
+            const res = await call('emailAuth:requestResetCode', { code: fam.code, personId: f.person.id });
+            if (res.ok) { stepReset(); return; }
+            if (res.reason === 'code') { closeSheet(); codeGone(); return; }
+            err.textContent = 'יותר מדי ניסיונות. נסו שוב עוד כמה דקות.';
+          } catch (e) { err.textContent = errMsg(e); }
+        },
+      })));
+  }
+  $('forgotPinBtn').addEventListener('click', openForgotPin);
+  $('emailBtn').addEventListener('click', openEmailSheet);
 
   // ---------- נתונים ישנים מהמכשיר ----------
   function readLegacy() {
@@ -977,6 +1117,7 @@
     $('familyName').textContent = data.family.name;
     if (isParent()) localStorage.setItem(CODE_KEY, data.family.childCode);
     document.querySelectorAll('.parent-only').forEach((n) => (n.hidden = !isParent()));
+    $('emailBtn').textContent = data.me.email ? '✉️ מייל לשחזור: ' + data.me.email : '✉️ הוספת מייל לשחזור קוד';
     renderHome();
     renderPending();
     renderPushBtn();
@@ -1008,6 +1149,7 @@
   });
 
   $('changePinBtn').addEventListener('click', () => {
+    if (data.me.email) { openChangePinEmail(); return; }
     const oldPin = el('input', { type: 'password', inputmode: 'numeric', maxlength: '4', autocomplete: 'current-password' });
     const newPin = el('input', { type: 'password', inputmode: 'numeric', maxlength: '4', autocomplete: 'new-password' });
     const err = el('p', { class: 'error', role: 'alert' });
@@ -1023,6 +1165,7 @@
             if (res.ok) { closeSheet(); toast('הקוד שונה ✅'); }
             else if (res.reason === 'wrong') err.textContent = 'הקוד הנוכחי לא נכון.';
             else if (res.reason === 'locked') err.textContent = 'יותר מדי ניסיונות. נסו שוב עוד דקה.';
+            else if (res.reason === 'useEmail') { closeSheet(); openChangePinEmail(); }
             else err.textContent = 'משהו השתבש. נסו שוב.';
           } catch (e) { err.textContent = errMsg(e); }
         },
