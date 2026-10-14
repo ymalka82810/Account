@@ -17,7 +17,7 @@ import Auth from './components/Auth.jsx';
 import Home from './components/Home.jsx';
 import FriendsTab from './components/FriendsTab.jsx';
 import FamilyTab from './components/FamilyTab.jsx';
-import EntriesList from './components/EntriesList.jsx';
+import HistoryTab from './components/HistoryTab.jsx';
 
 // ---------- איזה מסך מוצג ----------
 // loading | noserver | welcome | setup | login | join | pin | app
@@ -37,6 +37,9 @@ function applyTheme(role) {
   const tc = document.querySelector('meta[name="theme-color"]');
   if (tc) tc.setAttribute('content', THEME_COLOR[role] || THEME_COLOR.child);
 }
+
+const TAB_IDS = ['home', 'friends', 'history', 'family'];
+const tabFromHash = () => { const h = location.hash.slice(1); return TAB_IDS.includes(h) ? h : null; };
 
 const DEFAULT_LABELS = { home: '🏠 הכסף שלי', friends: '🤝 חברים', history: '📜 מה היה', family: '👨‍👩‍👧 המשפחה' };
 
@@ -60,8 +63,9 @@ function Root() {
   const data = useQuery('data:get', token ? { token } : 'skip');
   const fdata = useQuery('friends:get', token ? { token } : 'skip') || null;
   const roster = useQuery('auth:legacyRoster', {});
-  const [tabSel, setTabSel] = useState(null);
+  const [tabSel, setTabSel] = useState(tabFromHash);
   const migrating = useRef(false);
+  const firstToken = useRef(true);
 
   // רשימת ההורים מהגרסה הישנה. אם מישהו באמצע כניסה כזו, מרעננים אותו.
   useEffect(() => {
@@ -100,7 +104,21 @@ function Root() {
   });
 
   // כניסה או יציאה: סוגרים חלונות, ובכל כניסה מתחילים מהלשונית הראשית.
-  useEffect(() => { sheet.close(); setTabSel(null); }, [token]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    sheet.close();
+    // בטעינה ראשונה עם כניסה שמורה נשארים בלשונית מהכתובת.
+    if (firstToken.current && token) { firstToken.current = false; return; }
+    firstToken.current = false;
+    setTabSel(null);
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  }, [token]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // כפתור "חזרה" בדפדפן מחזיר ללשונית הקודמת.
+  useEffect(() => {
+    const onPop = () => setTabSel(tabFromHash());
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
 
   const role = screen === 'app' ? data.me.role : '';
   useEffect(() => { applyTheme(role); }, [role]);
@@ -113,7 +131,11 @@ function Root() {
 
   const isParent = role === 'parent';
   const isTeen = role === 'teen';
-  const setTab = useCallback((t) => { setTabSel(t); window.scrollTo({ top: 0 }); }, []);
+  const setTab = useCallback((t) => {
+    setTabSel(t);
+    if (location.hash !== '#' + t) history.pushState(null, '', '#' + t);
+    window.scrollTo({ top: 0 });
+  }, []);
   const openEntryFlow = useCallback((opts) => sheet.open('', <EntryFlow opts={opts} />), [sheet]);
 
   const ctx = useMemo(() => (screen === 'app'
@@ -158,7 +180,8 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
     : 0;
 
   const tabs = ['home', ...(isTeen ? ['friends'] : []), 'history', ...(isParent ? ['family'] : [])];
-  const badge = { family: isParent ? parentCount : 0, friends: friendsCount };
+  const myPending = isParent ? 0 : data.entries.filter((e) => isPending(e) && (e.from === me || e.to === me)).length;
+  const badge = { home: myPending, family: isParent ? parentCount : 0, friends: friendsCount };
 
   const sheet = useSheet();
 
@@ -177,7 +200,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
 
       <nav className="tabs" role="tablist" aria-label="תפריט ראשי">
         {tabs.map((t) => (
-          <button key={t} role="tab" data-tab={t} className={'tab' + (tab === t ? ' active' : '')} aria-selected={tab === t} onClick={() => setTab(t)}>
+          <button key={t} id={'tabbtn-' + t} role="tab" aria-controls={'tab-' + t} data-tab={t} className={'tab' + (tab === t ? ' active' : '')} aria-selected={tab === t} onClick={() => setTab(t)}>
             {labels[t] || DEFAULT_LABELS[t]}
             {badge[t] ? <span className="badge">{badge[t]}</span> : null}
           </button>
@@ -185,20 +208,19 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
       </nav>
 
       <main>
-        <section id="tab-home" className={'panel' + (tab === 'home' ? ' active' : '')}>
+        <section id="tab-home" role="tabpanel" aria-labelledby="tabbtn-home" className={'panel' + (tab === 'home' ? ' active' : '')}>
           <Home data={data} token={token} />
         </section>
         {isTeen && (
-          <section id="tab-friends" className={'panel' + (tab === 'friends' ? ' active' : '')}>
+          <section id="tab-friends" role="tabpanel" aria-labelledby="tabbtn-friends" className={'panel' + (tab === 'friends' ? ' active' : '')}>
             <FriendsTab data={data} fdata={fdata} token={token} />
           </section>
         )}
-        <section id="tab-history" className={'panel' + (tab === 'history' ? ' active' : '')}>
-          <EntriesList list={data.entries.filter((e) => e.from === me || e.to === me)} emptyText="עדיין לא נרשם כלום."
-            token={token} me={me} isParent={isParent} lookup={(id) => data.people.find((p) => p.id === id)} debtList={data.entries} />
+        <section id="tab-history" role="tabpanel" aria-labelledby="tabbtn-history" className={'panel' + (tab === 'history' ? ' active' : '')}>
+          <HistoryTab data={data} token={token} me={me} isParent={isParent} />
         </section>
         {isParent && (
-          <section id="tab-family" className={'panel' + (tab === 'family' ? ' active' : '')}>
+          <section id="tab-family" role="tabpanel" aria-labelledby="tabbtn-family" className={'panel' + (tab === 'family' ? ' active' : '')}>
             <FamilyTab data={data} fdata={fdata} token={token} />
           </section>
         )}

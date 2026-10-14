@@ -471,3 +471,5 @@ button.busy { animation: busy-pulse 1s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { button.busy, #pinDots.busy { animation: none; } }
 
 #pinDots.busy { animation: busy-pulse 1s ease-in-out infinite; }
+
+.ghost.active { background: var(--coin); border-color: var(--coin-deep); font-weight: 800; }

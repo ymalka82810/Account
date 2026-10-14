@@ -2,10 +2,12 @@ import { state, CODE_KEY } from '../../src/state.js';
 import { call } from '../../src/api.js';
 import { today, toast, errMsg } from '../../src/helpers.js';
 import { dropSession } from '../../src/session.js';
+import { useApp } from '../appContext.js';
 import { cleanPayload } from '../../src/screens/legacy.js';
 
-// גיבוי, שחזור משיתוף קובץ, שינוי שם ומחיקה של הקופה (הורים).
-export default function FamilyTools({ data, token }) {
+// גיבוי, שחזור מקובץ ושינוי שם (הורים).
+export default function FamilySettings({ data }) {
+  const { token } = useApp();
   function exportBackup() {
     const out = {
       people: data.people.map((p) => ({ id: p.id, name: p.name, role: p.role })),
@@ -41,6 +43,21 @@ export default function FamilyTools({ data, token }) {
     catch (e) { toast(errMsg(e)); }
   }
 
+  return (
+    <>
+      <div className="tools">
+        <button className="ghost" type="button" onClick={exportBackup}>שמירת גיבוי</button>
+        <label className="ghost filebtn">הוספה מקובץ גיבוי<input type="file" accept="application/json" hidden onChange={importBackup} /></label>
+      </div>
+      <div className="tools">
+        <button className="ghost" type="button" onClick={rename}>שינוי שם המשפחה</button>
+      </div>
+    </>
+  );
+}
+
+// מחיקת הקופה כולה, מופרדת משאר ההגדרות.
+export function DangerZone({ data, token }) {
   async function deleteFamily() {
     const typed = prompt(`זה ימחק את כל הקופה: כל האנשים וכל הרשומות, ואי אפשר לבטל.\nכדי לאשר, כתבו את שם המשפחה: ${data.family.name}`);
     if (typed === null) return;
@@ -54,15 +71,8 @@ export default function FamilyTools({ data, token }) {
   }
 
   return (
-    <>
-      <div className="tools">
-        <button className="ghost" type="button" onClick={exportBackup}>שמירת גיבוי</button>
-        <label className="ghost filebtn">הוספה מקובץ גיבוי<input type="file" accept="application/json" hidden onChange={importBackup} /></label>
-      </div>
-      <div className="tools">
-        <button className="ghost" type="button" onClick={rename}>שינוי שם המשפחה</button>
-        <button className="ghost danger-ghost" type="button" onClick={deleteFamily}>מחיקת הקופה כולה</button>
-      </div>
-    </>
+    <div className="tools">
+      <button className="ghost danger-ghost" type="button" onClick={deleteFamily}>מחיקת הקופה כולה</button>
+    </div>
   );
 }
