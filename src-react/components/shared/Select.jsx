@@ -16,8 +16,8 @@ export default function Select({ value, onChange, options, className = '', place
     const estHeight = Math.min(options.length * 42 + 12, 280);
     const openAbove = r.bottom + estHeight > window.innerHeight && r.top > estHeight;
     setPos(openAbove
-      ? { left: r.left, width: r.width, bottom: window.innerHeight - r.top + 6 }
-      : { left: r.left, width: r.width, top: r.bottom + 6 });
+      ? { left: r.left, width: r.width, bottom: window.innerHeight - r.top + 6, above: true }
+      : { left: r.left, width: r.width, top: r.bottom + 6, above: false });
   }
 
   useEffect(() => {
@@ -73,7 +73,8 @@ export default function Select({ value, onChange, options, className = '', place
         <span className="dd-arrow" aria-hidden="true" />
       </button>
       {open && pos && createPortal(
-        <ul className="dd-list" role="listbox" style={pos}>
+        <ul className={'dd-list' + (pos.above ? ' dd-list-up' : '')} role="listbox"
+          style={{ left: pos.left, width: pos.width, top: pos.top, bottom: pos.bottom }}>
           {options.map((o, i) => (
             <li key={o.value} role="option" aria-selected={o.value === value}
               className={'dd-opt' + (o.value === value ? ' sel' : '') + (i === activeIdx ? ' active' : '')}
