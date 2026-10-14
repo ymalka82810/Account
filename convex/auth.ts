@@ -209,14 +209,25 @@ export const changeMyPin = mutation({
 
 // הורה קובע קוד חדש למישהו (או מנקה אותו, והאדם יבחר קוד בעצמו).
 export const resetPin = mutation({
-  args: { token: v.string(), personId: v.id("people"), pin: v.optional(v.string()), emailCode: v.optional(v.string()) },
-  handler: async (ctx, { token, personId, pin, emailCode }) => {
+  args: { token: v.string(), personId: v.id("people"), pin: v.optional(v.string()), emailCode: v.optional(v.string()), myPin: v.optional(v.string()) },
+  handler: async (ctx, { token, personId, pin, emailCode, myPin }) => {
     const me = await requireParent(ctx, token);
     await requireSameFamily(ctx, me, personId);
     // הורה עם מייל מאומת מאשר כל קוד חדש בקוד מהמייל (emailAuth:requestChildResetCode).
     if (me.emailVerified) {
       if (!emailCode) return { ok: false as const, reason: "needEmailCode" as const };
       if (!(await verifyCode(ctx, me._id, "childReset", emailCode))) return { ok: false as const, reason: "emailCode" as const };
+    } else {
+      // בלי מייל מאומת: ההורה מאשר עם הקוד הסודי שלו עצמו, כדי שלא כל מי שתופס מכשיר פתוח יוכל לאפס קוד לילד.
+      if (!me.pinHash || !me.pinSalt) return { ok: false as const, reason: "needMyPin" as const };
+      if (!myPin) return { ok: false as const, reason: "needMyPin" as const };
+      const now = Date.now();
+      if (me.lockedUntil && me.lockedUntil > now) return { ok: false as const, reason: "locked" as const };
+      if ((await hashPin(myPin, me.pinSalt)) !== me.pinHash) {
+        const r = await registerPinFail(ctx, me);
+        if (r.locked) await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: me._id });
+        return { ok: false as const, reason: "wrongMyPin" as const };
+      }
     }
     for (const s of await ctx.db.query("sessions").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) {
       await ctx.db.delete(s._id);

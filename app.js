@@ -1376,20 +1376,33 @@
 
   function openResetPin(p) {
     const emailRequired = !!data.me.email;
+    const myPinRequired = !emailRequired;
     const build = () => {
       const input = pinField('new-password');
       const codeIn = emailRequired ? codeField() : null;
+      const myPinIn = myPinRequired ? pinField('current-password') : null;
       const err = el('p', { class: 'error', role: 'alert' });
       const run = async (pin) => {
+        if (myPinIn && !/^\d{4}$/.test(myPinIn.value)) { err.textContent = 'הקלידו את הקוד הסודי שלכם, 4 ספרות.'; return; }
         try {
-          const res = await call('auth:resetPin', { token, personId: p.id, pin, emailCode: codeIn ? codeIn.value : undefined });
-          if (res && res.ok === false) { err.textContent = 'קוד האימות מהמייל שגוי או שפג תוקפו.'; return; }
+          const res = await call('auth:resetPin', {
+            token, personId: p.id, pin,
+            emailCode: codeIn ? codeIn.value : undefined,
+            myPin: myPinIn ? myPinIn.value : undefined,
+          });
+          if (res && res.ok === false) {
+            err.textContent = res.reason === 'wrongMyPin' ? 'הקוד הסודי שהקלדתם שגוי.'
+              : res.reason === 'locked' ? 'יותר מדי ניסיונות. נסו שוב עוד כמה דקות.'
+              : 'קוד האימות מהמייל שגוי או שפג תוקפו.';
+            return;
+          }
           closeSheet();
           toast(pin ? `הקוד של ${p.name} עודכן` : `${p.name} יבחר/תבחר קוד חדש בכניסה הבאה`);
         } catch (e) { err.textContent = errMsg(e); }
       };
       openSheet('קוד סודי ל' + p.name, el('div', { class: 'form' },
         codeIn ? el('label', { class: 'field' }, el('span', { text: 'קוד אימות מהמייל' }), codeIn) : null,
+        myPinIn ? el('label', { class: 'field' }, el('span', { text: 'הקוד הסודי שלכם, לאישור' }), myPinIn) : null,
         el('label', { class: 'field' }, el('span', { text: 'קוד חדש (4 ספרות)' }), input),
         err,
         el('button', {
