@@ -31,6 +31,7 @@ const SUBJECTS: Record<string, string> = {
   pinChange: "קוד לשינוי הקוד הסודי בקופה",
   pinReset: "קוד לאיפוס הקוד הסודי בקופה",
   childReset: "קוד לאישור קוד סודי חדש לילד/ה בקופה",
+  emailChange: "קוד לאישור החלפת המייל בקופה",
 };
 
 export const sendCode = internalAction({

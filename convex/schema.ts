@@ -48,7 +48,7 @@ export default defineSchema({
   emailCodes: defineTable({
     personId: v.id("people"),
     email: v.string(),
-    purpose: v.union(v.literal("verify"), v.literal("pinChange"), v.literal("pinReset"), v.literal("childReset")),
+    purpose: v.union(v.literal("verify"), v.literal("pinChange"), v.literal("pinReset"), v.literal("childReset"), v.literal("emailChange")),
     codeHash: v.string(),
     salt: v.string(),
     expiresAt: v.number(),

@@ -971,28 +971,46 @@
             } catch (e) { err.textContent = errMsg(e); }
           },
         }),
-        el('button', { class: 'ghost', type: 'button', text: 'כתובת אחרת', onclick: stepEmail })));
+        el('button', { class: 'ghost', type: 'button', text: 'כתובת אחרת', onclick: start })));
     };
+    // כתובת חדשה. אם כבר יש מייל מאומת, צריך גם את הקוד שנשלח למייל הישן.
     const stepEmail = () => {
       const email = el('input', { type: 'email', autocomplete: 'email', placeholder: 'name@example.com', dir: 'ltr' });
+      const oldCode = current ? codeField() : null;
       const err = el('p', { class: 'error', role: 'alert' });
       openSheet('מייל לשחזור הקוד', el('div', { class: 'form' },
         el('p', { class: 'hint', text: current
-          ? `המייל הנוכחי: ${current}. מייל חדש יחליף אותו רק אחרי אימות.`
+          ? `שלחנו קוד אל ${current}. כתבו אותו, ואת הכתובת החדשה. היא תחליף את הנוכחית רק אחרי אימות.`
           : 'נשלח אליו קוד כשמשנים או מאפסים קוד סודי, וגם התראה כשהקוד של מישהו במשפחה ננעל.' }),
-        el('label', { class: 'field' }, el('span', { text: 'כתובת מייל' }), email),
+        oldCode ? el('label', { class: 'field' }, el('span', { text: 'קוד מהמייל הנוכחי' }), oldCode) : null,
+        el('label', { class: 'field' }, el('span', { text: 'כתובת מייל' + (current ? ' חדשה' : '') }), email),
         err,
         el('button', {
           class: 'primary', type: 'button', text: 'שליחת קוד אימות', onclick: async () => {
             err.textContent = '';
             try {
-              await call('emailAuth:requestVerify', { token, email: email.value });
-              stepCode(email.value.trim().toLowerCase());
+              const res = await call('emailAuth:requestVerify', { token, email: email.value, oldCode: oldCode ? oldCode.value : undefined });
+              if (res.ok) stepCode(email.value.trim().toLowerCase());
+              else err.textContent = 'הקוד מהמייל הנוכחי שגוי או שפג תוקפו.';
             } catch (e) { err.textContent = errMsg(e); }
           },
         })));
     };
-    stepEmail();
+    // נקודת ההתחלה: בלי מייל, ישר לכתובת. עם מייל מאומת, קודם שולחים קוד למייל הישן.
+    function start() {
+      if (!current) { stepEmail(); return; }
+      const err = el('p', { class: 'error', role: 'alert' });
+      openSheet('החלפת מייל', el('div', { class: 'form' },
+        el('p', { class: 'hint', text: `המייל הנוכחי: ${current}. להחלפה נשלח אליו קוד אישור.` }),
+        err,
+        el('button', {
+          class: 'primary', type: 'button', text: 'שליחת קוד למייל הנוכחי', onclick: async () => {
+            try { await call('emailAuth:requestEmailChangeCode', { token }); stepEmail(); }
+            catch (e) { err.textContent = errMsg(e); }
+          },
+        })));
+    }
+    start();
   }
 
   // שינוי הקוד הסודי של הורה עם מייל מאומת: קוד מהמייל במקום הקוד הנוכחי.

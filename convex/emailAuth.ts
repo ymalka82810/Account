@@ -5,13 +5,30 @@ import { issueCode, verifyCode } from "./emailCodes";
 import { codeThrottled, failCode, openSession, setPin } from "./auth";
 
 // ---------- חיבור מייל להורה ----------
+// הורה שכבר יש לו מייל מאומת צריך קודם קוד מהמייל הישן (requestEmailChangeCode),
+// כדי שמי שמחזיק סשן פתוח לא יוכל להחליף את המייל לכתובת משלו.
+export const requestEmailChangeCode = mutation({
+  args: { token: v.string() },
+  handler: async (ctx, { token }) => {
+    const me = await requirePerson(ctx, token);
+    if (me.role !== "parent" || !me.emailVerified || !me.email) throw new ConvexError("אין מייל מאומת להחלפה");
+    await issueCode(ctx, me, me.email, "emailChange");
+    return { ok: true as const };
+  },
+});
+
 export const requestVerify = mutation({
-  args: { token: v.string(), email: v.string() },
-  handler: async (ctx, { token, email }) => {
+  args: { token: v.string(), email: v.string(), oldCode: v.optional(v.string()) },
+  handler: async (ctx, { token, email, oldCode }) => {
     const me = await requirePerson(ctx, token);
     if (me.role !== "parent") throw new ConvexError("מייל רק להורים");
     const clean = normalizeEmail(email);
     if (!validEmail(clean)) throw new ConvexError("כתובת מייל לא תקינה");
+    if (me.emailVerified) {
+      if (!oldCode || !(await verifyCode(ctx, me._id, "emailChange", oldCode))) {
+        return { ok: false as const, reason: "oldCode" as const };
+      }
+    }
     await ctx.db.patch(me._id, { pendingEmail: clean });
     await issueCode(ctx, me, clean, "verify");
     return { ok: true as const };
