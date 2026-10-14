@@ -39,6 +39,7 @@ export function dropSession() {
   state.token = '';
   localStorage.removeItem(TOKEN_KEY);
   state.pinFlow = null;
+  state.view = 'login';
   state.codeChecked = false;
   bumpAuth();
   restoreFamily().finally(() => { state.codeChecked = true; bumpAuth(); });
