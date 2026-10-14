@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { state } from '../../../src/state.js';
-import { goView, joinFamily } from '../../../src/screens/auth.js';
+import { state } from '../../state/state.js';
+import { goView, joinFamily } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 
 export default function Join({ current }) {

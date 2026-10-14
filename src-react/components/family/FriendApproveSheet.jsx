@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { state } from '../../../src/state.js';
-import { call } from '../../../src/api.js';
-import { toast, errMsg } from '../../../src/helpers.js';
+import { state } from '../../state/state.js';
+import { call } from '../../lib/api.js';
+import { toast, errMsg } from '../../lib/helpers.js';
 import { useApp } from '../../appContext.js';
 import { useSheet, useSheetTitle } from '../Sheet.jsx';
 import AsyncButton from '../AsyncButton.jsx';

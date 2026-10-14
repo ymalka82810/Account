@@ -1,5 +1,5 @@
-import { DEVICE_KEY } from './state.js';
-import { client } from '../src-react/lib/client.js';
+import { DEVICE_KEY } from '../state/state.js';
+import { client } from './client.js';
 
 // מזהה מכשיר אקראי, רק להגבלת קצב של ניחושי קוד (לא מזהה אישי).
 export function deviceId() {

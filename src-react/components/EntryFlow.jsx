@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { state } from '../../src/state.js';
-import { call } from '../../src/api.js';
-import { today, toast, errMsg } from '../../src/helpers.js';
+import { state } from '../state/state.js';
+import { call } from '../lib/api.js';
+import { today, toast, errMsg } from '../lib/helpers.js';
 import { openDebtsOf, debtLabel, namesFor, money } from '../lib/computations.js';
 import { useApp } from '../appContext.js';
 import { useSheet, useSheetTitle } from './Sheet.jsx';

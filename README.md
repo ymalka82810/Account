@@ -64,7 +64,7 @@ npx convex dev        # מתחבר לחשבון Convex, יוצר פרויקט ו
 
 ## מבנה
 - `index.html`, `vite.config.js` - נקודת הכניסה של Vite
-- `src-react/` - הממשק ב-React: `App.jsx` (ניתוב מסכים, לשוניות, #hash), `components/` (`auth/` מסכי כניסה, `family/` רכיבי לשונית המשפחה, `account/` חלונות החשבון, `sheets/` שדות משותפים), `lib/` (חישובי חובות, `useRun`)
-- `src/` - שכבת הגשר הוותיקה שעדיין בשימוש: מצב משותף (`state.js`), כניסה (`screens/auth.js`), התראות (`push.js`), קריאות לשרת (`api.js`)
+- `src-react/` - הממשק ב-React: `App.jsx` (ניתוב מסכים, לשוניות, #hash), `components/` (`auth/` מסכי כניסה, `family/` רכיבי לשונית המשפחה, `account/` חלונות החשבון, `sheets/` שדות משותפים), `lib/` (חישובי חובות, `api.js` קריאות לשרת, `useRun`, `helpers.js`, `push.js`)
+- `src-react/state/` - מצב כניסה משותף (`state.js`) והלוגיקה של מסכי הכניסה (`auth.js`)
 - `public/` - `style.css`, `config.js`, `sw.js`, manifest, תנאי שימוש ופרטיות (מועתקים כמו שהם ל-`dist`)
 - `convex/` - סכמה, כניסה והצטרפות (`auth.ts`), נתונים (`data.ts`), רשומות (`entries.ts`), אנשים (`people.ts`), משפחה (`family.ts`), ייבוא (`admin.ts`), כלים משותפים (`lib.ts`)

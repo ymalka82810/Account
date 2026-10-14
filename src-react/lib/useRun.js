@@ -1,5 +1,5 @@
-import { call } from '../../src/api.js';
-import { toast, errMsg } from '../../src/helpers.js';
+import { call } from './api.js';
+import { toast, errMsg } from './helpers.js';
 
 // run(שם פעולה, פרמטרים, הודעת הצלחה): מריץ mutation עם הטוקן ומציג הודעה.
 export function useRun(token) {

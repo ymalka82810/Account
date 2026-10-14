@@ -1,7 +1,7 @@
-import { call } from '../../src/api.js';
+import { call } from '../lib/api.js';
 import { useState } from 'react';
-import { toast, errMsg } from '../../src/helpers.js';
-import { WEEKDAYS } from '../../src/state.js';
+import { toast, errMsg } from '../lib/helpers.js';
+import { WEEKDAYS } from '../state/state.js';
 import { money, fmtDate } from '../lib/computations.js';
 
 const recurringWhen = (r) => (r.frequency === 'weekly' ? `כל יום ${WEEKDAYS[r.weekday]}` : `ב-${r.monthDay} בכל חודש`);

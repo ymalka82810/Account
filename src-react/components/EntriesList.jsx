@@ -1,5 +1,5 @@
-import { call } from '../../src/api.js';
-import { toast, errMsg } from '../../src/helpers.js';
+import { call } from '../lib/api.js';
+import { toast, errMsg } from '../lib/helpers.js';
 import { isPending, debtStates, canDelete, namesFor, money, fmtDate } from '../lib/computations.js';
 
 // רשימת רשומות. lookup(id) מחזיר אדם לפי מזהה.

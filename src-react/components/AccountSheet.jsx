@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { call } from '../../src/api.js';
-import { state } from '../../src/state.js';
-import { toast, errMsg } from '../../src/helpers.js';
-import { dropSession } from '../../src/screens/auth.js';
-import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../../src/push.js';
+import { call } from '../lib/api.js';
+import { state } from '../state/state.js';
+import { toast, errMsg } from '../lib/helpers.js';
+import { dropSession } from '../state/auth.js';
+import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../lib/push.js';
 import { useApp } from '../appContext.js';
 import { useSheet, useSheetTitle } from './Sheet.jsx';
 import { ChangePinSheet, ChangePinEmailSheet, EmailSheet } from './account/AccountSheets.jsx';

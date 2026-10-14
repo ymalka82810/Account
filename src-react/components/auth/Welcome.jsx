@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { state } from '../../../src/state.js';
-import { prettyCode } from '../../../src/helpers.js';
-import { submitFamilyCode, goView, startPin } from '../../../src/screens/auth.js';
+import { state } from '../../state/state.js';
+import { prettyCode } from '../../lib/helpers.js';
+import { submitFamilyCode, goView, startPin } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 
 export default function Welcome({ current }) {

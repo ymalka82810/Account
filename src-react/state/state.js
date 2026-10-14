@@ -8,7 +8,6 @@ export const LEGACY_DONE_KEY = 'kupa-legacy-imported';
 export const CODE_KEY = 'kupa-code';
 export const DEVICE_KEY = 'kupa-device';
 export const LAST_PERSON_KEY = 'kupa-last-person';
-export const UNDO_MS = 10 * 60 * 1000;
 export const AVATARS = ['🦊', '🐼', '🦁', '🐯', '🐸', '🐵', '🦄', '🐙', '🐨', '🐶', '🐱', '🚀', '😎', '🎧', '🛹', '⚡', '🔥', '🎮'];
 export const FRIEND_MAX = 50000; // באגורות, כמו בשרת
 export const WEEKDAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];

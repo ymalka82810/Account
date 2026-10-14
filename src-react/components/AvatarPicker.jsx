@@ -1,4 +1,4 @@
-import { AVATARS } from '../../src/state.js';
+import { AVATARS } from '../state/state.js';
 
 export const randomAvatar = () => AVATARS[Math.floor(Math.random() * AVATARS.length)];
 

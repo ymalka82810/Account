@@ -1,6 +1,6 @@
 import { useEffect, useRef, useSyncExternalStore } from 'react';
-import { state, subscribeAuth, authVersion } from '../../src/state.js';
-import { pressKey } from '../../src/screens/auth.js';
+import { state, subscribeAuth, authVersion } from '../state/state.js';
+import { pressKey } from '../state/auth.js';
 import Welcome from './auth/Welcome.jsx';
 import Setup from './auth/Setup.jsx';
 import Login from './auth/Login.jsx';

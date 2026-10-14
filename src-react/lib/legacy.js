@@ -1,4 +1,4 @@
-import { LEGACY_KEY, LEGACY_DONE_KEY } from '../state.js';
+import { LEGACY_KEY, LEGACY_DONE_KEY } from '../state/state.js';
 
 // ---------- נתונים ישנים מהמכשיר ----------
 export function readLegacy() {

@@ -1,6 +1,6 @@
-import { state, CODE_KEY, LAST_PERSON_KEY, TOKEN_KEY, bumpAuth } from '../state.js';
-import { toast, errMsg, fmtWait } from '../helpers.js';
-import { call } from '../api.js';
+import { state, CODE_KEY, LAST_PERSON_KEY, TOKEN_KEY, bumpAuth } from './state.js';
+import { toast, errMsg, fmtWait } from '../lib/helpers.js';
+import { call } from '../lib/api.js';
 
 // הלוגיקה של מסכי הכניסה. התצוגה שלהם ב-src-react/components/Auth.jsx.
 

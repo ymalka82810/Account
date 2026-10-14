@@ -1,8 +1,8 @@
-import { call } from '../../src/api.js';
+import { call } from '../lib/api.js';
 import { useState } from 'react';
-import { toast } from '../../src/helpers.js';
+import { toast } from '../lib/helpers.js';
 import { useRun } from '../lib/useRun.js';
-import { FRIEND_MAX } from '../../src/state.js';
+import { FRIEND_MAX } from '../state/state.js';
 import { useApp } from '../appContext.js';
 import { isPending, pairOwes, openDebtsOf, debtLabel, namesFor, money, fmtDate } from '../lib/computations.js';
 import EntriesList from './EntriesList.jsx';

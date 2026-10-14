@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { call } from '../../src/api.js';
-import { state } from '../../src/state.js';
+import { call } from '../lib/api.js';
+import { state } from '../state/state.js';
 import AvatarPicker, { randomAvatar } from './AvatarPicker.jsx';
-import { toast, errMsg } from '../../src/helpers.js';
+import { toast, errMsg } from '../lib/helpers.js';
 
 // הוספת בן/בת משפחה (הורים).
 export default function PersonForm({ token }) {
