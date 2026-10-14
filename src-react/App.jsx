@@ -161,6 +161,32 @@ function Root() {
   );
 }
 
+// ---------- אנימציית מעבר גלגל השיניים לאריח הצף ----------
+// השבב של גלגל השיניים "קופץ" ממקומו למרכז המסך, מסתובב ומתרחב עד שהוא
+// הופך למלבן בגודל האריח; ברגע שהאנימציה מסתיימת, האריח האמיתי נפתח במקומו.
+function GearLaunch({ fromRect, onDone }) {
+  const [grown, setGrown] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setGrown(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+  useEffect(() => {
+    if (!grown) return;
+    const t = setTimeout(onDone, 480);
+    return () => clearTimeout(t);
+  }, [grown, onDone]);
+
+  const style = grown
+    ? { left: '50%', top: '50%', width: 'min(560px, 92vw)', height: 'min(70vh, 480px)', transform: 'translate(-50%, -50%) rotate(540deg)', borderRadius: '24px' }
+    : { left: fromRect.left + fromRect.width / 2, top: fromRect.top + fromRect.height / 2, width: fromRect.width, height: fromRect.height, transform: 'translate(-50%, -50%) rotate(0deg)', borderRadius: '50%' };
+
+  return (
+    <div className={'gear-launch' + (grown ? ' grown' : '')} style={style} aria-hidden="true">
+      <span className="gear-launch-icon">⚙️</span>
+    </div>
+  );
+}
+
 // ---------- המסך הראשי ----------
 function Shell({ tabSel, setTab, isParent, isTeen }) {
   const { data, fdata, token, me } = useApp();
@@ -183,6 +209,17 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
   const badge = { home: myPending, family: isParent ? parentCount : 0, friends: friendsCount };
 
   const sheet = useSheet();
+  const gearRef = useRef(null);
+  const [launchRect, setLaunchRect] = useState(null);
+
+  const openAccount = () => {
+    if (gearRef.current) setLaunchRect(gearRef.current.getBoundingClientRect());
+    else sheet.open('', <AccountSheet />);
+  };
+  const finishLaunch = useCallback(() => {
+    setLaunchRect(null);
+    sheet.open('', <AccountSheet />);
+  }, [sheet]);
 
   return (
     <>
@@ -193,8 +230,11 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
             <h1>{data.me.name} {data.family.name.replace(/^משפחת\s+/, '')}</h1>
           </div>
         </div>
-        <button className="ghost light" type="button" aria-label="החשבון שלי" onClick={() => sheet.open('', <AccountSheet />)}>⚙️ החשבון שלי</button>
+        <button className="ghost light" type="button" aria-label="החשבון שלי" onClick={openAccount}>
+          <span ref={gearRef} aria-hidden="true">⚙️</span> החשבון שלי
+        </button>
       </header>
+      {launchRect && <GearLaunch fromRect={launchRect} onDone={finishLaunch} />}
 
       <nav className="tabs" role="tablist" aria-label="תפריט ראשי">
         {tabs.map((t) => (

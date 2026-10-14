@@ -442,6 +442,19 @@ button.small { min-height: 40px; }
 .linkish { margin-top: 26px; width: 100%; }
 .back.ghost, .ghost { cursor: pointer; }
 
+/* אנימציית מעבר גלגל השיניים לאריח הצף */
+.gear-launch {
+  position: fixed; z-index: 21; display: flex; align-items: center; justify-content: center;
+  background: var(--bg); box-shadow: 0 -8px 30px rgba(0, 0, 0, .3); overflow: hidden; pointer-events: none;
+  transition: left .48s cubic-bezier(.3, .6, .3, 1), top .48s cubic-bezier(.3, .6, .3, 1),
+    width .48s cubic-bezier(.3, .6, .3, 1), height .48s cubic-bezier(.3, .6, .3, 1),
+    transform .48s cubic-bezier(.3, .6, .3, 1), border-radius .48s cubic-bezier(.3, .6, .3, 1);
+}
+.gear-launch-icon {
+  font-size: 1.3rem; transition: font-size .48s cubic-bezier(.3, .6, .3, 1), opacity .3s ease .12s;
+}
+.gear-launch.grown .gear-launch-icon { font-size: 4.5rem; opacity: 0; }
+
 /* חלון קופץ */
 .sheet-wrap { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end; justify-content: center; }
 .sheet-bg { position: absolute; inset: 0; background: rgba(10, 16, 40, .55); }
