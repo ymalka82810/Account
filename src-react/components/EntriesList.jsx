@@ -1,4 +1,4 @@
-import { useConvex } from 'convex/react';
+import { call } from '../../src/api.js';
 import { toast, errMsg } from '../../src/helpers.js';
 import { isPending, debtStates, canDelete, namesFor, money, fmtDate } from '../lib/computations.js';
 
@@ -6,7 +6,6 @@ import { isPending, debtStates, canDelete, namesFor, money, fmtDate } from '../l
 export default function EntriesList({
   list, emptyText, token, me, isParent, lookup, debtList, removeEndpoint, pendingLabel,
 }) {
-  const convex = useConvex();
   if (!list.length) return <div className="empty">{emptyText}</div>;
   const { subjectWord, toWord } = namesFor(me, lookup);
   const debtMap = debtStates(debtList);
@@ -14,7 +13,7 @@ export default function EntriesList({
 
   async function remove(e) {
     if (!confirm(isParent ? 'למחוק את הרשומה הזאת?' : 'לבטל את מה שרשמת?')) return;
-    try { await convex.mutation(removeEndpoint || 'entries:remove', { token, id: e.id }); toast('הרשומה נמחקה'); }
+    try { await call(removeEndpoint || 'entries:remove', { token, id: e.id }); toast('הרשומה נמחקה'); }
     catch (err) { toast(errMsg(err)); }
   }
 

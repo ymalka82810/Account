@@ -1,3 +1,4 @@
+import { call } from '../../src/api.js';
 import { useState } from 'react';
 import { toast } from '../../src/helpers.js';
 import { useRun } from '../lib/useRun.js';
@@ -111,7 +112,7 @@ export default function FriendsTab({ data, fdata, token }) {
     setError('');
     await busyRun('add', async () => {
       try {
-        await convex.mutation('friends:addFriend', { token, email });
+        await call('friends:addFriend', { token, email });
         setEmail('');
         toast('אם לחבר/ה יש מצב חברים, נשלחה להם בקשה 🤝');
       } catch (e) { setError(errMsg(e)); }

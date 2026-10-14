@@ -1,5 +1,5 @@
+import { call } from '../../src/api.js';
 import { useState } from 'react';
-import { useConvex } from 'convex/react';
 import { toast, errMsg } from '../../src/helpers.js';
 import { WEEKDAYS } from '../../src/state.js';
 import { money, fmtDate } from '../lib/computations.js';
@@ -8,7 +8,6 @@ const recurringWhen = (r) => (r.frequency === 'weekly' ? `כל יום ${WEEKDAYS
 
 // דמי כיס קבועים (הורים בלבד).
 export default function Recurring({ data, token }) {
-  const convex = useConvex();
   const me = data.me.id;
   const people = data.people;
   const nameOf = (id) => people.find((p) => p.id === id)?.name ?? 'לא ידוע';
@@ -30,7 +29,7 @@ export default function Recurring({ data, token }) {
 
   async function remove(r) {
     if (!confirm('להפסיק את הרישום הקבוע? מה שכבר נרשם נשאר.')) return;
-    try { await convex.mutation('recurring:remove', { token, id: r.id }); toast('הרישום הקבוע הופסק'); }
+    try { await call('recurring:remove', { token, id: r.id }); toast('הרישום הקבוע הופסק'); }
     catch (err) { toast(errMsg(err)); }
   }
 
@@ -40,7 +39,7 @@ export default function Recurring({ data, token }) {
     const agorot = Math.round(parseFloat(amount) * 100);
     if (!Number.isFinite(agorot) || agorot <= 0) { setError('כתבו סכום גדול מאפס.'); return; }
     try {
-      await convex.mutation('recurring:add', {
+      await call('recurring:add', {
         token, from: fromVal, to: toVal, amount: agorot, note,
         frequency: freq,
         weekday: freq === 'weekly' ? Number(weekday) : undefined,

@@ -1,9 +1,8 @@
-import { useConvex } from 'convex/react';
+import { call } from '../../src/api.js';
 import { toast, errMsg, prettyCode } from '../../src/helpers.js';
 
 // קודי הצטרפות (הורים בלבד).
 export default function Codes({ data, token }) {
-  const convex = useConvex();
   const f = data.family;
 
   async function share(title, code) {
@@ -17,7 +16,7 @@ export default function Codes({ data, token }) {
 
   async function rotate(which) {
     if (!confirm('להחליף את הקוד? מי שכבר בפנים נשאר, אבל הקוד הישן יפסיק לעבוד.')) return;
-    try { await convex.mutation('family:rotateCode', { token, which }); toast('הקוד הוחלף ✅'); }
+    try { await call('family:rotateCode', { token, which }); toast('הקוד הוחלף ✅'); }
     catch (e) { toast(errMsg(e)); }
   }
 
