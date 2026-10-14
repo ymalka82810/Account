@@ -21,6 +21,7 @@ export const add = mutation({
     if (members.some((p) => p.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה");
     if (pin !== undefined && !validPin(pin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
     const personAvatar = avatar?.slice(0, 8);
+    if (personAvatar && members.some((p) => p.avatar === personAvatar)) throw new ConvexError("הדמות הזו כבר תפוסה על ידי מישהו אחר במשפחה");
     const id = await ctx.db.insert("people", { familyId: me.familyId, name: clean, role, avatar: personAvatar, gender });
     if (pin) {
       const pinSalt = randomHex(16);
@@ -113,12 +114,16 @@ export const setGender = mutation({
   },
 });
 
-// נער/ה או הורה בוחר/ת דמות לעצמו/ה.
+// כל אחד/ת בוחר/ת דמות לעצמו/ה. אי אפשר לבחור דמות שכבר תפוסה אצל בן משפחה אחר.
 export const setAvatar = mutation({
   args: { token: v.string(), avatar: v.optional(v.string()) },
   handler: async (ctx, { token, avatar }) => {
     const me = await requirePerson(ctx, token);
-    if (me.role !== "teen" && me.role !== "parent") throw new ConvexError("רק נערים והורים יכולים לשנות דמות");
-    await ctx.db.patch(me._id, { avatar: avatar ? avatar.slice(0, 8) : undefined });
+    const clean = avatar ? avatar.slice(0, 8) : undefined;
+    if (clean) {
+      const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
+      if (members.some((p) => p._id !== me._id && p.avatar === clean)) throw new ConvexError("הדמות הזו כבר תפוסה על ידי מישהו אחר במשפחה");
+    }
+    await ctx.db.patch(me._id, { avatar: clean });
   },
 });

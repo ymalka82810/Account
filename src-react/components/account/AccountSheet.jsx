@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { call } from '../../lib/api.js';
-import { state, PARENT_AVATARS } from '../../state/state.js';
+import { state } from '../../state/state.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { dropSession } from '../../state/auth.js';
 import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../../lib/push.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
-import { ChangePinSheet, ChangePinEmailSheet, EmailSheet } from './AccountSheets.jsx';
+import { ChangePinSheet, ChangePinEmailSheet, EmailSheet, AvatarSheet } from './AccountSheets.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
-import AvatarPicker from '../shared/AvatarPicker.jsx';
 import { g } from '../../lib/gender.js';
 
 export async function logout() {
@@ -27,11 +26,6 @@ export function AccountSheet() {
 
   useEffect(() => { if (pushSupported()) isPushOn().then(setPushOn); }, []);
 
-  async function setAvatar(avatar) {
-    try { await call('people:setAvatar', { token, avatar }); }
-    catch (e) { toast(errMsg(e)); }
-  }
-
   async function setGender(gender) {
     try { await call('people:setGender', { token, id: me.id, gender: gender || undefined }); }
     catch (e) { toast(errMsg(e)); }
@@ -46,11 +40,9 @@ export function AccountSheet() {
           <option value="female">נקבה</option>
         </select></label>
 
-      {(me.role === 'teen' || me.role === 'parent') && (
-        <div className="field"><span>דמות</span>
-          <AvatarPicker value={me.avatar} onChange={setAvatar} options={me.role === 'parent' ? PARENT_AVATARS : undefined} />
-        </div>
-      )}
+      <button className="ghost" type="button" onClick={() => sheet.open('דמות', <AvatarSheet />)}>
+        {me.avatar ? me.avatar + ' דמות' : '🙂 בחירת דמות'}
+      </button>
 
       {pushSupported() && pushOn !== null && (
         <AsyncButton className="ghost" onClick={async () => {

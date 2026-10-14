@@ -1,12 +1,34 @@
 // החלונות של החשבון האישי: מייל לשחזור ושינוי הקוד הסודי של עצמי.
 import { useState } from 'react';
-import { state } from '../../state/state.js';
+import { state, AVATARS, PARENT_AVATARS } from '../../state/state.js';
 import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
 import { codeProps, pinProps, Err, Field } from '../shared/fields.jsx';
+import AvatarPicker from '../shared/AvatarPicker.jsx';
+
+// בחירת דמות: כל אחד/ת בוחר/ת מתוך האפשרויות, אבל לא דמות שכבר תפוסה אצל בן משפחה אחר.
+export function AvatarSheet() {
+  const { data, token } = useApp();
+  const sheet = useSheet();
+  const me = data.me;
+  const options = me.role === 'parent' ? PARENT_AVATARS : AVATARS;
+  const taken = new Set(data.people.filter((p) => p.id !== me.id && p.avatar).map((p) => p.avatar));
+  useSheetTitle('דמות');
+
+  async function pick(avatar) {
+    try { await call('people:setAvatar', { token, avatar }); sheet.close(); }
+    catch (e) { toast(errMsg(e)); }
+  }
+
+  return (
+    <div className="form">
+      <AvatarPicker value={me.avatar} onChange={pick} options={options} taken={taken} />
+    </div>
+  );
+}
 
 // הוספה או החלפה של מייל להורה: כתובת, ואז קוד אימות שנשלח אליה.
 export function EmailSheet() {
