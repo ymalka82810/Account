@@ -4,9 +4,10 @@ import { ConvexProvider } from 'convex/react';
 import { client } from './lib/client.js';
 import { SheetProvider } from './components/shared/Sheet.jsx';
 import Toast from './components/shared/Toast.jsx';
+import UpdateBanner from './components/shared/UpdateBanner.jsx';
 import App from './App.jsx';
 
-const tree = <SheetProvider><App /><Toast /></SheetProvider>;
+const tree = <SheetProvider><App /><UpdateBanner /><Toast /></SheetProvider>;
 createRoot(document.getElementById('root')).render(client ? <ConvexProvider client={client}>{tree}</ConvexProvider> : tree);
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {

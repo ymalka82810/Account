@@ -787,3 +787,22 @@ button.busy { animation: busy-pulse 1s ease-in-out infinite; }
 #pinDots.busy { animation: busy-pulse 1s ease-in-out infinite; }
 
 .ghost.active { background: var(--coin); border-color: var(--coin-deep); font-weight: 800; }
+
+.update-banner {
+  position: fixed;
+  inset-inline: 16px;
+  top: calc(12px + env(safe-area-inset-top, 0));
+  z-index: 30;
+  max-width: 420px;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #1d2b4f;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+}
+.update-banner button { border: 0; border-radius: 8px; padding: 6px 14px; font: inherit; font-weight: 700; background: #fff; color: #1d2b4f; }
