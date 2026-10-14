@@ -223,6 +223,11 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
             <FamilyTab data={data} fdata={fdata} token={token} />
           </section>
         )}
+        {isParent && (
+          <section id="tab-manage" role="tabpanel" aria-labelledby="tabbtn-manage" className={'panel' + (tab === 'manage' ? ' active' : '')}>
+            <ManageTab data={data} token={token} />
+          </section>
+        )}
       </main>
     </>
   );
