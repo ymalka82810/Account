@@ -286,14 +286,33 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
 .tile:active { transform: scale(.97); }
 .tile:hover { border-color: var(--coin-deep); }
 .tname { font-weight: 700; font-size: 1.1rem; overflow-wrap: anywhere; }
+
+/* אפקט "סטיקר" תלת-ממדי לדמויות: שכבת אור מלמעלה + שכבת צל כהה מתחת + צל הטלה רחב ליצירת עומק */
+.avatar-lg, .avatar-md, .avatar-sm, .avatar-xl, .av {
+  filter:
+    drop-shadow(0 -1px 0 rgba(255, 255, 255, .6))
+    drop-shadow(0 1px .5px rgba(0, 0, 0, .25))
+    drop-shadow(0 3px 4px rgba(0, 0, 0, .22));
+}
 .avatar-lg { font-size: 3rem; line-height: 1; }
 .avatar-md { font-size: 2rem; line-height: 1; }
 .avatar-sm { font-size: 1.9rem; line-height: 1; }
-.avatar-xl { font-size: 4.4rem; line-height: 1; }
+.avatar-xl {
+  font-size: 4.4rem; line-height: 1;
+  filter:
+    drop-shadow(0 -1.5px 0 rgba(255, 255, 255, .6))
+    drop-shadow(0 1.5px 1px rgba(0, 0, 0, .25))
+    drop-shadow(0 6px 8px rgba(0, 0, 0, .25));
+}
 
 /* בורר דמות */
 .avatars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
-.av { font-size: 1.7rem; background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 6px 0; cursor: pointer; }
+.av {
+  font-size: 1.7rem; background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 6px 0; cursor: pointer;
+  transition: transform .12s ease, filter .12s ease;
+}
+.av:hover { transform: translateY(-2px); }
+.av:active { transform: translateY(0) scale(.95); filter: none; }
 .av.on { border-color: var(--coin-deep); background: var(--coin); }
 
 /* קוד סודי ולוחות מספרים */
@@ -421,44 +440,45 @@ button.small.okbtn { background: var(--get-bg); color: var(--get); border-color:
 .teen-card .row:last-child { border-bottom: 0; }
 
 /* ===== חידוד: ילדים (ברירת מחדל) ===== */
-body:not([data-theme]) .card,
-body:not([data-theme]) .tile,
-body:not([data-theme]) .sum,
-body:not([data-theme]) .bigbtn,
-body:not([data-theme]) .bal,
-body:not([data-theme]) .debt,
-body:not([data-theme]) .person {
+body[data-theme="child"] .card,
+body[data-theme="child"] .tile,
+body[data-theme="child"] .sum,
+body[data-theme="child"] .bigbtn,
+body[data-theme="child"] .bal,
+body[data-theme="child"] .debt,
+body[data-theme="child"] .person {
   box-shadow: 0 4px 14px rgba(74, 68, 104, .08);
 }
-body:not([data-theme]) button.primary {
+body[data-theme="child"] button.primary {
   background: linear-gradient(135deg, var(--coin), #ffb4a2);
   box-shadow: 0 4px 14px rgba(224, 166, 64, .25);
 }
+body[data-theme="child"],
 body:not([data-theme]) {
   background: linear-gradient(165deg, #a9e2f7 0%, #f4b4d6 48%, #ffd48f 100%);
   background-attachment: fixed;
 }
-body:not([data-theme]) .tabs {
+body[data-theme="child"] .tabs {
   background: rgba(255, 255, 255, .55);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
-body:not([data-theme]) .sheet-bg { background: rgba(120, 100, 160, .4); }
-body:not([data-theme]) .sheet { background: linear-gradient(165deg, #ddf3fc 0%, #fbe1ec 55%, #ffecc9 100%); }
-body:not([data-theme]) .top {
+body[data-theme="child"] .sheet-bg { background: rgba(120, 100, 160, .4); }
+body[data-theme="child"] .sheet { background: linear-gradient(165deg, #ddf3fc 0%, #fbe1ec 55%, #ffecc9 100%); }
+body[data-theme="child"] .top {
   background: linear-gradient(120deg, #8fd8f5 0%, #f295c3 55%, #ffc266 100%);
   color: var(--ink);
   border-bottom: 4px solid #ff9f4e;
 }
-body:not([data-theme]) .top h1 { color: var(--ink); }
-body:not([data-theme]) .sub { color: #5c4d79; }
-body:not([data-theme]) .ghost.light { color: var(--ink); border-color: #c19fd9; background: rgba(255, 255, 255, .55); }
-body:not([data-theme]) .toast { background: #ffdca0; color: var(--ink); box-shadow: 0 6px 20px rgba(90, 70, 110, .25); }
-body:not([data-theme]) .sum.owe { color: #e0766a; }
-body:not([data-theme]) .sum.get { color: #4fa87f; }
-body:not([data-theme]) .bigbtn { border-radius: 22px; }
-body:not([data-theme]) .bigbtn.owe:hover, body:not([data-theme]) .bigbtn.owe:focus-visible, body:not([data-theme]) .bigbtn.owe:active { border-color: #f4b4ac; }
-body:not([data-theme]) .bigbtn.get:hover, body:not([data-theme]) .bigbtn.get:focus-visible, body:not([data-theme]) .bigbtn.get:active { border-color: #a4ddc1; }
+body[data-theme="child"] .top h1 { color: var(--ink); }
+body[data-theme="child"] .sub { color: #5c4d79; }
+body[data-theme="child"] .ghost.light { color: var(--ink); border-color: #c19fd9; background: rgba(255, 255, 255, .55); }
+body[data-theme="child"] .toast { background: #ffdca0; color: var(--ink); box-shadow: 0 6px 20px rgba(90, 70, 110, .25); }
+body[data-theme="child"] .sum.owe { color: #e0766a; }
+body[data-theme="child"] .sum.get { color: #4fa87f; }
+body[data-theme="child"] .bigbtn { border-radius: 22px; }
+body[data-theme="child"] .bigbtn.owe:hover, body[data-theme="child"] .bigbtn.owe:focus-visible, body[data-theme="child"] .bigbtn.owe:active { border-color: #f4b4ac; }
+body[data-theme="child"] .bigbtn.get:hover, body[data-theme="child"] .bigbtn.get:focus-visible, body[data-theme="child"] .bigbtn.get:active { border-color: #a4ddc1; }
 
 /* ===== ערכת נושא: הורים ===== */
 body[data-theme="parent"] {
