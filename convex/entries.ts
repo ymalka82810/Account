@@ -14,6 +14,8 @@ export const add = mutation({
     amount: v.number(),
     note: v.string(),
     date: v.string(),
+    // החזר על חוב מסוים (רשומת חוב שכבר אושרה).
+    debtId: v.optional(v.id("entries")),
   },
   handler: async (ctx, { token, ...e }) => {
     const me = await requirePerson(ctx, token);
@@ -30,6 +32,21 @@ export const add = mutation({
     const from = await ctx.db.get(e.from);
     const to = await ctx.db.get(e.to);
     if (!from || !to || from.familyId !== me.familyId || to.familyId !== me.familyId) throw new ConvexError("אדם לא קיים");
+
+    // החזר שמקושר לחוב: החוב חייב להיות חוב מאושר באותה משפחה, באותו כיוון, וההחזר לא יעלה על מה שנשאר ממנו.
+    if (e.debtId) {
+      if (e.kind !== "payment") throw new ConvexError("אפשר לקשר לחוב רק החזר");
+      const debt = await ctx.db.get(e.debtId);
+      if (!debt || debt.kind !== "debt" || debt.familyId !== me.familyId || debt.status === "pending") {
+        throw new ConvexError("החוב לא נמצא");
+      }
+      if (debt.from !== e.from || debt.to !== e.to) throw new ConvexError("ההחזר לא מתאים לחוב הזה");
+      const linked = await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
+      const paid = linked.filter((x) => x.kind === "payment" && x.debtId === e.debtId).reduce((s, x) => s + x.amount, 0);
+      const remaining = debt.amount - paid;
+      if (remaining <= 0) throw new ConvexError("החוב הזה כבר שולם");
+      if (e.amount > remaining) throw new ConvexError("אי אפשר להחזיר יותר ממה שנשאר מהחוב");
+    }
 
     // מה שילד/ה רושם/ת ממתין לאישור הורה. מה שהורה רושם מאושר מיד.
     const pending = me.role !== "parent";
@@ -99,6 +116,11 @@ export const remove = mutation({
     if (!e || e.familyId !== me.familyId) return;
     const mine = e.createdBy === me._id && (e.status === "pending" || Date.now() - (e.createdAt ?? 0) < UNDO_MS);
     if (me.role !== "parent" && !mine) throw new ConvexError("אפשר לבטל רק ב-10 הדקות הראשונות, או לבקש מהורה");
+    // מחיקת חוב: ההחזרים שקושרו אליו נשארים כהחזרים כלליים, כדי שהיתרה לא תשתנה.
+    if (e.kind === "debt") {
+      const all = await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
+      for (const x of all) if (x.debtId === id) await ctx.db.patch(x._id, { debtId: undefined });
+    }
     await ctx.db.delete(id);
   },
 });

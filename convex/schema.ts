@@ -73,6 +73,8 @@ export default defineSchema({
     date: v.string(), // YYYY-MM-DD
     createdBy: v.optional(v.id("people")),
     createdAt: v.optional(v.number()),
+    // החזר שקשור לחוב מסוים (debtId = רשומת החוב). חסר = החזר כללי. החוב נשאר פתוח עד שסכום ההחזרים מגיע לסכום החוב.
+    debtId: v.optional(v.id("entries")),
     // רשומה שילד/ה יצר/ה ממתינה לאישור הורה ולא נספרת ביתרות. חסר = מאושר.
     status: v.optional(v.literal("pending")),
   })

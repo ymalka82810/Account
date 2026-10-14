@@ -135,6 +135,41 @@
     return out.sort((x, y) => y.amount - x.amount);
   }
 
+  // מצב כל חוב: כמה שולם וכמה נשאר. החזר שקשור לחוב (debtId) מקטין אותו ישירות.
+  // החזרים כלליים (בלי debtId) מנוכים מהחובות הישנים ביותר באותו כיוון.
+  function debtStates(list = data.entries) {
+    const byId = new Map();
+    const order = (a, b) => a.date.localeCompare(b.date) || a.createdAt - b.createdAt;
+    const debts = list.filter((e) => e.kind === 'debt' && !isPending(e)).sort(order);
+    for (const d of debts) byId.set(d.id, { debt: d, paid: 0, remaining: d.amount });
+    for (const e of list) {
+      if (e.kind !== 'payment' || isPending(e) || !e.debtId) continue;
+      const st = byId.get(e.debtId);
+      if (st) { st.paid += e.amount; st.remaining = Math.max(0, st.debt.amount - st.paid); }
+    }
+    for (const e of [...list].sort(order)) {
+      if (e.kind !== 'payment' || isPending(e) || e.debtId) continue;
+      let left = e.amount;
+      for (const d of debts) {
+        if (left <= 0) break;
+        if (d.from !== e.from || d.to !== e.to) continue;
+        const st = byId.get(d.id);
+        const take = Math.min(left, st.remaining);
+        st.paid += take; st.remaining -= take; left -= take;
+      }
+    }
+    return byId;
+  }
+
+  // חובות פתוחים של a ל-b (מה שעוד נשאר), מהישן לחדש.
+  function openDebtsOf(a, b, list = data.entries) {
+    return [...debtStates(list).values()]
+      .filter((x) => x.debt.from === a && x.debt.to === b && x.remaining > 0)
+      .sort((x, y) => x.debt.date.localeCompare(y.debt.date) || x.debt.createdAt - y.debt.createdAt);
+  }
+
+  const debtLabel = (d) => (d.note || 'חוב') + ' • ' + fmtDate(d.date);
+
   // ---------- ניתוב בין מסכים ----------
   function route() {
     if (token) {
@@ -471,15 +506,48 @@
   // ---------- אשף: חוב חדש / החזר ----------
   // opts: {kind:'debt'|'payment', from?, to?, suggest?}  (חסר from או to => בוחרים אדם)
   function openEntryFlow(opts) {
-    const st = { from: opts.from || null, to: opts.to || null, amount: '', agorot: 0, note: '' };
+    const st = { from: opts.from || null, to: opts.to || null, amount: '', agorot: 0, note: '', debtId: null, debtRemaining: null, debtName: '' };
     const body = el('div', { class: 'flow' });
-    const maxAmount = opts.kind === 'payment' && opts.suggest ? opts.suggest : null;
+    // סכום מקסימלי להחזר: אם נבחר חוב מסוים, מה שנשאר ממנו. אחרת היתרה הכללית.
+    const maxFor = () => (st.debtRemaining != null ? st.debtRemaining : (opts.kind === 'payment' && opts.suggest ? opts.suggest : null));
     let opened = false;
 
     const titleFor = () => {
       if (opts.kind === 'debt') return isMe(st.from) ? 'אני חייב/ת כסף' : 'חייבים לי כסף';
       return isMe(st.from) ? 'שילמתי' : isMe(st.to) ? 'קיבלתי כסף' : 'רישום החזר';
     };
+
+    const pickDebt = (x) => {
+      st.debtId = x.debt.id; st.debtRemaining = x.remaining; st.debtName = debtLabel(x.debt);
+      stepAmount();
+    };
+
+    // אחרי שיש שני אנשים: בהחזר בוחרים לאיזה חוב מחזירים (אם יש כמה). אחרת ממשיכים לסכום.
+    function afterPeople() {
+      if (opts.kind !== 'payment' || opts.noDebtPick) return stepAmount();
+      if (opts.debtId) {
+        const hit = openDebtsOf(st.from, st.to).find((x) => x.debt.id === opts.debtId);
+        if (hit) return pickDebt(hit);
+      }
+      const open = openDebtsOf(st.from, st.to);
+      if (open.length === 1) return pickDebt(open[0]);
+      if (open.length > 1) return stepDebt(open);
+      return stepAmount();
+    }
+
+    function stepDebt(open) {
+      body.replaceChildren(
+        el('p', { class: 'flow-q', text: 'לאיזה חוב ההחזר?' }),
+        el('div', { class: 'debt-picks' }, open.map((x) => el('button', {
+          class: 'debt-pick', type: 'button', onclick: () => pickDebt(x),
+        },
+        el('div', { class: 'dp-name', text: debtLabel(x.debt) }),
+        el('div', { class: 'dp-amt', text: x.paid > 0
+          ? `נשאר ${money(x.remaining)} מתוך ${money(x.debt.amount)}`
+          : money(x.remaining) })))),
+      );
+      openOrUpdate();
+    }
 
     function openOrUpdate() {
       if (opened) { $('sheetTitle').textContent = titleFor(); return; }
@@ -497,7 +565,7 @@
         el('p', { class: 'flow-q', text: q }),
         el('div', { class: 'tiles' }, others.map((p) => el('button', {
           class: 'tile', type: 'button',
-          onclick: () => { if (st.from) st.to = p.id; else st.from = p.id; stepAmount(); },
+          onclick: () => { if (st.from) st.to = p.id; else st.from = p.id; afterPeople(); },
         }, el('span', { class: 'avatar-lg', 'aria-hidden': 'true', text: p.avatar }), el('span', { class: 'tname', text: p.name })))),
       );
       openOrUpdate();
@@ -527,6 +595,7 @@
         type: 'button', class: 'chip', text: '₪' + n,
         onclick: () => { st.amount = String(n); err.textContent = ''; refresh(); },
       }));
+      const maxAmount = maxFor();
       if (maxAmount) {
         chips.push(el('button', {
           type: 'button', class: 'chip strong', text: 'הכול ' + money(maxAmount),
@@ -552,14 +621,20 @@
           if (!Number.isFinite(agorot) || agorot <= 0) { err.textContent = 'כתבו סכום גדול מאפס.'; return; }
           if (agorot > 1_000_000) { err.textContent = 'הסכום גדול מדי.'; return; }
           if (opts.maxEntry && agorot > opts.maxEntry) { err.textContent = `בין חברים אפשר לרשום עד ${money(opts.maxEntry)} בכל פעם.`; return; }
-          if (maxAmount && agorot > maxAmount) { err.textContent = `אפשר להחזיר עד ${money(maxAmount)}.`; return; }
+          if (maxAmount && agorot > maxAmount) { err.textContent = st.debtId ? `נשאר מהחוב הזה ${money(maxAmount)}.` : `אפשר להחזיר עד ${money(maxAmount)}.`; return; }
           st.agorot = agorot;
           stepFinal();
         },
       });
 
+      const debtInfo = st.debtId
+        ? el('div', { class: 'debt-info', text: `על: ${st.debtName} • נשאר ${money(st.debtRemaining)}` })
+        : null;
+      const backToDebt = st.debtId && !opts.debtId && openDebtsOf(st.from, st.to).length > 1
+        ? el('button', { type: 'button', class: 'ghost', text: '→ בחירת חוב אחר', onclick: () => { st.debtId = null; st.debtRemaining = null; afterPeople(); } })
+        : null;
       body.replaceChildren(
-        el('p', { class: 'flow-q', text: question }), disp, el('div', { class: 'chips' }, chips), pad, err, next);
+        el('p', { class: 'flow-q', text: question }), debtInfo, disp, el('div', { class: 'chips' }, chips), pad, err, next, backToDebt);
       refresh();
       openOrUpdate();
     }
@@ -571,7 +646,11 @@
       noteInput.addEventListener('input', () => { st.note = noteInput.value; });
       const err = el('p', { class: 'error', role: 'alert' });
 
-      const sentence = `${subjectWord(st.from)} ${isDebt ? 'חייב/ת' : 'החזיר/ה'} ${toWord(st.to)} ${money(st.agorot)}`;
+      let sentence = `${subjectWord(st.from)} ${isDebt ? 'חייב/ת' : 'החזיר/ה'} ${toWord(st.to)} ${money(st.agorot)}`;
+      if (st.debtId) {
+        const left = st.debtRemaining - st.agorot;
+        sentence += ` על ${st.debtName}. ` + (left > 0 ? `יישאר ${money(left)} מהחוב.` : 'החוב ייסגר במלואו ✅');
+      }
 
       const saveBtn = el('button', { type: 'button', class: 'primary', text: isDebt ? '✅ שמירת החוב' : '✅ שמירת ההחזר' });
       saveBtn.addEventListener('click', async () => {
@@ -580,6 +659,7 @@
           await call(opts.endpoint || 'entries:add', {
             token, kind: opts.kind, from: st.from, to: st.to, amount: st.agorot,
             note: isDebt ? st.note.trim() : (st.note.trim() || 'החזר'), date: today(),
+            ...(st.debtId ? { debtId: st.debtId } : {}),
           });
           closeSheet();
           toast(opts.doneToast || (!isParent() ? 'נשלח להורה לאישור ⏳' : isDebt ? 'החוב נשמר ✅' : 'ההחזר נשמר ✅'));
@@ -602,7 +682,7 @@
       openOrUpdate();
     }
 
-    if (!st.from || !st.to) stepPerson(); else stepAmount();
+    if (!st.from || !st.to) stepPerson(); else afterPeople();
   }
 
   // ---------- מסך הבית ----------
@@ -617,11 +697,23 @@
       const iOwe = n > 0;
       const amount = Math.abs(n);
       if (iOwe) owe += amount; else get += amount;
-      cards.push(el('div', { class: 'debt ' + (iOwe ? 'owe' : 'get') },
+      // החובות הפתוחים בכיוון הזה, כל אחד עם מה שנשאר ממנו וכפתור החזר משלו.
+      const [dFrom, dTo] = iOwe ? [me, p.id] : [p.id, me];
+      const open = openDebtsOf(dFrom, dTo);
+      const lines = open.map((x) => el('div', { class: 'debt-line' },
+        el('div', { class: 'dl-text' },
+          el('div', { class: 'dl-name', text: debtLabel(x.debt) }),
+          el('div', { class: 'dl-rem', text: x.paid > 0 ? `נשאר ${money(x.remaining)} מתוך ${money(x.debt.amount)}` : money(x.remaining) })),
+        el('button', {
+          class: 'small', type: 'button', text: iOwe ? 'שילמתי' : 'קיבלתי',
+          onclick: () => openEntryFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id }),
+        })));
+      cards.push(el('div', { class: 'debt ' + (iOwe ? 'owe' : 'get') + (lines.length > 1 ? ' multi' : '') },
         el('span', { class: 'avatar-md', 'aria-hidden': 'true', text: p.avatar }),
         el('div', { class: 'text' },
           el('div', { class: 'who', text: iOwe ? `אני חייב/ת ל${p.name}` : `${p.name} חייב/ת לי` }),
-          el('div', { class: 'amt', text: money(amount) })),
+          el('div', { class: 'amt', text: money(amount) }),
+          lines.length > 1 ? el('div', { class: 'debt-lines' }, lines) : null),
         el('button', {
           class: 'small strongbtn', type: 'button', text: iOwe ? '💰 שילמתי' : '💰 קיבלתי',
           onclick: () => openEntryFlow(iOwe
@@ -647,14 +739,25 @@
   function renderEntries(box, list, emptyText, opts = {}) {
     box.replaceChildren();
     if (!list.length) { box.append(el('div', { class: 'empty', text: emptyText })); return; }
+    // מצב החובות מחושב מרשומות המשפחה בלבד (לא מרשימות החברים).
+    const debtMap = opts.removeEndpoint ? null : debtStates();
     [...list].sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt).forEach((e) => {
       const isDebt = e.kind === 'debt';
       const title = `${subjectWord(e.from)} ${isDebt ? 'חייב/ת' : 'החזיר/ה'} ${toWord(e.to)}`;
+      // חוב: כמה נשאר ממנו. החזר: על איזה חוב הוא.
+      let extra = '';
+      const ds = e.debtId || isDebt ? debtMap : null;
+      if (ds && isDebt && !isPending(e) && ds.get(e.id) && ds.get(e.id).paid > 0) {
+        const st = ds.get(e.id);
+        extra = st.remaining > 0 ? `נשאר ${money(st.remaining)} מתוך ${money(e.amount)}` : 'שולם במלואו ✅';
+      } else if (ds && !isDebt && e.debtId && ds.get(e.debtId)) {
+        extra = 'על: ' + (ds.get(e.debtId).debt.note || 'חוב');
+      }
       const row = el('div', { class: 'row' + (isPending(e) ? ' pending' : '') },
         el('div', { class: 'text' },
           el('div', {}, el('span', { class: 'tag ' + e.kind, text: isDebt ? 'חוב' : 'החזר' }),
             isPending(e) ? el('span', { class: 'tag pending', text: opts.pendingLabel ? opts.pendingLabel(e) : '⏳ ממתין לאישור' }) : null, ' ', title),
-          el('div', { class: 'meta', text: [fmtDate(e.date), e.note].filter(Boolean).join(' • ') })),
+          el('div', { class: 'meta', text: [fmtDate(e.date), e.note, extra].filter(Boolean).join(' • ') })),
         el('strong', { text: money(e.amount) }));
       if (canDelete(e)) {
         row.append(el('button', {
@@ -987,7 +1090,7 @@
     ? fdata.friendships.filter((f) => f.status === 'accepted').map((f) => fdata.people[f.other]).filter(Boolean)
     : []);
   const friendFlow = (opts) => ({
-    ...opts, people: friendList(), endpoint: 'friends:addEntry', maxEntry: FRIEND_MAX,
+    ...opts, noDebtPick: true, people: friendList(), endpoint: 'friends:addEntry', maxEntry: FRIEND_MAX,
     doneToast: 'נשלח לחבר/ה לאישור ⏳', returnTab: 'friends',
   });
   const friendsInboxCount = () => (fdata && fdata.kind === 'teen' && fdata.enabled

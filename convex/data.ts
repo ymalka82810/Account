@@ -50,6 +50,7 @@ export const get = query({
         id: e._id, kind: e.kind, from: e.from, to: e.to, amount: e.amount, note: e.note,
         date: e.date, createdBy: e.createdBy ?? null, createdAt: e.createdAt ?? e._creationTime,
         status: e.status ?? "approved",
+        debtId: e.debtId ?? null,
       })),
       recurring: recurring.map((r) => ({
         id: r._id, from: r.from, to: r.to, amount: r.amount, note: r.note, frequency: r.frequency,

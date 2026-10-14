@@ -445,3 +445,15 @@ body[data-theme="teen"] .card.notice, body[data-theme="teen"] .pending-card { bo
 body[data-theme="teen"] .sheet { box-shadow: 0 -8px 40px rgba(124, 92, 255, .25); }
 .person { flex-wrap: wrap; } .person .text { min-width: 8em; }
 .person { flex-wrap: wrap; } .person .text { min-width: 8em; }
+
+/* החזר לחוב מסוים */
+.debt-picks { display: grid; gap: 10px; margin: 8px 0 4px; }
+.debt-pick { text-align: start; width: 100%; padding: 14px 16px; border-radius: 16px; border: 2px solid var(--line, #e5e7eb); background: var(--card, #fff); font: inherit; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.debt-pick:active, .debt-pick:focus-visible { border-color: var(--accent, #4f46e5); }
+.dp-name { font-weight: 700; }
+.dp-amt { opacity: .8; white-space: nowrap; }
+.debt-info { text-align: center; font-weight: 600; margin: 4px 0 8px; opacity: .85; }
+.debt-lines { margin-top: 8px; display: grid; gap: 6px; }
+.debt-line { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 10px; border-radius: 12px; background: rgba(0,0,0,.04); }
+.dl-name { font-size: .9em; font-weight: 600; }
+.dl-rem { font-size: .85em; opacity: .75; }
