@@ -26,6 +26,6 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npx convex deploy --yes
+      - run: npx convex deploy --yes --cmd-url-env-var-name CONVEX_URL --cmd 'echo "::notice title=convex-url::$CONVEX_URL"'
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
