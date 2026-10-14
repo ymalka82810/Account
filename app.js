@@ -1208,7 +1208,8 @@
     if (!fdata.enabled) {
       locked.hidden = false; on.hidden = true;
       $('friendsRequestBtn').hidden = fdata.requested;
-      $('friendsLockNote').textContent = fdata.requested ? '⏳ הבקשה נשלחה להורים. נעדכן אותך כשיאשרו.' : '';
+      $('friendsPendingBadge').hidden = !fdata.requested;
+      $('friendsLockNote').textContent = fdata.requested ? 'הבקשה נשלחה להורים. נעדכן אותך כשיאשרו.' : '';
       return;
     }
     locked.hidden = true; on.hidden = false;

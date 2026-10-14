@@ -377,6 +377,11 @@ button.small.okbtn { background: var(--get-bg); color: var(--get); border-color:
 .friends-lock { text-align: center; display: grid; gap: 8px; justify-items: center; padding: 24px 16px; }
 .friends-lock .hint { max-width: 36ch; }
 .friends-lock .primary { margin-top: 6px; padding-inline: 22px; }
+.badge-pending {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
+  border-radius: 99px; background: var(--coin); color: var(--ink);
+  font-size: .85rem; font-weight: 700;
+}
 #friendsInbox:empty { display: none; }
 #friendsInbox > .card { margin-top: 14px; }
 .teen-card { display: grid; gap: 4px; margin-bottom: 12px; }
