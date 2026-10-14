@@ -4,7 +4,8 @@ import { defineConfig } from 'vite';
 // אז כל הנתיבים היחסיים (JS, CSS, קבצים) צריכים את התחילית הזו.
 // בפיתוח מקומי (npm run dev) זה נשאר '/'.
 export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/Account/' : '/',
+  // בבניית APK (APK_BUILD=1) הקבצים נטענים מתוך האפליקציה, אז נתיב יחסי.
+  base: process.env.APK_BUILD ? './' : command === 'build' ? '/Account/' : '/',
   build: {
     outDir: 'dist',
   },
