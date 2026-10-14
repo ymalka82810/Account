@@ -1,7 +1,7 @@
 import { state, CODE_KEY } from '../../src/state.js';
 import { call } from '../../src/api.js';
 import { today, toast, errMsg } from '../../src/helpers.js';
-import { dropSession } from '../../src/session.js';
+import { dropSession } from '../../src/screens/auth.js';
 import { useApp } from '../appContext.js';
 import { cleanPayload } from '../../src/screens/legacy.js';
 

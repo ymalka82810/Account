@@ -1,8 +1,6 @@
-import { state, CODE_KEY, LAST_PERSON_KEY } from '../state.js';
+import { state, CODE_KEY, LAST_PERSON_KEY, TOKEN_KEY, bumpAuth } from '../state.js';
 import { toast, errMsg, fmtWait } from '../helpers.js';
 import { call } from '../api.js';
-import { route, setToken } from '../session.js';
-import { bumpAuth } from '../authStore.js';
 
 // הלוגיקה של מסכי הכניסה. התצוגה שלהם ב-src-react/components/Auth.jsx.
 
@@ -24,6 +22,26 @@ export async function restoreFamily() {
     const r = await enterFamily(saved, false);
     if (r !== true && r !== 'throttled') { localStorage.removeItem(CODE_KEY); state.fam = null; }
   } catch (e) { /* בלי חיבור: נשארים עם מה שיש */ }
+}
+
+// ---------- מצב הכניסה ----------
+// ה-state (token, fam, view, pinFlow, ...) נשאר ב-state.js, ו-App.jsx קורא
+// ממנו בכל רינדור. route() רק מודיע לו שמשהו השתנה.
+export const route = bumpAuth;
+
+export function setToken(t) {
+  state.token = t;
+  localStorage.setItem(TOKEN_KEY, t);
+  bumpAuth();
+}
+
+export function dropSession() {
+  state.token = '';
+  localStorage.removeItem(TOKEN_KEY);
+  state.pinFlow = null;
+  state.codeChecked = false;
+  bumpAuth();
+  restoreFamily().finally(() => { state.codeChecked = true; bumpAuth(); });
 }
 
 // ---------- מסך פתיחה ----------

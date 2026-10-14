@@ -28,3 +28,14 @@ export const state = {
   pinFlow: null,     // {person, legacy, mode:'login'|'new', first, entered, busy, error, shakes}
   pushSyncedFor: '',
 };
+
+// ---------- הודעה לקומפוננטות על שינוי ב-state ----------
+// מסכי הכניסה ב-React נרשמים כאן. bumpAuth() נקרא בכל שינוי (route, setToken, ...).
+let version = 0;
+const listeners = new Set();
+export const subscribeAuth = (fn) => { listeners.add(fn); return () => listeners.delete(fn); };
+export const authVersion = () => version;
+export function bumpAuth() {
+  version += 1;
+  listeners.forEach((fn) => fn());
+}

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { call } from '../../src/api.js';
 import { state } from '../../src/state.js';
 import { toast, errMsg } from '../../src/helpers.js';
-import { dropSession } from '../../src/session.js';
+import { dropSession } from '../../src/screens/auth.js';
 import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../../src/push.js';
 import { useApp } from '../appContext.js';
 import { useSheet, useSheetTitle } from './Sheet.jsx';

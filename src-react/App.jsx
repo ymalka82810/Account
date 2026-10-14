@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { useQuery } from 'convex/react';
-import { state, CODE_KEY, THEME_COLOR, TAB_LABELS } from '../src/state.js';
+import { state, CODE_KEY, THEME_COLOR, TAB_LABELS, subscribeAuth, authVersion, bumpAuth } from '../src/state.js';
 import { call } from '../src/api.js';
 import { toast } from '../src/helpers.js';
-import { subscribeAuth, authVersion, bumpAuth } from '../src/authStore.js';
-import { dropSession } from '../src/session.js';
-import { restoreFamily, startPin, autoSkipPerson } from '../src/screens/auth.js';
+import { restoreFamily, startPin, autoSkipPerson, dropSession } from '../src/screens/auth.js';
 import { syncPush } from '../src/push.js';
 import { client } from './lib/client.js';
 import { isPending } from './lib/computations.js';
