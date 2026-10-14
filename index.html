@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d2b4f">
+<title>הקופה המשפחתית</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <h1>הקופה המשפחתית</h1>
+  <p class="sub">כל הכסף שחייבים בבית, במקום אחד</p>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="תפריט ראשי">
+  <button role="tab" class="tab active" data-tab="overview" aria-selected="true">מי חייב למי</button>
+  <button role="tab" class="tab" data-tab="add" aria-selected="false">חוב חדש</button>
+  <button role="tab" class="tab" data-tab="history" aria-selected="false">היסטוריה</button>
+  <button role="tab" class="tab" data-tab="people" aria-selected="false">המשפחה</button>
+</nav>
+
+<main>
+  <!-- סקירה -->
+  <section id="tab-overview" class="panel active">
+    <div id="balances" class="balances"></div>
+    <h2>החובות הפתוחים</h2>
+    <div id="debts"></div>
+  </section>
+
+  <!-- חוב חדש -->
+  <section id="tab-add" class="panel">
+    <form id="entryForm" class="form" autocomplete="off">
+      <div class="kind" role="radiogroup" aria-label="סוג הרשומה">
+        <label><input type="radio" name="kind" value="debt" checked><span>חוב חדש</span></label>
+        <label><input type="radio" name="kind" value="payment"><span>החזר כסף</span></label>
+      </div>
+
+      <label class="field">
+        <span id="fromLabel">מי חייב?</span>
+        <select id="from" required></select>
+      </label>
+
+      <label class="field">
+        <span id="toLabel">למי?</span>
+        <select id="to" required></select>
+      </label>
+
+      <label class="field">
+        <span>כמה (בשקלים)?</span>
+        <input id="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required placeholder="0">
+      </label>
+
+      <label class="field">
+        <span>על מה? (לא חובה)</span>
+        <input id="note" type="text" maxlength="80" placeholder="למשל: גלידה, כרטיס לסרט">
+      </label>
+
+      <label class="field">
+        <span>תאריך</span>
+        <input id="date" type="date" required>
+      </label>
+
+      <p id="formError" class="error" role="alert" hidden></p>
+      <button class="primary" type="submit" id="submitBtn">שמירת החוב</button>
+    </form>
+  </section>
+
+  <!-- היסטוריה -->
+  <section id="tab-history" class="panel">
+    <div id="history"></div>
+    <div class="tools">
+      <button class="ghost" id="exportBtn">שמירת גיבוי</button>
+      <label class="ghost filebtn">שחזור מגיבוי<input type="file" id="importFile" accept="application/json" hidden></label>
+    </div>
+  </section>
+
+  <!-- אנשים -->
+  <section id="tab-people" class="panel">
+    <div id="peopleList"></div>
+    <form id="personForm" class="form inline" autocomplete="off">
+      <h2>הוספת בן משפחה</h2>
+      <label class="field">
+        <span>שם</span>
+        <input id="personName" type="text" maxlength="20" required>
+      </label>
+      <label class="field">
+        <span>תפקיד</span>
+        <select id="personRole">
+          <option value="child">ילד/ה</option>
+          <option value="parent">הורה</option>
+        </select>
+      </label>
+      <button class="primary" type="submit">הוספה</button>
+    </form>
+  </section>
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
