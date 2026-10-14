@@ -43,6 +43,7 @@
       <div id="legacyTiles" class="tiles"></div>
     </div>
     <button id="newFamilyBtn" class="ghost linkish" type="button">👨‍👩‍👧 אני הורה ורוצה להקים קופה חדשה</button>
+    <p class="legal"><a href="terms.html">תנאי שימוש</a> · <a href="privacy.html">מדיניות פרטיות</a></p>
   </div>
 </section>
 
@@ -61,6 +62,8 @@
       <div class="field"><span>בחר/י דמות</span><div id="setupAvatars" class="avatars"></div></div>
       <label class="field"><span>קוד סודי (4 ספרות)</span>
         <input id="setupPin" type="password" inputmode="numeric" pattern="\d{4}" maxlength="4" required autocomplete="new-password"></label>
+      <label class="check"><input id="setupTerms" type="checkbox" required>
+        <span>קראתי ואני מסכים/ה ל<a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ול<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a></span></label>
       <p id="setupError" class="error" role="alert" hidden></p>
       <button class="primary" type="submit">הקמת הקופה</button>
     </form>
@@ -89,6 +92,8 @@
       <div class="field"><span>בחר/י דמות</span><div id="joinAvatars" class="avatars"></div></div>
       <label class="field"><span>קוד סודי משלך (4 ספרות)</span>
         <input id="joinPin" type="password" inputmode="numeric" pattern="\d{4}" maxlength="4" required autocomplete="new-password"></label>
+      <label class="check"><input id="joinTerms" type="checkbox" required>
+        <span>קראתי ואני מסכים/ה ל<a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ול<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a>. ילדים מצטרפים בהסכמת הורה</span></label>
       <p id="joinError" class="error" role="alert" hidden></p>
       <button class="primary" type="submit">הצטרפות</button>
     </form>
@@ -179,6 +184,7 @@
         <button class="ghost danger-ghost" id="deleteFamilyBtn" type="button">מחיקת הקופה כולה</button>
       </div>
     </section>
+    <p class="legal"><a href="terms.html">תנאי שימוש</a> · <a href="privacy.html">מדיניות פרטיות</a></p>
   </main>
 </section>
 

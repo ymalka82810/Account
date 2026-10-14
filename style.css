@@ -348,3 +348,14 @@ button.small { min-height: 40px; }
 .codeval { font-size: 1.6rem; font-weight: 800; letter-spacing: .12em; text-align: start; user-select: all; }
 .codeblock .tools { margin-top: 6px; }
 .danger-ghost { color: var(--owe); border-color: var(--owe); }
+
+/* תנאים ופרטיות */
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: .92rem; text-align: start; }
+.check input { width: 22px; height: 22px; flex: none; margin-top: 2px; accent-color: var(--coin-deep); }
+.legal { text-align: center; font-size: .88rem; color: var(--ink-soft); margin: 18px 0 0; }
+.legal a, .check a { color: inherit; }
+.doc-main { max-width: 680px; margin: 0 auto; padding: calc(20px + env(safe-area-inset-top, 0)) 20px 48px; }
+.doc-main h1 { font-size: 1.7rem; margin: 8px 0 12px; }
+.doc-main h2 { margin: 26px 0 8px; }
+.doc-main ul { padding-inline-start: 22px; display: grid; gap: 6px; }
+.doc-main a { color: var(--ink); }
