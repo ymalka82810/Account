@@ -1,0 +1,24 @@
+name: Set Convex env (VAPID)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  set-env:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: |
+          npx convex env set VAPID_PUBLIC_KEY "BMAvS9Esvtie9kVeVw1INs-t2mlIBLLRF4hiNzEAENojfVwCrG9ZKBhjSu-TEorWwf1PJdCy67fJxs3HN8WqDSo"
+          npx convex env set VAPID_PRIVATE_KEY "$VAPID_PRIVATE_KEY"
+          npx convex env set VAPID_SUBJECT "https://ymalka82810.github.io/Account/"
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
