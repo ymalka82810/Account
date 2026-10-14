@@ -34,6 +34,24 @@
     for (const [k, v] of Object.entries(props)) {
       if (k === 'class') n.className = v;
       else if (k === 'text') n.textContent = v;
+      else if (k === 'onclick' && tag === 'button' && v.constructor.name === 'AsyncFunction') {
+        // כפתור עם פעולה אסינכרונית: נועלים ומראים "שולח…" עד שהשרת עונה
+        n.addEventListener('click', async (ev) => {
+          if (n.disabled) return;
+          const label = n.textContent;
+          n.disabled = true;
+          n.classList.add('busy');
+          n.textContent = '⏳ רגע…';
+          n.setAttribute('aria-busy', 'true');
+          try { await v(ev); }
+          finally {
+            n.disabled = false;
+            n.classList.remove('busy');
+            n.removeAttribute('aria-busy');
+            if (n.textContent === '⏳ רגע…') n.textContent = label;
+          }
+        });
+      }
       else if (k.startsWith('on')) n.addEventListener(k.slice(2), v);
       else if (typeof v === 'boolean') n[k] = v;
       else n.setAttribute(k, v);
