@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { AppCtx } from '../appContext.js';
 
 // החלון הקופץ. sheet.open(title, <Body />) מחליף את התוכן (גם כשכבר פתוח,
 // כמו בשלבים של אשף), ו-sheet.close() סוגר. הגוף יכול לקרוא ל-useSheet() בעצמו
@@ -35,6 +36,8 @@ export function SheetProvider({ children }) {
     });
   }, []);
   const setTitle = useCallback((title) => setSheet((cur) => (cur && cur.title !== title ? { ...cur, title } : cur)), []);
+  // החלון מוצג מחוץ ל-App, לכן App מעביר לכאן את ההקשר שלו כדי שהגוף יוכל לקרוא ל-useApp().
+  const [appCtx, setAppCtx] = useState(null);
 
   const key = sheet && sheet.key;
   useEffect(() => { if (key && closeBtn.current) closeBtn.current.focus(); }, [key]);
@@ -47,7 +50,7 @@ export function SheetProvider({ children }) {
   }, [!!sheet, close]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <SheetCtx.Provider value={{ open, close, setTitle }}>
+    <SheetCtx.Provider value={{ open, close, setTitle, setAppCtx }}>
       {children}
       <div className="sheet-wrap" hidden={!sheet}>
         <div className="sheet-bg" onClick={close} />
@@ -56,7 +59,7 @@ export function SheetProvider({ children }) {
             <h2 id="sheetTitle">{sheet ? sheet.title : ''}</h2>
             <button ref={closeBtn} className="ghost" type="button" aria-label="סגירה" onClick={close}>✕</button>
           </div>
-          <div key={sheet ? sheet.key : 0}>{sheet && sheet.body}</div>
+          <div key={sheet ? sheet.key : 0}>{sheet && <AppCtx.Provider value={appCtx}>{sheet.body}</AppCtx.Provider>}</div>
         </div>
       </div>
     </SheetCtx.Provider>
