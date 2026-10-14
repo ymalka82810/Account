@@ -42,6 +42,10 @@ const tabFromHash = () => { const h = location.hash.slice(1); return TAB_IDS.inc
 
 const DEFAULT_LABELS = { home: '🏠 הכסף שלי', friends: '🤝 חברים', history: '📜 מה היה', family: '👨‍👩‍👧 המשפחה', manage: 'ניהול' };
 
+// משך האנימציה של מסך הטעינה (coin-drop-cycle ב-style.css) - מסך הטעינה
+// נשאר מוצג לפחות עד שקטע אנימציה שלם אחד מסתיים, גם אם הטעינה עצמה הסתיימה קודם.
+const LOADING_MIN_MS = 3600;
+
 export default function App() {
   if (!client) {
     return (
@@ -92,7 +96,21 @@ function Root() {
     call('auth:migrateMe', { token }).catch(() => dropSession()).finally(() => { migrating.current = false; });
   }, [token, data]);
 
-  const screen = currentScreen(data);
+  const rawScreen = currentScreen(data);
+  const [screen, setScreen] = useState(rawScreen);
+  const loadingSince = useRef(rawScreen === 'loading' ? Date.now() : null);
+  useEffect(() => {
+    if (rawScreen === 'loading') {
+      if (loadingSince.current == null) loadingSince.current = Date.now();
+      setScreen('loading');
+      return;
+    }
+    if (loadingSince.current == null) { setScreen(rawScreen); return; }
+    const remain = LOADING_MIN_MS - (Date.now() - loadingSince.current);
+    if (remain <= 0) { loadingSince.current = null; setScreen(rawScreen); return; }
+    const t = setTimeout(() => { loadingSince.current = null; setScreen(rawScreen); }, remain);
+    return () => clearTimeout(t);
+  }, [rawScreen]);
 
   // דילוג ישר לקוד הסודי כשברור מי נכנס.
   useEffect(() => {
