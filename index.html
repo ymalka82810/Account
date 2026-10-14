@@ -198,21 +198,7 @@
 
       <h2>דמי כיס קבועים</h2>
       <p class="hint">רישום חוב אוטומטי, שבועי או חודשי, בלי להקליד כל פעם.</p>
-      <div id="recurringList"></div>
-      <form id="recurringForm" class="form card" autocomplete="off">
-        <h3>רישום קבוע חדש</h3>
-        <label class="field"><span>מי חייב/ת (משלם/ת)</span><select id="recFrom"></select></label>
-        <label class="field"><span>למי</span><select id="recTo"></select></label>
-        <label class="field"><span>סכום (₪)</span>
-          <input id="recAmount" type="number" inputmode="decimal" min="0.01" max="10000" step="0.01" required></label>
-        <label class="field"><span>הערה</span><input id="recNote" type="text" maxlength="80" value="דמי כיס"></label>
-        <label class="field"><span>כל כמה זמן</span>
-          <select id="recFreq"><option value="weekly">כל שבוע</option><option value="monthly">כל חודש</option></select></label>
-        <label class="field" id="recWeekdayField"><span>באיזה יום</span><select id="recWeekday"></select></label>
-        <label class="field" id="recMonthDayField" hidden><span>באיזה יום בחודש (1 עד 28)</span><select id="recMonthDay"></select></label>
-        <p id="recError" class="error" role="alert" hidden></p>
-        <button class="primary" type="submit">הוספה</button>
-      </form>
+      <div id="recurringBox"></div>
 
       <div id="teenFriendsSection" hidden>
         <h2>מה הנוער רושם עם חברים</h2>

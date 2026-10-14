@@ -5,9 +5,6 @@ import { openDebts, nameOf, roleLabel } from '../computations.js';
 import { openEntryFlow } from '../entryFlow.js';
 import { renderEntries } from '../entriesList.js';
 import { openResetPin } from './emailAuth.js';
-import { renderRecurring } from './recurring.js';
-import { renderCodes } from './codes.js';
-import { renderLegacy } from './legacy.js';
 
 // ---------- לשונית המשפחה (הורים) ----------
 export function renderFamily() {
@@ -82,9 +79,6 @@ export function renderFamily() {
 
   renderEntries($('allHistory'), state.data.entries, 'עדיין אין רשומות.');
   renderTeenOverview();
-  renderRecurring();
-  renderCodes();
-  renderLegacy();
 }
 
 // ---------- סקירה להורים: מה הנוער רושם עם חברים ----------

@@ -7,6 +7,9 @@ import { useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import PendingCards from './components/PendingCards.jsx';
+import Legacy from './components/Legacy.jsx';
+import Codes from './components/Codes.jsx';
+import Recurring from './components/Recurring.jsx';
 import { ConvexReactClient, ConvexProvider, useQuery } from 'convex/react';
 import Home from './components/Home.jsx';
 
@@ -33,11 +36,19 @@ function HomeRoot({ openEntryFlow }) {
   // אז כאן פשוט לא מציירים כלום, בלי להתנגש.
   if (!token || data === undefined || data === null || data.legacy) return null;
   // להורים האישורים בראש הסקירה המשפחתית (אלמנט סטטי ב-index.html), דרך portal.
-  const parentBox = data.me.role === 'parent' ? document.getElementById('pendingBoxParent') : null;
+  const isParent = data.me.role === 'parent';
+  const at = (id) => (isParent ? document.getElementById(id) : null);
+  const parentBox = at('pendingBoxParent');
+  const legacyBox = at('legacyBox');
+  const codesBox = at('codesBox');
+  const recurringBox = at('recurringBox');
   return (
     <>
       <Home data={data} token={token} openEntryFlow={openEntryFlow} />
       {parentBox && createPortal(<PendingCards data={data} token={token} parentView />, parentBox)}
+      {legacyBox && createPortal(<Legacy token={token} />, legacyBox)}
+      {codesBox && createPortal(<Codes data={data} token={token} />, codesBox)}
+      {recurringBox && createPortal(<Recurring data={data} token={token} />, recurringBox)}
     </>
   );
 }
