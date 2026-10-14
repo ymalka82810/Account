@@ -188,7 +188,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
     <>
       <header className="top">
         <div className="who-am-i">
-          <span className="avatar-sm" aria-hidden="true">{data.me.avatar}</span>
+          {data.me.avatar && <span className="avatar-sm" aria-hidden="true">{data.me.avatar}</span>}
           <div>
             <h1>{data.me.name}</h1>
             <p className="sub">{data.family.name}</p>

@@ -35,9 +35,11 @@ export default function PersonForm({ token }) {
         <select value={role} onChange={(e) => setRole(e.target.value)}>
           <option value="child">ילד/ה</option><option value="teen">נער/ה</option><option value="parent">הורה</option>
         </select></label>
-      <div className="field"><span>דמות</span>
-        <AvatarPicker value={avatar} onChange={setAvatar} />
-      </div>
+      {role !== 'parent' && (
+        <div className="field"><span>דמות</span>
+          <AvatarPicker value={avatar} onChange={setAvatar} />
+        </div>
+      )}
       <label className="field"><span>קוד סודי (לא חובה — אפשר שהילד/ה יבחרו לבד)</span>
         <input type="password" inputMode="numeric" pattern="\d{4}" maxLength={4} autoComplete="new-password"
           value={pin} onChange={(e) => setPin(e.target.value)} /></label>

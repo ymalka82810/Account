@@ -22,7 +22,7 @@ export { default as AvatarPicker, randomAvatar } from '../shared/AvatarPicker.js
 export function Tile({ avatar, name, onClick }) {
   return (
     <button className="tile" type="button" onClick={onClick}>
-      <span className="avatar-lg" aria-hidden="true">{avatar}</span>
+      {avatar && <span className="avatar-lg" aria-hidden="true">{avatar}</span>}
       <span className="tname">{name}</span>
     </button>
   );

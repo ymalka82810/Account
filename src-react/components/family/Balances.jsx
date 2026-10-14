@@ -13,7 +13,7 @@ export default function Balances({ people, debts }) {
         const v = bal.get(p.id) || 0;
         return (
           <div className={'bal ' + (v > 0 ? 'plus' : v < 0 ? 'minus' : 'zero')} key={p.id}>
-            <div className="name">{p.avatar} {p.name}</div>
+            <div className="name">{p.avatar ? `${p.avatar} ` : ''}{p.name}</div>
             <div className="num">{money(Math.abs(v))}</div>
             <div className="what">{v > 0 ? 'מגיע לו/ה' : v < 0 ? 'חייב/ת' : 'הכול מסודר'}</div>
           </div>

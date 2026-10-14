@@ -34,7 +34,7 @@ export const importData = mutation({
       if (found) { idMap.set(p.id, found._id); continue; }
       if (existing.length >= MAX_FAMILY_SIZE) throw new ConvexError("המשפחה מלאה");
       const id = await ctx.db.insert("people", {
-        familyId: me.familyId, name, role: p.role, avatar: p.role === "parent" ? "🧑" : "🧒",
+        familyId: me.familyId, name, role: p.role, avatar: p.role === "parent" ? undefined : "🧒",
       });
       existing.push((await ctx.db.get(id))!);
       idMap.set(p.id, id);

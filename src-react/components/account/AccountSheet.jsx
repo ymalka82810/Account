@@ -8,6 +8,7 @@ import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import { ChangePinSheet, ChangePinEmailSheet, EmailSheet } from './AccountSheets.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
+import AvatarPicker from '../shared/AvatarPicker.jsx';
 
 export async function logout() {
   await releasePushDevice();
@@ -25,8 +26,22 @@ export function AccountSheet() {
 
   useEffect(() => { if (pushSupported()) isPushOn().then(setPushOn); }, []);
 
+  async function setAvatar(avatar) {
+    try { await call('people:setAvatar', { token, avatar }); }
+    catch (e) { toast(errMsg(e)); }
+  }
+
   return (
     <div className="form">
+      {me.role === 'teen' && (
+        <div className="field"><span>דמות</span>
+          <AvatarPicker value={me.avatar} onChange={setAvatar} />
+          {me.avatar && (
+            <button className="ghost" type="button" onClick={() => setAvatar(undefined)}>🗑️ מחיקת הדמות</button>
+          )}
+        </div>
+      )}
+
       {pushSupported() && pushOn !== null && (
         <AsyncButton className="ghost" onClick={async () => {
           if (pushOn) await disablePush(); else await enablePush();

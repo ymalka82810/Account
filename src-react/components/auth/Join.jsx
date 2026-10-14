@@ -5,6 +5,7 @@ import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.js
 
 export default function Join({ current }) {
   const fam = state.fam;
+  const isParentCode = fam && fam.codeRole === 'parent';
   const [v, setV] = useState({ name: '', pin: '' });
   const [avatar, setAvatar] = useState(randomAvatar);
   const [error, setError] = useState('');
@@ -14,7 +15,7 @@ export default function Join({ current }) {
     ev.preventDefault();
     setError('');
     run(async () => {
-      const err = await joinFamily({ ...v, avatar });
+      const err = await joinFamily(isParentCode ? v : { ...v, avatar });
       if (err) setError(err); else setV({ name: '', pin: '' });
     });
   };
@@ -32,7 +33,7 @@ export default function Join({ current }) {
         <form className="form" autoComplete="off" onSubmit={submit}>
           <label className="field"><span>איך קוראים לך?</span>
             <input type="text" maxLength={20} required value={v.name} onChange={set('name')} /></label>
-          <div className="field"><span>בחר/י דמות</span><AvatarPicker value={avatar} onChange={setAvatar} /></div>
+          {!isParentCode && <div className="field"><span>בחר/י דמות</span><AvatarPicker value={avatar} onChange={setAvatar} /></div>}
           <label className="field"><span>קוד סודי משלך (4 ספרות)</span>
             <input type="password" inputMode="numeric" pattern="\d{4}" maxLength={4} required autoComplete="new-password"
               value={v.pin} onChange={set('pin')} /></label>

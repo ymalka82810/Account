@@ -258,13 +258,15 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
   list-style: none;
   cursor: pointer;
   padding: 14px 16px;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "title marker" "subtitle subtitle";
+  align-items: center;
+  column-gap: 10px;
 }
 .tile-section > summary::-webkit-details-marker { display: none; }
 .tile-section > summary::after {
+  grid-area: marker;
   content: '⌄';
   font-size: 1.2rem;
   color: var(--ink-soft);
@@ -273,8 +275,14 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
 }
 .tile-section[open] > summary::after { transform: rotate(180deg); }
 .tile-section > summary:hover { background: rgba(0, 0, 0, .03); }
-.tile-title { font-weight: 700; font-size: 1.05rem; }
-.tile-section > summary .hint { margin: 0; text-align: end; }
+.tile-title { grid-area: title; font-weight: 700; font-size: 1.05rem; }
+.tile-section > summary .hint {
+  grid-area: subtitle;
+  margin: 6px 0 0;
+  text-align: start;
+  display: none;
+}
+.tile-section[open] > summary .hint { display: block; }
 .tile-body { padding: 0 16px 16px; display: grid; gap: 14px; }
 
 /* ריבועי בחירת אדם */

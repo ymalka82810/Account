@@ -23,7 +23,7 @@ export default function Home({ data, token }) {
 
     cards.push(
       <div key={p.id} className={'debt ' + (iOwe ? 'owe' : 'get') + (open.length > 1 ? ' multi' : '')}>
-        <span className="avatar-md" aria-hidden="true">{p.avatar}</span>
+        {p.avatar && <span className="avatar-md" aria-hidden="true">{p.avatar}</span>}
         <div className="text">
           <div className="who">{iOwe ? `אני חייב/ת ל${p.name}` : `${p.name} חייב/ת לי`}</div>
           <div className="amt">{money(amount)}</div>

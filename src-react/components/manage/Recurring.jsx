@@ -50,7 +50,7 @@ export default function Recurring({ data, token }) {
     } catch (e) { setError(errMsg(e)); }
   }
 
-  const options = people.map((p) => <option key={p.id} value={p.id}>{p.avatar} {p.name}</option>);
+  const options = people.map((p) => <option key={p.id} value={p.id}>{p.avatar ? `${p.avatar} ` : ''}{p.name}</option>);
 
   return (
     <>

@@ -17,7 +17,7 @@ export default function Pin({ current }) {
   return (
     <In screen="pin" current={current}>
       <button className="ghost back" type="button" onClick={pinBack}>→ חזרה</button>
-      <div className="avatar-xl" aria-hidden="true">{f.person.avatar}</div>
+      {f.person.avatar && <div className="avatar-xl" aria-hidden="true">{f.person.avatar}</div>}
       <h1>{f.person.name}</h1>
       <p className="hint">{title}</p>
       {/* key לפי מספר הרעידות: מרנדר מחדש את האלמנט ומפעיל שוב את האנימציה */}

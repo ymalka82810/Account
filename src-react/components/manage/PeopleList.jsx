@@ -18,7 +18,7 @@ export default function PeopleList({ people, me, token }) {
     <div id="peopleList">
       {people.map((p) => (
         <div className="person" key={p.id}>
-          <span className="avatar-md" aria-hidden="true">{p.avatar}</span>
+          {p.avatar && <span className="avatar-md" aria-hidden="true">{p.avatar}</span>}
           <div className="text">
             {p.name}{' '}
             <span className="meta">{roleLabel(p.role) + (p.hasPin ? '' : ' • עוד לא בחר/ה קוד')}</span>

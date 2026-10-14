@@ -59,7 +59,7 @@ export function EntryFlow({ opts }) {
           {others.map((p) => (
             <button key={p.id} className="tile" type="button"
               onClick={() => setFlow(afterPeople(st.from ? { ...st, to: p.id } : { ...st, from: p.id }))}>
-              <span className="avatar-lg" aria-hidden="true">{p.avatar}</span><span className="tname">{p.name}</span>
+              {p.avatar && <span className="avatar-lg" aria-hidden="true">{p.avatar}</span>}<span className="tname">{p.name}</span>
             </button>
           ))}
         </div>
