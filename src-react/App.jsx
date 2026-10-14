@@ -165,26 +165,39 @@ function Root() {
 }
 
 // ---------- אנימציית מעבר גלגל השיניים לאריח הצף ----------
-// השבב של גלגל השיניים "קופץ" ממקומו למרכז המסך, מסתובב ומתרחב עד שהוא
-// הופך למלבן בגודל האריח; ברגע שהאנימציה מסתיימת, האריח האמיתי נפתח במקומו.
+// השבב של גלגל השיניים "קופץ" ממקומו למרכז המסך, מסתובב ומתרחב עד שהוא מכסה
+// בדיוק את מקום האריח האמיתי (שכבר פתוח ומוצג מתחתיו), ואז נעלם בדהייה וחושף אותו.
 function GearLaunch({ fromRect, onDone }) {
-  const [grown, setGrown] = useState(false);
+  const [phase, setPhase] = useState('start'); // start -> grown -> fading
+  const [targetRect, setTargetRect] = useState(null);
+
   useEffect(() => {
-    const id = requestAnimationFrame(() => setGrown(true));
+    const el = document.querySelector('.sheet-wrap .sheet');
+    const r = el ? el.getBoundingClientRect() : null;
+    setTargetRect(r || { left: window.innerWidth / 2 - 180, top: window.innerHeight / 2 - 220, width: 360, height: 440, borderRadius: 24 });
+    const id = requestAnimationFrame(() => setPhase('grown'));
     return () => cancelAnimationFrame(id);
   }, []);
-  useEffect(() => {
-    if (!grown) return;
-    const t = setTimeout(onDone, 480);
-    return () => clearTimeout(t);
-  }, [grown, onDone]);
 
-  const style = grown
-    ? { left: '50%', top: '50%', width: 'min(560px, 92vw)', height: 'min(70vh, 480px)', transform: 'translate(-50%, -50%) rotate(540deg)', borderRadius: '24px' }
-    : { left: fromRect.left + fromRect.width / 2, top: fromRect.top + fromRect.height / 2, width: fromRect.width, height: fromRect.height, transform: 'translate(-50%, -50%) rotate(0deg)', borderRadius: '50%' };
+  useEffect(() => {
+    if (phase !== 'grown') return;
+    const t = setTimeout(() => setPhase('fading'), 850);
+    return () => clearTimeout(t);
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== 'fading') return;
+    const t = setTimeout(onDone, 350);
+    return () => clearTimeout(t);
+  }, [phase, onDone]);
+
+  const borderRadius = window.innerWidth >= 640 ? '24px' : '24px 24px 0 0';
+  const style = phase === 'start' || !targetRect
+    ? { left: fromRect.left + fromRect.width / 2, top: fromRect.top + fromRect.height / 2, width: fromRect.width, height: fromRect.height, transform: 'translate(-50%, -50%) rotate(0deg)', borderRadius: '50%' }
+    : { left: targetRect.left + targetRect.width / 2, top: targetRect.top + targetRect.height / 2, width: targetRect.width, height: targetRect.height, transform: 'translate(-50%, -50%) rotate(540deg)', borderRadius };
 
   return (
-    <div className={'gear-launch' + (grown ? ' grown' : '')} style={style} aria-hidden="true">
+    <div className={'gear-launch' + (phase !== 'start' ? ' grown' : '') + (phase === 'fading' ? ' fading' : '')} style={style} aria-hidden="true">
       <span className="gear-launch-icon">⚙️</span>
     </div>
   );
@@ -216,13 +229,12 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
   const [launchRect, setLaunchRect] = useState(null);
 
   const openAccount = () => {
-    if (gearRef.current) setLaunchRect(gearRef.current.getBoundingClientRect());
-    else sheet.open('', <AccountSheet />);
+    if (gearRef.current) {
+      setLaunchRect(gearRef.current.getBoundingClientRect());
+      sheet.open('', <AccountSheet />);
+    } else sheet.open('', <AccountSheet />);
   };
-  const finishLaunch = useCallback(() => {
-    setLaunchRect(null);
-    sheet.open('', <AccountSheet />);
-  }, [sheet]);
+  const finishLaunch = useCallback(() => setLaunchRect(null), []);
 
   return (
     <>
@@ -234,7 +246,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
           </div>
         </div>
         <button className="ghost light" type="button" aria-label="החשבון שלי" onClick={openAccount}>
-          <span ref={gearRef} aria-hidden="true">⚙️</span> החשבון שלי
+          <span ref={gearRef} aria-hidden="true" style={launchRect ? { opacity: 0 } : undefined}>⚙️</span> החשבון שלי
         </button>
       </header>
       {launchRect && <GearLaunch fromRect={launchRect} onDone={finishLaunch} />}

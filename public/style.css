@@ -478,12 +478,15 @@ button.small { min-height: 40px; }
 .gear-launch {
   position: fixed; z-index: 21; display: flex; align-items: center; justify-content: center;
   background: var(--bg); box-shadow: 0 -8px 30px rgba(0, 0, 0, .3); overflow: hidden; pointer-events: none;
-  transition: left .48s cubic-bezier(.3, .6, .3, 1), top .48s cubic-bezier(.3, .6, .3, 1),
-    width .48s cubic-bezier(.3, .6, .3, 1), height .48s cubic-bezier(.3, .6, .3, 1),
-    transform .48s cubic-bezier(.3, .6, .3, 1), border-radius .48s cubic-bezier(.3, .6, .3, 1);
+  opacity: 1;
+  transition: left .85s cubic-bezier(.3, .6, .3, 1), top .85s cubic-bezier(.3, .6, .3, 1),
+    width .85s cubic-bezier(.3, .6, .3, 1), height .85s cubic-bezier(.3, .6, .3, 1),
+    transform .85s cubic-bezier(.3, .6, .3, 1), border-radius .85s cubic-bezier(.3, .6, .3, 1),
+    opacity .35s ease;
 }
+.gear-launch.fading { opacity: 0; }
 .gear-launch-icon {
-  font-size: 1.3rem; transition: font-size .48s cubic-bezier(.3, .6, .3, 1), opacity .3s ease .12s;
+  font-size: 1.3rem; transition: font-size .85s cubic-bezier(.3, .6, .3, 1), opacity .4s ease .3s;
 }
 .gear-launch.grown .gear-launch-icon { font-size: 4.5rem; opacity: 0; }
 
