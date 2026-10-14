@@ -1,18 +1,11 @@
-import { useEffect, useState } from 'react';
-import { state } from '../../src/state.js';
-import { call } from '../../src/api.js';
-import { toast, errMsg } from '../../src/helpers.js';
-import { pushSupported, isPushOn, enablePush, disablePush } from '../../src/push.js';
 import { useApp } from '../appContext.js';
-import { useSheet } from './Sheet.jsx';
-import { ChangePinSheet, ChangePinEmailSheet, EmailSheet } from './Sheets.jsx';
-import AsyncButton from './AsyncButton.jsx';
 import PendingCards from './PendingCards.jsx';
 import { pairOwes, openDebtsOf, debtLabel, money } from '../lib/computations.js';
 
-// מסך הבית: סיכום, כפתורי רישום, אישורים ממתינים והחובות הפתוחים,
-// ואחריהם כפתורי ההגדרות האישיות (התראות, בקשת נוער, קוד סודי, מייל).
-export default function Home({ data, token, openEntryFlow }) {
+// מסך הבית: סיכום, כפתורי רישום, אישורים ממתינים והחובות הפתוחים.
+// ההגדרות האישיות נמצאות ב"החשבון שלי" (AccountSheet), בכותרת.
+export default function Home({ data, token }) {
+  const { openEntryFlow } = useApp();
   const me = data.me.id;
   let owe = 0, get = 0;
   const cards = [];

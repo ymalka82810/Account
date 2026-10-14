@@ -6,12 +6,13 @@ import { toast } from '../src/helpers.js';
 import { subscribeAuth, authVersion, bumpAuth } from '../src/authStore.js';
 import { dropSession } from '../src/session.js';
 import { restoreFamily, startPin, autoSkipPerson } from '../src/screens/auth.js';
-import { syncPush, releasePushDevice } from '../src/push.js';
+import { syncPush } from '../src/push.js';
 import { client } from './lib/client.js';
 import { isPending } from './lib/computations.js';
 import { AppCtx, useApp } from './appContext.js';
 import { useSheet } from './components/Sheet.jsx';
 import { EntryFlow } from './components/EntryFlow.jsx';
+import { AccountSheet } from './components/AccountSheet.jsx';
 import Auth from './components/Auth.jsx';
 import Home from './components/Home.jsx';
 import FriendsTab from './components/FriendsTab.jsx';
@@ -119,6 +120,8 @@ function Root() {
     ? { data, fdata, token, me: data.me.id, isParent, setTab, openEntryFlow }
     : null), [screen, data, fdata, token, isParent, setTab, openEntryFlow]);
 
+  useEffect(() => { sheet.setAppCtx(ctx); }, [ctx]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <>
       <section id="screen-loading" className={'screen center' + (screen === 'loading' ? ' active' : '')}>
@@ -157,11 +160,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
   const tabs = ['home', ...(isTeen ? ['friends'] : []), 'history', ...(isParent ? ['family'] : [])];
   const badge = { family: isParent ? parentCount : 0, friends: friendsCount };
 
-  async function logout() {
-    await releasePushDevice();
-    try { await call('auth:logout', { token }); } catch (e) { /* ignore */ }
-    dropSession();
-  }
+  const sheet = useSheet();
 
   return (
     <>
@@ -173,12 +172,12 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
             <p className="sub">{data.family.name}</p>
           </div>
         </div>
-        <button className="ghost light" type="button" onClick={logout}>יציאה</button>
+        <button className="ghost light" type="button" aria-label="החשבון שלי" onClick={() => sheet.open('', <AccountSheet />)}>⚙️ החשבון שלי</button>
       </header>
 
       <nav className="tabs" role="tablist" aria-label="תפריט ראשי">
         {tabs.map((t) => (
-          <button key={t} role="tab" className={'tab' + (tab === t ? ' active' : '')} aria-selected={tab === t} onClick={() => setTab(t)}>
+          <button key={t} role="tab" data-tab={t} className={'tab' + (tab === t ? ' active' : '')} aria-selected={tab === t} onClick={() => setTab(t)}>
             {labels[t] || DEFAULT_LABELS[t]}
             {badge[t] ? <span className="badge">{badge[t]}</span> : null}
           </button>
@@ -203,7 +202,6 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
             <FamilyTab data={data} fdata={fdata} token={token} />
           </section>
         )}
-        <p className="legal"><a href="terms.html">תנאי שימוש</a> · <a href="privacy.html">מדיניות פרטיות</a></p>
       </main>
     </>
   );
