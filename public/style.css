@@ -434,6 +434,18 @@ body:not([data-theme]) button.primary {
   background: linear-gradient(135deg, var(--coin), #ffb4a2);
   box-shadow: 0 4px 14px rgba(224, 166, 64, .25);
 }
+body:not([data-theme]) .top {
+  background: linear-gradient(135deg, #8f7fc7, #d49bc4);
+  border-bottom: 4px solid #ffd9c2;
+}
+body:not([data-theme]) .sub { color: #ece6fa; }
+body:not([data-theme]) .ghost.light { border-color: #cdbde8; }
+body:not([data-theme]) .toast { background: #8f7fc7; }
+body:not([data-theme]) .sum.owe { color: #e0766a; }
+body:not([data-theme]) .sum.get { color: #4fa87f; }
+body:not([data-theme]) .bigbtn { border-radius: 22px; }
+body:not([data-theme]) .bigbtn.owe:hover, body:not([data-theme]) .bigbtn.owe:focus-visible, body:not([data-theme]) .bigbtn.owe:active { border-color: #f4b4ac; }
+body:not([data-theme]) .bigbtn.get:hover, body:not([data-theme]) .bigbtn.get:focus-visible, body:not([data-theme]) .bigbtn.get:active { border-color: #a4ddc1; }
 
 /* ===== ערכת נושא: הורים ===== */
 body[data-theme="parent"] {
