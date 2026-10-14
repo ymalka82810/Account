@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#1d2b4f">
 <title>הקופה המשפחתית</title>
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -13,96 +14,142 @@
 </head>
 <body>
 
-<header class="top">
+<!-- טעינה / אין שרת -->
+<section id="screen-loading" class="screen center active">
+  <div class="big-emoji" aria-hidden="true">🪙</div>
+  <p>רגע, מתחברים…</p>
+</section>
+
+<section id="screen-noserver" class="screen center">
+  <div class="big-emoji" aria-hidden="true">🔌</div>
+  <h1>האפליקציה עוד לא מחוברת לשרת</h1>
+  <p class="hint">הורה צריך להגדיר את כתובת Convex בקובץ <code>config.js</code>.</p>
+</section>
+
+<!-- הקמה ראשונה -->
+<section id="screen-setup" class="screen">
+  <div class="card-narrow">
+    <div class="big-emoji" aria-hidden="true">🏠</div>
+    <h1>ברוכים הבאים לקופה המשפחתית</h1>
+    <p class="hint">מקימים את המשפחה. מי שמקים הוא ההורה הראשון, ואחר כך מוסיפים את הילדים.</p>
+    <form id="setupForm" class="form" autocomplete="off">
+      <label class="field"><span>איך קוראים לך?</span>
+        <input id="setupName" type="text" maxlength="20" required></label>
+      <div class="field"><span>בחר/י דמות</span><div id="setupAvatars" class="avatars"></div></div>
+      <label class="field"><span>קוד סודי (4 ספרות)</span>
+        <input id="setupPin" type="password" inputmode="numeric" pattern="\d{4}" maxlength="4" required autocomplete="new-password"></label>
+      <p id="setupError" class="error" role="alert" hidden></p>
+      <button class="primary" type="submit">הקמת המשפחה</button>
+    </form>
+  </div>
+</section>
+
+<!-- בחירת מי נכנס -->
+<section id="screen-login" class="screen center">
+  <div class="big-emoji" aria-hidden="true">🪙</div>
   <h1>הקופה המשפחתית</h1>
-  <p class="sub">כל הכסף שחייבים בבית, במקום אחד</p>
-</header>
+  <p class="hint">מי נכנס/ת?</p>
+  <div id="loginTiles" class="tiles"></div>
+</section>
 
-<nav class="tabs" role="tablist" aria-label="תפריט ראשי">
-  <button role="tab" class="tab active" data-tab="overview" aria-selected="true">מי חייב למי</button>
-  <button role="tab" class="tab" data-tab="add" aria-selected="false">חוב חדש</button>
-  <button role="tab" class="tab" data-tab="history" aria-selected="false">היסטוריה</button>
-  <button role="tab" class="tab" data-tab="people" aria-selected="false">המשפחה</button>
-</nav>
+<!-- קוד סודי -->
+<section id="screen-pin" class="screen center">
+  <button id="pinBack" class="ghost back" type="button">→ חזרה</button>
+  <div id="pinAvatar" class="avatar-xl" aria-hidden="true"></div>
+  <h1 id="pinName"></h1>
+  <p id="pinTitle" class="hint"></p>
+  <div id="pinDots" class="dots" aria-hidden="true"></div>
+  <p id="pinError" class="error" role="alert" aria-live="assertive"></p>
+  <div id="pinPad" class="pad"></div>
+</section>
 
-<main>
-  <!-- סקירה -->
-  <section id="tab-overview" class="panel active">
-    <div id="balances" class="balances"></div>
-    <h2>החובות הפתוחים</h2>
-    <div id="debts"></div>
-  </section>
+<!-- האפליקציה -->
+<section id="screen-app" class="screen">
+  <header class="top">
+    <div class="who-am-i">
+      <span id="meAvatar" class="avatar-sm" aria-hidden="true"></span>
+      <div>
+        <h1 id="meName"></h1>
+        <p class="sub">הקופה המשפחתית</p>
+      </div>
+    </div>
+    <button id="logoutBtn" class="ghost light" type="button">יציאה</button>
+  </header>
 
-  <!-- חוב חדש -->
-  <section id="tab-add" class="panel">
-    <form id="entryForm" class="form" autocomplete="off">
-      <div class="kind" role="radiogroup" aria-label="סוג הרשומה">
-        <label><input type="radio" name="kind" value="debt" checked><span>חוב חדש</span></label>
-        <label><input type="radio" name="kind" value="payment"><span>החזר כסף</span></label>
+  <nav class="tabs" role="tablist" aria-label="תפריט ראשי">
+    <button role="tab" class="tab active" data-tab="home" aria-selected="true">🏠 הכסף שלי</button>
+    <button role="tab" class="tab" data-tab="history" aria-selected="false">📜 מה היה</button>
+    <button role="tab" class="tab parent-only" data-tab="family" aria-selected="false" hidden>👨‍👩‍👧 המשפחה</button>
+  </nav>
+
+  <main>
+    <section id="tab-home" class="panel active">
+      <div class="summary">
+        <div class="sum owe"><div class="lbl">אני חייב/ת</div><div id="sumOwe" class="num"></div></div>
+        <div class="sum get"><div class="lbl">חייבים לי</div><div id="sumGet" class="num"></div></div>
       </div>
 
-      <label class="field">
-        <span id="fromLabel">מי חייב?</span>
-        <select id="from" required></select>
-      </label>
+      <div class="bigbtns">
+        <button id="btnIOwe" class="bigbtn owe" type="button"><span aria-hidden="true">💸</span>אני חייב/ת כסף</button>
+        <button id="btnTheyOwe" class="bigbtn get" type="button"><span aria-hidden="true">🤝</span>חייבים לי כסף</button>
+      </div>
 
-      <label class="field">
-        <span id="toLabel">למי?</span>
-        <select id="to" required></select>
-      </label>
+      <h2>מי חייב למי</h2>
+      <div id="myDebts"></div>
 
-      <label class="field">
-        <span>כמה (בשקלים)?</span>
-        <input id="amount" type="number" inputmode="decimal" min="0.01" step="0.01" required placeholder="0">
-      </label>
+      <button id="changePinBtn" class="ghost linkish" type="button">🔑 שינוי הקוד הסודי שלי</button>
+    </section>
 
-      <label class="field">
-        <span>על מה? (לא חובה)</span>
-        <input id="note" type="text" maxlength="80" placeholder="למשל: גלידה, כרטיס לסרט">
-      </label>
+    <section id="tab-history" class="panel">
+      <div id="myHistory"></div>
+    </section>
 
-      <label class="field">
-        <span>תאריך</span>
-        <input id="date" type="date" required>
-      </label>
+    <section id="tab-family" class="panel">
+      <div id="legacyBox"></div>
+      <h2>יתרות</h2>
+      <div id="balances" class="balances"></div>
+      <h2>כל החובות הפתוחים</h2>
+      <div id="debts"></div>
 
-      <p id="formError" class="error" role="alert" hidden></p>
-      <button class="primary" type="submit" id="submitBtn">שמירת החוב</button>
-    </form>
-  </section>
+      <h2>בני המשפחה</h2>
+      <div id="peopleList"></div>
+      <form id="personForm" class="form card" autocomplete="off">
+        <h3>הוספת בן/בת משפחה</h3>
+        <label class="field"><span>שם</span><input id="personName" type="text" maxlength="20" required></label>
+        <label class="field"><span>תפקיד</span>
+          <select id="personRole"><option value="child">ילד/ה</option><option value="parent">הורה</option></select></label>
+        <div class="field"><span>דמות</span><div id="personAvatars" class="avatars"></div></div>
+        <label class="field"><span>קוד סודי (לא חובה — אפשר שהילד/ה יבחרו לבד)</span>
+          <input id="personPin" type="password" inputmode="numeric" pattern="\d{4}" maxlength="4" autocomplete="new-password"></label>
+        <button class="primary" type="submit">הוספה</button>
+      </form>
 
-  <!-- היסטוריה -->
-  <section id="tab-history" class="panel">
-    <div id="history"></div>
-    <div class="tools">
-      <button class="ghost" id="exportBtn">שמירת גיבוי</button>
-      <label class="ghost filebtn">שחזור מגיבוי<input type="file" id="importFile" accept="application/json" hidden></label>
+      <h2>כל הרשומות</h2>
+      <div id="allHistory"></div>
+      <div class="tools">
+        <button class="ghost" id="exportBtn" type="button">שמירת גיבוי</button>
+        <label class="ghost filebtn">הוספה מקובץ גיבוי<input type="file" id="importFile" accept="application/json" hidden></label>
+      </div>
+    </section>
+  </main>
+</section>
+
+<!-- חלון קופץ -->
+<div id="sheetWrap" class="sheet-wrap" hidden>
+  <div class="sheet-bg" id="sheetBg"></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-head">
+      <h2 id="sheetTitle"></h2>
+      <button id="sheetClose" class="ghost" type="button" aria-label="סגירה">✕</button>
     </div>
-  </section>
-
-  <!-- אנשים -->
-  <section id="tab-people" class="panel">
-    <div id="peopleList"></div>
-    <form id="personForm" class="form inline" autocomplete="off">
-      <h2>הוספת בן משפחה</h2>
-      <label class="field">
-        <span>שם</span>
-        <input id="personName" type="text" maxlength="20" required>
-      </label>
-      <label class="field">
-        <span>תפקיד</span>
-        <select id="personRole">
-          <option value="child">ילד/ה</option>
-          <option value="parent">הורה</option>
-        </select>
-      </label>
-      <button class="primary" type="submit">הוספה</button>
-    </form>
-  </section>
-</main>
+    <div id="sheetBody"></div>
+  </div>
+</div>
 
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
+<script src="config.js"></script>
+<script src="vendor/convex-browser.bundle.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

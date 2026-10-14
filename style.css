@@ -221,3 +221,120 @@ button.danger { color: var(--owe); }
   .toast { animation: pop .2s ease-out; }
   @keyframes pop { from { transform: translateY(8px); opacity: 0; } }
 }
+
+/* ===== גרסת שרת: מסכים, כניסה וממשק ילדים ===== */
+[hidden] { display: none !important; }
+body.noscroll { overflow: hidden; }
+code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px; border-radius: 6px; }
+
+.screen { display: none; min-height: 100vh; min-height: 100dvh; }
+.screen.active { display: block; }
+.screen.center.active {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: 8px;
+  padding: calc(24px + env(safe-area-inset-top, 0)) 20px calc(24px + env(safe-area-inset-bottom, 0));
+}
+.screen h1 { margin: 0; }
+.hint { color: var(--ink-soft); margin: 4px 0 0; }
+.big-emoji { font-size: 3.4rem; line-height: 1.1; }
+.card-narrow { max-width: 460px; margin: 0 auto; padding: calc(28px + env(safe-area-inset-top, 0)) 20px 28px; text-align: center; display: grid; gap: 10px; }
+.card-narrow .form { text-align: start; margin-top: 8px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+.card h3 { margin: 0; font-size: 1.05rem; }
+.card.notice { border-color: var(--coin-deep); margin-bottom: 8px; }
+.card.notice p { margin: 0 0 8px; }
+
+/* ריבועי בחירת אדם */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px; width: 100%; max-width: 520px; margin-top: 14px; }
+.tile {
+  font: inherit; color: var(--ink); background: var(--card);
+  border: 2px solid var(--line); border-radius: 20px; padding: 16px 8px;
+  display: grid; gap: 6px; justify-items: center; cursor: pointer; min-height: 120px;
+}
+.tile:active { transform: scale(.97); }
+.tile:hover { border-color: var(--coin-deep); }
+.tname { font-weight: 700; font-size: 1.1rem; overflow-wrap: anywhere; }
+.avatar-lg { font-size: 3rem; line-height: 1; }
+.avatar-md { font-size: 2rem; line-height: 1; }
+.avatar-sm { font-size: 1.9rem; line-height: 1; }
+.avatar-xl { font-size: 4.4rem; line-height: 1; }
+
+/* בורר דמות */
+.avatars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.av { font-size: 1.7rem; background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 6px 0; cursor: pointer; }
+.av.on { border-color: var(--coin-deep); background: var(--coin); }
+
+/* קוד סודי ולוחות מספרים */
+.dots { display: flex; gap: 14px; margin: 14px 0 4px; }
+.dot { width: 20px; height: 20px; border-radius: 50%; border: 2.5px solid var(--ink); }
+.dot.on { background: var(--ink); }
+.shake { animation: shake .35s; }
+@keyframes shake { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+@media (prefers-reduced-motion: reduce) { .shake { animation: none; } }
+#pinError { min-height: 1.5em; margin: 2px 0 8px; }
+.back { align-self: flex-start; position: absolute; top: calc(14px + env(safe-area-inset-top, 0)); inset-inline-start: 14px; }
+
+.pad { display: grid; grid-template-columns: repeat(3, 76px); gap: 12px; direction: ltr; justify-content: center; }
+.pad.compact { grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 320px; margin: 10px auto; }
+.key {
+  font: inherit; font-size: 1.7rem; font-weight: 700; color: var(--ink);
+  background: var(--card); border: 2px solid var(--line); border-radius: 50%;
+  height: 76px; cursor: pointer; touch-action: manipulation;
+}
+.pad.compact .key { border-radius: 16px; height: 58px; font-size: 1.5rem; }
+.key:active { background: var(--coin); border-color: var(--coin-deep); }
+.key.del { font-size: 1.4rem; }
+
+/* כותרת האפליקציה */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.who-am-i { display: flex; align-items: center; gap: 12px; }
+.who-am-i h1 { font-size: 1.4rem; }
+.who-am-i .sub { margin: 0; }
+.ghost.light { color: #fff; border-color: #6c7aa8; }
+
+/* סיכום וכפתורים גדולים */
+.summary { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sum { border-radius: 18px; padding: 14px; text-align: center; }
+.sum.owe { background: var(--owe-bg); color: var(--owe); }
+.sum.get { background: var(--get-bg); color: var(--get); }
+.sum .lbl { font-weight: 500; }
+.sum .num { font-size: 1.7rem; font-weight: 800; }
+.bigbtns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.bigbtn {
+  font: inherit; font-weight: 700; font-size: 1.05rem; color: var(--ink);
+  background: var(--card); border: 2px solid var(--line); border-radius: 18px;
+  padding: 16px 8px; min-height: 96px; cursor: pointer;
+  display: grid; gap: 6px; justify-items: center; align-content: center;
+}
+.bigbtn span { font-size: 2rem; line-height: 1; }
+.bigbtn.owe { border-color: var(--owe); }
+.bigbtn.get { border-color: var(--get); }
+.bigbtn:active { transform: scale(.98); }
+
+.debt.owe { border-inline-start: 6px solid var(--owe); }
+.debt.get { border-inline-start: 6px solid var(--get); }
+button.strongbtn { background: var(--coin); border-color: var(--coin-deep); color: #1d2b4f; font-weight: 700; padding: 12px 14px; }
+button.small { min-height: 40px; }
+.linkish { margin-top: 26px; width: 100%; }
+.back.ghost, .ghost { cursor: pointer; }
+
+/* חלון קופץ */
+.sheet-wrap { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end; justify-content: center; }
+.sheet-bg { position: absolute; inset: 0; background: rgba(10, 16, 40, .55); }
+.sheet {
+  position: relative; width: 100%; max-width: 560px; max-height: 94vh; max-height: 94dvh; overflow-y: auto;
+  background: var(--bg); border-radius: 24px 24px 0 0;
+  padding: 16px 18px calc(20px + env(safe-area-inset-bottom, 0));
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, .3);
+}
+@media (min-width: 640px) { .sheet-wrap { align-items: center; } .sheet { border-radius: 24px; } }
+.sheet-head { display: flex; align-items: center; justify-content: space-between; }
+.sheet-head h2 { margin: 0; }
+.flow { display: grid; gap: 12px; }
+.flow-q { font-size: 1.15rem; font-weight: 700; margin: 8px 0 0; text-align: center; }
+.amount-display { font-size: 3rem; font-weight: 800; text-align: center; padding: 6px 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.chip { font: inherit; font-weight: 500; color: var(--ink); background: var(--card); border: 2px solid var(--line); border-radius: 99px; padding: 10px 16px; cursor: pointer; }
+.chip.strong { background: var(--coin); border-color: var(--coin-deep); font-weight: 700; color: #1d2b4f; }
+.summary-line { text-align: center; font-size: 1.25rem; font-weight: 800; background: var(--card); border: 2px solid var(--coin-deep); border-radius: 16px; padding: 14px; }
+.flow .ghost { padding: 12px; }
