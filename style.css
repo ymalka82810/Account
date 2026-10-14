@@ -461,4 +461,6 @@ body[data-theme="teen"] .sheet { box-shadow: 0 -8px 40px rgba(124, 92, 255, .25)
 button.busy, button:disabled { opacity: .65; cursor: progress; }
 button.busy { animation: busy-pulse 1s ease-in-out infinite; }
 @keyframes busy-pulse { 50% { opacity: .4; } }
-@media (prefers-reduced-motion: reduce) { button.busy { animation: none; } }
+@media (prefers-reduced-motion: reduce) { button.busy, #pinDots.busy { animation: none; } }
+
+#pinDots.busy { animation: busy-pulse 1s ease-in-out infinite; }

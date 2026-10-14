@@ -60,6 +60,26 @@
     return n;
   }
 
+  // נועל כפתור קיים (submit/click) בזמן פעולה אסינכרונית ומראה "⏳ רגע…",
+  // כדי שלא יהיה אפשר ללחוץ כמה פעמים בזמן ההמתנה לשרת.
+  function withBusy(btn, fn) {
+    return async (ev) => {
+      if (btn.disabled) return;
+      const label = btn.textContent;
+      btn.disabled = true;
+      btn.classList.add('busy');
+      btn.textContent = '⏳ רגע…';
+      btn.setAttribute('aria-busy', 'true');
+      try { await fn(ev); }
+      finally {
+        btn.disabled = false;
+        btn.classList.remove('busy');
+        btn.removeAttribute('aria-busy');
+        if (btn.textContent === '⏳ רגע…') btn.textContent = label;
+      }
+    };
+  }
+
   let toastTimer;
   function toast(msg) {
     const t = $('toast');
@@ -307,7 +327,7 @@
   }
 
   $('codeInput').addEventListener('input', (ev) => { ev.target.value = prettyCode(ev.target.value); showCodeError(''); });
-  $('codeForm').addEventListener('submit', async (ev) => {
+  $('codeForm').addEventListener('submit', withBusy($('codeForm').querySelector('button[type=submit]'), async (ev) => {
     ev.preventDefault();
     showCodeError('');
     try {
@@ -316,7 +336,7 @@
       else if (r === 'throttled') showCodeError('יותר מדי ניסיונות. נסו שוב עוד דקה.');
       else showCodeError('הקוד לא נכון. בדקו שוב, או בקשו מההורים.');
     } catch (e) { showCodeError(errMsg(e)); }
-  });
+  }));
 
   $('newFamilyBtn').addEventListener('click', () => { view = 'setup'; route(); });
 
@@ -326,7 +346,7 @@
     if (!setupPicker) setupPicker = avatarPicker($('setupAvatars'));
   }
   $('setupBack').addEventListener('click', () => { view = 'welcome'; route(); });
-  $('setupForm').addEventListener('submit', async (ev) => {
+  $('setupForm').addEventListener('submit', withBusy($('setupForm').querySelector('button[type=submit]'), async (ev) => {
     ev.preventDefault();
     const err = $('setupError');
     err.hidden = true;
@@ -339,7 +359,7 @@
       view = 'welcome';
       setToken(res.token);
     } catch (e) { err.textContent = errMsg(e); err.hidden = false; }
-  });
+  }));
 
   // ---------- הצטרפות עם קוד ----------
   let joinPicker = null;
@@ -350,7 +370,7 @@
       : `מצטרפים לקופה של ${fam.name} בתור ילד/ה.`;
   }
   $('joinBack').addEventListener('click', () => { view = 'welcome'; route(); });
-  $('joinForm').addEventListener('submit', async (ev) => {
+  $('joinForm').addEventListener('submit', withBusy($('joinForm').querySelector('button[type=submit]'), async (ev) => {
     ev.preventDefault();
     const err = $('joinError');
     err.hidden = true;
@@ -368,7 +388,7 @@
       view = 'welcome';
       setToken(res.token);
     } catch (e) { err.textContent = errMsg(e); err.hidden = false; }
-  });
+  }));
 
   function leaveFamily() {
     fam = null;
@@ -421,7 +441,8 @@
       ? 'כתבו את הקוד הסודי'
       : f.first ? 'כתבו את הקוד שוב, לאישור' : 'בחרו קוד סודי חדש (4 ספרות)';
     $('pinDots').replaceChildren(...[0, 1, 2, 3].map((i) => el('span', { class: 'dot' + (i < f.entered.length ? ' on' : '') })));
-    $('pinError').textContent = error;
+    $('pinDots').classList.toggle('busy', !!f.busy);
+    $('pinError').textContent = f.busy ? 'בודקים…' : error;
     $('forgotPinBtn').hidden = !(f.mode === 'login' && f.person.role === 'parent' && !f.legacy);
   }
 
@@ -450,6 +471,7 @@
   async function submitPin() {
     const f = pinFlow;
     f.busy = true;
+    renderPin();
     const code = f.legacy ? undefined : fam.code;
     try {
       if (f.mode === 'login') {
@@ -1271,17 +1293,17 @@
     });
   }
 
-  $('friendsRequestBtn').addEventListener('click', async () => {
+  $('friendsRequestBtn').addEventListener('click', withBusy($('friendsRequestBtn'), async () => {
     try { await call('friends:requestAccess', { token }); toast('הבקשה נשלחה להורים ⏳'); }
     catch (e) { toast(errMsg(e)); }
-  });
-  $('teenRequestBtn').addEventListener('click', async () => {
+  }));
+  $('teenRequestBtn').addEventListener('click', withBusy($('teenRequestBtn'), async () => {
     try { await call('people:requestTeen', { token }); toast('הבקשה נשלחה להורים ⏳'); }
     catch (e) { toast(errMsg(e)); }
-  });
+  }));
   $('btnFriendIOwe').addEventListener('click', () => startFriendFlow({ kind: 'debt', from: data.me.id }));
   $('btnFriendOwesMe').addEventListener('click', () => startFriendFlow({ kind: 'debt', to: data.me.id }));
-  $('friendForm').addEventListener('submit', async (ev) => {
+  $('friendForm').addEventListener('submit', withBusy($('friendForm').querySelector('button[type=submit]'), async (ev) => {
     ev.preventDefault();
     const err = $('friendError');
     err.hidden = true;
@@ -1290,7 +1312,7 @@
       $('friendEmailInput').value = '';
       toast('אם לחבר/ה יש מצב חברים, נשלחה להם בקשה 🤝');
     } catch (e) { err.textContent = errMsg(e); err.hidden = false; }
-  });
+  }));
 
   // ---------- קודי הצטרפות ----------
   async function shareCode(title, code) {
