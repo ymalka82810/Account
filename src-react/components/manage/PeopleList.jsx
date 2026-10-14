@@ -4,9 +4,8 @@ import { ResetPinSheet } from './ResetPinSheet.jsx';
 import { useRun } from '../../lib/useRun.js';
 import { call } from '../../lib/api.js';
 import { roleLabel } from '../../lib/computations.js';
-import { g } from '../../lib/gender.js';
-
-const GENDER_LABEL = { male: 'זכר', female: 'נקבה' };
+import Select from '../shared/Select.jsx';
+import { g, GENDER_OPTIONS } from '../../lib/gender.js';
 
 // בני המשפחה: קוד חדש, ילד/נער, כיבוי מצב חברים והסרה.
 export default function PeopleList({ people, me, token }) {
@@ -58,11 +57,7 @@ export default function PeopleList({ people, me, token }) {
             )}
             <div className="meta">
               צורת פנייה:{' '}
-              <select value={p.gender || ''} onChange={(e) => changeGender(p, e.target.value)}>
-                <option value="">ללא ציון</option>
-                <option value="male">{GENDER_LABEL.male}</option>
-                <option value="female">{GENDER_LABEL.female}</option>
-              </select>
+              <Select className="dd-inline" value={p.gender || ''} onChange={(gender) => changeGender(p, gender)} options={GENDER_OPTIONS} />
             </div>
           </div>
           {p.role !== 'parent' && p.hasPin && (

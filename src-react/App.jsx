@@ -190,8 +190,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
         <div className="who-am-i">
           {data.me.avatar && <span className="avatar-sm" aria-hidden="true">{data.me.avatar}</span>}
           <div>
-            <h1>{data.me.name}</h1>
-            <p className="sub">{data.family.name}</p>
+            <h1>{data.me.name} {data.family.name.replace(/^משפחת\s+/, '')}</h1>
           </div>
         </div>
         <button className="ghost light" type="button" aria-label="החשבון שלי" onClick={() => sheet.open('', <AccountSheet />)}>⚙️ החשבון שלי</button>

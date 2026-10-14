@@ -75,7 +75,13 @@ export function openDebts(people, entries) {
 // פונקציות שמות שתלויות ב"מי אני" ובמי שאפשר לחפש לפיו (people של המשפחה,
 // ובמצב חברים גם fdata.people).
 export function namesFor(me, lookup) {
-  const nameOf = (id) => lookup(id)?.name ?? 'לא ידוע';
+  // הורה עם מגדר מוגדר מוצג כ"אבא"/"אימא" ולא בשם הפרטי שלו/ה.
+  const nameOf = (id) => {
+    const p = lookup(id);
+    if (!p) return 'לא ידוע';
+    if (p.role === 'parent' && (p.gender === 'male' || p.gender === 'female')) return p.gender === 'male' ? 'אבא' : 'אימא';
+    return p.name;
+  };
   const genderOf = (id) => lookup(id)?.gender;
   return {
     nameOf,

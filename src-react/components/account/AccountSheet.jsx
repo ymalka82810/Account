@@ -8,6 +8,8 @@ import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import { ChangePinSheet, ChangePinEmailSheet, EmailSheet, AvatarSheet } from './AccountSheets.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
+import Select from '../shared/Select.jsx';
+import { GENDER_OPTIONS } from '../../lib/gender.js';
 import { g } from '../../lib/gender.js';
 
 export async function logout() {
@@ -33,12 +35,8 @@ export function AccountSheet() {
 
   return (
     <div className="form">
-      <label className="field"><span>צורת פנייה</span>
-        <select value={me.gender || ''} onChange={(e) => setGender(e.target.value)}>
-          <option value="">ללא ציון</option>
-          <option value="male">זכר</option>
-          <option value="female">נקבה</option>
-        </select></label>
+      <div className="field"><span>צורת פנייה</span>
+        <Select value={me.gender || ''} onChange={setGender} options={GENDER_OPTIONS} /></div>
 
       <button className="ghost" type="button" onClick={() => sheet.open('דמות', <AvatarSheet />)}>
         {me.avatar ? me.avatar + ' דמות' : '🙂 בחירת דמות'}

@@ -1,7 +1,7 @@
 import { useApp } from '../../state/appContext.js';
 import PendingCards from '../entries/PendingCards.jsx';
 import DebtLines from '../entries/DebtLines.jsx';
-import { pairOwes, openDebtsOf, money } from '../../lib/computations.js';
+import { pairOwes, openDebtsOf, money, namesFor } from '../../lib/computations.js';
 import { g } from '../../lib/gender.js';
 
 // מסך הבית: סיכום, כפתורי רישום, אישורים ממתינים והחובות הפתוחים.
@@ -9,6 +9,7 @@ import { g } from '../../lib/gender.js';
 export default function Home({ data, token }) {
   const { openEntryFlow } = useApp();
   const me = data.me.id;
+  const { nameOf } = namesFor(me, (id) => data.people.find((p) => p.id === id));
   let owe = 0, get = 0;
   const cards = [];
 
@@ -26,7 +27,7 @@ export default function Home({ data, token }) {
       <div key={p.id} className={'debt ' + (iOwe ? 'owe' : 'get') + (open.length > 1 ? ' multi' : '')}>
         {p.avatar && <span className="avatar-md" aria-hidden="true">{p.avatar}</span>}
         <div className="text">
-          <div className="who">{iOwe ? `${g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${p.name}` : `${p.name} ${g(p.gender, 'חייב', 'חייבת', 'חייב/ת')} לי`}</div>
+          <div className="who">{iOwe ? `${g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${nameOf(p.id)}` : `${nameOf(p.id)} ${g(p.gender, 'חייב', 'חייבת', 'חייב/ת')} לי`}</div>
           <div className="amt">{money(amount)}</div>
           <DebtLines open={open} iOwe={iOwe} onPay={(x) => openEntryFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })} />
         </div>

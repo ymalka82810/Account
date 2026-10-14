@@ -59,7 +59,7 @@ body {
   cursor: pointer;
 }
 .tab.active { color: var(--ink); font-weight: 700; border-bottom-color: var(--coin-deep); }
-.tab:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, .filebtn:focus-within {
+.tab:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, .filebtn:focus-within, .dd-btn:focus-visible, .dd-opt:focus-visible {
   outline: 3px solid var(--coin-deep);
   outline-offset: 2px;
 }
@@ -142,6 +142,55 @@ input[type=text], input[type=password], input[type=number], input[type=date], in
 }
 .kind input:checked + span { background: var(--coin); border-color: var(--coin-deep); color: var(--on-coin, #1d2b4f); font-weight: 700; }
 .kind input:focus-visible + span { outline: 3px solid var(--coin-deep); outline-offset: 2px; }
+
+/* תפריט בחירה מעוצב (במקום <select> רגיל) */
+.dd { position: relative; width: 100%; }
+.dd-btn {
+  font: inherit;
+  color: var(--ink);
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  text-align: start;
+}
+.dd-btn:hover { border-color: var(--coin); }
+.dd-btn[aria-expanded="true"] { border-color: var(--coin-deep); }
+.dd-val { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dd-arrow { color: var(--ink-soft); font-size: .75em; transition: transform .15s ease; flex: none; }
+.dd-btn[aria-expanded="true"] .dd-arrow { transform: rotate(180deg); }
+.dd-list {
+  position: fixed;
+  z-index: 50;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(16, 24, 40, .18);
+  max-height: 280px;
+  overflow-y: auto;
+}
+.dd-opt {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.dd-opt.active { background: var(--bg); }
+.dd-opt.sel { background: var(--coin); color: var(--on-coin, #1d2b4f); font-weight: 700; }
+.dd-opt.sel.active { background: var(--coin-deep); }
+
+/* גרסה קומפקטית לשימוש בתוך שורת טקסט */
+.dd.dd-inline { width: auto; display: inline-block; vertical-align: middle; }
+.dd.dd-inline .dd-btn { width: auto; padding: 4px 10px; font-size: .9rem; border-radius: 8px; }
 
 button.primary {
   font: inherit;
@@ -483,6 +532,14 @@ body[data-theme="child"] .sum.get { color: #4fa87f; }
 body[data-theme="child"] .bigbtn { border-radius: 22px; }
 body[data-theme="child"] .bigbtn.owe:hover, body[data-theme="child"] .bigbtn.owe:focus-visible, body[data-theme="child"] .bigbtn.owe:active { border-color: #f4b4ac; }
 body[data-theme="child"] .bigbtn.get:hover, body[data-theme="child"] .bigbtn.get:focus-visible, body[data-theme="child"] .bigbtn.get:active { border-color: #a4ddc1; }
+body[data-theme="child"] .dd-btn, body:not([data-theme]) .dd-btn { border-radius: 14px; }
+body[data-theme="child"] .dd-list, body:not([data-theme]) .dd-list {
+  background: linear-gradient(165deg, #ddf3fc 0%, #fbe1ec 55%, #ffecc9 100%);
+  border-color: #c19fd9;
+  border-radius: 16px;
+}
+body[data-theme="child"] .dd-opt.sel, body:not([data-theme]) .dd-opt.sel { border-radius: 10px; color: var(--ink); background: #ffffffb3; border: 1.5px solid var(--coin-deep); }
+body[data-theme="child"] .dd-opt.active, body:not([data-theme]) .dd-opt.active { background: #ffffff80; border-radius: 10px; }
 
 /* ===== ערכת נושא: הורים ===== */
 body[data-theme="parent"] {
@@ -514,6 +571,9 @@ body[data-theme="parent"] .bigbtn span { font-size: 1.3rem; }
 body[data-theme="parent"] button.primary, body[data-theme="parent"] .ghost, body[data-theme="parent"] button.small { border-radius: 8px; }
 body[data-theme="parent"] .tile, body[data-theme="parent"] .av { border-radius: 12px; }
 body[data-theme="parent"] .card.notice, body[data-theme="parent"] .pending-card { border-color: var(--coin); }
+body[data-theme="parent"] .dd-btn { border-radius: 8px; }
+body[data-theme="parent"] .dd-list { border-radius: 10px; box-shadow: 0 6px 20px rgba(16, 24, 40, .12); }
+body[data-theme="parent"] .dd-opt { border-radius: 6px; }
 
 /* ===== ערכת נושא: נוער ===== */
 body[data-theme="teen"] {
@@ -548,6 +608,12 @@ body[data-theme="teen"] .toast { background: #2a1b6e; }
 body[data-theme="teen"] .tag.pending { background: #3b3320; color: #ffd873; }
 body[data-theme="teen"] .card.notice, body[data-theme="teen"] .pending-card { border-color: var(--coin); }
 body[data-theme="teen"] .sheet { box-shadow: 0 -8px 40px rgba(124, 92, 255, .25); }
+body[data-theme="teen"] .dd-btn { border-radius: 14px; }
+body[data-theme="teen"] .dd-btn[aria-expanded="true"] { border-color: var(--coin); box-shadow: 0 0 0 1px var(--coin); }
+body[data-theme="teen"] .dd-list { border-radius: 16px; box-shadow: 0 10px 30px rgba(124, 92, 255, .25); }
+body[data-theme="teen"] .dd-opt { border-radius: 10px; }
+body[data-theme="teen"] .dd-opt.sel { background: linear-gradient(135deg, #7c5cff, #5b8cff); color: #fff; }
+body[data-theme="teen"] .dd-opt.sel.active { background: linear-gradient(135deg, #6c4cef, #4b7cef); }
 .person { flex-wrap: wrap; } .person .text { min-width: 8em; }
 .person { flex-wrap: wrap; } .person .text { min-width: 8em; }
 

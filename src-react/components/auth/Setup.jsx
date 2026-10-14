@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { state, PARENT_AVATARS } from '../../state/state.js';
 import { goView, createFamily } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, useBusy } from './parts.jsx';
+import Select from '../shared/Select.jsx';
+import { GENDER_OPTIONS } from '../../lib/gender.js';
 
 export default function Setup({ current }) {
   const [v, setV] = useState({ familyName: '', name: '', pin: '' });
@@ -31,12 +33,8 @@ export default function Setup({ current }) {
           <label className="field"><span>איך קוראים לך?</span>
             <input type="text" maxLength={20} required value={v.name} onChange={set('name')} /></label>
           <div className="field"><span>בחר/י דמות</span><AvatarPicker value={avatar} onChange={setAvatar} options={PARENT_AVATARS} /></div>
-          <label className="field"><span>צורת פנייה</span>
-            <select value={gender} onChange={(e) => setGender(e.target.value)}>
-              <option value="">ללא ציון</option>
-              <option value="male">זכר</option>
-              <option value="female">נקבה</option>
-            </select></label>
+          <div className="field"><span>צורת פנייה</span>
+            <Select value={gender} onChange={setGender} options={GENDER_OPTIONS} /></div>
           <label className="field"><span>קוד סודי (4 ספרות)</span>
             <input type="password" inputMode="numeric" pattern="\d{4}" maxLength={4} required autoComplete="new-password"
               value={v.pin} onChange={set('pin')} /></label>

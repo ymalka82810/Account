@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { state, PARENT_AVATARS } from '../../state/state.js';
 import { goView, joinFamily } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
-import { g } from '../../lib/gender.js';
+import Select from '../shared/Select.jsx';
+import { g, GENDER_OPTIONS } from '../../lib/gender.js';
 
 export default function Join({ current }) {
   const fam = state.fam;
@@ -35,12 +36,8 @@ export default function Join({ current }) {
         <form className="form" autoComplete="off" onSubmit={submit}>
           <label className="field"><span>איך קוראים לך?</span>
             <input type="text" maxLength={20} required value={v.name} onChange={set('name')} /></label>
-          <label className="field"><span>צורת פנייה</span>
-            <select value={gender} onChange={(e) => setGender(e.target.value)}>
-              <option value="">ללא ציון</option>
-              <option value="male">זכר</option>
-              <option value="female">נקבה</option>
-            </select></label>
+          <div className="field"><span>צורת פנייה</span>
+            <Select value={gender} onChange={setGender} options={GENDER_OPTIONS} /></div>
           <div className="field"><span>בחר/י דמות</span>
             <AvatarPicker value={avatar} onChange={setAvatar} options={isParentCode ? PARENT_AVATARS : undefined} /></div>
           <label className="field"><span>קוד סודי משלך (4 ספרות)</span>

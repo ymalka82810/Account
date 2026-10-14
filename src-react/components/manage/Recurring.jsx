@@ -2,8 +2,9 @@ import { call } from '../../lib/api.js';
 import { useState } from 'react';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { WEEKDAYS } from '../../state/state.js';
-import { money, fmtDate } from '../../lib/computations.js';
+import { money, fmtDate, namesFor } from '../../lib/computations.js';
 import { g } from '../../lib/gender.js';
+import Select from '../shared/Select.jsx';
 
 const recurringWhen = (r) => (r.frequency === 'weekly' ? `כל יום ${WEEKDAYS[r.weekday]}` : `ב-${r.monthDay} בכל חודש`);
 
@@ -11,8 +12,7 @@ const recurringWhen = (r) => (r.frequency === 'weekly' ? `כל יום ${WEEKDAYS
 export default function Recurring({ data, token }) {
   const me = data.me.id;
   const people = data.people;
-  const nameOf = (id) => people.find((p) => p.id === id)?.name ?? 'לא ידוע';
-  const genderOf = (id) => people.find((p) => p.id === id)?.gender;
+  const { nameOf, genderOf } = namesFor(me, (id) => people.find((p) => p.id === id));
 
   const defaultTo = (people.find((p) => p.role === 'child') || people.find((p) => p.id !== me) || data.me).id;
   const [from, setFrom] = useState(me);
@@ -52,7 +52,7 @@ export default function Recurring({ data, token }) {
     } catch (e) { setError(errMsg(e)); }
   }
 
-  const options = people.map((p) => <option key={p.id} value={p.id}>{p.avatar ? `${p.avatar} ` : ''}{p.name}</option>);
+  const personOptions = people.map((p) => ({ value: p.id, label: (p.avatar ? `${p.avatar} ` : '') + p.name }));
 
   return (
     <>
@@ -70,29 +70,28 @@ export default function Recurring({ data, token }) {
       </div>
       <form className="form card" autoComplete="off" onSubmit={submit}>
         <h3>רישום קבוע חדש</h3>
-        <label className="field"><span>מי חייב/ת (משלם/ת)</span>
-          <select value={fromVal} onChange={(e) => setFrom(e.target.value)}>{options}</select></label>
-        <label className="field"><span>למי</span>
-          <select value={toVal} onChange={(e) => setTo(e.target.value)}>{options}</select></label>
+        <div className="field"><span>מי חייב/ת (משלם/ת)</span>
+          <Select value={fromVal} onChange={setFrom} options={personOptions} /></div>
+        <div className="field"><span>למי</span>
+          <Select value={toVal} onChange={setTo} options={personOptions} /></div>
         <label className="field"><span>סכום (₪)</span>
           <input type="number" inputMode="decimal" min="0.01" max="10000" step="0.01" required
             value={amount} onChange={(e) => setAmount(e.target.value)} /></label>
         <label className="field"><span>הערה</span>
           <input type="text" maxLength={80} value={note} onChange={(e) => setNote(e.target.value)} /></label>
-        <label className="field"><span>כל כמה זמן</span>
-          <select value={freq} onChange={(e) => setFreq(e.target.value)}>
-            <option value="weekly">כל שבוע</option><option value="monthly">כל חודש</option>
-          </select></label>
+        <div className="field"><span>כל כמה זמן</span>
+          <Select value={freq} onChange={setFreq} options={[
+            { value: 'weekly', label: 'כל שבוע' },
+            { value: 'monthly', label: 'כל חודש' },
+          ]} /></div>
         {freq === 'weekly' ? (
-          <label className="field"><span>באיזה יום</span>
-            <select value={weekday} onChange={(e) => setWeekday(e.target.value)}>
-              {WEEKDAYS.map((d, i) => <option key={i} value={String(i)}>יום {d}</option>)}
-            </select></label>
+          <div className="field"><span>באיזה יום</span>
+            <Select value={weekday} onChange={setWeekday}
+              options={WEEKDAYS.map((d, i) => ({ value: String(i), label: 'יום ' + d }))} /></div>
         ) : (
-          <label className="field"><span>באיזה יום בחודש (1 עד 28)</span>
-            <select value={monthDay} onChange={(e) => setMonthDay(e.target.value)}>
-              {Array.from({ length: 28 }, (_, i) => <option key={i} value={String(i + 1)}>{i + 1}</option>)}
-            </select></label>
+          <div className="field"><span>באיזה יום בחודש (1 עד 28)</span>
+            <Select value={monthDay} onChange={setMonthDay}
+              options={Array.from({ length: 28 }, (_, i) => ({ value: String(i + 1), label: String(i + 1) }))} /></div>
         )}
         {error && <p className="error" role="alert">{error}</p>}
         <button className="primary" type="submit">הוספה</button>

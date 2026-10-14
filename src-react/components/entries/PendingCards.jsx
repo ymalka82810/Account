@@ -1,4 +1,4 @@
-import { isPending, money, fmtDate } from '../../lib/computations.js';
+import { isPending, money, fmtDate, namesFor } from '../../lib/computations.js';
 import { useRun } from '../../lib/useRun.js';
 import { useSheet } from '../shared/Sheet.jsx';
 import { FriendApproveSheet } from '../family/FriendApproveSheet.jsx';
@@ -11,8 +11,7 @@ export default function PendingCards({ data, token, parentView }) {
   const sheet = useSheet();
   const openFriendApprove = (p) => sheet.open('מצב חברים ל' + p.name, <FriendApproveSheet person={p} />);
   const list = data.entries.filter(isPending);
-  const nameOf = (id) => data.people.find((p) => p.id === id)?.name ?? 'לא ידוע';
-  const genderOf = (id) => data.people.find((p) => p.id === id)?.gender;
+  const { nameOf, genderOf } = namesFor(null, (id) => data.people.find((p) => p.id === id));
 
   if (!parentView) {
     if (!list.length) return null;
