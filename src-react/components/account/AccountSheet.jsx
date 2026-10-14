@@ -17,7 +17,7 @@ export async function logout() {
 
 // "החשבון שלי": ההגדרות האישיות של מי שמחובר (התראות, קוד סודי, מייל, בקשת נוער, יציאה).
 export function AccountSheet() {
-  const { data, token, setTab } = useApp();
+  const { data, token } = useApp();
   const sheet = useSheet();
   const me = data.me;
   const [pushOn, setPushOn] = useState(null);
@@ -38,10 +38,6 @@ export function AccountSheet() {
         onClick={() => sheet.open('שינוי הקוד הסודי', me.email ? <ChangePinEmailSheet /> : <ChangePinSheet />)}>
         🔑 שינוי הקוד הסודי
       </button>
-
-      {me.role === 'parent' && (
-        <button className="ghost" type="button" onClick={() => { sheet.close(); setTab('manage'); }}>⚙️ ניהול המשפחה</button>
-      )}
 
       {me.role === 'parent' && (
         <button className="ghost" type="button" onClick={() => sheet.open('', <EmailSheet />)}>

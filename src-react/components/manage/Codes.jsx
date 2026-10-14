@@ -33,8 +33,7 @@ export default function Codes({ data, token }) {
   );
 
   return (
-    <div className="card codes">
-      <h3>🔑 קודי הצטרפות</h3>
+    <div className="codes">
       {block('קוד לילדים', 'ילדים שמקלידים אותו מצטרפים בתור ילדים.', f.childCode, 'child', 'קוד ילדים')}
       {block('קוד להורים', 'להורה השני. מי שמקליד אותו מצטרף בתור הורה, אז לא לשתף עם ילדים.', f.parentCode, 'parent', 'קוד הורים')}
     </div>

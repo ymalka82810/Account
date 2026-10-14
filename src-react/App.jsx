@@ -40,7 +40,7 @@ function applyTheme(role) {
 const TAB_IDS = ['home', 'friends', 'history', 'family', 'manage'];
 const tabFromHash = () => { const h = location.hash.slice(1); return TAB_IDS.includes(h) ? h : null; };
 
-const DEFAULT_LABELS = { home: '🏠 הכסף שלי', friends: '🤝 חברים', history: '📜 מה היה', family: '👨‍👩‍👧 המשפחה', manage: '⚙️ ניהול' };
+const DEFAULT_LABELS = { home: '🏠 הכסף שלי', friends: '🤝 חברים', history: '📜 מה היה', family: '👨‍👩‍👧 המשפחה', manage: 'ניהול' };
 
 export default function App() {
   if (!client) {
