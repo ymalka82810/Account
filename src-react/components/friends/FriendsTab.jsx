@@ -46,7 +46,7 @@ export default function FriendsTab({ data, fdata, token }) {
 
   const entries = fdata.entries;
   const lookup = (id) => data.people.find((p) => p.id === id) || fdata.people[id];
-  const { nameOf, subjectWord, toWord, gw } = namesFor(me, lookup);
+  const { nameOf, subjectWord, toWord, gw, vw } = namesFor(me, lookup);
   const accepted = fdata.friendships.filter((f) => f.status === 'accepted').length;
   const startFlow = (opts) => {
     if (!accepted) { toast('עוד אין חברים מאושרים. הוסיפו חבר/ה לפי המייל שלהם.'); return; }
@@ -164,7 +164,7 @@ export default function FriendsTab({ data, fdata, token }) {
                 <div className="text">
                   <div>
                     {nameOf(e.createdBy)} {gw(e.createdBy, 'רשם', 'רשמה', 'רשם/ה')}: {subjectWord(e.from)}{' '}
-                    {e.kind === 'debt' ? gw(e.from, 'חייב', 'חייבת', 'חייב/ת') : gw(e.from, 'החזיר', 'החזירה', 'החזיר/ה')} {toWord(e.to)}
+                    {e.kind === 'debt' ? gw(e.from, 'חייב', 'חייבת', 'חייב/ת') : vw(e.from, 'החזרתי', 'החזיר', 'החזירה', 'החזיר/ה')} {toWord(e.to)}
                   </div>
                   <div className="meta">{[money(e.amount), fmtDate(e.date), e.note].filter(Boolean).join(' • ')}</div>
                 </div>

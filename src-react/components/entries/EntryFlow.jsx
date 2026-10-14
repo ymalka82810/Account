@@ -20,7 +20,7 @@ export function EntryFlow({ opts }) {
   useEffect(() => { setErr(''); }, [step]);
 
   const lookup = (id) => data.people.find((p) => p.id === id) || (fdata && fdata.people && fdata.people[id]);
-  const { nameOf, subjectWord, toWord, gw } = namesFor(me, lookup);
+  const { nameOf, subjectWord, toWord, gw, vw } = namesFor(me, lookup);
   const isMe = (id) => id === me;
 
   const title = opts.kind === 'debt'
@@ -154,7 +154,7 @@ export function EntryFlow({ opts }) {
 
   function renderFinal() {
     const isDebt = opts.kind === 'debt';
-    let sentence = `${subjectWord(st.from)} ${isDebt ? gw(st.from, 'חייב', 'חייבת', 'חייב/ת') : gw(st.from, 'החזיר', 'החזירה', 'החזיר/ה')} ${toWord(st.to)} ${money(st.agorot)}`;
+    let sentence = `${subjectWord(st.from)} ${isDebt ? gw(st.from, 'חייב', 'חייבת', 'חייב/ת') : vw(st.from, 'החזרתי', 'החזיר', 'החזירה', 'החזיר/ה')} ${toWord(st.to)} ${money(st.agorot)}`;
     if (st.debtId) {
       const left = st.debtRemaining - st.agorot;
       sentence += ` על ${st.debtName}. ` + (left > 0 ? `יישאר ${money(left)} מהחוב.` : 'החוב ייסגר במלואו ✅');

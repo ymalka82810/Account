@@ -82,6 +82,8 @@ export function namesFor(me, lookup) {
     genderOf,
     // בוחר צורת פנייה (זכר/נקבה/כפולה) לפי המגדר של מי שמזוהה/ת ב-id.
     gw: (id, male, female, neutral) => g(genderOf(id), male, female, neutral),
+    // כמו gw, אבל לפועל שמשתנה גם לפי גוף: כש-id הוא "אני" צריך נטיית גוף ראשון (meForm), לא סתם מגדר.
+    vw: (id, meForm, male, female, neutral) => (id === me ? meForm : g(genderOf(id), male, female, neutral)),
     subjectWord: (id) => (id === me ? 'אני' : nameOf(id)),
     toWord: (id) => (id === me ? 'לי' : 'ל' + nameOf(id)),
   };
