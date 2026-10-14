@@ -1,7 +1,7 @@
 import { useConvex } from 'convex/react';
 import { toast, errMsg, prettyCode } from '../../src/helpers.js';
 
-// גרסת React של src/screens/codes.js (קודי הצטרפות, הורים בלבד).
+// קודי הצטרפות (הורים בלבד).
 export default function Codes({ data, token }) {
   const convex = useConvex();
   const f = data.family;

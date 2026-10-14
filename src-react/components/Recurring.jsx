@@ -6,7 +6,7 @@ import { money, fmtDate } from '../lib/computations.js';
 
 const recurringWhen = (r) => (r.frequency === 'weekly' ? `כל יום ${WEEKDAYS[r.weekday]}` : `ב-${r.monthDay} בכל חודש`);
 
-// גרסת React של src/screens/recurring.js (דמי כיס קבועים, הורים בלבד).
+// דמי כיס קבועים (הורים בלבד).
 export default function Recurring({ data, token }) {
   const convex = useConvex();
   const me = data.me.id;

@@ -2,7 +2,7 @@ import { useConvex } from 'convex/react';
 import { toast, errMsg } from '../../src/helpers.js';
 import { isPending, debtStates, canDelete, namesFor, money, fmtDate } from '../lib/computations.js';
 
-// גרסת React של src/entriesList.js (renderEntries). lookup(id) מחזיר אדם לפי מזהה.
+// רשימת רשומות. lookup(id) מחזיר אדם לפי מזהה.
 export default function EntriesList({
   list, emptyText, token, me, isParent, lookup, debtList, removeEndpoint, pendingLabel,
 }) {

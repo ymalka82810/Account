@@ -7,8 +7,7 @@ import { isPending, pairOwes, openDebtsOf, debtLabel, namesFor, money, fmtDate }
 import EntriesList from './EntriesList.jsx';
 import DebtLines from './DebtLines.jsx';
 
-// גרסת React של src/screens/friends.js (מצב חברים לבני נוער).
-// openEntryFlow הישן קורא את החברים מ-state.fdata, ש-session.js עדיין מעדכן.
+// מצב חברים לבני נוער.
 export default function FriendsTab({ data, fdata, token }) {
   const { openEntryFlow } = useApp();
   const me = data.me.id;

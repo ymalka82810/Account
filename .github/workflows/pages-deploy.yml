@@ -1,12 +1,12 @@
 name: Deploy React app to GitHub Pages
 
-# שימו לב: ה-trigger היחיד כרגע הוא הפעלה ידנית (workflow_dispatch).
-# זה מכוון: כל עוד GitHub Pages מוגדר ב-Settings > Pages על "Deploy from a branch"
-# (מגיש את index.html הישן ישירות מה-root), ה-workflow הזה לא מתחרה איתו ולא
-# רץ אוטומטית. רק כש-React יהיה מוכן להחליף את האתר הישן, נוסיף "on: push"
-# ונעבור ידנית ב-Settings > Pages ל-Source: "GitHub Actions".
+# האתר נבנה עם Vite ופורס ע"י ה-workflow הזה. בכל push ל-main (או הפעלה ידנית).
+# חשוב: ב-Settings > Pages צריך להיות Source: "GitHub Actions". אם זה עדיין
+# "Deploy from a branch", GitHub מגיש את index.html הגולמי של Vite והאתר לא עובד.
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
