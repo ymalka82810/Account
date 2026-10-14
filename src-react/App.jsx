@@ -165,7 +165,9 @@ function Root() {
     <>
       <section id="screen-loading" className={'screen center' + (screen === 'loading' ? ' active' : '')}>
         <div className="coin-drop" aria-hidden="true">
-          <div className="coin-drop__coin">🪙</div>
+          <div className="coin-drop__mask">
+            <div className="coin-drop__coin">🪙</div>
+          </div>
           <div className="coin-drop__floor" />
         </div>
         <p>רגע, מתחברים…</p>
@@ -186,9 +188,12 @@ function Root() {
 // גלגל השיניים קופץ ממקומו למרכז המסך (1 שנ'), ובמקביל מסתובב באיטיות וגדל עד
 // לגודל מטבע חצי שקל (עוד 2 שנ'). אז מבזיקים ניצוצות והוא שוקע לאחור ונעלם
 // במהירות (כ-0.35 שנ'), ולבסוף האריח האמיתי נפתח וגדל מאותה נקודה (1.5 שנ').
-const COIN_SIZE = 64; // קוטר משוער על המסך של מטבע חצי שקל
+const COIN_SIZE = 192; // הגודל הסופי של גלגל השיניים לפני השקיעה
 function GearLaunch({ fromRect, onDone }) {
   const [phase, setPhase] = useState('start'); // start -> flying -> sinking
+  // onDone ב-ref כדי שרינדור מחדש של ההורה לא יאפס את הטיימר של הסיום
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setPhase('flying'));
@@ -201,9 +206,9 @@ function GearLaunch({ fromRect, onDone }) {
   }, [phase]);
   useEffect(() => {
     if (phase !== 'sinking') return;
-    const t = setTimeout(onDone, 350);
+    const t = setTimeout(() => onDoneRef.current(), 350);
     return () => clearTimeout(t);
-  }, [phase, onDone]);
+  }, [phase]);
 
   const style = phase === 'start'
     ? { left: fromRect.left + fromRect.width / 2, top: fromRect.top + fromRect.height / 2, width: fromRect.width, height: fromRect.height }

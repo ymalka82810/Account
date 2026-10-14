@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { AppCtx } from '../../state/appContext.js';
 
 // החלון הקופץ. sheet.open(title, <Body />) מחליף את התוכן (גם כשכבר פתוח,
@@ -42,6 +42,10 @@ export function SheetProvider({ children }) {
   // החלון מוצג מחוץ ל-App, לכן App מעביר לכאן את ההקשר שלו כדי שהגוף יוכל לקרוא ל-useApp().
   const [appCtx, setAppCtx] = useState(null);
 
+  // ערך ההקשר חייב להיות יציב: אחרת כל רינדור כאן יוצר אובייקט חדש, App מעביר
+  // שוב setAppCtx, וזו לולאת רינדורים אינסופית שגם מאפסת טיימרים של הצרכנים.
+  const ctxValue = useMemo(() => ({ open, close, setTitle, setAppCtx }), [open, close, setTitle]);
+
   const key = sheet && sheet.key;
   useEffect(() => { if (key && closeBtn.current) closeBtn.current.focus(); }, [key]);
   // כשנפתח אריח עם נקודת מוצא, ממתינים לרינדור ומודדים את מיקומו כדי לקבוע
@@ -67,7 +71,7 @@ export function SheetProvider({ children }) {
   }, [!!sheet, close]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <SheetCtx.Provider value={{ open, close, setTitle, setAppCtx }}>
+    <SheetCtx.Provider value={ctxValue}>
       {children}
       <div className="sheet-wrap" hidden={!sheet}>
         <div className={'sheet-bg' + (sheet && sheet.revealFrom ? ' sheet-bg-reveal' : '')} onClick={close} />

@@ -301,14 +301,18 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
 .hint { color: var(--ink-soft); margin: 4px 0 0; }
 .big-emoji { font-size: 3.4rem; line-height: 1.1; }
 
-/* אנימציית מטבע במסך הטעינה: חריץ אפור נפתח מתחת למטבע תוך כדי שהוא מסתובב,
-   המטבע נופל ונעלם ממש בתוך החריץ (עובר מאחורי השכבה שלו), ואז מופיע מראש
-   המסך ונופל בחזרה למקומו המקורי עם קפיצה קלה */
+/* אנימציית מטבע במסך הטעינה: חריץ אפור נפתח תוך כדי שהמטבע מסתובב באיטיות
+   ויורד; "השמיים" שמעל החריץ חתוכים בדיוק בקו החריץ (coin-drop__mask), כך
+   שהמטבע נעלם ממש בתוכו מלמטה כלפי מעלה, כמו מטבע אמיתי שנכנס לחריץ של
+   קופת חיסכון. בסיום הוא מופיע מראש האזור ונופל בחזרה למקומו עם קפיצה קלה */
 .coin-drop { position: relative; width: 110px; height: 128px; margin: 0 auto; perspective: 500px; }
+/* גובה המסכה = גובה המיכל פחות מרווח הרצפה מהתחתית פחות גובה החריץ, כך שקו
+   החיתוך העליון של המסכה נופל בדיוק על השפה העליונה של החריץ. */
+.coin-drop__mask { position: absolute; inset-inline: 0; top: 0; height: 98px; overflow: hidden; }
 .coin-drop__coin {
-  position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center;
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
   font-size: 3.4rem; line-height: 1; transform-style: preserve-3d;
-  animation: coin-drop-cycle 3.6s cubic-bezier(.4, 0, .2, 1) infinite;
+  animation: coin-drop-cycle 4s cubic-bezier(.4, 0, .2, 1) infinite;
 }
 .coin-drop__floor {
   position: absolute; left: 50%; bottom: 20px; width: 78px; height: 10px; transform: translateX(-50%);
@@ -316,27 +320,28 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
 }
 .coin-drop__floor::before, .coin-drop__floor::after {
   content: ''; position: absolute; top: 0; width: 50%; height: 100%; background: var(--ink-soft);
-  animation: coin-slot-cycle 3.6s cubic-bezier(.4, 0, .2, 1) infinite;
+  animation: coin-slot-cycle 4s cubic-bezier(.4, 0, .2, 1) infinite;
 }
 .coin-drop__floor::before { left: 0; border-radius: 5px 0 0 5px; transform-origin: left center; }
 .coin-drop__floor::after  { right: 0; border-radius: 0 5px 5px 0; transform-origin: right center; }
 @keyframes coin-drop-cycle {
-  0%   { transform: translateY(0)     rotateY(0deg)   scale(1);   opacity: 1; }
-  28%  { transform: translateY(16px)  rotateY(400deg) scale(.8);  opacity: 1; }
-  40%  { transform: translateY(32px)  rotateY(680deg) scale(.4);  opacity: 1; }
-  46%  { transform: translateY(40px)  rotateY(760deg) scale(.08); opacity: 0; }
-  47%, 60% { transform: translateY(40px) scale(0); opacity: 0; }
-  63%  { transform: translateY(-115px) rotateY(760deg) scale(1); opacity: 1; }
-  78%  { transform: translateY(0)      rotateY(760deg) scale(1); opacity: 1; }
-  85%  { transform: translateY(-13px); }
-  91%  { transform: translateY(0); }
-  96%  { transform: translateY(-5px); }
-  100% { transform: translateY(0); }
+  0%    { transform: translateY(0)    rotateY(0deg)   scale(1); }
+  12%   { transform: translateY(3px)  rotateY(60deg)  scale(.97); }
+  30%   { transform: translateY(24px) rotateY(180deg) scale(.9); }
+  45%   { transform: translateY(55px) rotateY(290deg) scale(.78); }
+  56%   { transform: translateY(84px) rotateY(360deg) scale(.65); }
+  61%   { transform: translateY(84px)   rotateY(360deg) scale(.65); }
+  61.3% { transform: translateY(-120px) rotateY(360deg) scale(1); }
+  76%   { transform: translateY(0)      rotateY(360deg) scale(1); }
+  84%   { transform: translateY(-13px); }
+  90%   { transform: translateY(0); }
+  95%   { transform: translateY(-5px); }
+  100%  { transform: translateY(0); }
 }
 @keyframes coin-slot-cycle {
-  0%, 20%  { transform: scaleX(1); }
-  32%, 48% { transform: scaleX(.58); }
-  58%, 100% { transform: scaleX(1); }
+  0%, 15%   { transform: scaleX(1); }
+  28%, 54%  { transform: scaleX(.6); }
+  64%, 100% { transform: scaleX(1); }
 }
 @media (prefers-reduced-motion: reduce) {
   .coin-drop__coin { animation: none; }
@@ -497,10 +502,10 @@ button.small { min-height: 40px; }
 .gear-launch-spin { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .gear-launch-spin.flying { animation: gear-spin-slow 3s linear; }
 .gear-launch-spin.sinking { animation: gear-spin-fast .35s ease-in forwards; }
-@keyframes gear-spin-slow { to { transform: rotate(360deg); } }
+@keyframes gear-spin-slow { to { transform: rotate(450deg); } }
 @keyframes gear-spin-fast { to { transform: rotate(90deg); } }
 .gear-launch-icon { font-size: 1.3rem; transition: font-size 3s cubic-bezier(.22, .8, .2, 1); }
-.gear-launch-spin.flying .gear-launch-icon { font-size: 1.9rem; }
+.gear-launch-spin.flying .gear-launch-icon { font-size: 5.7rem; }
 .gear-launch-spin.sinking .gear-launch-icon { transition: font-size .35s ease-in; font-size: 0; }
 .gear-launch .spark {
   position: absolute; left: 50%; top: 50%; width: 3px; height: 15px; border-radius: 2px;
@@ -509,8 +514,8 @@ button.small { min-height: 40px; }
   animation: spark-burst .35s ease-out forwards;
 }
 @keyframes spark-burst {
-  0% { opacity: 1; transform: rotate(var(--ang)) translateY(-8px) scaleY(.6); }
-  100% { opacity: 0; transform: rotate(var(--ang)) translateY(-42px) scaleY(1); }
+  0% { opacity: 1; transform: rotate(var(--ang)) translateY(-30px) scaleY(.6); }
+  100% { opacity: 0; transform: rotate(var(--ang)) translateY(-130px) scaleY(1); }
 }
 
 /* חלון קופץ */
