@@ -1,10 +1,8 @@
 import { state, CODE_KEY, LAST_PERSON_KEY } from '../state.js';
-import { el, toast, errMsg, fmtWait } from '../helpers.js';
+import { toast, errMsg, fmtWait } from '../helpers.js';
 import { call } from '../api.js';
 import { route, setToken } from '../session.js';
 import { bumpAuth } from '../authStore.js';
-import { openSheet, closeSheet } from '../sheet.js';
-import { codeField, pinField } from './emailAuth.js';
 
 // הלוגיקה של מסכי הכניסה. התצוגה שלהם ב-src-react/components/Auth.jsx.
 
@@ -118,7 +116,7 @@ export async function pressKey(k) {
 }
 
 // קוד משפחה שהפסיק להיות תקף באמצע הכניסה (ההורים החליפו אותו).
-function codeGone() {
+export function codeGone() {
   toast('קוד המשפחה השתנה. בקשו קוד חדש מההורים.');
   leaveFamily();
 }
@@ -170,43 +168,12 @@ async function submitPin() {
   }
 }
 
-// שכחתי קוד (הורה, במסך הכניסה): קוד למייל המאומת, ואז בוחרים קוד חדש ונכנסים.
-// חלונות קופצים: יעברו ל-React יחד עם sheet.js.
-export function openForgotPin() {
-  const f = state.pinFlow;
-  if (!f || f.legacy) return;
-  const stepReset = () => {
-    const emailCode = codeField();
-    const newPin = pinField('new-password');
-    const err = el('p', { class: 'error', role: 'alert' });
-    openSheet('קוד סודי חדש', el('div', { class: 'form' },
-      el('label', { class: 'field' }, el('span', { text: 'הקוד מהמייל' }), emailCode),
-      el('label', { class: 'field' }, el('span', { text: 'קוד חדש (4 ספרות)' }), newPin),
-      err,
-      el('button', {
-        class: 'primary', type: 'button', text: 'קביעת הקוד והכניסה', onclick: async () => {
-          if (!/^\d{4}$/.test(newPin.value)) { err.textContent = 'הקוד החדש צריך להיות 4 ספרות.'; return; }
-          try {
-            const res = await call('emailAuth:resetWithCode', { code: state.fam.code, personId: f.person.id, emailCode: emailCode.value, newPin: newPin.value });
-            if (res.ok) { state.pinFlow = null; setToken(res.token); return; }
-            if (res.reason === 'code') { closeSheet(); codeGone(); return; }
-            err.textContent = res.reason === 'throttled' ? 'יותר מדי ניסיונות. נסו שוב עוד כמה דקות.' : 'קוד האימות שגוי או שפג תוקפו.';
-          } catch (e) { err.textContent = errMsg(e); }
-        },
-      })));
-  };
-  const err = el('p', { class: 'error', role: 'alert' });
-  openSheet('שכחתי את הקוד', el('div', { class: 'form' },
-    el('p', { class: 'hint', text: 'אם הוגדר מייל מאומת להורה הזה, נשלח אליו קוד אימות. אם לא הוגדר מייל, הורה אחר יכול לקבוע לך קוד חדש.' }),
-    err,
-    el('button', {
-      class: 'primary', type: 'button', text: 'שליחת קוד למייל', onclick: async () => {
-        try {
-          const res = await call('emailAuth:requestResetCode', { code: state.fam.code, personId: f.person.id });
-          if (res.ok) { stepReset(); return; }
-          if (res.reason === 'code') { closeSheet(); codeGone(); return; }
-          err.textContent = 'יותר מדי ניסיונות. נסו שוב עוד כמה דקות.';
-        } catch (e) { err.textContent = errMsg(e); }
-      },
-    })));
+// מחליט אם אפשר לדלג ישר למסך הקוד הסודי בלי להציג את רשימת הפרופילים:
+// אם יש רק איש/ה אחת במשפחה, או אם זה/ו האחרון/ה שנכנס/ה מהמכשיר הזה.
+export function autoSkipPerson() {
+  if (!state.fam || state.view === 'login') return null; // 'login' = המשתמש ביקש לראות את הרשימה (למשל "לא אני")
+  if (state.fam.people.length === 1) return state.fam.people[0];
+  const lastId = localStorage.getItem(LAST_PERSON_KEY);
+  if (lastId) return state.fam.people.find((p) => p.id === lastId) || null;
+  return null;
 }

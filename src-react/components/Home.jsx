@@ -1,20 +1,17 @@
+import { useEffect, useState } from 'react';
+import { state } from '../../src/state.js';
+import { call } from '../../src/api.js';
+import { toast, errMsg } from '../../src/helpers.js';
+import { pushSupported, isPushOn, enablePush, disablePush } from '../../src/push.js';
+import { useApp } from '../appContext.js';
+import { useSheet } from './Sheet.jsx';
+import { ChangePinSheet, ChangePinEmailSheet, EmailSheet } from './Sheets.jsx';
+import AsyncButton from './AsyncButton.jsx';
 import PendingCards from './PendingCards.jsx';
 import { pairOwes, openDebtsOf, debtLabel, money } from '../lib/computations.js';
 
-// גרסת React של src/screens/home.js. אותו HTML/classes בדיוק (style.css
-// לא משתנה), אבל בלי renderHome() ידני: React מריץ מחדש אוטומטית
-// כש-data.entries או data.people משתנים (דרך ה-props שמגיעים מ-useQuery).
-//
-// openEntryFlow מועבר כ-prop (בינתיים עדיין הפונקציה הישנה מה-vanilla app,
-// עד שגם היא תעבור ל-React בשלב נפרד).
-//
-// שימו לב: אין כאן <section id="tab-home"> - האלמנט הזה נשאר סטטי ב-
-// index.html (כדי ש-switchTab() ימשיך למצוא ולהחליף class 'active' עליו),
-// ו-React מצייר רק את התוכן הפנימי, לתוך <div id="reactHomeRoot"> שבפנים.
-// הכפתורים pushBtn/teenRequestBtn/changePinBtn/emailBtn נשארים סטטיים
-// מחוץ ל-React, כי קוד ישן (push.js, app.js, friends.js) ממשיך לשלוט
-// בהם ישירות (hidden/textContent/dataset) - אם React היה מצייר אותם
-// מחדש בכל רינדור, זה היה דורס את השינויים האלה.
+// מסך הבית: סיכום, כפתורי רישום, אישורים ממתינים והחובות הפתוחים,
+// ואחריהם כפתורי ההגדרות האישיות (התראות, בקשת נוער, קוד סודי, מייל).
 export default function Home({ data, token, openEntryFlow }) {
   const me = data.me.id;
   let owe = 0, get = 0;

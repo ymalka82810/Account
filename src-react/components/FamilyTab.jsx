@@ -1,20 +1,27 @@
-import { createPortal } from 'react-dom';
 import { useConvex } from 'convex/react';
 import { today, toast, errMsg } from '../../src/helpers.js';
-import { openEntryFlow } from '../../src/entryFlow.js';
-import { openResetPin } from '../../src/screens/emailAuth.js';
+import { useApp } from '../appContext.js';
+import { useSheet } from './Sheet.jsx';
+import { ResetPinSheet } from './Sheets.jsx';
 import { openDebts, roleLabel, namesFor, money, fmtDate } from '../lib/computations.js';
 import EntriesList from './EntriesList.jsx';
+import PendingCards from './PendingCards.jsx';
+import Legacy from './Legacy.jsx';
+import Codes from './Codes.jsx';
+import Recurring from './Recurring.jsx';
+import PersonForm from './PersonForm.jsx';
+import FamilyTools from './FamilyTools.jsx';
 
-// גרסת React של לשונית המשפחה (src/screens/family.js). האלמנטים הקבועים
-// נשארים ב-index.html, וכל חלק מצויר לתוכם דרך portal.
-function At({ id, children }) {
-  const node = document.getElementById(id);
-  return node ? createPortal(children, node) : null;
+// לשונית המשפחה (הורים): אישורים, קודים, יתרות, חובות, דמי כיס, בני משפחה והגדרות.
+// כל קטע הוא div עם id, כדי שיהיה קל למצוא אותו ב-DevTools.
+function At({ id, className, children }) {
+  return <div id={id} className={className}>{children}</div>;
 }
 
 export default function FamilyTab({ data, fdata, token }) {
   const convex = useConvex();
+  const { openEntryFlow } = useApp();
+  const sheet = useSheet();
   const me = data.me.id;
   const { nameOf } = namesFor(me, (id) => data.people.find((p) => p.id === id));
   const debts = openDebts(data.people, data.entries);
@@ -43,7 +50,12 @@ export default function FamilyTab({ data, fdata, token }) {
 
   return (
     <>
-      <At id="balances">
+      <PendingCards data={data} token={token} parentView />
+      <Legacy token={token} />
+      <Codes data={data} token={token} />
+
+      <h2>יתרות</h2>
+      <At id="balances" className="balances">
         {data.people.map((p) => {
           const v = bal.get(p.id) || 0;
           return (
@@ -56,6 +68,7 @@ export default function FamilyTab({ data, fdata, token }) {
         })}
       </At>
 
+      <h2>כל החובות הפתוחים</h2>
       <At id="debts">
         {debts.length === 0 && <div className="empty">אף אחד לא חייב כלום.</div>}
         {debts.map((d) => (
@@ -70,6 +83,10 @@ export default function FamilyTab({ data, fdata, token }) {
           </div>
         ))}
       </At>
+
+      <h2>דמי כיס קבועים</h2>
+      <p className="hint">רישום חוב אוטומטי, שבועי או חודשי, בלי להקליד כל פעם.</p>
+      <Recurring data={data} token={token} />
 
       <At id="teenFriendsRoot">
         {teens.length > 0 && (
@@ -100,6 +117,7 @@ export default function FamilyTab({ data, fdata, token }) {
         )}
       </At>
 
+      <h2>בני המשפחה</h2>
       <At id="peopleList">
         {data.people.map((p) => (
           <div className="person" key={p.id}>
@@ -114,7 +132,7 @@ export default function FamilyTab({ data, fdata, token }) {
               )}
               {p.role === 'teen' && p.friendsEnabled && <div className="meta">🤝 מצב חברים פעיל • {p.friendEmail || ''}</div>}
             </div>
-            <button className="small" type="button" onClick={() => openResetPin(p)}>קוד חדש</button>
+            <button className="small" type="button" onClick={() => sheet.open('קוד סודי ל' + p.name, <ResetPinSheet person={p} />)}>קוד חדש</button>
             {p.role !== 'parent' && (
               <button className="small" type="button" onClick={() => toggleRole(p)}>
                 {p.role === 'teen' ? 'חזרה לילד/ה' : 'הפיכה לנער/ה'}
@@ -136,10 +154,14 @@ export default function FamilyTab({ data, fdata, token }) {
         ))}
       </At>
 
+      <PersonForm token={token} />
+
+      <h2>כל הרשומות</h2>
       <At id="allHistory">
         <EntriesList list={data.entries} emptyText="עדיין אין רשומות." token={token} me={me} isParent
           lookup={(id) => data.people.find((p) => p.id === id)} debtList={data.entries} />
       </At>
+      <FamilyTools data={data} token={token} />
     </>
   );
 }

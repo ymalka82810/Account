@@ -1,21 +1,25 @@
-import { useEffect, useState, useSyncExternalStore } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { state, AVATARS } from '../../src/state.js';
 import { prettyCode } from '../../src/helpers.js';
 import { subscribeAuth, authVersion } from '../../src/authStore.js';
 import {
   submitFamilyCode, goView, createFamily, joinFamily, leaveFamily,
-  startPin, pinBack, pressKey, openForgotPin,
+  startPin, pinBack, pressKey,
 } from '../../src/screens/auth.js';
+import { useSheet } from './Sheet.jsx';
+import { ForgotPinSheet } from './Sheets.jsx';
 
-// גרסת React של מסכי הכניסה (welcome / setup / login / join / pin).
-// ה-<section> של כל מסך נשאר ב-index.html (session.js מחליף ביניהם עם
-// show()), וכאן מצויר רק התוכן שלהם דרך portal. ה-state המשותף
-// (view, fam, pinFlow, legacyPeople) נשאר ב-state.js, וכל route() מודיע
-// לכאן להתרנדר מחדש.
-function In({ screen, children }) {
-  const node = document.getElementById('screen-' + screen);
-  return node ? createPortal(children, node) : null;
+// מסכי הכניסה (welcome / setup / login / join / pin). כולם תמיד ב-DOM, ורק
+// זה שהוא ה-current מקבל את ה-class 'active' (ה-CSS מסתיר את השאר).
+// ה-state המשותף (view, fam, pinFlow, legacyPeople) נשאר ב-state.js, וכל
+// route() מודיע לכאן להתרנדר מחדש.
+const CENTER = { login: true, pin: true };
+function In({ screen, current, children }) {
+  return (
+    <section id={'screen-' + screen} className={'screen' + (CENTER[screen] ? ' center' : '') + (current === screen ? ' active' : '')}>
+      {children}
+    </section>
+  );
 }
 
 const Terms = ({ extra }) => (
@@ -57,7 +61,7 @@ function useBusy() {
   return [busy, run];
 }
 
-function Welcome() {
+function Welcome({ current }) {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [busy, run] = useBusy();
@@ -71,7 +75,7 @@ function Welcome() {
     });
   };
   return (
-    <In screen="welcome">
+    <In screen="welcome" current={current}>
       <div className="card-narrow">
         <div className="big-emoji" aria-hidden="true">🪙</div>
         <h1>הקופה המשפחתית</h1>
@@ -99,7 +103,7 @@ function Welcome() {
   );
 }
 
-function Setup() {
+function Setup({ current }) {
   const [v, setV] = useState({ familyName: '', name: '', pin: '' });
   const [avatar, setAvatar] = useState(randomAvatar);
   const [error, setError] = useState('');
@@ -114,7 +118,7 @@ function Setup() {
     });
   };
   return (
-    <In screen="setup">
+    <In screen="setup" current={current}>
       <button className="ghost back" type="button" onClick={() => goView('welcome')}>→ חזרה</button>
       <div className="card-narrow">
         <div className="big-emoji" aria-hidden="true">🏠</div>
@@ -138,10 +142,10 @@ function Setup() {
   );
 }
 
-function Login() {
+function Login({ current }) {
   const fam = state.fam;
   return (
-    <In screen="login">
+    <In screen="login" current={current}>
       <button className="ghost back" type="button" onClick={leaveFamily}>→ משפחה אחרת</button>
       <div className="big-emoji" aria-hidden="true">🪙</div>
       <h1>{fam ? fam.name : 'הקופה המשפחתית'}</h1>
@@ -154,7 +158,7 @@ function Login() {
   );
 }
 
-function Join() {
+function Join({ current }) {
   const fam = state.fam;
   const [v, setV] = useState({ name: '', pin: '' });
   const [avatar, setAvatar] = useState(randomAvatar);
@@ -170,7 +174,7 @@ function Join() {
     });
   };
   return (
-    <In screen="join">
+    <In screen="join" current={current}>
       <button className="ghost back" type="button" onClick={() => goView('welcome')}>→ חזרה</button>
       <div className="card-narrow">
         <div className="big-emoji" aria-hidden="true">👋</div>
@@ -198,14 +202,15 @@ function Join() {
 
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del'];
 
-function Pin() {
+function Pin({ current }) {
+  const sheet = useSheet();
   const f = state.pinFlow;
-  if (!f) return <In screen="pin" />;
+  if (!f) return <In screen="pin" current={current} />;
   const title = f.mode === 'login'
     ? 'כתבו את הקוד הסודי'
     : f.first ? 'כתבו את הקוד שוב, לאישור' : 'בחרו קוד סודי חדש (4 ספרות)';
   return (
-    <In screen="pin">
+    <In screen="pin" current={current}>
       <button className="ghost back" type="button" onClick={pinBack}>→ חזרה</button>
       <div className="avatar-xl" aria-hidden="true">{f.person.avatar}</div>
       <h1>{f.person.name}</h1>
@@ -222,19 +227,21 @@ function Pin() {
         )))}
       </div>
       {f.mode === 'login' && f.person.role === 'parent' && !f.legacy && (
-        <button className="ghost linkish" type="button" onClick={openForgotPin}>שכחתי את הקוד</button>
+        <button className="ghost linkish" type="button" onClick={() => sheet.open('שכחתי את הקוד', <ForgotPinSheet />)}>שכחתי את הקוד</button>
       )}
     </In>
   );
 }
 
-export default function Auth() {
+export default function Auth({ current }) {
   useSyncExternalStore(subscribeAuth, authVersion);
+  const currentRef = useRef(current);
+  currentRef.current = current;
 
   // הקלדה במקלדת פיזית במסך הקוד הסודי.
   useEffect(() => {
     const onKey = (ev) => {
-      if (!state.pinFlow || state.token || !document.getElementById('screen-pin').classList.contains('active')) return;
+      if (!state.pinFlow || state.token || currentRef.current !== 'pin') return;
       if (/^\d$/.test(ev.key)) pressKey(ev.key);
       else if (ev.key === 'Backspace') pressKey('del');
     };
@@ -244,11 +251,11 @@ export default function Auth() {
 
   return (
     <>
-      <Welcome />
-      <Setup />
-      <Login />
-      <Join />
-      <Pin />
+      <Welcome current={current} />
+      <Setup current={current} />
+      <Login current={current} />
+      <Join current={current} />
+      <Pin current={current} />
     </>
   );
 }

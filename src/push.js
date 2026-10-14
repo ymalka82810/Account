@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { $, toast, errMsg } from './helpers.js';
+import { toast, errMsg } from './helpers.js';
 import { call } from './api.js';
 
 // ---------- התראות (Push) ----------
@@ -17,17 +17,12 @@ async function sendSubToServer(sub) {
   await call('push:subscribe', { token: state.token, endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth });
 }
 
-export async function renderPushBtn() {
-  const btn = $('pushBtn');
-  if (!pushSupported()) { btn.hidden = true; return; }
-  btn.hidden = false;
-  let on = false;
-  try { on = Notification.permission === 'granted' && !!(await getPushSub()); } catch (e) { /* ignore */ }
-  btn.textContent = on ? '🔕 כיבוי התראות' : '🔔 הפעלת התראות';
-  btn.dataset.on = on ? '1' : '';
+// האם ההתראות פעילות במכשיר הזה.
+export async function isPushOn() {
+  try { return Notification.permission === 'granted' && !!(await getPushSub()); } catch (e) { return false; }
 }
 
-async function enablePush() {
+export async function enablePush() {
   try {
     const perm = await Notification.requestPermission();
     if (perm !== 'granted') { toast('ההתראות חסומות. אפשר לאשר אותן בהגדרות הדפדפן.'); return; }
@@ -37,10 +32,9 @@ async function enablePush() {
     await sendSubToServer(sub);
     toast('ההתראות הופעלו 🔔');
   } catch (e) { toast(e && e.data ? errMsg(e) : 'לא הצלחנו להפעיל התראות במכשיר הזה'); }
-  renderPushBtn();
 }
 
-async function disablePush() {
+export async function disablePush() {
   try {
     const sub = await getPushSub();
     if (sub) {
@@ -49,10 +43,7 @@ async function disablePush() {
     }
     toast('ההתראות כובו');
   } catch (e) { toast('משהו השתבש. נסו שוב.'); }
-  renderPushBtn();
 }
-
-$('pushBtn').addEventListener('click', () => ($('pushBtn').dataset.on ? disablePush() : enablePush()));
 
 // בכל כניסה מחדשים את הרישום של המכשיר על שם מי שמחובר עכשיו (חשוב במכשיר משותף).
 export async function syncPush() {
@@ -70,4 +61,3 @@ export async function releasePushDevice() {
     if (sub) await call('push:unsubscribe', { token: state.token, endpoint: sub.endpoint });
   } catch (e) { /* ignore */ }
 }
-

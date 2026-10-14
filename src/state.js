@@ -20,21 +20,11 @@ export const TAB_LABELS = {
 };
 
 export const state = {
-  client: null,
   token: localStorage.getItem(TOKEN_KEY) || '',
   legacyPeople: null, // null = עוד לא נטען. הורים מהגרסה הישנה (בלי קוד משפחה)
   codeChecked: false, // האם בדקנו קוד שמור במכשיר
   fam: null,         // {code, name, codeRole, people} אחרי שהוזן קוד משפחה תקין
   view: 'welcome',   // welcome | setup | join
-  data: undefined,   // undefined = נטען, null = כניסה לא תקפה
-  pinFlow: null,     // {person, legacy, mode:'login'|'new', first, entered, busy}
-  unsubData: null,
-  migrating: false,
-  fdata: null,        // נתוני מצב חברים (friends:get): בני נוער רואים חברים, הורים רואים סקירה
-  unsubFriends: null,
-  tabInit: false,     // הלשונית ההתחלתית נבחרת פעם אחת בכל כניסה
-  setupPicker: null,
-  joinPicker: null,
-  sheetReturnFocus: null,
+  pinFlow: null,     // {person, legacy, mode:'login'|'new', first, entered, busy, error, shakes}
   pushSyncedFor: '',
 };

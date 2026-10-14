@@ -7,10 +7,5 @@ export default defineConfig(({ command }) => ({
   base: command === 'build' ? '/Account/' : '/',
   build: {
     outDir: 'dist',
-    rollupOptions: {
-      // index.html הוא עכשיו האתר האמיתי (כולל מסך הבית ב-React).
-      // react-app.html נשאר ככלי דיבאג מבודד, לא חובה אבל לא מזיק.
-      input: ['index.html', 'react-app.html'],
-    },
   },
 }));

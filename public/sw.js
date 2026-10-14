@@ -1,4 +1,4 @@
-const CACHE = 'kupa-v14';
+const CACHE = 'kupa-v15';
 // מאז שהאתר עובר דרך Vite build, קובץ ה-JS הראשי יוצא עם hash בשם
 // (למשל assets/index-ABC123.js) שלא ידוע מראש. לכן לא מפרטים כאן כל
 // קובץ src/*.js בנפרד (כמו קודם) - caches.addAll() נכשל כולו אם קובץ
@@ -8,7 +8,7 @@ const CACHE = 'kupa-v14';
 // למטה, בפעם הראשונה שהם נטענים.
 const FILES = [
   './', 'index.html', 'terms.html', 'privacy.html', 'style.css', 'config.js',
-  'vendor/convex-browser.bundle.js', 'manifest.webmanifest', 'icon.svg',
+  'manifest.webmanifest', 'icon.svg',
 ];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)));

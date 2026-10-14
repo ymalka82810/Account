@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useConvex } from 'convex/react';
 import { toast, errMsg } from '../../src/helpers.js';
 import { FRIEND_MAX } from '../../src/state.js';
-import { openEntryFlow } from '../../src/entryFlow.js';
+import { useApp } from '../appContext.js';
 import { isPending, pairOwes, openDebtsOf, debtLabel, namesFor, money, fmtDate } from '../lib/computations.js';
 import EntriesList from './EntriesList.jsx';
 
@@ -10,6 +10,7 @@ import EntriesList from './EntriesList.jsx';
 // openEntryFlow הישן קורא את החברים מ-state.fdata, ש-session.js עדיין מעדכן.
 export default function FriendsTab({ data, fdata, token }) {
   const convex = useConvex();
+  const { openEntryFlow } = useApp();
   const me = data.me.id;
   const [busy, setBusy] = useState('');
   const [email, setEmail] = useState('');

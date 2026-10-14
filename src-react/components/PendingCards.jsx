@@ -1,12 +1,15 @@
 import { useConvex } from 'convex/react';
 import { isPending, money, fmtDate } from '../lib/computations.js';
 import { toast, errMsg } from '../../src/helpers.js';
-import { openFriendApprove } from '../../src/screens/pending.js';
+import { useSheet } from './Sheet.jsx';
+import { FriendApproveSheet } from './Sheets.jsx';
 
 // גרסת React של renderPending() הישן. הורה: כרטיסי אישורים בראש הסקירה
 // המשפחתית. אחרים: הודעה קטנה בדף הבית. המסך מתרנדר מחדש לבד עם ה-data.
 export default function PendingCards({ data, token, parentView }) {
   const convex = useConvex();
+  const sheet = useSheet();
+  const openFriendApprove = (p) => sheet.open('מצב חברים ל' + p.name, <FriendApproveSheet person={p} />);
   const list = data.entries.filter(isPending);
   const nameOf = (id) => data.people.find((p) => p.id === id)?.name ?? 'לא ידוע';
 
