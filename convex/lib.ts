@@ -202,3 +202,46 @@ export async function requireSameFamily(ctx: QueryCtx, me: Member, personId: Id<
   if (!p || p.familyId !== me.familyId) throw new ConvexError("אדם לא קיים");
   return p;
 }
+
+// ---------- תאריכים (שעון ישראל) ----------
+const parseDay = (d: string) => {
+  const [y, m, day] = d.split("-").map(Number);
+  return { y, m, day };
+};
+const fmtUTC = (t: number) => new Date(t).toISOString().slice(0, 10);
+
+export function jerusalemToday(): string {
+  try {
+    return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jerusalem" }).format(new Date());
+  } catch {
+    return new Date().toISOString().slice(0, 10);
+  }
+}
+
+export function addDays(d: string, n: number): string {
+  const { y, m, day } = parseDay(d);
+  return fmtUTC(Date.UTC(y, m - 1, day) + n * 86400000);
+}
+
+export function weekdayOf(d: string): number {
+  const { y, m, day } = parseDay(d);
+  return new Date(Date.UTC(y, m - 1, day)).getUTCDay();
+}
+
+// התאריך הראשון אחרי היום שמתאים לתזמון (יום בשבוע או יום בחודש 1-28).
+export function firstAfter(today: string, frequency: "weekly" | "monthly", weekday?: number, monthDay?: number): string {
+  if (frequency === "weekly") {
+    let d = addDays(today, 1);
+    while (weekdayOf(d) !== weekday) d = addDays(d, 1);
+    return d;
+  }
+  const { y, m } = parseDay(today);
+  const thisMonth = fmtUTC(Date.UTC(y, m - 1, monthDay!));
+  return thisMonth > today ? thisMonth : fmtUTC(Date.UTC(y, m, monthDay!));
+}
+
+export function advanceDate(d: string, frequency: "weekly" | "monthly", monthDay?: number): string {
+  if (frequency === "weekly") return addDays(d, 7);
+  const { y, m } = parseDay(d);
+  return fmtUTC(Date.UTC(y, m, monthDay ?? parseDay(d).day));
+}

@@ -32,8 +32,14 @@ export const remove = mutation({
     for (const e of await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()) {
       await ctx.db.delete(e._id);
     }
+    for (const r of await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()) {
+      await ctx.db.delete(r._id);
+    }
     for (const p of await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()) {
       for (const s of await ctx.db.query("sessions").withIndex("by_person", (q) => q.eq("personId", p._id)).collect()) {
+        await ctx.db.delete(s._id);
+      }
+      for (const s of await ctx.db.query("pushSubs").withIndex("by_person", (q) => q.eq("personId", p._id)).collect()) {
         await ctx.db.delete(s._id);
       }
       await ctx.db.delete(p._id);

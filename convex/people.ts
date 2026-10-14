@@ -38,6 +38,11 @@ export const remove = mutation({
     for (const s of await ctx.db.query("sessions").withIndex("by_person", (q) => q.eq("personId", id)).collect()) {
       await ctx.db.delete(s._id);
     }
+    for (const s of await ctx.db.query("pushSubs").withIndex("by_person", (q) => q.eq("personId", id)).collect()) {
+      await ctx.db.delete(s._id);
+    }
+    const rec = await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
+    for (const r of rec) if (r.from === id || r.to === id) await ctx.db.delete(r._id);
     await ctx.db.delete(id);
   },
 });

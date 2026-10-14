@@ -99,10 +99,14 @@
   const subjectWord = (id) => (isMe(id) ? 'אני' : nameOf(id));
   const toWord = (id) => (isMe(id) ? 'לי' : 'ל' + nameOf(id));
 
+  // רשומה שילד/ה יצר/ה וממתינה לאישור הורה. היא לא נספרת ביתרות.
+  const isPending = (e) => e.status === 'pending';
+
   // כמה a חייב ל-b (יכול להיות שלילי)
   function pairOwes(a, b) {
     let sum = 0;
     for (const e of data.entries) {
+      if (isPending(e)) continue;
       const sign = e.kind === 'debt' ? 1 : -1;
       if (e.from === a && e.to === b) sum += sign * e.amount;
       else if (e.from === b && e.to === a) sum -= sign * e.amount;
@@ -559,7 +563,7 @@
             note: isDebt ? st.note.trim() : (st.note.trim() || 'החזר'), date: today(),
           });
           closeSheet();
-          toast(isDebt ? 'החוב נשמר ✅' : 'ההחזר נשמר ✅');
+          toast(!isParent() ? 'נשלח להורה לאישור ⏳' : isDebt ? 'החוב נשמר ✅' : 'ההחזר נשמר ✅');
           switchTab('home');
         } catch (e) { err.textContent = errMsg(e); saveBtn.disabled = false; }
       });
@@ -618,7 +622,8 @@
   }
 
   // ---------- רשימות רשומות ----------
-  const canDelete = (e) => isParent() || (e.createdBy === data.me.id && Date.now() - e.createdAt < UNDO_MS);
+  const canDelete = (e) => isParent()
+    || (e.createdBy === data.me.id && (isPending(e) || Date.now() - e.createdAt < UNDO_MS));
 
   function renderEntries(box, list, emptyText) {
     box.replaceChildren();
@@ -626,9 +631,10 @@
     [...list].sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt).forEach((e) => {
       const isDebt = e.kind === 'debt';
       const title = `${subjectWord(e.from)} ${isDebt ? 'חייב/ת' : 'החזיר/ה'} ${toWord(e.to)}`;
-      const row = el('div', { class: 'row' },
+      const row = el('div', { class: 'row' + (isPending(e) ? ' pending' : '') },
         el('div', { class: 'text' },
-          el('div', {}, el('span', { class: 'tag ' + e.kind, text: isDebt ? 'חוב' : 'החזר' }), ' ', title),
+          el('div', {}, el('span', { class: 'tag ' + e.kind, text: isDebt ? 'חוב' : 'החזר' }),
+            isPending(e) ? el('span', { class: 'tag pending', text: '⏳ ממתין לאישור' }) : null, ' ', title),
           el('div', { class: 'meta', text: [fmtDate(e.date), e.note].filter(Boolean).join(' • ') })),
         el('strong', { text: money(e.amount) }));
       if (canDelete(e)) {
@@ -644,6 +650,174 @@
       box.append(row);
     });
   }
+
+  // ---------- ממתין לאישור ----------
+  function renderPending() {
+    const box = $('pendingBox');
+    box.replaceChildren();
+    const list = data.entries.filter(isPending);
+    if (!list.length) return;
+    if (!isParent()) {
+      box.append(el('div', { class: 'card notice' },
+        el('p', { text: `⏳ ${list.length === 1 ? 'רישום אחד מחכה' : list.length + ' רישומים מחכים'} לאישור של הורה. אפשר לראות אותם ב"מה היה".` })));
+      return;
+    }
+    const card = el('div', { class: 'card pending-card' }, el('h3', { text: `⏳ ממתין לאישור (${list.length})` }));
+    [...list].sort((x, y) => x.createdAt - y.createdAt).forEach((e) => {
+      const isDebt = e.kind === 'debt';
+      const who = e.createdBy ? nameOf(e.createdBy) : 'מישהו';
+      card.append(el('div', { class: 'row' },
+        el('div', { class: 'text' },
+          el('div', { text: `${who} רשם/ה: ${nameOf(e.from)} ${isDebt ? 'חייב/ת' : 'החזיר/ה'} ל${nameOf(e.to)}` }),
+          el('div', { class: 'meta', text: [money(e.amount), fmtDate(e.date), e.note].filter(Boolean).join(' • ') })),
+        el('div', { class: 'acts' },
+          el('button', {
+            class: 'small okbtn', type: 'button', text: '✅ אישור', onclick: async () => {
+              try { await call('entries:approve', { token, id: e.id }); toast('אושר ✅'); }
+              catch (err) { toast(errMsg(err)); }
+            },
+          }),
+          el('button', {
+            class: 'small danger', type: 'button', text: 'דחייה', onclick: async () => {
+              if (!confirm('לדחות? הרישום יימחק.')) return;
+              try { await call('entries:reject', { token, id: e.id }); toast('הרישום נדחה'); }
+              catch (err) { toast(errMsg(err)); }
+            },
+          }))));
+    });
+    box.append(card);
+  }
+
+  // ---------- התראות (Push) ----------
+  const WEEKDAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+  const pushSupported = () => !!window.VAPID_PUBLIC_KEY && 'serviceWorker' in navigator
+    && 'PushManager' in window && 'Notification' in window;
+
+  function keyToBytes(b64) {
+    const s = (b64 + '='.repeat((4 - (b64.length % 4)) % 4)).replace(/-/g, '+').replace(/_/g, '/');
+    return Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+  }
+  const getPushSub = async () => (await navigator.serviceWorker.ready).pushManager.getSubscription();
+
+  async function sendSubToServer(sub) {
+    const j = sub.toJSON();
+    await call('push:subscribe', { token, endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth });
+  }
+
+  async function renderPushBtn() {
+    const btn = $('pushBtn');
+    if (!pushSupported()) { btn.hidden = true; return; }
+    btn.hidden = false;
+    let on = false;
+    try { on = Notification.permission === 'granted' && !!(await getPushSub()); } catch (e) { /* ignore */ }
+    btn.textContent = on ? '🔕 כיבוי התראות' : '🔔 הפעלת התראות';
+    btn.dataset.on = on ? '1' : '';
+  }
+
+  async function enablePush() {
+    try {
+      const perm = await Notification.requestPermission();
+      if (perm !== 'granted') { toast('ההתראות חסומות. אפשר לאשר אותן בהגדרות הדפדפן.'); return; }
+      const reg = await navigator.serviceWorker.ready;
+      let sub = await reg.pushManager.getSubscription();
+      if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyToBytes(window.VAPID_PUBLIC_KEY) });
+      await sendSubToServer(sub);
+      toast('ההתראות הופעלו 🔔');
+    } catch (e) { toast(e && e.data ? errMsg(e) : 'לא הצלחנו להפעיל התראות במכשיר הזה'); }
+    renderPushBtn();
+  }
+
+  async function disablePush() {
+    try {
+      const sub = await getPushSub();
+      if (sub) {
+        try { await call('push:unsubscribe', { token, endpoint: sub.endpoint }); } catch (e) { /* ignore */ }
+        await sub.unsubscribe();
+      }
+      toast('ההתראות כובו');
+    } catch (e) { toast('משהו השתבש. נסו שוב.'); }
+    renderPushBtn();
+  }
+
+  $('pushBtn').addEventListener('click', () => ($('pushBtn').dataset.on ? disablePush() : enablePush()));
+
+  // בכל כניסה מחדשים את הרישום של המכשיר על שם מי שמחובר עכשיו (חשוב במכשיר משותף).
+  let pushSyncedFor = '';
+  async function syncPush() {
+    if (pushSyncedFor === token) return;
+    pushSyncedFor = token;
+    if (!pushSupported() || Notification.permission !== 'granted') return;
+    try { const sub = await getPushSub(); if (sub) await sendSubToServer(sub); } catch (e) { /* ignore */ }
+  }
+
+  async function releasePushDevice() {
+    if (!pushSupported()) return;
+    try {
+      // מסירים את המכשיר מהמשתמש הנוכחי בשרת. ההרשאה בדפדפן נשארת, והכניסה הבאה תרשום אותו מחדש.
+      const sub = await getPushSub();
+      if (sub) await call('push:unsubscribe', { token, endpoint: sub.endpoint });
+    } catch (e) { /* ignore */ }
+  }
+
+  // ---------- דמי כיס קבועים (הורים) ----------
+  const recurringWhen = (r) => (r.frequency === 'weekly' ? `כל יום ${WEEKDAYS[r.weekday]}` : `ב-${r.monthDay} בכל חודש`);
+
+  function renderRecurring() {
+    const box = $('recurringList');
+    box.replaceChildren();
+    if (!data.recurring.length) box.append(el('div', { class: 'empty', text: 'עוד אין רישומים קבועים.' }));
+    data.recurring.forEach((r) => box.append(el('div', { class: 'row' },
+      el('div', { class: 'text' },
+        el('div', { text: `${nameOf(r.from)} חייב/ת ל${nameOf(r.to)} ${money(r.amount)}` }),
+        el('div', { class: 'meta', text: [recurringWhen(r), r.note, 'הרישום הבא: ' + fmtDate(r.nextDate)].filter(Boolean).join(' • ') })),
+      el('button', {
+        class: 'small danger', type: 'button', text: 'הפסקה', onclick: async () => {
+          if (!confirm('להפסיק את הרישום הקבוע? מה שכבר נרשם נשאר.')) return;
+          try { await call('recurring:remove', { token, id: r.id }); toast('הרישום הקבוע הופסק'); }
+          catch (err) { toast(errMsg(err)); }
+        },
+      }))));
+
+    // רשימות הבחירה של הטופס. שומרים על הבחירה הקיימת בין רענונים.
+    const fill = (sel, items, fallback) => {
+      const prev = sel.value;
+      sel.replaceChildren(...items.map(([val, label]) => el('option', { value: val, text: label })));
+      sel.value = items.some(([val]) => val === prev) ? prev : fallback;
+    };
+    const people = data.people.map((p) => [p.id, `${p.avatar} ${p.name}`]);
+    const firstChild = data.people.find((p) => p.role === 'child');
+    fill($('recFrom'), people, data.me.id);
+    fill($('recTo'), people, firstChild ? firstChild.id : (data.people.find((p) => p.id !== data.me.id) || data.me).id);
+    if (!$('recWeekday').childElementCount) {
+      fill($('recWeekday'), WEEKDAYS.map((d, i) => [String(i), 'יום ' + d]), '5');
+      fill($('recMonthDay'), Array.from({ length: 28 }, (_, i) => [String(i + 1), String(i + 1)]), '1');
+    }
+  }
+
+  $('recFreq').addEventListener('change', () => {
+    const weekly = $('recFreq').value === 'weekly';
+    $('recWeekdayField').hidden = !weekly;
+    $('recMonthDayField').hidden = weekly;
+  });
+
+  $('recurringForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const err = $('recError');
+    err.hidden = true;
+    const agorot = Math.round(parseFloat($('recAmount').value) * 100);
+    if (!Number.isFinite(agorot) || agorot <= 0) { err.textContent = 'כתבו סכום גדול מאפס.'; err.hidden = false; return; }
+    const freq = $('recFreq').value;
+    try {
+      await call('recurring:add', {
+        token, from: $('recFrom').value, to: $('recTo').value, amount: agorot, note: $('recNote').value,
+        frequency: freq,
+        weekday: freq === 'weekly' ? Number($('recWeekday').value) : undefined,
+        monthDay: freq === 'monthly' ? Number($('recMonthDay').value) : undefined,
+      });
+      $('recAmount').value = '';
+      toast('הרישום הקבוע נוסף ✅');
+    } catch (e) { err.textContent = errMsg(e); err.hidden = false; }
+  });
 
   // ---------- לשונית המשפחה (הורים) ----------
   function renderFamily() {
@@ -698,6 +872,7 @@
       }))));
 
     renderEntries($('allHistory'), data.entries, 'עדיין אין רשומות.');
+    renderRecurring();
     renderCodes();
     renderLegacy();
   }
@@ -803,6 +978,9 @@
     if (isParent()) localStorage.setItem(CODE_KEY, data.family.childCode);
     document.querySelectorAll('.parent-only').forEach((n) => (n.hidden = !isParent()));
     renderHome();
+    renderPending();
+    renderPushBtn();
+    syncPush();
     renderEntries($('myHistory'), data.entries.filter((e) => e.from === data.me.id || e.to === data.me.id), 'עדיין לא נרשם כלום.');
     if (isParent()) renderFamily();
     else if (document.querySelector('.tab.active').dataset.tab === 'family') switchTab('home');
@@ -824,6 +1002,7 @@
   $('btnTheyOwe').addEventListener('click', () => openEntryFlow({ kind: 'debt', to: data.me.id }));
 
   $('logoutBtn').addEventListener('click', async () => {
+    await releasePushDevice();
     try { await call('auth:logout', { token }); } catch (e) { /* ignore */ }
     dropSession();
   });

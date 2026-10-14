@@ -16,7 +16,13 @@ export const get = query({
     const people = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
     let entries = await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
     // ילדים רואים רק רשומות שקשורות אליהם. הורים רואים הכול.
-    if (me.role !== "parent") entries = entries.filter((e) => e.from === me._id || e.to === me._id);
+    // רשומות שממתינות לאישור מוצגות רק למי שיצר/ה אותן ולהורים.
+    if (me.role !== "parent") {
+      entries = entries.filter((e) => (e.from === me._id || e.to === me._id) && (e.status !== "pending" || e.createdBy === me._id));
+    }
+    const recurring = me.role === "parent"
+      ? await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()
+      : [];
     return {
       legacy: false as const,
       me: { id: me._id, name: me.name, role: me.role, avatar: me.avatar ?? "🙂" },
@@ -34,6 +40,11 @@ export const get = query({
       entries: entries.map((e) => ({
         id: e._id, kind: e.kind, from: e.from, to: e.to, amount: e.amount, note: e.note,
         date: e.date, createdBy: e.createdBy ?? null, createdAt: e.createdAt ?? e._creationTime,
+        status: e.status ?? "approved",
+      })),
+      recurring: recurring.map((r) => ({
+        id: r._id, from: r.from, to: r.to, amount: r.amount, note: r.note, frequency: r.frequency,
+        weekday: r.weekday ?? null, monthDay: r.monthDay ?? null, nextDate: r.nextDate,
       })),
     };
   },

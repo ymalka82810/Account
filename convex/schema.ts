@@ -50,10 +50,41 @@ export default defineSchema({
     date: v.string(), // YYYY-MM-DD
     createdBy: v.optional(v.id("people")),
     createdAt: v.optional(v.number()),
+    // רשומה שילד/ה יצר/ה ממתינה לאישור הורה ולא נספרת ביתרות. חסר = מאושר.
+    status: v.optional(v.literal("pending")),
   })
     .index("by_family", ["familyId"])
     .index("by_from", ["from"])
     .index("by_to", ["to"]),
+
+  // מנויי התראות (Web Push), מכשיר אחד = שורה אחת.
+  pushSubs: defineTable({
+    personId: v.id("people"),
+    familyId: v.id("families"),
+    endpoint: v.string(),
+    p256dh: v.string(),
+    auth: v.string(),
+    createdAt: v.number(),
+  })
+    .index("by_person", ["personId"])
+    .index("by_endpoint", ["endpoint"]),
+
+  // רישום חוזר (דמי כיס). רץ אוטומטית פעם ביום ויוצר חוב חדש בתאריך המתאים.
+  recurring: defineTable({
+    familyId: v.id("families"),
+    from: v.id("people"),
+    to: v.id("people"),
+    amount: v.number(), // באגורות
+    note: v.string(),
+    frequency: v.union(v.literal("weekly"), v.literal("monthly")),
+    weekday: v.optional(v.number()), // 0 = ראשון
+    monthDay: v.optional(v.number()), // 1-28
+    nextDate: v.string(), // YYYY-MM-DD, הרישום הבא
+    createdBy: v.id("people"),
+    createdAt: v.number(),
+  })
+    .index("by_family", ["familyId"])
+    .index("by_nextDate", ["nextDate"]),
 
   // מונים גסים להגבלת קצב (ניחוש קודי משפחה, יצירת משפחות).
   throttles: defineTable({

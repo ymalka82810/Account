@@ -359,3 +359,11 @@ button.small { min-height: 40px; }
 .doc-main h2 { margin: 26px 0 8px; }
 .doc-main ul { padding-inline-start: 22px; display: grid; gap: 6px; }
 .doc-main a { color: var(--ink); }
+
+/* ממתין לאישור */
+.tag.pending { background: #fff4d6; color: #7a5a00; margin-inline-start: 4px; }
+.row.pending { opacity: .85; }
+.pending-card { display: grid; gap: 8px; margin-bottom: 14px; border-color: var(--coin-deep); }
+.pending-card .row { margin: 0; }
+.row .acts { display: flex; gap: 6px; flex: none; }
+button.small.okbtn { background: var(--get-bg); color: var(--get); border-color: var(--get); }
