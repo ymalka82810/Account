@@ -146,7 +146,10 @@ function Root() {
   return (
     <>
       <section id="screen-loading" className={'screen center' + (screen === 'loading' ? ' active' : '')}>
-        <div className="big-emoji" aria-hidden="true">🪙</div>
+        <div className="coin-drop" aria-hidden="true">
+          <div className="coin-drop__coin">🪙</div>
+          <div className="coin-drop__hole" />
+        </div>
         <p>רגע, מתחברים…</p>
       </section>
       <Auth current={screen} />
