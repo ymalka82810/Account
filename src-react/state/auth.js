@@ -58,9 +58,9 @@ export async function submitFamilyCode(code) {
 export function goView(view) { state.view = view; route(); }
 
 // ---------- הקמת משפחה חדשה ----------
-export async function createFamily({ familyName, name, avatar, pin }) {
+export async function createFamily({ familyName, name, avatar, gender, pin }) {
   try {
-    const res = await call('auth:createFamily', { familyName, name, avatar, pin });
+    const res = await call('auth:createFamily', { familyName, name, avatar, gender, pin });
     state.view = 'welcome';
     setToken(res.token);
     return '';
@@ -68,9 +68,9 @@ export async function createFamily({ familyName, name, avatar, pin }) {
 }
 
 // ---------- הצטרפות עם קוד ----------
-export async function joinFamily({ name, avatar, pin }) {
+export async function joinFamily({ name, avatar, gender, pin }) {
   try {
-    const res = await call('auth:join', { code: state.fam.code, name, avatar, pin });
+    const res = await call('auth:join', { code: state.fam.code, name, avatar, gender, pin });
     if (!res.ok) {
       if (res.reason === 'code') leaveFamily();
       return res.reason === 'throttled' ? 'יותר מדי ניסיונות. נסו שוב עוד דקה.' : 'הקוד כבר לא תקף. בקשו קוד חדש מההורים.';

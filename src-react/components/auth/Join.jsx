@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { state, PARENT_AVATARS } from '../../state/state.js';
 import { goView, joinFamily } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
+import { g } from '../../lib/gender.js';
 
 export default function Join({ current }) {
   const fam = state.fam;
   const isParentCode = fam && fam.codeRole === 'parent';
   const [v, setV] = useState({ name: '', pin: '' });
   const [avatar, setAvatar] = useState(() => randomAvatar(isParentCode ? PARENT_AVATARS : undefined));
+  const [gender, setGender] = useState('');
   const [error, setError] = useState('');
   const [busy, run] = useBusy();
   const set = (k) => (e) => setV((x) => ({ ...x, [k]: e.target.value }));
@@ -15,7 +17,7 @@ export default function Join({ current }) {
     ev.preventDefault();
     setError('');
     run(async () => {
-      const err = await joinFamily({ ...v, avatar });
+      const err = await joinFamily({ ...v, avatar, gender: gender || undefined });
       if (err) setError(err); else setV({ name: '', pin: '' });
     });
   };
@@ -28,17 +30,23 @@ export default function Join({ current }) {
         <p className="hint">
           {fam && (fam.codeRole === 'parent'
             ? `מצטרפים לקופה של ${fam.name} בתור הורה.`
-            : `מצטרפים לקופה של ${fam.name} בתור ילד/ה.`)}
+            : `מצטרפים לקופה של ${fam.name} בתור ${g(gender, 'ילד', 'ילדה', 'ילד/ה')}.`)}
         </p>
         <form className="form" autoComplete="off" onSubmit={submit}>
           <label className="field"><span>איך קוראים לך?</span>
             <input type="text" maxLength={20} required value={v.name} onChange={set('name')} /></label>
+          <label className="field"><span>צורת פנייה</span>
+            <select value={gender} onChange={(e) => setGender(e.target.value)}>
+              <option value="">ללא ציון</option>
+              <option value="male">זכר</option>
+              <option value="female">נקבה</option>
+            </select></label>
           <div className="field"><span>בחר/י דמות</span>
             <AvatarPicker value={avatar} onChange={setAvatar} options={isParentCode ? PARENT_AVATARS : undefined} /></div>
           <label className="field"><span>קוד סודי משלך (4 ספרות)</span>
             <input type="password" inputMode="numeric" pattern="\d{4}" maxLength={4} required autoComplete="new-password"
               value={v.pin} onChange={set('pin')} /></label>
-          <label className="check"><input type="checkbox" required /><Terms extra=". ילדים מצטרפים בהסכמת הורה" /></label>
+          <label className="check"><input type="checkbox" required /><Terms gender={gender} extra=". ילדים מצטרפים בהסכמת הורה" /></label>
           {error && <p className="error" role="alert">{error}</p>}
           <button className="primary" type="submit" disabled={busy} aria-busy={busy}>{busy ? '⏳ רגע…' : 'הצטרפות'}</button>
         </form>

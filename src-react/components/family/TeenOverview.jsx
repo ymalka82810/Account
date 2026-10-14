@@ -1,4 +1,5 @@
 import { money, fmtDate } from '../../lib/computations.js';
+import { g } from '../../lib/gender.js';
 
 // מה הנוער רושם עם חברים (לקריאה בלבד).
 export default function TeenOverview({ teens }) {
@@ -18,7 +19,7 @@ export default function TeenOverview({ teens }) {
                 <div>
                   <span className={'tag ' + e.kind}>{e.kind === 'debt' ? 'חוב' : 'החזר'}</span>
                   {e.status === 'pending' && <span className="tag pending">⏳ ממתין לחבר/ה</span>}
-                  {' '}{e.fromName} {e.kind === 'debt' ? 'חייב/ת' : 'החזיר/ה'} ל{e.toName}
+                  {' '}{e.fromName} {e.kind === 'debt' ? g(e.fromGender, 'חייב', 'חייבת', 'חייב/ת') : g(e.fromGender, 'החזיר', 'החזירה', 'החזיר/ה')} ל{e.toName}
                 </div>
                 <div className="meta">{[fmtDate(e.date), e.note].filter(Boolean).join(' • ')}</div>
               </div>

@@ -6,6 +6,7 @@ import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
 import { codeProps, pinProps, Err, Field } from '../shared/fields.jsx';
+import { g } from '../../lib/gender.js';
 
 // הורה קובע קוד סודי חדש לילד/ה (אפשר גם לאפס שיבחרו לבד).
 export function ResetPinSheet({ person: p }) {
@@ -47,7 +48,7 @@ export function ResetPinSheet({ person: p }) {
         return;
       }
       sheet.close();
-      toast(newPin ? `הקוד של ${p.name} עודכן` : `${p.name} יבחר/תבחר קוד חדש בכניסה הבאה`);
+      toast(newPin ? `הקוד של ${p.name} עודכן` : `${p.name} ${g(p.gender, 'יבחר', 'תבחר', 'יבחר/תבחר')} קוד חדש בכניסה הבאה`);
     } catch (e) { setErr(errMsg(e)); }
   };
 

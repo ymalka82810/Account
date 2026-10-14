@@ -6,6 +6,7 @@ import { In, Terms, AvatarPicker, randomAvatar, useBusy } from './parts.jsx';
 export default function Setup({ current }) {
   const [v, setV] = useState({ familyName: '', name: '', pin: '' });
   const [avatar, setAvatar] = useState(() => randomAvatar(PARENT_AVATARS));
+  const [gender, setGender] = useState('');
   const [error, setError] = useState('');
   const [busy, run] = useBusy();
   const set = (k) => (e) => setV((x) => ({ ...x, [k]: e.target.value }));
@@ -13,7 +14,7 @@ export default function Setup({ current }) {
     ev.preventDefault();
     setError('');
     run(async () => {
-      const err = await createFamily({ ...v, avatar });
+      const err = await createFamily({ ...v, avatar, gender: gender || undefined });
       if (err) setError(err); else setV((x) => ({ ...x, pin: '' }));
     });
   };
@@ -30,10 +31,16 @@ export default function Setup({ current }) {
           <label className="field"><span>איך קוראים לך?</span>
             <input type="text" maxLength={20} required value={v.name} onChange={set('name')} /></label>
           <div className="field"><span>בחר/י דמות</span><AvatarPicker value={avatar} onChange={setAvatar} options={PARENT_AVATARS} /></div>
+          <label className="field"><span>צורת פנייה</span>
+            <select value={gender} onChange={(e) => setGender(e.target.value)}>
+              <option value="">ללא ציון</option>
+              <option value="male">זכר</option>
+              <option value="female">נקבה</option>
+            </select></label>
           <label className="field"><span>קוד סודי (4 ספרות)</span>
             <input type="password" inputMode="numeric" pattern="\d{4}" maxLength={4} required autoComplete="new-password"
               value={v.pin} onChange={set('pin')} /></label>
-          <label className="check"><input type="checkbox" required /><Terms /></label>
+          <label className="check"><input type="checkbox" required /><Terms gender={gender} /></label>
           {error && <p className="error" role="alert">{error}</p>}
           <button className="primary" type="submit" disabled={busy} aria-busy={busy}>{busy ? '⏳ רגע…' : 'הקמת הקופה'}</button>
         </form>

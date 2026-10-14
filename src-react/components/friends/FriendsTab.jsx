@@ -5,6 +5,7 @@ import { useRun } from '../../lib/useRun.js';
 import { FRIEND_MAX } from '../../state/state.js';
 import { useApp } from '../../state/appContext.js';
 import { isPending, pairOwes, openDebtsOf, debtLabel, namesFor, money, fmtDate } from '../../lib/computations.js';
+import { g } from '../../lib/gender.js';
 import EntriesList from '../entries/EntriesList.jsx';
 import DebtLines from '../entries/DebtLines.jsx';
 
@@ -45,7 +46,7 @@ export default function FriendsTab({ data, fdata, token }) {
 
   const entries = fdata.entries;
   const lookup = (id) => data.people.find((p) => p.id === id) || fdata.people[id];
-  const { nameOf, subjectWord, toWord } = namesFor(me, lookup);
+  const { nameOf, subjectWord, toWord, gw } = namesFor(me, lookup);
   const accepted = fdata.friendships.filter((f) => f.status === 'accepted').length;
   const startFlow = (opts) => {
     if (!accepted) { toast('עוד אין חברים מאושרים. הוסיפו חבר/ה לפי המייל שלהם.'); return; }
@@ -89,7 +90,7 @@ export default function FriendsTab({ data, fdata, token }) {
       <div key={f.id} className={'debt' + (n === 0 ? '' : iOwe ? ' owe' : ' get') + (open.length > 1 ? ' multi' : '')}>
         <span className="avatar-md" aria-hidden="true">{p.avatar}</span>
         <div className="text">
-          <div className="who">{n === 0 ? p.name : iOwe ? `אני חייב/ת ל${p.name}` : `${p.name} חייב/ת לי`}</div>
+          <div className="who">{n === 0 ? p.name : iOwe ? `${g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${p.name}` : `${p.name} ${g(p.gender, 'חייב', 'חייבת', 'חייב/ת')} לי`}</div>
           <div className="amt">{n === 0 ? 'הכול מסודר ✅' : money(amount)}</div>
           <DebtLines open={open} iOwe={iOwe} onPay={(x) => startFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })} />
         </div>
@@ -122,12 +123,12 @@ export default function FriendsTab({ data, fdata, token }) {
   return (
     <>
       <div className="summary">
-        <div className="sum owe"><div className="lbl">אני חייב/ת לחברים</div><div className="num">{money(owe)}</div></div>
+        <div className="sum owe"><div className="lbl">{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} לחברים</div><div className="num">{money(owe)}</div></div>
         <div className="sum get"><div className="lbl">חברים חייבים לי</div><div className="num">{money(get)}</div></div>
       </div>
       <div className="bigbtns">
         <button className="bigbtn owe" type="button" onClick={() => startFlow({ kind: 'debt', from: me })}>
-          <span aria-hidden="true">💸</span>אני חייב/ת לחבר/ה
+          <span aria-hidden="true">💸</span>{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} לחבר/ה
         </button>
         <button className="bigbtn get" type="button" onClick={() => startFlow({ kind: 'debt', to: me })}>
           <span aria-hidden="true">🤝</span>חבר/ה חייב/ת לי
@@ -161,7 +162,10 @@ export default function FriendsTab({ data, fdata, token }) {
             {waiting.map((e) => (
               <div className="row" key={e.id}>
                 <div className="text">
-                  <div>{nameOf(e.createdBy)} רשם/ה: {subjectWord(e.from)} {e.kind === 'debt' ? 'חייב/ת' : 'החזיר/ה'} {toWord(e.to)}</div>
+                  <div>
+                    {nameOf(e.createdBy)} {gw(e.createdBy, 'רשם', 'רשמה', 'רשם/ה')}: {subjectWord(e.from)}{' '}
+                    {e.kind === 'debt' ? gw(e.from, 'חייב', 'חייבת', 'חייב/ת') : gw(e.from, 'החזיר', 'החזירה', 'החזיר/ה')} {toWord(e.to)}
+                  </div>
                   <div className="meta">{[money(e.amount), fmtDate(e.date), e.note].filter(Boolean).join(' • ')}</div>
                 </div>
                 <div className="acts">

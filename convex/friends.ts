@@ -280,13 +280,13 @@ const entryOut = (e: Doc<"friendEntries">) => ({
   debtId: e.debtId ?? null,
 });
 
-// מידע ציבורי על חבר/ה: שם ודמות בלבד.
+// מידע ציבורי על חבר/ה: שם, דמות ומגדר (לצורת פנייה מותאמת) בלבד.
 async function publicInfo(ctx: QueryCtx, ids: Iterable<Id<"people">>) {
-  const out: Record<string, { id: Id<"people">; name: string; avatar: string }> = {};
+  const out: Record<string, { id: Id<"people">; name: string; avatar: string; gender: "male" | "female" | null }> = {};
   for (const id of ids) {
     if (out[id]) continue;
     const p = await ctx.db.get(id);
-    if (p) out[id] = { id: p._id, name: p.name, avatar: p.avatar ?? "🙂" };
+    if (p) out[id] = { id: p._id, name: p.name, avatar: p.avatar ?? "🙂", gender: p.gender ?? null };
   }
   return out;
 }
@@ -331,15 +331,18 @@ export const get = query({
         for (const e of entries) { ids.add(e.from); ids.add(e.to); }
         const info = await publicInfo(ctx, ids);
         const nameOf = (id: Id<"people">) => info[id]?.name ?? "לא ידוע";
+        const genderOf = (id: Id<"people">) => info[id]?.gender ?? null;
         teens.push({
           id: t._id,
           name: t.name,
+          gender: t.gender ?? null,
           friends: friendships.map((f) => nameOf(f.a === t._id ? f.b : f.a)),
           entries: entries
             .sort((x, y) => y.createdAt - x.createdAt)
             .slice(0, 30)
             .map((e) => ({
-              id: e._id, kind: e.kind, fromName: nameOf(e.from), toName: nameOf(e.to), amount: e.amount,
+              id: e._id, kind: e.kind, fromName: nameOf(e.from), toName: nameOf(e.to),
+              fromGender: genderOf(e.from), toGender: genderOf(e.to), amount: e.amount,
               note: e.note, date: e.date, status: e.status ?? "approved",
             })),
         });
