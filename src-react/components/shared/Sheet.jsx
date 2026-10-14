@@ -14,16 +14,19 @@ export function useSheetTitle(title) {
 }
 
 export function SheetProvider({ children }) {
-  const [sheet, setSheet] = useState(null); // {key, title, body}
+  const [sheet, setSheet] = useState(null); // {key, title, body, revealFrom?, revealReady?}
   const returnFocus = useRef(null);
   const closeBtn = useRef(null);
+  const sheetElRef = useRef(null);
   const counter = useRef(0);
 
-  const open = useCallback((title, body) => {
+  // revealFrom (אופציונלי): {x, y} בפיקסלי המסך - הנקודה שממנה האריח "נובט" בגדילה,
+  // למשל המקום שבו נעלם גלגל השיניים המונפש לפני פתיחת האריח.
+  const open = useCallback((title, body, revealFrom) => {
     setSheet((cur) => {
       if (!cur) returnFocus.current = document.activeElement;
       counter.current += 1;
-      return { key: counter.current, title, body };
+      return { key: counter.current, title, body, revealFrom, revealReady: false };
     });
   }, []);
   const close = useCallback(() => {
@@ -41,6 +44,20 @@ export function SheetProvider({ children }) {
 
   const key = sheet && sheet.key;
   useEffect(() => { if (key && closeBtn.current) closeBtn.current.focus(); }, [key]);
+  // כשנפתח אריח עם נקודת מוצא, ממתינים לרינדור ומודדים את מיקומו כדי לקבוע
+  // את מרכז הגדילה (transform-origin) בדיוק על אותה נקודה.
+  useEffect(() => {
+    if (!sheet || !sheet.revealFrom || sheet.revealReady) return;
+    const id = requestAnimationFrame(() => {
+      const el = sheetElRef.current;
+      const rect = el ? el.getBoundingClientRect() : null;
+      const { x, y } = sheet.revealFrom;
+      const originX = rect && rect.width ? ((x - rect.left) / rect.width) * 100 : 50;
+      const originY = rect && rect.height ? ((y - rect.top) / rect.height) * 100 : 50;
+      setSheet((cur) => (cur && cur.key === key ? { ...cur, revealReady: true, revealOrigin: { x: originX, y: originY } } : cur));
+    });
+    return () => cancelAnimationFrame(id);
+  }, [sheet, key]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     document.body.classList.toggle('noscroll', !!sheet);
     if (!sheet) return undefined;
@@ -53,8 +70,13 @@ export function SheetProvider({ children }) {
     <SheetCtx.Provider value={{ open, close, setTitle, setAppCtx }}>
       {children}
       <div className="sheet-wrap" hidden={!sheet}>
-        <div className="sheet-bg" onClick={close} />
-        <div className="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+        <div className={'sheet-bg' + (sheet && sheet.revealFrom ? ' sheet-bg-reveal' : '')} onClick={close} />
+        <div
+          ref={sheetElRef}
+          className={'sheet' + (sheet && sheet.revealFrom ? (sheet.revealReady ? ' sheet-reveal' : ' sheet-reveal-pending') : '')}
+          style={sheet && sheet.revealOrigin ? { transformOrigin: `${sheet.revealOrigin.x}% ${sheet.revealOrigin.y}%` } : undefined}
+          role="dialog" aria-modal="true" aria-labelledby="sheetTitle"
+        >
           <div className="sheet-head">
             <h2 id="sheetTitle">{sheet ? sheet.title : ''}</h2>
             <button ref={closeBtn} className="ghost" type="button" aria-label="סגירה" onClick={close}>✕</button>

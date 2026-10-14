@@ -166,7 +166,7 @@ function Root() {
       <section id="screen-loading" className={'screen center' + (screen === 'loading' ? ' active' : '')}>
         <div className="coin-drop" aria-hidden="true">
           <div className="coin-drop__coin">🪙</div>
-          <div className="coin-drop__hole" />
+          <div className="coin-drop__floor" />
         </div>
         <p>רגע, מתחברים…</p>
       </section>
@@ -183,40 +183,42 @@ function Root() {
 }
 
 // ---------- אנימציית מעבר גלגל השיניים לאריח הצף ----------
-// השבב של גלגל השיניים "קופץ" ממקומו למרכז המסך, מסתובב ומתרחב עד שהוא מכסה
-// בדיוק את מקום האריח האמיתי (שכבר פתוח ומוצג מתחתיו), ואז נעלם בדהייה וחושף אותו.
+// גלגל השיניים קופץ ממקומו למרכז המסך (1 שנ'), ובמקביל מסתובב באיטיות וגדל עד
+// לגודל מטבע חצי שקל (עוד 2 שנ'). אז מבזיקים ניצוצות והוא שוקע לאחור ונעלם
+// במהירות (כ-0.35 שנ'), ולבסוף האריח האמיתי נפתח וגדל מאותה נקודה (1.5 שנ').
+const COIN_SIZE = 64; // קוטר משוער על המסך של מטבע חצי שקל
 function GearLaunch({ fromRect, onDone }) {
-  const [phase, setPhase] = useState('start'); // start -> grown -> fading
-  const [targetRect, setTargetRect] = useState(null);
+  const [phase, setPhase] = useState('start'); // start -> flying -> sinking
 
   useEffect(() => {
-    const el = document.querySelector('.sheet-wrap .sheet');
-    const r = el ? el.getBoundingClientRect() : null;
-    setTargetRect(r || { left: window.innerWidth / 2 - 180, top: window.innerHeight / 2 - 220, width: 360, height: 440, borderRadius: 24 });
-    const id = requestAnimationFrame(() => setPhase('grown'));
+    const id = requestAnimationFrame(() => setPhase('flying'));
     return () => cancelAnimationFrame(id);
   }, []);
-
   useEffect(() => {
-    if (phase !== 'grown') return;
-    const t = setTimeout(() => setPhase('fading'), 850);
+    if (phase !== 'flying') return;
+    const t = setTimeout(() => setPhase('sinking'), 3000); // 1s קפיצה + 2s גדילה, מקבילים
     return () => clearTimeout(t);
   }, [phase]);
-
   useEffect(() => {
-    if (phase !== 'fading') return;
+    if (phase !== 'sinking') return;
     const t = setTimeout(onDone, 350);
     return () => clearTimeout(t);
   }, [phase, onDone]);
 
-  const borderRadius = window.innerWidth >= 640 ? '24px' : '24px 24px 0 0';
-  const style = phase === 'start' || !targetRect
-    ? { left: fromRect.left + fromRect.width / 2, top: fromRect.top + fromRect.height / 2, width: fromRect.width, height: fromRect.height, transform: 'translate(-50%, -50%) rotate(0deg)', borderRadius: '50%' }
-    : { left: targetRect.left + targetRect.width / 2, top: targetRect.top + targetRect.height / 2, width: targetRect.width, height: targetRect.height, transform: 'translate(-50%, -50%) rotate(540deg)', borderRadius };
+  const style = phase === 'start'
+    ? { left: fromRect.left + fromRect.width / 2, top: fromRect.top + fromRect.height / 2, width: fromRect.width, height: fromRect.height }
+    : phase === 'flying'
+      ? { left: '50%', top: '50%', width: COIN_SIZE, height: COIN_SIZE }
+      : { left: '50%', top: '50%', width: 0, height: 0, opacity: 0 };
 
   return (
-    <div className={'gear-launch' + (phase !== 'start' ? ' grown' : '') + (phase === 'fading' ? ' fading' : '')} style={style} aria-hidden="true">
-      <span className="gear-launch-icon">⚙️</span>
+    <div className={'gear-launch' + (phase === 'sinking' ? ' sinking' : '')} style={style} aria-hidden="true">
+      <div className={'gear-launch-spin' + (phase === 'flying' ? ' flying' : '') + (phase === 'sinking' ? ' sinking' : '')}>
+        <span className="gear-launch-icon">⚙️</span>
+        {phase === 'sinking' && Array.from({ length: 8 }, (_, i) => (
+          <span key={i} className="spark" style={{ '--ang': `${i * 45}deg`, animationDelay: `${i * 12}ms` }} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -247,12 +249,13 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
   const [launchRect, setLaunchRect] = useState(null);
 
   const openAccount = () => {
-    if (gearRef.current) {
-      setLaunchRect(gearRef.current.getBoundingClientRect());
-      sheet.open('', <AccountSheet />);
-    } else sheet.open('', <AccountSheet />);
+    if (gearRef.current) setLaunchRect(gearRef.current.getBoundingClientRect());
+    else sheet.open('', <AccountSheet />);
   };
-  const finishLaunch = useCallback(() => setLaunchRect(null), []);
+  const finishLaunch = useCallback(() => {
+    setLaunchRect(null);
+    sheet.open('', <AccountSheet />, { x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  }, [sheet]);
 
   return (
     <>

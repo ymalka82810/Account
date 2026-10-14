@@ -301,23 +301,25 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
 .hint { color: var(--ink-soft); margin: 4px 0 0; }
 .big-emoji { font-size: 3.4rem; line-height: 1.1; }
 
-/* אנימציית מטבע במסך הטעינה: המטבע מסתובב ונופל לתוך חריץ של קופת חיסכון,
-   ואז מופיע מראש המסך ונופל בחזרה למקומו המקורי עם קפיצה קלה */
+/* אנימציית מטבע במסך הטעינה: חריץ אפור נפתח מתחת למטבע תוך כדי שהוא מסתובב,
+   המטבע נופל ונעלם ממש בתוך החריץ (עובר מאחורי השכבה שלו), ואז מופיע מראש
+   המסך ונופל בחזרה למקומו המקורי עם קפיצה קלה */
 .coin-drop { position: relative; width: 110px; height: 128px; margin: 0 auto; perspective: 500px; }
 .coin-drop__coin {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center;
   font-size: 3.4rem; line-height: 1; transform-style: preserve-3d;
   animation: coin-drop-cycle 3.6s cubic-bezier(.4, 0, .2, 1) infinite;
 }
-.coin-drop__hole {
-  position: absolute; left: 50%; bottom: 14px; width: 70px; height: 16px; transform: translateX(-50%);
-  border-radius: 50%; background: var(--line);
-  box-shadow: 0 5px 0 var(--card), inset 0 4px 7px rgba(74, 68, 104, .45);
+.coin-drop__floor {
+  position: absolute; left: 50%; bottom: 20px; width: 78px; height: 10px; transform: translateX(-50%);
+  z-index: 2;
 }
-.coin-drop__hole::after {
-  content: ''; position: absolute; left: 50%; top: 50%; width: 30px; height: 9px; transform: translate(-50%, -50%);
-  border-radius: 50%; background: radial-gradient(ellipse at center, var(--ink) 0%, rgba(74, 68, 104, .5) 65%, transparent 100%);
+.coin-drop__floor::before, .coin-drop__floor::after {
+  content: ''; position: absolute; top: 0; width: 50%; height: 100%; background: var(--ink-soft);
+  animation: coin-slot-cycle 3.6s cubic-bezier(.4, 0, .2, 1) infinite;
 }
+.coin-drop__floor::before { left: 0; border-radius: 5px 0 0 5px; transform-origin: left center; }
+.coin-drop__floor::after  { right: 0; border-radius: 0 5px 5px 0; transform-origin: right center; }
 @keyframes coin-drop-cycle {
   0%   { transform: translateY(0)     rotateY(0deg)   scale(1);   opacity: 1; }
   28%  { transform: translateY(16px)  rotateY(400deg) scale(.8);  opacity: 1; }
@@ -331,7 +333,15 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
   96%  { transform: translateY(-5px); }
   100% { transform: translateY(0); }
 }
-@media (prefers-reduced-motion: reduce) { .coin-drop__coin { animation: none; } }
+@keyframes coin-slot-cycle {
+  0%, 20%  { transform: scaleX(1); }
+  32%, 48% { transform: scaleX(.58); }
+  58%, 100% { transform: scaleX(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .coin-drop__coin { animation: none; }
+  .coin-drop__floor::before, .coin-drop__floor::after { animation: none; }
+}
 .card-narrow { max-width: 460px; margin: 0 auto; padding: calc(28px + env(safe-area-inset-top, 0)) 20px 28px; text-align: center; display: grid; gap: 10px; }
 .card-narrow .form { text-align: start; margin-top: 8px; }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
@@ -476,29 +486,47 @@ button.small { min-height: 40px; }
 
 /* אנימציית מעבר גלגל השיניים לאריח הצף */
 .gear-launch {
-  position: fixed; z-index: 21; display: flex; align-items: center; justify-content: center;
-  background: var(--bg); box-shadow: 0 -8px 30px rgba(0, 0, 0, .3); overflow: hidden; pointer-events: none;
-  opacity: 1;
-  transition: left .85s cubic-bezier(.3, .6, .3, 1), top .85s cubic-bezier(.3, .6, .3, 1),
-    width .85s cubic-bezier(.3, .6, .3, 1), height .85s cubic-bezier(.3, .6, .3, 1),
-    transform .85s cubic-bezier(.3, .6, .3, 1), border-radius .85s cubic-bezier(.3, .6, .3, 1),
-    opacity .35s ease;
+  position: fixed; z-index: 21; transform: translate(-50%, -50%);
+  background: var(--card); border: 2px solid var(--line); border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .35); overflow: visible; pointer-events: none; opacity: 1;
+  transition: left 1s cubic-bezier(.3, .6, .3, 1), top 1s cubic-bezier(.3, .6, .3, 1),
+    width 3s cubic-bezier(.22, .8, .2, 1), height 3s cubic-bezier(.22, .8, .2, 1);
 }
-.gear-launch.fading { opacity: 0; }
-.gear-launch-icon {
-  font-size: 1.3rem; transition: font-size .85s cubic-bezier(.3, .6, .3, 1), opacity .4s ease .3s;
+.gear-launch.sinking { transition: width .35s ease-in, height .35s ease-in, opacity .35s ease-in; }
+/* הסיבוב רץ בדיב נפרד כדי שתמיד יתבצע כאנימציית keyframes אמיתית (מעבר transition בין rotate(0) ל-rotate(360) לא זז בפועל) */
+.gear-launch-spin { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.gear-launch-spin.flying { animation: gear-spin-slow 3s linear; }
+.gear-launch-spin.sinking { animation: gear-spin-fast .35s ease-in forwards; }
+@keyframes gear-spin-slow { to { transform: rotate(360deg); } }
+@keyframes gear-spin-fast { to { transform: rotate(90deg); } }
+.gear-launch-icon { font-size: 1.3rem; transition: font-size 3s cubic-bezier(.22, .8, .2, 1); }
+.gear-launch-spin.flying .gear-launch-icon { font-size: 1.9rem; }
+.gear-launch-spin.sinking .gear-launch-icon { transition: font-size .35s ease-in; font-size: 0; }
+.gear-launch .spark {
+  position: absolute; left: 50%; top: 50%; width: 3px; height: 15px; border-radius: 2px;
+  background: linear-gradient(#fff6c8, #ffb020); opacity: 0; pointer-events: none;
+  transform: rotate(var(--ang)) translateY(0) scaleY(.6);
+  animation: spark-burst .35s ease-out forwards;
 }
-.gear-launch.grown .gear-launch-icon { font-size: 4.5rem; opacity: 0; }
+@keyframes spark-burst {
+  0% { opacity: 1; transform: rotate(var(--ang)) translateY(-8px) scaleY(.6); }
+  100% { opacity: 0; transform: rotate(var(--ang)) translateY(-42px) scaleY(1); }
+}
 
 /* חלון קופץ */
 .sheet-wrap { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end; justify-content: center; }
 .sheet-bg { position: absolute; inset: 0; background: rgba(10, 16, 40, .55); }
+.sheet-bg-reveal { opacity: 0; animation: sheet-bg-fade 1.5s ease forwards; }
+@keyframes sheet-bg-fade { to { opacity: 1; } }
 .sheet {
   position: relative; width: 100%; max-width: 560px; max-height: 94vh; max-height: 94dvh; overflow-y: auto;
   background: var(--bg); border-radius: 24px 24px 0 0;
   padding: 16px 18px calc(20px + env(safe-area-inset-bottom, 0));
   box-shadow: 0 -8px 30px rgba(0, 0, 0, .3);
 }
+.sheet-reveal-pending { opacity: 0; transform: scale(.02); }
+.sheet-reveal { animation: sheet-grow 1.5s cubic-bezier(.22, .8, .2, 1); }
+@keyframes sheet-grow { from { opacity: 0; transform: scale(.02); } to { opacity: 1; transform: scale(1); } }
 @media (min-width: 640px) { .sheet-wrap { align-items: center; } .sheet { border-radius: 24px; } }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .sheet-head h2 { margin: 0; }
