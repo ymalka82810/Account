@@ -178,8 +178,8 @@ button.danger { color: var(--owe); }
 .row .text { flex: 1; }
 .row .meta { font-size: .85rem; color: var(--ink-soft); }
 .tag { font-size: .8rem; padding: 2px 8px; border-radius: 99px; }
-.tag.debt { background: var(--owe-bg); color: var(--owe); }
-.tag.payment { background: var(--get-bg); color: var(--get); }
+.tag.tag-debt { background: var(--owe-bg); color: var(--owe); }
+.tag.tag-payment { background: var(--get-bg); color: var(--get); }
 
 .person {
   display: flex;

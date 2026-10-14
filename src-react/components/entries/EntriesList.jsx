@@ -31,7 +31,7 @@ export default function EntriesList({
       <div className={'row' + (isPending(e) ? ' pending' : '')} key={e.id}>
         <div className="text">
           <div>
-            <span className={'tag ' + e.kind}>{isDebt ? 'חוב' : 'החזר'}</span>
+            <span className={'tag tag-' + e.kind}>{isDebt ? 'חוב' : 'החזר'}</span>
             {isPending(e) && <span className="tag pending">{pendingLabel ? pendingLabel(e) : '⏳ ממתין לאישור'}</span>}
             {' '}{subjectWord(e.from)} {isDebt ? gw(e.from, 'חייב', 'חייבת', 'חייב/ת') : vw(e.from, 'החזרתי', 'החזיר', 'החזירה', 'החזיר/ה')} {toWord(e.to)}
           </div>

@@ -17,7 +17,7 @@ export default function TeenOverview({ teens }) {
             <div className="row" key={i}>
               <div className="text">
                 <div>
-                  <span className={'tag ' + e.kind}>{e.kind === 'debt' ? 'חוב' : 'החזר'}</span>
+                  <span className={'tag tag-' + e.kind}>{e.kind === 'debt' ? 'חוב' : 'החזר'}</span>
                   {e.status === 'pending' && <span className="tag pending">⏳ ממתין לחבר/ה</span>}
                   {' '}{e.fromName} {e.kind === 'debt' ? g(e.fromGender, 'חייב', 'חייבת', 'חייב/ת') : g(e.fromGender, 'החזיר', 'החזירה', 'החזיר/ה')} ל{e.toName}
                 </div>
