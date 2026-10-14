@@ -6,6 +6,7 @@
   const LEGACY_DONE_KEY = 'kupa-legacy-imported';
   const CODE_KEY = 'kupa-code';
   const DEVICE_KEY = 'kupa-device';
+  const LAST_PERSON_KEY = 'kupa-last-person';
   const UNDO_MS = 10 * 60 * 1000;
   const AVATARS = ['🦊', '🐼', '🦁', '🐯', '🐸', '🐵', '🦄', '🐙', '🐨', '🐶', '🐱', '🚀', '😎', '🎧', '🛹', '⚡', '🔥', '🎮'];
 
@@ -219,9 +220,24 @@
     if (pinFlow) return show('pin');
     if (view === 'setup') { initSetup(); return show('setup'); }
     if (view === 'join' && fam) { initJoin(); return show('join'); }
-    if (fam) { renderLogin(); return show('login'); }
+    if (fam) {
+      const skip = autoSkipPerson();
+      if (skip) { startPin(skip, false); return; }
+      renderLogin();
+      return show('login');
+    }
     renderWelcome();
     show('welcome');
+  }
+
+  // מחליט אם אפשר לדלג ישר למסך הקוד הסודי בלי להציג את רשימת הפרופילים:
+  // אם יש רק איש/ה אחת במשפחה, או אם זה/ו האחרון/ה שנכנס/ה מהמכשיר הזה.
+  function autoSkipPerson() {
+    if (view === 'login') return null; // המשתמש ביקש לראות את הרשימה (למשל לחיצה על "לא אני")
+    if (fam.people.length === 1) return fam.people[0];
+    const lastId = localStorage.getItem(LAST_PERSON_KEY);
+    if (lastId) return fam.people.find((p) => p.id === lastId) || null;
+    return null;
   }
 
   function subscribeData() {
@@ -395,6 +411,7 @@
     view = 'welcome';
     pinFlow = null;
     localStorage.removeItem(CODE_KEY);
+    localStorage.removeItem(LAST_PERSON_KEY);
     route();
   }
 
@@ -427,8 +444,16 @@
 
   function startPin(p, legacy) {
     pinFlow = { person: p, legacy: !!legacy, mode: p.hasPin ? 'login' : 'new', first: null, entered: '', busy: false };
+    if (!legacy) localStorage.setItem(LAST_PERSON_KEY, p.id);
     buildPad();
     renderPin();
+    route();
+  }
+
+  function notMe() {
+    pinFlow = null;
+    view = 'login';
+    localStorage.removeItem(LAST_PERSON_KEY);
     route();
   }
 
@@ -514,7 +539,11 @@
     }
   }
 
-  $('pinBack').addEventListener('click', () => { pinFlow = null; route(); });
+  $('pinBack').addEventListener('click', () => {
+    pinFlow = null;
+    if (fam && fam.people.length > 1) { notMe(); return; }
+    route();
+  });
   document.addEventListener('keydown', (ev) => {
     if (ev.key === 'Escape' && !$('sheetWrap').hidden) { closeSheet(); return; }
     if (!pinFlow || token || !$('screen-pin').classList.contains('active')) return;
