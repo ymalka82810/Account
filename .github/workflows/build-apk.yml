@@ -67,4 +67,10 @@ jobs:
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "v1.0.$VERSION_CODE" account.apk --title "גרסה 1.0.$VERSION_CODE" --notes "APK חתום. מותקן מעל גרסה קודמת ומתעדכן מתוך האפליקציה."
+        run: |
+          TAG="v1.0.$VERSION_CODE"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" account.apk --clobber
+          else
+            gh release create "$TAG" account.apk --title "גרסה 1.0.$VERSION_CODE" --notes "APK חתום. מותקן מעל גרסה קודמת ומתעדכן מתוך האפליקציה."
+          fi
