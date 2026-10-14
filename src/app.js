@@ -11,11 +11,11 @@ import { route, show, subscribeData, setToken, dropSession, wireSession } from '
 
 import { renderWelcome, renderLogin, initSetup, initJoin, startPin, restoreFamily } from './screens/auth.js';
 import { openChangePinEmail } from './screens/emailAuth.js';
-import { renderHome } from './screens/home.js';
 import { renderPending } from './screens/pending.js';
 import { renderFamily } from './screens/family.js';
 import { renderFriends } from './screens/friends.js';
 import { cleanPayload } from './screens/legacy.js';
+import { mountHomeTab } from '../src-react/mountHome.jsx';
 
 // ---------- ערכות נושא ----------
 function applyTheme(role) {
@@ -52,7 +52,8 @@ function renderApp() {
   const asked = !!(mine && mine.teenRequested);
   tbtn.disabled = asked;
   tbtn.textContent = asked ? '⏳ הבקשה להפוך לנער/ה נשלחה להורים' : '🎧 בקשה להפוך לנער/ה';
-  renderHome();
+  // מסך הבית (summary/bigbtns/myDebts) מנוהל עכשיו ע"י React באופן עצמאי
+  // (src-react/mountHome.jsx, דרך useQuery) - לא צריך renderHome() ידני.
   renderPending();
   renderPushBtn();
   syncPush();
@@ -72,8 +73,7 @@ function renderApp() {
 document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => switchTab(t.dataset.tab)));
 
 // ---------- אירועים ----------
-$('btnIOwe').addEventListener('click', () => openEntryFlow({ kind: 'debt', from: state.data.me.id }));
-$('btnTheyOwe').addEventListener('click', () => openEntryFlow({ kind: 'debt', to: state.data.me.id }));
+// btnIOwe/btnTheyOwe (מסך הבית) מנוהלים עכשיו ע"י React - ראו Home.jsx.
 
 $('logoutBtn').addEventListener('click', async () => {
   await releasePushDevice();
@@ -180,6 +180,7 @@ function init() {
   subscribeData();
   restoreFamily().finally(() => { state.codeChecked = true; route(); });
   route();
+  mountHomeTab({ initialToken: state.token, openEntryFlow });
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }

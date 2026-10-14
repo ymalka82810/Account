@@ -2,6 +2,7 @@ import { state, TOKEN_KEY, LAST_PERSON_KEY, CODE_KEY } from './state.js';
 import { $, toast } from './helpers.js';
 import { call } from './api.js';
 import { closeSheet } from './sheet.js';
+import { notifyTokenChange } from '../src-react/mountHome.jsx';
 
 // renderApp, renderWelcome, renderLogin, initSetup, initJoin, startPin, applyTheme
 // מוזרקים מ-app.js כדי להימנע מתלות מעגלית בין המודולים.
@@ -78,6 +79,7 @@ async function handleLegacySession(d) {
 export function setToken(t) {
   state.token = t;
   localStorage.setItem(TOKEN_KEY, t);
+  notifyTokenChange(t);
   closeSheet();
   subscribeData();
   route();
@@ -86,6 +88,7 @@ export function setToken(t) {
 export function dropSession() {
   state.token = '';
   localStorage.removeItem(TOKEN_KEY);
+  notifyTokenChange('');
   if (state.unsubData) { state.unsubData(); state.unsubData = null; }
   if (state.unsubFriends) { state.unsubFriends(); state.unsubFriends = null; }
   state.data = undefined;

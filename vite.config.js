@@ -8,9 +8,9 @@ export default defineConfig(({ command }) => ({
   build: {
     outDir: 'dist',
     rollupOptions: {
-      // index.html הוא עדיין האתר ה"ישן" (vanilla) החי בפרודקשן.
-      // בשלב הזה ה-build בודק רק את ה-scaffold המבודד של React.
-      input: 'react-app.html',
+      // index.html הוא עכשיו האתר האמיתי (כולל מסך הבית ב-React).
+      // react-app.html נשאר ככלי דיבאג מבודד, לא חובה אבל לא מזיק.
+      input: ['index.html', 'react-app.html'],
     },
   },
 }));

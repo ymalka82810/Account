@@ -6,6 +6,14 @@ import { pairOwes, openDebtsOf, debtLabel, money } from '../lib/computations.js'
 //
 // openEntryFlow מועבר כ-prop (בינתיים עדיין הפונקציה הישנה מה-vanilla app,
 // עד שגם היא תעבור ל-React בשלב נפרד).
+//
+// שימו לב: אין כאן <section id="tab-home"> - האלמנט הזה נשאר סטטי ב-
+// index.html (כדי ש-switchTab() ימשיך למצוא ולהחליף class 'active' עליו),
+// ו-React מצייר רק את התוכן הפנימי, לתוך <div id="reactHomeRoot"> שבפנים.
+// הכפתורים pushBtn/teenRequestBtn/changePinBtn/emailBtn נשארים סטטיים
+// מחוץ ל-React, כי קוד ישן (push.js, app.js, friends.js) ממשיך לשלוט
+// בהם ישירות (hidden/textContent/dataset) - אם React היה מצייר אותם
+// מחדש בכל רינדור, זה היה דורס את השינויים האלה.
 export default function Home({ data, openEntryFlow }) {
   const me = data.me.id;
   let owe = 0, get = 0;
@@ -61,7 +69,7 @@ export default function Home({ data, openEntryFlow }) {
   }
 
   return (
-    <section id="tab-home" className="panel active">
+    <>
       <div className="summary">
         <div className="sum owe"><div className="lbl">אני חייב/ת</div><div className="num">{money(owe)}</div></div>
         <div className="sum get"><div className="lbl">חייבים לי</div><div className="num">{money(get)}</div></div>
@@ -86,6 +94,6 @@ export default function Home({ data, openEntryFlow }) {
           <div className="empty"><div className="big-emoji" aria-hidden="true">🎉</div>אף אחד לא חייב כלום!</div>
         ) : cards}
       </div>
-    </section>
+    </>
   );
 }

@@ -134,20 +134,8 @@
 
   <main>
     <section id="tab-home" class="panel active">
-      <div class="summary">
-        <div class="sum owe"><div class="lbl">אני חייב/ת</div><div id="sumOwe" class="num"></div></div>
-        <div class="sum get"><div class="lbl">חייבים לי</div><div id="sumGet" class="num"></div></div>
-      </div>
-
-      <div class="bigbtns">
-        <button id="btnIOwe" class="bigbtn owe" type="button"><span aria-hidden="true">💸</span>אני חייב/ת כסף</button>
-        <button id="btnTheyOwe" class="bigbtn get" type="button"><span aria-hidden="true">🤝</span>חייבים לי כסף</button>
-      </div>
-
-      <div id="pendingBox"></div>
-
-      <h2>מי חייב למי</h2>
-      <div id="myDebts"></div>
+      <!-- התוכן מכאן מנוהל ע"י React (ראו src-react/mountHome.jsx) -->
+      <div id="reactHomeRoot"></div>
 
       <button id="pushBtn" class="ghost linkish" type="button" hidden>🔔 הפעלת התראות</button>
       <button id="teenRequestBtn" class="ghost linkish" type="button" hidden>🎧 בקשה להפוך לנער/ה</button>
