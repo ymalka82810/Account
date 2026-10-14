@@ -15,6 +15,7 @@ import { g } from '../../lib/gender.js';
 export async function logout() {
   await releasePushDevice();
   try { await call('auth:logout', { token: state.token }); } catch (e) { /* ignore */ }
+  state.exiting = true;
   dropSession();
 }
 

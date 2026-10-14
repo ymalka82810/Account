@@ -46,6 +46,21 @@ const DEFAULT_LABELS = { home: '💰 הכסף שלי', friends: '🤝 חברים
 // נשאר מוצג לפחות עד שקטע אנימציה שלם אחד מסתיים, גם אם הטעינה עצמה הסתיימה קודם.
 const LOADING_MIN_MS = 4500;
 
+// טקסטים שמתחלפים במסך הטעינה, לפי מה שבאמת קורה (כניסה או יציאה).
+const LOGIN_TEXTS = ['רגע, מתחברים…', 'בודקים מי זה…', 'כבר כמעט…'];
+const LOGOUT_TEXTS = ['רגע, מתנתקים…', 'שומרים הכל…', 'יוצאים בבטחה…'];
+
+function LoadingText({ active, texts }) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (!active) { setI(0); return; }
+    setI(0);
+    const id = setInterval(() => setI((n) => (n + 1) % texts.length), 1500);
+    return () => clearInterval(id);
+  }, [active, texts]);
+  return <p>{texts[i]}</p>;
+}
+
 export default function App() {
   if (!client) {
     return (
@@ -109,8 +124,8 @@ function Root() {
     }
     if (loadingSince.current == null) { setScreen(rawScreen); return; }
     const remain = LOADING_MIN_MS - (Date.now() - loadingSince.current);
-    if (remain <= 0) { loadingSince.current = null; setScreen(rawScreen); return; }
-    const t = setTimeout(() => { loadingSince.current = null; setScreen(rawScreen); }, remain);
+    if (remain <= 0) { loadingSince.current = null; setScreen(rawScreen); state.exiting = false; return; }
+    const t = setTimeout(() => { loadingSince.current = null; setScreen(rawScreen); state.exiting = false; }, remain);
     return () => clearTimeout(t);
   }, [rawScreen]);
 
@@ -172,7 +187,7 @@ function Root() {
           </div>
           <div className="coin-drop__floor" />
         </div>
-        <p>רגע, מתחברים…</p>
+        <LoadingText active={screen === 'loading'} texts={state.exiting ? LOGOUT_TEXTS : LOGIN_TEXTS} />
       </section>
       <Auth current={screen} />
       <section id="screen-app" className={'screen' + (screen === 'app' ? ' active' : '')}>
@@ -281,7 +296,8 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
           </div>
         </div>
         <button className="ghost light" type="button" aria-label="החשבון שלי" onClick={openAccount}>
-          <span ref={gearRef} aria-hidden="true" style={launchRect ? { opacity: 0 } : undefined}>⚙️</span> החשבון שלי
+          {/* בזמן האנימציה הגלגל "יוצא" מהכפתור, אז המקום שלו מתכווץ והטקסט נשאר לבד */}
+          <span ref={gearRef} aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'bottom', overflow: 'hidden', whiteSpace: 'nowrap', transition: 'max-width .3s ease, opacity .2s ease, margin .3s ease', ...(launchRect ? { maxWidth: 0, opacity: 0, marginInlineStart: '-.3em' } : { maxWidth: '2em' }) }}>⚙️</span> החשבון שלי
         </button>
       </header>
       {launchRect && <GearLaunch fromRect={launchRect} onDone={finishLaunch} />}
