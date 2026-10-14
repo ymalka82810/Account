@@ -1,6 +1,7 @@
 import { useApp } from '../appContext.js';
 import PendingCards from './PendingCards.jsx';
-import { pairOwes, openDebtsOf, debtLabel, money } from '../lib/computations.js';
+import DebtLines from './DebtLines.jsx';
+import { pairOwes, openDebtsOf, money } from '../lib/computations.js';
 
 // מסך הבית: סיכום, כפתורי רישום, אישורים ממתינים והחובות הפתוחים.
 // ההגדרות האישיות נמצאות ב"החשבון שלי" (AccountSheet), בכותרת.
@@ -26,26 +27,7 @@ export default function Home({ data, token }) {
         <div className="text">
           <div className="who">{iOwe ? `אני חייב/ת ל${p.name}` : `${p.name} חייב/ת לי`}</div>
           <div className="amt">{money(amount)}</div>
-          {open.length > 1 && (
-            <div className="debt-lines">
-              {open.map((x) => (
-                <div className="debt-line" key={x.debt.id}>
-                  <div className="dl-text">
-                    <div className="dl-name">{debtLabel(x.debt)}</div>
-                    <div className="dl-rem">
-                      {x.paid > 0 ? `נשאר ${money(x.remaining)} מתוך ${money(x.debt.amount)}` : money(x.remaining)}
-                    </div>
-                  </div>
-                  <button
-                    className="small" type="button"
-                    onClick={() => openEntryFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })}
-                  >
-                    {iOwe ? 'שילמתי' : 'קיבלתי'}
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+          <DebtLines open={open} iOwe={iOwe} onPay={(x) => openEntryFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })} />
         </div>
         <button
           className="small strongbtn" type="button"

@@ -1,0 +1,19 @@
+import { debtLabel, money } from '../lib/computations.js';
+
+// פירוט חובות פתוחים בתוך כרטיס חוב: שורה לכל חוב, עם כפתור שילמתי/קיבלתי.
+export default function DebtLines({ open, iOwe, onPay }) {
+  if (open.length <= 1) return null;
+  return (
+    <div className="debt-lines">
+      {open.map((x) => (
+        <div className="debt-line" key={x.debt.id}>
+          <div className="dl-text">
+            <div className="dl-name">{debtLabel(x.debt)}</div>
+            <div className="dl-rem">{x.paid > 0 ? `נשאר ${money(x.remaining)} מתוך ${money(x.debt.amount)}` : money(x.remaining)}</div>
+          </div>
+          <button className="small" type="button" onClick={() => onPay(x)}>{iOwe ? 'שילמתי' : 'קיבלתי'}</button>
+        </div>
+      ))}
+    </div>
+  );
+}

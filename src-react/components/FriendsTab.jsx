@@ -1,27 +1,24 @@
 import { useState } from 'react';
-import { useConvex } from 'convex/react';
-import { toast, errMsg } from '../../src/helpers.js';
+import { toast } from '../../src/helpers.js';
+import { useRun } from '../lib/useRun.js';
 import { FRIEND_MAX } from '../../src/state.js';
 import { useApp } from '../appContext.js';
 import { isPending, pairOwes, openDebtsOf, debtLabel, namesFor, money, fmtDate } from '../lib/computations.js';
 import EntriesList from './EntriesList.jsx';
+import DebtLines from './DebtLines.jsx';
 
 // גרסת React של src/screens/friends.js (מצב חברים לבני נוער).
 // openEntryFlow הישן קורא את החברים מ-state.fdata, ש-session.js עדיין מעדכן.
 export default function FriendsTab({ data, fdata, token }) {
-  const convex = useConvex();
   const { openEntryFlow } = useApp();
   const me = data.me.id;
   const [busy, setBusy] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const run = useRun(token);
 
   if (!fdata || fdata.kind !== 'teen') return null;
 
-  async function run(name, args, okMsg) {
-    try { await convex.mutation(name, { token, ...args }); toast(okMsg); }
-    catch (e) { toast(errMsg(e)); }
-  }
   async function busyRun(key, fn) {
     if (busy) return;
     setBusy(key);
@@ -94,22 +91,7 @@ export default function FriendsTab({ data, fdata, token }) {
         <div className="text">
           <div className="who">{n === 0 ? p.name : iOwe ? `אני חייב/ת ל${p.name}` : `${p.name} חייב/ת לי`}</div>
           <div className="amt">{n === 0 ? 'הכול מסודר ✅' : money(amount)}</div>
-          {open.length > 1 && (
-            <div className="debt-lines">
-              {open.map((x) => (
-                <div className="debt-line" key={x.debt.id}>
-                  <div className="dl-text">
-                    <div className="dl-name">{debtLabel(x.debt)}</div>
-                    <div className="dl-rem">{x.paid > 0 ? `נשאר ${money(x.remaining)} מתוך ${money(x.debt.amount)}` : money(x.remaining)}</div>
-                  </div>
-                  <button className="small" type="button"
-                    onClick={() => startFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })}>
-                    {iOwe ? 'שילמתי' : 'קיבלתי'}
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+          <DebtLines open={open} iOwe={iOwe} onPay={(x) => startFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })} />
         </div>
         {n !== 0 && (
           <button className="small strongbtn" type="button"

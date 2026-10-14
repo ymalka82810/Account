@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { AVATARS } from '../../src/state.js';
 import { call } from '../../src/api.js';
 import { state } from '../../src/state.js';
+import AvatarPicker, { randomAvatar } from './AvatarPicker.jsx';
 import { toast, errMsg } from '../../src/helpers.js';
-
-const randomAvatar = () => AVATARS[Math.floor(Math.random() * AVATARS.length)];
 
 // הוספת בן/בת משפחה (הורים).
 export default function PersonForm({ token }) {
@@ -38,12 +36,7 @@ export default function PersonForm({ token }) {
           <option value="child">ילד/ה</option><option value="teen">נער/ה</option><option value="parent">הורה</option>
         </select></label>
       <div className="field"><span>דמות</span>
-        <div className="avatars">
-          {AVATARS.map((a) => (
-            <button key={a} type="button" className={'av' + (a === avatar ? ' on' : '')} aria-label={'דמות ' + a}
-              aria-pressed={a === avatar} onClick={() => setAvatar(a)}>{a}</button>
-          ))}
-        </div>
+        <AvatarPicker value={avatar} onChange={setAvatar} />
       </div>
       <label className="field"><span>קוד סודי (לא חובה — אפשר שהילד/ה יבחרו לבד)</span>
         <input type="password" inputMode="numeric" pattern="\d{4}" maxLength={4} autoComplete="new-password"

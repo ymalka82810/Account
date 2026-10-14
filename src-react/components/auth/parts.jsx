@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { AVATARS } from '../../../src/state.js';
 
 // החלקים המשותפים למסכי הכניסה.
 // כולם תמיד ב-DOM, ורק זה שהוא ה-current מקבל את ה-class 'active'.
@@ -18,18 +17,7 @@ export const Terms = ({ extra }) => (
   </span>
 );
 
-export function AvatarPicker({ value, onChange }) {
-  return (
-    <div className="avatars">
-      {AVATARS.map((a) => (
-        <button key={a} type="button" className={'av' + (a === value ? ' on' : '')} aria-label={'דמות ' + a}
-          aria-pressed={a === value} onClick={() => onChange(a)}>{a}</button>
-      ))}
-    </div>
-  );
-}
-
-export const randomAvatar = () => AVATARS[Math.floor(Math.random() * AVATARS.length)];
+export { default as AvatarPicker, randomAvatar } from '../AvatarPicker.jsx';
 
 export function Tile({ avatar, name, onClick }) {
   return (
