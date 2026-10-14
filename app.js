@@ -775,7 +775,8 @@
 
   // ---------- ממתין לאישור ----------
   const friendRequests = () => (isParent() ? data.people.filter((p) => p.friendsRequested) : []);
-  const parentPendingCount = () => data.entries.filter(isPending).length + friendRequests().length;
+  const teenRequests = () => (isParent() ? data.people.filter((p) => p.teenRequested) : []);
+  const parentPendingCount = () => data.entries.filter(isPending).length + friendRequests().length + teenRequests().length;
 
   function renderPending() {
     const parentView = isParent();
@@ -789,6 +790,29 @@
       box.append(el('div', { class: 'card notice' },
         el('p', { text: `⏳ ${list.length === 1 ? 'רישום אחד מחכה' : list.length + ' רישומים מחכים'} לאישור של הורה. אפשר לראות אותם ב"מה היה".` })));
       return;
+    }
+
+    const teenReqs = teenRequests();
+    if (teenReqs.length) {
+      const tcard = el('div', { class: 'card pending-card' }, el('h3', { text: `🎧 בקשות לעבור לנוער (${teenReqs.length})` }));
+      teenReqs.forEach((p) => tcard.append(el('div', { class: 'row' },
+        el('div', { class: 'text' },
+          el('div', { text: `${p.name} מבקש/ת להפוך לנער/ה` }),
+          el('div', { class: 'meta', text: 'ממשק מותאם לנוער. מצב חברים נפרד ודורש אישור נוסף.' })),
+        el('div', { class: 'acts' },
+          el('button', {
+            class: 'small okbtn', type: 'button', text: '✅ אישור', onclick: async () => {
+              try { await call('people:setRole', { token, id: p.id, role: 'teen' }); toast(`${p.name} עכשיו נער/ה`); }
+              catch (err) { toast(errMsg(err)); }
+            },
+          }),
+          el('button', {
+            class: 'small danger', type: 'button', text: 'דחייה', onclick: async () => {
+              try { await call('people:declineTeen', { token, id: p.id }); toast('הבקשה נדחתה'); }
+              catch (err) { toast(errMsg(err)); }
+            },
+          })))));
+      box.append(tcard);
     }
 
     const reqs = friendRequests();
@@ -1233,6 +1257,10 @@
     try { await call('friends:requestAccess', { token }); toast('הבקשה נשלחה להורים ⏳'); }
     catch (e) { toast(errMsg(e)); }
   });
+  $('teenRequestBtn').addEventListener('click', async () => {
+    try { await call('people:requestTeen', { token }); toast('הבקשה נשלחה להורים ⏳'); }
+    catch (e) { toast(errMsg(e)); }
+  });
   $('btnFriendIOwe').addEventListener('click', () => startFriendFlow({ kind: 'debt', from: data.me.id }));
   $('btnFriendOwesMe').addEventListener('click', () => startFriendFlow({ kind: 'debt', to: data.me.id }));
   $('friendForm').addEventListener('submit', async (ev) => {
@@ -1529,6 +1557,12 @@
       t.replaceChildren(...[labels[t.dataset.tab] || t.textContent, count ? el('span', { class: 'badge', text: String(count) }) : null].filter((x) => x !== null));
     });
 
+    const tbtn = $('teenRequestBtn');
+    const mine = person(data.me.id);
+    tbtn.hidden = role !== 'child';
+    const asked = !!(mine && mine.teenRequested);
+    tbtn.disabled = asked;
+    tbtn.textContent = asked ? '⏳ הבקשה להפוך לנער/ה נשלחה להורים' : '🎧 בקשה להפוך לנער/ה';
     renderHome();
     renderPending();
     renderPushBtn();

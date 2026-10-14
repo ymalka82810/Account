@@ -37,6 +37,8 @@ export default defineSchema({
     friendsEnabled: v.optional(v.boolean()),
     friendsRequested: v.optional(v.boolean()),
     friendEmail: v.optional(v.string()),
+    // ילד/ה ביקש/ה שההורים יהפכו אותו/ה לנער/ה.
+    teenRequested: v.optional(v.boolean()),
   })
     .index("by_family", ["familyId"])
     .index("by_friendEmail", ["friendEmail"]),
