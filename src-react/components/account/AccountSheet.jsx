@@ -19,6 +19,33 @@ const PALETTES = [
   { id: 'orange', label: 'כתום + ורוד' },
 ];
 
+function PaletteSheet() {
+  const { data, token } = useApp();
+  const sheet = useSheet();
+  const me = data.me;
+  useSheetTitle('צבעי המסך');
+
+  async function setPalette(palette) {
+    try { await call('people:setPalette', { token, palette }); sheet.close(); }
+    catch (e) { toast(errMsg(e)); }
+  }
+
+  return (
+    <div className="form">
+      <div className="palette-picks" role="radiogroup" aria-label="צבעי המסך">
+        {PALETTES.map((p) => (
+          <button key={p.id} type="button" role="radio" aria-checked={me.palette === p.id}
+            className={'palette-pick' + (me.palette === p.id ? ' sel' : '')} data-pal={p.id}
+            onClick={() => setPalette(p.id)}>
+            <span className="palette-swatch" aria-hidden="true" />
+            {p.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export async function logout() {
   await releasePushDevice();
   try { await call('auth:logout', { token: state.token }); } catch (e) { /* ignore */ }
@@ -41,34 +68,20 @@ export function AccountSheet() {
     catch (e) { toast(errMsg(e)); }
   }
 
-  async function setPalette(palette) {
-    try { await call('people:setPalette', { token, palette }); }
-    catch (e) { toast(errMsg(e)); }
-  }
-
   return (
     <div className="form">
       <div className="field"><span>צורת פנייה</span>
         <Select value={me.gender || ''} onChange={setGender} options={GENDER_OPTIONS} /></div>
 
-      {me.role === 'teen' && (
-        <div className="field"><span>צבעי המסך</span>
-          <div className="palette-picks" role="radiogroup" aria-label="צבעי המסך">
-            {PALETTES.map((p) => (
-              <button key={p.id} type="button" role="radio" aria-checked={me.palette === p.id}
-                className={'palette-pick' + (me.palette === p.id ? ' sel' : '')} data-pal={p.id}
-                onClick={() => setPalette(p.id)}>
-                <span className="palette-swatch" aria-hidden="true" />
-                {p.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
       <button className="ghost" type="button" onClick={() => sheet.open('דמות', <AvatarSheet />)}>
         {me.avatar ? me.avatar + ' דמות' : '🙂 בחירת דמות'}
       </button>
+
+      {me.role === 'teen' && (
+        <button className="ghost" type="button" onClick={() => sheet.open('צבעי המסך', <PaletteSheet />)}>
+          🎨 צבעי המסך
+        </button>
+      )}
 
       {pushSupported() && pushOn !== null && (
         <AsyncButton className="ghost" onClick={async () => {
