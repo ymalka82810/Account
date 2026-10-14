@@ -14,7 +14,7 @@ export default function ManageTab({ data, token }) {
     <>
       <Legacy token={token} />
 
-      <Collapsible name="manage-tiles" title="בני המשפחה" defaultOpen>
+      <Collapsible name="manage-tiles" title={data.family?.name ? `בני ${data.family.name}` : 'בני המשפחה'} defaultOpen>
         <PeopleList people={data.people} me={me} token={token} />
         <PersonForm token={token} />
       </Collapsible>
