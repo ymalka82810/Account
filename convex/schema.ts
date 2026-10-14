@@ -19,9 +19,10 @@ export default defineSchema({
     name: v.string(),
     role: v.union(v.literal("parent"), v.literal("child"), v.literal("teen")),
     avatar: v.optional(v.string()),
-    // קוד סודי (נשמר כגיבוב בלבד). אם חסר - הילד/ה בוחר/ת קוד בכניסה הראשונה.
+    // קוד סודי (נשמר גם כגיבוב וגם בטקסט גלוי, כדי שהורה יוכל להציג אותו לילד/ה). אם חסר - הילד/ה בוחר/ת קוד בכניסה הראשונה.
     pinHash: v.optional(v.string()),
     pinSalt: v.optional(v.string()),
+    pinPlain: v.optional(v.string()),
     failedAttempts: v.optional(v.number()),
     lockedUntil: v.optional(v.number()),
     // נעילה מדורגת: רמה עולה בכל נעילה (דקה, 5 דקות, שעה...). מתאפסת בכניסה מוצלחת.

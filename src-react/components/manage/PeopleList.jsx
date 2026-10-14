@@ -1,12 +1,24 @@
+import { useState } from 'react';
 import { useSheet } from '../shared/Sheet.jsx';
 import { ResetPinSheet } from './ResetPinSheet.jsx';
 import { useRun } from '../../lib/useRun.js';
+import { call } from '../../lib/api.js';
 import { roleLabel } from '../../lib/computations.js';
 
 // בני המשפחה: קוד חדש, ילד/נער, כיבוי מצב חברים והסרה.
 export default function PeopleList({ people, me, token }) {
   const sheet = useSheet();
   const run = useRun(token);
+  const [shownPins, setShownPins] = useState({});
+
+  async function togglePin(p) {
+    if (shownPins[p.id] !== undefined) {
+      setShownPins((s) => { const n = { ...s }; delete n[p.id]; return n; });
+      return;
+    }
+    const pin = await call('people:getPin', { token, id: p.id });
+    setShownPins((s) => ({ ...s, [p.id]: pin }));
+  }
 
   function toggleRole(p) {
     const toRole = p.role === 'teen' ? 'child' : 'teen';
@@ -28,7 +40,17 @@ export default function PeopleList({ people, me, token }) {
               </div>
             )}
             {p.role === 'teen' && p.friendsEnabled && <div className="meta">🤝 מצב חברים פעיל • {p.friendEmail || ''}</div>}
+            {shownPins[p.id] !== undefined && (
+              <div className="meta">
+                {shownPins[p.id] ? <>הקוד הנוכחי: <strong>{shownPins[p.id]}</strong></> : 'הקוד נקבע לפני העדכון ואי אפשר להציג אותו. אפשר לקבוע קוד חדש.'}
+              </div>
+            )}
           </div>
+          {p.role !== 'parent' && p.hasPin && (
+            <button className="small" type="button" onClick={() => togglePin(p)}>
+              {shownPins[p.id] !== undefined ? 'הסתר קוד' : 'הצג קוד'}
+            </button>
+          )}
           <button className="small" type="button" onClick={() => sheet.open('קוד סודי ל' + p.name, <ResetPinSheet person={p} />)}>קוד חדש</button>
           {p.role !== 'parent' && (
             <button className="small" type="button" onClick={() => toggleRole(p)}>

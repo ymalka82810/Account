@@ -24,6 +24,7 @@ export async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: stri
   await ctx.db.patch(personId, {
     pinSalt,
     pinHash: await hashPin(pin, pinSalt),
+    pinPlain: pin,
     failedAttempts: 0,
     lockedUntil: undefined,
     lockLevel: 0,
@@ -239,7 +240,7 @@ export const resetPin = mutation({
       if (!validPin(pin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
       await setPin(ctx, personId, pin);
     } else {
-      await ctx.db.patch(personId, { pinHash: undefined, pinSalt: undefined, failedAttempts: 0, lockedUntil: undefined, lockLevel: 0, lockCount: 0, lastLockAt: undefined });
+      await ctx.db.patch(personId, { pinHash: undefined, pinSalt: undefined, pinPlain: undefined, failedAttempts: 0, lockedUntil: undefined, lockLevel: 0, lockCount: 0, lastLockAt: undefined });
     }
     return { ok: true as const };
   },
