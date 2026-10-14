@@ -8,7 +8,7 @@ import TeenOverview from './TeenOverview.jsx';
 // לשונית המשפחה (הורים): אישורים, יתרות, חובות פתוחים ומה שהנוער רושם. הגדרות וניהול נמצאים בלשונית "ניהול".
 export default function FamilyTab({ data, fdata, token }) {
   const { me } = useApp();
-  const { nameOf } = namesFor(me, (id) => data.people.find((p) => p.id === id));
+  const { nameOf, gw } = namesFor(me, (id) => data.people.find((p) => p.id === id));
   const debts = openDebts(data.people, data.entries);
   const teens = fdata && fdata.kind === 'parent' ? fdata.teens : [];
 
@@ -20,7 +20,7 @@ export default function FamilyTab({ data, fdata, token }) {
       <Balances people={data.people} debts={debts} />
 
       <h2>כל החובות הפתוחים</h2>
-      <OpenDebts debts={debts} token={token} nameOf={nameOf} />
+      <OpenDebts debts={debts} token={token} nameOf={nameOf} gw={gw} />
 
       <TeenOverview teens={teens} />
     </>

@@ -4,6 +4,9 @@ import { ResetPinSheet } from './ResetPinSheet.jsx';
 import { useRun } from '../../lib/useRun.js';
 import { call } from '../../lib/api.js';
 import { roleLabel } from '../../lib/computations.js';
+import { g } from '../../lib/gender.js';
+
+const GENDER_LABEL = { male: 'זכר', female: 'נקבה' };
 
 // בני המשפחה: קוד חדש, ילד/נער, כיבוי מצב חברים והסרה.
 export default function PeopleList({ people, me, token }) {
@@ -22,8 +25,13 @@ export default function PeopleList({ people, me, token }) {
 
   function toggleRole(p) {
     const toRole = p.role === 'teen' ? 'child' : 'teen';
-    if (toRole === 'child' && p.friendsEnabled && !confirm(`${p.name} יאבד/תאבד את מצב החברים. להמשיך?`)) return;
-    run('people:setRole', { id: p.id, role: toRole }, toRole === 'teen' ? `${p.name} עכשיו נער/ה` : `${p.name} עכשיו ילד/ה`);
+    if (toRole === 'child' && p.friendsEnabled
+      && !confirm(`${p.name} ${g(p.gender, 'יאבד', 'תאבד', 'יאבד/תאבד')} את מצב החברים. להמשיך?`)) return;
+    run('people:setRole', { id: p.id, role: toRole }, `${p.name} עכשיו ${roleLabel(toRole, p.gender)}`);
+  }
+
+  function changeGender(p, gender) {
+    run('people:setGender', { id: p.id, gender: gender || undefined });
   }
 
   return (
@@ -33,10 +41,13 @@ export default function PeopleList({ people, me, token }) {
           {p.avatar && <span className="avatar-md" aria-hidden="true">{p.avatar}</span>}
           <div className="text">
             {p.name}{' '}
-            <span className="meta">{roleLabel(p.role) + (p.hasPin ? '' : ' • עוד לא בחר/ה קוד')}</span>
+            <span className="meta">
+              {roleLabel(p.role, p.gender) + (p.hasPin ? '' : ' • ' + g(p.gender, 'עוד לא בחר קוד', 'עוד לא בחרה קוד', 'עוד לא בחר/ה קוד'))}
+            </span>
             {p.lockAlert && (
               <div className="meta" style={{ color: '#b45309' }}>
-                ⚠️ הקוד של {p.name} ננעל {p.lockAlert.count === 1 ? 'פעם אחת' : p.lockAlert.count + ' פעמים'} אחרי ניסיונות שגויים. אם זה לא הוא/היא, כדאי לקבוע קוד חדש.
+                ⚠️ הקוד של {p.name} ננעל {p.lockAlert.count === 1 ? 'פעם אחת' : p.lockAlert.count + ' פעמים'} אחרי ניסיונות שגויים.
+                {' '}{g(p.gender, 'אם זה לא הוא', 'אם זה לא היא', 'אם זה לא הוא/היא')}, כדאי לקבוע קוד חדש.
               </div>
             )}
             {p.role === 'teen' && p.friendsEnabled && <div className="meta">🤝 מצב חברים פעיל • {p.friendEmail || ''}</div>}
@@ -45,6 +56,14 @@ export default function PeopleList({ people, me, token }) {
                 {shownPins[p.id] ? <>הקוד הנוכחי: <strong>{shownPins[p.id]}</strong></> : 'הקוד נקבע לפני העדכון ואי אפשר להציג אותו. אפשר לקבוע קוד חדש.'}
               </div>
             )}
+            <div className="meta">
+              צורת פנייה:{' '}
+              <select value={p.gender || ''} onChange={(e) => changeGender(p, e.target.value)}>
+                <option value="">ללא ציון</option>
+                <option value="male">{GENDER_LABEL.male}</option>
+                <option value="female">{GENDER_LABEL.female}</option>
+              </select>
+            </div>
           </div>
           {p.role !== 'parent' && p.hasPin && (
             <button className="small" type="button" onClick={() => togglePin(p)}>
@@ -54,7 +73,7 @@ export default function PeopleList({ people, me, token }) {
           <button className="small" type="button" onClick={() => sheet.open('קוד סודי ל' + p.name, <ResetPinSheet person={p} />)}>קוד חדש</button>
           {p.role !== 'parent' && (
             <button className="small" type="button" onClick={() => toggleRole(p)}>
-              {p.role === 'teen' ? 'חזרה לילד/ה' : 'הפיכה לנער/ה'}
+              {p.role === 'teen' ? `חזרה ל${g(p.gender, 'ילד', 'ילדה', 'ילד/ה')}` : `הפיכה ל${g(p.gender, 'נער', 'נערה', 'נער/ה')}`}
             </button>
           )}
           {p.role === 'teen' && p.friendsEnabled && (
@@ -66,7 +85,7 @@ export default function PeopleList({ people, me, token }) {
           {p.id !== me && (
             <button className="small danger" type="button" aria-label={'הסרת ' + p.name} onClick={() => {
               if (!confirm(`להסיר את ${p.name} מהמשפחה?`)) return;
-              run('people:remove', { id: p.id }, `${p.name} הוסר/ה`);
+              run('people:remove', { id: p.id }, `${p.name} ${g(p.gender, 'הוסר', 'הוסרה', 'הוסר/ה')}`);
             }}>הסרה</button>
           )}
         </div>

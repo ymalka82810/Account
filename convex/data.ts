@@ -26,7 +26,7 @@ export const get = query({
     return {
       legacy: false as const,
       me: {
-        id: me._id, name: me.name, role: me.role, avatar: avatarOf(me),
+        id: me._id, name: me.name, role: me.role, avatar: avatarOf(me), gender: me.gender ?? null,
         // מייל מוסתר חלקית (למסך ההגדרות). מאומת = אפשר לשלוח אליו קודים.
         email: me.emailVerified && me.email ? maskEmail(me.email) : null,
         pendingEmail: me.pendingEmail ? maskEmail(me.pendingEmail) : null,
@@ -36,7 +36,7 @@ export const get = query({
         ? { name: family.name, parentCode: family.parentCode, childCode: family.childCode }
         : { name: family.name },
       people: people.map((p) => ({
-        id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), hasPin: !!p.pinHash,
+        id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash,
         // התראה להורים בלבד: הקוד של האדם ננעל בגלל ניסיונות כושלים בשבוע האחרון.
         lockAlert: me.role === "parent" && !!p.lastLockAt && Date.now() - p.lastLockAt < ALERT_WINDOW_MS
           ? { count: p.lockCount ?? 1, at: p.lastLockAt }

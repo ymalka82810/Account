@@ -7,7 +7,7 @@ export default function EntriesList({
   list, emptyText, token, me, isParent, lookup, debtList, removeEndpoint, pendingLabel,
 }) {
   if (!list.length) return <div className="empty">{emptyText}</div>;
-  const { subjectWord, toWord } = namesFor(me, lookup);
+  const { subjectWord, toWord, gw } = namesFor(me, lookup);
   const debtMap = debtStates(debtList);
   const sorted = [...list].sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt);
 
@@ -33,7 +33,7 @@ export default function EntriesList({
           <div>
             <span className={'tag ' + e.kind}>{isDebt ? 'חוב' : 'החזר'}</span>
             {isPending(e) && <span className="tag pending">{pendingLabel ? pendingLabel(e) : '⏳ ממתין לאישור'}</span>}
-            {' '}{subjectWord(e.from)} {isDebt ? 'חייב/ת' : 'החזיר/ה'} {toWord(e.to)}
+            {' '}{subjectWord(e.from)} {isDebt ? gw(e.from, 'חייב', 'חייבת', 'חייב/ת') : gw(e.from, 'החזיר', 'החזירה', 'החזיר/ה')} {toWord(e.to)}
           </div>
           <div className="meta">{[fmtDate(e.date), e.note, extra].filter(Boolean).join(' • ')}</div>
         </div>

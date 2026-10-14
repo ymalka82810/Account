@@ -10,18 +10,18 @@ export const add = mutation({
     name: v.string(),
     role: v.union(v.literal("parent"), v.literal("child"), v.literal("teen")),
     avatar: v.optional(v.string()),
+    gender: v.optional(v.union(v.literal("male"), v.literal("female"))),
     pin: v.optional(v.string()),
   },
-  handler: async (ctx, { token, name, role, avatar, pin }) => {
+  handler: async (ctx, { token, name, role, avatar, gender, pin }) => {
     const me = await requireParent(ctx, token);
     const clean = cleanName(name);
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     if (members.length >= MAX_FAMILY_SIZE) throw new ConvexError("המשפחה מלאה");
     if (members.some((p) => p.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה");
     if (pin !== undefined && !validPin(pin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
-    // הורים אין להם אימוג'י ליד השם.
-    const personAvatar = role === "parent" ? undefined : avatar?.slice(0, 8);
-    const id = await ctx.db.insert("people", { familyId: me.familyId, name: clean, role, avatar: personAvatar });
+    const personAvatar = avatar?.slice(0, 8);
+    const id = await ctx.db.insert("people", { familyId: me.familyId, name: clean, role, avatar: personAvatar, gender });
     if (pin) {
       const pinSalt = randomHex(16);
       await ctx.db.patch(id, { pinSalt, pinHash: await hashPin(pin, pinSalt), pinPlain: pin });
@@ -100,12 +100,25 @@ export const declineTeen = mutation({
   },
 });
 
-// נער/ה בוחר/ת דמות לעצמו/ה, או מוחק/ת אותה (avatar חסר).
+// קביעת מגדר (לצורת פנייה מותאמת): האדם עצמו/ה או הורה יכולים לקבוע. חסר = ללא ציון.
+export const setGender = mutation({
+  args: { token: v.string(), id: v.id("people"), gender: v.optional(v.union(v.literal("male"), v.literal("female"))) },
+  handler: async (ctx, { token, id, gender }) => {
+    const me = await requirePerson(ctx, token);
+    if (me._id !== id) {
+      if (me.role !== "parent") throw new ConvexError("רק הורים יכולים לעשות את זה");
+      await requireSameFamily(ctx, me, id);
+    }
+    await ctx.db.patch(id, { gender });
+  },
+});
+
+// נער/ה או הורה בוחר/ת דמות לעצמו/ה.
 export const setAvatar = mutation({
   args: { token: v.string(), avatar: v.optional(v.string()) },
   handler: async (ctx, { token, avatar }) => {
     const me = await requirePerson(ctx, token);
-    if (me.role !== "teen") throw new ConvexError("רק נערים יכולים לשנות דמות");
+    if (me.role !== "teen" && me.role !== "parent") throw new ConvexError("רק נערים והורים יכולים לשנות דמות");
     await ctx.db.patch(me._id, { avatar: avatar ? avatar.slice(0, 8) : undefined });
   },
 });

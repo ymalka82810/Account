@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { WEEKDAYS } from '../../state/state.js';
 import { money, fmtDate } from '../../lib/computations.js';
+import { g } from '../../lib/gender.js';
 
 const recurringWhen = (r) => (r.frequency === 'weekly' ? `כל יום ${WEEKDAYS[r.weekday]}` : `ב-${r.monthDay} בכל חודש`);
 
@@ -11,6 +12,7 @@ export default function Recurring({ data, token }) {
   const me = data.me.id;
   const people = data.people;
   const nameOf = (id) => people.find((p) => p.id === id)?.name ?? 'לא ידוע';
+  const genderOf = (id) => people.find((p) => p.id === id)?.gender;
 
   const defaultTo = (people.find((p) => p.role === 'child') || people.find((p) => p.id !== me) || data.me).id;
   const [from, setFrom] = useState(me);
@@ -59,7 +61,7 @@ export default function Recurring({ data, token }) {
         {data.recurring.map((r) => (
           <div className="row" key={r.id}>
             <div className="text">
-              <div>{nameOf(r.from)} חייב/ת ל{nameOf(r.to)} {money(r.amount)}</div>
+              <div>{nameOf(r.from)} {g(genderOf(r.from), 'חייב', 'חייבת', 'חייב/ת')} ל{nameOf(r.to)} {money(r.amount)}</div>
               <div className="meta">{[recurringWhen(r), r.note, 'הרישום הבא: ' + fmtDate(r.nextDate)].filter(Boolean).join(' • ')}</div>
             </div>
             <button className="small danger" type="button" onClick={() => remove(r)}>הפסקה</button>

@@ -181,9 +181,11 @@ export async function getSessionPerson(ctx: QueryCtx, token: string): Promise<Do
   return await ctx.db.get(session.personId);
 }
 
-// הורים אין להם אימוג'י ליד השם. ילדים ונערים כן, עם ברירת מחדל אם לא נבחר.
+// דמות ליד השם, עם ברירת מחדל אם לא נבחרה (למשל אצל הורים מלפני הפיצ'ר).
 export function avatarOf(p: Doc<"people">): string | undefined {
-  return p.role === "parent" ? undefined : (p.avatar ?? "🙂");
+  if (p.avatar) return p.avatar;
+  if (p.role === "parent") return p.gender === "female" ? "👩" : "👨";
+  return "🙂";
 }
 
 export type Member = Doc<"people"> & { familyId: Id<"families"> };

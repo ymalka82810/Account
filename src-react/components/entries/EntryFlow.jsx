@@ -20,11 +20,11 @@ export function EntryFlow({ opts }) {
   useEffect(() => { setErr(''); }, [step]);
 
   const lookup = (id) => data.people.find((p) => p.id === id) || (fdata && fdata.people && fdata.people[id]);
-  const { nameOf, subjectWord, toWord } = namesFor(me, lookup);
+  const { nameOf, subjectWord, toWord, gw } = namesFor(me, lookup);
   const isMe = (id) => id === me;
 
   const title = opts.kind === 'debt'
-    ? (isMe(st.from) ? 'אני חייב/ת כסף' : 'חייבים לי כסף')
+    ? (isMe(st.from) ? gw(st.from, 'אני חייב כסף', 'אני חייבת כסף', 'אני חייב/ת כסף') : 'חייבים לי כסף')
     : (isMe(st.from) ? 'שילמתי' : isMe(st.to) ? 'קיבלתי כסף' : 'רישום החזר');
   useSheetTitle(title);
 
@@ -51,7 +51,9 @@ export function EntryFlow({ opts }) {
   if (step === 'person') {
     const fixed = st.from || st.to;
     const others = (opts.people || data.people).filter((p) => p.id !== fixed);
-    const q = opts.kind === 'debt' ? (isMe(st.from) ? 'למי אני חייב/ת?' : 'מי חייב/ת לי?') : 'עם מי?';
+    const q = opts.kind === 'debt'
+      ? (isMe(st.from) ? gw(st.from, 'למי אני חייב?', 'למי אני חייבת?', 'למי אני חייב/ת?') : 'מי חייב/ת לי?')
+      : 'עם מי?';
     return (
       <div className="flow">
         <p className="flow-q">{q}</p>
@@ -108,10 +110,11 @@ export function EntryFlow({ opts }) {
     const setAmount = (a) => { setErr(''); patch({ amount: a }); };
 
     const question = opts.kind === 'debt'
-      ? (meIsFrom ? `כמה אני חייב/ת ${toWord(other)}?` : `כמה ${nameOf(other)} חייב/ת לי?`)
+      ? (meIsFrom ? `כמה ${gw(st.from, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ${toWord(other)}?`
+        : `כמה ${nameOf(other)} ${gw(other, 'חייב', 'חייבת', 'חייב/ת')} לי?`)
       : (meIsFrom ? `כמה שילמתי ${toWord(other)}?`
-        : isMe(st.to) ? `כמה ${nameOf(other)} שילם/ה לי?`
-          : `כמה ${nameOf(st.from)} החזיר/ה ל${nameOf(st.to)}?`);
+        : isMe(st.to) ? `כמה ${nameOf(other)} ${gw(other, 'שילם', 'שילמה', 'שילם/ה')} לי?`
+          : `כמה ${nameOf(st.from)} ${gw(st.from, 'החזיר', 'החזירה', 'החזיר/ה')} ל${nameOf(st.to)}?`);
 
     const next = () => {
       const agorot = Math.round(parseFloat(st.amount || '0') * 100);
@@ -151,7 +154,7 @@ export function EntryFlow({ opts }) {
 
   function renderFinal() {
     const isDebt = opts.kind === 'debt';
-    let sentence = `${subjectWord(st.from)} ${isDebt ? 'חייב/ת' : 'החזיר/ה'} ${toWord(st.to)} ${money(st.agorot)}`;
+    let sentence = `${subjectWord(st.from)} ${isDebt ? gw(st.from, 'חייב', 'חייבת', 'חייב/ת') : gw(st.from, 'החזיר', 'החזירה', 'החזיר/ה')} ${toWord(st.to)} ${money(st.agorot)}`;
     if (st.debtId) {
       const left = st.debtRemaining - st.agorot;
       sentence += ` על ${st.debtName}. ` + (left > 0 ? `יישאר ${money(left)} מהחוב.` : 'החוב ייסגר במלואו ✅');

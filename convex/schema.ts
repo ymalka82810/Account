@@ -19,6 +19,8 @@ export default defineSchema({
     name: v.string(),
     role: v.union(v.literal("parent"), v.literal("child"), v.literal("teen")),
     avatar: v.optional(v.string()),
+    // מגדר, לצורת פנייה מותאמת (זכר/נקבה). חסר = ללא ציון, וצורת הפנייה נשארת כפולה כמו היום.
+    gender: v.optional(v.union(v.literal("male"), v.literal("female"))),
     // קוד סודי (נשמר גם כגיבוב וגם בטקסט גלוי, כדי שהורה יוכל להציג אותו לילד/ה). אם חסר - הילד/ה בוחר/ת קוד בכניסה הראשונה.
     pinHash: v.optional(v.string()),
     pinSalt: v.optional(v.string()),

@@ -2,6 +2,7 @@ import { isPending, money, fmtDate } from '../../lib/computations.js';
 import { useRun } from '../../lib/useRun.js';
 import { useSheet } from '../shared/Sheet.jsx';
 import { FriendApproveSheet } from '../family/FriendApproveSheet.jsx';
+import { g } from '../../lib/gender.js';
 
 // גרסת React של renderPending() הישן. הורה: כרטיסי אישורים בראש הסקירה
 // המשפחתית. אחרים: הודעה קטנה בדף הבית. המסך מתרנדר מחדש לבד עם ה-data.
@@ -11,6 +12,7 @@ export default function PendingCards({ data, token, parentView }) {
   const openFriendApprove = (p) => sheet.open('מצב חברים ל' + p.name, <FriendApproveSheet person={p} />);
   const list = data.entries.filter(isPending);
   const nameOf = (id) => data.people.find((p) => p.id === id)?.name ?? 'לא ידוע';
+  const genderOf = (id) => data.people.find((p) => p.id === id)?.gender;
 
   if (!parentView) {
     if (!list.length) return null;
@@ -33,12 +35,12 @@ export default function PendingCards({ data, token, parentView }) {
           {teenReqs.map((p) => (
             <div className="row" key={p.id}>
               <div className="text">
-                <div>{p.name} מבקש/ת להפוך לנער/ה</div>
+                <div>{p.name} {g(p.gender, 'מבקש', 'מבקשת', 'מבקש/ת')} להפוך ל{g(p.gender, 'נער', 'נערה', 'נער/ה')}</div>
                 <div className="meta">ממשק מותאם לנוער. מצב חברים נפרד ודורש אישור נוסף.</div>
               </div>
               <div className="acts">
                 <button className="small okbtn" type="button"
-                  onClick={() => run('people:setRole', { id: p.id, role: 'teen' }, `${p.name} עכשיו נער/ה`)}>✅ אישור</button>
+                  onClick={() => run('people:setRole', { id: p.id, role: 'teen' }, `${p.name} עכשיו ${g(p.gender, 'נער', 'נערה', 'נער/ה')}`)}>✅ אישור</button>
                 <button className="small danger" type="button"
                   onClick={() => run('people:declineTeen', { id: p.id }, 'הבקשה נדחתה')}>דחייה</button>
               </div>
@@ -53,7 +55,7 @@ export default function PendingCards({ data, token, parentView }) {
           {friendReqs.map((p) => (
             <div className="row" key={p.id}>
               <div className="text">
-                <div>{p.name} מבקש/ת לרשום חובות עם חברים</div>
+                <div>{p.name} {g(p.gender, 'מבקש', 'מבקשת', 'מבקש/ת')} לרשום חובות עם חברים</div>
                 <div className="meta">חברים נוספים לפי כתובת מייל. תראו כל מה שנרשם בסקירה.</div>
               </div>
               <div className="acts">
@@ -73,7 +75,8 @@ export default function PendingCards({ data, token, parentView }) {
             <div className="row" key={e.id}>
               <div className="text">
                 <div>
-                  {(e.createdBy ? nameOf(e.createdBy) : 'מישהו')} רשם/ה: {nameOf(e.from)} {e.kind === 'debt' ? 'חייב/ת' : 'החזיר/ה'} ל{nameOf(e.to)}
+                  {(e.createdBy ? nameOf(e.createdBy) : 'מישהו')} {g(e.createdBy ? genderOf(e.createdBy) : null, 'רשם', 'רשמה', 'רשם/ה')}:{' '}
+                  {nameOf(e.from)} {e.kind === 'debt' ? g(genderOf(e.from), 'חייב', 'חייבת', 'חייב/ת') : g(genderOf(e.from), 'החזיר', 'החזירה', 'החזיר/ה')} ל{nameOf(e.to)}
                 </div>
                 <div className="meta">{[money(e.amount), fmtDate(e.date), e.note].filter(Boolean).join(' • ')}</div>
               </div>

@@ -2,6 +2,7 @@ import { useApp } from '../../state/appContext.js';
 import PendingCards from '../entries/PendingCards.jsx';
 import DebtLines from '../entries/DebtLines.jsx';
 import { pairOwes, openDebtsOf, money } from '../../lib/computations.js';
+import { g } from '../../lib/gender.js';
 
 // מסך הבית: סיכום, כפתורי רישום, אישורים ממתינים והחובות הפתוחים.
 // ההגדרות האישיות נמצאות ב"החשבון שלי" (AccountSheet), בכותרת.
@@ -25,7 +26,7 @@ export default function Home({ data, token }) {
       <div key={p.id} className={'debt ' + (iOwe ? 'owe' : 'get') + (open.length > 1 ? ' multi' : '')}>
         {p.avatar && <span className="avatar-md" aria-hidden="true">{p.avatar}</span>}
         <div className="text">
-          <div className="who">{iOwe ? `אני חייב/ת ל${p.name}` : `${p.name} חייב/ת לי`}</div>
+          <div className="who">{iOwe ? `${g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${p.name}` : `${p.name} ${g(p.gender, 'חייב', 'חייבת', 'חייב/ת')} לי`}</div>
           <div className="amt">{money(amount)}</div>
           <DebtLines open={open} iOwe={iOwe} onPay={(x) => openEntryFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })} />
         </div>
@@ -44,13 +45,13 @@ export default function Home({ data, token }) {
   return (
     <>
       <div className="summary">
-        <div className="sum owe"><div className="lbl">אני חייב/ת</div><div className="num">{money(owe)}</div></div>
+        <div className="sum owe"><div className="lbl">{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')}</div><div className="num">{money(owe)}</div></div>
         <div className="sum get"><div className="lbl">חייבים לי</div><div className="num">{money(get)}</div></div>
       </div>
 
       <div className="bigbtns">
         <button className="bigbtn owe" type="button" onClick={() => openEntryFlow({ kind: 'debt', from: me })}>
-          <span aria-hidden="true">💸</span>אני חייב/ת כסף
+          <span aria-hidden="true">💸</span>{g(data.me.gender, 'אני חייב כסף', 'אני חייבת כסף', 'אני חייב/ת כסף')}
         </button>
         <button className="bigbtn get" type="button" onClick={() => openEntryFlow({ kind: 'debt', to: me })}>
           <span aria-hidden="true">🤝</span>חייבים לי כסף

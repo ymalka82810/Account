@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { call } from '../../lib/api.js';
-import { state } from '../../state/state.js';
+import { state, PARENT_AVATARS } from '../../state/state.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { dropSession } from '../../state/auth.js';
 import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../../lib/push.js';
@@ -9,6 +9,7 @@ import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import { ChangePinSheet, ChangePinEmailSheet, EmailSheet } from './AccountSheets.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
 import AvatarPicker from '../shared/AvatarPicker.jsx';
+import { g } from '../../lib/gender.js';
 
 export async function logout() {
   await releasePushDevice();
@@ -31,14 +32,23 @@ export function AccountSheet() {
     catch (e) { toast(errMsg(e)); }
   }
 
+  async function setGender(gender) {
+    try { await call('people:setGender', { token, id: me.id, gender: gender || undefined }); }
+    catch (e) { toast(errMsg(e)); }
+  }
+
   return (
     <div className="form">
-      {me.role === 'teen' && (
+      <label className="field"><span>צורת פנייה</span>
+        <select value={me.gender || ''} onChange={(e) => setGender(e.target.value)}>
+          <option value="">ללא ציון</option>
+          <option value="male">זכר</option>
+          <option value="female">נקבה</option>
+        </select></label>
+
+      {(me.role === 'teen' || me.role === 'parent') && (
         <div className="field"><span>דמות</span>
-          <AvatarPicker value={me.avatar} onChange={setAvatar} />
-          {me.avatar && (
-            <button className="ghost" type="button" onClick={() => setAvatar(undefined)}>🗑️ מחיקת הדמות</button>
-          )}
+          <AvatarPicker value={me.avatar} onChange={setAvatar} options={me.role === 'parent' ? PARENT_AVATARS : undefined} />
         </div>
       )}
 
@@ -62,11 +72,11 @@ export function AccountSheet() {
 
       {me.role === 'child' && (
         me.teenRequested
-          ? <p className="hint">הבקשה להפוך לנער/ה נשלחה, מחכה לאישור ההורים.</p>
+          ? <p className="hint">הבקשה להפוך ל{g(me.gender, 'נער', 'נערה', 'נער/ה')} נשלחה, מחכה לאישור ההורים.</p>
           : <AsyncButton className="ghost" onClick={async () => {
             try { await call('people:requestTeen', { token }); toast('הבקשה נשלחה להורים'); sheet.close(); }
             catch (e) { toast(errMsg(e)); }
-          }}>🧑 אני רוצה להפוך לנער/ה</AsyncButton>
+          }}>🧑 אני רוצה להפוך ל{g(me.gender, 'נער', 'נערה', 'נער/ה')}</AsyncButton>
       )}
 
       <AsyncButton className="ghost" onClick={async () => { sheet.close(); await logout(); }}>יציאה</AsyncButton>

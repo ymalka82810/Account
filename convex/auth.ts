@@ -34,7 +34,7 @@ export async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: stri
 }
 
 const publicPerson = (p: Doc<"people">) => ({
-  id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), hasPin: !!p.pinHash,
+  id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash,
 });
 
 // הערה: שגיאות של קוד משפחה מוחזרות כתוצאה (ולא נזרקות) כדי שספירת הניסיונות תישמר.
@@ -73,8 +73,11 @@ export const enter = mutation({
 
 // הקמת משפחה חדשה. מי שמקים הוא ההורה הראשון.
 export const createFamily = mutation({
-  args: { familyName: v.string(), name: v.string(), pin: v.string() },
-  handler: async (ctx, { familyName, name, pin }) => {
+  args: {
+    familyName: v.string(), name: v.string(), pin: v.string(),
+    avatar: v.optional(v.string()), gender: v.optional(v.union(v.literal("male"), v.literal("female"))),
+  },
+  handler: async (ctx, { familyName, name, pin, avatar, gender }) => {
     if (await isThrottled(ctx, "create-family", CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS)) {
       throw new ConvexError("יותר מדי משפחות חדשות כרגע. נסו שוב בעוד כמה דקות");
     }
@@ -82,8 +85,7 @@ export const createFamily = mutation({
     const family = cleanFamilyName(familyName);
     const personName = cleanName(name);
     const familyId = await createFamilyDoc(ctx, family);
-    // הורים אין להם אימוג'י ליד השם.
-    const id = await ctx.db.insert("people", { familyId, name: personName, role: "parent" });
+    const id = await ctx.db.insert("people", { familyId, name: personName, role: "parent", avatar: avatar?.slice(0, 8), gender });
     await setPin(ctx, id, pin);
     await noteHit(ctx, "create-family", CREATE_FAMILY_WINDOW_MS);
     return { token: await openSession(ctx, id) };
@@ -92,8 +94,12 @@ export const createFamily = mutation({
 
 // הצטרפות למשפחה קיימת עם קוד. התפקיד נקבע לפי הקוד: קוד הורים או קוד ילדים.
 export const join = mutation({
-  args: { code: v.string(), name: v.string(), avatar: v.optional(v.string()), pin: v.string(), device: v.optional(v.string()) },
-  handler: async (ctx, { code, name, avatar, pin, device }) => {
+  args: {
+    code: v.string(), name: v.string(), avatar: v.optional(v.string()),
+    gender: v.optional(v.union(v.literal("male"), v.literal("female"))),
+    pin: v.string(), device: v.optional(v.string()),
+  },
+  handler: async (ctx, { code, name, avatar, gender, pin, device }) => {
     if (await codeThrottled(ctx, device)) return { ok: false as const, reason: "throttled" as const };
     const found = await findFamilyByCode(ctx, code);
     if (!found) return await failCode(ctx, device);
@@ -103,9 +109,7 @@ export const join = mutation({
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
     if (members.length >= MAX_FAMILY_SIZE) throw new ConvexError("המשפחה מלאה");
     if (members.some((p) => p.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה. בחרו אותו ברשימה, או שנו את השם");
-    // הורים אין להם אימוג'י ליד השם.
-    const personAvatar = found.role === "parent" ? undefined : avatar?.slice(0, 8);
-    const id = await ctx.db.insert("people", { familyId, name: clean, role: found.role, avatar: personAvatar });
+    const id = await ctx.db.insert("people", { familyId, name: clean, role: found.role, avatar: avatar?.slice(0, 8), gender });
     await setPin(ctx, id, pin);
     return { ok: true as const, token: await openSession(ctx, id) };
   },

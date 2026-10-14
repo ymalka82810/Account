@@ -9,6 +9,7 @@ export const CODE_KEY = 'kupa-code';
 export const DEVICE_KEY = 'kupa-device';
 export const LAST_PERSON_KEY = 'kupa-last-person';
 export const AVATARS = ['🦊', '🐼', '🦁', '🐯', '🐸', '🐵', '🦄', '🐙', '🐨', '🐶', '🐱', '🚀', '😎', '🎧', '🛹', '⚡', '🔥', '🎮'];
+export const PARENT_AVATARS = ['👨', '👩'];
 export const FRIEND_MAX = 50000; // באגורות, כמו בשרת
 export const WEEKDAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
 export const THEME_COLOR = { parent: '#1f2933', child: '#fbf3f7', teen: '#2a1b6e' };

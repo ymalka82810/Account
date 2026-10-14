@@ -2,6 +2,8 @@
 // מקבלת את ה-state כפרמטר במקום לקרוא למודול גלובלי. כך React יכול להריץ
 // מחדש אוטומטית בכל שינוי ב-data (ללא קריאות renderX ידניות).
 
+import { g } from './gender.js';
+
 export const isPending = (e) => e.status === 'pending';
 
 export function pairOwes(a, b, entries) {
@@ -54,7 +56,8 @@ export const debtLabel = (d) => (d.note || 'חוב') + ' • ' + fmtDate(d.date)
 
 export const money = (agorot) => (agorot / 100).toLocaleString('he-IL', { style: 'currency', currency: 'ILS' });
 
-export const roleLabel = (r) => (r === 'parent' ? 'הורה' : r === 'teen' ? 'נער/ה' : 'ילד/ה');
+export const roleLabel = (r, gender) =>
+  r === 'parent' ? 'הורה' : r === 'teen' ? g(gender, 'נער', 'נערה', 'נער/ה') : g(gender, 'ילד', 'ילדה', 'ילד/ה');
 
 // כמה כל אחד חייב / מגיע לו, לפי כל החובות הפתוחים (גרסת React של openDebts).
 export function openDebts(people, entries) {
@@ -73,8 +76,12 @@ export function openDebts(people, entries) {
 // ובמצב חברים גם fdata.people).
 export function namesFor(me, lookup) {
   const nameOf = (id) => lookup(id)?.name ?? 'לא ידוע';
+  const genderOf = (id) => lookup(id)?.gender;
   return {
     nameOf,
+    genderOf,
+    // בוחר צורת פנייה (זכר/נקבה/כפולה) לפי המגדר של מי שמזוהה/ת ב-id.
+    gw: (id, male, female, neutral) => g(genderOf(id), male, female, neutral),
     subjectWord: (id) => (id === me ? 'אני' : nameOf(id)),
     toWord: (id) => (id === me ? 'לי' : 'ל' + nameOf(id)),
   };
