@@ -331,7 +331,7 @@ button.small { min-height: 40px; }
   box-shadow: 0 -8px 30px rgba(0, 0, 0, .3);
 }
 @media (min-width: 640px) { .sheet-wrap { align-items: center; } .sheet { border-radius: 24px; } }
-.sheet-head { display: flex; align-items: center; justify-content: space-between; }
+.sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .sheet-head h2 { margin: 0; }
 .flow { display: grid; gap: 12px; }
 .flow-q { font-size: 1.15rem; font-weight: 700; margin: 8px 0 0; text-align: center; }
