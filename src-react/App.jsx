@@ -249,7 +249,7 @@ function GearLaunch({ fromRect, onSinking, onDone }) {
 
 // הניצוצות בשכבה נפרדת מהגלגל (לא מסתובבים ולא נעלמים איתו), וממשיכים לעוף
 // ולדהות גם אחרי שהגלגל נעלם ואחרי שהאריח נפתח, עד שהם יוצאים מהמסך.
-const SPARKS_MS = 1100;
+const SPARKS_MS = 2400;
 function GearSparks({ onEnd }) {
   const onEndRef = useRef(onEnd);
   onEndRef.current = onEnd;

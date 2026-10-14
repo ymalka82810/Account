@@ -520,12 +520,12 @@ button.small { min-height: 40px; }
   background: linear-gradient(#fffbe6, #ffd54a 45%, #ff8a00);
   box-shadow: 0 0 6px 2px rgba(255, 200, 60, .9), 0 0 14px 4px rgba(255, 140, 0, .55);
   opacity: 0; transform: rotate(var(--ang)) translateY(-60px) scaleY(.5);
-  animation: spark-burst 1.1s cubic-bezier(.15, .6, .35, 1) forwards;
+  animation: spark-burst 2.4s cubic-bezier(.25, .45, .5, .95) forwards;
 }
 .gear-sparks .spark--short { width: 5px; height: 18px; left: -2.5px; top: -9px; }
 @keyframes spark-burst {
   0%   { opacity: 1; transform: rotate(var(--ang)) translateY(-60px)  scaleY(.5); }
-  35%  { opacity: 1; }
+  55%  { opacity: 1; }
   100% { opacity: 0; transform: rotate(var(--ang)) translateY(-110vmax) scaleY(1.2); }
 }
 
