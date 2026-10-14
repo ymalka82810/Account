@@ -58,6 +58,6 @@ npx convex dev        # מתחבר לחשבון Convex, יוצר פרויקט ו
 מומלץ להוסיף ל-git גם את התיקייה `convex/_generated` אחרי ההרצה הראשונה.
 
 ## מבנה
-- `index.html`, `style.css`, `app.js` - הממשק (בלי build)
+- `index.html`, `style.css`, `src/` - הממשק (בלי build; `src/app.js` הוא נקודת הכניסה, מפוצל ל-ES modules תחת `src/`)
 - `vendor/convex-browser.bundle.js` - לקוח Convex לדפדפן (מ-`convex@1.45.0`)
 - `convex/` - סכמה, כניסה והצטרפות (`auth.ts`), נתונים (`data.ts`), רשומות (`entries.ts`), אנשים (`people.ts`), משפחה (`family.ts`), ייבוא (`admin.ts`), כלים משותפים (`lib.ts`)

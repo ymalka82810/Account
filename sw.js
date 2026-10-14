@@ -1,5 +1,14 @@
-const CACHE = 'kupa-v12';
-const FILES = ['./', 'index.html', 'terms.html', 'privacy.html', 'style.css', 'app.js', 'config.js', 'vendor/convex-browser.bundle.js', 'manifest.webmanifest', 'icon.svg'];
+const CACHE = 'kupa-v13';
+const FILES = [
+  './', 'index.html', 'terms.html', 'privacy.html', 'style.css', 'config.js',
+  'vendor/convex-browser.bundle.js', 'manifest.webmanifest', 'icon.svg',
+  'src/app.js', 'src/state.js', 'src/helpers.js', 'src/api.js', 'src/computations.js',
+  'src/sheet.js', 'src/tabs.js', 'src/entryFlow.js', 'src/entriesList.js', 'src/push.js',
+  'src/session.js',
+  'src/screens/auth.js', 'src/screens/emailAuth.js', 'src/screens/home.js',
+  'src/screens/pending.js', 'src/screens/recurring.js', 'src/screens/legacy.js',
+  'src/screens/codes.js', 'src/screens/family.js', 'src/screens/friends.js',
+];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)));
   self.skipWaiting();
