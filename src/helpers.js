@@ -1,63 +1,8 @@
-// ---------- עזרי עיצוב ו-DOM כלליים ----------
-
-export const fmt = new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS' });
-export const money = (agorot) => fmt.format(agorot / 100);
-export const $ = (id) => document.getElementById(id);
-
-export function el(tag, props = {}, ...kids) {
-  const n = document.createElement(tag);
-  for (const [k, v] of Object.entries(props)) {
-    if (k === 'class') n.className = v;
-    else if (k === 'text') n.textContent = v;
-    else if (k === 'onclick' && tag === 'button' && v.constructor.name === 'AsyncFunction') {
-      // כפתור עם פעולה אסינכרונית: נועלים ומראים "שולח…" עד שהשרת עונה
-      n.addEventListener('click', async (ev) => {
-        if (n.disabled) return;
-        const label = n.textContent;
-        n.disabled = true;
-        n.classList.add('busy');
-        n.textContent = '⏳ רגע…';
-        n.setAttribute('aria-busy', 'true');
-        try { await v(ev); }
-        finally {
-          n.disabled = false;
-          n.classList.remove('busy');
-          n.removeAttribute('aria-busy');
-          if (n.textContent === '⏳ רגע…') n.textContent = label;
-        }
-      });
-    }
-    else if (k.startsWith('on')) n.addEventListener(k.slice(2), v);
-    else if (typeof v === 'boolean') n[k] = v;
-    else n.setAttribute(k, v);
-  }
-  kids.flat().forEach((c) => c != null && n.append(c));
-  return n;
-}
-
-// נועל כפתור קיים (submit/click) בזמן פעולה אסינכרונית ומראה "⏳ רגע…",
-// כדי שלא יהיה אפשר ללחוץ כמה פעמים בזמן ההמתנה לשרת.
-export function withBusy(btn, fn) {
-  return async (ev) => {
-    if (btn.disabled) return;
-    const label = btn.textContent;
-    btn.disabled = true;
-    btn.classList.add('busy');
-    btn.textContent = '⏳ רגע…';
-    btn.setAttribute('aria-busy', 'true');
-    try { await fn(ev); }
-    finally {
-      btn.disabled = false;
-      btn.classList.remove('busy');
-      btn.removeAttribute('aria-busy');
-      if (btn.textContent === '⏳ רגע…') btn.textContent = label;
-    }
-  };
-}
+// ---------- עזרים כלליים ----------
 
 let toastTimer;
 export function toast(msg) {
-  const t = $('toast');
+  const t = document.getElementById('toast');
   t.textContent = msg;
   t.hidden = false;
   clearTimeout(toastTimer);
@@ -89,18 +34,4 @@ export function fmtWait(sec) {
 export function prettyCode(code) {
   const c = String(code).toUpperCase().replace(/[^A-Z0-9]/g, '');
   return c.length > 5 ? c.slice(0, 5) + '-' + c.slice(5) : c;
-}
-
-// ---------- בורר דמות ----------
-export function avatarPicker(container, AVATARS) {
-  let chosen = AVATARS[Math.floor(Math.random() * AVATARS.length)];
-  const draw = () => {
-    container.replaceChildren(...AVATARS.map((a) => el('button', {
-      type: 'button', class: 'av' + (a === chosen ? ' on' : ''), text: a,
-      'aria-label': 'דמות ' + a, 'aria-pressed': String(a === chosen),
-      onclick: () => { chosen = a; draw(); },
-    })));
-  };
-  draw();
-  return { get: () => chosen };
 }

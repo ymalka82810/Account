@@ -1,13 +1,14 @@
-const CACHE = 'kupa-v13';
+const CACHE = 'kupa-v15';
+// מאז שהאתר עובר דרך Vite build, קובץ ה-JS הראשי יוצא עם hash בשם
+// (למשל assets/index-ABC123.js) שלא ידוע מראש. לכן לא מפרטים כאן כל
+// קובץ src/*.js בנפרד (כמו קודם) - caches.addAll() נכשל כולו אם קובץ
+// אחד מהרשימה לא נמצא, וזה היה קורה מיד עם כל build חדש.
+// הקבצים היציבים (שלא משתנה שמם) עדיין מוטענים מראש כאן; שאר הקבצים
+// (ה-JS/CSS המבונדלים) נשמרים ל-cache אוטומטית ע"י ה-fetch handler
+// למטה, בפעם הראשונה שהם נטענים.
 const FILES = [
   './', 'index.html', 'terms.html', 'privacy.html', 'style.css', 'config.js',
-  'vendor/convex-browser.bundle.js', 'manifest.webmanifest', 'icon.svg',
-  'src/app.js', 'src/state.js', 'src/helpers.js', 'src/api.js', 'src/computations.js',
-  'src/sheet.js', 'src/tabs.js', 'src/entryFlow.js', 'src/entriesList.js', 'src/push.js',
-  'src/session.js',
-  'src/screens/auth.js', 'src/screens/emailAuth.js', 'src/screens/home.js',
-  'src/screens/pending.js', 'src/screens/recurring.js', 'src/screens/legacy.js',
-  'src/screens/codes.js', 'src/screens/family.js', 'src/screens/friends.js',
+  'manifest.webmanifest', 'icon.svg',
 ];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)));
