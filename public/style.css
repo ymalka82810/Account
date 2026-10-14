@@ -301,8 +301,8 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
 .hint { color: var(--ink-soft); margin: 4px 0 0; }
 .big-emoji { font-size: 3.4rem; line-height: 1.1; }
 
-/* אנימציית מטבע במסך הטעינה: המטבע מסתובב במקום סיבוב אחד (כמו גלגל, לכיוון
-   אחד בלבד), נעצר ישר ואז שוקע לתוך חריץ קבוע (שלא זז) בראש קופת החיסכון.
+/* אנימציית מטבע במסך הטעינה: המטבע מסתובב מצד לצד סיבוב שלם אחד לכיוון אחד
+   במהירות קבועה, נעצר עם הפנים קדימה ואז שוקע לתוך חריץ קבוע (שלא זז) בראש קופת החיסכון.
    "השמיים" שמעל החריץ חתוכים בדיוק בשפה הקדמית (התחתונה) של החריץ
    (coin-drop__mask), והמטבע מצויר מעל החלל הכהה של החריץ - כך החלק התחתון
    שלו נבלע בחריץ ונעלם בהדרגה עד שכולו בפנים, כמו מטבע אמיתי.
@@ -329,21 +329,24 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
   content: ''; position: absolute; left: 50%; top: 6px; width: 70px; height: 7px; transform: translateX(-50%);
   border-radius: 4px; background: var(--ink); box-shadow: inset 0 2px 3px rgba(0, 0, 0, .6);
 }
-/* כל keyframe מציין את כל רשימת ה-transform (כולל rotate) - אחרת הדפדפן
-   משלים identity ומייצר סיבוב לא מכוון בין הפריימים. הסיבוב הוא מקטע אחד
-   0→360 כדי שלא ייעצר באמצע וייראה כאילו התהפך כיוון */
+/* כל keyframe מציין את כל רשימת ה-transform (כולל rotateY) - אחרת הדפדפן
+   משלים identity ומייצר סיבוב לא מכוון בין הפריימים. ההיפוך מצד לצד רץ
+   במהירות קבועה (linear) בלי עצירה באמצע - עצירה ב-180° גורמת לו להיראות
+   כמו נדנוד הלוך ושוב. perspective() בתוך ה-transform נותן עומק שמבהיר את
+   כיוון הסיבוב */
 @keyframes coin-drop-cycle {
-  0%    { transform: translateY(0)      rotate(0deg);   animation-timing-function: ease-in-out; }
-  28%   { transform: translateY(0)      rotate(360deg); animation-timing-function: ease-out; }
-  40%   { transform: translateY(-6px)   rotate(360deg); animation-timing-function: cubic-bezier(.55, 0, .85, .45); }
-  64%   { transform: translateY(96px)   rotate(360deg); }
-  72%   { transform: translateY(96px)   rotate(360deg); }
-  72.1% { transform: translateY(-200px) rotate(0deg);   animation-timing-function: ease-in; }
-  86%   { transform: translateY(0)      rotate(0deg);   animation-timing-function: ease-out; }
-  91%   { transform: translateY(-14px)  rotate(0deg);   animation-timing-function: ease-in; }
-  95%   { transform: translateY(0)      rotate(0deg);   animation-timing-function: ease-out; }
-  98%   { transform: translateY(-5px)   rotate(0deg);   animation-timing-function: ease-in; }
-  100%  { transform: translateY(0)      rotate(0deg); }
+  0%    { transform: perspective(400px) translateY(0)      rotateY(0deg);   animation-timing-function: linear; }
+  24%   { transform: perspective(400px) translateY(0)      rotateY(325deg); animation-timing-function: ease-out; }
+  28%   { transform: perspective(400px) translateY(0)      rotateY(360deg); animation-timing-function: ease-out; }
+  40%   { transform: perspective(400px) translateY(-6px)   rotateY(360deg); animation-timing-function: cubic-bezier(.55, 0, .85, .45); }
+  64%   { transform: perspective(400px) translateY(96px)   rotateY(360deg); }
+  72%   { transform: perspective(400px) translateY(96px)   rotateY(360deg); }
+  72.1% { transform: perspective(400px) translateY(-200px) rotateY(0deg);   animation-timing-function: ease-in; }
+  86%   { transform: perspective(400px) translateY(0)      rotateY(0deg);   animation-timing-function: ease-out; }
+  91%   { transform: perspective(400px) translateY(-14px)  rotateY(0deg);   animation-timing-function: ease-in; }
+  95%   { transform: perspective(400px) translateY(0)      rotateY(0deg);   animation-timing-function: ease-out; }
+  98%   { transform: perspective(400px) translateY(-5px)   rotateY(0deg);   animation-timing-function: ease-in; }
+  100%  { transform: perspective(400px) translateY(0)      rotateY(0deg); }
 }
 @media (prefers-reduced-motion: reduce) {
   .coin-drop__coin { animation: none; }
