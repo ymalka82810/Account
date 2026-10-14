@@ -3,12 +3,9 @@ import { v, ConvexError } from "convex/values";
 import { Doc, Id } from "./_generated/dataModel";
 import {
   CODE_FAIL_LIMIT, CODE_FAIL_WINDOW_MS, CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS, MAX_FAMILY_SIZE, SESSION_MS,
-  adoptLegacy, cleanFamilyName, cleanName, createFamilyDoc, findFamilyByCode, getSessionPerson, hashPin, hashToken,
-  isThrottled, legacyPeople, noteHit, randomHex, requireSameFamily, requireParent, validPin,
+  adoptLegacy, cleanFamilyName, cleanName, createFamilyDoc, deviceKey, findFamilyByCode, getSessionPerson, hashPin,
+  hashToken, isThrottled, legacyPeople, noteHit, randomHex, registerPinFail, requireSameFamily, requireParent, validPin,
 } from "./lib";
-
-const MAX_FAILS = 5;
-const LOCK_MS = 60 * 1000;
 
 async function openSession(ctx: MutationCtx, personId: Id<"people">): Promise<string> {
   const token = randomHex(32);
@@ -27,6 +24,9 @@ async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: string) {
     pinHash: await hashPin(pin, pinSalt),
     failedAttempts: 0,
     lockedUntil: undefined,
+    lockLevel: 0,
+    lockCount: 0,
+    lastLockAt: undefined,
   });
 }
 
@@ -35,11 +35,13 @@ const publicPerson = (p: Doc<"people">) => ({
 });
 
 // הערה: שגיאות של קוד משפחה מוחזרות כתוצאה (ולא נזרקות) כדי שספירת הניסיונות תישמר.
-const failCode = async (ctx: MutationCtx) => {
-  await noteHit(ctx, "code-fail", CODE_FAIL_WINDOW_MS);
+// הספירה היא לפי מכשיר (device), לא גלובלית, כדי שמנחש אחד לא ינעל את כולם.
+const failCode = async (ctx: MutationCtx, device: string | undefined) => {
+  await noteHit(ctx, deviceKey(device), CODE_FAIL_WINDOW_MS);
   return { ok: false as const, reason: "code" as const };
 };
-const codeThrottled = (ctx: MutationCtx) => isThrottled(ctx, "code-fail", CODE_FAIL_LIMIT, CODE_FAIL_WINDOW_MS);
+const codeThrottled = (ctx: MutationCtx, device: string | undefined) =>
+  isThrottled(ctx, deviceKey(device), CODE_FAIL_LIMIT, CODE_FAIL_WINDOW_MS);
 
 // הורים מהגרסה הישנה (משפחה אחת בלי קוד). נעלם מעצמו אחרי שהורה נכנס פעם אחת.
 export const legacyRoster = query({
@@ -49,11 +51,11 @@ export const legacyRoster = query({
 
 // בדיקת קוד משפחה ורשימת בני המשפחה למסך הכניסה.
 export const enter = mutation({
-  args: { code: v.string() },
-  handler: async (ctx, { code }) => {
-    if (await codeThrottled(ctx)) return { ok: false as const, reason: "throttled" as const };
+  args: { code: v.string(), device: v.optional(v.string()) },
+  handler: async (ctx, { code, device }) => {
+    if (await codeThrottled(ctx, device)) return { ok: false as const, reason: "throttled" as const };
     const found = await findFamilyByCode(ctx, code);
-    if (!found) return await failCode(ctx);
+    if (!found) return await failCode(ctx, device);
     const people = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", found.family._id)).collect();
     return {
       ok: true as const,
@@ -86,11 +88,11 @@ export const createFamily = mutation({
 
 // הצטרפות למשפחה קיימת עם קוד. התפקיד נקבע לפי הקוד: קוד הורים או קוד ילדים.
 export const join = mutation({
-  args: { code: v.string(), name: v.string(), avatar: v.string(), pin: v.string() },
-  handler: async (ctx, { code, name, avatar, pin }) => {
-    if (await codeThrottled(ctx)) return { ok: false as const, reason: "throttled" as const };
+  args: { code: v.string(), name: v.string(), avatar: v.string(), pin: v.string(), device: v.optional(v.string()) },
+  handler: async (ctx, { code, name, avatar, pin, device }) => {
+    if (await codeThrottled(ctx, device)) return { ok: false as const, reason: "throttled" as const };
     const found = await findFamilyByCode(ctx, code);
-    if (!found) return await failCode(ctx);
+    if (!found) return await failCode(ctx, device);
     if (!validPin(pin)) throw new ConvexError("הקוד הסודי צריך להיות 4 ספרות");
     const clean = cleanName(name);
     const familyId = found.family._id;
@@ -104,14 +106,14 @@ export const join = mutation({
 });
 
 export const login = mutation({
-  args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string() },
-  handler: async (ctx, { code, personId, pin }) => {
+  args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string(), device: v.optional(v.string()) },
+  handler: async (ctx, { code, personId, pin, device }) => {
     const p = await ctx.db.get(personId);
     if (!p) return { ok: false as const, reason: "code" as const };
     if (p.familyId) {
-      if (await codeThrottled(ctx)) return { ok: false as const, reason: "throttled" as const };
+      if (await codeThrottled(ctx, device)) return { ok: false as const, reason: "throttled" as const };
       const found = code ? await findFamilyByCode(ctx, code) : null;
-      if (!found || found.family._id !== p.familyId) return await failCode(ctx);
+      if (!found || found.family._id !== p.familyId) return await failCode(ctx, device);
     } else if (p.role !== "parent") {
       // נתונים ישנים: רק הורה פותח את המעבר למשפחה. ילדים מקבלים קוד מההורים.
       return { ok: false as const, reason: "legacy" as const };
@@ -122,15 +124,12 @@ export const login = mutation({
       return { ok: false as const, reason: "locked" as const, waitSeconds: Math.ceil((p.lockedUntil - now) / 1000) };
     }
     if ((await hashPin(pin, p.pinSalt)) !== p.pinHash) {
-      const fails = (p.failedAttempts ?? 0) + 1;
-      if (fails >= MAX_FAILS) {
-        await ctx.db.patch(personId, { failedAttempts: 0, lockedUntil: now + LOCK_MS });
-        return { ok: false as const, reason: "locked" as const, waitSeconds: LOCK_MS / 1000 };
-      }
-      await ctx.db.patch(personId, { failedAttempts: fails });
-      return { ok: false as const, reason: "wrong" as const, left: MAX_FAILS - fails };
+      const r = await registerPinFail(ctx, p);
+      if (r.locked) return { ok: false as const, reason: "locked" as const, waitSeconds: r.waitSeconds };
+      return { ok: false as const, reason: "wrong" as const, left: r.left };
     }
-    await ctx.db.patch(personId, { failedAttempts: 0, lockedUntil: undefined });
+    // כניסה מוצלחת מאפסת את הרמה. lockCount/lastLockAt נשארים כדי שההורה יראה התראה.
+    await ctx.db.patch(personId, { failedAttempts: 0, lockedUntil: undefined, lockLevel: 0 });
     if (!p.familyId) await adoptLegacy(ctx);
     return { ok: true as const, token: await openSession(ctx, personId) };
   },
@@ -138,16 +137,16 @@ export const login = mutation({
 
 // כניסה ראשונה של מי שהורה עוד לא קבע לו/ה קוד: בוחרים קוד לעצמם.
 export const claimProfile = mutation({
-  args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string() },
-  handler: async (ctx, { code, personId, pin }) => {
+  args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string(), device: v.optional(v.string()) },
+  handler: async (ctx, { code, personId, pin, device }) => {
     const p = await ctx.db.get(personId);
     if (!p) throw new ConvexError("אדם לא קיים");
     if (p.pinHash) throw new ConvexError("כבר יש קוד לפרופיל הזה");
     if (!validPin(pin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
     if (p.familyId) {
-      if (await codeThrottled(ctx)) return { ok: false as const, reason: "throttled" as const };
+      if (await codeThrottled(ctx, device)) return { ok: false as const, reason: "throttled" as const };
       const found = code ? await findFamilyByCode(ctx, code) : null;
-      if (!found || found.family._id !== p.familyId) return await failCode(ctx);
+      if (!found || found.family._id !== p.familyId) return await failCode(ctx, device);
       // פרופיל הורה שהוקם בלי קוד נתפס רק עם קוד הורים, כדי שילד/ה לא יהפכו להורים.
       if (p.role === "parent" && found.role !== "parent") {
         throw new ConvexError("כדי להיכנס כהורה צריך את קוד ההורים");
@@ -192,10 +191,7 @@ export const changeMyPin = mutation({
     const now = Date.now();
     if (p.lockedUntil && p.lockedUntil > now) return { ok: false as const, reason: "locked" as const };
     if ((await hashPin(oldPin, p.pinSalt)) !== p.pinHash) {
-      const fails = (p.failedAttempts ?? 0) + 1;
-      await ctx.db.patch(p._id, fails >= MAX_FAILS
-        ? { failedAttempts: 0, lockedUntil: now + LOCK_MS }
-        : { failedAttempts: fails });
+      await registerPinFail(ctx, p);
       return { ok: false as const, reason: "wrong" as const };
     }
     await setPin(ctx, p._id, newPin);
@@ -216,7 +212,7 @@ export const resetPin = mutation({
       if (!validPin(pin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
       await setPin(ctx, personId, pin);
     } else {
-      await ctx.db.patch(personId, { pinHash: undefined, pinSalt: undefined, failedAttempts: 0, lockedUntil: undefined });
+      await ctx.db.patch(personId, { pinHash: undefined, pinSalt: undefined, failedAttempts: 0, lockedUntil: undefined, lockLevel: 0, lockCount: 0, lastLockAt: undefined });
     }
   },
 });

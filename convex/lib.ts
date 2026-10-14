@@ -6,9 +6,11 @@ export const SESSION_MS = 90 * 24 * 60 * 60 * 1000;
 export const MAX_AMOUNT = 1_000_000; // באגורות = 10,000 ש"ח
 export const MAX_FAMILY_SIZE = 50;
 
-// הגבלות קצב (גסות, לכל השרת). אפשר לכוון לפי השימוש.
-export const CODE_FAIL_LIMIT = 300; // ניחושי קוד שגויים
-export const CODE_FAIL_WINDOW_MS = 60 * 1000;
+// הגבלות קצב. ניחושי קוד שגויים נספרים לפי מכשיר (לא לכל השרת), כך שמי שמנחש
+// לא יכול לנעול את הכניסה לכל המשפחות. קוד משפחה הוא 2^50 אפשרויות, אז הגבלה
+// נדיבה מספיקה. את הקוד הסודי של 4 ספרות מגינה הנעילה המדורגת לפי אדם (למטה).
+export const CODE_FAIL_LIMIT = 30; // ניחושי קוד משפחה שגויים למכשיר
+export const CODE_FAIL_WINDOW_MS = 10 * 60 * 1000;
 export const CREATE_FAMILY_LIMIT = 120; // משפחות חדשות
 export const CREATE_FAMILY_WINDOW_MS = 10 * 60 * 1000;
 
@@ -36,6 +38,47 @@ export async function hashToken(token: string): Promise<string> {
 }
 
 export const validPin = (pin: string) => /^\d{4}$/.test(pin);
+
+// מזהה מכשיר אקראי שהאפליקציה יוצרת. לא מזהה אישי, רק מפתח להגבלת קצב.
+export function deviceKey(device: string | undefined): string {
+  const d = (device ?? "").replace(/[^A-Za-z0-9]/g, "").slice(0, 40);
+  return "code-fail:" + (d || "anon");
+}
+
+// ---------- נעילה מדורגת של קוד סודי ----------
+export const MAX_FAILS = 5;
+export const LOCK_STEPS_MS = [
+  60 * 1000, // דקה
+  5 * 60 * 1000, // 5 דקות
+  60 * 60 * 1000, // שעה
+  6 * 60 * 60 * 1000, // 6 שעות
+  24 * 60 * 60 * 1000, // יממה (המקסימום)
+];
+export const ALERT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+
+export type PinFailResult =
+  | { locked: false; left: number }
+  | { locked: true; waitSeconds: number };
+
+// רושם ניסיון שגוי. אחרי MAX_FAILS כישלונות נועל, ובכל נעילה הזמן ארוך יותר.
+export async function registerPinFail(ctx: MutationCtx, p: Doc<"people">): Promise<PinFailResult> {
+  const fails = (p.failedAttempts ?? 0) + 1;
+  if (fails < MAX_FAILS) {
+    await ctx.db.patch(p._id, { failedAttempts: fails });
+    return { locked: false, left: MAX_FAILS - fails };
+  }
+  const level = p.lockLevel ?? 0;
+  const lockMs = LOCK_STEPS_MS[Math.min(level, LOCK_STEPS_MS.length - 1)];
+  const now = Date.now();
+  await ctx.db.patch(p._id, {
+    failedAttempts: 0,
+    lockedUntil: now + lockMs,
+    lockLevel: level + 1,
+    lockCount: (p.lockCount ?? 0) + 1,
+    lastLockAt: now,
+  });
+  return { locked: true, waitSeconds: Math.ceil(lockMs / 1000) };
+}
 
 export function cleanName(name: string): string {
   const clean = name.trim().replace(/\s+/g, " ");

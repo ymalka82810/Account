@@ -24,6 +24,11 @@ export default defineSchema({
     pinSalt: v.optional(v.string()),
     failedAttempts: v.optional(v.number()),
     lockedUntil: v.optional(v.number()),
+    // נעילה מדורגת: רמה עולה בכל נעילה (דקה, 5 דקות, שעה...). מתאפסת בכניסה מוצלחת.
+    lockLevel: v.optional(v.number()),
+    // להתראה להורה: כמה נעילות היו ומתי הייתה האחרונה. מתאפס כשקובעים קוד חדש.
+    lockCount: v.optional(v.number()),
+    lastLockAt: v.optional(v.number()),
   }).index("by_family", ["familyId"]),
 
   sessions: defineTable({
@@ -32,7 +37,8 @@ export default defineSchema({
     expiresAt: v.number(),
   })
     .index("by_token", ["tokenHash"])
-    .index("by_person", ["personId"]),
+    .index("by_person", ["personId"])
+    .index("by_expires", ["expiresAt"]),
 
   entries: defineTable({
     familyId: v.optional(v.id("families")),
@@ -54,5 +60,7 @@ export default defineSchema({
     key: v.string(),
     windowStart: v.number(),
     count: v.number(),
-  }).index("by_key", ["key"]),
+  })
+    .index("by_key", ["key"])
+    .index("by_window", ["windowStart"]),
 });

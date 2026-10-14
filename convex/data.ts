@@ -1,6 +1,6 @@
 import { query } from "./_generated/server";
 import { v } from "convex/values";
-import { getSessionPerson } from "./lib";
+import { ALERT_WINDOW_MS, getSessionPerson } from "./lib";
 
 // כל נתוני המשפחה למי שמחובר/ת. בלי כניסה תקינה מחזיר null.
 // אם החשבון הוא מהגרסה הישנה (בלי משפחה), מחזיר legacy כדי שהאפליקציה תעביר אותו.
@@ -26,6 +26,10 @@ export const get = query({
         : { name: family.name },
       people: people.map((p) => ({
         id: p._id, name: p.name, role: p.role, avatar: p.avatar ?? "🙂", hasPin: !!p.pinHash,
+        // התראה להורים בלבד: הקוד של האדם ננעל בגלל ניסיונות כושלים בשבוע האחרון.
+        lockAlert: me.role === "parent" && !!p.lastLockAt && Date.now() - p.lastLockAt < ALERT_WINDOW_MS
+          ? { count: p.lockCount ?? 1, at: p.lastLockAt }
+          : null,
       })),
       entries: entries.map((e) => ({
         id: e._id, kind: e.kind, from: e.from, to: e.to, amount: e.amount, note: e.note,

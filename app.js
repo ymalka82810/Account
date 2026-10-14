@@ -5,6 +5,7 @@
   const LEGACY_KEY = 'family-account-v1';
   const LEGACY_DONE_KEY = 'kupa-legacy-imported';
   const CODE_KEY = 'kupa-code';
+  const DEVICE_KEY = 'kupa-device';
   const UNDO_MS = 10 * 60 * 1000;
   const AVATARS = ['🦊', '🐼', '🦁', '🐯', '🐸', '🐵', '🦄', '🐙', '🐨', '🐶', '🐱', '🚀'];
 
@@ -61,7 +62,29 @@
     return 'משהו השתבש. נסו שוב.';
   }
 
-  const call = (name, args) => client.mutation(name, args);
+  // מזהה מכשיר אקראי, רק להגבלת קצב של ניחושי קוד (לא מזהה אישי).
+  function deviceId() {
+    try {
+      let d = localStorage.getItem(DEVICE_KEY);
+      if (!d) {
+        const a = new Uint8Array(16);
+        crypto.getRandomValues(a);
+        d = [...a].map((b) => b.toString(16).padStart(2, '0')).join('');
+        localStorage.setItem(DEVICE_KEY, d);
+      }
+      return d;
+    } catch (e) { return undefined; }
+  }
+  const AUTH_CALLS = ['auth:enter', 'auth:join', 'auth:login', 'auth:claimProfile'];
+  const call = (name, args) => client.mutation(name, AUTH_CALLS.includes(name) ? { ...args, device: deviceId() } : args);
+
+  // "דקה", "5 דקות", "שעה"... לפי מספר השניות שנשארו בנעילה.
+  function fmtWait(sec) {
+    if (sec < 90) return 'דקה';
+    if (sec < 3600) return Math.round(sec / 60) + ' דקות';
+    const h = Math.round(sec / 3600);
+    return h === 1 ? 'שעה' : h === 2 ? 'שעתיים' : h + ' שעות';
+  }
 
   function show(name) {
     document.querySelectorAll('.screen').forEach((s) => s.classList.toggle('active', s.id === 'screen-' + name));
@@ -360,7 +383,7 @@
         f.entered = '';
         if (res.reason === 'code') { codeGone(); return; }
         if (res.reason === 'wrong') renderPin(`הקוד לא נכון. נשארו עוד ${res.left} ניסיונות.`);
-        else if (res.reason === 'locked') renderPin(`ניסיתם יותר מדי פעמים. נסו שוב בעוד ${res.waitSeconds} שניות.`);
+        else if (res.reason === 'locked') renderPin(`ניסיתם יותר מדי פעמים. נסו שוב בעוד ${fmtWait(res.waitSeconds)}.`);
         else if (res.reason === 'throttled') renderPin('יותר מדי ניסיונות. נסו שוב עוד דקה.');
         else if (res.reason === 'legacy') renderPin('הורה צריך להיכנס קודם.');
         else { f.mode = 'new'; renderPin(); }
@@ -662,7 +685,8 @@
     $('peopleList').replaceChildren(...data.people.map((p) => el('div', { class: 'person' },
       el('span', { class: 'avatar-md', 'aria-hidden': 'true', text: p.avatar }),
       el('div', { class: 'text' }, p.name, ' ',
-        el('span', { class: 'meta', text: (p.role === 'parent' ? 'הורה' : 'ילד/ה') + (p.hasPin ? '' : ' • עוד לא בחר/ה קוד') })),
+        el('span', { class: 'meta', text: (p.role === 'parent' ? 'הורה' : 'ילד/ה') + (p.hasPin ? '' : ' • עוד לא בחר/ה קוד') }),
+        p.lockAlert ? el('div', { class: 'meta', style: 'color:#b45309', text: `⚠️ הקוד של ${p.name} ננעל ${p.lockAlert.count === 1 ? 'פעם אחת' : p.lockAlert.count + ' פעמים'} אחרי ניסיונות שגויים. אם זה לא הוא/היא, כדאי לקבוע קוד חדש.` }) : null),
       el('button', { class: 'small', type: 'button', text: 'קוד חדש', onclick: () => openResetPin(p) }),
       p.id === data.me.id ? null : el('button', {
         class: 'small danger', type: 'button', text: 'הסרה', 'aria-label': 'הסרת ' + p.name,
