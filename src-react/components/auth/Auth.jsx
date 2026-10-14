@@ -1,11 +1,11 @@
 import { useEffect, useRef, useSyncExternalStore } from 'react';
-import { state, subscribeAuth, authVersion } from '../state/state.js';
-import { pressKey } from '../state/auth.js';
-import Welcome from './auth/Welcome.jsx';
-import Setup from './auth/Setup.jsx';
-import Login from './auth/Login.jsx';
-import Join from './auth/Join.jsx';
-import Pin from './auth/Pin.jsx';
+import { state, subscribeAuth, authVersion } from '../../state/state.js';
+import { pressKey } from '../../state/auth.js';
+import Welcome from './Welcome.jsx';
+import Setup from './Setup.jsx';
+import Login from './Login.jsx';
+import Join from './Join.jsx';
+import Pin from './Pin.jsx';
 
 // מסכי הכניסה (welcome / setup / login / join / pin). כל מסך בקובץ משלו ב-auth/.
 // ה-state המשותף (view, fam, pinFlow, legacyPeople) נשאר ב-state.js, וכל

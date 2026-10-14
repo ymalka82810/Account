@@ -1,4 +1,4 @@
-import { debtLabel, money } from '../lib/computations.js';
+import { debtLabel, money } from '../../lib/computations.js';
 
 // פירוט חובות פתוחים בתוך כרטיס חוב: שורה לכל חוב, עם כפתור שילמתי/קיבלתי.
 export default function DebtLines({ open, iOwe, onPay }) {

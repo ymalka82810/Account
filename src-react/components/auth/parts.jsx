@@ -17,7 +17,7 @@ export const Terms = ({ extra }) => (
   </span>
 );
 
-export { default as AvatarPicker, randomAvatar } from '../AvatarPicker.jsx';
+export { default as AvatarPicker, randomAvatar } from '../shared/AvatarPicker.jsx';
 
 export function Tile({ avatar, name, onClick }) {
   return (

@@ -1,6 +1,6 @@
-import { call } from '../lib/api.js';
-import { toast, errMsg } from '../lib/helpers.js';
-import { isPending, debtStates, canDelete, namesFor, money, fmtDate } from '../lib/computations.js';
+import { call } from '../../lib/api.js';
+import { toast, errMsg } from '../../lib/helpers.js';
+import { isPending, debtStates, canDelete, namesFor, money, fmtDate } from '../../lib/computations.js';
 
 // רשימת רשומות. lookup(id) מחזיר אדם לפי מזהה.
 export default function EntriesList({

@@ -1,9 +1,9 @@
-import { state, CODE_KEY } from '../state/state.js';
-import { call } from '../lib/api.js';
-import { today, toast, errMsg } from '../lib/helpers.js';
-import { dropSession } from '../state/auth.js';
-import { useApp } from '../appContext.js';
-import { cleanPayload } from '../lib/legacy.js';
+import { state, CODE_KEY } from '../../state/state.js';
+import { call } from '../../lib/api.js';
+import { today, toast, errMsg } from '../../lib/helpers.js';
+import { dropSession } from '../../state/auth.js';
+import { useApp } from '../../state/appContext.js';
+import { cleanPayload } from '../../lib/legacy.js';
 
 // גיבוי, שחזור מקובץ ושינוי שם (הורים).
 export default function FamilySettings({ data }) {

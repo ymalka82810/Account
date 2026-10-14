@@ -1,7 +1,7 @@
-import { useApp } from '../appContext.js';
-import PendingCards from './PendingCards.jsx';
-import DebtLines from './DebtLines.jsx';
-import { pairOwes, openDebtsOf, money } from '../lib/computations.js';
+import { useApp } from '../../state/appContext.js';
+import PendingCards from '../entries/PendingCards.jsx';
+import DebtLines from '../entries/DebtLines.jsx';
+import { pairOwes, openDebtsOf, money } from '../../lib/computations.js';
 
 // מסך הבית: סיכום, כפתורי רישום, אישורים ממתינים והחובות הפתוחים.
 // ההגדרות האישיות נמצאות ב"החשבון שלי" (AccountSheet), בכותרת.

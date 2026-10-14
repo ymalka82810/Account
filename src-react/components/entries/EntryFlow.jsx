@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { state } from '../state/state.js';
-import { call } from '../lib/api.js';
-import { today, toast, errMsg } from '../lib/helpers.js';
-import { openDebtsOf, debtLabel, namesFor, money } from '../lib/computations.js';
-import { useApp } from '../appContext.js';
-import { useSheet, useSheetTitle } from './Sheet.jsx';
-import AsyncButton from './AsyncButton.jsx';
+import { state } from '../../state/state.js';
+import { call } from '../../lib/api.js';
+import { today, toast, errMsg } from '../../lib/helpers.js';
+import { openDebtsOf, debtLabel, namesFor, money } from '../../lib/computations.js';
+import { useApp } from '../../state/appContext.js';
+import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
+import AsyncButton from '../shared/AsyncButton.jsx';
 
 // אשף: חוב חדש / החזר (גרסת React של src/entryFlow.js).
 // opts: {kind:'debt'|'payment', from?, to?, suggest?, debtId?, ...}. חסר from או to => בוחרים אדם.

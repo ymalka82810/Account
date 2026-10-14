@@ -1,9 +1,9 @@
-import { useApp } from '../appContext.js';
-import { openDebts, namesFor } from '../lib/computations.js';
-import PendingCards from './PendingCards.jsx';
-import Balances from './family/Balances.jsx';
-import OpenDebts from './family/OpenDebts.jsx';
-import TeenOverview from './family/TeenOverview.jsx';
+import { useApp } from '../../state/appContext.js';
+import { openDebts, namesFor } from '../../lib/computations.js';
+import PendingCards from '../entries/PendingCards.jsx';
+import Balances from './Balances.jsx';
+import OpenDebts from './OpenDebts.jsx';
+import TeenOverview from './TeenOverview.jsx';
 
 // לשונית המשפחה (הורים): אישורים, יתרות, חובות פתוחים ומה שהנוער רושם. הגדרות וניהול נמצאים בלשונית "ניהול".
 export default function FamilyTab({ data, fdata, token }) {

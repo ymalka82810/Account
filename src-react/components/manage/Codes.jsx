@@ -1,5 +1,5 @@
-import { call } from '../lib/api.js';
-import { toast, errMsg, prettyCode } from '../lib/helpers.js';
+import { call } from '../../lib/api.js';
+import { toast, errMsg, prettyCode } from '../../lib/helpers.js';
 
 // קודי הצטרפות (הורים בלבד).
 export default function Codes({ data, token }) {

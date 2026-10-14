@@ -1,4 +1,4 @@
-import { useSheet } from '../Sheet.jsx';
+import { useSheet } from '../shared/Sheet.jsx';
 import { ResetPinSheet } from './ResetPinSheet.jsx';
 import { useRun } from '../../lib/useRun.js';
 import { roleLabel } from '../../lib/computations.js';

@@ -1,8 +1,8 @@
-import { call } from '../lib/api.js';
+import { call } from '../../lib/api.js';
 import { useState } from 'react';
-import { toast, errMsg } from '../lib/helpers.js';
-import { LEGACY_DONE_KEY } from '../state/state.js';
-import { readLegacy, cleanPayload } from '../lib/legacy.js';
+import { toast, errMsg } from '../../lib/helpers.js';
+import { LEGACY_DONE_KEY } from '../../state/state.js';
+import { readLegacy, cleanPayload } from '../../lib/legacy.js';
 
 // גרסת React של renderLegacy(): הצעה להעביר נתונים ישנים מהמכשיר לשרת.
 export default function Legacy({ token }) {

@@ -7,16 +7,16 @@ import { restoreFamily, startPin, autoSkipPerson, dropSession } from './state/au
 import { syncPush } from './lib/push.js';
 import { client } from './lib/client.js';
 import { isPending } from './lib/computations.js';
-import { AppCtx, useApp } from './appContext.js';
-import { useSheet } from './components/Sheet.jsx';
-import { EntryFlow } from './components/EntryFlow.jsx';
-import { AccountSheet } from './components/AccountSheet.jsx';
-import Auth from './components/Auth.jsx';
-import Home from './components/Home.jsx';
-import FriendsTab from './components/FriendsTab.jsx';
-import FamilyTab from './components/FamilyTab.jsx';
-import ManageTab from './components/ManageTab.jsx';
-import HistoryTab from './components/HistoryTab.jsx';
+import { AppCtx, useApp } from './state/appContext.js';
+import { useSheet } from './components/shared/Sheet.jsx';
+import { EntryFlow } from './components/entries/EntryFlow.jsx';
+import { AccountSheet } from './components/account/AccountSheet.jsx';
+import Auth from './components/auth/Auth.jsx';
+import Home from './components/home/Home.jsx';
+import FriendsTab from './components/friends/FriendsTab.jsx';
+import FamilyTab from './components/family/FamilyTab.jsx';
+import ManageTab from './components/manage/ManageTab.jsx';
+import HistoryTab from './components/history/HistoryTab.jsx';
 
 // ---------- איזה מסך מוצג ----------
 // loading | noserver | welcome | setup | login | join | pin | app

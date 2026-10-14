@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { call } from '../lib/api.js';
-import { state } from '../state/state.js';
-import { toast, errMsg } from '../lib/helpers.js';
-import { dropSession } from '../state/auth.js';
-import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../lib/push.js';
-import { useApp } from '../appContext.js';
-import { useSheet, useSheetTitle } from './Sheet.jsx';
-import { ChangePinSheet, ChangePinEmailSheet, EmailSheet } from './account/AccountSheets.jsx';
-import AsyncButton from './AsyncButton.jsx';
+import { call } from '../../lib/api.js';
+import { state } from '../../state/state.js';
+import { toast, errMsg } from '../../lib/helpers.js';
+import { dropSession } from '../../state/auth.js';
+import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../../lib/push.js';
+import { useApp } from '../../state/appContext.js';
+import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
+import { ChangePinSheet, ChangePinEmailSheet, EmailSheet } from './AccountSheets.jsx';
+import AsyncButton from '../shared/AsyncButton.jsx';
 
 export async function logout() {
   await releasePushDevice();

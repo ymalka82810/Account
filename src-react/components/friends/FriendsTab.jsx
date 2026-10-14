@@ -1,12 +1,12 @@
-import { call } from '../lib/api.js';
+import { call } from '../../lib/api.js';
 import { useState } from 'react';
-import { toast } from '../lib/helpers.js';
-import { useRun } from '../lib/useRun.js';
-import { FRIEND_MAX } from '../state/state.js';
-import { useApp } from '../appContext.js';
-import { isPending, pairOwes, openDebtsOf, debtLabel, namesFor, money, fmtDate } from '../lib/computations.js';
-import EntriesList from './EntriesList.jsx';
-import DebtLines from './DebtLines.jsx';
+import { toast } from '../../lib/helpers.js';
+import { useRun } from '../../lib/useRun.js';
+import { FRIEND_MAX } from '../../state/state.js';
+import { useApp } from '../../state/appContext.js';
+import { isPending, pairOwes, openDebtsOf, debtLabel, namesFor, money, fmtDate } from '../../lib/computations.js';
+import EntriesList from '../entries/EntriesList.jsx';
+import DebtLines from '../entries/DebtLines.jsx';
 
 // מצב חברים לבני נוער.
 export default function FriendsTab({ data, fdata, token }) {

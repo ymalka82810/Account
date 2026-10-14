@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { state } from '../../state/state.js';
 import { pinBack, pressKey } from '../../state/auth.js';
-import { useSheet } from '../Sheet.jsx';
+import { useSheet } from '../shared/Sheet.jsx';
 import { ForgotPinSheet } from './ForgotPinSheet.jsx';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 

@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { state } from '../../state/state.js';
 import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
-import { useApp } from '../../appContext.js';
-import { useSheet, useSheetTitle } from '../Sheet.jsx';
-import AsyncButton from '../AsyncButton.jsx';
-import { codeProps, pinProps, Err, Field } from '../sheets/fields.jsx';
+import { useApp } from '../../state/appContext.js';
+import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
+import AsyncButton from '../shared/AsyncButton.jsx';
+import { codeProps, pinProps, Err, Field } from '../shared/fields.jsx';
 
 // הורה קובע קוד סודי חדש לילד/ה (אפשר גם לאפס שיבחרו לבד).
 export function ResetPinSheet({ person: p }) {

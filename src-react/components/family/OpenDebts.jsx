@@ -1,5 +1,5 @@
 import { today } from '../../lib/helpers.js';
-import { useApp } from '../../appContext.js';
+import { useApp } from '../../state/appContext.js';
 import { useRun } from '../../lib/useRun.js';
 import { money } from '../../lib/computations.js';
 

@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { AppCtx } from '../appContext.js';
+import { AppCtx } from '../../state/appContext.js';
 
 // החלון הקופץ. sheet.open(title, <Body />) מחליף את התוכן (גם כשכבר פתוח,
 // כמו בשלבים של אשף), ו-sheet.close() סוגר. הגוף יכול לקרוא ל-useSheet() בעצמו

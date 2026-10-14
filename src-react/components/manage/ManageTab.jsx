@@ -1,10 +1,10 @@
-import { useApp } from '../appContext.js';
+import { useApp } from '../../state/appContext.js';
 import Legacy from './Legacy.jsx';
 import Codes from './Codes.jsx';
 import Recurring from './Recurring.jsx';
 import PersonForm from './PersonForm.jsx';
 import FamilySettings, { DangerZone } from './FamilyTools.jsx';
-import PeopleList from './family/PeopleList.jsx';
+import PeopleList from './PeopleList.jsx';
 
 // לשונית הניהול (הורים): בני משפחה, קודים, דמי כיס קבועים, הגדרות ואזור מסוכן.
 export default function ManageTab({ data, token }) {

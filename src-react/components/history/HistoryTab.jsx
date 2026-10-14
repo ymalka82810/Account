@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import EntriesList from './EntriesList.jsx';
+import EntriesList from '../entries/EntriesList.jsx';
 
 // ההיסטוריה: הרשומות שלי. להורה יש גם מתג לכל רשומות המשפחה.
 export default function HistoryTab({ data, token, me, isParent }) {
