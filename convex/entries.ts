@@ -25,8 +25,11 @@ export const add = mutation({
     if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date)) throw new ConvexError("תאריך לא תקין");
     const note = e.note.trim();
     if (note.length > 80) throw new ConvexError("ההערה ארוכה מדי");
-    if (!(await ctx.db.get(e.from)) || !(await ctx.db.get(e.to))) throw new ConvexError("אדם לא קיים");
-    return await ctx.db.insert("entries", { ...e, note, createdBy: me._id, createdAt: Date.now() });
+    // שני האנשים חייבים להיות באותה משפחה כמו המחובר/ת.
+    const from = await ctx.db.get(e.from);
+    const to = await ctx.db.get(e.to);
+    if (!from || !to || from.familyId !== me.familyId || to.familyId !== me.familyId) throw new ConvexError("אדם לא קיים");
+    return await ctx.db.insert("entries", { ...e, note, familyId: me.familyId, createdBy: me._id, createdAt: Date.now() });
   },
 });
 
@@ -36,7 +39,7 @@ export const remove = mutation({
   handler: async (ctx, { token, id }) => {
     const me = await requirePerson(ctx, token);
     const e = await ctx.db.get(id);
-    if (!e) return;
+    if (!e || e.familyId !== me.familyId) return;
     const mine = e.createdBy === me._id && Date.now() - (e.createdAt ?? 0) < UNDO_MS;
     if (me.role !== "parent" && !mine) throw new ConvexError("אפשר לבטל רק ב-10 הדקות הראשונות, או לבקש מהורה");
     await ctx.db.delete(id);

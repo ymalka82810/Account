@@ -126,7 +126,7 @@ h2 { font-size: 1.1rem; margin: 22px 0 10px; }
 .form.inline { margin-top: 10px; }
 .field { display: grid; gap: 6px; }
 .field > span { font-weight: 500; font-size: .95rem; }
-input[type=text], input[type=number], input[type=date], select {
+input[type=text], input[type=password], input[type=number], input[type=date], select {
   font: inherit;
   color: var(--ink);
   background: var(--card);
@@ -338,3 +338,13 @@ button.small { min-height: 40px; }
 .chip.strong { background: var(--coin); border-color: var(--coin-deep); font-weight: 700; color: #1d2b4f; }
 .summary-line { text-align: center; font-size: 1.25rem; font-weight: 800; background: var(--card); border: 2px solid var(--coin-deep); border-radius: 16px; padding: 14px; }
 .flow .ghost { padding: 12px; }
+
+/* קודי משפחה */
+.code-input { text-align: center; font-size: 1.4rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.codes { display: grid; gap: 14px; margin-bottom: 8px; }
+.codeblock { display: grid; gap: 4px; padding-top: 10px; border-top: 1px solid var(--line); }
+.codeblock .meta { font-weight: 500; }
+.codeblock .hint { font-size: .9rem; margin: 0; }
+.codeval { font-size: 1.6rem; font-weight: 800; letter-spacing: .12em; text-align: start; user-select: all; }
+.codeblock .tools { margin-top: 6px; }
+.danger-ghost { color: var(--owe); border-color: var(--owe); }

@@ -4,6 +4,7 @@
   const TOKEN_KEY = 'kupa-token';
   const LEGACY_KEY = 'family-account-v1';
   const LEGACY_DONE_KEY = 'kupa-legacy-imported';
+  const CODE_KEY = 'kupa-code';
   const UNDO_MS = 10 * 60 * 1000;
   const AVATARS = ['🦊', '🐼', '🦁', '🐯', '🐸', '🐵', '🦄', '🐙', '🐨', '🐶', '🐱', '🚀'];
 
@@ -14,10 +15,14 @@
   // ---------- state ----------
   let client = null;
   let token = localStorage.getItem(TOKEN_KEY) || '';
-  let roster = null;      // null = עוד לא נטען
+  let legacyPeople = null; // null = עוד לא נטען. הורים מהגרסה הישנה (בלי קוד משפחה)
+  let codeChecked = false; // האם בדקנו קוד שמור במכשיר
+  let fam = null;         // {code, name, codeRole, people} אחרי שהוזן קוד משפחה תקין
+  let view = 'welcome';   // welcome | setup | join
   let data = undefined;   // undefined = נטען, null = כניסה לא תקפה
-  let pinFlow = null;     // {person, mode:'login'|'new', first, entered, busy}
+  let pinFlow = null;     // {person, legacy, mode:'login'|'new', first, entered, busy}
   let unsubData = null;
+  let migrating = false;
 
   // ---------- helpers ----------
   function el(tag, props = {}, ...kids) {
@@ -64,7 +69,7 @@
   }
 
   // ---------- חישובים ----------
-  const person = (id) => (data ? data.people.find((p) => p.id === id) : null) || (roster || []).find((p) => p.id === id);
+  const person = (id) => (data ? data.people.find((p) => p.id === id) : null);
   const isMe = (id) => !!data && id === data.me.id;
   const isParent = () => !!data && data.me.role === 'parent';
   const nameOf = (id) => (person(id) ? person(id).name : 'לא ידוע');
@@ -102,11 +107,13 @@
       renderApp();
       return show('app');
     }
-    if (roster === null) return show('loading');
-    if (roster.length === 0) { initSetup(); return show('setup'); }
+    if (legacyPeople === null || !codeChecked) return show('loading');
     if (pinFlow) return show('pin');
-    renderLogin();
-    show('login');
+    if (view === 'setup') { initSetup(); return show('setup'); }
+    if (view === 'join' && fam) { initJoin(); return show('join'); }
+    if (fam) { renderLogin(); return show('login'); }
+    renderWelcome();
+    show('welcome');
   }
 
   function subscribeData() {
@@ -115,9 +122,20 @@
     if (!token) return;
     unsubData = client.onUpdate('data:get', { token }, (d) => {
       if (d === null) { dropSession(); return; }
+      if (d.legacy) { handleLegacySession(d); return; }
       data = d;
       route();
     }, () => {});
+  }
+
+  // חשבון מהגרסה הישנה (בלי משפחה): הורה מעביר את הקופה למשפחה עם קודים. ילדים נכנסים מחדש עם קוד.
+  async function handleLegacySession(d) {
+    if (!d.canMigrate) { toast('צריך להיכנס מחדש עם קוד המשפחה'); dropSession(); return; }
+    if (migrating) return;
+    migrating = true;
+    try { await call('auth:migrateMe', { token }); }
+    catch (e) { dropSession(); }
+    finally { migrating = false; }
   }
 
   function setToken(t) {
@@ -135,7 +153,9 @@
     data = undefined;
     pinFlow = null;
     closeSheet();
+    codeChecked = false;
     route();
+    restoreFamily().finally(() => { codeChecked = true; route(); });
   }
 
   // ---------- בורר דמות ----------
@@ -152,29 +172,127 @@
     return { get: () => chosen };
   }
 
-  // ---------- הקמה ראשונה ----------
+  // ---------- מסך פתיחה: קוד משפחה ----------
+  const showCodeError = (msg) => { const e = $('codeError'); e.textContent = msg; e.hidden = !msg; };
+
+  function prettyCode(code) {
+    const c = String(code).toUpperCase().replace(/[^A-Z0-9]/g, '');
+    return c.length > 5 ? c.slice(0, 5) + '-' + c.slice(5) : c;
+  }
+
+  function renderWelcome() {
+    const box = $('legacyLogin');
+    const parents = legacyPeople || [];
+    box.hidden = parents.length === 0;
+    $('legacyTiles').replaceChildren(...parents.map((p) => el('button', {
+      class: 'tile', type: 'button', onclick: () => startPin(p, true),
+    }, el('span', { class: 'avatar-lg', 'aria-hidden': 'true', text: p.avatar }), el('span', { class: 'tname', text: p.name }))));
+  }
+
+  // בודק קוד מול השרת. מחזיר true אם נכנסנו למשפחה.
+  async function enterFamily(code, remember) {
+    const res = await call('auth:enter', { code });
+    if (!res.ok) return res.reason;
+    fam = { code, name: res.familyName, codeRole: res.codeRole, people: res.people };
+    // שומרים במכשיר רק את קוד הילדים, כדי שקוד הורים לא יישאר על מכשיר משותף.
+    if (remember) localStorage.setItem(CODE_KEY, res.loginCode);
+    return true;
+  }
+
+  // קוד ילדים שמור במכשיר: מרעננים את רשימת המשפחה, ואם הקוד הוחלף מוחקים אותו.
+  async function restoreFamily() {
+    const saved = localStorage.getItem(CODE_KEY);
+    if (!saved) return;
+    try {
+      const r = await enterFamily(saved, false);
+      if (r !== true && r !== 'throttled') { localStorage.removeItem(CODE_KEY); fam = null; }
+    } catch (e) { /* בלי חיבור: נשארים עם מה שיש */ }
+  }
+
+  $('codeInput').addEventListener('input', (ev) => { ev.target.value = prettyCode(ev.target.value); showCodeError(''); });
+  $('codeForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    showCodeError('');
+    try {
+      const r = await enterFamily($('codeInput').value, true);
+      if (r === true) { $('codeInput').value = ''; view = 'welcome'; route(); }
+      else if (r === 'throttled') showCodeError('יותר מדי ניסיונות. נסו שוב עוד דקה.');
+      else showCodeError('הקוד לא נכון. בדקו שוב, או בקשו מההורים.');
+    } catch (e) { showCodeError(errMsg(e)); }
+  });
+
+  $('newFamilyBtn').addEventListener('click', () => { view = 'setup'; route(); });
+
+  // ---------- הקמת משפחה חדשה ----------
   let setupPicker = null;
   function initSetup() {
     if (!setupPicker) setupPicker = avatarPicker($('setupAvatars'));
   }
+  $('setupBack').addEventListener('click', () => { view = 'welcome'; route(); });
   $('setupForm').addEventListener('submit', async (ev) => {
     ev.preventDefault();
     const err = $('setupError');
     err.hidden = true;
     try {
-      const res = await call('auth:setupFamily', {
-        name: $('setupName').value, avatar: setupPicker.get(), pin: $('setupPin').value,
+      const res = await call('auth:createFamily', {
+        familyName: $('setupFamily').value, name: $('setupName').value,
+        avatar: setupPicker.get(), pin: $('setupPin').value,
       });
+      $('setupPin').value = '';
+      view = 'welcome';
       setToken(res.token);
     } catch (e) { err.textContent = errMsg(e); err.hidden = false; }
   });
 
+  // ---------- הצטרפות עם קוד ----------
+  let joinPicker = null;
+  function initJoin() {
+    if (!joinPicker) joinPicker = avatarPicker($('joinAvatars'));
+    $('joinHint').textContent = fam.codeRole === 'parent'
+      ? `מצטרפים לקופה של ${fam.name} בתור הורה.`
+      : `מצטרפים לקופה של ${fam.name} בתור ילד/ה.`;
+  }
+  $('joinBack').addEventListener('click', () => { view = 'welcome'; route(); });
+  $('joinForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const err = $('joinError');
+    err.hidden = true;
+    try {
+      const res = await call('auth:join', {
+        code: fam.code, name: $('joinName').value, avatar: joinPicker.get(), pin: $('joinPin').value,
+      });
+      if (!res.ok) {
+        err.textContent = res.reason === 'throttled' ? 'יותר מדי ניסיונות. נסו שוב עוד דקה.' : 'הקוד כבר לא תקף. בקשו קוד חדש מההורים.';
+        err.hidden = false;
+        if (res.reason === 'code') leaveFamily();
+        return;
+      }
+      $('joinPin').value = ''; $('joinName').value = '';
+      view = 'welcome';
+      setToken(res.token);
+    } catch (e) { err.textContent = errMsg(e); err.hidden = false; }
+  });
+
+  function leaveFamily() {
+    fam = null;
+    view = 'welcome';
+    pinFlow = null;
+    localStorage.removeItem(CODE_KEY);
+    route();
+  }
+
   // ---------- בחירת פרופיל ----------
   function renderLogin() {
-    $('loginTiles').replaceChildren(...roster.map((p) => el('button', {
-      class: 'tile', type: 'button', onclick: () => startPin(p),
-    }, el('span', { class: 'avatar-lg', 'aria-hidden': 'true', text: p.avatar }), el('span', { class: 'tname', text: p.name }))));
+    $('loginFamily').textContent = fam.name;
+    const tiles = fam.people.map((p) => el('button', {
+      class: 'tile', type: 'button', onclick: () => startPin(p, false),
+    }, el('span', { class: 'avatar-lg', 'aria-hidden': 'true', text: p.avatar }), el('span', { class: 'tname', text: p.name })));
+    tiles.push(el('button', {
+      class: 'tile', type: 'button', onclick: () => { view = 'join'; route(); },
+    }, el('span', { class: 'avatar-lg', 'aria-hidden': 'true', text: '➕' }), el('span', { class: 'tname', text: 'אני חדש/ה' })));
+    $('loginTiles').replaceChildren(...tiles);
   }
+  $('loginBack').addEventListener('click', leaveFamily);
 
   // ---------- קוד סודי ----------
   function buildPad() {
@@ -190,8 +308,8 @@
     });
   }
 
-  function startPin(p) {
-    pinFlow = { person: p, mode: p.hasPin ? 'login' : 'new', first: null, entered: '', busy: false };
+  function startPin(p, legacy) {
+    pinFlow = { person: p, legacy: !!legacy, mode: p.hasPin ? 'login' : 'new', first: null, entered: '', busy: false };
     buildPad();
     renderPin();
     route();
@@ -225,16 +343,26 @@
     if (f.entered.length === 4) await submitPin();
   }
 
+  // קוד משפחה שהפסיק להיות תקף באמצע הכניסה (ההורים החליפו אותו).
+  function codeGone() {
+    toast('קוד המשפחה השתנה. בקשו קוד חדש מההורים.');
+    leaveFamily();
+  }
+
   async function submitPin() {
     const f = pinFlow;
     f.busy = true;
+    const code = f.legacy ? undefined : fam.code;
     try {
       if (f.mode === 'login') {
-        const res = await call('auth:login', { personId: f.person.id, pin: f.entered });
+        const res = await call('auth:login', { code, personId: f.person.id, pin: f.entered });
         if (res.ok) { pinFlow = null; setToken(res.token); return; }
         f.entered = '';
+        if (res.reason === 'code') { codeGone(); return; }
         if (res.reason === 'wrong') renderPin(`הקוד לא נכון. נשארו עוד ${res.left} ניסיונות.`);
         else if (res.reason === 'locked') renderPin(`ניסיתם יותר מדי פעמים. נסו שוב בעוד ${res.waitSeconds} שניות.`);
+        else if (res.reason === 'throttled') renderPin('יותר מדי ניסיונות. נסו שוב עוד דקה.');
+        else if (res.reason === 'legacy') renderPin('הורה צריך להיכנס קודם.');
         else { f.mode = 'new'; renderPin(); }
         shake();
       } else if (!f.first) {
@@ -245,7 +373,14 @@
         renderPin('הקודים לא היו זהים. נתחיל מחדש.');
         shake();
       } else {
-        const res = await call('auth:claimProfile', { personId: f.person.id, pin: f.entered });
+        const res = await call('auth:claimProfile', { code, personId: f.person.id, pin: f.entered });
+        if (!res.ok) {
+          if (res.reason === 'code') { codeGone(); return; }
+          f.first = null; f.entered = '';
+          renderPin(res.reason === 'throttled' ? 'יותר מדי ניסיונות. נסו שוב עוד דקה.' : 'הורה צריך להיכנס קודם.');
+          shake();
+          return;
+        }
         pinFlow = null;
         setToken(res.token);
         return;
@@ -539,7 +674,39 @@
       }))));
 
     renderEntries($('allHistory'), data.entries, 'עדיין אין רשומות.');
+    renderCodes();
     renderLegacy();
+  }
+
+  // ---------- קודי הצטרפות ----------
+  async function shareCode(title, code) {
+    const text = `${title} לקופה של ${data.family.name}: ${prettyCode(code)}\n${location.origin}${location.pathname}`;
+    try {
+      if (navigator.share) { await navigator.share({ text }); return; }
+      await navigator.clipboard.writeText(text);
+      toast('הועתק ✅');
+    } catch (e) { /* בוטל */ }
+  }
+
+  function renderCodes() {
+    const f = data.family;
+    const block = (label, hint, code, which, shareTitle) => el('div', { class: 'codeblock' },
+      el('div', { class: 'meta', text: label }),
+      el('div', { class: 'codeval', dir: 'ltr', text: prettyCode(code) }),
+      el('p', { class: 'hint', text: hint }),
+      el('div', { class: 'tools' },
+        el('button', { class: 'small', type: 'button', text: 'שיתוף', onclick: () => shareCode(shareTitle, code) }),
+        el('button', {
+          class: 'small', type: 'button', text: 'החלפת קוד', onclick: async () => {
+            if (!confirm('להחליף את הקוד? מי שכבר בפנים נשאר, אבל הקוד הישן יפסיק לעבוד.')) return;
+            try { await call('family:rotateCode', { token, which }); toast('הקוד הוחלף ✅'); }
+            catch (e) { toast(errMsg(e)); }
+          },
+        })));
+    $('codesBox').replaceChildren(el('div', { class: 'card codes' },
+      el('h3', { text: '🔑 קודי הצטרפות' }),
+      block('קוד לילדים', 'ילדים שמקלידים אותו מצטרפים בתור ילדים.', f.childCode, 'child', 'קוד ילדים'),
+      block('קוד להורים', 'להורה השני. מי שמקליד אותו מצטרף בתור הורה, אז לא לשתף עם ילדים.', f.parentCode, 'parent', 'קוד הורים')));
   }
 
   function openResetPin(p) {
@@ -608,6 +775,8 @@
   function renderApp() {
     $('meAvatar').textContent = data.me.avatar;
     $('meName').textContent = data.me.name;
+    $('familyName').textContent = data.family.name;
+    if (isParent()) localStorage.setItem(CODE_KEY, data.family.childCode);
     document.querySelectorAll('.parent-only').forEach((n) => (n.hidden = !isParent()));
     renderHome();
     renderEntries($('myHistory'), data.entries.filter((e) => e.from === data.me.id || e.to === data.me.id), 'עדיין לא נרשם כלום.');
@@ -682,6 +851,25 @@
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   });
 
+  $('renameFamilyBtn').addEventListener('click', async () => {
+    const name = prompt('איך לקרוא למשפחה?', data.family.name);
+    if (name === null || !name.trim()) return;
+    try { await call('family:rename', { token, name }); toast('השם עודכן ✅'); }
+    catch (e) { toast(errMsg(e)); }
+  });
+
+  $('deleteFamilyBtn').addEventListener('click', async () => {
+    const typed = prompt(`זה ימחק את כל הקופה: כל האנשים וכל הרשומות, ואי אפשר לבטל.\nכדי לאשר, כתבו את שם המשפחה: ${data.family.name}`);
+    if (typed === null) return;
+    try {
+      await call('family:remove', { token, confirmName: typed });
+      localStorage.removeItem(CODE_KEY);
+      fam = null;
+      toast('הקופה נמחקה');
+      dropSession();
+    } catch (e) { toast(errMsg(e)); }
+  });
+
   $('importFile').addEventListener('change', async (ev) => {
     const file = ev.target.files[0];
     ev.target.value = '';
@@ -701,9 +889,9 @@
   function init() {
     if (!window.CONVEX_URL || typeof convex === 'undefined') { show('noserver'); return; }
     client = new convex.ConvexClient(window.CONVEX_URL);
-    client.onUpdate('auth:roster', {}, (r) => {
-      roster = r;
-      if (pinFlow) {
+    client.onUpdate('auth:legacyRoster', {}, (r) => {
+      legacyPeople = r;
+      if (pinFlow && pinFlow.legacy) {
         const fresh = r.find((p) => p.id === pinFlow.person.id);
         if (!fresh) pinFlow = null;
         else { pinFlow.person = fresh; if (!fresh.hasPin && pinFlow.mode === 'login') pinFlow.mode = 'new'; }
@@ -711,6 +899,7 @@
       route();
     }, () => {});
     subscribeData();
+    restoreFamily().finally(() => { codeChecked = true; route(); });
     route();
     if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
       navigator.serviceWorker.register('sw.js').catch(() => {});
