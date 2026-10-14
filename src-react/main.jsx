@@ -1,26 +1,39 @@
-// נקודת כניסה חדשה ל-React. בשלב הזה היא עדיין לא מחוברת לאתר החי
-// ולא ל-Convex האמיתי — מציגה את מסך הבית (Home) מול נתוני דמה,
-// כדי לוודא שהקומפוננטה והלוגיקה נכונות לפני שמחברים backend אמיתי.
+// נקודת כניסה חדשה ל-React. עדיין לא מחוברת לאתר החי (index.html), אבל
+// עכשיו כן מתחברת ל-Convex האמיתי (אותה כתובת production מ-config.js),
+// כדי לוודא שתבנית ה-useQuery עובדת מול שרת אמיתי לפני שמחליפים את
+// המסך בתוך האתר החי. ה-token מגיע מ-localStorage (אותו מפתח 'kupa-token'
+// שהאתר הישן שומר) - אם מישהו כבר מחובר באתר הישן באותו דפדפן, ה-preview
+// הזה יראה אותם נתונים אמיתיים, read-only (useQuery לא כותב כלום).
 import { createRoot } from 'react-dom/client';
+import { ConvexReactClient, ConvexProvider, useQuery } from 'convex/react';
 import Home from './components/Home.jsx';
 
-// נתוני דמה באותו מבנה בדיוק שמחזירה convex/data.ts (query data:get).
-const mockData = {
-  me: { id: 'p1', name: 'יוחאי', role: 'parent', avatar: '🦊' },
-  people: [
-    { id: 'p1', name: 'יוחאי', role: 'parent', avatar: '🦊' },
-    { id: 'p2', name: 'נועה', role: 'child', avatar: '🐼' },
-    { id: 'p3', name: 'איתן', role: 'teen', avatar: '🦁' },
-  ],
-  entries: [
-    { id: 'e1', kind: 'debt', from: 'p1', to: 'p2', amount: 2000, note: 'דמי כיס', date: '2026-10-01', createdAt: 1, status: 'approved', debtId: null },
-    { id: 'e2', kind: 'debt', from: 'p3', to: 'p1', amount: 1500, note: 'הלוואה', date: '2026-10-05', createdAt: 2, status: 'approved', debtId: null },
-  ],
-};
+const client = new ConvexReactClient(window.CONVEX_URL);
+
+function AppInner() {
+  const token = localStorage.getItem('kupa-token') || '';
+  const data = useQuery('data:get', { token });
+
+  if (!token) {
+    return <p style={{ padding: 16 }}>
+      אין session פעיל בדפדפן הזה (לא מחובר דרך האתר הישן). זה תקין -
+      ה-query עצמו הגיע לשרת ה-Convex האמיתי בהצלחה והחזיר "אין נתונים",
+      בדיוק כמו שהיה קורה באתר הישן למשתמש לא מחובר.
+    </p>;
+  }
+  if (data === undefined) return <p style={{ padding: 16 }}>טוען…</p>;
+  if (data === null || data.legacy) return <p style={{ padding: 16 }}>Session לא תקין.</p>;
+
+  const openEntryFlow = (opts) => alert('openEntryFlow (עדיין לא מחובר):\n' + JSON.stringify(opts, null, 2));
+  return <Home data={data} openEntryFlow={openEntryFlow} />;
+}
 
 function App() {
-  const openEntryFlow = (opts) => alert('openEntryFlow (עדיין לא מחובר):\n' + JSON.stringify(opts, null, 2));
-  return <Home data={mockData} openEntryFlow={openEntryFlow} />;
+  return (
+    <ConvexProvider client={client}>
+      <AppInner />
+    </ConvexProvider>
+  );
 }
 
 const rootEl = document.getElementById('react-root');
