@@ -2,7 +2,7 @@ import { useConvex } from 'convex/react';
 import { isPending, money, fmtDate } from '../lib/computations.js';
 import { toast, errMsg } from '../../src/helpers.js';
 import { useSheet } from './Sheet.jsx';
-import { FriendApproveSheet } from './Sheets.jsx';
+import { FriendApproveSheet } from './family/FriendApproveSheet.jsx';
 
 // גרסת React של renderPending() הישן. הורה: כרטיסי אישורים בראש הסקירה
 // המשפחתית. אחרים: הודעה קטנה בדף הבית. המסך מתרנדר מחדש לבד עם ה-data.

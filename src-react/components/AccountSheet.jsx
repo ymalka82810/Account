@@ -6,7 +6,7 @@ import { dropSession } from '../../src/session.js';
 import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../../src/push.js';
 import { useApp } from '../appContext.js';
 import { useSheet, useSheetTitle } from './Sheet.jsx';
-import { ChangePinSheet, ChangePinEmailSheet, EmailSheet } from './Sheets.jsx';
+import { ChangePinSheet, ChangePinEmailSheet, EmailSheet } from './account/AccountSheets.jsx';
 import AsyncButton from './AsyncButton.jsx';
 
 export async function logout() {

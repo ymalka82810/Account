@@ -1,5 +1,5 @@
 import { useSheet } from '../Sheet.jsx';
-import { ResetPinSheet } from '../Sheets.jsx';
+import { ResetPinSheet } from './ResetPinSheet.jsx';
 import { useRun } from '../../lib/useRun.js';
 import { roleLabel } from '../../lib/computations.js';
 
