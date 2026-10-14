@@ -163,7 +163,14 @@ input[type=text], input[type=password], input[type=number], input[type=date], in
 .dd-btn:hover { border-color: var(--coin); }
 .dd-btn[aria-expanded="true"] { border-color: var(--coin-deep); }
 .dd-val { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.dd-arrow { color: var(--ink-soft); font-size: .75em; transition: transform .15s ease; flex: none; }
+.dd-arrow {
+  flex: none;
+  width: 0;
+  height: 0;
+  border-inline: 5px solid transparent;
+  border-top: 6px solid var(--ink-soft);
+  transition: transform .15s ease;
+}
 .dd-btn[aria-expanded="true"] .dd-arrow { transform: rotate(180deg); }
 .dd-list {
   position: fixed;

@@ -70,7 +70,7 @@ export default function Select({ value, onChange, options, className = '', place
         onClick={() => { if (!open) setActiveIdx(Math.max(0, options.findIndex((o) => o.value === value))); setOpen((o) => !o); }}
         onKeyDown={onKeyDown}>
         <span className="dd-val">{current ? current.label : placeholder}</span>
-        <span className="dd-arrow" aria-hidden="true">▾</span>
+        <span className="dd-arrow" aria-hidden="true" />
       </button>
       {open && pos && createPortal(
         <ul className="dd-list" role="listbox" style={pos}>
