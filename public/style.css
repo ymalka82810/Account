@@ -301,19 +301,20 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
 .hint { color: var(--ink-soft); margin: 4px 0 0; }
 .big-emoji { font-size: 3.4rem; line-height: 1.1; }
 
-/* אנימציית מטבע במסך הטעינה: המטבע מרחף ומסתובב סיבוב אחד איטי, נעצר עם
-   הפנים קדימה ואז שוקע ישר לתוך חריץ קבוע (שלא זז) בראש קופת החיסכון.
+/* אנימציית מטבע במסך הטעינה: המטבע מסתובב במקום סיבוב אחד (כמו גלגל, לכיוון
+   אחד בלבד), נעצר ישר ואז שוקע לתוך חריץ קבוע (שלא זז) בראש קופת החיסכון.
    "השמיים" שמעל החריץ חתוכים בדיוק בשפה הקדמית (התחתונה) של החריץ
    (coin-drop__mask), והמטבע מצויר מעל החלל הכהה של החריץ - כך החלק התחתון
    שלו נבלע בחריץ ונעלם בהדרגה עד שכולו בפנים, כמו מטבע אמיתי.
-   בסיום הוא מופיע מראש האזור ונופל בחזרה למקומו עם קפיצה קלה */
-.coin-drop { position: relative; width: 110px; height: 128px; margin: 0 auto; perspective: 500px; }
-/* גובה המסכה = top של גג הקופה (92) + מרווח החריץ (6) + גובה החריץ (7), כך שקו
-   החיתוך נופל בדיוק על השפה הקדמית של החריץ. */
-.coin-drop__mask { position: absolute; inset-inline: 0; top: 0; height: 105px; overflow: hidden; z-index: 2; }
+   אחרי שנכנס לקופה הוא מופיע גבוה מעל האזור ונופל חזרה למקומו עם קפיצה קלה */
+.coin-drop { position: relative; width: 110px; height: 128px; margin: 0 auto; }
+/* המסכה נמשכת 90px מעל המיכל כדי שהנפילה החוזרת תתחיל גבוה. השפה התחתונה שלה
+   (105px מראש המיכל) = top של גג הקופה (92) + מרווח החריץ (6) + גובה החריץ (7),
+   כך שקו החיתוך נופל בדיוק על השפה הקדמית של החריץ. */
+.coin-drop__mask { position: absolute; inset-inline: 0; top: -90px; height: 195px; overflow: hidden; z-index: 2; }
 .coin-drop__coin {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-size: 3.4rem; line-height: 1; transform-style: preserve-3d;
+  position: absolute; inset: 90px 0 0 0; display: flex; align-items: center; justify-content: center;
+  font-size: 3.4rem; line-height: 1;
   animation: coin-drop-cycle 5s infinite;
 }
 /* גג הקופה (::before) והחריץ הכהה שבתוכו (::after) */
@@ -328,21 +329,21 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
   content: ''; position: absolute; left: 50%; top: 6px; width: 70px; height: 7px; transform: translateX(-50%);
   border-radius: 4px; background: var(--ink); box-shadow: inset 0 2px 3px rgba(0, 0, 0, .6);
 }
-/* כל keyframe מציין את כל רשימת ה-transform (כולל rotateY) - אחרת הדפדפן
-   משלים identity ומייצר סיבוב מהיר לא מכוון בין הפריימים */
+/* כל keyframe מציין את כל רשימת ה-transform (כולל rotate) - אחרת הדפדפן
+   משלים identity ומייצר סיבוב לא מכוון בין הפריימים. הסיבוב הוא מקטע אחד
+   0→360 כדי שלא ייעצר באמצע וייראה כאילו התהפך כיוון */
 @keyframes coin-drop-cycle {
-  0%    { transform: translateY(0)      rotateY(0deg);   animation-timing-function: ease-in-out; }
-  20%   { transform: translateY(-5px)   rotateY(180deg); animation-timing-function: ease-in-out; }
-  40%   { transform: translateY(0)      rotateY(360deg); animation-timing-function: ease-out; }
-  45%   { transform: translateY(-6px)   rotateY(360deg); animation-timing-function: cubic-bezier(.55, 0, .85, .45); }
-  68%   { transform: translateY(96px)   rotateY(360deg); }
-  72%   { transform: translateY(96px)   rotateY(360deg); }
-  72.1% { transform: translateY(-120px) rotateY(0deg);   animation-timing-function: ease-in; }
-  86%   { transform: translateY(0)      rotateY(0deg);   animation-timing-function: ease-out; }
-  91%   { transform: translateY(-12px)  rotateY(0deg);   animation-timing-function: ease-in; }
-  95%   { transform: translateY(0)      rotateY(0deg);   animation-timing-function: ease-out; }
-  98%   { transform: translateY(-4px)   rotateY(0deg);   animation-timing-function: ease-in; }
-  100%  { transform: translateY(0)      rotateY(0deg); }
+  0%    { transform: translateY(0)      rotate(0deg);   animation-timing-function: ease-in-out; }
+  28%   { transform: translateY(0)      rotate(360deg); animation-timing-function: ease-out; }
+  40%   { transform: translateY(-6px)   rotate(360deg); animation-timing-function: cubic-bezier(.55, 0, .85, .45); }
+  64%   { transform: translateY(96px)   rotate(360deg); }
+  72%   { transform: translateY(96px)   rotate(360deg); }
+  72.1% { transform: translateY(-200px) rotate(0deg);   animation-timing-function: ease-in; }
+  86%   { transform: translateY(0)      rotate(0deg);   animation-timing-function: ease-out; }
+  91%   { transform: translateY(-14px)  rotate(0deg);   animation-timing-function: ease-in; }
+  95%   { transform: translateY(0)      rotate(0deg);   animation-timing-function: ease-out; }
+  98%   { transform: translateY(-5px)   rotate(0deg);   animation-timing-function: ease-in; }
+  100%  { transform: translateY(0)      rotate(0deg); }
 }
 @media (prefers-reduced-motion: reduce) {
   .coin-drop__coin { animation: none; }
