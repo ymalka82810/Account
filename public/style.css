@@ -498,20 +498,20 @@ button.small { min-height: 40px; }
   position: fixed; z-index: 21; transform: translate(-50%, -50%);
   background: var(--card); border: 2px solid var(--line); border-radius: 50%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, .35); overflow: visible; pointer-events: none; opacity: 1;
-  transition: left 1s cubic-bezier(.3, .6, .3, 1), top 1s cubic-bezier(.3, .6, .3, 1),
-    width 3s cubic-bezier(.22, .8, .2, 1), height 3s cubic-bezier(.22, .8, .2, 1);
+  transition: left .45s cubic-bezier(.3, .6, .3, 1), top .45s cubic-bezier(.3, .6, .3, 1),
+    width .9s cubic-bezier(.22, .8, .2, 1), height .9s cubic-bezier(.22, .8, .2, 1);
 }
 .gear-launch.sinking { transition: width .35s ease-in, height .35s ease-in, opacity .35s ease-in; }
 /* הסיבוב רץ בדיב נפרד כדי שתמיד יתבצע כאנימציית keyframes אמיתית (מעבר transition בין rotate(0) ל-rotate(360) לא זז בפועל) */
 .gear-launch-spin { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-/* סיבוב איטי שמתחיל במהירות הקודמת (150°/שנ') ומאט בהדרגה עד עצירה מלאה
-   (האטה ריבועית: שיפוע התחלתי 2, לכן 225° ב-3 שנ'). בשקיעה הגלגל מתגלגל
+/* סיבוב שמתחיל מהר (500°/שנ') ומאט בהדרגה עד עצירה מלאה
+   (האטה ריבועית: 225° ב-0.9 שנ'). בשקיעה הגלגל מתגלגל
    אחורה מאותה זווית, ומאיץ עד הרבה מעבר למהירות ההתחלתית. */
-.gear-launch-spin.flying { animation: gear-spin-slow 3s cubic-bezier(.33, .67, .67, 1) forwards; }
+.gear-launch-spin.flying { animation: gear-spin-slow .9s cubic-bezier(.33, .67, .67, 1) forwards; }
 .gear-launch-spin.sinking { animation: gear-spin-back .35s cubic-bezier(.5, 0, .9, .6) forwards; }
 @keyframes gear-spin-slow { from { transform: rotate(0deg); } to { transform: rotate(225deg); } }
 @keyframes gear-spin-back { from { transform: rotate(225deg); } to { transform: rotate(-45deg); } }
-.gear-launch-icon { font-size: 1.3rem; transition: font-size 3s cubic-bezier(.22, .8, .2, 1); }
+.gear-launch-icon { font-size: 1.3rem; transition: font-size .9s cubic-bezier(.22, .8, .2, 1); }
 .gear-launch-spin.flying .gear-launch-icon { font-size: 5.7rem; }
 .gear-launch-spin.sinking .gear-launch-icon { transition: font-size .35s ease-in; font-size: 0; }
 .gear-sparks { position: fixed; left: 50%; top: 50%; width: 0; height: 0; z-index: 22; pointer-events: none; }
