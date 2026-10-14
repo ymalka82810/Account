@@ -654,36 +654,43 @@ body[data-theme="child"] .dd-opt.active, body:not([data-theme]) .dd-opt.active {
 
 /* ===== ערכת נושא: הורים ===== */
 body[data-theme="parent"] {
-  --ink: #1f2933; --ink-soft: #5f6c7b; --bg: #f5f6f8; --card: #ffffff; --line: #dfe3e8;
-  --coin: #2c5f7c; --coin-deep: #1f4a63; --on-coin: #ffffff;
-  --owe: #b3363f; --owe-bg: #faeaec; --get: #2a7a5b; --get-bg: #e6f3ee;
-  --radius: 10px;
+  --ink: #e6e9ee; --ink-soft: #8b95a3; --bg: #0b0d10; --card: #14171c; --line: #262b33;
+  --coin: #4ea1d3; --coin-deep: #7cc0e8; --on-coin: #0b0d10;
+  --owe: #f0717a; --owe-bg: #3a1a1f; --get: #3fc590; --get-bg: #10332a;
+  --radius: 6px;
+  color-scheme: dark;
+  font-variant-numeric: tabular-nums;
 }
 body[data-theme="parent"] .top {
-  background: linear-gradient(120deg, #8fd8f5 0%, #f295c3 55%, #ffc266 100%);
+  background: #000;
   color: var(--ink);
-  border-bottom: 3px solid var(--coin);
+  border-bottom: 2px solid var(--coin);
   padding-bottom: 16px;
 }
-body[data-theme="parent"] .top h1 { font-size: 1.2rem; font-weight: 700; color: var(--ink); }
-body[data-theme="parent"] .sub { color: #5f6c7b; }
-body[data-theme="parent"] .ghost.light { color: var(--ink); border-color: #c7d3da; background: rgba(255, 255, 255, .55); }
-body[data-theme="parent"] .toast { background: #ffffff; color: var(--ink); box-shadow: 0 6px 20px rgba(16, 24, 40, .15); }
+body[data-theme="parent"] .top h1 { font-size: 1.2rem; font-weight: 700; color: var(--ink); letter-spacing: .01em; }
+body[data-theme="parent"] .sub { color: var(--ink-soft); }
+body[data-theme="parent"] .ghost.light { color: var(--ink); border-color: var(--line); background: var(--card); }
+body[data-theme="parent"] .toast { background: #1c2027; color: var(--ink); border: 1px solid var(--line); box-shadow: 0 6px 20px rgba(0, 0, 0, .5); }
+body[data-theme="parent"] .tag.pending { background: #3b3320; color: #ffd873; }
+body[data-theme="parent"] .sheet-bg { background: rgba(0, 0, 0, .7); }
+body[data-theme="parent"] .sheet { border: 1px solid var(--line); border-bottom: 0; box-shadow: 0 -8px 30px rgba(0, 0, 0, .6); }
+body[data-theme="parent"] .tile-section > summary:hover { background: rgba(255, 255, 255, .03); }
+body[data-theme="parent"] .debt-line { background: rgba(255, 255, 255, .04); }
 body[data-theme="parent"] .who-am-i .avatar-sm { font-size: 1.5rem; }
 body[data-theme="parent"] .tab[data-tab="family"] { order: -1; }
 body[data-theme="parent"] .tab.active { border-bottom-color: var(--coin); }
-body[data-theme="parent"] main h2 { font-size: .9rem; font-weight: 700; color: var(--ink-soft); letter-spacing: .02em; margin: 28px 0 10px; }
+body[data-theme="parent"] main h2 { font-size: .85rem; font-weight: 700; color: var(--ink-soft); letter-spacing: .06em; margin: 28px 0 10px; }
 body[data-theme="parent"] .card, body[data-theme="parent"] .bal,
-body[data-theme="parent"] .debt, body[data-theme="parent"] .person { box-shadow: 0 1px 2px rgba(16, 24, 40, .06); }
+body[data-theme="parent"] .debt, body[data-theme="parent"] .person { box-shadow: none; }
 body[data-theme="parent"] .sum { border-radius: var(--radius); padding: 12px; }
 body[data-theme="parent"] .sum .num { font-size: 1.45rem; }
 body[data-theme="parent"] .bigbtn { min-height: 64px; border-radius: var(--radius); font-size: .98rem; grid-auto-flow: column; gap: 10px; }
 body[data-theme="parent"] .bigbtn span { font-size: 1.3rem; }
 body[data-theme="parent"] button.primary, body[data-theme="parent"] .ghost, body[data-theme="parent"] button.small { border-radius: 8px; }
-body[data-theme="parent"] .tile, body[data-theme="parent"] .av { border-radius: 12px; }
+body[data-theme="parent"] .tile, body[data-theme="parent"] .av { border-radius: 8px; }
 body[data-theme="parent"] .card.notice, body[data-theme="parent"] .pending-card { border-color: var(--coin); }
 body[data-theme="parent"] .dd-btn { border-radius: 8px; }
-body[data-theme="parent"] .dd-list { border-radius: 10px; box-shadow: 0 6px 20px rgba(16, 24, 40, .12); }
+body[data-theme="parent"] .dd-list { border-radius: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, .5); }
 body[data-theme="parent"] .dd-opt { border-radius: 6px; }
 
 /* ===== ערכת נושא: נוער ===== */
