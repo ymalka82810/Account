@@ -2,15 +2,22 @@
   "name": "family-account",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "convex dev",
-    "deploy": "convex deploy"
+    "deploy": "convex deploy",
+    "web:dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "convex": "1.45.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "web-push": "^3.6.7"
   },
   "devDependencies": {
-    "@types/web-push": "^3.6.4"
+    "@types/web-push": "^3.6.4",
+    "vite": "^8.3.4"
   }
 }
