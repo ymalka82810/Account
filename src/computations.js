@@ -84,9 +84,6 @@ export const friendRequests = () => (isParent() ? state.data.people.filter((p) =
 export const teenRequests = () => (isParent() ? state.data.people.filter((p) => p.teenRequested) : []);
 export const parentPendingCount = () => state.data.entries.filter(isPending).length + friendRequests().length + teenRequests().length;
 
-export const friendList = () => (state.fdata && state.fdata.kind === 'teen' && state.fdata.enabled
-  ? state.fdata.friendships.filter((f) => f.status === 'accepted').map((f) => state.fdata.people[f.other]).filter(Boolean)
-  : []);
 export const friendsInboxCount = () => (state.fdata && state.fdata.kind === 'teen' && state.fdata.enabled
   ? state.fdata.friendships.filter((f) => f.status === 'pending' && f.incoming).length
     + state.fdata.entries.filter((e) => isPending(e) && e.createdBy !== state.data.me.id).length

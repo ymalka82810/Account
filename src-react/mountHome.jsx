@@ -10,6 +10,9 @@ import PendingCards from './components/PendingCards.jsx';
 import Legacy from './components/Legacy.jsx';
 import Codes from './components/Codes.jsx';
 import Recurring from './components/Recurring.jsx';
+import FamilyTab from './components/FamilyTab.jsx';
+import FriendsTab from './components/FriendsTab.jsx';
+import EntriesList from './components/EntriesList.jsx';
 import { ConvexReactClient, ConvexProvider, useQuery } from 'convex/react';
 import Home from './components/Home.jsx';
 
@@ -31,6 +34,7 @@ function getSnapshot() { return currentToken; }
 function HomeRoot({ openEntryFlow }) {
   const token = useSyncExternalStore(subscribe, getSnapshot);
   const data = useQuery('data:get', token ? { token } : 'skip');
+  const fdata = useQuery('friends:get', token ? { token } : 'skip') || null;
   // מצבים שבהם אין עדיין מה להציג (טעינה ראשונית / לא מחובר / session
   // ישן) - שאר האתר (מסך welcome/pin/loading) כבר מטפל בהם ברמת הניתוב,
   // אז כאן פשוט לא מציירים כלום, בלי להתנגש.
@@ -42,6 +46,10 @@ function HomeRoot({ openEntryFlow }) {
   const legacyBox = at('legacyBox');
   const codesBox = at('codesBox');
   const recurringBox = at('recurringBox');
+  const isTeen = data.me.role === 'teen';
+  const friendsBox = isTeen ? document.getElementById('friendsRoot') : null;
+  const historyBox = document.getElementById('myHistory');
+  const me = data.me.id;
   return (
     <>
       <Home data={data} token={token} openEntryFlow={openEntryFlow} />
@@ -49,6 +57,12 @@ function HomeRoot({ openEntryFlow }) {
       {legacyBox && createPortal(<Legacy token={token} />, legacyBox)}
       {codesBox && createPortal(<Codes data={data} token={token} />, codesBox)}
       {recurringBox && createPortal(<Recurring data={data} token={token} />, recurringBox)}
+      {isParent && <FamilyTab data={data} fdata={fdata} token={token} />}
+      {friendsBox && createPortal(<FriendsTab data={data} fdata={fdata} token={token} />, friendsBox)}
+      {historyBox && createPortal(
+        <EntriesList list={data.entries.filter((e) => e.from === me || e.to === me)} emptyText="עדיין לא נרשם כלום."
+          token={token} me={me} isParent={isParent} lookup={(id) => data.people.find((p) => p.id === id)} debtList={data.entries} />,
+        historyBox)}
     </>
   );
 }

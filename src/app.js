@@ -1,18 +1,15 @@
 import { state, CODE_KEY, THEME_COLOR, TAB_LABELS, AVATARS } from './state.js';
-import { $, el, today, errMsg, toast, avatarPicker } from './helpers.js';
+import { $, el, today, errMsg, toast, avatarPicker, withBusy } from './helpers.js';
 import { call } from './api.js';
 import { person, isParent, isTeen, parentPendingCount, friendsInboxCount } from './computations.js';
 import { openSheet, closeSheet } from './sheet.js';
 import { openEntryFlow } from './entryFlow.js';
-import { renderEntries } from './entriesList.js';
 import { renderPushBtn, syncPush, releasePushDevice } from './push.js';
 import { switchTab } from './tabs.js';
 import { route, show, subscribeData, setToken, dropSession, wireSession } from './session.js';
 
 import { renderWelcome, renderLogin, initSetup, initJoin, startPin, restoreFamily } from './screens/auth.js';
 import { openChangePinEmail } from './screens/emailAuth.js';
-import { renderFamily } from './screens/family.js';
-import { renderFriends } from './screens/friends.js';
 import { cleanPayload } from './screens/legacy.js';
 import { mountHomeTab } from '../src-react/mountHome.jsx';
 
@@ -55,9 +52,7 @@ function renderApp() {
   // (src-react/mountHome.jsx, דרך useQuery) - לא צריך renderHome() ידני.
   renderPushBtn();
   syncPush();
-  renderEntries($('myHistory'), state.data.entries.filter((e) => e.from === state.data.me.id || e.to === state.data.me.id), 'עדיין לא נרשם כלום.');
-  if (isParent()) renderFamily();
-  if (isTeen()) renderFriends();
+  // מה היה, המשפחה והחברים מנוהלים ע"י React (mountHome.jsx).
 
   if (!state.tabInit) {
     state.tabInit = true;
@@ -72,6 +67,11 @@ document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () 
 
 // ---------- אירועים ----------
 // btnIOwe/btnTheyOwe (מסך הבית) מנוהלים עכשיו ע"י React - ראו Home.jsx.
+
+$('teenRequestBtn').addEventListener('click', withBusy($('teenRequestBtn'), async () => {
+  try { await call('people:requestTeen', { token: state.token }); toast('הבקשה נשלחה להורים ⏳'); }
+  catch (e) { toast(errMsg(e)); }
+}));
 
 $('logoutBtn').addEventListener('click', async () => {
   await releasePushDevice();

@@ -53,3 +53,32 @@ export function fmtDate(iso) {
 export const debtLabel = (d) => (d.note || 'חוב') + ' • ' + fmtDate(d.date);
 
 export const money = (agorot) => (agorot / 100).toLocaleString('he-IL', { style: 'currency', currency: 'ILS' });
+
+export const roleLabel = (r) => (r === 'parent' ? 'הורה' : r === 'teen' ? 'נער/ה' : 'ילד/ה');
+
+// כמה כל אחד חייב / מגיע לו, לפי כל החובות הפתוחים (גרסת React של openDebts).
+export function openDebts(people, entries) {
+  const out = [];
+  for (let i = 0; i < people.length; i++) {
+    for (let j = i + 1; j < people.length; j++) {
+      const n = pairOwes(people[i].id, people[j].id, entries);
+      if (n > 0) out.push({ debtor: people[i].id, creditor: people[j].id, amount: n });
+      else if (n < 0) out.push({ debtor: people[j].id, creditor: people[i].id, amount: -n });
+    }
+  }
+  return out.sort((x, y) => y.amount - x.amount);
+}
+
+// פונקציות שמות שתלויות ב"מי אני" ובמי שאפשר לחפש לפיו (people של המשפחה,
+// ובמצב חברים גם fdata.people).
+export function namesFor(me, lookup) {
+  const nameOf = (id) => lookup(id)?.name ?? 'לא ידוע';
+  return {
+    nameOf,
+    subjectWord: (id) => (id === me ? 'אני' : nameOf(id)),
+    toWord: (id) => (id === me ? 'לי' : 'ל' + nameOf(id)),
+  };
+}
+
+export const canDelete = (e, me, isParent) =>
+  isParent || (e.createdBy === me && (isPending(e) || Date.now() - e.createdAt < 10 * 60 * 1000));
