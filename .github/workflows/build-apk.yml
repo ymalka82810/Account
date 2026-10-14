@@ -35,6 +35,9 @@ jobs:
       - run: npx cap add android
       - run: npx cap sync android
 
+      - name: Generate app icons
+        run: npx --yes @capacitor/assets@3 generate --android --assetPath assets
+
       - name: Add self-update plugin
         run: |
           JAVA_DIR=android/app/src/main/java/com/ymalka/account
