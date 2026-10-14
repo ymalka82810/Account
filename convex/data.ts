@@ -27,6 +27,7 @@ export const get = query({
       legacy: false as const,
       me: {
         id: me._id, name: me.name, role: me.role, avatar: avatarOf(me), gender: me.gender ?? null,
+        palette: me.palette ?? "blue",
         // מייל מוסתר חלקית (למסך ההגדרות). מאומת = אפשר לשלוח אליו קודים.
         email: me.emailVerified && me.email ? maskEmail(me.email) : null,
         pendingEmail: me.pendingEmail ? maskEmail(me.pendingEmail) : null,

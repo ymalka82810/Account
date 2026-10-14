@@ -37,7 +37,7 @@ export const PARENT_AVATARS = [
 ];
 export const FRIEND_MAX = 50000; // באגורות, כמו בשרת
 export const WEEKDAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
-export const THEME_COLOR = { parent: '#000000', child: '#fbf3f7', teen: '#2a1b6e' };
+export const THEME_COLOR = { parent: '#000000', child: '#fbf3f7', teen: '#000000' };
 export const TAB_LABELS = {
   parent: { family: 'סקירה משפחתית', home: 'הכסף שלי', history: 'היסטוריה', manage: 'ניהול' },
   child: { home: '💰 הכסף שלי', history: '📜 מה היה' },

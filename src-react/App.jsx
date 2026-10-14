@@ -31,8 +31,9 @@ function currentScreen(data) {
   return 'welcome';
 }
 
-function applyTheme(role) {
+function applyTheme(role, palette) {
   if (role) document.body.dataset.theme = role; else delete document.body.dataset.theme;
+  if (role === 'teen' && palette) document.body.dataset.palette = palette; else delete document.body.dataset.palette;
   const tc = document.querySelector('meta[name="theme-color"]');
   if (tc) tc.setAttribute('content', THEME_COLOR[role] || THEME_COLOR.child);
 }
@@ -155,7 +156,8 @@ function Root() {
   }, []);
 
   const role = screen === 'app' ? data.me.role : '';
-  useEffect(() => { applyTheme(role); }, [role]);
+  const palette = screen === 'app' ? data.me.palette : '';
+  useEffect(() => { applyTheme(role, palette); }, [role, palette]);
   useEffect(() => { window.scrollTo({ top: 0 }); }, [screen]);
   useEffect(() => {
     if (screen !== 'app') return;

@@ -694,21 +694,37 @@ body[data-theme="parent"] .dd-list { border-radius: 8px; box-shadow: 0 6px 20px 
 body[data-theme="parent"] .dd-opt { border-radius: 6px; }
 
 /* ===== ערכת נושא: נוער ===== */
+/* רקע שחור + שני צבעי ניאון לבחירה (--neon-a ראשי, --neon-b משני). ברירת מחדל: כחול+סגול. */
+body[data-theme="teen"], .palette-pick[data-pal="blue"] { --neon-a: #b04dff; --neon-b: #22d8ff; --neon-ink: #ffffff; }
+body[data-theme="teen"][data-palette="green"], .palette-pick[data-pal="green"] { --neon-a: #39ff88; --neon-b: #f2ff3a; --neon-ink: #031a0b; }
+body[data-theme="teen"][data-palette="orange"], .palette-pick[data-pal="orange"] { --neon-a: #ff7a1a; --neon-b: #ff3fae; --neon-ink: #1f0a00; }
 body[data-theme="teen"] {
-  --ink: #f1f1f8; --ink-soft: #a4a4c0; --bg: #0e0e16; --card: #181826; --line: #2b2b42;
-  --coin: #7c5cff; --coin-deep: #a18bff; --on-coin: #ffffff;
+  --ink: #f4f4fa; --ink-soft: #a3a3b8; --bg: #000; --card: #0d0d12; --line: #24242f;
+  --coin: var(--neon-a); --coin-deep: var(--neon-b); --on-coin: var(--neon-ink);
   --owe: #ff6b8a; --owe-bg: #3a1a2a; --get: #35e0a1; --get-bg: #103a30;
+  --neon-glow: color-mix(in srgb, var(--neon-a) 30%, transparent);
+  --neon-grad: linear-gradient(135deg, var(--neon-a), var(--neon-b));
   --radius: 18px;
   color-scheme: dark;
+  background:
+    radial-gradient(60vmax 40vmax at 100% 0%, color-mix(in srgb, var(--neon-a) 14%, transparent), transparent 70%),
+    radial-gradient(60vmax 40vmax at 0% 100%, color-mix(in srgb, var(--neon-b) 10%, transparent), transparent 70%),
+    #000;
+  background-attachment: fixed;
 }
 body[data-theme="teen"] .top {
-  background: linear-gradient(135deg, #2a1b6e 0%, #5b2bd6 55%, #12b3d6 100%);
-  border-bottom: 0; border-radius: 0 0 26px 26px; padding-bottom: 26px;
+  background: #000;
+  border-bottom: 2px solid var(--neon-a); border-radius: 0 0 26px 26px; padding-bottom: 26px;
+  box-shadow: 0 6px 28px var(--neon-glow);
 }
-body[data-theme="teen"] .sub { color: #dcd6ff; }
+body[data-theme="teen"] .top h1 {
+  background: var(--neon-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+body[data-theme="teen"] .sub { color: var(--ink-soft); }
+body[data-theme="teen"] .ghost.light { color: var(--ink); border-color: var(--neon-a); background: transparent; }
 body[data-theme="teen"] .tabs { gap: 8px; padding: 12px 12px 10px; border-bottom: 0; }
 body[data-theme="teen"] .tab { border: 0; border-radius: 99px; padding: 9px 16px; background: var(--card); color: var(--ink-soft); }
-body[data-theme="teen"] .tab.active { background: var(--coin); color: #fff; }
+body[data-theme="teen"] .tab.active { background: var(--neon-grad); color: var(--on-coin); box-shadow: 0 0 16px var(--neon-glow); }
 body[data-theme="teen"] .sum { border-radius: 20px; }
 body[data-theme="teen"] .sum .num { font-size: 1.9rem; letter-spacing: -.01em; }
 body[data-theme="teen"] .bigbtn { border-radius: 22px; border-width: 2px; transition: box-shadow .25s ease; }
@@ -717,21 +733,37 @@ body[data-theme="teen"] .bigbtn.get:hover, body[data-theme="teen"] .bigbtn.get:f
 body[data-theme="teen"] .bigbtn.owe:active { box-shadow: 0 0 0 1px var(--owe), 0 4px 12px rgba(255, 107, 138, .08); }
 body[data-theme="teen"] .bigbtn.get:active { box-shadow: 0 0 0 1px var(--get), 0 4px 12px rgba(53, 224, 161, .08); }
 body[data-theme="teen"] .card, body[data-theme="teen"] .debt, body[data-theme="teen"] .person, body[data-theme="teen"] .bal { border-color: var(--line); }
-body[data-theme="teen"] button.primary { border-radius: 16px; background: linear-gradient(135deg, #7c5cff, #5b8cff); }
+body[data-theme="teen"] button.primary { border-radius: 16px; background: var(--neon-grad); color: var(--on-coin); box-shadow: 0 0 18px var(--neon-glow); }
 body[data-theme="teen"] .chip, body[data-theme="teen"] .av, body[data-theme="teen"] .tile { border-radius: 99px; }
 body[data-theme="teen"] .tile { border-radius: 22px; }
 body[data-theme="teen"] .av { border-radius: 14px; }
 body[data-theme="teen"] .summary-line { border-color: var(--coin); }
-body[data-theme="teen"] .toast { background: #2a1b6e; }
+body[data-theme="teen"] .toast { background: #0d0d12; color: var(--ink); border: 1px solid var(--neon-a); box-shadow: 0 0 20px var(--neon-glow); }
 body[data-theme="teen"] .tag.pending { background: #3b3320; color: #ffd873; }
 body[data-theme="teen"] .card.notice, body[data-theme="teen"] .pending-card { border-color: var(--coin); }
-body[data-theme="teen"] .sheet { box-shadow: 0 -8px 40px rgba(124, 92, 255, .25); }
+body[data-theme="teen"] .sheet-bg { background: rgba(0, 0, 0, .7); }
+body[data-theme="teen"] .sheet { background: #07070b; border-top: 2px solid var(--neon-a); box-shadow: 0 -8px 40px var(--neon-glow); }
 body[data-theme="teen"] .dd-btn { border-radius: 14px; }
 body[data-theme="teen"] .dd-btn[aria-expanded="true"] { border-color: var(--coin); box-shadow: 0 0 0 1px var(--coin); }
-body[data-theme="teen"] .dd-list { border-radius: 16px; box-shadow: 0 10px 30px rgba(124, 92, 255, .25); }
+body[data-theme="teen"] .dd-list { border-radius: 16px; box-shadow: 0 10px 30px var(--neon-glow); }
 body[data-theme="teen"] .dd-opt { border-radius: 10px; }
-body[data-theme="teen"] .dd-opt.sel { background: linear-gradient(135deg, #7c5cff, #5b8cff); color: #fff; }
-body[data-theme="teen"] .dd-opt.sel.active { background: linear-gradient(135deg, #6c4cef, #4b7cef); }
+body[data-theme="teen"] .dd-opt.sel { background: var(--neon-grad); color: var(--on-coin); }
+body[data-theme="teen"] .dd-opt.sel.active { background: var(--neon-grad); filter: brightness(.9); }
+
+/* בחירת צבעי המסך (נוער) */
+.palette-picks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.palette-pick {
+  display: grid; justify-items: center; gap: 8px; padding: 12px 6px;
+  border: 2px solid #24242f; border-radius: 16px; background: #000; color: #f4f4fa;
+  font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer;
+}
+.palette-swatch {
+  width: 100%; max-width: 64px; height: 28px; border-radius: 99px;
+  background: linear-gradient(135deg, var(--neon-a), var(--neon-b));
+  box-shadow: 0 0 14px color-mix(in srgb, var(--neon-a) 50%, transparent);
+}
+.palette-pick.sel { border-color: var(--neon-a); box-shadow: 0 0 0 1px var(--neon-a), 0 0 16px color-mix(in srgb, var(--neon-a) 35%, transparent); }
+.palette-pick:focus-visible { outline: 2px solid var(--neon-b); outline-offset: 2px; }
 .person { flex-wrap: wrap; } .person .text { min-width: 8em; }
 .person { flex-wrap: wrap; } .person .text { min-width: 8em; }
 

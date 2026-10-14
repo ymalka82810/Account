@@ -114,6 +114,15 @@ export const setGender = mutation({
   },
 });
 
+// נוער בוחרים לעצמם את צבעי הניאון של המסך. חסר = ברירת המחדל (כחול+סגול).
+export const setPalette = mutation({
+  args: { token: v.string(), palette: v.optional(v.union(v.literal("blue"), v.literal("green"), v.literal("orange"))) },
+  handler: async (ctx, { token, palette }) => {
+    const me = await requirePerson(ctx, token);
+    await ctx.db.patch(me._id, { palette });
+  },
+});
+
 // כל אחד/ת בוחר/ת דמות לעצמו/ה. אי אפשר לבחור דמות שכבר תפוסה אצל בן משפחה אחר.
 export const setAvatar = mutation({
   args: { token: v.string(), avatar: v.optional(v.string()) },
