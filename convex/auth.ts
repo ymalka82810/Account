@@ -1,13 +1,15 @@
 import { mutation, query, MutationCtx } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { Doc, Id } from "./_generated/dataModel";
+import { internal } from "./_generated/api";
+import { verifyCode } from "./emailCodes";
 import {
   CODE_FAIL_LIMIT, CODE_FAIL_WINDOW_MS, CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS, MAX_FAMILY_SIZE, SESSION_MS,
   adoptLegacy, cleanFamilyName, cleanName, createFamilyDoc, deviceKey, findFamilyByCode, getSessionPerson, hashPin,
   hashToken, isThrottled, legacyPeople, noteHit, randomHex, registerPinFail, requireSameFamily, requireParent, validPin,
 } from "./lib";
 
-async function openSession(ctx: MutationCtx, personId: Id<"people">): Promise<string> {
+export async function openSession(ctx: MutationCtx, personId: Id<"people">): Promise<string> {
   const token = randomHex(32);
   await ctx.db.insert("sessions", {
     personId,
@@ -17,7 +19,7 @@ async function openSession(ctx: MutationCtx, personId: Id<"people">): Promise<st
   return token;
 }
 
-async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: string) {
+export async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: string) {
   const pinSalt = randomHex(16);
   await ctx.db.patch(personId, {
     pinSalt,
@@ -36,11 +38,11 @@ const publicPerson = (p: Doc<"people">) => ({
 
 // הערה: שגיאות של קוד משפחה מוחזרות כתוצאה (ולא נזרקות) כדי שספירת הניסיונות תישמר.
 // הספירה היא לפי מכשיר (device), לא גלובלית, כדי שמנחש אחד לא ינעל את כולם.
-const failCode = async (ctx: MutationCtx, device: string | undefined) => {
+export const failCode = async (ctx: MutationCtx, device: string | undefined) => {
   await noteHit(ctx, deviceKey(device), CODE_FAIL_WINDOW_MS);
   return { ok: false as const, reason: "code" as const };
 };
-const codeThrottled = (ctx: MutationCtx, device: string | undefined) =>
+export const codeThrottled = (ctx: MutationCtx, device: string | undefined) =>
   isThrottled(ctx, deviceKey(device), CODE_FAIL_LIMIT, CODE_FAIL_WINDOW_MS);
 
 // הורים מהגרסה הישנה (משפחה אחת בלי קוד). נעלם מעצמו אחרי שהורה נכנס פעם אחת.
@@ -125,7 +127,10 @@ export const login = mutation({
     }
     if ((await hashPin(pin, p.pinSalt)) !== p.pinHash) {
       const r = await registerPinFail(ctx, p);
-      if (r.locked) return { ok: false as const, reason: "locked" as const, waitSeconds: r.waitSeconds };
+      if (r.locked) {
+        await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: p._id });
+        return { ok: false as const, reason: "locked" as const, waitSeconds: r.waitSeconds };
+      }
       return { ok: false as const, reason: "wrong" as const, left: r.left };
     }
     // כניסה מוצלחת מאפסת את הרמה. lockCount/lastLockAt נשארים כדי שההורה יראה התראה.
@@ -188,10 +193,13 @@ export const changeMyPin = mutation({
     const p = await ctx.db.get(session.personId);
     if (!p || !p.pinHash || !p.pinSalt) return { ok: false as const, reason: "session" as const };
     if (!validPin(newPin)) return { ok: false as const, reason: "format" as const };
+    // הורה עם מייל מאומת משנה קוד רק באישור קוד מהמייל (emailAuth:changePinWithCode).
+    if (p.emailVerified) return { ok: false as const, reason: "useEmail" as const };
     const now = Date.now();
     if (p.lockedUntil && p.lockedUntil > now) return { ok: false as const, reason: "locked" as const };
     if ((await hashPin(oldPin, p.pinSalt)) !== p.pinHash) {
-      await registerPinFail(ctx, p);
+      const r = await registerPinFail(ctx, p);
+      if (r.locked) await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: p._id });
       return { ok: false as const, reason: "wrong" as const };
     }
     await setPin(ctx, p._id, newPin);
@@ -201,10 +209,15 @@ export const changeMyPin = mutation({
 
 // הורה קובע קוד חדש למישהו (או מנקה אותו, והאדם יבחר קוד בעצמו).
 export const resetPin = mutation({
-  args: { token: v.string(), personId: v.id("people"), pin: v.optional(v.string()) },
-  handler: async (ctx, { token, personId, pin }) => {
+  args: { token: v.string(), personId: v.id("people"), pin: v.optional(v.string()), emailCode: v.optional(v.string()) },
+  handler: async (ctx, { token, personId, pin, emailCode }) => {
     const me = await requireParent(ctx, token);
     await requireSameFamily(ctx, me, personId);
+    // הורה עם מייל מאומת מאשר כל קוד חדש בקוד מהמייל (emailAuth:requestChildResetCode).
+    if (me.emailVerified) {
+      if (!emailCode) return { ok: false as const, reason: "needEmailCode" as const };
+      if (!(await verifyCode(ctx, me._id, "childReset", emailCode))) return { ok: false as const, reason: "emailCode" as const };
+    }
     for (const s of await ctx.db.query("sessions").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) {
       await ctx.db.delete(s._id);
     }
@@ -214,5 +227,6 @@ export const resetPin = mutation({
     } else {
       await ctx.db.patch(personId, { pinHash: undefined, pinSalt: undefined, failedAttempts: 0, lockedUntil: undefined, lockLevel: 0, lockCount: 0, lastLockAt: undefined });
     }
+    return { ok: true as const };
   },
 });

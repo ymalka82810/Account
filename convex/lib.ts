@@ -245,3 +245,30 @@ export function advanceDate(d: string, frequency: "weekly" | "monthly", monthDay
   const { y, m } = parseDay(d);
   return fmtUTC(Date.UTC(y, m, monthDay ?? parseDay(d).day));
 }
+
+// ---------- מייל וקודי אימות ----------
+export const EMAIL_CODE_TTL_MS = 10 * 60 * 1000;
+export const EMAIL_CODE_MAX_ATTEMPTS = 5;
+export const EMAIL_SEND_LIMIT = 5; // בקשות קוד לאדם
+export const EMAIL_SEND_WINDOW_MS = 10 * 60 * 1000;
+
+export function normalizeEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
+export function validEmail(email: string): boolean {
+  return email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+}
+
+// קוד של 6 ספרות בלי הטיה (דגימה עם דחייה).
+export function generateEmailCode(): string {
+  const a = new Uint32Array(1);
+  const limit = Math.floor(0x100000000 / 1_000_000) * 1_000_000;
+  do crypto.getRandomValues(a); while (a[0] >= limit);
+  return String(a[0] % 1_000_000).padStart(6, "0");
+}
+
+export function maskEmail(email: string): string {
+  const [name, domain] = email.split("@");
+  return (name[0] ?? "") + "***@" + (domain ?? "");
+}

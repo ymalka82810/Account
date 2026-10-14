@@ -26,6 +26,10 @@ export default defineSchema({
     lockedUntil: v.optional(v.number()),
     // נעילה מדורגת: רמה עולה בכל נעילה (דקה, 5 דקות, שעה...). מתאפסת בכניסה מוצלחת.
     lockLevel: v.optional(v.number()),
+    // מייל להורים בלבד (לשינוי/איפוס קוד ולהתראות נעילה). pendingEmail = ממתין לאימות.
+    email: v.optional(v.string()),
+    emailVerified: v.optional(v.boolean()),
+    pendingEmail: v.optional(v.string()),
     // להתראה להורה: כמה נעילות היו ומתי הייתה האחרונה. מתאפס כשקובעים קוד חדש.
     lockCount: v.optional(v.number()),
     lastLockAt: v.optional(v.number()),
@@ -37,6 +41,19 @@ export default defineSchema({
     expiresAt: v.number(),
   })
     .index("by_token", ["tokenHash"])
+    .index("by_person", ["personId"])
+    .index("by_expires", ["expiresAt"]),
+
+  // קודי אימות חד-פעמיים שנשלחים למייל (נשמרים כגיבוב בלבד).
+  emailCodes: defineTable({
+    personId: v.id("people"),
+    email: v.string(),
+    purpose: v.union(v.literal("verify"), v.literal("pinChange"), v.literal("pinReset"), v.literal("childReset")),
+    codeHash: v.string(),
+    salt: v.string(),
+    expiresAt: v.number(),
+    attempts: v.number(),
+  })
     .index("by_person", ["personId"])
     .index("by_expires", ["expiresAt"]),
 
