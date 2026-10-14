@@ -15,6 +15,7 @@ import Auth from './components/Auth.jsx';
 import Home from './components/Home.jsx';
 import FriendsTab from './components/FriendsTab.jsx';
 import FamilyTab from './components/FamilyTab.jsx';
+import ManageTab from './components/ManageTab.jsx';
 import HistoryTab from './components/HistoryTab.jsx';
 
 // ---------- איזה מסך מוצג ----------
@@ -36,10 +37,10 @@ function applyTheme(role) {
   if (tc) tc.setAttribute('content', THEME_COLOR[role] || THEME_COLOR.child);
 }
 
-const TAB_IDS = ['home', 'friends', 'history', 'family'];
+const TAB_IDS = ['home', 'friends', 'history', 'family', 'manage'];
 const tabFromHash = () => { const h = location.hash.slice(1); return TAB_IDS.includes(h) ? h : null; };
 
-const DEFAULT_LABELS = { home: '🏠 הכסף שלי', friends: '🤝 חברים', history: '📜 מה היה', family: '👨‍👩‍👧 המשפחה' };
+const DEFAULT_LABELS = { home: '🏠 הכסף שלי', friends: '🤝 חברים', history: '📜 מה היה', family: '👨‍👩‍👧 המשפחה', manage: '⚙️ ניהול' };
 
 export default function App() {
   if (!client) {
@@ -166,7 +167,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
   const role = data.me.role;
   // הלשונית הנבחרת: ברירת מחדל לפי תפקיד, ואם היא לא שייכת לתפקיד חוזרים לבית.
   let tab = tabSel || (isParent ? 'family' : 'home');
-  if ((tab === 'family' && !isParent) || (tab === 'friends' && !isTeen)) tab = 'home';
+  if (((tab === 'family' || tab === 'manage') && !isParent) || (tab === 'friends' && !isTeen)) tab = 'home';
 
   const labels = TAB_LABELS[role] || TAB_LABELS.child;
   const friendReqs = data.people.filter((p) => p.friendsRequested).length;
@@ -177,7 +178,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
       + fdata.entries.filter((e) => isPending(e) && e.createdBy !== me).length
     : 0;
 
-  const tabs = ['home', ...(isTeen ? ['friends'] : []), 'history', ...(isParent ? ['family'] : [])];
+  const tabs = ['home', ...(isTeen ? ['friends'] : []), 'history', ...(isParent ? ['family', 'manage'] : [])];
   const myPending = isParent ? 0 : data.entries.filter((e) => isPending(e) && (e.from === me || e.to === me)).length;
   const badge = { home: myPending, family: isParent ? parentCount : 0, friends: friendsCount };
 
