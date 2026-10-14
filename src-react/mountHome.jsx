@@ -4,7 +4,9 @@
 // מאותו רגע, המסך הזה מתעדכן לבד בכל שינוי נתונים (useQuery), בלי צורך
 // בקריאה ידנית ל-renderHome() כמו קודם.
 import { useSyncExternalStore } from 'react';
+import { createPortal } from 'react-dom';
 import { createRoot } from 'react-dom/client';
+import PendingCards from './components/PendingCards.jsx';
 import { ConvexReactClient, ConvexProvider, useQuery } from 'convex/react';
 import Home from './components/Home.jsx';
 
@@ -30,7 +32,14 @@ function HomeRoot({ openEntryFlow }) {
   // ישן) - שאר האתר (מסך welcome/pin/loading) כבר מטפל בהם ברמת הניתוב,
   // אז כאן פשוט לא מציירים כלום, בלי להתנגש.
   if (!token || data === undefined || data === null || data.legacy) return null;
-  return <Home data={data} openEntryFlow={openEntryFlow} />;
+  // להורים האישורים בראש הסקירה המשפחתית (אלמנט סטטי ב-index.html), דרך portal.
+  const parentBox = data.me.role === 'parent' ? document.getElementById('pendingBoxParent') : null;
+  return (
+    <>
+      <Home data={data} token={token} openEntryFlow={openEntryFlow} />
+      {parentBox && createPortal(<PendingCards data={data} token={token} parentView />, parentBox)}
+    </>
+  );
 }
 
 export function mountHomeTab({ initialToken, openEntryFlow }) {

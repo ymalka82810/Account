@@ -11,7 +11,6 @@ import { route, show, subscribeData, setToken, dropSession, wireSession } from '
 
 import { renderWelcome, renderLogin, initSetup, initJoin, startPin, restoreFamily } from './screens/auth.js';
 import { openChangePinEmail } from './screens/emailAuth.js';
-import { renderPending } from './screens/pending.js';
 import { renderFamily } from './screens/family.js';
 import { renderFriends } from './screens/friends.js';
 import { cleanPayload } from './screens/legacy.js';
@@ -54,7 +53,6 @@ function renderApp() {
   tbtn.textContent = asked ? '⏳ הבקשה להפוך לנער/ה נשלחה להורים' : '🎧 בקשה להפוך לנער/ה';
   // מסך הבית (summary/bigbtns/myDebts) מנוהל עכשיו ע"י React באופן עצמאי
   // (src-react/mountHome.jsx, דרך useQuery) - לא צריך renderHome() ידני.
-  renderPending();
   renderPushBtn();
   syncPush();
   renderEntries($('myHistory'), state.data.entries.filter((e) => e.from === state.data.me.id || e.to === state.data.me.id), 'עדיין לא נרשם כלום.');

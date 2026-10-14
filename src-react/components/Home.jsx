@@ -1,3 +1,4 @@
+import PendingCards from './PendingCards.jsx';
 import { pairOwes, openDebtsOf, debtLabel, money } from '../lib/computations.js';
 
 // גרסת React של src/screens/home.js. אותו HTML/classes בדיוק (style.css
@@ -14,7 +15,7 @@ import { pairOwes, openDebtsOf, debtLabel, money } from '../lib/computations.js'
 // מחוץ ל-React, כי קוד ישן (push.js, app.js, friends.js) ממשיך לשלוט
 // בהם ישירות (hidden/textContent/dataset) - אם React היה מצייר אותם
 // מחדש בכל רינדור, זה היה דורס את השינויים האלה.
-export default function Home({ data, openEntryFlow }) {
+export default function Home({ data, token, openEntryFlow }) {
   const me = data.me.id;
   let owe = 0, get = 0;
   const cards = [];
@@ -84,7 +85,9 @@ export default function Home({ data, openEntryFlow }) {
         </button>
       </div>
 
-      <div id="pendingBox" />
+      <div id="pendingBox">
+        {data.me.role !== 'parent' && <PendingCards data={data} token={token} parentView={false} />}
+      </div>
 
       <h2>מי חייב למי</h2>
       <div id="myDebts">
