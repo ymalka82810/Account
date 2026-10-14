@@ -1,5 +1,5 @@
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --ink: #4a4468;
   --ink-soft: #8d84ab;
   --bg: #fbf3f7;
@@ -13,19 +13,6 @@
   --get-bg: #e2f6ec;
   --radius: 16px;
   font-family: "Rubik", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --ink: #ece7fb;
-    --ink-soft: #b3a9d6;
-    --bg: #211d33;
-    --card: #2e2847;
-    --line: #413a5e;
-    --owe-bg: #4a2f33;
-    --get-bg: #1c3e37;
-  }
 }
 
 * { box-sizing: border-box; }
@@ -454,13 +441,6 @@ body[data-theme="parent"] {
   --coin: #2c5f7c; --coin-deep: #1f4a63; --on-coin: #ffffff;
   --owe: #b3363f; --owe-bg: #faeaec; --get: #2a7a5b; --get-bg: #e6f3ee;
   --radius: 10px;
-}
-@media (prefers-color-scheme: dark) {
-  body[data-theme="parent"] {
-    --ink: #e8edf2; --ink-soft: #a3afbd; --bg: #12171c; --card: #1b232b; --line: #2c3844;
-    --coin: #5aa3c7; --coin-deep: #8cc3de; --on-coin: #0f2230;
-    --owe: #ef7d86; --owe-bg: #3a1f23; --get: #5fcf9f; --get-bg: #16342a;
-  }
 }
 body[data-theme="parent"] .top { background: #1f2933; border-bottom: 3px solid var(--coin); padding-bottom: 16px; }
 body[data-theme="parent"] .top h1 { font-size: 1.2rem; font-weight: 700; }
