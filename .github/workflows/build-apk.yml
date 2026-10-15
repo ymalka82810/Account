@@ -38,14 +38,20 @@ jobs:
       - name: Generate app icons
         run: npx --yes @capacitor/assets@3 generate --android --assetPath assets
 
-      - name: Add native plugins (self-update, biometric)
+      # אייקון לפי מטבע: activity-alias לכל מטבע (₪, $, €...) במקום ה-LAUNCHER של MainActivity
+      - name: Currency launcher icons
+        run: python3 android-plugin/apply-currency-icons.py
+
+      - name: Add native plugins (self-update, biometric, app icon)
         run: |
           JAVA_DIR=android/app/src/main/java/com/ymalka/account
           sed "s/PACKAGE_PLACEHOLDER/com.ymalka.account/" android-plugin/AppUpdaterPlugin.java > $JAVA_DIR/AppUpdaterPlugin.java
           sed "s/PACKAGE_PLACEHOLDER/com.ymalka.account/" android-plugin/BiometricAuthPlugin.java > $JAVA_DIR/BiometricAuthPlugin.java
+          sed "s/PACKAGE_PLACEHOLDER/com.ymalka.account/" android-plugin/AppIconPlugin.java > $JAVA_DIR/AppIconPlugin.java
           # רישום הפלאגינים לפני super.onCreate
-          sed -i 's/public class MainActivity extends BridgeActivity {}/public class MainActivity extends BridgeActivity {\n    @Override\n    public void onCreate(android.os.Bundle savedInstanceState) {\n        registerPlugin(AppUpdaterPlugin.class);\n        registerPlugin(BiometricAuthPlugin.class);\n        super.onCreate(savedInstanceState);\n    }\n}/' $JAVA_DIR/MainActivity.java
+          sed -i 's/public class MainActivity extends BridgeActivity {}/public class MainActivity extends BridgeActivity {\n    @Override\n    public void onCreate(android.os.Bundle savedInstanceState) {\n        registerPlugin(AppUpdaterPlugin.class);\n        registerPlugin(BiometricAuthPlugin.class);\n        registerPlugin(AppIconPlugin.class);\n        super.onCreate(savedInstanceState);\n    }\n}/' $JAVA_DIR/MainActivity.java
           grep -q "registerPlugin(BiometricAuthPlugin.class)" $JAVA_DIR/MainActivity.java
+          grep -q "registerPlugin(AppIconPlugin.class)" $JAVA_DIR/MainActivity.java
           # ספריית BiometricPrompt של androidx
           sed -i '0,/^dependencies {/s//dependencies {\n    implementation "androidx.biometric:biometric:1.1.0"/' android/app/build.gradle
           grep -q "androidx.biometric:biometric" android/app/build.gradle

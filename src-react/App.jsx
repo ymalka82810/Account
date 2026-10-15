@@ -7,6 +7,7 @@ import { restoreFamily, startPin, autoSkipPerson, dropSession } from './state/au
 import { syncPush } from './lib/push.js';
 import { client } from './lib/client.js';
 import { isPending, setFx } from './lib/computations.js';
+import { applyAppIcon, deviceCurrency } from './lib/appIcon.js';
 import { AppCtx, useApp } from './state/appContext.js';
 import { useSheet } from './components/shared/Sheet.jsx';
 import { EntryFlow } from './components/entries/EntryFlow.jsx';
@@ -17,6 +18,8 @@ import FriendsTab from './components/friends/FriendsTab.jsx';
 import FamilyTab from './components/family/FamilyTab.jsx';
 import ManageTab from './components/manage/ManageTab.jsx';
 import HistoryTab from './components/history/HistoryTab.jsx';
+
+const ICON_CURRENCY_KEY = 'app-icon-currency';
 
 // ---------- איזה מסך מוצג ----------
 // loading | noserver | welcome | setup | login | join | pin | app
@@ -181,6 +184,14 @@ function Root() {
   const themePalette = screen === 'app' ? palette : (lt ? lt.palette : '');
   useEffect(() => { applyTheme(themeRole, themePalette); }, [themeRole, themePalette]);
   useEffect(() => { window.scrollTo({ top: 0 }); }, [screen]);
+  // אייקון לפי המטבע: של המשפחה אחרי כניסה (ונשמר לפעם הבאה), ולפני כן האחרון שנשמר או לפי המיקום של המכשיר
+  const familyCurrency = screen === 'app' ? (data.family.currency || 'ILS') : '';
+  useEffect(() => {
+    let cur = familyCurrency;
+    if (cur) { try { localStorage.setItem(ICON_CURRENCY_KEY, cur); } catch (e) { /* */ } }
+    else { try { cur = localStorage.getItem(ICON_CURRENCY_KEY); } catch (e) { /* */ } }
+    applyAppIcon(cur || deviceCurrency() || 'ILS');
+  }, [familyCurrency]);
   useEffect(() => {
     if (screen !== 'app') return;
     localStorage.setItem(LAST_ROLE_KEY, role);
