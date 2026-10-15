@@ -11,7 +11,7 @@ export default function DebtLines({ open, iOwe, onPay }) {
             <div className="dl-name">{debtLabel(x.debt)}</div>
             <div className="dl-rem">{x.paid > 0 ? `נשאר ${money(x.remaining)} מתוך ${money(x.debt.amount)}` : money(x.remaining)}</div>
           </div>
-          <button className="small charcoalbtn" type="button" onClick={() => onPay(x)}>{iOwe ? '💰 שילמתי' : '💰 קיבלתי'}</button>
+          <button className="small charcoalbtn" type="button" onClick={() => onPay(x)}>{iOwe ? 'שילמתי' : 'קיבלתי'}</button>
         </div>
       ))}
     </div>

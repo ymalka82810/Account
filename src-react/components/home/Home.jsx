@@ -41,7 +41,7 @@ export default function Home({ data, token }) {
             onClick={() => openEntryFlow(iOwe
               ? { kind: 'payment', from: me, to: p.id, suggest: amount }
               : { kind: 'payment', from: p.id, to: me, suggest: amount })}>
-            {iOwe ? '💰 שילמתי' : '💰 קיבלתי'}
+            {iOwe ? 'שילמתי' : 'קיבלתי'}
           </button>
         )}
       </div>
