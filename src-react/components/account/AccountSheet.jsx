@@ -101,15 +101,6 @@ export function AccountSheet() {
         </button>
       )}
 
-      {me.role === 'child' && (
-        me.teenRequested
-          ? <p className="hint">הבקשה להפוך ל{g(me.gender, 'נער', 'נערה', 'נער/ה')} נשלחה, מחכה לאישור ההורים.</p>
-          : <AsyncButton className="ghost" onClick={async () => {
-            try { await call('people:requestTeen', { token }); toast('הבקשה נשלחה להורים'); sheet.close(); }
-            catch (e) { toast(errMsg(e)); }
-          }}>🧑 אני רוצה להפוך ל{g(me.gender, 'נער', 'נערה', 'נער/ה')}</AsyncButton>
-      )}
-
       <AsyncButton className="ghost" onClick={async () => { sheet.close(); await logout(); }}>יציאה</AsyncButton>
 
       <p className="legal"><a href="terms.html">תנאי שימוש</a> · <a href="privacy.html">מדיניות פרטיות</a></p>

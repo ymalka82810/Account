@@ -22,32 +22,11 @@ export default function PendingCards({ data, token, parentView }) {
     );
   }
 
-  const teenReqs = data.people.filter((p) => p.teenRequested);
   const friendReqs = data.people.filter((p) => p.friendsRequested);
   const sorted = [...list].sort((x, y) => x.createdAt - y.createdAt);
 
   return (
     <>
-      {teenReqs.length > 0 && (
-        <div className="card pending-card">
-          <h3>🎧 בקשות לעבור לנוער ({teenReqs.length})</h3>
-          {teenReqs.map((p) => (
-            <div className="row" key={p.id}>
-              <div className="text">
-                <div>{p.name} {g(p.gender, 'מבקש', 'מבקשת', 'מבקש/ת')} להפוך ל{g(p.gender, 'נער', 'נערה', 'נער/ה')}</div>
-                <div className="meta">ממשק מותאם לנוער. מצב חברים נפרד ודורש אישור נוסף.</div>
-              </div>
-              <div className="acts">
-                <button className="small okbtn" type="button"
-                  onClick={() => run('people:setRole', { id: p.id, role: 'teen' }, `${p.name} עכשיו ${g(p.gender, 'נער', 'נערה', 'נער/ה')}`)}>✅ אישור</button>
-                <button className="small danger" type="button"
-                  onClick={() => run('people:declineTeen', { id: p.id }, 'הבקשה נדחתה')}>דחייה</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
       {friendReqs.length > 0 && (
         <div className="card pending-card">
           <h3>🤝 בקשות למצב חברים ({friendReqs.length})</h3>

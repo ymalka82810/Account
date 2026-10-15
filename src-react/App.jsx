@@ -278,8 +278,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
 
   const labels = TAB_LABELS[role] || TAB_LABELS.child;
   const friendReqs = data.people.filter((p) => p.friendsRequested).length;
-  const teenReqs = data.people.filter((p) => p.teenRequested).length;
-  const parentCount = data.entries.filter(isPending).length + friendReqs + teenReqs;
+  const parentCount = data.entries.filter(isPending).length + friendReqs;
   const friendsCount = fdata && fdata.kind === 'teen' && fdata.enabled
     ? fdata.friendships.filter((f) => f.status === 'pending' && f.incoming).length
       + fdata.entries.filter((e) => isPending(e) && e.createdBy !== me).length

@@ -43,7 +43,6 @@ export const get = query({
           ? { count: p.lockCount ?? 1, at: p.lastLockAt }
           : null,
         // מצב חברים (בני נוער). המייל והבקשות מוצגים להורים בלבד.
-        teenRequested: (me.role === "parent" || p._id === me._id) ? !!p.teenRequested : false,
         friendsEnabled: !!p.friendsEnabled,
         friendsRequested: me.role === "parent" ? !!p.friendsRequested : false,
         friendEmail: me.role === "parent" ? p.friendEmail ?? null : null,

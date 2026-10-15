@@ -72,34 +72,14 @@ export const setRole = mutation({
     if (p.role === "parent") throw new ConvexError("אי אפשר לשנות תפקיד של הורה");
     if (p.role === role) return;
     await ctx.db.patch(id, role === "child"
-      ? { role, teenRequested: false, friendsEnabled: false, friendsRequested: false, friendEmail: undefined }
-      : { role, teenRequested: false });
+      ? { role, friendsEnabled: false, friendsRequested: false, friendEmail: undefined }
+      : { role });
   },
 });
 
-// ילד/ה מבקש/ת להפוך לנער/ה. ההורה מאשר/ת דרך setRole או דוחה/ה דרך declineTeen.
-export const requestTeen = mutation({
-  args: { token: v.string() },
-  handler: async (ctx, { token }) => {
-    const me = await requirePerson(ctx, token);
-    if (me.role !== "child") throw new ConvexError("הבקשה היא לילדים בלבד");
-    if (me.teenRequested) return;
-    await ctx.db.patch(me._id, { teenRequested: true });
-    const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
-    await notify(ctx, members.filter((p) => p.role === "parent").map((p) => p._id), "בקשה לעבור לנוער", `${me.name} מבקש/ת להפוך לנער/ה. צריך את האישור שלך.`);
-  },
-});
-
-export const declineTeen = mutation({
-  args: { token: v.string(), id: v.id("people") },
-  handler: async (ctx, { token, id }) => {
-    const me = await requireParent(ctx, token);
-    const p = await requireSameFamily(ctx, me, id);
-    if (!p.teenRequested) return;
-    await ctx.db.patch(id, { teenRequested: false });
-    await notify(ctx, [id], "בקשה לעבור לנוער", "ההורים לא אישרו את הבקשה כרגע.");
-  },
-});
+// הפיכה לנער/ה היא אך ורק ביוזמת הורה, דרך setRole למעלה (שכבר דורש requireParent,
+// כלומר התחברות עם קוד ההורה). ילד/ה לא יכול/ה לבקש זאת - כדי שלא יהיה אפשר
+// "לשגע" הורה בבקשות חוזרות.
 
 // קביעת מגדר (לצורת פנייה מותאמת): האדם עצמו/ה או הורה יכולים לקבוע. חסר = ללא ציון.
 export const setGender = mutation({
