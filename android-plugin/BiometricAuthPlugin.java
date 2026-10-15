@@ -1,8 +1,7 @@
 package PACKAGE_PLACEHOLDER;
 
-import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyPermanentlyInvalidatedException;
+import android.security.keystore.KeyInfo;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
 
@@ -18,6 +17,7 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
 import java.nio.charset.StandardCharsets;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
@@ -28,12 +28,13 @@ import java.security.spec.ECGenParameterSpec;
 /**
  * Fingerprint / face confirmation that the server can verify.
  *
- * register({alias}) creates a P-256 key in the Android Keystore that can only be used after a strong
- * biometric check, and returns its public key (X.509 SPKI, base64). sign({alias, message, title, subtitle})
- * shows BiometricPrompt and signs the UTF-8 message with SHA256withECDSA (DER signature, base64).
- * The server keeps the public key and checks each signature, so a role change can't skip the prompt.
+ * Face unlock on most Android phones is a "weak" (class 2) biometric, and Android lets only "strong"
+ * biometrics unlock a Keystore key. So the prompt allows BIOMETRIC_WEAK (face or fingerprint, whichever
+ * the phone has), and only after it succeeds the app signs with a non-exportable Keystore key that never
+ * leaves this app. register({alias}) returns the public key (X.509 SPKI, base64);
+ * sign({alias, message, title, subtitle}) shows the prompt and returns a SHA256withECDSA signature (DER, base64).
  *
- * Rejects with "cancel", "nokey", "invalidated" (a new fingerprint was enrolled; register again),
+ * Rejects with "cancel", "nokey", "invalidated" (an older key from the fingerprint-only version; register again),
  * "unavailable" or "error".
  *
  * Needs androidx.biometric in app/build.gradle and registerPlugin(BiometricAuthPlugin.class) in MainActivity.
@@ -41,7 +42,8 @@ import java.security.spec.ECGenParameterSpec;
 @CapacitorPlugin(name = "BiometricAuth")
 public class BiometricAuthPlugin extends Plugin {
     private static final String STORE = "AndroidKeyStore";
-    private static final int AUTH = BiometricManager.Authenticators.BIOMETRIC_STRONG;
+    // WEAK כולל גם את החזקים: זיהוי פנים וגם טביעת אצבע.
+    private static final int AUTH = BiometricManager.Authenticators.BIOMETRIC_WEAK;
 
     @PluginMethod
     public void isAvailable(PluginCall call) {
@@ -64,18 +66,12 @@ public class BiometricAuthPlugin extends Plugin {
             KeyStore ks = KeyStore.getInstance(STORE);
             ks.load(null);
             if (ks.containsAlias(alias)) ks.deleteEntry(alias);
-            KeyGenParameterSpec.Builder b = new KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_SIGN)
+            KeyGenParameterSpec spec = new KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_SIGN)
                 .setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))
                 .setDigests(KeyProperties.DIGEST_SHA256)
-                .setUserAuthenticationRequired(true)
-                .setInvalidatedByBiometricEnrollment(true);
-            if (Build.VERSION.SDK_INT >= 30) {
-                b.setUserAuthenticationParameters(0, KeyProperties.AUTH_BIOMETRIC_STRONG);
-            } else {
-                b.setUserAuthenticationValidityDurationSeconds(-1); // כל שימוש דורש אימות ביומטרי
-            }
+                .build();
             KeyPairGenerator g = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, STORE);
-            g.initialize(b.build());
+            g.initialize(spec);
             KeyPair kp = g.generateKeyPair();
             JSObject o = new JSObject();
             o.put("publicKey", Base64.encodeToString(kp.getPublic().getEncoded(), Base64.NO_WRAP));
@@ -92,18 +88,20 @@ public class BiometricAuthPlugin extends Plugin {
         final String title = call.getString("title", "אימות");
         final String subtitle = call.getString("subtitle", "");
         if (alias == null || message == null) { call.reject("error", "bad args"); return; }
-        final Signature sig;
+        final PrivateKey key;
         try {
             KeyStore ks = KeyStore.getInstance(STORE);
             ks.load(null);
-            PrivateKey key = (PrivateKey) ks.getKey(alias, null);
+            key = (PrivateKey) ks.getKey(alias, null);
             if (key == null) { call.reject("nokey"); return; }
-            sig = Signature.getInstance("SHA256withECDSA");
-            sig.initSign(key);
-        } catch (KeyPermanentlyInvalidatedException e) {
-            deleteQuietly(alias);
-            call.reject("invalidated");
-            return;
+            // מפתח מהגרסה הקודמת (רק טביעת אצבע): נרשמים מחדש כדי לאפשר גם זיהוי פנים.
+            KeyFactory kf = KeyFactory.getInstance(key.getAlgorithm(), STORE);
+            KeyInfo info = kf.getKeySpec(key, KeyInfo.class);
+            if (info.isUserAuthenticationRequired()) {
+                deleteQuietly(alias);
+                call.reject("invalidated");
+                return;
+            }
         } catch (Exception e) {
             call.reject("error", e);
             return;
@@ -117,9 +115,8 @@ public class BiometricAuthPlugin extends Plugin {
                     @Override
                     public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
                         try {
-                            BiometricPrompt.CryptoObject co = result.getCryptoObject();
-                            Signature s = co != null ? co.getSignature() : null;
-                            if (s == null) { call.reject("error", "no signature"); return; }
+                            Signature s = Signature.getInstance("SHA256withECDSA");
+                            s.initSign(key);
                             s.update(message.getBytes(StandardCharsets.UTF_8));
                             JSObject o = new JSObject();
                             o.put("signature", Base64.encodeToString(s.sign(), Base64.NO_WRAP));
@@ -136,15 +133,16 @@ public class BiometricAuthPlugin extends Plugin {
                             || code == BiometricPrompt.ERROR_CANCELED;
                         call.reject(cancel ? "cancel" : "error", String.valueOf(code));
                     }
-                    // onAuthenticationFailed (אצבע לא מזוהה) - החלון נשאר פתוח לניסיון נוסף.
+                    // onAuthenticationFailed (פנים/אצבע לא מזוהים) - החלון נשאר פתוח לניסיון נוסף.
                 });
             BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle(title)
                 .setSubtitle(subtitle)
                 .setNegativeButtonText("ביטול")
                 .setAllowedAuthenticators(AUTH)
+                .setConfirmationRequired(false) // זיהוי פנים מאשר מיד, בלי לחיצה נוספת
                 .build();
-            prompt.authenticate(info, new BiometricPrompt.CryptoObject(sig));
+            prompt.authenticate(info);
         });
     }
 

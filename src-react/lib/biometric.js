@@ -51,7 +51,7 @@ export async function bioRegister(token, myPin) {
       const { publicKey } = await native('register', { alias });
       const { signature } = await native('sign', {
         alias, message: 'account-bio:' + challenge,
-        title: 'רישום טביעת אצבע / זיהוי פנים', subtitle: 'לאישור שינויי תפקיד בקופה',
+        title: 'רישום זיהוי פנים / טביעת אצבע', subtitle: 'לאישור שינויי תפקיד בקופה',
       });
       await call('biometric:registerFinish', {
         token, challenge, kind: 'android', credentialId: alias, publicKey, alg: -7, signature, label: 'אפליקציה',
@@ -102,7 +102,7 @@ export async function bioProve(token, personId, action) {
     if (isNativeApp) {
       const { signature } = await native('sign', {
         alias: credentialId, message: 'account-bio:' + challenge,
-        title: 'אישור שינוי תפקיד', subtitle: 'טביעת אצבע או זיהוי פנים',
+        title: 'אישור שינוי תפקיד', subtitle: 'זיהוי פנים או טביעת אצבע',
       });
       return { challenge, credentialId, signature };
     }
@@ -124,10 +124,10 @@ export async function bioProve(token, personId, action) {
     };
   } catch (e) {
     if (isCancel(e)) throw new BioError('cancel', 'האימות בוטל');
-    // באפליקציה: אצבע חדשה שנוספה למכשיר מבטלת את המפתח, וצריך לרשום מחדש.
+    // באפליקציה: מפתח מהגרסה הקודמת (רק טביעת אצבע) או מפתח שנמחק - נרשמים מחדש.
     if (e && (e.message === 'invalidated' || e.message === 'nokey')) {
       bioForgetLocal(personId);
-      throw new BioError('needSetup', 'טביעות האצבע במכשיר השתנו. צריך לרשום את המכשיר מחדש');
+      throw new BioError('needSetup', 'צריך לרשום את המכשיר מחדש כדי לאפשר גם זיהוי פנים');
     }
     throw new BioError('failed', 'האימות לא הצליח. נסו שוב.');
   }
