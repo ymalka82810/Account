@@ -184,13 +184,14 @@ function Root() {
   const themePalette = screen === 'app' ? palette : (lt ? lt.palette : '');
   useEffect(() => { applyTheme(themeRole, themePalette); }, [themeRole, themePalette]);
   useEffect(() => { window.scrollTo({ top: 0 }); }, [screen]);
-  // אייקון לפי המטבע: של המשפחה אחרי כניסה (ונשמר לפעם הבאה), ולפני כן האחרון שנשמר או לפי המיקום של המכשיר
-  const familyCurrency = screen === 'app' ? (data.family.currency || 'ILS') : '';
+  // אייקון לפי המטבע: של המשפחה אחרי כניסה, אם הוגדר לה מיקום (ונשמר לפעם הבאה). אחרת האחרון שנשמר,
+  // או לפי המיקום של המכשיר, ואם גם הוא לא ידוע - דולר.
+  const familyCurrency = screen === 'app' && data.family.localeSet ? data.family.currency : '';
   useEffect(() => {
     let cur = familyCurrency;
     if (cur) { try { localStorage.setItem(ICON_CURRENCY_KEY, cur); } catch (e) { /* */ } }
     else { try { cur = localStorage.getItem(ICON_CURRENCY_KEY); } catch (e) { /* */ } }
-    applyAppIcon(cur || deviceCurrency() || 'ILS');
+    applyAppIcon(cur || deviceCurrency() || 'USD');
   }, [familyCurrency]);
   useEffect(() => {
     if (screen !== 'app') return;

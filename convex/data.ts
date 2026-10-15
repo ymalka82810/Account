@@ -37,6 +37,8 @@ export const get = query({
         name: family.name,
         currency: family.currency ?? "ILS",
         country: family.country ?? (family.currency ? null : "IL"),
+        // האם הוגדרו למשפחה מיקום או מטבע (אחרת הערכים למעלה הם ברירת המחדל של הנתונים הישנים)
+        localeSet: !!(family.country || family.currency),
       },
       people: people.map((p) => ({
         id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash,

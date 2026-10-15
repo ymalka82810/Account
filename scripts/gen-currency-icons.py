@@ -69,8 +69,6 @@ def aed_path(dx=-4):
 
 CUSTOM = {
     'AED': ('D', aed_path(), ['AED']),
-    # מטבע זהב בלי סמל: לכל מטבע שאין לו וריאנט
-    'COIN': ('', '', []),
 }
 
 out = {'variants': {}, 'byCurrency': {}}

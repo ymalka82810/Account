@@ -9,14 +9,14 @@
   - activity-alias בשם .Icon<KEY> במניפסט, עם intent-filter של LAUNCHER
 
 ה-intent-filter של LAUNCHER יורד מ-MainActivity, כך שבמסך הבית מופיע תמיד רק ה-alias הפעיל.
-ברירת המחדל (enabled) היא ILS; AppIconPlugin.java מחליף ביניהם לפי המטבע.
+ברירת המחדל (enabled) היא USD; AppIconPlugin.java מחליף ביניהם לפי המטבע.
 """
 import json, os, re, sys
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 RES = os.path.join(ROOT, 'android/app/src/main/res')
 MANIFEST = os.path.join(ROOT, 'android/app/src/main/AndroidManifest.xml')
-DEFAULT = 'ILS'
+DEFAULT = 'USD'
 BG, GOLD, DARK = '#FF1D2B4F', '#FFF6C945', '#FFC99A0F'
 
 data = json.load(open(os.path.join(ROOT, 'assets/currency-icons.json'), encoding='utf-8'))

@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Launcher icon by currency. The manifest has one activity-alias per icon (".Icon" + key, e.g. ".IconUSD"),
- * all pointing at MainActivity, with only ".IconILS" enabled by default (see apply-currency-icons.py).
+ * all pointing at MainActivity, with only ".IconUSD" enabled by default (see apply-currency-icons.py).
  *
  * setIcon({name, all}) remembers the wanted icon and switches it when the app goes to the background:
  * swapping the enabled launcher alias while the app is on screen can close it on some phones.
@@ -28,7 +28,7 @@ import java.util.List;
 @CapacitorPlugin(name = "AppIcon")
 public class AppIconPlugin extends Plugin {
     private static final String PREFS = "app_icon";
-    private static final String DEFAULT = "ILS";
+    private static final String DEFAULT = "USD";
     private String pending = null;
     private List<String> all = new ArrayList<>();
 
