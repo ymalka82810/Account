@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { useQuery } from 'convex/react';
-import { state, CODE_KEY, THEME_COLOR, TAB_LABELS, subscribeAuth, authVersion, bumpAuth } from './state/state.js';
+import { state, CODE_KEY, LAST_ROLE_KEY, LAST_PALETTE_KEY, THEME_COLOR, TAB_LABELS, subscribeAuth, authVersion, bumpAuth } from './state/state.js';
 import { call } from './lib/api.js';
 import { toast } from './lib/helpers.js';
 import { restoreFamily, startPin, autoSkipPerson, dropSession } from './state/auth.js';
@@ -36,6 +36,17 @@ function applyTheme(role, palette) {
   if (role === 'teen' && palette) document.body.dataset.palette = palette; else delete document.body.dataset.palette;
   const tc = document.querySelector('meta[name="theme-color"]');
   if (tc) tc.setAttribute('content', THEME_COLOR[role] || THEME_COLOR.child);
+}
+
+// ---------- ערכת הנושא של מסך הטעינה ----------
+// המעבר (כניסה או יציאה) צריך להיראות כמו המסכים של מי שנכנס/יצא: רקע ההורה
+// להורה, רקע הנוער לנוער. מי זה? לפי הסדר: מי שבאמצע הזנת הקוד הסודי, מי
+// שהמכשיר מדלג אליו, ואחרת מי שנכנס לאחרונה מהמכשיר הזה (גם ביציאה).
+function loadingTheme() {
+  const person = (state.pinFlow && state.pinFlow.person) || (!state.token && autoSkipPerson()) || null;
+  const role = (person && person.role) || localStorage.getItem(LAST_ROLE_KEY) || '';
+  if (role !== 'parent' && role !== 'teen' && role !== 'child') return { role: '', palette: '' };
+  return { role, palette: role === 'teen' ? localStorage.getItem(LAST_PALETTE_KEY) || '' : '' };
 }
 
 const TAB_IDS = ['home', 'friends', 'history', 'family', 'manage'];
@@ -157,10 +168,17 @@ function Root() {
 
   const role = screen === 'app' ? data.me.role : '';
   const palette = screen === 'app' ? data.me.palette : '';
-  useEffect(() => { applyTheme(role, palette); }, [role, palette]);
+  // במסך הטעינה מחילים את ערכת הנושא של מי שנכנס או יצא, כדי שהמעבר ייראה
+  // כמו המשך של שאר המסכים שלו ולא כמו מסך של ילדים.
+  const lt = screen === 'loading' ? loadingTheme() : null;
+  const themeRole = screen === 'app' ? role : (lt ? lt.role : '');
+  const themePalette = screen === 'app' ? palette : (lt ? lt.palette : '');
+  useEffect(() => { applyTheme(themeRole, themePalette); }, [themeRole, themePalette]);
   useEffect(() => { window.scrollTo({ top: 0 }); }, [screen]);
   useEffect(() => {
     if (screen !== 'app') return;
+    localStorage.setItem(LAST_ROLE_KEY, role);
+    if (role === 'teen') localStorage.setItem(LAST_PALETTE_KEY, palette || '');
     if (role === 'parent') localStorage.setItem(CODE_KEY, data.family.code);
     syncPush();
   }, [screen, role, token]); // eslint-disable-line react-hooks/exhaustive-deps

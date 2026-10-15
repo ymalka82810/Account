@@ -8,6 +8,10 @@ export const LEGACY_DONE_KEY = 'kupa-legacy-imported';
 export const CODE_KEY = 'kupa-code';
 export const DEVICE_KEY = 'kupa-device';
 export const LAST_PERSON_KEY = 'kupa-last-person';
+// התפקיד (וצבעי הנוער) של מי שנכנס לאחרונה מהמכשיר הזה - כדי שמסך הטעינה
+// של הכניסה והיציאה ייראה כמו שאר המסכים של אותו תפקיד.
+export const LAST_ROLE_KEY = 'kupa-last-role';
+export const LAST_PALETTE_KEY = 'kupa-last-palette';
 // דמויות לילדים/ות ונערים/ות - אותה רשימה לכולם (לא מחולקת לפי מגדר).
 export const AVATARS = [
   '🦊', '🐼', '🦁', '🐯', '🐸', '🐵', '🦄', '🐙', '🐨', '🐶', '🐱', '🚀', '😎', '🎧', '🛹', '⚡', '🔥', '🎮',
