@@ -70,6 +70,26 @@ function ledger(entries) {
 
 export const debtStates = (entries) => ledger(entries).byId;
 
+// חובות פתוחים מ-a ל-b מקובצים לפי מטבע: {USD: 5000, ILS: 3000} (במטבע של כל קבוצה).
+export function totalsByCurrency(a, b, entries) {
+  const out = {};
+  for (const st of debtStates(entries).values()) {
+    if (st.debt.from !== a || st.debt.to !== b || st.remaining <= 0) continue;
+    out[st.cur] = (out[st.cur] || 0) + st.remaining;
+  }
+  for (const c of Object.keys(out)) { out[c] = Math.round(out[c]); if (out[c] <= 0) delete out[c]; }
+  return out;
+}
+
+// האם יש בין a ל-b (בכיוון הזה) חוב פתוח במטבע שאינו מטבע התצוגה.
+export const hasForeignOpen = (a, b, entries, display = FX.base) =>
+  Object.keys(totalsByCurrency(a, b, entries)).some((c) => c !== display);
+
+// רשומה זמנית (לא נשמרת) כדי לחשב איך ייראו היתרות אחרי הפעולה.
+export const draftEntry = (e) => ({
+  id: '__draft', status: 'approved', date: '9999-12-31', createdAt: Number.MAX_SAFE_INTEGER, createdBy: null, fx: FX.rates, ...e,
+});
+
 // כמה a חייב ל-b, במטבע התצוגה (ברירת מחדל: המטבע הראשי). חובות במטבע אחר מומרים לפי השער הנוכחי.
 export function pairOwes(a, b, entries, display = FX.base) {
   const { byId, leftovers } = ledger(entries);

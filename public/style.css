@@ -919,3 +919,9 @@ body[data-theme="teen"] .confirm-box { background: #07070b; border: 2px solid va
 .currency-pick { max-width: 260px; margin: 0 auto 8px; }
 .currency-pick > span { font-size: .85rem; opacity: .75; }
 .fx-rates { margin-top: 10px; display: grid; gap: 2px; }
+.confirm-rows { text-align: start; margin: 0 0 16px; padding: 10px 12px; border-radius: 10px; background: rgba(127, 127, 127, .1); display: grid; gap: 6px; }
+.confirm-rows-title { font-size: .8rem; opacity: .7; }
+.confirm-row { display: flex; justify-content: space-between; gap: 10px; font-size: .92rem; }
+.confirm-row.strong { font-weight: 700; border-top: 1px solid rgba(127, 127, 127, .3); padding-top: 6px; }
+.confirm-row-val { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.calc-bycur { font-size: .85rem; opacity: .8; }

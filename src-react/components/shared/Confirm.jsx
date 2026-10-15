@@ -49,6 +49,16 @@ export function ConfirmProvider({ children }) {
             <h2 id="confirmTitle" className="confirm-title">{o.title}</h2>
             {o.amount && <div className="confirm-amount">{o.amount}</div>}
             <p id="confirmMsg" className="confirm-msg">{o.message}</p>
+            {o.rows && o.rows.length > 0 && (
+              <div className="confirm-rows">
+                {o.rowsTitle && <div className="confirm-rows-title">{o.rowsTitle}</div>}
+                {o.rows.map((r, i) => (
+                  <div className={'confirm-row' + (r.strong ? ' strong' : '')} key={i}>
+                    <span>{r.label}</span><span className="confirm-row-val">{r.value}</span>
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="confirm-actions">
               <button ref={okBtn} type="button" className={'primary' + (o.danger ? ' danger-fill' : '')} onClick={() => answer(true)}>{o.okText || 'אישור'}</button>
               <button type="button" className="ghost" onClick={() => answer(false)}>{o.cancelText || 'ביטול'}</button>

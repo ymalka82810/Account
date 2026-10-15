@@ -6,7 +6,7 @@ import { call } from '../../lib/api.js';
 import { state } from '../../state/state.js';
 import { today, toast, errMsg } from '../../lib/helpers.js';
 import { openDebtsOf, pairOwes, debtLabel, money, namesFor, baseCurrency } from '../../lib/computations.js';
-import { currencySymbol } from '../../lib/currencies.js';
+import { currencySymbol, currencyLabel } from '../../lib/currencies.js';
 import { g } from '../../lib/gender.js';
 
 // סכום בלי סימני כיוון נסתרים (RLM) ש-toLocaleString מוסיף בעברית, כדי ששורת החישוב תוצג יציב משמאל לימין.
@@ -14,6 +14,22 @@ const plain = (agorot) => money(agorot).replace(/[\u200e\u200f\u061c]/g, '').rep
 
 // הסכומים במטבע הראשי: חוב במטבע אחר נספר לפי השווי שלו היום (value).
 const sum = (list) => list.reduce((s, x) => s + x.value, 0);
+
+// סכומים מקובצים לפי מטבע: [{cur, amount}], המטבע הראשי ראשון.
+function byCurrency(list) {
+  const m = new Map();
+  for (const x of list) m.set(x.cur, (m.get(x.cur) || 0) + x.remaining);
+  const base = baseCurrency();
+  return [...m].map(([cur, amount]) => ({ cur, amount }))
+    .sort((a, b) => (b.cur === base) - (a.cur === base) || a.cur.localeCompare(b.cur));
+}
+const mixed = (list) => list.some((x) => x.foreign);
+
+// שורת "לפי מטבע" מתחת לסה"כ, רק כשיש חובות במטבע אחר.
+const CurrencyBreakdown = ({ list }) => (mixed(list) ? (
+  <div className="calc-row calc-bycur"><span>לפי מטבע</span>
+    <span>{byCurrency(list).map((x) => money(x.amount, x.cur)).join(' + ')}</span></div>
+) : null);
 
 // חלוקת סכום קיזוז על החובות הפתוחים, מהישן לחדש: [{debt, amount}].
 function allocate(open, total) {
@@ -52,11 +68,20 @@ export default function BalanceSheet({ otherId }) {
   const other_ = nameOf(otherId);
 
   async function offset() {
+    const foreign = mixed(mine) || mixed(theirs);
     const ok = await confirm({
-      icon: '⚖️',
+      icon: foreign ? '💱' : '⚖️',
       title: 'קיזוז חובות הדדיים',
       amount: money(overlap),
-      message: `החובות בינך לבין ${other_} ייסגרו עד גובה הסכום הזה, ויישאר רק ההפרש. ההיסטוריה נשמרת.`,
+      message: `החובות בינך לבין ${other_} ייסגרו עד גובה הסכום הזה, ויישאר רק ההפרש. ההיסטוריה נשמרת.`
+        + (foreign ? ' יש כאן חובות במטבע אחר: הם יקוזזו לפי השער של היום, והשער הזה יישמר.' : ''),
+      ...(foreign ? {
+        rowsTitle: 'החובות הפתוחים לפי מטבע',
+        rows: [
+          ...byCurrency(theirs).map((x) => ({ label: `${other_} ${g(other.gender, 'חייב', 'חייבת', 'חייב/ת')} לי • ${currencyLabel(x.cur)}`, value: money(x.amount, x.cur) })),
+          ...byCurrency(mine).map((x) => ({ label: `${g(myGender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${other_} • ${currencyLabel(x.cur)}`, value: money(x.amount, x.cur) })),
+        ],
+      } : {}),
       okText: 'כן, לקזז',
       cancelText: 'ביטול',
     });
@@ -99,12 +124,14 @@ export default function BalanceSheet({ otherId }) {
         <div className="calc-h get">{other_} {g(other.gender, 'חייב', 'חייבת', 'חייב/ת')} לי</div>
         {theirs.length === 0 ? <div className="calc-row"><span>אין</span></div> : <Rows list={theirs} sign="get" />}
         <div className="calc-row calc-total"><span>סה״כ</span><span className="calc-amt get">{money(sumTheirs)}</span></div>
+        <CurrencyBreakdown list={theirs} />
       </div>
 
       <div className="calc-sec">
         <div className="calc-h owe">{g(myGender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל{other_}</div>
         {mine.length === 0 ? <div className="calc-row"><span>אין</span></div> : <Rows list={mine} sign="owe" />}
         <div className="calc-row calc-total"><span>סה״כ</span><span className="calc-amt owe">{money(sumMine)}</span></div>
+        <CurrencyBreakdown list={mine} />
       </div>
 
       {adjust !== 0 && (

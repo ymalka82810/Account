@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { state } from '../../state/state.js';
 import { call } from '../../lib/api.js';
 import { today, toast, errMsg } from '../../lib/helpers.js';
-import { openDebtsOf, debtLabel, debtLeftText, namesFor, money, moneyWithValue, baseCurrency, convert } from '../../lib/computations.js';
+import { openDebtsOf, debtLabel, debtLeftText, namesFor, money, moneyWithValue, baseCurrency, convert, totalsByCurrency, hasForeignOpen, draftEntry, pairOwes } from '../../lib/computations.js';
+import { useConfirm } from '../shared/Confirm.jsx';
 import { CURRENCIES, currencyLabel, currencySymbol } from '../../lib/currencies.js';
 import Select from '../shared/Select.jsx';
 import { useApp } from '../../state/appContext.js';
@@ -15,6 +16,7 @@ import AsyncButton from '../shared/AsyncButton.jsx';
 export function EntryFlow({ opts }) {
   const { data, fdata, me, isParent, setTab } = useApp();
   const sheet = useSheet();
+  const confirm = useConfirm();
   const entries = opts.entries ? opts.entries : data.entries;
   // המטבע הראשי (בין חברים תמיד שקלים). חוב חדש אפשר לרשום במטבע אחר; החזר נרשם במטבע הראשי.
   const display = opts.endpoint ? 'ILS' : baseCurrency();
@@ -183,7 +185,44 @@ export function EntryFlow({ opts }) {
       const left = st.debtRemaining - st.agorot;
       sentence += ` על ${st.debtName}. ` + (left > 0 ? `יישאר ${money(left, display)} מהחוב.` : 'החוב ייסגר במלואו ✅');
     }
+    // מטבע שונה מהמטבע של המשפחה זה מקרה פחות נפוץ: לפני השמירה מציגים התראה מיוחדת
+    // עם הסכומים בין שני האנשים מקובצים לפי מטבע, עכשיו ואחרי הפעולה.
+    const foreignCase = !opts.endpoint && (isDebt
+      ? st.cur !== display
+      : (st.debt ? st.debt.foreign : hasForeignOpen(st.from, st.to, entries, display)));
+
+    async function confirmForeign() {
+      const after = [...entries, draftEntry({
+        kind: opts.kind, from: st.from, to: st.to, amount: st.agorot,
+        currency: isDebt ? st.cur : display, debtId: st.debtId || undefined,
+      })];
+      const before = totalsByCurrency(st.from, st.to, entries);
+      const next = totalsByCurrency(st.from, st.to, after);
+      const curs = [...new Set([...Object.keys(before), ...Object.keys(next)])]
+        .sort((a, b) => (a === display) - (b === display) || a.localeCompare(b));
+      const rows = curs.map((c) => ({
+        label: currencyLabel(c),
+        value: `${money(before[c] || 0, c)} ← ${money(next[c] || 0, c)}`,
+      }));
+      const net0 = Math.max(0, pairOwes(st.from, st.to, entries, display));
+      const net1 = Math.max(0, pairOwes(st.from, st.to, after, display));
+      rows.push({ label: `סה״כ ב${currencySymbol(display)} לפי השער של היום`, value: `${money(net0, display)} ← ${money(net1, display)}`, strong: true });
+      return confirm({
+        icon: '💱',
+        title: isDebt ? `חוב ב${currencyLabel(st.cur)}` : 'תשלום על חוב במטבע אחר',
+        amount: isDebt ? money(st.agorot, st.cur) : money(st.agorot, display),
+        message: isDebt
+          ? `המטבע של המשפחה הוא ${currencyLabel(display)}, והחוב הזה יישמר ב${currencyLabel(st.cur)}. ביתרות הוא יוצג לפי השער של אותו יום, וכשמשלמים אותו הסכום יומר לפי השער ביום התשלום.`
+          : `התשלום ב${currencyLabel(display)} יומר לפי השער של היום ויורד מהחוב במטבע שלו. אחרי השמירה השער הזה נשמר ולא ישתנה.`,
+        rowsTitle: `כמה ${subjectWord(st.from)} ${gw(st.from, 'חייב', 'חייבת', 'חייב/ת')} ${toWord(st.to)}, לפי מטבע (עכשיו ← אחרי)`,
+        rows,
+        okText: isDebt ? 'כן, לשמור את החוב' : 'כן, לשמור את התשלום',
+        cancelText: 'חזרה',
+      });
+    }
+
     const save = async () => {
+      if (foreignCase && !(await confirmForeign())) return;
       try {
         await call(opts.endpoint || 'entries:add', {
           token: state.token, kind: opts.kind, from: st.from, to: st.to, amount: st.agorot,
