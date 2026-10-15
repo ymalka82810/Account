@@ -16,7 +16,6 @@ export default function ManageTab({ data, token }) {
 
       <Collapsible name="manage-tiles" title={data.family?.name ? `בני ${data.family.name}` : 'בני המשפחה'} defaultOpen>
         <PeopleList people={data.people} me={me} token={token} />
-        <PersonForm token={token} />
       </Collapsible>
 
       <Collapsible name="manage-tiles" title="קודי הצטרפות">
@@ -29,6 +28,7 @@ export default function ManageTab({ data, token }) {
 
       <Collapsible name="manage-tiles" title="הגדרות המשפחה">
         <FamilySettings data={data} />
+        <PersonForm token={token} />
       </Collapsible>
 
       <Collapsible name="manage-tiles" title="אזור מסוכן">
