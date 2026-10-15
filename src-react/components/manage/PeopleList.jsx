@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useBioConfirm } from '../shared/BioConfirm.jsx';
+import { useConfirm } from '../shared/Confirm.jsx';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { BioError } from '../../lib/biometric.js';
 import { useSheet } from '../shared/Sheet.jsx';
@@ -18,6 +19,7 @@ const GENDER_PLACEHOLDER = [{ value: '', label: 'קביעת צורת פנייה�
 export default function PeopleList({ people, me, token }) {
   const sheet = useSheet();
   const run = useRun(token);
+  const confirm = useConfirm();
   const [shownPins, setShownPins] = useState({});
   const [roleBusy, setRoleBusy] = useState(null);
   const bioConfirm = useBioConfirm();
@@ -34,10 +36,29 @@ export default function PeopleList({ people, me, token }) {
   // שינוי תפקיד (ילד/ה, נער/ה, הורה) דורש אישור בטביעת אצבע או זיהוי פנים.
   async function changeRole(p, toRole) {
     if (!toRole || toRole === p.role || roleBusy) return;
-    if (p.role === 'teen' && p.friendsEnabled
-      && !confirm(`${p.name} ${g(p.gender, 'יאבד', 'תאבד', 'יאבד/תאבד')} את מצב החברים. להמשיך?`)) return;
-    if (toRole === 'parent' && !confirm(`${p.name} ${g(p.gender, 'יקבל', 'תקבל', 'יקבל/תקבל')} הרשאות הורה מלאות: לראות הכול, לאשר, למחוק ולנהל את המשפחה. להמשיך?`)) return;
-    if (p.role === 'parent' && !confirm(`${p.name} ${g(p.gender, 'יאבד', 'תאבד', 'יאבד/תאבד')} את הרשאות ההורה. להמשיך?`)) return;
+    if (p.role === 'teen' && p.friendsEnabled && !(await confirm({
+      icon: '🤝',
+      title: 'ביטול מצב חברים',
+      amount: p.name,
+      message: `${g(p.gender, 'יאבד', 'תאבד', 'יאבד/תאבד')} את מצב החברים. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.`,
+      okText: 'כן, להמשיך',
+      danger: true,
+    }))) return;
+    if (toRole === 'parent' && !(await confirm({
+      icon: '🔐',
+      title: 'הענקת הרשאות הורה',
+      amount: p.name,
+      message: `${g(p.gender, 'יקבל', 'תקבל', 'יקבל/תקבל')} הרשאות הורה מלאות: לראות הכול, לאשר, למחוק ולנהל את המשפחה. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.`,
+      okText: 'כן, להמשיך',
+    }))) return;
+    if (p.role === 'parent' && !(await confirm({
+      icon: '⚠️',
+      title: 'ביטול הרשאות הורה',
+      amount: p.name,
+      message: `${g(p.gender, 'יאבד', 'תאבד', 'יאבד/תאבד')} את הרשאות ההורה. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.`,
+      okText: 'כן, להמשיך',
+      danger: true,
+    }))) return;
     setRoleBusy(p.id);
     try {
       const proof = await bioConfirm(`role:${p.id}:${toRole}`);

@@ -870,6 +870,11 @@ button.charcoalbtn:active { background: #353b45; }
 @keyframes confirm-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes confirm-pop { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: scale(1); } }
 body[data-theme="child"] .confirm-box { background: linear-gradient(165deg, #ddf3fc 0%, #fbe1ec 55%, #ffecc9 100%); }
-body[data-theme="parent"] .confirm-box { border: 1px solid var(--line); border-radius: 12px; }
+body[data-theme="parent"] .confirm-box { background: var(--card); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 12px 40px rgba(0, 0, 0, .6); }
+body[data-theme="parent"] .confirm-icon { font-size: 1.6rem; }
+body[data-theme="parent"] .confirm-title { font-size: 1rem; font-weight: 700; letter-spacing: .01em; }
+body[data-theme="parent"] .confirm-amount { font-size: 1.3rem; font-weight: 700; color: var(--coin-deep); padding: 2px 0 4px; overflow-wrap: anywhere; }
+body[data-theme="parent"] .confirm-msg { font-size: .9rem; opacity: .78; }
+body[data-theme="parent"] .confirm-actions .primary, body[data-theme="parent"] .confirm-actions .ghost { border-radius: 8px; padding: 11px; }
 body[data-theme="parent"] .confirm-bg, body[data-theme="teen"] .confirm-bg { background: rgba(0, 0, 0, .7); }
 body[data-theme="teen"] .confirm-box { background: #07070b; border: 2px solid var(--neon-a); box-shadow: 0 0 30px var(--neon-glow); }
