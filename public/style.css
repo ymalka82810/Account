@@ -831,3 +831,25 @@ button.charcoalbtn, button.charcoalbtn:hover, button.charcoalbtn:active, button.
   background: #2b3038; border: 1px solid #3d444f; color: #e6e9ee; font-weight: 700; padding: 12px 14px; border-radius: 8px;
 }
 button.charcoalbtn:active { background: #353b45; }
+
+/* חלון אישור מעוצב (במקום confirm של הדפדפן) */
+.confirm-wrap { position: fixed; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.confirm-bg { position: absolute; inset: 0; background: rgba(10, 16, 40, .6); animation: confirm-fade .18s ease; }
+.confirm-box {
+  position: relative; width: 100%; max-width: 360px; text-align: center;
+  background: var(--bg); color: var(--ink); border-radius: 22px; padding: 22px 20px 18px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .4); animation: confirm-pop .2s cubic-bezier(.22, .8, .2, 1);
+}
+.confirm-icon { font-size: 2rem; line-height: 1; margin-bottom: 6px; }
+.confirm-title { margin: 0 0 6px; font-size: 1.2rem; }
+.confirm-amount { font-size: 2.2rem; font-weight: 800; padding: 4px 0 2px; }
+.confirm-msg { margin: 6px 0 16px; font-size: .95rem; line-height: 1.5; opacity: .85; }
+.confirm-actions { display: grid; gap: 8px; }
+.confirm-actions .primary, .confirm-actions .ghost { width: 100%; padding: 13px; }
+.confirm-actions .danger-fill { background: var(--owe); border-color: var(--owe); color: #fff; }
+@keyframes confirm-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes confirm-pop { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: scale(1); } }
+body[data-theme="child"] .confirm-box { background: linear-gradient(165deg, #ddf3fc 0%, #fbe1ec 55%, #ffecc9 100%); }
+body[data-theme="parent"] .confirm-box { border: 1px solid var(--line); border-radius: 12px; }
+body[data-theme="parent"] .confirm-bg, body[data-theme="teen"] .confirm-bg { background: rgba(0, 0, 0, .7); }
+body[data-theme="teen"] .confirm-box { background: #07070b; border: 2px solid var(--neon-a); box-shadow: 0 0 30px var(--neon-glow); }

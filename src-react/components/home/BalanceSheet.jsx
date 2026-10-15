@@ -1,6 +1,7 @@
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
+import { useConfirm } from '../shared/Confirm.jsx';
 import { call } from '../../lib/api.js';
 import { state } from '../../state/state.js';
 import { today, toast, errMsg } from '../../lib/helpers.js';
@@ -27,6 +28,7 @@ function allocate(open, total) {
 export default function BalanceSheet({ otherId }) {
   const { data, me, openEntryFlow } = useApp();
   const sheet = useSheet();
+  const confirm = useConfirm();
   const other = data.people.find((p) => p.id === otherId);
   const { nameOf } = namesFor(me, (id) => data.people.find((p) => p.id === id));
   const myGender = data.me.gender;
@@ -45,7 +47,15 @@ export default function BalanceSheet({ otherId }) {
   const other_ = nameOf(otherId);
 
   async function offset() {
-    if (!confirm(`לקזז ${money(overlap)} בין החובות ההדדיים מול ${other_}? החובות ייסגרו עד גובה הסכום הזה, ויישאר רק ההפרש.`)) return;
+    const ok = await confirm({
+      icon: '⚖️',
+      title: 'קיזוז חובות הדדיים',
+      amount: money(overlap),
+      message: `החובות בינך לבין ${other_} ייסגרו עד גובה הסכום הזה, ויישאר רק ההפרש. ההיסטוריה נשמרת.`,
+      okText: 'כן, לקזז',
+      cancelText: 'ביטול',
+    });
+    if (!ok) return;
     try {
       const jobs = [
         ...allocate(mine, overlap).map((a) => ({ from: me, to: otherId, ...a })),
