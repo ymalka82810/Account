@@ -106,7 +106,7 @@ export default function BalanceSheet({ otherId }) {
       )}
       {net !== 0 && (
         <button type="button" className="charcoalbtn" onClick={payNet}>
-          {iOwe ? `${'שילמתי'} את ההפרש (${money(net)})` : `💰 קיבלתי את ההפרש (${money(-net)})`}
+          {iOwe ? `שילמתי את ההפרש (${money(net)})` : `קיבלתי את ההפרש (${money(-net)})`}
         </button>
       )}
     </div>
