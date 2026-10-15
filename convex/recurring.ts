@@ -1,7 +1,8 @@
 import { internalMutation, mutation } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { MAX_AMOUNT, advanceDate, firstAfter, jerusalemToday, requireParent, requireSameFamily } from "./lib";
-import { notify, shekel } from "./notify";
+import { notify } from "./notify";
+import { LEGACY_CURRENCY, fmtMoney } from "./currency";
 
 const MAX_PER_FAMILY = 30;
 const MAX_CATCH_UP = 8; // כמה רישומים מוחמצים משלימים בריצה אחת
@@ -27,10 +28,12 @@ export const add = mutation({
     if (r.frequency === "monthly" && !(Number.isInteger(r.monthDay) && r.monthDay! >= 1 && r.monthDay! <= 28)) throw new ConvexError("יום בחודש לא תקין (1 עד 28)");
     await requireSameFamily(ctx, me, r.from);
     await requireSameFamily(ctx, me, r.to);
+    const family = await ctx.db.get(me.familyId);
     const existing = await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     if (existing.length >= MAX_PER_FAMILY) throw new ConvexError("יש כבר הרבה רישומים קבועים");
     return await ctx.db.insert("recurring", {
       familyId: me.familyId, from: r.from, to: r.to, amount: r.amount, note,
+      currency: family?.currency ?? LEGACY_CURRENCY,
       frequency: r.frequency,
       weekday: r.frequency === "weekly" ? r.weekday : undefined,
       monthDay: r.frequency === "monthly" ? r.monthDay : undefined,
@@ -68,7 +71,7 @@ export const runDue = internalMutation({
       while (next <= today && created < MAX_CATCH_UP) {
         await ctx.db.insert("entries", {
           familyId: r.familyId, kind: "debt", from: r.from, to: r.to, amount: r.amount,
-          note: r.note, date: next, createdBy: r.createdBy, createdAt: Date.now(),
+          currency: r.currency ?? LEGACY_CURRENCY, note: r.note, date: next, createdBy: r.createdBy, createdAt: Date.now(),
         });
         next = advanceDate(next, r.frequency, r.monthDay);
         created++;
@@ -77,7 +80,7 @@ export const runDue = internalMutation({
       while (next <= today) next = advanceDate(next, r.frequency, r.monthDay);
       await ctx.db.patch(r._id, { nextDate: next });
       if (created > 0) {
-        await notify(ctx, [r.to], "נרשם חוב 🪙", `${r.note}: ${from.name} חייב/ת לך ${shekel(r.amount * created)}`);
+        await notify(ctx, [r.to], "נרשם חוב 🪙", `${r.note}: ${from.name} חייב/ת לך ${fmtMoney(r.amount * created, r.currency)}`);
       }
     }
   },

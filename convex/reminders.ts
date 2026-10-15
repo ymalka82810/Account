@@ -3,7 +3,9 @@ import { v } from "convex/values";
 import { Id } from "./_generated/dataModel";
 import { internal } from "./_generated/api";
 import { addDays, jerusalemToday } from "./lib";
-import { notify, shekel } from "./notify";
+import { notify } from "./notify";
+import { LEGACY_CURRENCY, convert, curOf, fmtMoney } from "./currency";
+import { loadRates } from "./fx";
 
 const STALE_DAYS = 14;
 
@@ -23,6 +25,9 @@ export const weekly = internalMutation({
 export const forFamily = internalMutation({
   args: { familyId: v.id("families") },
   handler: async (ctx, { familyId }): Promise<void> => {
+    const family = await ctx.db.get(familyId);
+    const base = family?.currency ?? LEGACY_CURRENCY;
+    const rates = (await loadRates(ctx))?.rates ?? null;
     const people = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
     const name = new Map(people.map((p) => [p._id, p.name]));
     const entries = (await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect())
@@ -35,7 +40,9 @@ export const forFamily = internalMutation({
       const key = `${a}:${b}`;
       const p = pairs.get(key) ?? { a, b, net: 0, last: "" };
       const sign = e.kind === "debt" ? 1 : -1;
-      p.net += e.from === a ? sign * e.amount : -sign * e.amount; // כמה a חייב ל-b
+      // הערכה לפי השער הנוכחי, במטבע הראשי של המשפחה (לתזכורת בלבד).
+      const amount = Math.round(convert(e.amount, curOf(e), base, rates) ?? 0);
+      p.net += e.from === a ? sign * amount : -sign * amount; // כמה a חייב ל-b
       if (e.date > p.last) p.last = e.date;
       pairs.set(key, p);
     }
@@ -43,7 +50,7 @@ export const forFamily = internalMutation({
     const limit = addDays(jerusalemToday(), -STALE_DAYS);
     const stale: Pair[] = [];
     for (const p of pairs.values()) {
-      if (p.net === 0 || p.last > limit) continue;
+      if (Math.abs(p.net) < 100 || p.last > limit) continue;
       stale.push(p.net > 0
         ? { net: p.net, last: p.last, debtor: p.a, creditor: p.b }
         : { net: -p.net, last: p.last, debtor: p.b, creditor: p.a });
@@ -52,8 +59,8 @@ export const forFamily = internalMutation({
 
     const parents = people.filter((p) => p.role === "parent").map((p) => p._id);
     const body = stale.length === 1
-      ? `${name.get(stale[0].debtor)} עדיין חייב/ת ל${name.get(stale[0].creditor)} ${shekel(stale[0].net)}`
-      : `יש ${stale.length} חובות פתוחים שלא זזו כבר שבועיים, בסך ${shekel(stale.reduce((s, p) => s + p.net, 0))}`;
+      ? `${name.get(stale[0].debtor)} עדיין חייב/ת ל${name.get(stale[0].creditor)} ${fmtMoney(stale[0].net, base)}`
+      : `יש ${stale.length} חובות פתוחים שלא זזו כבר שבועיים, בסך ${fmtMoney(stale.reduce((s, p) => s + p.net, 0), base)}`;
     await notify(ctx, parents, "תזכורת: חוב פתוח ⏰", body);
   },
 });

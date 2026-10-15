@@ -1,4 +1,4 @@
-import { isPending, money, fmtDate, namesFor } from '../../lib/computations.js';
+import { isPending, money, moneyWithValue, curOf, fmtDate, namesFor } from '../../lib/computations.js';
 import { useRun } from '../../lib/useRun.js';
 import { useSheet } from '../shared/Sheet.jsx';
 import { FriendApproveSheet } from '../family/FriendApproveSheet.jsx';
@@ -56,7 +56,7 @@ export default function PendingCards({ data, token, parentView }) {
                   {(e.createdBy ? nameOf(e.createdBy) : 'מישהו')} {g(e.createdBy ? genderOf(e.createdBy) : null, 'רשם', 'רשמה', 'רשם/ה')}:{' '}
                   {nameOf(e.from)} {e.kind === 'debt' ? g(genderOf(e.from), 'חייב', 'חייבת', 'חייב/ת') : g(genderOf(e.from), 'החזיר', 'החזירה', 'החזיר/ה')} ל{nameOf(e.to)}
                 </div>
-                <div className="meta">{[money(e.amount), fmtDate(e.date), e.note].filter(Boolean).join(' • ')}</div>
+                <div className="meta">{[moneyWithValue(e.amount, curOf(e)), fmtDate(e.date), e.note].filter(Boolean).join(' • ')}</div>
               </div>
               <div className="acts">
                 <button className="small okbtn" type="button"

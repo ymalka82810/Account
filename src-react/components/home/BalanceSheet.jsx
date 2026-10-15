@@ -5,13 +5,15 @@ import { useConfirm } from '../shared/Confirm.jsx';
 import { call } from '../../lib/api.js';
 import { state } from '../../state/state.js';
 import { today, toast, errMsg } from '../../lib/helpers.js';
-import { openDebtsOf, pairOwes, debtLabel, money, namesFor } from '../../lib/computations.js';
+import { openDebtsOf, pairOwes, debtLabel, money, namesFor, baseCurrency } from '../../lib/computations.js';
+import { currencySymbol } from '../../lib/currencies.js';
 import { g } from '../../lib/gender.js';
 
 // סכום בלי סימני כיוון נסתרים (RLM) ש-toLocaleString מוסיף בעברית, כדי ששורת החישוב תוצג יציב משמאל לימין.
 const plain = (agorot) => money(agorot).replace(/[\u200e\u200f\u061c]/g, '').replace(/\s+/g, '');
 
-const sum = (list) => list.reduce((s, x) => s + x.remaining, 0);
+// הסכומים במטבע הראשי: חוב במטבע אחר נספר לפי השווי שלו היום (value).
+const sum = (list) => list.reduce((s, x) => s + x.value, 0);
 
 // חלוקת סכום קיזוז על החובות הפתוחים, מהישן לחדש: [{debt, amount}].
 function allocate(open, total) {
@@ -19,7 +21,7 @@ function allocate(open, total) {
   let left = total;
   for (const x of open) {
     if (left <= 0) break;
-    const take = Math.min(left, x.remaining);
+    const take = Math.min(left, x.value);
     out.push({ debt: x.debt, amount: take });
     left -= take;
   }
@@ -83,8 +85,11 @@ export default function BalanceSheet({ otherId }) {
 
   const Rows = ({ list, sign }) => list.map((x) => (
     <div className="calc-row" key={x.debt.id}>
-      <span>{debtLabel(x.debt)}{x.paid > 0 ? ` (נשאר מתוך ${money(x.debt.amount)})` : ''}</span>
-      <span className={'calc-amt ' + sign}>{money(x.remaining)}</span>
+      <span>
+        {debtLabel(x.debt)}{x.paid > 0 ? ` (נשאר מתוך ${money(x.debt.amount, x.cur)})` : ''}
+        {x.foreign && <> • {money(x.remaining, x.cur)} לפי {currencySymbol(x.cur)}1 = {money(Math.round(x.value / x.remaining * 100), baseCurrency())}</>}
+      </span>
+      <span className={'calc-amt ' + sign}>{money(x.value)}</span>
     </div>
   ));
 

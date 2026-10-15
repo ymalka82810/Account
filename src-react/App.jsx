@@ -6,7 +6,7 @@ import { toast } from './lib/helpers.js';
 import { restoreFamily, startPin, autoSkipPerson, dropSession } from './state/auth.js';
 import { syncPush } from './lib/push.js';
 import { client } from './lib/client.js';
-import { isPending } from './lib/computations.js';
+import { isPending, setFx } from './lib/computations.js';
 import { AppCtx, useApp } from './state/appContext.js';
 import { useSheet } from './components/shared/Sheet.jsx';
 import { EntryFlow } from './components/entries/EntryFlow.jsx';
@@ -93,6 +93,12 @@ function Root() {
   const data = useQuery('data:get', token ? { token } : 'skip');
   const fdata = useQuery('friends:get', token ? { token } : 'skip') || null;
   const roster = useQuery('auth:legacyRoster', {});
+  // שערי חליפין (לחובות במטבע אחר). אם אין או שהם ישנים, מבקשים מהשרת לעדכן.
+  const fx = useQuery('fx:rates', token ? {} : 'skip');
+  useEffect(() => {
+    if (fx === undefined) return;
+    if (!fx || Date.now() - fx.fetchedAt > 6 * 60 * 60 * 1000) client.action('fx:ensure', {}).catch(() => {});
+  }, [fx]);
   const [tabSel, setTabSel] = useState(tabFromHash);
   const migrating = useRef(false);
   const firstToken = useRef(true);
@@ -192,9 +198,11 @@ function Root() {
   }, []);
   const openEntryFlow = useCallback((opts) => sheet.open('', <EntryFlow opts={opts} />), [sheet]);
 
+  // המטבע הראשי והשערים נקבעים לפני שהמסכים מצוירים (חישובי היתרות משתמשים בהם).
+  if (screen === 'app') setFx(data.family.currency, fx && fx.rates);
   const ctx = useMemo(() => (screen === 'app'
-    ? { data, fdata, token, me: data.me.id, isParent, setTab, openEntryFlow }
-    : null), [screen, data, fdata, token, isParent, setTab, openEntryFlow]);
+    ? { data, fdata, token, me: data.me.id, isParent, setTab, openEntryFlow, fx }
+    : null), [screen, data, fdata, token, isParent, setTab, openEntryFlow, fx]);
 
   useEffect(() => { sheet.setAppCtx(ctx); }, [ctx]); // eslint-disable-line react-hooks/exhaustive-deps
 

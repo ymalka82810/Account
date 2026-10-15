@@ -11,6 +11,9 @@ export default defineSchema({
     // קוד ההורים הישן. כבר לא בשימוש ולא פותח כלום. נמחק כשמחליפים קוד.
     parentCode: v.optional(v.string()),
     createdAt: v.number(),
+    // מדינת המגורים (קוד ISO, למשל IL) והמטבע הראשי של המשפחה (למשל ILS). חסר = ישראל ושקלים.
+    country: v.optional(v.string()),
+    currency: v.optional(v.string()),
   })
     .index("by_parentCode", ["parentCode"])
     .index("by_childCode", ["childCode"]),
@@ -78,7 +81,11 @@ export default defineSchema({
     kind: v.union(v.literal("debt"), v.literal("payment")),
     from: v.id("people"),
     to: v.id("people"),
-    amount: v.number(), // באגורות
+    amount: v.number(), // במאיות של המטבע (אגורות, סנטים...)
+    // מטבע הרשומה (ILS, USD...). חסר = שקלים (רשומות מלפני המטבעות).
+    currency: v.optional(v.string()),
+    // בהחזר: השערים ברגע התשלום (יחידות לדולר), כדי שהמרת ההחזר לחוב במטבע אחר לא תשתנה בדיעבד.
+    fx: v.optional(v.record(v.string(), v.number())),
     note: v.string(),
     date: v.string(), // YYYY-MM-DD
     createdBy: v.optional(v.id("people")),
@@ -137,6 +144,7 @@ export default defineSchema({
     from: v.id("people"),
     to: v.id("people"),
     amount: v.number(), // באגורות
+    currency: v.optional(v.string()), // חסר = שקלים
     note: v.string(),
     frequency: v.union(v.literal("weekly"), v.literal("monthly")),
     weekday: v.optional(v.number()), // 0 = ראשון
@@ -168,6 +176,13 @@ export default defineSchema({
     challenge: v.string(),
     expiresAt: v.number(),
   }).index("by_person", ["personId"]),
+
+  // שערי חליפין עדכניים (מסמך אחד). rates[X] = כמה X שווה דולר אחד.
+  fxRates: defineTable({
+    rates: v.record(v.string(), v.number()),
+    source: v.string(),
+    fetchedAt: v.number(),
+  }),
 
   // מונים גסים להגבלת קצב (ניחוש קודי משפחה, יצירת משפחות).
   throttles: defineTable({

@@ -1,10 +1,10 @@
 import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
-import { isPending, debtStates, canDelete, namesFor, money, fmtDate } from '../../lib/computations.js';
+import { isPending, debtStates, canDelete, namesFor, money, moneyWithValue, curOf, fmtDate } from '../../lib/computations.js';
 
 // רשימת רשומות. lookup(id) מחזיר אדם לפי מזהה.
 export default function EntriesList({
-  list, emptyText, token, me, isParent, lookup, debtList, removeEndpoint, pendingLabel,
+  list, emptyText, token, me, isParent, lookup, debtList, removeEndpoint, pendingLabel, display,
 }) {
   if (!list.length) return <div className="empty">{emptyText}</div>;
   const { subjectWord, toWord, gw, vw } = namesFor(me, lookup);
@@ -23,7 +23,7 @@ export default function EntriesList({
     let extra = '';
     const st = debtMap.get(e.id);
     if (isDebt && !isPending(e) && st && st.paid > 0) {
-      extra = st.remaining > 0 ? `נשאר ${money(st.remaining)} מתוך ${money(e.amount)}` : 'שולם במלואו ✅';
+      extra = st.remaining > 0 ? `נשאר ${money(Math.round(st.remaining), st.cur)} מתוך ${money(e.amount, st.cur)}` : 'שולם במלואו ✅';
     } else if (!isDebt && e.debtId && debtMap.get(e.debtId)) {
       extra = 'על: ' + (debtMap.get(e.debtId).debt.note || 'חוב');
     }
@@ -37,7 +37,7 @@ export default function EntriesList({
           </div>
           <div className="meta">{[fmtDate(e.date), e.note, extra].filter(Boolean).join(' • ')}</div>
         </div>
-        <strong>{money(e.amount)}</strong>
+        <strong>{isDebt && !isPending(e) && !(st && st.remaining <= 0) ? moneyWithValue(e.amount, curOf(e), display || undefined) : money(e.amount, curOf(e))}</strong>
         {canDelete(e, me, isParent) && (
           <button className="small danger" type="button" onClick={() => remove(e)}>{isParent ? 'מחיקה' : 'ביטול'}</button>
         )}

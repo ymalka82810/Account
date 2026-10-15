@@ -2,7 +2,8 @@ import { call } from '../../lib/api.js';
 import { useState } from 'react';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { WEEKDAYS } from '../../state/state.js';
-import { money, fmtDate, namesFor } from '../../lib/computations.js';
+import { money, fmtDate, namesFor, baseCurrency } from '../../lib/computations.js';
+import { currencySymbol } from '../../lib/currencies.js';
 import { g } from '../../lib/gender.js';
 import Select from '../shared/Select.jsx';
 
@@ -61,7 +62,7 @@ export default function Recurring({ data, token }) {
         {data.recurring.map((r) => (
           <div className="row" key={r.id}>
             <div className="text">
-              <div>{nameOf(r.from)} {g(genderOf(r.from), 'חייב', 'חייבת', 'חייב/ת')} ל{nameOf(r.to)} {money(r.amount)}</div>
+              <div>{nameOf(r.from)} {g(genderOf(r.from), 'חייב', 'חייבת', 'חייב/ת')} ל{nameOf(r.to)} {money(r.amount, r.currency)}</div>
               <div className="meta">{[recurringWhen(r), r.note, 'הרישום הבא: ' + fmtDate(r.nextDate)].filter(Boolean).join(' • ')}</div>
             </div>
             <button className="small danger" type="button" onClick={() => remove(r)}>הפסקה</button>
@@ -74,7 +75,7 @@ export default function Recurring({ data, token }) {
           <Select value={fromVal} onChange={setFrom} options={personOptions} /></div>
         <div className="field"><span>למי</span>
           <Select value={toVal} onChange={setTo} options={personOptions} /></div>
-        <label className="field"><span>סכום (₪)</span>
+        <label className="field"><span>סכום ({currencySymbol(baseCurrency())})</span>
           <input type="number" inputMode="decimal" min="0.01" max="10000" step="0.01" required
             value={amount} onChange={(e) => setAmount(e.target.value)} /></label>
         <label className="field"><span>הערה</span>

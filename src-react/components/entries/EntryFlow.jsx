@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { state } from '../../state/state.js';
 import { call } from '../../lib/api.js';
 import { today, toast, errMsg } from '../../lib/helpers.js';
-import { openDebtsOf, debtLabel, namesFor, money } from '../../lib/computations.js';
+import { openDebtsOf, debtLabel, debtLeftText, namesFor, money, moneyWithValue, baseCurrency, convert } from '../../lib/computations.js';
+import { CURRENCIES, currencyLabel, currencySymbol } from '../../lib/currencies.js';
+import Select from '../shared/Select.jsx';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
@@ -14,7 +16,10 @@ export function EntryFlow({ opts }) {
   const { data, fdata, me, isParent, setTab } = useApp();
   const sheet = useSheet();
   const entries = opts.entries ? opts.entries : data.entries;
-  const [flow, setFlow] = useState(() => start({ from: opts.from || null, to: opts.to || null, amount: (opts.noDebtPick && opts.suggest) ? String(opts.suggest / 100) : '', agorot: 0, note: '', debtId: null, debtRemaining: null, debtName: '' }));
+  // המטבע הראשי (בין חברים תמיד שקלים). חוב חדש אפשר לרשום במטבע אחר; החזר נרשם במטבע הראשי.
+  const display = opts.endpoint ? 'ILS' : baseCurrency();
+  const canPickCurrency = opts.kind === 'debt' && !opts.endpoint;
+  const [flow, setFlow] = useState(() => start({ from: opts.from || null, to: opts.to || null, amount: (opts.noDebtPick && opts.suggest) ? String(opts.suggest / 100) : '', agorot: 0, note: '', debtId: null, debtRemaining: null, debtName: '', cur: display, debt: null }));
   const { step, st } = flow;
   const [err, setErr] = useState('');
   useEffect(() => { setErr(''); }, [step]);
@@ -31,7 +36,7 @@ export function EntryFlow({ opts }) {
   // אחרי שיש שני אנשים: בהחזר בוחרים לאיזה חוב מחזירים (אם יש כמה). אחרת ממשיכים לסכום.
   function afterPeople(s) {
     if (opts.kind !== 'payment' || opts.noDebtPick) return { step: 'amount', st: s };
-    const open = openDebtsOf(s.from, s.to, entries);
+    const open = openDebtsOf(s.from, s.to, entries, display);
     if (opts.debtId) {
       const hit = open.find((x) => x.debt.id === opts.debtId);
       if (hit) return pickDebt(s, hit);
@@ -44,7 +49,8 @@ export function EntryFlow({ opts }) {
     return (!s.from || !s.to) ? { step: 'person', st: s } : afterPeople(s);
   }
   function pickDebt(s, x) {
-    return { step: 'amount', st: { ...s, debtId: x.debt.id, debtRemaining: x.remaining, debtName: debtLabel(x.debt) } };
+    // debtRemaining = כמה אפשר לשלם במטבע הראשי (חוב במטבע אחר מומר לפי השער של עכשיו).
+    return { step: 'amount', st: { ...s, debtId: x.debt.id, debtRemaining: x.foreign ? x.value : x.remaining, debtName: debtLabel(x.debt), debt: x } };
   }
   const patch = (p) => setFlow((f) => ({ ...f, st: { ...f.st, ...p } }));
 
@@ -70,7 +76,7 @@ export function EntryFlow({ opts }) {
   }
 
   if (step === 'debt') {
-    const open = openDebtsOf(st.from, st.to, entries);
+    const open = openDebtsOf(st.from, st.to, entries, display);
     return (
       <div className="flow">
         <p className="flow-q">לאיזה חוב ההחזר?</p>
@@ -78,7 +84,7 @@ export function EntryFlow({ opts }) {
           {open.map((x) => (
             <button key={x.debt.id} className="debt-pick" type="button" onClick={() => setFlow(pickDebt(st, x))}>
               <div className="dp-name">{debtLabel(x.debt)}</div>
-              <div className="dp-amt">{x.paid > 0 ? `נשאר ${money(x.remaining)} מתוך ${money(x.debt.amount)}` : money(x.remaining)}</div>
+              <div className="dp-amt">{debtLeftText(x)}</div>
             </button>
           ))}
         </div>
@@ -119,21 +125,33 @@ export function EntryFlow({ opts }) {
     const next = () => {
       const agorot = Math.round(parseFloat(st.amount || '0') * 100);
       if (!Number.isFinite(agorot) || agorot <= 0) { setErr('כתבו סכום גדול מאפס.'); return; }
-      if (agorot > 1_000_000) { setErr('הסכום גדול מדי.'); return; }
-      if (opts.maxEntry && agorot > opts.maxEntry) { setErr(`בין חברים אפשר לרשום עד ${money(opts.maxEntry)} בכל פעם.`); return; }
-      if (maxAmount && agorot > maxAmount) { setErr(st.debtId ? `נשאר מהחוב הזה ${money(maxAmount)}.` : `אפשר להחזיר עד ${money(maxAmount)}.`); return; }
+      // עד 10,000 ש"ח לרשומה (או השווי שלהם במטבע אחר).
+      const ils = convert(agorot, st.cur, 'ILS');
+      if ((ils === null ? agorot > 100_000_000 : ils > 1_000_000 * 1.001)) { setErr('הסכום גדול מדי.'); return; }
+      if (opts.maxEntry && agorot > opts.maxEntry) { setErr(`בין חברים אפשר לרשום עד ${money(opts.maxEntry, display)} בכל פעם.`); return; }
+      if (maxAmount && agorot > maxAmount) { setErr(st.debtId ? `נשאר מהחוב הזה ${money(maxAmount, display)}.` : `אפשר להחזיר עד ${money(maxAmount, display)}.`); return; }
       setFlow({ step: 'final', st: { ...st, agorot } });
     };
 
-    const canPickOther = st.debtId && !opts.debtId && openDebtsOf(st.from, st.to, entries).length > 1;
+    const canPickOther = st.debtId && !opts.debtId && openDebtsOf(st.from, st.to, entries, display).length > 1;
+    const sym = currencySymbol(st.cur);
     return (
       <div className="flow">
         <p className="flow-q">{question}</p>
-        {st.debtId && <div className="debt-info">על: {st.debtName} • נשאר {money(st.debtRemaining)}</div>}
-        <div className="amount-display" aria-live="polite">₪{st.amount || '0'}</div>
+        {st.debtId && <div className="debt-info">על: {st.debtName} • {st.debt ? debtLeftText(st.debt) : money(st.debtRemaining, display)}</div>}
+        {st.debt && st.debt.foreign && (
+          <div className="debt-info">החוב ב{currencyLabel(st.debt.cur)}. משלמים ב{currencySymbol(display)} לפי השער של היום.</div>
+        )}
+        <div className="amount-display" aria-live="polite">{sym}{st.amount || '0'}</div>
+        {canPickCurrency && (
+          <div className="field currency-pick"><span>מטבע</span>
+            <Select value={st.cur} onChange={(c) => patch({ cur: c })}
+              options={[display, ...CURRENCIES.filter((c) => c !== display)].map((c) => ({ value: c, label: currencyLabel(c) }))} />
+          </div>
+        )}
         <div className="chips">
-          {[5, 10, 20, 50].map((n) => <button key={n} type="button" className="chip" onClick={() => setAmount(String(n))}>₪{n}</button>)}
-          {maxAmount ? <button type="button" className="chip strong" onClick={() => setAmount(String(maxAmount / 100))}>הכול {money(maxAmount)}</button> : null}
+          {[5, 10, 20, 50].map((n) => <button key={n} type="button" className="chip" onClick={() => setAmount(String(n))}>{sym}{n}</button>)}
+          {maxAmount ? <button type="button" className="chip strong" onClick={() => setAmount(String(maxAmount / 100))}>הכול {money(maxAmount, display)}</button> : null}
         </div>
         <div className="pad compact">
           {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'del'].map((k) => (
@@ -146,7 +164,7 @@ export function EntryFlow({ opts }) {
         <button type="button" className="primary" onClick={next}>המשך</button>
         {canPickOther && (
           <button type="button" className="ghost"
-            onClick={() => setFlow(afterPeople({ ...st, debtId: null, debtRemaining: null }))}>→ בחירת חוב אחר</button>
+            onClick={() => setFlow(afterPeople({ ...st, debtId: null, debtRemaining: null, debt: null }))}>→ בחירת חוב אחר</button>
         )}
       </div>
     );
@@ -154,10 +172,16 @@ export function EntryFlow({ opts }) {
 
   function renderFinal() {
     const isDebt = opts.kind === 'debt';
-    let sentence = `${subjectWord(st.from)} ${isDebt ? gw(st.from, 'חייב', 'חייבת', 'חייב/ת') : vw(st.from, 'החזרתי', 'החזיר', 'החזירה', 'החזיר/ה')} ${toWord(st.to)} ${money(st.agorot)}`;
-    if (st.debtId) {
+    let sentence = `${subjectWord(st.from)} ${isDebt ? gw(st.from, 'חייב', 'חייבת', 'חייב/ת') : vw(st.from, 'החזרתי', 'החזיר', 'החזירה', 'החזיר/ה')} ${toWord(st.to)} ${isDebt ? moneyWithValue(st.agorot, st.cur, display) : money(st.agorot, display)}`;
+    if (st.debtId && st.debt && st.debt.foreign) {
+      // החזר על חוב במטבע אחר: כמה מהחוב זה מכסה לפי השער של היום.
+      const covers = convert(st.agorot, display, st.debt.cur) ?? 0;
+      const left = st.debt.remaining - covers;
+      sentence += ` על ${st.debtName} (= ${money(Math.round(Math.min(covers, st.debt.remaining)), st.debt.cur)} לפי השער של היום). `
+        + (left >= 1 ? `יישאר ${moneyWithValue(Math.round(left), st.debt.cur, display)} מהחוב.` : 'החוב ייסגר במלואו ✅');
+    } else if (st.debtId) {
       const left = st.debtRemaining - st.agorot;
-      sentence += ` על ${st.debtName}. ` + (left > 0 ? `יישאר ${money(left)} מהחוב.` : 'החוב ייסגר במלואו ✅');
+      sentence += ` על ${st.debtName}. ` + (left > 0 ? `יישאר ${money(left, display)} מהחוב.` : 'החוב ייסגר במלואו ✅');
     }
     const save = async () => {
       try {
@@ -165,6 +189,7 @@ export function EntryFlow({ opts }) {
           token: state.token, kind: opts.kind, from: st.from, to: st.to, amount: st.agorot,
           note: isDebt ? st.note.trim() : (st.note.trim() || 'החזר'), date: today(),
           ...(st.debtId ? { debtId: st.debtId } : {}),
+          ...(canPickCurrency ? { currency: st.cur } : {}),
         });
         sheet.close();
         toast(opts.doneToast || (!isParent ? 'נשלח להורה לאישור ⏳' : isDebt ? 'החוב נשמר ✅' : 'ההחזר נשמר ✅'));

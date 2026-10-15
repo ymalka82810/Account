@@ -3,6 +3,60 @@ import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { dropSession } from '../../state/auth.js';
 import { useApp } from '../../state/appContext.js';
+import { useState } from 'react';
+import Select from '../shared/Select.jsx';
+import { COUNTRIES, CURRENCIES, currencyLabel, currencySymbol } from '../../lib/currencies.js';
+import { convert, curOf } from '../../lib/computations.js';
+
+// מיקום המגורים והמטבע הראשי של המשפחה (הורים). בחירת מדינה קובעת גם את המטבע שלה,
+// ואפשר לשנות את המטבע בנפרד. חובות במטבע אחר נשארים במטבע שלהם ומומרים לפי השער של היום.
+function LocaleSettings({ data }) {
+  const { token, fx } = useApp();
+  const [country, setCountry] = useState(data.family.country || '');
+  const [currency, setCurrency] = useState(data.family.currency || 'ILS');
+  const [busy, setBusy] = useState(false);
+  const changed = country !== (data.family.country || '') || currency !== (data.family.currency || 'ILS');
+
+  function pickCountry(c) {
+    setCountry(c);
+    const hit = COUNTRIES.find((x) => x[0] === c);
+    if (hit) setCurrency(hit[2]);
+  }
+  async function save() {
+    setBusy(true);
+    try { await call('family:setLocale', { token, country: country || undefined, currency }); toast('המיקום והמטבע עודכנו ✅'); }
+    catch (e) { toast(errMsg(e)); }
+    finally { setBusy(false); }
+  }
+
+  // מטבעות אחרים שיש בהם רשומות: מציגים את השער שלהם מול המטבע הראשי.
+  const base = data.family.currency || 'ILS';
+  const others = [...new Set(data.entries.map(curOf))].filter((c) => c !== base);
+  const rates = fx && fx.rates;
+
+  return (
+    <div className="form card">
+      <h3>מיקום ומטבע</h3>
+      <div className="field"><span>מדינת המגורים</span>
+        <Select value={country} onChange={pickCountry} placeholder="בחירת מדינה"
+          options={COUNTRIES.map(([code, name, cur]) => ({ value: code, label: `${name} (${currencySymbol(cur)})` }))} /></div>
+      <div className="field"><span>המטבע של המשפחה</span>
+        <Select value={currency} onChange={setCurrency}
+          options={CURRENCIES.map((c) => ({ value: c, label: currencyLabel(c) }))} /></div>
+      <p className="hint">כל הסכומים מוצגים במטבע הזה. אפשר לרשום חוב במטבע אחר (למשל 100 דולר), וכשמשלמים אותו הוא מומר לפי השער של אותו יום.</p>
+      {changed && <button className="primary" type="button" disabled={busy} onClick={save}>שמירה</button>}
+      {others.length > 0 && (
+        <div className="fx-rates">
+          {others.map((c) => {
+            const r = convert(100, c, base, rates);
+            return <div className="meta" key={c}>{currencySymbol(c)}1 = {r === null ? 'אין שער כרגע' : (r / 100).toLocaleString('he-IL', { style: 'currency', currency: base, maximumFractionDigits: 4 })}</div>;
+          })}
+          {fx && <div className="meta">השערים עודכנו {new Date(fx.fetchedAt).toLocaleString('he-IL', { dateStyle: 'short', timeStyle: 'short' })}</div>}
+        </div>
+      )}
+    </div>
+  );
+}
 
 // שינוי שם המשפחה (הורים).
 export default function FamilySettings({ data }) {
@@ -16,9 +70,12 @@ export default function FamilySettings({ data }) {
   }
 
   return (
-    <div className="tools">
-      <button className="ghost" type="button" onClick={rename}>שינוי שם המשפחה</button>
-    </div>
+    <>
+      <LocaleSettings data={data} />
+      <div className="tools">
+        <button className="ghost" type="button" onClick={rename}>שינוי שם המשפחה</button>
+      </div>
+    </>
   );
 }
 

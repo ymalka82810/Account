@@ -3,12 +3,25 @@ import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
 import { purgeBiometric } from "./biometric";
 import { cleanFamilyName, freshCode, requireParent } from "./lib";
+import { COUNTRIES, isCurrency } from "./currency";
 
 export const rename = mutation({
   args: { token: v.string(), name: v.string() },
   handler: async (ctx, { token, name }) => {
     const me = await requireParent(ctx, token);
     await ctx.db.patch(me.familyId, { name: cleanFamilyName(name) });
+  },
+});
+
+// מדינת המגורים והמטבע הראשי של המשפחה. בחירת מדינה מציעה את המטבע שלה, אבל אפשר לבחור מטבע אחר.
+// רשומות קיימות נשארות במטבע שבו נרשמו, ומוצגות במטבע הראשי לפי השער הנוכחי.
+export const setLocale = mutation({
+  args: { token: v.string(), country: v.optional(v.string()), currency: v.string() },
+  handler: async (ctx, { token, country, currency }) => {
+    const me = await requireParent(ctx, token);
+    if (!isCurrency(currency)) throw new ConvexError("מטבע לא נתמך");
+    if (country !== undefined && country !== "" && !(country in COUNTRIES)) throw new ConvexError("מדינה לא נתמכת");
+    await ctx.db.patch(me.familyId, { currency, country: country || undefined });
   },
 });
 

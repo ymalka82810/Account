@@ -33,9 +33,12 @@ export const get = query({
         pendingEmail: me.pendingEmail ? maskEmail(me.pendingEmail) : null,
       },
       // קוד ההצטרפות מגיע להורים בלבד.
-      family: me.role === "parent"
-        ? { name: family.name, code: family.childCode }
-        : { name: family.name },
+      family: {
+        name: family.name,
+        currency: family.currency ?? "ILS",
+        country: family.country ?? (family.currency ? null : "IL"),
+        ...(me.role === "parent" ? { code: family.childCode } : {}),
+      },
       people: people.map((p) => ({
         id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash,
         // התראה להורים בלבד: הקוד של האדם ננעל בגלל ניסיונות כושלים בשבוע האחרון.
@@ -49,12 +52,13 @@ export const get = query({
       })),
       entries: entries.map((e) => ({
         id: e._id, kind: e.kind, from: e.from, to: e.to, amount: e.amount, note: e.note,
+        currency: e.currency ?? "ILS", fx: e.fx ?? null,
         date: e.date, createdBy: e.createdBy ?? null, createdAt: e.createdAt ?? e._creationTime,
         status: e.status ?? "approved",
         debtId: e.debtId ?? null,
       })),
       recurring: recurring.map((r) => ({
-        id: r._id, from: r.from, to: r.to, amount: r.amount, note: r.note, frequency: r.frequency,
+        id: r._id, from: r.from, to: r.to, amount: r.amount, currency: r.currency ?? "ILS", note: r.note, frequency: r.frequency,
         weekday: r.weekday ?? null, monthDay: r.monthDay ?? null, nextDate: r.nextDate,
       })),
     };

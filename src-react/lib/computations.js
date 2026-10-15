@@ -6,44 +6,100 @@ import { g } from './gender.js';
 
 export const isPending = (e) => e.status === 'pending';
 
-export function pairOwes(a, b, entries) {
-  let sum = 0;
-  for (const e of entries) {
-    if (isPending(e)) continue;
-    const sign = e.kind === 'debt' ? 1 : -1;
-    if (e.from === a && e.to === b) sum += sign * e.amount;
-    else if (e.from === b && e.to === a) sum -= sign * e.amount;
-  }
-  return sum;
-}
+// ---------- מטבעות ושערי המרה ----------
+// App קובע את המטבע הראשי של המשפחה ואת השערים (setFx) לפני שהמסכים מצוירים.
+// רשומה בלי currency היא בשקלים (גם רשומות חברים).
+let FX = { base: 'ILS', rates: null };
+export function setFx(base, rates) { FX = { base: base || 'ILS', rates: rates || null }; }
+export const baseCurrency = () => FX.base;
+export const hasRates = () => !!FX.rates;
+export const curOf = (e) => e.currency || 'ILS';
 
-export function debtStates(entries) {
+// rates[X] = כמה X שווה דולר אחד. null אם אין שער.
+export function convert(amount, from, to, rates = FX.rates) {
+  if (from === to) return amount;
+  if (!rates || !rates[from] || !rates[to]) return null;
+  return (amount * rates[to]) / rates[from];
+}
+// שער: כמה יחידות של to שווה יחידה אחת של from.
+export const rateOf = (from, to, rates) => convert(1, from, to, rates);
+
+const EPS = 0.5; // פחות מחצי אגורה/סנט = שולם
+
+// חלוקת ההחזרים על החובות. החזר שמקושר לחוב הולך אליו; החזר כללי מתחלק על החובות
+// באותו כיוון מהישן לחדש. חוב במטבע אחר מקבל את ההחזר לפי השער שנשמר בהחזר (e.fx).
+// מחזיר את מצב כל חוב (במטבע שלו) ואת מה שנשאר מכל החזר אחרי החלוקה.
+function ledger(entries) {
   const byId = new Map();
+  const leftovers = [];
   const order = (a, b) => a.date.localeCompare(b.date) || a.createdAt - b.createdAt;
   const debts = entries.filter((e) => e.kind === 'debt' && !isPending(e)).sort(order);
-  for (const d of debts) byId.set(d.id, { debt: d, paid: 0, remaining: d.amount });
-  for (const e of entries) {
-    if (e.kind !== 'payment' || isPending(e) || !e.debtId) continue;
+  for (const d of debts) byId.set(d.id, { debt: d, cur: curOf(d), paid: 0, remaining: d.amount });
+  const pays = entries.filter((e) => e.kind === 'payment' && !isPending(e)).sort(order);
+  // קודם ההחזרים המקושרים, אחר כך הכלליים.
+  for (const e of pays) {
+    if (!e.debtId) continue;
     const st = byId.get(e.debtId);
-    if (st) { st.paid += e.amount; st.remaining = Math.max(0, st.debt.amount - st.paid); }
+    if (!st) { leftovers.push({ e, left: e.amount }); continue; }
+    const r = rateOf(st.cur, curOf(e), e.fx || FX.rates); // כמה מטבע-החזר ליחידת חוב
+    if (r === null) continue;
+    const used = Math.min(st.remaining, e.amount / r);
+    st.paid += used; st.remaining -= used;
+    if (st.remaining < EPS) st.remaining = 0;
+    const left = e.amount - used * r;
+    if (left >= 1) leftovers.push({ e, left });
   }
-  for (const e of [...entries].sort(order)) {
-    if (e.kind !== 'payment' || isPending(e) || e.debtId) continue;
+  for (const e of pays) {
+    if (e.debtId) continue;
     let left = e.amount;
     for (const d of debts) {
-      if (left <= 0) break;
+      if (left < EPS) break;
       if (d.from !== e.from || d.to !== e.to) continue;
       const st = byId.get(d.id);
-      const take = Math.min(left, st.remaining);
-      st.paid += take; st.remaining -= take; left -= take;
+      if (st.remaining <= 0) continue;
+      const r = rateOf(st.cur, curOf(e), e.fx || FX.rates);
+      if (r === null) continue;
+      const take = Math.min(left, st.remaining * r);
+      st.paid += take / r; st.remaining -= take / r; left -= take;
+      if (st.remaining < EPS) st.remaining = 0;
     }
+    if (left >= 1) leftovers.push({ e, left });
   }
-  return byId;
+  return { byId, leftovers };
 }
 
-export function openDebtsOf(a, b, entries) {
+export const debtStates = (entries) => ledger(entries).byId;
+
+// כמה a חייב ל-b, במטבע התצוגה (ברירת מחדל: המטבע הראשי). חובות במטבע אחר מומרים לפי השער הנוכחי.
+export function pairOwes(a, b, entries, display = FX.base) {
+  const { byId, leftovers } = ledger(entries);
+  let sum = 0;
+  for (const st of byId.values()) {
+    if (st.remaining <= 0) continue;
+    const sign = st.debt.from === a && st.debt.to === b ? 1 : st.debt.from === b && st.debt.to === a ? -1 : 0;
+    if (!sign) continue;
+    const v = convert(st.remaining, st.cur, display);
+    if (v !== null) sum += sign * v;
+  }
+  for (const { e, left } of leftovers) {
+    // החזר שלא כיסה חוב: מי ששילם "בעודף" - מגיע לו.
+    const sign = e.from === a && e.to === b ? -1 : e.from === b && e.to === a ? 1 : 0;
+    if (!sign) continue;
+    const v = convert(left, curOf(e), display);
+    if (v !== null) sum += sign * v;
+  }
+  return Math.round(sum);
+}
+
+// חובות פתוחים מ-a ל-b. remaining = במטבע החוב (מעוגל), value = השווי במטבע התצוגה עכשיו.
+export function openDebtsOf(a, b, entries, display = FX.base) {
   return [...debtStates(entries).values()]
     .filter((x) => x.debt.from === a && x.debt.to === b && x.remaining > 0)
+    .map((x) => {
+      const v = convert(x.remaining, x.cur, display);
+      return { ...x, paid: Math.round(x.paid), remaining: Math.round(x.remaining), value: v === null ? 0 : Math.round(v), valueCur: display, foreign: x.cur !== display };
+    })
+    .filter((x) => x.remaining > 0)
     .sort((x, y) => x.debt.date.localeCompare(y.debt.date) || x.debt.createdAt - y.debt.createdAt);
 }
 
@@ -54,7 +110,23 @@ export function fmtDate(iso) {
 
 export const debtLabel = (d) => (d.note || 'חוב') + ' • ' + fmtDate(d.date);
 
-export const money = (agorot) => (agorot / 100).toLocaleString('he-IL', { style: 'currency', currency: 'ILS' });
+export const money = (amount, currency = FX.base) =>
+  (amount / 100).toLocaleString('he-IL', { style: 'currency', currency });
+
+// מה נשאר מחוב פתוח (פריט מ-openDebtsOf): "נשאר $50 מתוך $100 (≈ ₪185)".
+export function debtLeftText(x) {
+  const rem = money(x.remaining, x.cur);
+  const base = x.paid > 0 ? `נשאר ${rem} מתוך ${money(x.debt.amount, x.cur)}` : rem;
+  return x.foreign && x.value ? `${base} (≈ ${money(x.value, x.valueCur)})` : base;
+}
+
+// "$100 (≈ ₪370)": סכום במטבע שלו, ואם הוא לא המטבע הראשי - גם השווי הנוכחי.
+export function moneyWithValue(amount, currency, display = FX.base) {
+  const s = money(amount, currency);
+  if (currency === display) return s;
+  const v = convert(amount, currency, display);
+  return v === null ? s : `${s} (≈ ${money(Math.round(v), display)})`;
+}
 
 export const roleLabel = (r, gender) =>
   r === 'parent' ? 'הורה' : r === 'teen' ? g(gender, 'נער', 'נערה', 'נער/ה') : g(gender, 'ילד', 'ילדה', 'ילד/ה');

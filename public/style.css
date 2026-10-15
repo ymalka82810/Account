@@ -914,3 +914,8 @@ body[data-theme="parent"] .confirm-msg { font-size: .9rem; opacity: .78; }
 body[data-theme="parent"] .confirm-actions .primary, body[data-theme="parent"] .confirm-actions .ghost { border-radius: 8px; padding: 11px; }
 body[data-theme="parent"] .confirm-bg, body[data-theme="teen"] .confirm-bg { background: rgba(0, 0, 0, .7); }
 body[data-theme="teen"] .confirm-box { background: #07070b; border: 2px solid var(--neon-a); box-shadow: 0 0 30px var(--neon-glow); }
+
+/* ---------- מטבעות ---------- */
+.currency-pick { max-width: 260px; margin: 0 auto 8px; }
+.currency-pick > span { font-size: .85rem; opacity: .75; }
+.fx-rates { margin-top: 10px; display: grid; gap: 2px; }

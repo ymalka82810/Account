@@ -80,18 +80,18 @@ export default function FriendsTab({ data, fdata, token }) {
       );
       continue;
     }
-    const n = pairOwes(me, p.id, entries);
+    const n = pairOwes(me, p.id, entries, 'ILS');
     const iOwe = n > 0;
     const amount = Math.abs(n);
     if (n > 0) owe += amount; else if (n < 0) get += amount;
     const [dFrom, dTo] = iOwe ? [me, p.id] : [p.id, me];
-    const open = n === 0 ? [] : openDebtsOf(dFrom, dTo, entries);
+    const open = n === 0 ? [] : openDebtsOf(dFrom, dTo, entries, 'ILS');
     cards.push(
       <div key={f.id} className={'debt' + (n === 0 ? '' : iOwe ? ' owe' : ' get') + (open.length > 1 ? ' multi' : '')}>
         <span className="avatar-md" aria-hidden="true">{p.avatar}</span>
         <div className="text">
           <div className="who">{n === 0 ? p.name : iOwe ? `${g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${p.name}` : `${p.name} ${g(p.gender, 'חייב', 'חייבת', 'חייב/ת')} לי`}</div>
-          <div className="amt">{n === 0 ? 'הכול מסודר ✅' : money(amount)}</div>
+          <div className="amt">{n === 0 ? 'הכול מסודר ✅' : money(amount, 'ILS')}</div>
           <DebtLines open={open} iOwe={iOwe} onPay={(x) => startFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })} />
         </div>
         {n !== 0 && (
@@ -123,8 +123,8 @@ export default function FriendsTab({ data, fdata, token }) {
   return (
     <>
       <div className="summary">
-        <div className="sum owe"><div className="lbl">{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} לחברים</div><div className="num">{money(owe)}</div></div>
-        <div className="sum get"><div className="lbl">חברים חייבים לי</div><div className="num">{money(get)}</div></div>
+        <div className="sum owe"><div className="lbl">{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} לחברים</div><div className="num">{money(owe, 'ILS')}</div></div>
+        <div className="sum get"><div className="lbl">חברים חייבים לי</div><div className="num">{money(get, 'ILS')}</div></div>
       </div>
       <div className="bigbtns">
         <button className="bigbtn owe" type="button" onClick={() => startFlow({ kind: 'debt', from: me })}>
@@ -166,7 +166,7 @@ export default function FriendsTab({ data, fdata, token }) {
                     {nameOf(e.createdBy)} {gw(e.createdBy, 'רשם', 'רשמה', 'רשם/ה')}: {subjectWord(e.from)}{' '}
                     {e.kind === 'debt' ? gw(e.from, 'חייב', 'חייבת', 'חייב/ת') : vw(e.from, 'החזרתי', 'החזיר', 'החזירה', 'החזיר/ה')} {toWord(e.to)}
                   </div>
-                  <div className="meta">{[money(e.amount), fmtDate(e.date), e.note].filter(Boolean).join(' • ')}</div>
+                  <div className="meta">{[money(e.amount, 'ILS'), fmtDate(e.date), e.note].filter(Boolean).join(' • ')}</div>
                 </div>
                 <div className="acts">
                   <button className="small okbtn" type="button"
@@ -201,7 +201,7 @@ export default function FriendsTab({ data, fdata, token }) {
 
       <h2>היסטוריה עם חברים</h2>
       <div>
-        <EntriesList list={entries} emptyText="עוד לא נרשם כלום עם חברים." token={token} me={me} isParent={false}
+        <EntriesList list={entries} emptyText="עוד לא נרשם כלום עם חברים." token={token} me={me} isParent={false} display="ILS"
           lookup={lookup} debtList={entries} removeEndpoint="friends:removeEntry"
           pendingLabel={(e) => (e.createdBy === me ? '⏳ ממתין לחבר/ה' : '⏳ ממתין לאישור שלך')} />
       </div>
