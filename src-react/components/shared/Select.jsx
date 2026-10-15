@@ -9,6 +9,7 @@ export default function Select({ value, onChange, options, className = '', place
   const [pos, setPos] = useState(null);
   const rootRef = useRef(null);
   const btnRef = useRef(null);
+  const listRef = useRef(null);
 
   function place() {
     const r = btnRef.current?.getBoundingClientRect();
@@ -24,7 +25,8 @@ export default function Select({ value, onChange, options, className = '', place
     if (!open) return;
     place();
     function onOutside(e) {
-      if (rootRef.current?.contains(e.target)) return;
+      // הרשימה מוצגת ב-portal מחוץ ל-rootRef, לכן חייבים לבדוק גם אותה — אחרת הלחיצה על אפשרות סוגרת את התפריט לפני שהבחירה נקלטת
+      if (rootRef.current?.contains(e.target) || listRef.current?.contains(e.target)) return;
       setOpen(false);
     }
     function onReflow() { place(); }
@@ -73,7 +75,7 @@ export default function Select({ value, onChange, options, className = '', place
         <span className="dd-arrow" aria-hidden="true" />
       </button>
       {open && pos && createPortal(
-        <ul className={'dd-list' + (pos.above ? ' dd-list-up' : '')} role="listbox"
+        <ul ref={listRef} className={'dd-list' + (pos.above ? ' dd-list-up' : '')} role="listbox"
           style={{ left: pos.left, width: pos.width, top: pos.top, bottom: pos.bottom }}>
           {options.map((o, i) => (
             <li key={o.value} role="option" aria-selected={o.value === value}
