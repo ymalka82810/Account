@@ -19,8 +19,8 @@ export default function ManageTab({ data, token }) {
       </Collapsible>
 
       <Collapsible name="manage-tiles" title="הגדרות המשפחה">
-        <FamilySettings data={data} />
         <PersonForm token={token} />
+        <FamilySettings data={data} />
       </Collapsible>
 
       <Collapsible name="manage-tiles" title="דמי כיס קבועים" subtitle="רישום חוב אוטומטי, שבועי או חודשי, בלי להקליד כל פעם.">
