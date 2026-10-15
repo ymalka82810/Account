@@ -111,6 +111,7 @@ h2 { font-size: 1.1rem; margin: 22px 0 10px; }
 .debt .who { font-weight: 500; }
 .debt .amt { font-weight: 800; font-size: 1.15rem; }
 .debt button { white-space: nowrap; }
+.debt.open-debt { flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; }
 
 .empty {
   text-align: center;

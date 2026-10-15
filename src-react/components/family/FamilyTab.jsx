@@ -20,7 +20,7 @@ export default function FamilyTab({ data, fdata, token }) {
       <Balances people={data.people} debts={debts} />
 
       <h2>כל החובות הפתוחים</h2>
-      <OpenDebts debts={debts} token={token} nameOf={nameOf} gw={gw} />
+      <OpenDebts debts={debts} nameOf={nameOf} gw={gw} />
 
       <TeenOverview teens={teens} />
     </>
