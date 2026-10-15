@@ -40,7 +40,6 @@ export default function Codes({ data, token }) {
       const proof = await bioConfirm('reveal-code', BIO_OPTS);
       const res = await call('family:revealCode', { token, proof });
       setCode(res.code);
-      try { if (localStorage.getItem(CODE_KEY)) localStorage.setItem(CODE_KEY, res.code); } catch (e) { /* */ }
       clearTimeout(timer.current);
       timer.current = setTimeout(() => setCode(null), SHOW_MS);
       return res.code;
@@ -64,12 +63,13 @@ export default function Codes({ data, token }) {
   }
 
   async function rotate() {
-    if (!confirm('להחליף את הקוד? מי שכבר בפנים נשאר, אבל הקוד הישן יפסיק לעבוד.')) return;
+    if (!confirm('להחליף את הקוד? מי שכבר בפנים נשאר, אבל הקוד הישן יפסיק לעבוד, ומכשירים אחרים ששמרו את המשפחה יצטרכו להזין את הקוד החדש.')) return;
     try {
-      const res = await call('family:rotateCode', { token });
+      const keepDevice = !!localStorage.getItem(CODE_KEY);
+      const res = await call('family:rotateCode', { token, keepDevice });
       hide();
-      // מעדכנים את הכניסה השמורה במכשיר הזה, אם יש כזו.
-      try { if (res?.loginCode && localStorage.getItem(CODE_KEY)) localStorage.setItem(CODE_KEY, res.loginCode); } catch (e) { /* */ }
+      // כל המכשירים ששמרו את המשפחה צריכים להזין את הקוד החדש. המכשיר הזה מקבל כרטיס חדש.
+      if (res?.loginCode) localStorage.setItem(CODE_KEY, res.loginCode);
       toast('הקוד הוחלף ✅ אפשר להציג אותו בטביעת אצבע או זיהוי פנים');
     } catch (e) { toast(errMsg(e)); }
   }

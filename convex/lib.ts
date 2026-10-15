@@ -107,9 +107,36 @@ function randomCode(): string {
   return [...bytes].map((b) => CODE_ALPHABET[b & 31]).join("");
 }
 
+// ---------- כרטיסי כניסה למכשיר ----------
+export const PASS_PREFIX = "dev_";
+export const isPass = (raw: string) => raw.startsWith(PASS_PREFIX);
+
+export async function issuePass(ctx: MutationCtx, familyId: Id<"families">): Promise<string> {
+  const pass = PASS_PREFIX + randomHex(32);
+  await ctx.db.insert("devicePasses", { familyId, passHash: await hashToken(pass), createdAt: Date.now() });
+  return pass;
+}
+
+export async function purgePasses(ctx: MutationCtx, familyId: Id<"families">) {
+  for (const p of await ctx.db.query("devicePasses").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()) {
+    await ctx.db.delete(p._id);
+  }
+}
+
 // קוד הצטרפות אחד לכל משפחה. מי שמצטרף/ת איתו נכנס/ת תמיד בתור ילד/ה.
 // קוד ההורים הישן (parentCode) כבר לא פותח כלום.
-export async function findFamilyByCode(ctx: QueryCtx, rawCode: string): Promise<{ family: Doc<"families"> } | null> {
+// מקבל גם כרטיס כניסה של מכשיר (dev_...) במקום הקוד; אז passId מסמן שזה כרטיס.
+export async function findFamilyByCode(
+  ctx: QueryCtx, rawCode: string,
+): Promise<{ family: Doc<"families">; passId?: Id<"devicePasses"> } | null> {
+  if (isPass(rawCode)) {
+    if (rawCode.length > 100) return null;
+    const passHash = await hashToken(rawCode);
+    const pass = await ctx.db.query("devicePasses").withIndex("by_hash", (q) => q.eq("passHash", passHash)).first();
+    if (!pass) return null;
+    const family = await ctx.db.get(pass.familyId);
+    return family ? { family, passId: pass._id } : null;
+  }
   const code = normalizeCode(rawCode);
   if (code.length !== CODE_LEN) return null;
   const family = await ctx.db.query("families").withIndex("by_childCode", (q) => q.eq("childCode", code)).first();

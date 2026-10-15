@@ -5,7 +5,7 @@ import { internal } from "./_generated/api";
 import { verifyCode } from "./emailCodes";
 import {
   CODE_FAIL_LIMIT, CODE_FAIL_WINDOW_MS, CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS, MAX_FAMILY_SIZE, SESSION_MS,
-  adoptLegacy, avatarOf, cleanFamilyName, cleanName, createFamilyDoc, deviceKey, findFamilyByCode, getSessionPerson, hashPin,
+  adoptLegacy, avatarOf, cleanFamilyName, cleanName, createFamilyDoc, deviceKey, findFamilyByCode, getSessionPerson, hashPin, isPass, issuePass,
   hashToken, isThrottled, legacyPeople, noteHit, randomHex, registerPinFail, requireSameFamily, requireParent, validPin,
 } from "./lib";
 
@@ -53,9 +53,10 @@ export const legacyRoster = query({
 });
 
 // בדיקת קוד משפחה ורשימת בני המשפחה למסך הכניסה.
+// remember: המכשיר רוצה לזכור את המשפחה. אז מקבלים כרטיס כניסה (loginCode) ולא את הקוד עצמו.
 export const enter = mutation({
-  args: { code: v.string(), device: v.optional(v.string()) },
-  handler: async (ctx, { code, device }) => {
+  args: { code: v.string(), device: v.optional(v.string()), remember: v.optional(v.boolean()) },
+  handler: async (ctx, { code, device, remember }) => {
     if (await codeThrottled(ctx, device)) return { ok: false as const, reason: "throttled" as const };
     const found = await findFamilyByCode(ctx, code);
     if (!found) return await failCode(ctx, device);
@@ -63,8 +64,8 @@ export const enter = mutation({
     return {
       ok: true as const,
       familyName: found.family.name,
-      // הקוד שנשמר במכשיר לכניסות הבאות (הקוד היחיד של המשפחה).
-      loginCode: found.family.childCode,
+      // מה שנשמר במכשיר לכניסות הבאות: כרטיס כניסה, אף פעם לא קוד ההצטרפות.
+      loginCode: found.passId ? code : remember ? await issuePass(ctx, found.family._id) : undefined,
       people: people.map(publicPerson),
     };
   },
@@ -181,6 +182,17 @@ export const migrateMe = mutation({
     const me = await getSessionPerson(ctx, token);
     if (!me || me.familyId || me.role !== "parent") return;
     await adoptLegacy(ctx);
+  },
+});
+
+// המכשיר "שוכח" את המשפחה: מוחקים את כרטיס הכניסה שלו.
+export const forgetPass = mutation({
+  args: { pass: v.string() },
+  handler: async (ctx, { pass }) => {
+    if (!isPass(pass) || pass.length > 100) return;
+    const passHash = await hashToken(pass);
+    const row = await ctx.db.query("devicePasses").withIndex("by_hash", (q) => q.eq("passHash", passHash)).first();
+    if (row) await ctx.db.delete(row._id);
   },
 });
 

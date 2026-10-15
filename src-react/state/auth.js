@@ -6,20 +6,21 @@ import { call } from '../lib/api.js';
 
 // בודק קוד מול השרת. מחזיר true אם נכנסנו למשפחה.
 export async function enterFamily(code, remember) {
-  const res = await call('auth:enter', { code });
+  const res = await call('auth:enter', { code, remember: !!remember });
   if (!res.ok) return res.reason;
   state.fam = { code, name: res.familyName, people: res.people };
-  // שומרים במכשיר את קוד המשפחה, לכניסות הבאות.
-  if (remember) localStorage.setItem(CODE_KEY, res.loginCode);
+  // שומרים במכשיר כרטיס כניסה (לא את קוד ההצטרפות), לכניסות הבאות.
+  if (remember && res.loginCode) localStorage.setItem(CODE_KEY, res.loginCode);
   return true;
 }
 
-// קוד המשפחה שמור במכשיר: מרעננים את רשימת המשפחה, ואם הקוד הוחלף מוחקים אותו.
+// כרטיס הכניסה שמור במכשיר: מרעננים את רשימת המשפחה, ואם הכרטיס בוטל מוחקים אותו.
+// מכשיר שעוד שומר את קוד ההצטרפות עצמו (גרסה קודמת) מחליף אותו בכרטיס.
 export async function restoreFamily() {
   const saved = localStorage.getItem(CODE_KEY);
   if (!saved) return;
   try {
-    const r = await enterFamily(saved, false);
+    const r = await enterFamily(saved, !saved.startsWith('dev_'));
     if (r !== true && r !== 'throttled') { localStorage.removeItem(CODE_KEY); state.fam = null; }
   } catch (e) { /* בלי חיבור: נשארים עם מה שיש */ }
 }
@@ -85,6 +86,8 @@ export async function joinFamily({ name, avatar, pin, gender }) {
 }
 
 export function leaveFamily() {
+  const saved = localStorage.getItem(CODE_KEY);
+  if (saved && saved.startsWith('dev_')) call('auth:forgetPass', { pass: saved }).catch(() => {});
   state.fam = null;
   state.view = 'welcome';
   state.pinFlow = null;

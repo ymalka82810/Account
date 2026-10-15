@@ -2,7 +2,7 @@ import { mutation } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
 import { proofValidator, purgeBiometric, requireBiometric } from "./biometric";
-import { cleanFamilyName, freshCode, requireParent } from "./lib";
+import { cleanFamilyName, freshCode, issuePass, purgePasses, requireParent } from "./lib";
 import { COUNTRIES, isCurrency } from "./currency";
 
 export const rename = mutation({
@@ -39,14 +39,15 @@ export const revealCode = mutation({
 });
 
 // החלפת קוד ההצטרפות (למשל אם הוא הגיע למי שלא צריך). מי שכבר בפנים נשאר בפנים.
-// מחזיר את הקוד החדש רק כדי לעדכן את הכניסה השמורה במכשיר; התצוגה נשארת מוסתרת.
+// כל כרטיסי הכניסה של המכשירים נמחקים (אולי מישהו זר שמר את המשפחה עם הקוד הישן).
+// keepDevice: המכשיר של ההורה שמחליף שומר את המשפחה, אז הוא מקבל כרטיס חדש.
 export const rotateCode = mutation({
-  args: { token: v.string() },
-  handler: async (ctx, { token }) => {
+  args: { token: v.string(), keepDevice: v.optional(v.boolean()) },
+  handler: async (ctx, { token, keepDevice }) => {
     const me = await requireParent(ctx, token);
-    const childCode = await freshCode(ctx);
-    await ctx.db.patch(me.familyId, { childCode, parentCode: undefined });
-    return { loginCode: childCode };
+    await ctx.db.patch(me.familyId, { childCode: await freshCode(ctx), parentCode: undefined });
+    await purgePasses(ctx, me.familyId);
+    return { loginCode: keepDevice ? await issuePass(ctx, me.familyId) : undefined };
   },
 });
 
@@ -76,6 +77,7 @@ export const remove = mutation({
       await purgeBiometric(ctx, p._id);
       await ctx.db.delete(p._id);
     }
+    await purgePasses(ctx, familyId);
     await ctx.db.delete(familyId);
   },
 });

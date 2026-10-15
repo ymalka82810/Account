@@ -18,6 +18,17 @@ export default defineSchema({
     .index("by_parentCode", ["parentCode"])
     .index("by_childCode", ["childCode"]),
 
+  // כרטיסי כניסה למכשירים שבחרו "לזכור" את המשפחה. במקום לשמור במכשיר את קוד ההצטרפות,
+  // שומרים שם כרטיס אקראי שפותח רק את מסך הכניסה של המשפחה (עדיין צריך קוד סודי אישי),
+  // לא מגלה את הקוד, ונמחק כשמחליפים קוד או כשהמכשיר "שוכח" את המשפחה. בשרת נשמר רק הגיבוב.
+  devicePasses: defineTable({
+    familyId: v.id("families"),
+    passHash: v.string(),
+    createdAt: v.number(),
+  })
+    .index("by_hash", ["passHash"])
+    .index("by_family", ["familyId"]),
+
   people: defineTable({
     // חסר רק אצל נתונים מהגרסה של משפחה אחת. הם עוברים למשפחה בכניסה הראשונה של הורה.
     familyId: v.optional(v.id("families")),
