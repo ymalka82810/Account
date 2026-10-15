@@ -271,7 +271,7 @@ button.danger { color: var(--owe); }
 .person .text { flex: 1; font-weight: 500; }
 .person .meta { font-size: .85rem; color: var(--ink-soft); font-weight: 400; }
 
-.tools { display: flex; gap: 8px; margin-top: 22px; flex-wrap: wrap; }
+.tools { display: flex; gap: 8px; margin-top: 22px; margin-bottom: 16px; flex-wrap: wrap; }
 
 .toast {
   position: fixed;
