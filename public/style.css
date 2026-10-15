@@ -469,6 +469,19 @@ body[data-theme="teen"] #screen-loading p {
     drop-shadow(0 6px 8px rgba(0, 0, 0, .25));
 }
 
+/* אותו אפקט סטיקר לכל אימוג'י באפליקציה (בכפתורים, בכותרות, בהודעות). כל אימוג'י נעטף
+   אוטומטית ב-<span class="emo"> (src-react/lib/emojiJsx.js). הצללים ביחידות em כדי שיתאימו לכל גודל. */
+.emo {
+  display: inline-block;
+  line-height: 1;
+  filter:
+    drop-shadow(0 -0.03em 0 rgba(255, 255, 255, .6))
+    drop-shadow(0 .03em .02em rgba(0, 0, 0, .25))
+    drop-shadow(0 .08em .1em rgba(0, 0, 0, .22));
+}
+/* הדמויות כבר מקבלות את האפקט מהמסגרת שלהן - בלי צל כפול */
+.avatar-lg .emo, .avatar-md .emo, .avatar-sm .emo, .avatar-xl .emo, .av .emo { filter: none; }
+
 /* בורר דמות */
 .avatars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
 .av {
