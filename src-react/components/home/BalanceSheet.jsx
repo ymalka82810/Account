@@ -74,8 +74,8 @@ export default function BalanceSheet({ otherId }) {
   function payNet() {
     sheet.close();
     openEntryFlow(iOwe
-      ? { kind: 'payment', from: me, to: otherId, suggest: net }
-      : { kind: 'payment', from: otherId, to: me, suggest: -net });
+      ? { kind: 'payment', from: me, to: otherId, suggest: net, noDebtPick: true }
+      : { kind: 'payment', from: otherId, to: me, suggest: -net, noDebtPick: true });
   }
 
   const Rows = ({ list, sign }) => list.map((x) => (
@@ -105,7 +105,7 @@ export default function BalanceSheet({ otherId }) {
 
       <div className="calc-final">
         <div>{net === 0 ? 'מאוזן: אף אחד לא חייב' : iOwe ? `בסך הכול ${g(myGender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${other_}` : `בסך הכול ${other_} ${g(other.gender, 'חייב', 'חייבת', 'חייב/ת')} לי`}</div>
-        <div className="calc-eq">{money(sumTheirs)} − {money(sumMine)}{adjust !== 0 ? ` ${adjust > 0 ? '+' : '−'} ${money(Math.abs(adjust))}` : ''} = <strong>{money(Math.abs(net))}</strong></div>
+        <div className="calc-eq" dir="ltr">{money(sumTheirs)} − {money(sumMine)}{adjust !== 0 ? ` ${adjust > 0 ? '+' : '−'} ${money(Math.abs(adjust))}` : ''} = <strong>{money(Math.abs(net))}</strong></div>
       </div>
 
       {twoSided && (

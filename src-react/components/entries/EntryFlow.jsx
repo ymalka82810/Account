@@ -14,7 +14,7 @@ export function EntryFlow({ opts }) {
   const { data, fdata, me, isParent, setTab } = useApp();
   const sheet = useSheet();
   const entries = opts.entries ? opts.entries : data.entries;
-  const [flow, setFlow] = useState(() => start({ from: opts.from || null, to: opts.to || null, amount: '', agorot: 0, note: '', debtId: null, debtRemaining: null, debtName: '' }));
+  const [flow, setFlow] = useState(() => start({ from: opts.from || null, to: opts.to || null, amount: (opts.noDebtPick && opts.suggest) ? String(opts.suggest / 100) : '', agorot: 0, note: '', debtId: null, debtRemaining: null, debtName: '' }));
   const { step, st } = flow;
   const [err, setErr] = useState('');
   useEffect(() => { setErr(''); }, [step]);
