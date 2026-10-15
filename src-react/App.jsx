@@ -284,7 +284,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
       + fdata.entries.filter((e) => isPending(e) && e.createdBy !== me).length
     : 0;
 
-  const tabs = ['home', ...(isParent ? ['manage'] : []), ...(isTeen ? ['friends'] : []), 'history', ...(isParent ? ['family'] : [])];
+  const tabs = ['home', ...(isTeen ? ['friends'] : []), 'history', ...(isParent ? ['family', 'manage'] : [])];
   const myPending = isParent ? 0 : data.entries.filter((e) => isPending(e) && (e.from === me || e.to === me)).length;
   const badge = { home: myPending, family: isParent ? parentCount : 0, friends: friendsCount };
 

@@ -18,17 +18,17 @@ export default function ManageTab({ data, token }) {
         <PeopleList people={data.people} me={me} token={token} />
       </Collapsible>
 
-      <Collapsible name="manage-tiles" title="קודי הצטרפות">
-        <Codes data={data} token={token} />
+      <Collapsible name="manage-tiles" title="הגדרות המשפחה">
+        <FamilySettings data={data} />
+        <PersonForm token={token} />
       </Collapsible>
 
       <Collapsible name="manage-tiles" title="דמי כיס קבועים" subtitle="רישום חוב אוטומטי, שבועי או חודשי, בלי להקליד כל פעם.">
         <Recurring data={data} token={token} />
       </Collapsible>
 
-      <Collapsible name="manage-tiles" title="הגדרות המשפחה">
-        <FamilySettings data={data} />
-        <PersonForm token={token} />
+      <Collapsible name="manage-tiles" title="קודי הצטרפות">
+        <Codes data={data} token={token} />
       </Collapsible>
 
       <Collapsible name="manage-tiles" title="אזור מסוכן">
