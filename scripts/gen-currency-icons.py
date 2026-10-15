@@ -57,13 +57,33 @@ def text_path(text):
         gs[n].draw(TransformPen(sp, (s, 0, 0, -s, tx + s * dx, ty)))
     return sp.getCommands()
 
+# סמלים שאין בגופנים, מצוירים ידנית באותו viewBox (מרכז 256,256, בתוך הטבעת הפנימית).
+# כיוון הציור: מתאר חיצוני עם כיוון השעון וחורים נגדו (מילוי nonzero).
+def aed_path(dx=-4):
+    # הסמל החדש של הדירהם (2025): D עבה עם שני קווים אופקיים שחוצים אותה
+    X = lambda x: ('%g' % (x + dx))
+    outer = f'M{X(202)} 186H{X(266)}A70 70 0 0 1 {X(266)} 326H{X(202)}Z'
+    hole = f'M{X(228)} 212V300H{X(266)}A44 44 0 0 0 {X(266)} 212Z'
+    bars = ''.join(f'M{X(176)} {y - 7}H{X(344)}V{y + 7}H{X(176)}Z' for y in (238, 274))
+    return outer + hole + bars
+
+CUSTOM = {
+    'AED': ('D', aed_path(), ['AED']),
+    # מטבע זהב בלי סמל: לכל מטבע שאין לו וריאנט
+    'COIN': ('', '', []),
+}
+
 out = {'variants': {}, 'byCurrency': {}}
 for key, (text, curs) in VARIANTS.items():
     out['variants'][key] = {'symbol': text, 'path': text_path(text)}
+    for c in curs:
+        out['byCurrency'][c] = key
+for key, (text, path, curs) in CUSTOM.items():
+    out['variants'][key] = {'symbol': text, 'path': path}
     for c in curs:
         out['byCurrency'][c] = key
 
 root = os.path.join(os.path.dirname(__file__), '..')
 with open(os.path.join(root, 'assets', 'currency-icons.json'), 'w', encoding='utf-8') as f:
     json.dump(out, f, ensure_ascii=False, indent=1)
-print('wrote', len(VARIANTS), 'variants')
+print('wrote', len(out['variants']), 'variants')

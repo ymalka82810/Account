@@ -31,7 +31,7 @@ def circle(r, cx=256, cy=256):
 def coin_paths(symbol_path):
     return (f'    <path android:fillColor="{GOLD}" android:pathData="{circle(150)}"/>\n'
             f'    <path android:strokeColor="{DARK}" android:strokeWidth="14" android:pathData="{circle(112)}"/>\n'
-            f'    <path android:fillColor="{DARK}" android:pathData="{symbol_path}"/>\n')
+            + (f'    <path android:fillColor="{DARK}" android:pathData="{symbol_path}"/>\n' if symbol_path else ''))
 
 def vector(size_dp, body):
     return ('<?xml version="1.0" encoding="utf-8"?>\n'

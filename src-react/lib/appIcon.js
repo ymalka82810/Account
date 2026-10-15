@@ -7,7 +7,8 @@ import { COUNTRIES } from './currencies.js';
 import { isNativeApp } from './updater.js';
 
 const KEYS = Object.keys(ICONS.variants);
-export const iconKeyFor = (currency) => ICONS.byCurrency[currency] || 'ILS';
+// מטבע בלי סמל משלו: מטבע זהב ריק
+export const iconKeyFor = (currency) => ICONS.byCurrency[currency] || 'COIN';
 
 // אזורי זמן של המדינות ברשימה (כשהדפדפן לא מגלה מדינה מהשפה)
 const TZ_COUNTRY = {
@@ -46,7 +47,7 @@ export function iconSvg(key) {
   const v = ICONS.variants[key] || ICONS.variants.ILS;
   return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="96" fill="#1d2b4f"/>'
     + '<circle cx="256" cy="256" r="150" fill="#f6c945"/><circle cx="256" cy="256" r="112" fill="none" stroke="#c99a0f" stroke-width="14"/>'
-    + `<path d="${v.path}" fill="#c99a0f"/></svg>`;
+    + (v.path ? `<path d="${v.path}" fill="#c99a0f"/>` : '') + '</svg>';
 }
 
 let shown = null;
