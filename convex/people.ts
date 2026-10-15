@@ -89,8 +89,8 @@ export const setRole = mutation({
     if (role === "parent" && !p.pinHash) throw new ConvexError(`קודם צריך לקבוע ל${p.name} קוד סודי`);
     await requireBiometric(ctx, me, `role:${id}:${role}`, proof);
     await ctx.db.patch(id, role === "teen"
-      ? { role }
-      : { role, friendsEnabled: false, friendsRequested: false, friendEmail: undefined });
+      ? { role, teenRequested: undefined }
+      : { role, teenRequested: undefined, friendsEnabled: false, friendsRequested: false, friendEmail: undefined });
     // הורה שהפך לילד/ה או לנער/ה לא צריך את המכשירים הביומטריים שלו.
     if (p.role === "parent") await purgeBiometric(ctx, id);
   },

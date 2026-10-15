@@ -44,6 +44,9 @@ export default defineSchema({
     friendsEnabled: v.optional(v.boolean()),
     friendsRequested: v.optional(v.boolean()),
     friendEmail: v.optional(v.string()),
+    // ישן: בקשת ילד/ה לעבור לנוער (הפיצ'ר הוסר). נשאר בסכמה כי יש מסמכים קיימים עם השדה,
+    // ובלעדיו Convex מסרב לפרוס. לא בשימוש, ומתנקה בשינוי תפקיד.
+    teenRequested: v.optional(v.boolean()),
   })
     .index("by_family", ["familyId"])
     .index("by_friendEmail", ["friendEmail"]),
