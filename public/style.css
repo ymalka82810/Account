@@ -15,7 +15,7 @@
   font-family: "Rubik", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 html { -webkit-text-size-adjust: 100%; }
 
@@ -59,6 +59,7 @@ body {
   cursor: pointer;
 }
 .tab.active { color: var(--ink); font-weight: 700; border-bottom-color: var(--coin-deep); }
+button:focus:not(:focus-visible), a:focus:not(:focus-visible), [role="button"]:focus:not(:focus-visible) { outline: none; }
 .tab:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, .filebtn:focus-within, .dd-btn:focus-visible, .dd-opt:focus-visible {
   outline: 3px solid var(--coin-deep);
   outline-offset: 2px;
