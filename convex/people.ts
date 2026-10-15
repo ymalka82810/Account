@@ -81,15 +81,15 @@ export const setRole = mutation({
 // כלומר התחברות עם קוד ההורה). ילד/ה לא יכול/ה לבקש זאת - כדי שלא יהיה אפשר
 // "לשגע" הורה בבקשות חוזרות.
 
-// קביעת מגדר (לצורת פנייה מותאמת): האדם עצמו/ה או הורה יכולים לקבוע. חסר = ללא ציון.
+// קביעת מגדר (לצורת פנייה מותאמת): אך ורק הורה קובע, ופעם אחת בלבד לכל אדם.
+// אחרי שנקבע, הוא ננעל - גם ההורה לא יכול לשנות אותו יותר דרך האפליקציה.
 export const setGender = mutation({
-  args: { token: v.string(), id: v.id("people"), gender: v.optional(v.union(v.literal("male"), v.literal("female"))) },
+  args: { token: v.string(), id: v.id("people"), gender: v.union(v.literal("male"), v.literal("female")) },
   handler: async (ctx, { token, id, gender }) => {
     const me = await requirePerson(ctx, token);
-    if (me._id !== id) {
-      if (me.role !== "parent") throw new ConvexError("רק הורים יכולים לעשות את זה");
-      await requireSameFamily(ctx, me, id);
-    }
+    if (me.role !== "parent") throw new ConvexError("רק הורים יכולים לקבוע את צורת הפנייה");
+    const person = await requireSameFamily(ctx, me, id);
+    if (person.gender) throw new ConvexError("צורת הפנייה כבר נקבעה ולא ניתנת לשינוי");
     await ctx.db.patch(id, { gender });
   },
 });

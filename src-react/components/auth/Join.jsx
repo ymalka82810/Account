@@ -18,7 +18,7 @@ export default function Join({ current }) {
     ev.preventDefault();
     setError('');
     run(async () => {
-      const err = await joinFamily({ ...v, avatar, gender: gender || undefined });
+      const err = await joinFamily({ ...v, avatar, ...(isParentCode ? { gender: gender || undefined } : {}) });
       if (err) setError(err); else setV({ name: '', pin: '' });
     });
   };
@@ -31,13 +31,15 @@ export default function Join({ current }) {
         <p className="hint">
           {fam && (fam.codeRole === 'parent'
             ? `מצטרפים לקופה של ${fam.name} בתור הורה.`
-            : `מצטרפים לקופה של ${fam.name} בתור ${g(gender, 'ילד', 'ילדה', 'ילד/ה')}.`)}
+            : `מצטרפים לקופה של ${fam.name} בתור ילד/ה.`)}
         </p>
         <form className="form" autoComplete="off" onSubmit={submit}>
           <label className="field"><span>איך קוראים לך?</span>
             <input type="text" maxLength={20} required value={v.name} onChange={set('name')} /></label>
-          <div className="field"><span>צורת פנייה</span>
-            <Select value={gender} onChange={setGender} options={GENDER_OPTIONS} /></div>
+          {isParentCode && (
+            <div className="field"><span>צורת פנייה</span>
+              <Select value={gender} onChange={setGender} options={GENDER_OPTIONS} /></div>
+          )}
           <div className="field"><span>בחר/י דמות</span>
             <AvatarPicker value={avatar} onChange={setAvatar} options={isParentCode ? PARENT_AVATARS : undefined} /></div>
           <label className="field"><span>קוד סודי משלך (4 ספרות)</span>

@@ -93,6 +93,8 @@ export const createFamily = mutation({
 });
 
 // הצטרפות למשפחה קיימת עם קוד. התפקיד נקבע לפי הקוד: קוד הורים או קוד ילדים.
+// צורת פנייה (מגדר): רק מי שמצטרף/ת בתור הורה יכול/ה לקבוע לעצמו/ה כאן.
+// ילד/ה לא בוחר/ת מגדר בהצטרפות - זו קביעת הורה בלבד, דרך people:setGender.
 export const join = mutation({
   args: {
     code: v.string(), name: v.string(), avatar: v.optional(v.string()),
@@ -109,7 +111,8 @@ export const join = mutation({
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
     if (members.length >= MAX_FAMILY_SIZE) throw new ConvexError("המשפחה מלאה");
     if (members.some((p) => p.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה. בחרו אותו ברשימה, או שנו את השם");
-    const id = await ctx.db.insert("people", { familyId, name: clean, role: found.role, avatar: avatar?.slice(0, 8), gender });
+    const personGender = found.role === "parent" ? gender : undefined;
+    const id = await ctx.db.insert("people", { familyId, name: clean, role: found.role, avatar: avatar?.slice(0, 8), gender: personGender });
     await setPin(ctx, id, pin);
     return { ok: true as const, token: await openSession(ctx, id) };
   },

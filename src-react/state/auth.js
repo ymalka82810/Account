@@ -69,9 +69,11 @@ export async function createFamily({ familyName, name, avatar, gender, pin }) {
 }
 
 // ---------- הצטרפות עם קוד ----------
-export async function joinFamily({ name, avatar, gender, pin }) {
+export async function joinFamily({ name, avatar, pin, gender }) {
   try {
-    const res = await call('auth:join', { code: state.fam.code, name, avatar, gender, pin });
+    const args = { code: state.fam.code, name, avatar, pin };
+    if (gender) args.gender = gender;
+    const res = await call('auth:join', args);
     if (!res.ok) {
       if (res.reason === 'code') leaveFamily();
       return res.reason === 'throttled' ? 'יותר מדי ניסיונות. נסו שוב עוד דקה.' : 'הקוד כבר לא תקף. בקשו קוד חדש מההורים.';

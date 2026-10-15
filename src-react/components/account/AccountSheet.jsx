@@ -64,14 +64,24 @@ export function AccountSheet() {
   useEffect(() => { if (pushSupported()) isPushOn().then(setPushOn); }, []);
 
   async function setGender(gender) {
-    try { await call('people:setGender', { token, id: me.id, gender: gender || undefined }); }
+    if (!gender) return;
+    try { await call('people:setGender', { token, id: me.id, gender }); }
     catch (e) { toast(errMsg(e)); }
   }
+
+  // צורת פנייה: הורה קובע לעצמו (פעם אחת בלבד - נעול אחרי קביעה).
+  // לילד/נער זו קביעת הורה בלבד, דרך מסך ניהול בני המשפחה - לא כאן.
+  const genderField = me.role === 'parent'
+    ? (me.gender
+        ? <span>{g(me.gender, 'זכר', 'נקבה')}</span>
+        : <Select value="" onChange={setGender}
+            options={[{ value: '', label: 'קביעת צורת פנייה…' }, ...GENDER_OPTIONS.filter((o) => o.value)]} />)
+    : (me.gender ? <span>{g(me.gender, 'זכר', 'נקבה')}</span> : <span className="hint">טרם נקבעה ע״י ההורה</span>);
 
   return (
     <div className="form">
       <div className="field"><span>צורת פנייה</span>
-        <Select value={me.gender || ''} onChange={setGender} options={GENDER_OPTIONS} /></div>
+        {genderField}</div>
 
       <button className="ghost" type="button" onClick={() => sheet.open('דמות', <AvatarSheet />)}>
         {me.avatar ? me.avatar + ' דמות' : '🙂 בחירת דמות'}

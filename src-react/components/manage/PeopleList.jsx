@@ -7,6 +7,10 @@ import { roleLabel } from '../../lib/computations.js';
 import Select from '../shared/Select.jsx';
 import { g, GENDER_OPTIONS } from '../../lib/gender.js';
 
+// כאן זו קביעה ראשונית וחד-פעמית (לא ניתנת לשינוי אחר כך), אז בלי אפשרות "ללא ציון".
+const GENDER_SET_OPTIONS = GENDER_OPTIONS.filter((o) => o.value);
+const GENDER_PLACEHOLDER = [{ value: '', label: 'קביעת צורת פנייה…' }, ...GENDER_SET_OPTIONS];
+
 // בני המשפחה: קוד חדש, ילד/נער, כיבוי מצב חברים והסרה.
 export default function PeopleList({ people, me, token }) {
   const sheet = useSheet();
@@ -30,7 +34,7 @@ export default function PeopleList({ people, me, token }) {
   }
 
   function changeGender(p, gender) {
-    run('people:setGender', { id: p.id, gender: gender || undefined });
+    run('people:setGender', { id: p.id, gender });
   }
 
   return (
@@ -57,7 +61,11 @@ export default function PeopleList({ people, me, token }) {
             )}
             <div className="meta">
               צורת פנייה:{' '}
-              <Select className="dd-inline" value={p.gender || ''} onChange={(gender) => changeGender(p, gender)} options={GENDER_OPTIONS} />
+              {p.gender ? (
+                <span>{g(p.gender, 'זכר', 'נקבה')}</span>
+              ) : (
+                <Select className="dd-inline" value="" onChange={(gender) => gender && changeGender(p, gender)} options={GENDER_PLACEHOLDER} />
+              )}
             </div>
           </div>
           {p.role !== 'parent' && p.hasPin && (
