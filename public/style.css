@@ -420,18 +420,15 @@ body[data-theme="teen"] #screen-loading p {
   flex-shrink: 0;
 }
 .tile-section[open] > summary::after { transform: rotate(180deg); }
-/* ההדגשה בריחוף נצבעת כמלבן פנימי מרוח מהמסגרת, כדי שלא תיראה כאילו היא חופפת לה */
+/* מלבן פנימי קבוע מאחורי הכותרת, עם רווח מהמסגרת כדי שלא ייראה חופף לה */
 .tile-section > summary::before {
   content: '';
   position: absolute;
   inset: 5px;
   border-radius: calc(var(--radius) - 2px);
-  background: rgba(0, 0, 0, .03);
-  opacity: 0;
-  transition: opacity .15s ease;
+  background: rgba(0, 0, 0, .05);
   pointer-events: none;
 }
-.tile-section > summary:hover::before { opacity: 1; }
 .tile-title { grid-area: title; font-weight: 700; font-size: 1.05rem; position: relative; }
 .tile-section > summary .hint {
   grid-area: subtitle;
@@ -739,7 +736,7 @@ body[data-theme="parent"] .toast { background: #1c2027; color: var(--ink); borde
 body[data-theme="parent"] .tag.pending { background: #3b3320; color: #ffd873; }
 body[data-theme="parent"] .sheet-bg { background: rgba(0, 0, 0, .7); }
 body[data-theme="parent"] .sheet { border: 1px solid var(--line); border-bottom: 0; box-shadow: 0 -8px 30px rgba(0, 0, 0, .6); }
-body[data-theme="parent"] .tile-section > summary::before { background: rgba(255, 255, 255, .03); }
+body[data-theme="parent"] .tile-section > summary::before { background: rgba(255, 255, 255, .06); }
 body[data-theme="parent"] .debt-line { background: rgba(255, 255, 255, .04); }
 body[data-theme="parent"] .who-am-i .avatar-sm { font-size: 1.5rem; }
 body[data-theme="parent"] .tab[data-tab="family"] { order: -1; }
