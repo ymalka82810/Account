@@ -926,3 +926,9 @@ body[data-theme="teen"] .confirm-box { background: #07070b; border: 2px solid va
 .confirm-row.strong { font-weight: 700; border-top: 1px solid rgba(127, 127, 127, .3); padding-top: 6px; }
 .confirm-row-val { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .calc-bycur { font-size: .85rem; opacity: .8; }
+
+/* בחירת מדינת המגורים (LocalePicker) */
+.locale-ask p { margin: 0 0 8px; }
+.locale-ask-btns { display: flex; gap: 8px; }
+.locale-ask-btns button { flex: 1; }
+.locale-picked { display: flex; align-items: center; justify-content: space-between; gap: 8px; }

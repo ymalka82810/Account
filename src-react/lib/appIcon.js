@@ -4,44 +4,17 @@
 // באתר מתחלף ה-favicon. באפליקציה (APK) מתחלף האייקון במסך הבית דרך הפלאגין AppIcon,
 // ברגע שהאפליקציה יוצאת לרקע (ראו android-plugin/AppIconPlugin.java).
 import ICONS from '../../assets/currency-icons.json';
-import { COUNTRIES } from './currencies.js';
+import { deviceCountry, inList, localeFor } from './currencies.js';
 import { isNativeApp } from './updater.js';
 
 const KEYS = Object.keys(ICONS.variants);
 // מטבע לא מוכר: דולר
 export const iconKeyFor = (currency) => ICONS.byCurrency[currency] || 'USD';
 
-// אזורי זמן של המדינות ברשימה (כשהדפדפן לא מגלה מדינה מהשפה)
-const TZ_COUNTRY = {
-  'Asia/Jerusalem': 'IL', 'Asia/Tel_Aviv': 'IL', 'Europe/London': 'GB', 'Europe/Dublin': 'IE',
-  'Europe/Paris': 'FR', 'Europe/Brussels': 'BE', 'Europe/Berlin': 'DE', 'Europe/Amsterdam': 'NL',
-  'Europe/Rome': 'IT', 'Europe/Madrid': 'ES', 'Europe/Lisbon': 'PT', 'Europe/Vienna': 'AT',
-  'Europe/Athens': 'GR', 'Europe/Zurich': 'CH', 'Europe/Moscow': 'RU', 'Europe/Kiev': 'UA', 'Europe/Kyiv': 'UA',
-  'Europe/Stockholm': 'SE', 'Europe/Oslo': 'NO', 'Europe/Copenhagen': 'DK', 'Europe/Warsaw': 'PL',
-  'Europe/Budapest': 'HU', 'Europe/Prague': 'CZ', 'Europe/Istanbul': 'TR', 'Asia/Dubai': 'AE',
-  'Asia/Kolkata': 'IN', 'Asia/Calcutta': 'IN', 'Asia/Shanghai': 'CN', 'Asia/Tokyo': 'JP', 'Asia/Bangkok': 'TH',
-  'Asia/Singapore': 'SG', 'Asia/Hong_Kong': 'HK', 'Africa/Johannesburg': 'ZA', 'America/Sao_Paulo': 'BR',
-  'America/Argentina/Buenos_Aires': 'AR', 'America/Buenos_Aires': 'AR', 'America/Mexico_City': 'MX',
-  'America/Toronto': 'CA', 'America/Vancouver': 'CA', 'America/Montreal': 'CA', 'America/Edmonton': 'CA',
-  'America/Winnipeg': 'CA', 'America/Halifax': 'CA', 'Pacific/Auckland': 'NZ',
-};
-
-// המטבע לפי המיקום של המכשיר, או null אם לא ידוע
+// המטבע לפי המיקום של המכשיר, או null אם המדינה לא ידועה או לא ברשימה
 export function deviceCurrency() {
-  const byCountry = (cc) => { const hit = COUNTRIES.find((c) => c[0] === cc); return hit ? hit[2] : null; };
-  try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-    if (TZ_COUNTRY[tz]) return byCountry(TZ_COUNTRY[tz]);
-    if (tz.startsWith('Australia/')) return 'AUD';
-  } catch (e) { /* */ }
-  for (const lang of navigator.languages || [navigator.language]) {
-    const region = (lang || '').split('-')[1];
-    const cur = region && byCountry(region.toUpperCase());
-    if (cur) return cur;
-  }
-  // שאר אזורי הזמן של אמריקה (כשהשפה לא אמרה מדינה): ארה"ב
-  try { if ((Intl.DateTimeFormat().resolvedOptions().timeZone || '').startsWith('America/')) return 'USD'; } catch (e) { /* */ }
-  return null;
+  const cc = deviceCountry();
+  return cc && inList(cc) ? localeFor(cc).currency : null;
 }
 
 export function iconSvg(key) {

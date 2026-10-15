@@ -3,20 +3,23 @@ import { state, PARENT_AVATARS } from '../../state/state.js';
 import { goView, createFamily } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, useBusy } from './parts.jsx';
 import Select from '../shared/Select.jsx';
+import LocalePicker from '../shared/LocalePicker.jsx';
 import { GENDER_OPTIONS } from '../../lib/gender.js';
 
 export default function Setup({ current }) {
   const [v, setV] = useState({ familyName: '', name: '', pin: '' });
   const [avatar, setAvatar] = useState(() => randomAvatar(PARENT_AVATARS));
   const [gender, setGender] = useState('');
+  const [locale, setLocale] = useState(null);
   const [error, setError] = useState('');
   const [busy, run] = useBusy();
   const set = (k) => (e) => setV((x) => ({ ...x, [k]: e.target.value }));
   const submit = (ev) => {
     ev.preventDefault();
     setError('');
+    if (!locale) { setError('בחרו איפה אתם גרים'); return; }
     run(async () => {
-      const err = await createFamily({ ...v, avatar, gender: gender || undefined });
+      const err = await createFamily({ ...v, avatar, gender: gender || undefined, ...locale });
       if (err) setError(err); else setV((x) => ({ ...x, pin: '' }));
     });
   };
@@ -32,6 +35,7 @@ export default function Setup({ current }) {
             <input type="text" maxLength={30} placeholder="למשל: משפחת כהן" required value={v.familyName} onChange={set('familyName')} /></label>
           <label className="field"><span>איך קוראים לך?</span>
             <input type="text" maxLength={20} required value={v.name} onChange={set('name')} /></label>
+          <div className="field"><span>איפה אתם גרים?</span><LocalePicker value={locale} onChange={setLocale} /></div>
           <div className="field"><span>בחר/י דמות</span><AvatarPicker value={avatar} onChange={setAvatar} options={PARENT_AVATARS} /></div>
           <div className="field"><span>צורת פנייה</span>
             <Select value={gender} onChange={setGender} options={GENDER_OPTIONS} /></div>

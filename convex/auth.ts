@@ -1,5 +1,6 @@
 import { mutation, query, MutationCtx } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
+import { COUNTRIES, isCurrency } from "./currency";
 import { Doc, Id } from "./_generated/dataModel";
 import { internal } from "./_generated/api";
 import { verifyCode } from "./emailCodes";
@@ -76,15 +77,20 @@ export const createFamily = mutation({
   args: {
     familyName: v.string(), name: v.string(), pin: v.string(),
     avatar: v.optional(v.string()), gender: v.optional(v.union(v.literal("male"), v.literal("female"))),
+    // מדינת המגורים (חסרה = לא ברשימה) והמטבע שלה, כפי שנבחרו בהקמה
+    country: v.optional(v.string()), currency: v.optional(v.string()),
   },
-  handler: async (ctx, { familyName, name, pin, avatar, gender }) => {
+  handler: async (ctx, { familyName, name, pin, avatar, gender, country, currency }) => {
     if (await isThrottled(ctx, "create-family", CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS)) {
       throw new ConvexError("יותר מדי משפחות חדשות כרגע. נסו שוב בעוד כמה דקות");
     }
     if (!validPin(pin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
+    if (currency !== undefined && !isCurrency(currency)) throw new ConvexError("מטבע לא נתמך");
+    if (country && !(country in COUNTRIES)) throw new ConvexError("מדינה לא נתמכת");
     const family = cleanFamilyName(familyName);
     const personName = cleanName(name);
     const familyId = await createFamilyDoc(ctx, family);
+    if (currency) await ctx.db.patch(familyId, { currency, country: country || undefined });
     const id = await ctx.db.insert("people", { familyId, name: personName, role: "parent", avatar: avatar?.slice(0, 8), gender });
     await setPin(ctx, id, pin);
     await noteHit(ctx, "create-family", CREATE_FAMILY_WINDOW_MS);

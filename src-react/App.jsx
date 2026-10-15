@@ -18,6 +18,7 @@ import FriendsTab from './components/friends/FriendsTab.jsx';
 import FamilyTab from './components/family/FamilyTab.jsx';
 import ManageTab from './components/manage/ManageTab.jsx';
 import HistoryTab from './components/history/HistoryTab.jsx';
+import LocaleSheet from './components/manage/LocaleSheet.jsx';
 
 const ICON_CURRENCY_KEY = 'app-icon-currency';
 
@@ -184,6 +185,14 @@ function Root() {
   const themePalette = screen === 'app' ? palette : (lt ? lt.palette : '');
   useEffect(() => { applyTheme(themeRole, themePalette); }, [themeRole, themePalette]);
   useEffect(() => { window.scrollTo({ top: 0 }); }, [screen]);
+  // הורה במשפחה שעוד לא בחרה איפה היא גרה: שואלים פעם אחת בכל כניסה
+  const askedLocale = useRef(false);
+  const needLocale = screen === 'app' && data.me.role === 'parent' && !data.family.localeSet;
+  useEffect(() => {
+    if (!needLocale || askedLocale.current) return;
+    askedLocale.current = true;
+    sheet.open('איפה אתם גרים?', <LocaleSheet token={token} />);
+  }, [needLocale]); // eslint-disable-line react-hooks/exhaustive-deps
   // אייקון לפי המטבע: של המשפחה אחרי כניסה, אם הוגדר לה מיקום (ונשמר לפעם הבאה). אחרת האחרון שנשמר,
   // או לפי המיקום של המכשיר, ואם גם הוא לא ידוע - דולר.
   const familyCurrency = screen === 'app' && data.family.localeSet ? data.family.currency : '';
