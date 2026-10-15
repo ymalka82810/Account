@@ -57,7 +57,24 @@ jobs:
           sed -i "s/versionCode 1/versionCode $VERSION_CODE/; s/versionName \"1.0\"/versionName \"1.0.$VERSION_CODE\"/" android/app/build.gradle
           grep -q "versionCode $VERSION_CODE" android/app/build.gradle
 
-      - run: ./gradlew assembleRelease
+      # שמירת Gradle בין בניות: ההורדות (Gradle עצמו, ספריות אנדרואיד) ותוצרי בנייה שלא השתנו.
+      # המפתח לפי package-lock.json, כי גרסת Capacitor קובעת את גרסת Gradle והספריות.
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('package-lock.json', 'android-plugin/**', '.github/workflows/build-apk.yml') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Speed up Gradle
+        run: |
+          # בלי בדיקות lint בבניית release (הן לוקחות הרבה מזמן הבנייה ולא חוסמות כלום אצלנו)
+          printf '\nandroid {\n    lint {\n        checkReleaseBuilds false\n        abortOnError false\n    }\n}\n' >> android/app/build.gradle
+          printf '\norg.gradle.caching=true\norg.gradle.parallel=true\norg.gradle.jvmargs=-Xmx4g -Dfile.encoding=UTF-8\n' >> android/gradle.properties
+
+      - run: ./gradlew assembleRelease --build-cache
         working-directory: android
 
       - name: Sign APK
