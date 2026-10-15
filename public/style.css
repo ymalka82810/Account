@@ -94,8 +94,9 @@ h2 { font-size: 1.1rem; margin: 22px 0 10px; }
 /* חובות */
 .debt {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -103,6 +104,10 @@ h2 { font-size: 1.1rem; margin: 22px 0 10px; }
   margin-bottom: 8px;
 }
 .debt .text { flex: 1; }
+.debt-avatar { text-align: start; }
+.debt-total { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; width: 100%; text-align: start; font: inherit; color: inherit; background: rgba(127,127,127,.08); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; cursor: pointer; }
+.debt-total:active, .debt-total:focus-visible { border-color: var(--accent, #4f46e5); }
+.debt-more { font-size: .8rem; opacity: .65; }
 .debt .who { font-weight: 500; }
 .debt .amt { font-weight: 800; font-size: 1.15rem; }
 .debt button { white-space: nowrap; }
@@ -807,3 +812,16 @@ button.busy { animation: busy-pulse 1s ease-in-out infinite; }
   box-shadow: 0 6px 20px rgba(0,0,0,.25);
 }
 .update-banner button { border: 0; border-radius: 8px; padding: 6px 14px; font: inherit; font-weight: 700; background: #fff; color: #1d2b4f; }
+
+/* פירוט חישוב יתרה מול אדם */
+.calc { display: grid; gap: 12px; }
+.calc-sec { display: grid; gap: 4px; padding: 10px 12px; border-radius: 14px; background: rgba(127,127,127,.08); }
+.calc-h { font-weight: 800; }
+.calc-h.get, .calc-amt.get { color: var(--get); }
+.calc-h.owe, .calc-amt.owe { color: var(--owe); }
+.calc-row { display: flex; justify-content: space-between; gap: 10px; font-size: .92rem; }
+.calc-amt { font-weight: 700; white-space: nowrap; }
+.calc-total { border-top: 1px solid var(--line); padding-top: 4px; margin-top: 2px; font-weight: 700; }
+.calc-final { text-align: center; padding: 12px; border-radius: 14px; border: 2px solid var(--line); font-weight: 700; }
+.calc-eq { font-size: 1.05rem; margin-top: 4px; }
+.calc-hint { font-size: .82rem; opacity: .7; margin: -4px 0 0; text-align: center; }

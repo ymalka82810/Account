@@ -1,4 +1,6 @@
 import { useApp } from '../../state/appContext.js';
+import { useSheet } from '../shared/Sheet.jsx';
+import BalanceSheet from './BalanceSheet.jsx';
 import PendingCards from '../entries/PendingCards.jsx';
 import DebtLines from '../entries/DebtLines.jsx';
 import { pairOwes, openDebtsOf, money, namesFor } from '../../lib/computations.js';
@@ -8,6 +10,7 @@ import { g } from '../../lib/gender.js';
 // ההגדרות האישיות נמצאות ב"החשבון שלי" (AccountSheet), בכותרת.
 export default function Home({ data, token }) {
   const { openEntryFlow } = useApp();
+  const sheet = useSheet();
   const me = data.me.id;
   const { nameOf } = namesFor(me, (id) => data.people.find((p) => p.id === id));
   let owe = 0, get = 0;
@@ -24,21 +27,23 @@ export default function Home({ data, token }) {
     const open = openDebtsOf(dFrom, dTo, data.entries);
 
     cards.push(
-      <div key={p.id} className={'debt ' + (iOwe ? 'owe' : 'get') + (open.length > 1 ? ' multi' : '')}>
-        {p.avatar && <span className="avatar-md" aria-hidden="true">{p.avatar}</span>}
-        <div className="text">
-          <div className="who">{iOwe ? `${g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${nameOf(p.id)}` : `${nameOf(p.id)} ${g(p.gender, 'חייב', 'חייבת', 'חייב/ת')} לי`}</div>
-          <div className="amt">{money(amount)}</div>
-          <DebtLines open={open} iOwe={iOwe} onPay={(x) => openEntryFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })} />
-        </div>
-        <button
-          className="small strongbtn" type="button"
-          onClick={() => openEntryFlow(iOwe
-            ? { kind: 'payment', from: me, to: p.id, suggest: amount }
-            : { kind: 'payment', from: p.id, to: me, suggest: amount })}
-        >
-          {iOwe ? '💰 שילמתי' : '💰 קיבלתי'}
+      <div key={p.id} className={'debt ' + (iOwe ? 'owe' : 'get')}>
+        {p.avatar && <div className="debt-avatar avatar-md" aria-hidden="true">{p.avatar}</div>}
+        <button type="button" className="debt-total" aria-label="פירוט החישוב"
+          onClick={() => sheet.open('', <BalanceSheet otherId={p.id} />)}>
+          <span className="who">{iOwe ? `${g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${nameOf(p.id)}` : `${nameOf(p.id)} ${g(p.gender, 'חייב', 'חייבת', 'חייב/ת')} לי`}</span>
+          <span className="amt">{money(amount)}</span>
+          <span className="debt-more">לחצו לפירוט החישוב ‹</span>
         </button>
+        <DebtLines open={open} iOwe={iOwe} onPay={(x) => openEntryFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })} />
+        {open.length === 0 && (
+          <button className="small strongbtn" type="button"
+            onClick={() => openEntryFlow(iOwe
+              ? { kind: 'payment', from: me, to: p.id, suggest: amount }
+              : { kind: 'payment', from: p.id, to: me, suggest: amount })}>
+            {iOwe ? '💰 שילמתי' : '💰 קיבלתי'}
+          </button>
+        )}
       </div>
     );
   }
