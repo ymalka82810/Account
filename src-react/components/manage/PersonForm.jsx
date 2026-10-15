@@ -48,7 +48,7 @@ export default function PersonForm({ token }) {
       <div className="field"><span>צורת פנייה</span>
         <Select value={gender} onChange={setGender} options={GENDER_OPTIONS} /></div>
       <div className="field"><span>דמות</span>
-        <AvatarPicker value={avatar} onChange={setAvatar} options={role === 'parent' ? PARENT_AVATARS : undefined} />
+        <AvatarPicker value={avatar} onChange={setAvatar} options={role === 'parent' ? PARENT_AVATARS : undefined} compact />
       </div>
       <label className="field"><span>קוד סודי (לא חובה — אפשר ש{g(gender, 'הילד', 'הילדה', 'הילד/ה')} {g(gender, 'יבחר', 'תבחר', 'יבחר/תבחר')} לבד)</span>
         <input type="password" inputMode="numeric" pattern="\d{4}" maxLength={4} autoComplete="new-password"
