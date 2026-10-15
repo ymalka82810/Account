@@ -8,13 +8,13 @@ import { call } from '../lib/api.js';
 export async function enterFamily(code, remember) {
   const res = await call('auth:enter', { code });
   if (!res.ok) return res.reason;
-  state.fam = { code, name: res.familyName, codeRole: res.codeRole, people: res.people };
-  // שומרים במכשיר רק את קוד הילדים, כדי שקוד הורים לא יישאר על מכשיר משותף.
+  state.fam = { code, name: res.familyName, people: res.people };
+  // שומרים במכשיר את קוד המשפחה, לכניסות הבאות.
   if (remember) localStorage.setItem(CODE_KEY, res.loginCode);
   return true;
 }
 
-// קוד ילדים שמור במכשיר: מרעננים את רשימת המשפחה, ואם הקוד הוחלף מוחקים אותו.
+// קוד המשפחה שמור במכשיר: מרעננים את רשימת המשפחה, ואם הקוד הוחלף מוחקים אותו.
 export async function restoreFamily() {
   const saved = localStorage.getItem(CODE_KEY);
   if (!saved) return;

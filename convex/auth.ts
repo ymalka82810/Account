@@ -63,8 +63,7 @@ export const enter = mutation({
     return {
       ok: true as const,
       familyName: found.family.name,
-      codeRole: found.role,
-      // את קוד הילדים בלבד שומרים במכשיר, כדי שקוד הורים לא יישאר על מכשיר משותף.
+      // הקוד שנשמר במכשיר לכניסות הבאות (הקוד היחיד של המשפחה).
       loginCode: found.family.childCode,
       people: people.map(publicPerson),
     };
@@ -92,9 +91,9 @@ export const createFamily = mutation({
   },
 });
 
-// הצטרפות למשפחה קיימת עם קוד. התפקיד נקבע לפי הקוד: קוד הורים או קוד ילדים.
-// צורת פנייה (מגדר): רק מי שמצטרף/ת בתור הורה יכול/ה לקבוע לעצמו/ה כאן.
-// ילד/ה לא בוחר/ת מגדר בהצטרפות - זו קביעת הורה בלבד, דרך people:setGender.
+// הצטרפות למשפחה קיימת עם הקוד היחיד שלה. כל מי שמצטרף/ת נכנס/ת בתור ילד/ה,
+// והורה משנה תפקיד (ילד/ה, נער/ה, הורה) ב-people:setRole, באישור ביומטרי.
+// צורת פנייה (מגדר) לא נבחרת בהצטרפות - זו קביעת הורה בלבד, דרך people:setGender.
 export const join = mutation({
   args: {
     code: v.string(), name: v.string(), avatar: v.optional(v.string()),
@@ -111,8 +110,8 @@ export const join = mutation({
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
     if (members.length >= MAX_FAMILY_SIZE) throw new ConvexError("המשפחה מלאה");
     if (members.some((p) => p.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה. בחרו אותו ברשימה, או שנו את השם");
-    const personGender = found.role === "parent" ? gender : undefined;
-    const id = await ctx.db.insert("people", { familyId, name: clean, role: found.role, avatar: avatar?.slice(0, 8), gender: personGender });
+    void gender; // נשאר בחתימה בשביל גרסאות ישנות של האפליקציה, ולא נשמר.
+    const id = await ctx.db.insert("people", { familyId, name: clean, role: "child", avatar: avatar?.slice(0, 8) });
     await setPin(ctx, id, pin);
     return { ok: true as const, token: await openSession(ctx, id) };
   },
@@ -163,10 +162,9 @@ export const claimProfile = mutation({
       if (await codeThrottled(ctx, device)) return { ok: false as const, reason: "throttled" as const };
       const found = code ? await findFamilyByCode(ctx, code) : null;
       if (!found || found.family._id !== p.familyId) return await failCode(ctx, device);
-      // פרופיל הורה שהוקם בלי קוד נתפס רק עם קוד הורים, כדי שילד/ה לא יהפכו להורים.
-      if (p.role === "parent" && found.role !== "parent") {
-        throw new ConvexError("כדי להיכנס כהורה צריך את קוד ההורים");
-      }
+      // יש רק קוד אחד למשפחה, אז פרופיל הורה בלי קוד סודי לא נתפס מכאן (אחרת ילד/ה
+      // היו יכולים להיכנס אליו). הורה אחר קובע לו קוד ב"קוד חדש".
+      if (p.role === "parent") throw new ConvexError("הורה אחר צריך לקבוע לך קוד סודי");
     } else if (p.role !== "parent") {
       return { ok: false as const, reason: "legacy" as const };
     }
@@ -240,6 +238,8 @@ export const resetPin = mutation({
         return { ok: false as const, reason: "wrongMyPin" as const };
       }
     }
+    const target = await ctx.db.get(personId);
+    if (!pin && target?.role === "parent") throw new ConvexError("להורה צריך לקבוע קוד (אי אפשר לאפס שיבחר לבד)");
     for (const s of await ctx.db.query("sessions").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) {
       await ctx.db.delete(s._id);
     }

@@ -107,33 +107,28 @@ function randomCode(): string {
   return [...bytes].map((b) => CODE_ALPHABET[b & 31]).join("");
 }
 
-export async function findFamilyByCode(
-  ctx: QueryCtx,
-  rawCode: string,
-): Promise<{ family: Doc<"families">; role: "parent" | "child" } | null> {
+// קוד הצטרפות אחד לכל משפחה. מי שמצטרף/ת איתו נכנס/ת תמיד בתור ילד/ה.
+// קוד ההורים הישן (parentCode) כבר לא פותח כלום.
+export async function findFamilyByCode(ctx: QueryCtx, rawCode: string): Promise<{ family: Doc<"families"> } | null> {
   const code = normalizeCode(rawCode);
   if (code.length !== CODE_LEN) return null;
-  const asParent = await ctx.db.query("families").withIndex("by_parentCode", (q) => q.eq("parentCode", code)).first();
-  if (asParent) return { family: asParent, role: "parent" };
-  const asChild = await ctx.db.query("families").withIndex("by_childCode", (q) => q.eq("childCode", code)).first();
-  if (asChild) return { family: asChild, role: "child" };
-  return null;
+  const family = await ctx.db.query("families").withIndex("by_childCode", (q) => q.eq("childCode", code)).first();
+  return family ? { family } : null;
 }
 
-// קוד חדש שלא קיים אצל אף משפחה (לא כקוד הורים ולא כקוד ילדים).
+// קוד חדש שלא קיים אצל אף משפחה (גם לא כקוד הורים ישן).
 export async function freshCode(ctx: QueryCtx): Promise<string> {
   for (let i = 0; i < 10; i++) {
     const code = randomCode();
-    if (!(await findFamilyByCode(ctx, code))) return code;
+    const taken = (await findFamilyByCode(ctx, code))
+      || (await ctx.db.query("families").withIndex("by_parentCode", (q) => q.eq("parentCode", code)).first());
+    if (!taken) return code;
   }
   throw new ConvexError("משהו השתבש. נסו שוב.");
 }
 
 export async function createFamilyDoc(ctx: MutationCtx, name: string): Promise<Id<"families">> {
-  const parentCode = await freshCode(ctx);
-  let childCode = await freshCode(ctx);
-  while (childCode === parentCode) childCode = await freshCode(ctx);
-  return await ctx.db.insert("families", { name, parentCode, childCode, createdAt: Date.now() });
+  return await ctx.db.insert("families", { name, childCode: await freshCode(ctx), createdAt: Date.now() });
 }
 
 // ---------- הגבלת קצב ----------

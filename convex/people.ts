@@ -1,6 +1,7 @@
 import { mutation } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
+import { proofValidator, purgeBiometric, requireBiometric } from "./biometric";
 import { notify } from "./notify";
 import { MAX_FAMILY_SIZE, cleanName, hashPin, randomHex, requireParent, requirePerson, requireSameFamily, validPin } from "./lib";
 
@@ -12,10 +13,16 @@ export const add = mutation({
     avatar: v.optional(v.string()),
     gender: v.optional(v.union(v.literal("male"), v.literal("female"))),
     pin: v.optional(v.string()),
+    proof: v.optional(proofValidator),
   },
-  handler: async (ctx, { token, name, role, avatar, gender, pin }) => {
+  handler: async (ctx, { token, name, role, avatar, gender, pin, proof }) => {
     const me = await requireParent(ctx, token);
     const clean = cleanName(name);
+    // הוספה ישירה בתור נער/ה או הורה היא כמו שינוי תפקיד: צריך אישור ביומטרי.
+    if (role !== "child") {
+      if (role === "parent" && !pin) throw new ConvexError("להורה חדש צריך לקבוע קוד סודי");
+      await requireBiometric(ctx, me, `add:${role}:${clean}`, proof);
+    }
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     if (members.length >= MAX_FAMILY_SIZE) throw new ConvexError("המשפחה מלאה");
     if (members.some((p) => p.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה");
@@ -47,6 +54,7 @@ export const remove = mutation({
       await ctx.db.delete(s._id);
     }
     await purgeFriends(ctx, id);
+    await purgeBiometric(ctx, id);
     const rec = await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     for (const r of rec) if (r.from === id || r.to === id) await ctx.db.delete(r._id);
     await ctx.db.delete(id);
@@ -63,23 +71,33 @@ export const getPin = mutation({
   },
 });
 
-// הורה משנה בין ילד/ה לנער/ה. מי שחוזר להיות ילד/ה מאבד/ת את מצב החברים.
+// הורה משנה תפקיד של בן/בת משפחה: ילד/ה, נער/ה או הורה. כל שינוי דורש אישור
+// בטביעת אצבע או בזיהוי פנים של ההורה (biometric:requireBiometric), קשור בדיוק לשינוי הזה.
+// מצב חברים קיים רק אצל נוער, אז מי שיוצא/ת מ"נער/ה" מאבד/ת אותו.
 export const setRole = mutation({
-  args: { token: v.string(), id: v.id("people"), role: v.union(v.literal("child"), v.literal("teen")) },
-  handler: async (ctx, { token, id, role }) => {
+  args: {
+    token: v.string(), id: v.id("people"),
+    role: v.union(v.literal("child"), v.literal("teen"), v.literal("parent")),
+    proof: v.optional(proofValidator),
+  },
+  handler: async (ctx, { token, id, role, proof }) => {
     const me = await requireParent(ctx, token);
     const p = await requireSameFamily(ctx, me, id);
-    if (p.role === "parent") throw new ConvexError("אי אפשר לשנות תפקיד של הורה");
+    if (p._id === me._id) throw new ConvexError("אי אפשר לשנות את התפקיד של עצמך");
     if (p.role === role) return;
-    await ctx.db.patch(id, role === "child"
-      ? { role, friendsEnabled: false, friendsRequested: false, friendEmail: undefined }
-      : { role });
+    // הורה בלי קוד סודי היה נשאר פרופיל שאי אפשר להיכנס אליו (ואסור שילד יתפוס אותו).
+    if (role === "parent" && !p.pinHash) throw new ConvexError(`קודם צריך לקבוע ל${p.name} קוד סודי`);
+    await requireBiometric(ctx, me, `role:${id}:${role}`, proof);
+    await ctx.db.patch(id, role === "teen"
+      ? { role }
+      : { role, friendsEnabled: false, friendsRequested: false, friendEmail: undefined });
+    // הורה שהפך לילד/ה או לנער/ה לא צריך את המכשירים הביומטריים שלו.
+    if (p.role === "parent") await purgeBiometric(ctx, id);
   },
 });
 
-// הפיכה לנער/ה היא אך ורק ביוזמת הורה, דרך setRole למעלה (שכבר דורש requireParent,
-// כלומר התחברות עם קוד ההורה). ילד/ה לא יכול/ה לבקש זאת - כדי שלא יהיה אפשר
-// "לשגע" הורה בבקשות חוזרות.
+// שינוי תפקיד הוא אך ורק ביוזמת הורה, דרך setRole למעלה. ילד/ה לא יכול/ה לבקש זאת -
+// כדי שלא יהיה אפשר "לשגע" הורה בבקשות חוזרות.
 
 // קביעת מגדר (לצורת פנייה מותאמת): אך ורק הורה קובע, ופעם אחת בלבד לכל אדם.
 // אחרי שנקבע, הוא ננעל - גם ההורה לא יכול לשנות אותו יותר דרך האפליקציה.

@@ -22,7 +22,7 @@ export default function Welcome({ current }) {
       <div className="card-narrow">
         <div className="big-emoji" aria-hidden="true">🪙</div>
         <h1>הקופה המשפחתית</h1>
-        <p className="hint">יש לכם קוד משפחה? כתבו אותו כאן. ילדים: בקשו מההורים את קוד הילדים.</p>
+        <p className="hint">יש לכם קוד משפחה? כתבו אותו כאן. בקשו מההורים את קוד ההצטרפות של המשפחה.</p>
         <form className="form" autoComplete="off" onSubmit={submit}>
           <label className="field"><span>קוד משפחה</span>
             <input className="code-input" type="text" dir="ltr" maxLength={14} autoCapitalize="characters"

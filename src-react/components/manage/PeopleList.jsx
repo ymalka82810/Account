@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { useBioConfirm } from '../shared/BioConfirm.jsx';
+import { toast, errMsg } from '../../lib/helpers.js';
+import { BioError } from '../../lib/biometric.js';
 import { useSheet } from '../shared/Sheet.jsx';
 import { ResetPinSheet } from './ResetPinSheet.jsx';
 import { useRun } from '../../lib/useRun.js';
@@ -11,11 +14,13 @@ import { g, GENDER_OPTIONS } from '../../lib/gender.js';
 const GENDER_SET_OPTIONS = GENDER_OPTIONS.filter((o) => o.value);
 const GENDER_PLACEHOLDER = [{ value: '', label: 'קביעת צורת פנייה…' }, ...GENDER_SET_OPTIONS];
 
-// בני המשפחה: קוד חדש, ילד/נער, כיבוי מצב חברים והסרה.
+// בני המשפחה: קוד חדש, תפקיד (ילד/נער/הורה, באישור ביומטרי), כיבוי מצב חברים והסרה.
 export default function PeopleList({ people, me, token }) {
   const sheet = useSheet();
   const run = useRun(token);
   const [shownPins, setShownPins] = useState({});
+  const [roleBusy, setRoleBusy] = useState(null);
+  const bioConfirm = useBioConfirm();
 
   async function togglePin(p) {
     if (shownPins[p.id] !== undefined) {
@@ -26,11 +31,21 @@ export default function PeopleList({ people, me, token }) {
     setShownPins((s) => ({ ...s, [p.id]: pin }));
   }
 
-  function toggleRole(p) {
-    const toRole = p.role === 'teen' ? 'child' : 'teen';
-    if (toRole === 'child' && p.friendsEnabled
+  // שינוי תפקיד (ילד/ה, נער/ה, הורה) דורש אישור בטביעת אצבע או זיהוי פנים.
+  async function changeRole(p, toRole) {
+    if (!toRole || toRole === p.role || roleBusy) return;
+    if (p.role === 'teen' && p.friendsEnabled
       && !confirm(`${p.name} ${g(p.gender, 'יאבד', 'תאבד', 'יאבד/תאבד')} את מצב החברים. להמשיך?`)) return;
-    run('people:setRole', { id: p.id, role: toRole }, `${p.name} עכשיו ${roleLabel(toRole, p.gender)}`);
+    if (toRole === 'parent' && !confirm(`${p.name} ${g(p.gender, 'יקבל', 'תקבל', 'יקבל/תקבל')} הרשאות הורה מלאות: לראות הכול, לאשר, למחוק ולנהל את המשפחה. להמשיך?`)) return;
+    if (p.role === 'parent' && !confirm(`${p.name} ${g(p.gender, 'יאבד', 'תאבד', 'יאבד/תאבד')} את הרשאות ההורה. להמשיך?`)) return;
+    setRoleBusy(p.id);
+    try {
+      const proof = await bioConfirm(`role:${p.id}:${toRole}`);
+      await call('people:setRole', { token, id: p.id, role: toRole, proof });
+      toast(`${p.name} עכשיו ${roleLabel(toRole, p.gender)} ✅`);
+    } catch (e) {
+      toast(e instanceof BioError ? e.message : errMsg(e));
+    } finally { setRoleBusy(null); }
   }
 
   function changeGender(p, gender) {
@@ -59,6 +74,19 @@ export default function PeopleList({ people, me, token }) {
                 {shownPins[p.id] ? <>הקוד הנוכחי: <strong>{shownPins[p.id]}</strong></> : 'הקוד נקבע לפני העדכון ואי אפשר להציג אותו. אפשר לקבוע קוד חדש.'}
               </div>
             )}
+            {p.id !== me && (
+              <div className="meta">
+                תפקיד:{' '}
+                {roleBusy === p.id ? <span>⏳ מאמתים…</span> : (
+                  <Select className="dd-inline" value={p.role} onChange={(r) => changeRole(p, r)} options={[
+                    { value: 'child', label: g(p.gender, 'ילד', 'ילדה', 'ילד/ה') },
+                    { value: 'teen', label: g(p.gender, 'נער', 'נערה', 'נער/ה') },
+                    { value: 'parent', label: 'הורה' },
+                  ]} />
+                )}
+                {' '}<span aria-hidden="true">🔒</span>
+              </div>
+            )}
             <div className="meta">
               צורת פנייה:{' '}
               {p.gender ? (
@@ -74,11 +102,6 @@ export default function PeopleList({ people, me, token }) {
             </button>
           )}
           <button className="small" type="button" onClick={() => sheet.open('קוד סודי ל' + p.name, <ResetPinSheet person={p} />)}>קוד חדש</button>
-          {p.role !== 'parent' && (
-            <button className="small" type="button" onClick={() => toggleRole(p)}>
-              {p.role === 'teen' ? `חזרה ל${g(p.gender, 'ילד', 'ילדה', 'ילד/ה')}` : `הפיכה ל${g(p.gender, 'נער', 'נערה', 'נער/ה')}`}
-            </button>
-          )}
           {p.role === 'teen' && p.friendsEnabled && (
             <button className="small danger" type="button" onClick={() => {
               if (!confirm(`לכבות את מצב החברים של ${p.name}? אי אפשר יהיה להוסיף רישומים חדשים עם חברים.`)) return;

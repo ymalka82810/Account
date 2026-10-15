@@ -32,9 +32,9 @@ export const get = query({
         email: me.emailVerified && me.email ? maskEmail(me.email) : null,
         pendingEmail: me.pendingEmail ? maskEmail(me.pendingEmail) : null,
       },
-      // קודי ההצטרפות מגיעים להורים בלבד.
+      // קוד ההצטרפות מגיע להורים בלבד.
       family: me.role === "parent"
-        ? { name: family.name, parentCode: family.parentCode, childCode: family.childCode }
+        ? { name: family.name, code: family.childCode }
         : { name: family.name },
       people: people.map((p) => ({
         id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash,

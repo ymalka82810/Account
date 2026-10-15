@@ -5,9 +5,11 @@ export default defineSchema({
   // משפחה = קופה אחת. כל האנשים והרשומות שייכים למשפחה.
   families: defineTable({
     name: v.string(),
-    // קודי הצטרפות. הקוד קובע את התפקיד של מי שמצטרף/ת: הורה או ילד/ה.
-    parentCode: v.string(),
+    // קוד ההצטרפות היחיד של המשפחה (השם childCode נשאר מהגרסה הקודמת, שבה היו שני קודים).
+    // כל מי שמצטרף/ת עם הקוד נכנס/ת בתור ילד/ה, והורה משנה תפקיד באישור ביומטרי.
     childCode: v.string(),
+    // קוד ההורים הישן. כבר לא בשימוש ולא פותח כלום. נמחק כשמחליפים קוד.
+    parentCode: v.optional(v.string()),
     createdAt: v.number(),
   })
     .index("by_parentCode", ["parentCode"])
@@ -142,6 +144,27 @@ export default defineSchema({
   })
     .index("by_family", ["familyId"])
     .index("by_nextDate", ["nextDate"]),
+
+  // מכשירים שהורה רשם לאימות ביומטרי (WebAuthn באתר, Android Keystore באפליקציה).
+  bioKeys: defineTable({
+    personId: v.id("people"),
+    kind: v.union(v.literal("webauthn"), v.literal("android")),
+    credentialId: v.string(),
+    publicKey: v.string(), // SPKI ב-base64
+    alg: v.number(), // COSE: -7 = ES256, -257 = RS256
+    origin: v.optional(v.string()),
+    label: v.optional(v.string()),
+    createdAt: v.number(),
+    lastUsedAt: v.optional(v.number()),
+  }).index("by_person", ["personId"]),
+
+  // אתגרים חד-פעמיים לאימות ביומטרי, קשורים לפעולה מסוימת.
+  bioChallenges: defineTable({
+    personId: v.id("people"),
+    action: v.string(),
+    challenge: v.string(),
+    expiresAt: v.number(),
+  }).index("by_person", ["personId"]),
 
   // מונים גסים להגבלת קצב (ניחוש קודי משפחה, יצירת משפחות).
   throttles: defineTable({

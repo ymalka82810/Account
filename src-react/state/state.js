@@ -48,7 +48,7 @@ export const state = {
   token: localStorage.getItem(TOKEN_KEY) || '',
   legacyPeople: null, // null = עוד לא נטען. הורים מהגרסה הישנה (בלי קוד משפחה)
   codeChecked: false, // האם בדקנו קוד שמור במכשיר
-  fam: null,         // {code, name, codeRole, people} אחרי שהוזן קוד משפחה תקין
+  fam: null,         // {code, name, people} אחרי שהוזן קוד משפחה תקין
   view: 'welcome',   // welcome | setup | join
   pinFlow: null,     // {person, legacy, mode:'login'|'new', first, entered, busy, error, shakes}
   pushSyncedFor: '',

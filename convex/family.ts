@@ -1,6 +1,7 @@
 import { mutation } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
+import { purgeBiometric } from "./biometric";
 import { cleanFamilyName, freshCode, requireParent } from "./lib";
 
 export const rename = mutation({
@@ -11,13 +12,12 @@ export const rename = mutation({
   },
 });
 
-// החלפת קוד הצטרפות (למשל אם הוא הגיע למי שלא צריך). מי שכבר בפנים נשאר בפנים.
+// החלפת קוד ההצטרפות (למשל אם הוא הגיע למי שלא צריך). מי שכבר בפנים נשאר בפנים.
 export const rotateCode = mutation({
-  args: { token: v.string(), which: v.union(v.literal("parent"), v.literal("child")) },
-  handler: async (ctx, { token, which }) => {
+  args: { token: v.string() },
+  handler: async (ctx, { token }) => {
     const me = await requireParent(ctx, token);
-    const code = await freshCode(ctx);
-    await ctx.db.patch(me.familyId, which === "parent" ? { parentCode: code } : { childCode: code });
+    await ctx.db.patch(me.familyId, { childCode: await freshCode(ctx), parentCode: undefined });
   },
 });
 
@@ -44,6 +44,7 @@ export const remove = mutation({
         await ctx.db.delete(s._id);
       }
       await purgeFriends(ctx, p._id);
+      await purgeBiometric(ctx, p._id);
       await ctx.db.delete(p._id);
     }
     await ctx.db.delete(familyId);

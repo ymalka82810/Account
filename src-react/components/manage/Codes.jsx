@@ -1,12 +1,13 @@
 import { call } from '../../lib/api.js';
 import { toast, errMsg, prettyCode } from '../../lib/helpers.js';
 
-// קודי הצטרפות (הורים בלבד).
+// קוד ההצטרפות היחיד של המשפחה (הורים בלבד). כל מי שמצטרף/ת איתו נכנס/ת בתור ילד/ה,
+// ואז הורה קובע/ת את התפקיד ב"בני המשפחה" (ילד/ה, נער/ה או הורה), באישור ביומטרי.
 export default function Codes({ data, token }) {
   const f = data.family;
 
-  async function share(title, code) {
-    const text = `${title} לקופה של ${f.name}: ${prettyCode(code)}\n${location.origin}${location.pathname}`;
+  async function share() {
+    const text = `קוד ההצטרפות לקופה של ${f.name}: ${prettyCode(f.code)}\n${location.origin}${location.pathname}`;
     try {
       if (navigator.share) { await navigator.share({ text }); return; }
       await navigator.clipboard.writeText(text);
@@ -14,28 +15,26 @@ export default function Codes({ data, token }) {
     } catch (e) { /* בוטל */ }
   }
 
-  async function rotate(which) {
+  async function rotate() {
     if (!confirm('להחליף את הקוד? מי שכבר בפנים נשאר, אבל הקוד הישן יפסיק לעבוד.')) return;
-    try { await call('family:rotateCode', { token, which }); toast('הקוד הוחלף ✅'); }
+    try { await call('family:rotateCode', { token }); toast('הקוד הוחלף ✅'); }
     catch (e) { toast(errMsg(e)); }
   }
 
-  const block = (label, hint, code, which, shareTitle) => (
-    <div className="codeblock">
-      <div className="meta">{label}</div>
-      <div className="codeval" dir="ltr">{prettyCode(code)}</div>
-      <p className="hint">{hint}</p>
-      <div className="tools">
-        <button className="small" type="button" onClick={() => share(shareTitle, code)}>שיתוף</button>
-        <button className="small" type="button" onClick={() => rotate(which)}>החלפת קוד</button>
-      </div>
-    </div>
-  );
-
   return (
     <div className="codes">
-      {block('קוד לילדים', 'ילדים שמקלידים אותו מצטרפים בתור ילדים.', f.childCode, 'child', 'קוד ילדים')}
-      {block('קוד להורים', 'להורה השני. מי שמקליד אותו מצטרף בתור הורה, אז לא לשתף עם ילדים.', f.parentCode, 'parent', 'קוד הורים')}
+      <div className="codeblock">
+        <div className="meta">קוד ההצטרפות של המשפחה</div>
+        <div className="codeval" dir="ltr">{prettyCode(f.code)}</div>
+        <p className="hint">
+          קוד אחד לכולם. מי שמצטרף/ת איתו נכנס/ת בתור ילד/ה. אחר כך אפשר לשנות ב&quot;בני המשפחה&quot;
+          לנער/ה או להורה, באישור טביעת אצבע או זיהוי פנים.
+        </p>
+        <div className="tools">
+          <button className="small" type="button" onClick={share}>שיתוף</button>
+          <button className="small" type="button" onClick={rotate}>החלפת קוד</button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -26,7 +26,7 @@ export default function Setup({ current }) {
       <div className="card-narrow">
         <div className="big-emoji" aria-hidden="true">🏠</div>
         <h1>הקמת קופה משפחתית</h1>
-        <p className="hint">להורים בלבד. מי שמקים הוא ההורה הראשון. אחר כך מקבלים קוד להורים וקוד לילדים, ומוסיפים את כולם.</p>
+        <p className="hint">להורים בלבד. מי שמקים הוא ההורה הראשון. אחר כך מקבלים קוד הצטרפות אחד לכל המשפחה, וקובעים לכל אחד/ת תפקיד: ילד/ה, נער/ה או הורה.</p>
         <form className="form" autoComplete="off" onSubmit={submit}>
           <label className="field"><span>שם המשפחה</span>
             <input type="text" maxLength={30} placeholder="למשל: משפחת כהן" required value={v.familyName} onChange={set('familyName')} /></label>

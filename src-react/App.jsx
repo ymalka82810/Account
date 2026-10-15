@@ -99,7 +99,7 @@ function Root() {
     bumpAuth();
   }, [roster]);
 
-  // קוד ילדים שמור במכשיר.
+  // קוד המשפחה שמור במכשיר.
   useEffect(() => { restoreFamily().finally(() => { state.codeChecked = true; bumpAuth(); }); }, []);
 
   // כניסה לא תקפה, או חשבון מהגרסה הישנה (בלי משפחה).
@@ -161,7 +161,7 @@ function Root() {
   useEffect(() => { window.scrollTo({ top: 0 }); }, [screen]);
   useEffect(() => {
     if (screen !== 'app') return;
-    if (role === 'parent') localStorage.setItem(CODE_KEY, data.family.childCode);
+    if (role === 'parent') localStorage.setItem(CODE_KEY, data.family.code);
     syncPush();
   }, [screen, role, token]); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -38,13 +38,17 @@ jobs:
       - name: Generate app icons
         run: npx --yes @capacitor/assets@3 generate --android --assetPath assets
 
-      - name: Add self-update plugin
+      - name: Add native plugins (self-update, biometric)
         run: |
           JAVA_DIR=android/app/src/main/java/com/ymalka/account
           sed "s/PACKAGE_PLACEHOLDER/com.ymalka.account/" android-plugin/AppUpdaterPlugin.java > $JAVA_DIR/AppUpdaterPlugin.java
-          # רישום הפלאגין לפני super.onCreate
-          sed -i 's/public class MainActivity extends BridgeActivity {}/public class MainActivity extends BridgeActivity {\n    @Override\n    public void onCreate(android.os.Bundle savedInstanceState) {\n        registerPlugin(AppUpdaterPlugin.class);\n        super.onCreate(savedInstanceState);\n    }\n}/' $JAVA_DIR/MainActivity.java
-          grep -q registerPlugin $JAVA_DIR/MainActivity.java
+          sed "s/PACKAGE_PLACEHOLDER/com.ymalka.account/" android-plugin/BiometricAuthPlugin.java > $JAVA_DIR/BiometricAuthPlugin.java
+          # רישום הפלאגינים לפני super.onCreate
+          sed -i 's/public class MainActivity extends BridgeActivity {}/public class MainActivity extends BridgeActivity {\n    @Override\n    public void onCreate(android.os.Bundle savedInstanceState) {\n        registerPlugin(AppUpdaterPlugin.class);\n        registerPlugin(BiometricAuthPlugin.class);\n        super.onCreate(savedInstanceState);\n    }\n}/' $JAVA_DIR/MainActivity.java
+          grep -q "registerPlugin(BiometricAuthPlugin.class)" $JAVA_DIR/MainActivity.java
+          # ספריית BiometricPrompt של androidx
+          sed -i '0,/^dependencies {/s//dependencies {\n    implementation "androidx.biometric:biometric:1.1.0"/' android/app/build.gradle
+          grep -q "androidx.biometric:biometric" android/app/build.gradle
           MANIFEST=android/app/src/main/AndroidManifest.xml
           sed -i 's#<application#<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />\n    <application#' $MANIFEST
           grep -q fileprovider $MANIFEST
