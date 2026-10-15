@@ -100,12 +100,12 @@ export default function BalanceSheet({ otherId }) {
 
       {twoSided && (
         <>
-          <AsyncButton className="primary" onClick={offset}>🔄 קיזוז חובות הדדיים ({money(overlap)})</AsyncButton>
+          <AsyncButton className="charcoalbtn" onClick={offset}>🔄 קיזוז חובות הדדיים ({money(overlap)})</AsyncButton>
           <p className="calc-hint">הקיזוז סוגר חובות משני הצדדים עד {money(overlap)}. ההפרש נשאר כמו שהוא וההיסטוריה נשמרת.</p>
         </>
       )}
       {net !== 0 && (
-        <button type="button" className="strongbtn" onClick={payNet}>
+        <button type="button" className="charcoalbtn" onClick={payNet}>
           {iOwe ? `💰 ${'שילמתי'} את ההפרש (${money(net)})` : `💰 קיבלתי את ההפרש (${money(-net)})`}
         </button>
       )}

@@ -37,7 +37,7 @@ export default function Home({ data, token }) {
         </button>
         <DebtLines open={open} iOwe={iOwe} onPay={(x) => openEntryFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })} />
         {open.length === 0 && (
-          <button className="small strongbtn" type="button"
+          <button className="small charcoalbtn" type="button"
             onClick={() => openEntryFlow(iOwe
               ? { kind: 'payment', from: me, to: p.id, suggest: amount }
               : { kind: 'payment', from: p.id, to: me, suggest: amount })}>

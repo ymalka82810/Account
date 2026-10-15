@@ -825,3 +825,9 @@ button.busy { animation: busy-pulse 1s ease-in-out infinite; }
 .calc-final { text-align: center; padding: 12px; border-radius: 14px; border: 2px solid var(--line); font-weight: 700; }
 .calc-eq { font-size: 1.05rem; margin-top: 4px; }
 .calc-hint { font-size: .82rem; opacity: .7; margin: -4px 0 0; text-align: center; }
+
+/* כפתורי פעולה בכרטיסי חוב ובפירוט החישוב: אפור פחם, כמו ערכת ההורים */
+button.charcoalbtn, button.charcoalbtn:hover, button.charcoalbtn:active, button.charcoalbtn:focus-visible {
+  background: #2b3038; border: 1px solid #3d444f; color: #e6e9ee; font-weight: 700; padding: 12px 14px; border-radius: 8px;
+}
+button.charcoalbtn:active { background: #353b45; }
