@@ -8,6 +8,9 @@ import { today, toast, errMsg } from '../../lib/helpers.js';
 import { openDebtsOf, pairOwes, debtLabel, money, namesFor } from '../../lib/computations.js';
 import { g } from '../../lib/gender.js';
 
+// סכום בלי סימני כיוון נסתרים (RLM) ש-toLocaleString מוסיף בעברית, כדי ששורת החישוב תוצג יציב משמאל לימין.
+const plain = (agorot) => money(agorot).replace(/[\u200e\u200f\u061c]/g, '').replace(/\s+/g, '');
+
 const sum = (list) => list.reduce((s, x) => s + x.remaining, 0);
 
 // חלוקת סכום קיזוז על החובות הפתוחים, מהישן לחדש: [{debt, amount}].
@@ -105,7 +108,9 @@ export default function BalanceSheet({ otherId }) {
 
       <div className="calc-final">
         <div>{net === 0 ? 'מאוזן: אף אחד לא חייב' : iOwe ? `בסך הכול ${g(myGender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${other_}` : `בסך הכול ${other_} ${g(other.gender, 'חייב', 'חייבת', 'חייב/ת')} לי`}</div>
-        <div className="calc-eq" dir="ltr">{money(sumTheirs)} − {money(sumMine)}{adjust !== 0 ? ` ${adjust > 0 ? '+' : '−'} ${money(Math.abs(adjust))}` : ''} = <strong>{money(Math.abs(net))}</strong></div>
+        <div className="calc-eq" dir="ltr">
+          <bdo dir="ltr">{`${plain(sumTheirs)} − ${plain(sumMine)}${adjust !== 0 ? ` ${adjust > 0 ? '+' : '−'} ${plain(Math.abs(adjust))}` : ''} = `}<strong>{plain(Math.abs(net))}</strong></bdo>
+        </div>
       </div>
 
       {twoSided && (
