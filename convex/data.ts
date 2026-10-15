@@ -32,12 +32,11 @@ export const get = query({
         email: me.emailVerified && me.email ? maskEmail(me.email) : null,
         pendingEmail: me.pendingEmail ? maskEmail(me.pendingEmail) : null,
       },
-      // קוד ההצטרפות מגיע להורים בלבד.
+      // קוד ההצטרפות לא נשלח כאן: הורה חושף אותו בטביעת אצבע / זיהוי פנים (family:revealCode).
       family: {
         name: family.name,
         currency: family.currency ?? "ILS",
         country: family.country ?? (family.currency ? null : "IL"),
-        ...(me.role === "parent" ? { code: family.childCode } : {}),
       },
       people: people.map((p) => ({
         id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash,

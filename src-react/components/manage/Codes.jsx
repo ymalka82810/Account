@@ -1,13 +1,61 @@
+import { useEffect, useRef, useState } from 'react';
 import { call } from '../../lib/api.js';
 import { toast, errMsg, prettyCode } from '../../lib/helpers.js';
+import { CODE_KEY } from '../../state/state.js';
+import { useBioConfirm } from '../shared/BioConfirm.jsx';
+import { BioError } from '../../lib/biometric.js';
+
+// כמה זמן הקוד נשאר גלוי אחרי האימות.
+const SHOW_MS = 30000;
+const BIO_OPTS = {
+  need: 'לראות את קוד ההצטרפות',
+  title: 'הצגת קוד ההצטרפות',
+  reason: 'קוד ההצטרפות של המשפחה נחשף רק בטביעת אצבע או בזיהוי פנים.',
+};
 
 // קוד ההצטרפות היחיד של המשפחה (הורים בלבד). כל מי שמצטרף/ת איתו נכנס/ת בתור ילד/ה,
 // ואז הורה קובע/ת את התפקיד ב"בני המשפחה" (ילד/ה, נער/ה או הורה), באישור ביומטרי.
+// הקוד מוסתר ונחשף רק אחרי טביעת אצבע / זיהוי פנים; השרת לא שולח אותו בלי האישור.
 export default function Codes({ data, token }) {
   const f = data.family;
+  const bioConfirm = useBioConfirm();
+  const [code, setCode] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const timer = useRef(null);
+
+  const hide = () => { clearTimeout(timer.current); setCode(null); };
+  useEffect(() => () => clearTimeout(timer.current), []);
+  // הסתרה כשעוברים לאפליקציה אחרת או נועלים את המסך.
+  useEffect(() => {
+    const onVis = () => { if (document.hidden) hide(); };
+    document.addEventListener('visibilitychange', onVis);
+    return () => document.removeEventListener('visibilitychange', onVis);
+  }, []);
+
+  // מחזיר את הקוד אחרי אימות, או null אם בוטל / נכשל.
+  async function reveal() {
+    if (code) return code;
+    setBusy(true);
+    try {
+      const proof = await bioConfirm('reveal-code', BIO_OPTS);
+      const res = await call('family:revealCode', { token, proof });
+      setCode(res.code);
+      try { if (localStorage.getItem(CODE_KEY)) localStorage.setItem(CODE_KEY, res.code); } catch (e) { /* */ }
+      clearTimeout(timer.current);
+      timer.current = setTimeout(() => setCode(null), SHOW_MS);
+      return res.code;
+    } catch (e) {
+      if (!(e instanceof BioError && e.code === 'cancel')) toast(e instanceof BioError ? e.message : errMsg(e));
+      return null;
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function share() {
-    const text = `קוד ההצטרפות לקופה של ${f.name}: ${prettyCode(f.code)}\n${location.origin}${location.pathname}`;
+    const c = await reveal();
+    if (!c) return;
+    const text = `קוד ההצטרפות לקופה של ${f.name}: ${prettyCode(c)}\n${location.origin}${location.pathname}`;
     try {
       if (navigator.share) { await navigator.share({ text }); return; }
       await navigator.clipboard.writeText(text);
@@ -17,22 +65,33 @@ export default function Codes({ data, token }) {
 
   async function rotate() {
     if (!confirm('להחליף את הקוד? מי שכבר בפנים נשאר, אבל הקוד הישן יפסיק לעבוד.')) return;
-    try { await call('family:rotateCode', { token }); toast('הקוד הוחלף ✅'); }
-    catch (e) { toast(errMsg(e)); }
+    try {
+      const res = await call('family:rotateCode', { token });
+      hide();
+      // מעדכנים את הכניסה השמורה במכשיר הזה, אם יש כזו.
+      try { if (res?.loginCode && localStorage.getItem(CODE_KEY)) localStorage.setItem(CODE_KEY, res.loginCode); } catch (e) { /* */ }
+      toast('הקוד הוחלף ✅ אפשר להציג אותו בטביעת אצבע או זיהוי פנים');
+    } catch (e) { toast(errMsg(e)); }
   }
 
   return (
     <div className="codes">
       <div className="codeblock">
         <div className="meta">קוד ההצטרפות של המשפחה</div>
-        <div className="codeval" dir="ltr">{prettyCode(f.code)}</div>
+        <div className={'codeval' + (code ? '' : ' masked')} dir="ltr" aria-label={code ? undefined : 'הקוד מוסתר'}>
+          {code ? prettyCode(code) : '•••••-•••••'}
+        </div>
         <p className="hint">
           קוד אחד לכולם. מי שמצטרף/ת איתו נכנס/ת בתור ילד/ה. אחר כך אפשר לשנות ב&quot;בני המשפחה&quot;
           לנער/ה או להורה, באישור טביעת אצבע או זיהוי פנים.
+          {' '}הקוד מוסתר ונחשף רק בטביעת אצבע או בזיהוי פנים.
         </p>
         <div className="tools">
-          <button className="small" type="button" onClick={share}>שיתוף</button>
-          <button className="small" type="button" onClick={rotate}>החלפת קוד</button>
+          {code
+            ? <button className="small" type="button" onClick={hide}>הסתרה</button>
+            : <button className="small" type="button" onClick={reveal} disabled={busy}>{busy ? 'מאמתים…' : 'הצגת הקוד 🔒'}</button>}
+          <button className="small" type="button" onClick={share} disabled={busy}>שיתוף</button>
+          <button className="small" type="button" onClick={rotate} disabled={busy}>החלפת קוד</button>
         </div>
       </div>
     </div>

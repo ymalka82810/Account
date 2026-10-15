@@ -51,7 +51,7 @@ export async function bioRegister(token, myPin) {
       const { publicKey } = await native('register', { alias });
       const { signature } = await native('sign', {
         alias, message: 'account-bio:' + challenge,
-        title: 'רישום זיהוי פנים / טביעת אצבע', subtitle: 'לאישור שינויי תפקיד בקופה',
+        title: 'רישום זיהוי פנים / טביעת אצבע', subtitle: 'לאישור פעולות רגישות בקופה',
       });
       await call('biometric:registerFinish', {
         token, challenge, kind: 'android', credentialId: alias, publicKey, alg: -7, signature, label: 'אפליקציה',
@@ -92,7 +92,7 @@ export async function bioRegister(token, myPin) {
 
 // אישור פעולה: מבקש אתגר מהשרת, מפעיל טביעת אצבע / זיהוי פנים, ומחזיר proof
 // שמצרפים לקריאה עצמה (למשל people:setRole). action חייב להתאים בדיוק למה שהשרת מצפה.
-export async function bioProve(token, personId, action) {
+export async function bioProve(token, personId, action, title = 'אישור שינוי תפקיד') {
   const credentialId = localStorage.getItem(LOCAL_KEY(personId));
   if (!credentialId) throw new BioError('needSetup', 'צריך לרשום את המכשיר');
   const res = await call('biometric:challenge', { token, action, credentialId });
@@ -102,7 +102,7 @@ export async function bioProve(token, personId, action) {
     if (isNativeApp) {
       const { signature } = await native('sign', {
         alias: credentialId, message: 'account-bio:' + challenge,
-        title: 'אישור שינוי תפקיד', subtitle: 'זיהוי פנים או טביעת אצבע',
+        title, subtitle: 'זיהוי פנים או טביעת אצבע',
       });
       return { challenge, credentialId, signature };
     }

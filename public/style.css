@@ -624,6 +624,7 @@ button.small { min-height: 40px; }
 .codeblock .meta { font-weight: 500; }
 .codeblock .hint { font-size: .9rem; margin: 0; }
 .codeval { font-size: 1.6rem; font-weight: 800; letter-spacing: .12em; text-align: start; user-select: all; }
+.codeval.masked { user-select: none; opacity: .55; letter-spacing: .2em; }
 .codeblock .tools { margin-top: 6px; }
 .danger-ghost { color: var(--owe); border-color: var(--owe); }
 

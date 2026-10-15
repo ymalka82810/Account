@@ -1,7 +1,7 @@
 import { mutation } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
-import { purgeBiometric } from "./biometric";
+import { proofValidator, purgeBiometric, requireBiometric } from "./biometric";
 import { cleanFamilyName, freshCode, requireParent } from "./lib";
 import { COUNTRIES, isCurrency } from "./currency";
 
@@ -25,12 +25,28 @@ export const setLocale = mutation({
   },
 });
 
+// חשיפת קוד ההצטרפות: הורה בלבד, ורק אחרי אישור בטביעת אצבע / זיהוי פנים.
+// הקוד לא נשלח יותר עם נתוני המשפחה (data:get), כך שאי אפשר לראות אותו בלי האישור הזה.
+export const revealCode = mutation({
+  args: { token: v.string(), proof: v.optional(proofValidator) },
+  handler: async (ctx, { token, proof }) => {
+    const me = await requireParent(ctx, token);
+    await requireBiometric(ctx, me, "reveal-code", proof);
+    const family = await ctx.db.get(me.familyId);
+    if (!family) throw new ConvexError("המשפחה לא נמצאה");
+    return { code: family.childCode };
+  },
+});
+
 // החלפת קוד ההצטרפות (למשל אם הוא הגיע למי שלא צריך). מי שכבר בפנים נשאר בפנים.
+// מחזיר את הקוד החדש רק כדי לעדכן את הכניסה השמורה במכשיר; התצוגה נשארת מוסתרת.
 export const rotateCode = mutation({
   args: { token: v.string() },
   handler: async (ctx, { token }) => {
     const me = await requireParent(ctx, token);
-    await ctx.db.patch(me.familyId, { childCode: await freshCode(ctx), parentCode: undefined });
+    const childCode = await freshCode(ctx);
+    await ctx.db.patch(me.familyId, { childCode, parentCode: undefined });
+    return { loginCode: childCode };
   },
 });
 

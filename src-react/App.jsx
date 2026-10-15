@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { useQuery } from 'convex/react';
-import { state, CODE_KEY, LAST_ROLE_KEY, LAST_PALETTE_KEY, THEME_COLOR, TAB_LABELS, subscribeAuth, authVersion, bumpAuth } from './state/state.js';
+import { state, LAST_ROLE_KEY, LAST_PALETTE_KEY, THEME_COLOR, TAB_LABELS, subscribeAuth, authVersion, bumpAuth } from './state/state.js';
 import { call } from './lib/api.js';
 import { toast } from './lib/helpers.js';
 import { restoreFamily, startPin, autoSkipPerson, dropSession } from './state/auth.js';
@@ -185,7 +185,6 @@ function Root() {
     if (screen !== 'app') return;
     localStorage.setItem(LAST_ROLE_KEY, role);
     if (role === 'teen') localStorage.setItem(LAST_PALETTE_KEY, palette || '');
-    if (role === 'parent') localStorage.setItem(CODE_KEY, data.family.code);
     syncPush();
   }, [screen, role, token]); // eslint-disable-line react-hooks/exhaustive-deps
 

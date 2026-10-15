@@ -52,7 +52,9 @@ function BioSetupSheet({ onDone, reason }) {
   );
 }
 
-// מחזיר confirm(action) שמחזיר proof לשרת, או זורק BioError (code: unsupported/cancel/failed).
+// מחזיר confirm(action, opts) שמחזיר proof לשרת, או זורק BioError (code: unsupported/cancel/failed).
+// opts (לא חובה): { reason } - הסבר בחלון הרישום, { need } - מה צריך מכשיר ביומטרי בשבילו,
+// { title } - הכותרת בחלון האימות של האפליקציה.
 // אם המכשיר עוד לא רשום, פותח קודם את חלון הרישום.
 export function useBioConfirm() {
   const sheet = useSheet();
@@ -62,17 +64,17 @@ export function useBioConfirm() {
     sheet.open('הפעלת אימות ביומטרי', <BioSetupSheet onDone={resolve} reason={reason} />);
   }), [sheet]);
 
-  return useCallback(async (action) => {
+  return useCallback(async (action, opts = {}) => {
     if (!(await bioSupported())) {
-      throw new BioError('unsupported', 'כדי לשנות תפקיד צריך מכשיר עם טביעת אצבע או זיהוי פנים שמוגדרים בו.');
+      throw new BioError('unsupported', `כדי ${opts.need || 'לשנות תפקיד'} צריך מכשיר עם טביעת אצבע או זיהוי פנים שמוגדרים בו.`);
     }
-    if (!bioReady(me) && !(await setup())) throw new BioError('cancel', 'האימות בוטל');
+    if (!bioReady(me) && !(await setup(opts.reason))) throw new BioError('cancel', 'האימות בוטל');
     try {
-      return await bioProve(token, me, action);
+      return await bioProve(token, me, action, opts.title);
     } catch (e) {
       if (!(e instanceof BioError) || e.code !== 'needSetup') throw e;
       if (!(await setup(e.message + '.'))) throw new BioError('cancel', 'האימות בוטל');
-      return await bioProve(token, me, action);
+      return await bioProve(token, me, action, opts.title);
     }
   }, [token, me, setup]);
 }
