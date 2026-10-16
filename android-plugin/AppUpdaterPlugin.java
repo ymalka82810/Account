@@ -24,7 +24,11 @@ import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * Self-update for a sideloaded APK: downloads the new APK and opens the system install dialog,
@@ -50,6 +54,7 @@ public class AppUpdaterPlugin extends Plugin {
     private static final String DIR = "app-update";
     private static final String APK = "update.apk";
     private static final String PREFS = "app-updater";
+    private static final long STALL_MS = 20000; // no downloaded bytes for this long = the DownloadManager is stuck
     private volatile boolean busy = false;
     private Runnable onResume; // the install dialog, waiting for the app to come back to the foreground
 
@@ -97,9 +102,14 @@ public class AppUpdaterPlugin extends Plugin {
                 File apk = apkFile();
                 boolean sameUrl = url.equals(prefs().getString("url", null));
                 if (!(sameUrl && apk.exists() && isUpdateOfThisApp(apk))) {
-                    long id = sameUrl ? runningDownload() : -1;
-                    if (id == -1) id = enqueue(url);
-                    waitFor(id);
+                    try {
+                        long id = sameUrl ? runningDownload() : -1;
+                        if (id == -1) id = enqueue(url);
+                        waitFor(id);
+                    } catch (IOException e) {
+                        // The DownloadManager failed or got stuck (paused/pending forever): download directly instead
+                        downloadDirect(url, apk);
+                    }
                 }
                 if (!isUpdateOfThisApp(apk)) {
                     apk.delete();
@@ -138,6 +148,8 @@ public class AppUpdaterPlugin extends Plugin {
     private void waitFor(long id) throws IOException {
         DownloadManager dm = downloadManager();
         int lastPercent = -2;
+        long lastDone = -1;
+        long lastMove = System.currentTimeMillis();
         while (true) {
             int status;
             long done, total;
@@ -153,6 +165,14 @@ public class AppUpdaterPlugin extends Plugin {
                 prefs().edit().clear().apply();
                 throw new IOException("download failed");
             }
+            if (done > lastDone) {
+                lastDone = done;
+                lastMove = System.currentTimeMillis();
+            } else if (System.currentTimeMillis() - lastMove > STALL_MS) {
+                dm.remove(id);
+                prefs().edit().clear().apply();
+                throw new IOException("download stalled");
+            }
             int percent = total > 0 ? (int) (done * 100 / total) : -1;
             if (percent != lastPercent) {
                 lastPercent = percent;
@@ -165,6 +185,48 @@ public class AppUpdaterPlugin extends Plugin {
             } catch (InterruptedException e) {
                 throw new IOException("interrupted");
             }
+        }
+    }
+
+    // Plain HTTPS download into apk (follows GitHub's redirect to the asset CDN), with progress events
+    private void downloadDirect(String url, File apk) throws IOException {
+        File dir = updateDir();
+        if (dir == null) throw new IOException("no external storage");
+        dir.mkdirs();
+        File tmp = new File(dir, APK + ".part");
+        HttpURLConnection conn = null;
+        try {
+            conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(20000);
+            conn.setInstanceFollowRedirects(true);
+            int code = conn.getResponseCode();
+            if (code != 200) throw new IOException("HTTP " + code);
+            long total = conn.getContentLengthLong();
+            long done = 0;
+            int lastPercent = -2;
+            try (InputStream in = conn.getInputStream(); FileOutputStream out = new FileOutputStream(tmp)) {
+                byte[] buf = new byte[32 * 1024];
+                int n;
+                while ((n = in.read(buf)) != -1) {
+                    out.write(buf, 0, n);
+                    done += n;
+                    int percent = total > 0 ? (int) (done * 100 / total) : -1;
+                    if (percent != lastPercent) {
+                        lastPercent = percent;
+                        JSObject ev = new JSObject();
+                        ev.put("percent", percent);
+                        notifyListeners("progress", ev);
+                    }
+                }
+            }
+            if (total > 0 && tmp.length() != total) throw new IOException("incomplete download");
+            apk.delete();
+            if (!tmp.renameTo(apk)) throw new IOException("rename failed");
+            prefs().edit().putString("url", url).apply();
+        } finally {
+            if (conn != null) conn.disconnect();
+            tmp.delete();
         }
     }
 
