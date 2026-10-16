@@ -503,12 +503,15 @@ body[data-theme="teen"] #screen-loading p {
 
 /* בורר דמות מצומצם (בטופס הוספת בן משפחה): 4 שורות, כל שורה נגללת אופקית בנפרד
    (עד 20 דמויות בשורה), ומתחתיהן כפתור "עוד" שפותח את הרשימה המלאה באריח נפרד. */
-.avatars-compact { display: flex; flex-direction: column; gap: 6px; }
+/* min-width:0 הכרחי: ה-.form וה-.field הם grid, ובלעדיו התוכן הרחב מרחיב את העמודה והשורות אף פעם לא נגללות */
+.field, .avatars-compact, .avatars-row { min-width: 0; }
+.avatars-compact { display: flex; flex-direction: column; gap: 6px; max-width: 100%; }
 .avatars-row {
   display: flex;
   gap: 6px;
   overflow-x: auto;
   overflow-y: hidden;
+  overscroll-behavior-x: contain;
   /* ריווח כדי שהדמות הנבחרת המוגדלת לא תיחתך */
   padding: 8px 8px;
   -webkit-overflow-scrolling: touch;
