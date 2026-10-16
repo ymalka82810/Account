@@ -112,7 +112,8 @@ function notMe() {
 
 export function pinBack() {
   state.pinFlow = null;
-  if (state.fam && state.fam.people.length > 1) { notMe(); return; }
+  // גם במשפחה עם בן משפחה אחד חוזרים למסך הבחירה, אחרת הדילוג האוטומטי מחזיר מיד לקוד הסודי.
+  if (state.fam) { notMe(); return; }
   route();
 }
 
