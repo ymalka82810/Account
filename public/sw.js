@@ -1,4 +1,4 @@
-const CACHE = 'kupa-v19';
+const CACHE = 'kupa-v20';
 // מאז שהאתר עובר דרך Vite build, קובץ ה-JS הראשי יוצא עם hash בשם
 // (למשל assets/index-ABC123.js) שלא ידוע מראש. לכן לא מפרטים כאן כל
 // קובץ src/*.js בנפרד (כמו קודם) - caches.addAll() נכשל כולו אם קובץ
