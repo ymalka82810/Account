@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { call } from '../../lib/api.js';
-import { state } from '../../state/state.js';
+import { state, CODE_KEY } from '../../state/state.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { dropSession } from '../../state/auth.js';
 import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../../lib/push.js';
@@ -48,6 +48,14 @@ function PaletteSheet() {
 
 export async function logout() {
   await releasePushDevice();
+  // אם המכשיר לא שמר את המשפחה (למשל הקמת משפחה חדשה), מקבלים כרטיס כניסה לפני היציאה,
+  // כדי שהיציאה תחזיר למסך הבחירה בין בני המשפחה ולא תזרוק מהמשפחה.
+  if (!localStorage.getItem(CODE_KEY)) {
+    try {
+      const r = await call('auth:deviceCard', { token: state.token });
+      if (r && r.ok && r.loginCode) localStorage.setItem(CODE_KEY, r.loginCode);
+    } catch (e) { /* ignore */ }
+  }
   try { await call('auth:logout', { token: state.token }); } catch (e) { /* ignore */ }
   state.exiting = true;
   dropSession();

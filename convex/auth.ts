@@ -191,6 +191,17 @@ export const migrateMe = mutation({
   },
 });
 
+// מי שנכנס בלי שהמכשיר שמר את המשפחה (למשל הקים אותה בעצמו) מבקש כרטיס כניסה ברגע היציאה,
+// כדי שאחרי היציאה יוצג מסך הבחירה בין בני המשפחה ולא מסך הפתיחה.
+export const deviceCard = mutation({
+  args: { token: v.string() },
+  handler: async (ctx, { token }) => {
+    const me = await getSessionPerson(ctx, token);
+    if (!me) return { ok: false as const };
+    return { ok: true as const, loginCode: await issuePass(ctx, me.familyId) };
+  },
+});
+
 // המכשיר "שוכח" את המשפחה: מוחקים את כרטיס הכניסה שלו.
 export const forgetPass = mutation({
   args: { pass: v.string() },
