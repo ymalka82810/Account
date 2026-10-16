@@ -1,4 +1,4 @@
-const CACHE = 'kupa-v24';
+const CACHE = 'kupa-v25';
 // מאז שהאתר עובר דרך Vite build, קובץ ה-JS הראשי יוצא עם hash בשם
 // (למשל assets/index-ABC123.js) שלא ידוע מראש. לכן לא מפרטים כאן כל
 // קובץ src/*.js בנפרד (כמו קודם) - caches.addAll() נכשל כולו אם קובץ
@@ -11,7 +11,8 @@ const FILES = [
   'manifest.webmanifest', 'icon.svg',
 ];
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)));
+  // cache: 'reload' - לא לקחת את הקבצים מהמטמון של הדפדפן (GitHub Pages שומר אותם 10 דקות)
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES.map((f) => new Request(f, { cache: 'reload' })))));
   self.skipWaiting();
 });
 self.addEventListener('activate', (e) => {
@@ -19,8 +20,12 @@ self.addEventListener('activate', (e) => {
 });
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+  // קבצים מהאתר עצמו (לא דפי ניווט): מבקשים מהשרת עם no-cache, כדי שאחרי דחיפה
+  // לא יוצג קובץ ישן ממטמון הדפדפן (GitHub Pages נותן max-age=600 גם ל-style.css)
+  const sameOrigin = new URL(e.request.url).origin === location.origin;
+  const req = sameOrigin && e.request.mode !== 'navigate' ? new Request(e.request, { cache: 'no-cache' }) : e.request;
   e.respondWith(
-    fetch(e.request).then((r) => {
+    fetch(req).then((r) => {
       if (r.ok && new URL(e.request.url).origin === location.origin) {
         const copy = r.clone();
         caches.open(CACHE).then((c) => c.put(e.request, copy));
