@@ -518,9 +518,32 @@ body[data-theme="teen"] #screen-loading p {
   padding: 14px 12px;
   /* בלי -webkit-overflow-scrolling: הוא יוצר שכבה נפרדת לכל שורה, והשורה שמתחת מכסה את הצד התחתון של הדמות המוגדלת */
   position: relative;
+  /* בלי פס גלילה גלוי - במקומו הצללה וחצים בצדדים (ראו .row-edge) */
+  scrollbar-width: none;
 }
+.avatars-row::-webkit-scrollbar { display: none; }
+.avatars-row-wrap { position: relative; flex: none; min-width: 0; }
 /* השורה שמכילה את הדמות הנבחרת מעל השורות האחרות, כדי שהגדילה למטה לא תוסתר */
-.avatars-row:has(.av.on) { z-index: 1; }
+.avatars-row-wrap:has(.av.on) { z-index: 1; }
+/* הצללה בקצה השורה עם חץ; מופיעה רק בצד שאפשר להמשיך לגלול אליו */
+.row-edge {
+  position: absolute; top: 0; bottom: 0; width: 38px; z-index: 3;
+  display: flex; align-items: center;
+  opacity: 0; pointer-events: none; transition: opacity .18s ease;
+  direction: ltr;
+}
+.row-edge.show { opacity: 1; }
+.row-edge.left { left: 0; justify-content: flex-start; border-radius: 12px 0 0 12px;
+  background: linear-gradient(to right, rgba(0, 0, 0, .34), rgba(0, 0, 0, 0)); }
+.row-edge.right { right: 0; justify-content: flex-end; border-radius: 0 12px 12px 0;
+  background: linear-gradient(to left, rgba(0, 0, 0, .34), rgba(0, 0, 0, 0)); }
+.row-edge button {
+  display: grid; place-items: center; width: 26px; height: 100%; padding: 0; margin: 0;
+  background: none; border: 0; color: #fff; cursor: pointer; pointer-events: none;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .6)); touch-action: manipulation;
+}
+.row-edge.show button { pointer-events: auto; }
+@media (prefers-reduced-motion: reduce) { .row-edge { transition: none; } }
 .avatars-row .av { flex: 0 0 52px; width: 52px; }
 .avatars-compact .av-more { align-self: stretch; margin-top: 2px; }
 
