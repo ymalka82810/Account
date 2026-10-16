@@ -485,12 +485,21 @@ body[data-theme="teen"] #screen-loading p {
 /* בורר דמות */
 .avatars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
 .av {
+  position: relative; z-index: 0;
   font-size: 1.7rem; background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 6px 0; cursor: pointer;
-  transition: transform .12s ease, filter .12s ease;
+  transition: transform .18s cubic-bezier(.34, 1.56, .64, 1), box-shadow .18s ease, filter .12s ease;
 }
 .av:hover { transform: translateY(-2px); }
 .av:active { transform: translateY(0) scale(.95); filter: none; }
-.av.on { border-color: var(--coin-deep); background: var(--coin); }
+/* הדמות הנבחרת גדלה מעט ומרחפת מעל שאר הדמויות */
+.av.on {
+  border-color: var(--coin-deep); background: var(--coin);
+  transform: scale(1.22); z-index: 2;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .28);
+}
+.av.on:hover { transform: scale(1.22) translateY(-2px); }
+.av.on:active { transform: scale(1.12); }
+@media (prefers-reduced-motion: reduce) { .av { transition: none; } }
 
 /* בורר דמות מצומצם (בטופס הוספת בן משפחה): 4 שורות בלבד עם גלילה אופקית,
    ובסוף כפתור "עוד" שפותח את הרשימה המלאה באריח נפרד. */
@@ -502,7 +511,8 @@ body[data-theme="teen"] #screen-loading p {
   gap: 6px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding-bottom: 4px;
+  /* ריווח כדי שהדמות הנבחרת המוגדלת לא תיחתך בקצוות הגלילה */
+  padding: 8px 8px 12px;
   -webkit-overflow-scrolling: touch;
 }
 .avatars-compact .av { width: 52px; }
