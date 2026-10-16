@@ -495,28 +495,30 @@ body[data-theme="teen"] #screen-loading p {
 /* הדמות הנבחרת גדלה מעט ומרחפת מעל שאר הדמויות - גדילה שווה לכל ארבעת הצדדים (מרכז הריבוע קבוע) */
 .av.on {
   border-color: var(--coin-deep); background: var(--coin);
-  transform: scale(1.32); transform-origin: center; z-index: 2;
-  box-shadow: 0 0 14px rgba(0, 0, 0, .3);
+  transform: scale(1.42); transform-origin: center; z-index: 2;
+  box-shadow: 0 0 9px rgba(0, 0, 0, .32);
 }
-@media (hover: hover) { .av.on:hover { transform: scale(1.32); } }
-.av.on:active { transform: scale(1.2); }
+@media (hover: hover) { .av.on:hover { transform: scale(1.42); } }
+.av.on:active { transform: scale(1.3); }
 @media (prefers-reduced-motion: reduce) { .av { transition: none; } }
 
 /* בורר דמות מצומצם (בטופס הוספת בן משפחה): 4 שורות, כל שורה נגללת אופקית בנפרד
    (עד 20 דמויות בשורה), ומתחתיהן כפתור "עוד" שפותח את הרשימה המלאה באריח נפרד. */
 /* min-width:0 הכרחי: ה-.form וה-.field הם grid, ובלעדיו התוכן הרחב מרחיב את העמודה והשורות אף פעם לא נגללות */
-.field, .avatars-compact, .avatars-row { min-width: 0; }
-.avatars-compact { display: flex; flex-direction: column; gap: 0; max-width: 100%; }
-.avatars-row {
+.field, .avatars-compact, .avatars-row {
   display: flex;
+  flex: none;
   gap: 6px;
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
-  /* ריווח כדי שהדמות הנבחרת המוגדלת לא תיחתך */
-  padding: 12px;
-  -webkit-overflow-scrolling: touch;
+  /* ריווח כדי שהדמות הנבחרת המוגדלת לא תיחתך (הגדילה נעשית סביב המרכז, לכל הכיוונים) */
+  padding: 14px 12px;
+  /* בלי -webkit-overflow-scrolling: הוא יוצר שכבה נפרדת לכל שורה, והשורה שמתחת מכסה את הצד התחתון של הדמות המוגדלת */
+  position: relative;
 }
+/* השורה שמכילה את הדמות הנבחרת מעל השורות האחרות, כדי שהגדילה למטה לא תוסתר */
+.avatars-row:has(.av.on) { z-index: 1; }
 .avatars-row .av { flex: 0 0 52px; width: 52px; }
 .avatars-compact .av-more { align-self: stretch; margin-top: 2px; }
 
