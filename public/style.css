@@ -515,7 +515,7 @@ body[data-theme="teen"] #screen-loading p {
   overflow-y: hidden;
   overscroll-behavior-x: contain;
   /* ריווח כדי שהדמות הנבחרת המוגדלת לא תיחתך (הגדילה נעשית סביב המרכז, לכל הכיוונים) */
-  padding: 14px 12px;
+  padding: 11px 12px;
   /* בלי -webkit-overflow-scrolling: הוא יוצר שכבה נפרדת לכל שורה, והשורה שמתחת מכסה את הצד התחתון של הדמות המוגדלת */
   position: relative;
   /* בלי פס גלילה גלוי - במקומו הצללה וחצים בצדדים (ראו .row-edge) */
