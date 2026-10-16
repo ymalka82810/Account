@@ -489,23 +489,24 @@ body[data-theme="teen"] #screen-loading p {
   font-size: 1.7rem; background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 6px 0; cursor: pointer;
   transition: transform .18s cubic-bezier(.34, 1.56, .64, 1), box-shadow .18s ease, filter .12s ease;
 }
-.av:hover { transform: translateY(-2px); }
-.av:active { transform: translateY(0) scale(.95); filter: none; }
-/* הדמות הנבחרת גדלה מעט ומרחפת מעל שאר הדמויות */
+.av:active { transform: scale(.95); filter: none; }
+/* ריחוף רק במכשירים עם עכבר; במגע ה-hover נתקע אחרי לחיצה וגורם להזזה כלפי מעלה */
+@media (hover: hover) { .av:hover { transform: translateY(-2px); } }
+/* הדמות הנבחרת גדלה מעט ומרחפת מעל שאר הדמויות - גדילה שווה לכל ארבעת הצדדים (מרכז הריבוע קבוע) */
 .av.on {
   border-color: var(--coin-deep); background: var(--coin);
-  transform: scale(1.22); z-index: 2;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, .28);
+  transform: scale(1.32); transform-origin: center; z-index: 2;
+  box-shadow: 0 0 14px rgba(0, 0, 0, .3);
 }
-.av.on:hover { transform: scale(1.22) translateY(-2px); }
-.av.on:active { transform: scale(1.12); }
+@media (hover: hover) { .av.on:hover { transform: scale(1.32); } }
+.av.on:active { transform: scale(1.2); }
 @media (prefers-reduced-motion: reduce) { .av { transition: none; } }
 
 /* בורר דמות מצומצם (בטופס הוספת בן משפחה): 4 שורות, כל שורה נגללת אופקית בנפרד
    (עד 20 דמויות בשורה), ומתחתיהן כפתור "עוד" שפותח את הרשימה המלאה באריח נפרד. */
 /* min-width:0 הכרחי: ה-.form וה-.field הם grid, ובלעדיו התוכן הרחב מרחיב את העמודה והשורות אף פעם לא נגללות */
 .field, .avatars-compact, .avatars-row { min-width: 0; }
-.avatars-compact { display: flex; flex-direction: column; gap: 6px; max-width: 100%; }
+.avatars-compact { display: flex; flex-direction: column; gap: 0; max-width: 100%; }
 .avatars-row {
   display: flex;
   gap: 6px;
@@ -513,7 +514,7 @@ body[data-theme="teen"] #screen-loading p {
   overflow-y: hidden;
   overscroll-behavior-x: contain;
   /* ריווח כדי שהדמות הנבחרת המוגדלת לא תיחתך */
-  padding: 8px 8px;
+  padding: 12px;
   -webkit-overflow-scrolling: touch;
 }
 .avatars-row .av { flex: 0 0 52px; width: 52px; }
