@@ -1036,7 +1036,7 @@ body[data-theme="parent"] .gb-art, body[data-theme="teen"] .gb-art {
 body[data-theme="parent"] .sum.get, body[data-theme="parent"] .sum.owe,
 body[data-theme="teen"] .sum.get, body[data-theme="teen"] .sum.owe {
   border: 0; border-radius: 0; overflow: visible; background: none;
-  aspect-ratio: 200 / 122; padding: 15% 14% 5% 0;
+  aspect-ratio: 200 / 122; padding: 10% 9% 2% 0;
   display: flex; flex-direction: column; justify-content: center;
 }
 
