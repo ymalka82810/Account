@@ -48,6 +48,15 @@ export function startDemo() {
   bumpAuth();
 }
 
+// סיום הדמו בקריאה לפעולה: יוצאים מהדמו ופותחים ישר את הפנקס האישי או את הקמת הקופה.
+export function endDemo(to) {
+  state.token = '';
+  state.pinFlow = null;
+  state.fromNotebook = false;
+  state.notebookBack = false;
+  goView(to);
+}
+
 export function dropSession() {
   state.token = '';
   localStorage.removeItem(TOKEN_KEY);

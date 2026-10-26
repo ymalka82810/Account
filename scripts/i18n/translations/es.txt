@@ -73,619 +73,627 @@
 72|🎨 Colores de la pantalla
 73|🎮 Juego
 74|🏠 Crear una hucha familiar
-75|👀 Modo demo: datos de ejemplo, no se guarda nada
-76|👀 ¿Quieres ver cómo funciona? Una demo de 10 segundos
+75|👀 Demo de 10 segundos
+76|👀 Modo demo: datos de ejemplo, no se guarda nada
 77|👨‍👩‍👧 Soy padre o madre y quiero crear una nueva hucha familiar
 78|👨‍👩‍👧 Familia
-79|💰 Mi dinero
-80|💰 Recibí
-81|💰 Pagué
-82|📋 Copiar la lista abierta
-83|📒 Mi cuaderno
-84|📜 Historial
-85|📜 Historial
-86|🔑 Cambiar el código secreto
-87|🔒 Añadir como {role} se aprueba con huella digital o reconocimiento facial.
-88|🔔 Activar notificaciones
-89|🔕 Desactivar notificaciones
-90|🗑️ Borrar todo el cuaderno
-91|🤝 Solicitudes de amistad ({n})
-92|🤝 Solicitudes del modo amigos ({n})
-93|🤝 Amigos
-94|🤝 Modo amigos activo
-95|🧹 Borrar lo pagado
-96|🙂 Elegir un avatar
-97|4 dígitos
-98|de 4 a {max} dígitos
-99|de 4 a 8 dígitos
-100|6 dígitos
-101|Papá
-102|Una persona no puede deberse dinero a sí misma
-103|La persona no existe
-104|Aprobado ✅
-105|Zona de peligro
-106|No se puede devolver más de lo que queda de la deuda
-107|No se puede devolver más de lo que queda de la deuda ({amount})
-108|No puedes eliminarte a ti mismo
-109|No se puede copiar en este dispositivo
-110|No puedes cambiar tu propio rol
-111|¿Cómo se llamará la familia?
-112|¿Cómo te llamas?
-113|Mamá
-114|Verificar
-115|Verificar el correo
-116|Ninguno
-117|Sin conexión a internet. Inténtalo de nuevo cuando tengas.
-118|Nada pendiente
-119|¡Nada pendiente!
-120|No tienes código secreto. Define uno en «Mi cuenta» e inténtalo de nuevo.
-121|Sin correo verificado
-122|No hay correo verificado que reemplazar
-123|No hay registros pagados
-124|No hay tipo de cambio para la moneda de la deuda
-125|No hay tipo de cambio por ahora
-126|¿Dónde viven?
-127|Aprobar
-128|Confirmación por correo
-129|Aprobar el modo amigos
-130|Confirmar el cambio de rol
-131|Si este padre o madre tiene un correo verificado, le enviaremos un código de verificación. Si no hay correo, otro padre o madre puede definirte un código nuevo.
-132|Si no es él, conviene definir un código nuevo.
-133|Si no es él/ella, conviene definir un código nuevo.
-134|Si no es ella, conviene definir un código nuevo.
-135|Si el amigo tiene el modo amigos, se le envió una solicitud 🤝
-136|Soy nuevo/a
-137|Debo
-138|Debo dinero
-139|Debo dinero a {name}
-140|Debo dinero a {to}
-141|Debo dinero a un amigo
-142|Debo dinero a mis amigos
-143|Debo
-144|Debo dinero
-145|Debo dinero a {name}
-146|Debo dinero a {to}
-147|Debo dinero a un amigo / una amiga
-148|Debo dinero a mis amigos
-149|Debo
-150|Debo dinero
-151|Debo dinero a {name}
-152|Debo dinero a {to}
-153|Debo dinero a una amiga
-154|Debo dinero a mis amigos
-155|¡Nadie debe nada!
-156|Nadie debe nada.
-157|Solo se puede cancelar en los primeros 10 minutos, o pedírselo a un padre o madre
-158|Solo se puede cancelar en los primeros 10 minutos. Para corregirlo, registra una devolución
-159|Puedes devolver hasta {max}.
-160|A una deuda solo se le puede vincular una devolución
-161|Solo puedes registrar deudas que te involucren
-162|Solo puedes registrar con amigos aprobados
-163|El día {day} de cada mes
-164|Qué día
-165|Qué día del mes (de 1 a 28)
-166|Comprobando quién es…
-167|Comprobando…
-168|Elegir un país
-169|Elige un avatar
-170|Elige dónde vives
-171|Elige un código secreto nuevo ({rule})
-172|Cancelar
-173|Quitar permisos de padre o madre
-174|Desactivar el modo amigos
-175|Entre amigos puedes registrar hasta {max} cada vez.
-176|Miembros de {name}
-177|Miembros de la familia
-178|En total {name} me debe dinero
-179|En total {name} me debe dinero
+79|💬 Recordatorio por WhatsApp
+80|💰 Mi dinero
+81|💰 Recibí
+82|💰 Pagué
+83|📋 Copiar la lista abierta
+84|📎 Enlace de invitación
+85|📒 Mi cuaderno
+86|📜 Historial
+87|📜 Historial
+88|🔑 Cambiar el código secreto
+89|🔒 Añadir como {role} se aprueba con huella digital o reconocimiento facial.
+90|🔔 Activar notificaciones
+91|🔕 Desactivar notificaciones
+92|🗑️ Borrar todo el cuaderno
+93|🤝 Solicitudes de amistad ({n})
+94|🤝 Solicitudes del modo amigos ({n})
+95|🤝 Amigos
+96|🤝 Modo amigos activo
+97|🧹 Borrar lo pagado
+98|🙂 Elegir un avatar
+99|4 dígitos
+100|de 4 a {max} dígitos
+101|de 4 a 8 dígitos
+102|6 dígitos
+103|Papá
+104|Una persona no puede deberse dinero a sí misma
+105|La persona no existe
+106|Aprobado ✅
+107|Zona de peligro
+108|No se puede devolver más de lo que queda de la deuda
+109|No se puede devolver más de lo que queda de la deuda ({amount})
+110|No puedes eliminarte a ti mismo
+111|No se puede copiar en este dispositivo
+112|No puedes cambiar tu propio rol
+113|¿Cómo se llamará la familia?
+114|¿Cómo te llamas?
+115|Mamá
+116|Verificar
+117|Verificar el correo
+118|Ninguno
+119|Sin conexión a internet. Inténtalo de nuevo cuando tengas.
+120|Nada pendiente
+121|¡Nada pendiente!
+122|No tienes código secreto. Define uno en «Mi cuenta» e inténtalo de nuevo.
+123|Sin correo verificado
+124|No hay correo verificado que reemplazar
+125|No hay registros pagados
+126|No hay tipo de cambio para la moneda de la deuda
+127|No hay tipo de cambio por ahora
+128|¿Dónde viven?
+129|Aprobar
+130|Confirmación por correo
+131|Aprobar el modo amigos
+132|Confirmar el cambio de rol
+133|Si este padre o madre tiene un correo verificado, le enviaremos un código de verificación. Si no hay correo, otro padre o madre puede definirte un código nuevo.
+134|Si no es él, conviene definir un código nuevo.
+135|Si no es él/ella, conviene definir un código nuevo.
+136|Si no es ella, conviene definir un código nuevo.
+137|Si el amigo tiene el modo amigos, se le envió una solicitud 🤝
+138|Soy nuevo/a
+139|Debo
+140|Debo dinero
+141|Debo dinero a {name}
+142|Debo dinero a {to}
+143|Debo dinero a un amigo
+144|Debo dinero a mis amigos
+145|Debo
+146|Debo dinero
+147|Debo dinero a {name}
+148|Debo dinero a {to}
+149|Debo dinero a un amigo / una amiga
+150|Debo dinero a mis amigos
+151|Debo
+152|Debo dinero
+153|Debo dinero a {name}
+154|Debo dinero a {to}
+155|Debo dinero a una amiga
+156|Debo dinero a mis amigos
+157|¡Nadie debe nada!
+158|Nadie debe nada.
+159|Solo se puede cancelar en los primeros 10 minutos, o pedírselo a un padre o madre
+160|Solo se puede cancelar en los primeros 10 minutos. Para corregirlo, registra una devolución
+161|Puedes devolver hasta {max}.
+162|A una deuda solo se le puede vincular una devolución
+163|Solo puedes registrar deudas que te involucren
+164|Solo puedes registrar con amigos aprobados
+165|El día {day} de cada mes
+166|Qué día
+167|Qué día del mes (de 1 a 28)
+168|Comprobando quién es…
+169|Comprobando…
+170|Elegir un país
+171|Elige un avatar
+172|Elige dónde vives
+173|Elige un código secreto nuevo ({rule})
+174|Cancelar
+175|Quitar permisos de padre o madre
+176|Desactivar el modo amigos
+177|Entre amigos puedes registrar hasta {max} cada vez.
+178|Miembros de {name}
+179|Miembros de la familia
 180|En total {name} me debe dinero
-181|En total debo dinero a {name}
-182|En total debo dinero a {name}
+181|En total {name} me debe dinero
+182|En total {name} me debe dinero
 183|En total debo dinero a {name}
-184|Pedir aprobación a los padres
-185|Grande
-186|Tamaño del texto
-187|Desplazar a la derecha
-188|Desplazar a la izquierda
-189|Hay una versión nueva disponible ({version})
-190|Rechazar
-191|Avatar
-192|Avatar {avatar}
-193|Paga semanal
-194|Paga periódica
-195|un minuto
-196|{"one":"{n} minuto","other":"{n} minutos"}
-197|Verificación cancelada
-198|Falló la verificación con huella digital / reconocimiento facial
-199|Falló la verificación. Inténtalo de nuevo.
-200|Falló la verificación (dirección desconocida).
+184|En total debo dinero a {name}
+185|En total debo dinero a {name}
+186|Pedir aprobación a los padres
+187|Grande
+188|Tamaño del texto
+189|Desplazar a la derecha
+190|Desplazar a la izquierda
+191|Hay una versión nueva disponible ({version})
+192|Rechazar
+193|Avatar
+194|Avatar {avatar}
+195|Paga semanal
+196|Paga periódica
+197|un minuto
+198|{"one":"{n} minuto","other":"{n} minutos"}
+199|Verificación cancelada
+200|Falló la verificación con huella digital / reconocimiento facial
 201|Falló la verificación. Inténtalo de nuevo.
-202|Las personas que añadas elegirán un código secreto en su primer inicio de sesión.
-203|La aplicación aún no está conectada al servidor
-204|Entendido
-205|La solicitud ya no existe
-206|Se rechazó la solicitud
-207|Se envió la solicitud
-208|Se envió la solicitud a tus padres ⏳
-209|Se envió la solicitud a tus padres. Te avisaremos cuando la aprueben.
-210|Ajustes
-211|Ajustes de la familia
-212|Este avatar ya lo tiene otra persona de la familia
-213|Este navegador es demasiado antiguo para la verificación biométrica. Actualízalo e inténtalo de nuevo.
-214|La descarga falló. Revisa tu conexión a internet e inténtalo de nuevo
-215|La devolución no corresponde a esta deuda
-216|Devolución guardada ✅
-217|La nota es demasiado larga
-218|Notificaciones activadas 🔔
-219|Las notificaciones están bloqueadas. Puedes permitirlas en los ajustes del navegador.
-220|Notificaciones desactivadas
-221|Perderá los permisos de padre. Después se pedirá verificación con reconocimiento facial o huella digital.
-222|Perderá el modo amigos. Después se pedirá verificación con reconocimiento facial o huella digital.
-223|Recibirá todos los permisos de padre: ver todo, aprobar, borrar y administrar la familia. Después se pedirá verificación con reconocimiento facial o huella digital.
-224|Añadir
-225|Añadir un miembro de la familia
-226|Añadir un amigo / una amiga
-227|Se transfirieron {n} registros
-228|Copiado ✅
-229|Padre o madre
-230|Otro padre o madre debe definirte un código secreto
-231|Un padre o madre inicia sesión aquí y luego recibe los códigos para el resto de la familia.
-232|Un padre o madre debe definir la dirección de Convex en el archivo
-233|Un padre o madre debe iniciar sesión primero.
-234|Amigo/a eliminado/a
-235|Mis amigos
-236|La deuda está en {debtCur}. Pagas en {payCur} al cambio de hoy.
-237|Esta deuda ya está pagada
-238|La deuda se cerrará por completo ✅
-239|Deuda no encontrada
-240|Deuda guardada ✅
-241|Las deudas entre tú y {name} se cerrarán hasta este monto y solo quedará la diferencia. El historial se conserva.
-242|Deudas abiertas por moneda
-243|Deudas compensadas ✅
-244|Devolución
-245|Devolví a {to}
-246|Cambiar correo
-247|Cambiar código
-248|Cuenta con {name}
-249|Mi cuenta
-250|Perderá los permisos de madre. Después se pedirá verificación con reconocimiento facial o huella digital.
-251|Perderá el modo amigos. Después se pedirá verificación con reconocimiento facial o huella digital.
-252|Recibirá todos los permisos de madre: ver todo, aprobar, borrar y administrar la familia. Después se pedirá verificación con reconocimiento facial o huella digital.
-253|Historial
-254|Historial con amigos
-255|Todo: {amount}
-256|Todo saldado
-257|Todo saldado ✅
-258|Todo se guarda solo en este dispositivo.
-259|Más recientes primero
-260|Mi dinero
-261|Mi país no está en la lista ($)
-262|Moneda de la familia
-263|La moneda de la familia es {base} y esta deuda se conservará en {cur}. En los saldos se muestra al cambio de ese día, y al pagarla el monto se convierte al cambio del día del pago.
-264|Moneda: {cur}
-265|Correo verificado ✅
-266|Este correo ya lo usa otra persona
-267|Correo actual: {email}. Para cambiarlo le enviaremos un código de confirmación.
-268|Correo de {name}
-269|Correo del amigo / la amiga
-270|Tu correo para los amigos:
-271|Ubicación y moneda guardadas ✅
-272|Ubicación y moneda actualizadas ✅
-273|Este dispositivo no está registrado para la verificación. Regístralo de nuevo.
-274|El dispositivo no es compatible
-275|Dispositivo desconectado ✅
-276|Continuar
-277|Familia no encontrada
-278|La familia está completa
-279|Bloqueo liberado ✅
-280|Este adolescente perderá el modo amigos. Después se pedirá verificación con reconocimiento facial o huella digital.
-281|Mis datos
-282|El monto es demasiado grande
-283|El monto es demasiado grande.
-284|Primero el monto más grande
-285|Montos en el cuaderno
-286|Eliminar
-287|Eliminar a {name}
-288|Ocultar
-289|Transferir al servidor
-290|Otorgar permisos de padre o madre
-291|Nota
-292|El cuaderno se vació
-293|El cuaderno ya está vacío
-294|Mi cuaderno
-295|Detener
-296|Activar la verificación biométrica
-297|Mostrar el código 🔒
-298|Mostrar el código de unión
-299|Unirse
-300|El archivo es demasiado grande
-301|El archivo descargado no es una versión nueva de la aplicación
-302|El archivo descargado no es válido. Inténtalo de nuevo
-303|Código reemplazado ✅ Puedes mostrarlo con huella digital o reconocimiento facial
-304|El código nuevo debe tener {rule}.
-305|Código actual
-306|El código actual no es correcto.
-307|El código secreto debe tener 4 dígitos
-308|El código secreto es incorrecto.
-309|El código secreto que escribiste es incorrecto.
-310|Tu código secreto, para confirmar
-311|El código ya no es válido. Pide un código nuevo a tus padres.
-312|El código no es correcto. Revísalo de nuevo o pregunta a tus padres.
-313|El código no es correcto. Te quedan {left} intentos.
-314|El código del correo
-315|El código del correo actual es incorrecto o venció.
-316|El código está oculto
-317|El código está oculto y solo se muestra con huella digital o reconocimiento facial.
-318|El código debe tener {rule}
-319|El código debe tener {rule}.
-320|El código debe tener 4 dígitos
-321|El código debe tener al menos 4 dígitos y hasta {max}
-322|El código es incorrecto o venció.
-323|Se cambió el código ✅
-324|Se actualizó el código de {name}
-325|Los códigos no coincidían. Empecemos de nuevo.
-326|La Hucha Familiar
-327|Se eliminó la hucha
-328|La compensación se envió a un padre o madre para su aprobación ⏳
-329|La compensación cierra deudas de ambos lados hasta {amount}. La diferencia se queda como está y el historial se conserva.
-330|Escribe tu código secreto.
-331|Crear la hucha
-332|Crear una hucha familiar
-333|Próximo registro: {date}
-334|Se detuvo el registro periódico
-335|Se añadió el registro periódico ✅
-336|Se rechazó el registro
-337|Se eliminó el registro
-338|Lista
-339|Se copió la lista
-340|Se actualizó el nombre ✅
-341|Tipos de cambio actualizados {when}
-342|Ajustes (devoluciones registradas sin una deuda concreta)
-343|El pago en {base} se convertirá al cambio de hoy y se descontará de la deuda en su propia moneda. Tras guardar, este tipo de cambio se conserva y no cambiará.
-344|Esto es una demo, así que no se puede cambiar nada. ¡Crea tu propia hucha!
-345|Este es tu correo
-346|Esto borrará toda la hucha: todas las personas y todos los registros, y no se puede deshacer.\nPara confirmar, escribe el nombre de la familia: {name}
-347|Reconocimiento facial o huella digital
-348|Masculino
-349|Un amigo / una amiga me debe dinero
-350|Amigo/a añadido/a ✅
-351|Los amigos me deben dinero
-352|Los amigos añaden al adolescente con este correo. No se le envía nada; solo sirve para buscar.
-353|Los amigos añaden al adolescente con este correo. No se le envía nada; solo sirve para buscar.
-354|Los amigos añaden al adolescente con este correo. No se le envía nada; solo sirve para buscar.
-355|Los amigos se añaden por dirección de correo. Verás todo lo que se registre en el resumen.
-356|Amigos: {names}
-357|Deuda
-358|Deuda en {cur}
-359|Volver
-360|debe
-361|debe
-362|me debe
-363|Me deben
-364|Me deben dinero
+202|Falló la verificación (dirección desconocida).
+203|Falló la verificación. Inténtalo de nuevo.
+204|Las personas que añadas elegirán un código secreto en su primer inicio de sesión.
+205|La aplicación aún no está conectada al servidor
+206|Entendido
+207|La solicitud ya no existe
+208|Se rechazó la solicitud
+209|Se envió la solicitud
+210|Se envió la solicitud a tus padres ⏳
+211|Se envió la solicitud a tus padres. Te avisaremos cuando la aprueben.
+212|Ajustes
+213|Ajustes de la familia
+214|Este avatar ya lo tiene otra persona de la familia
+215|Este navegador es demasiado antiguo para la verificación biométrica. Actualízalo e inténtalo de nuevo.
+216|La descarga falló. Revisa tu conexión a internet e inténtalo de nuevo
+217|La devolución no corresponde a esta deuda
+218|Devolución guardada ✅
+219|La nota es demasiado larga
+220|Notificaciones activadas 🔔
+221|Las notificaciones están bloqueadas. Puedes permitirlas en los ajustes del navegador.
+222|Notificaciones desactivadas
+223|Perderá los permisos de padre. Después se pedirá verificación con reconocimiento facial o huella digital.
+224|Perderá el modo amigos. Después se pedirá verificación con reconocimiento facial o huella digital.
+225|Recibirá todos los permisos de padre: ver todo, aprobar, borrar y administrar la familia. Después se pedirá verificación con reconocimiento facial o huella digital.
+226|Añadir
+227|Añadir un miembro de la familia
+228|Añadir un amigo / una amiga
+229|Se transfirieron {n} registros
+230|Copiado ✅
+231|Padre o madre
+232|Otro padre o madre debe definirte un código secreto
+233|Un padre o madre inicia sesión aquí y luego recibe los códigos para el resto de la familia.
+234|Un padre o madre debe definir la dirección de Convex en el archivo
+235|Un padre o madre debe iniciar sesión primero.
+236|Amigo/a eliminado/a
+237|Mis amigos
+238|La deuda está en {debtCur}. Pagas en {payCur} al cambio de hoy.
+239|Esta deuda ya está pagada
+240|La deuda se cerrará por completo ✅
+241|Deuda no encontrada
+242|Deuda guardada ✅
+243|Las deudas entre tú y {name} se cerrarán hasta este monto y solo quedará la diferencia. El historial se conserva.
+244|Deudas abiertas por moneda
+245|Deudas compensadas ✅
+246|Devolución
+247|Devolví a {to}
+248|Cambiar correo
+249|Cambiar código
+250|Cuenta con {name}
+251|Mi cuenta
+252|Perderá los permisos de madre. Después se pedirá verificación con reconocimiento facial o huella digital.
+253|Perderá el modo amigos. Después se pedirá verificación con reconocimiento facial o huella digital.
+254|Recibirá todos los permisos de madre: ver todo, aprobar, borrar y administrar la familia. Después se pedirá verificación con reconocimiento facial o huella digital.
+255|Hola {name}, un pequeño recordatorio: aún quedan {amount} por devolver. ¡Gracias! 🙏
+256|Hola {name}, un pequeño recordatorio: aún quedan {amount} por devolver de {note}. ¡Gracias! 🙏
+257|Historial
+258|Historial con amigos
+259|Todo: {amount}
+260|Todo saldado
+261|Todo saldado ✅
+262|Todo se guarda solo en este dispositivo.
+263|Más recientes primero
+264|Mi dinero
+265|Mi país no está en la lista ($)
+266|Moneda de la familia
+267|La moneda de la familia es {base} y esta deuda se conservará en {cur}. En los saldos se muestra al cambio de ese día, y al pagarla el monto se convierte al cambio del día del pago.
+268|Moneda: {cur}
+269|Correo verificado ✅
+270|Este correo ya lo usa otra persona
+271|Correo actual: {email}. Para cambiarlo le enviaremos un código de confirmación.
+272|Correo de {name}
+273|Correo del amigo / la amiga
+274|Tu correo para los amigos:
+275|Ubicación y moneda guardadas ✅
+276|Ubicación y moneda actualizadas ✅
+277|Este dispositivo no está registrado para la verificación. Regístralo de nuevo.
+278|El dispositivo no es compatible
+279|Dispositivo desconectado ✅
+280|Continuar
+281|Familia no encontrada
+282|La familia está completa
+283|Bloqueo liberado ✅
+284|Este adolescente perderá el modo amigos. Después se pedirá verificación con reconocimiento facial o huella digital.
+285|Mis datos
+286|El monto es demasiado grande
+287|El monto es demasiado grande.
+288|Primero el monto más grande
+289|Montos en el cuaderno
+290|Eliminar
+291|Eliminar a {name}
+292|Ocultar
+293|Transferir al servidor
+294|Otorgar permisos de padre o madre
+295|Nota
+296|El cuaderno se vació
+297|El cuaderno ya está vacío
+298|Mi cuaderno
+299|Detener
+300|Activar la verificación biométrica
+301|Mostrar el código 🔒
+302|Mostrar el código de unión
+303|Unirse
+304|El archivo es demasiado grande
+305|El archivo descargado no es una versión nueva de la aplicación
+306|El archivo descargado no es válido. Inténtalo de nuevo
+307|Código reemplazado ✅ Puedes mostrarlo con huella digital o reconocimiento facial
+308|El código nuevo debe tener {rule}.
+309|Código actual
+310|El código actual no es correcto.
+311|El código secreto debe tener 4 dígitos
+312|El código secreto es incorrecto.
+313|El código secreto que escribiste es incorrecto.
+314|Tu código secreto, para confirmar
+315|El código ya no es válido. Pide un código nuevo a tus padres.
+316|El código no es correcto. Revísalo de nuevo o pregunta a tus padres.
+317|El código no es correcto. Te quedan {left} intentos.
+318|El código del correo
+319|El código del correo actual es incorrecto o venció.
+320|El código está oculto
+321|El código está oculto y solo se muestra con huella digital o reconocimiento facial.
+322|El código debe tener {rule}
+323|El código debe tener {rule}.
+324|El código debe tener 4 dígitos
+325|El código debe tener al menos 4 dígitos y hasta {max}
+326|El código es incorrecto o venció.
+327|Se cambió el código ✅
+328|Se actualizó el código de {name}
+329|Los códigos no coincidían. Empecemos de nuevo.
+330|La Hucha Familiar
+331|Se eliminó la hucha
+332|La compensación se envió a un padre o madre para su aprobación ⏳
+333|La compensación cierra deudas de ambos lados hasta {amount}. La diferencia se queda como está y el historial se conserva.
+334|Crea una hucha familiar
+335|Escribe tu código secreto.
+336|Crear la hucha
+337|Crear una hucha familiar
+338|Próximo registro: {date}
+339|Se detuvo el registro periódico
+340|Se añadió el registro periódico ✅
+341|Se rechazó el registro
+342|Se eliminó el registro
+343|Lista
+344|Se copió la lista
+345|Se actualizó el nombre ✅
+346|Tipos de cambio actualizados {when}
+347|Ajustes (devoluciones registradas sin una deuda concreta)
+348|El pago en {base} se convertirá al cambio de hoy y se descontará de la deuda en su propia moneda. Tras guardar, este tipo de cambio se conserva y no cambiará.
+349|Esto es una demo, así que no se puede cambiar nada. ¡Crea tu propia hucha!
+350|Este es tu correo
+351|Esto borrará toda la hucha: todas las personas y todos los registros, y no se puede deshacer.\nPara confirmar, escribe el nombre de la familia: {name}
+352|Reconocimiento facial o huella digital
+353|Masculino
+354|Un amigo / una amiga me debe dinero
+355|Amigo/a añadido/a ✅
+356|Los amigos me deben dinero
+357|Los amigos añaden al adolescente con este correo. No se le envía nada; solo sirve para buscar.
+358|Los amigos añaden al adolescente con este correo. No se le envía nada; solo sirve para buscar.
+359|Los amigos añaden al adolescente con este correo. No se le envía nada; solo sirve para buscar.
+360|Los amigos se añaden por dirección de correo. Verás todo lo que se registre en el resumen.
+361|Amigos: {names}
+362|Deuda
+363|Deuda en {cur}
+364|Volver
 365|debe
-366|Cargando…
-367|Aún no definida por el padre o la madre
-368|Perderán los permisos de padre o madre. Después se pedirá verificación con reconocimiento facial o huella digital.
-369|{day}
-370|Día del mes no válido (de 1 a 28)
-371|Día no válido
-372|Cerrando sesión con seguridad…
-373|Demasiadas solicitudes de código. Inténtalo de nuevo en unos minutos
-374|Demasiadas solicitudes. Inténtalo más tarde
-375|Demasiados dispositivos registrados
-376|Demasiadas familias nuevas ahora mismo. Inténtalo de nuevo en unos minutos
-377|Demasiados intentos. Inténtalo de nuevo en un minuto.
-378|Demasiados intentos. Inténtalo de nuevo en unos minutos.
-379|Demasiados registros. Inténtalo más tarde
-380|De la deuda quedarán {left}.
-381|Niño/a
-382|Niño/a
-383|Niña
-384|Cerrar sesión
-385|Salir de la demo
-386|Recibirán todos los permisos de padre o madre: ver todo, aprobar, borrar y administrar la familia. Después se pedirá verificación con reconocimiento facial o huella digital.
-387|Verde
-388|Verde + amarillo
-389|Hay demasiadas solicitudes de unión pendientes. Pide a los padres que se ocupen de ellas
-390|Hay demasiadas deudas abiertas entre los dos. Cierra deudas antes de añadir más.
-391|Hay demasiados registros activos entre los dos. Cierra deudas antes de añadir más.
-392|Hay un saldo abierto entre ustedes. Ciérralo primero
-393|Aquí hay deudas en otra moneda: se compensarán al cambio de hoy y ese cambio se guardará.
-394|Ya hay muchos amigos en la lista
-395|Ya hay muchos registros periódicos
-396|¿Tienes un código de familia? Entra en la hucha
-397|¿Tienes un código de familia? Escríbelo aquí. Pide a tus padres el código de unión de la familia.
-398|Hay registros a su nombre. Bórralos primero
-399|Saldos
-400|Aquí se registran deudas con amigos: quién compró para quién y quién debe devolver. Tu amigo/a también necesita la aplicación, y tus padres deben aprobar.
-401|Ya hay alguien con este nombre
-402|Ya hay alguien con este nombre. Elígelo en la lista o cambia el nombre
-403|Ya hay alguien con este nombre. Rechaza la solicitud
-404|Este perfil ya tiene un código
-405|Casi listo…
-406|¿Ya usan la hucha?
-407|Para {need} se necesita un dispositivo con huella digital o reconocimiento facial configurados.
-408|Para definir un código nuevo a {name}, enviaremos un código de verificación a {email}.
-409|Azul + morado
-410|Desactivar amigos
-411|Todas las deudas abiertas
-412|Toda la familia
-413|Todos los montos se muestran en esta moneda. Puedes registrar una deuda en otra moneda (por ejemplo 100 dólares) y al pagarla se convierte al cambio de ese día.
-414|Cada mes
-415|Cada {day}
-416|Cada cuánto
-417|Cada semana
-418|¿Cuánto devolvió {from} a {to}?
-419|¿Cuánto devolvió {from} a {to}?
-420|¿Cuánto devolvió {from} a {to}?
-421|¿Cuánto me debe {name}?
-422|¿Cuánto me debe {name}?
-423|¿Cuánto me debe {name}?
-424|¿Cuánto me pagó {name}?
-425|¿Cuánto me pagó {name}?
-426|¿Cuánto me pagó {name}?
-427|¿Cuánto debo a {to}?
-428|¿Cuánto debo a {to}?
-429|¿Cuánto debo a {to}?
-430|¿Cuánto pagué a {to}?
-431|¿Cuánto?
-432|Sí
-433|Sí, continuar
-434|Sí, compensar
-435|Sí, guardar la deuda
-436|Sí, guardar el pago
-437|Entrar
-438|Escribe el correo que tu amigo/a registró con sus padres en la aplicación. Se le envía una solicitud y debe aprobarla. Solo funciona si tu amigo/a también tiene el modo amigos.
-439|Escribe el código secreto
-440|Escribe el código otra vez, para confirmar
-441|Escribe el nombre
-442|Escribe un monto
-443|Escribe un monto mayor que cero.
-444|Otra dirección
-445|La dirección de correo no es válida
-446|Dirección de correo
-447|Nueva dirección de correo
-448|Dirección de correo no válida
-449|Naranja
-450|Naranja + rosa
-451|No
-452|No pudimos activar las notificaciones en este dispositivo
-453|No pudimos registrar el dispositivo. Inténtalo de nuevo.
-454|Desconocido
-455|Incorrecto
-456|No se encontró un instalador en el teléfono. Puedes descargar el archivo directamente desde GitHub
-457|¿A qué deuda corresponde la devolución?
-458|Para confirmar, enviaremos un código de verificación a {email}.
-459|Para confirmar acciones sensibles en la hucha
-460|Restablecer y que elija por sí mismo en el próximo inicio de sesión
-461|¿Cancelar lo que registraste?
-462|¿Rechazar? Se eliminará el registro.
-463|Un nuevo padre o madre necesita un código secreto
-464|A un padre o madre hay que definirle un código (no se puede restablecer para que elija solo)
-465|Solo para padres. Quien crea la hucha es el primer padre o madre. Después recibes un código de unión para toda la familia y defines el rol de cada persona: niño, adolescente o padre/madre.
-466|¿Reemplazar el código? Quienes ya están dentro se quedan, pero el código anterior dejará de funcionar y otros dispositivos que guardaron la familia deberán introducir el código nuevo.
-467|¿Quitar a {name} de los amigos?
-468|¿Quitar a {name} de la familia?
-469|¿Detener el registro periódico? Lo ya registrado se queda.
-470|Mostrar también lo pagado en la página principal
-471|Toca para ver el detalle del cálculo ›
-472|¿Desactivar el modo amigos de {name}? Ya no se podrán añadir registros nuevos con amigos.
-473|Sin especificar
-474|¿Borrar {n} registros pagados?
-475|¿Borrar el registro de {name}?
-476|¿Borrar este registro?
-477|¿Borrar todos los registros del cuaderno? No se puede deshacer.
-478|A quién
-479|¿A quién debo dinero?
-480|¿A quién debo dinero?
-481|¿A quién debo dinero?
-482|¿A quién?
-483|Por ejemplo: helado, entrada de cine
-484|Por ejemplo: la familia García
-485|¿Desconectar el dispositivo? Tendrá que introducir de nuevo el código de unión.
-486|La moneda de la familia la determina el país. Puedes cambiarla después en la pestaña Administrar.
-487|Por moneda
-488|Por nombre (A-Z)
-489|Solo lectura. Cada registro con un amigo/a también espera su aprobación.
-490|ver el código de unión
-491|cambiar un rol
-492|Equilibrado: nadie debe nada
-493|Verificando…
-494|le deben
-495|le deben
-496|le deben
-497|País no compatible
-498|la política de privacidad
-499|Política de privacidad
-500|País de residencia
-501|Lo que los adolescentes registran con amigos
-502|Lo que está abierto
-503|Descargando actualización...
-504|Descargando actualización... {percent} %
-505|Borrar
-506|Borrar toda la hucha
-507|Moneda
-508|Moneda no compatible
-509|¿Quién me debe dinero?
-510|Quién debe a quién
-511|Quién debe (quien paga)
-512|¿Quién me debe dinero?
-513|¿Quién entra?
-514|Correo para recuperar el código
-515|El correo es solo para padres
-516|Ubicación y moneda
-517|Alguien
-518|Dispositivo
-519|El dispositivo no existe
-520|Dispositivos conectados
-521|Dispositivos que guardaron la familia. Una tarjeta sin uso durante 180 días caduca sola.
-522|Esperando la aprobación de un padre o madre en {name}. Cuando lo apruebe, elige tu nombre en la pantalla de inicio de sesión y escribe el código secreto que elegiste.
-523|Esperando la aprobación de un padre o madre. Cuando lo apruebe, elige tu nombre en la pantalla de inicio de sesión y escribe el código secreto que elegiste.
-524|Suscripción de notificaciones no válida
-525|Clave no válida
-526|Modo amigos
-527|Modo amigos aprobado ✅
-528|El modo amigos es solo para adolescentes
-529|Modo amigos desactivado
-530|Modo amigos para {name}
-531|Los padres aún no han aprobado el modo amigos
-532|Unirse a la hucha
-533|Te unes a la hucha de {name}. Un padre o madre de la familia debe aprobar la unión y definirá si eres niño, adolescente o padre/madre.
-534|Apariencia
-535|Algo salió mal. Inténtalo de nuevo.
-536|Administrar
-537|Lo intentaste demasiadas veces. Inténtalo de nuevo en {wait}.
-538|Desconectar
-539|Eliminado
-540|Se encontraron en este dispositivo datos de la versión anterior: {people} personas y {entries} registros. ¿Transferirlos al servidor?
-541|Reintentar
-542|Adolescente
-543|Adolescente
-544|Adolescente
-545|Femenino
-546|Parece que el dispositivo está en {name}. ¿Viven en {name}?
-547|Quedan {left} de {total}
-548|Quedan {left} de esta deuda.
-549|Se envía un código cuando se cambia o restablece un código secreto, y también un aviso cuando se bloquea el código de alguien de la familia.
-550|Enviado a un padre o madre para su aprobación ⏳
-551|Enviado al amigo/a para su aprobación ⏳
-552|Morado y turquesa
-553|Cerrar
-554|Orden de los registros
-555|Total
-556|Total en {cur} al cambio de hoy
-557|Monto ({cur})
-558|Monto no válido
-559|Monto no válido. Entre amigos puedes registrar hasta 500 séqueles cada vez
-560|Resumen de la familia
-561|Todavía no se ha registrado nada.
-562|Ya hay una actualización en curso
-563|Actualizar
-564|Más
-565|Todavía no hay nadie más en la familia. Un padre o madre debe añadirlos.
-566|Todavía no hay amigos aprobados
-567|Todavía no hay amigos aprobados. Añade un amigo/a con su correo.
-568|Todavía no hay amigos. Añade un amigo/a con su correo.
-569|La lista aún está vacía. Toca uno de los botones para empezar.
-570|Todavía no hay registros periódicos.
-571|Más avatares
-572|Aún no eligió código
-573|Aún no eligió código
-574|Aún no eligió código
-575|Todavía no se ha registrado nada con amigos.
-576|Todavía no se ha registrado nada.
-577|Aspecto
-578|Por {debt} (= {covers} al cambio de hoy).
-579|Por {debt}.
-580|¿Por qué? (se puede omitir)
-581|¿Por qué? (opcional)
-582|Por: {debt}
-583|¿Con quién?
-584|Enorme
-585|La verificación venció. Inténtalo de nuevo.
-586|Detalle del cálculo
-587|Acción no válida
-588|Colores de la pantalla
-589|Colores de neón
-590|El trato ya está definido y no se puede cambiar
-591|Trato
-592|Trato:
-593|Crea una hucha familiar: todos ven la misma cuenta y las deudas se actualizan para todos.
-594|Se necesita confirmación con huella digital o reconocimiento facial
-595|La aplicación necesita permiso para instalar actualizaciones: en los ajustes que aparecen, activa «Permitir desde esta fuente» y vuelve a tocar «Actualizar»
-596|Debes iniciar sesión de nuevo
-597|Debes iniciar sesión de nuevo con el código de la familia
-598|Debes registrar este teléfono una vez.
-599|Debes registrar el dispositivo
-600|Debes registrar este dispositivo y este navegador una vez.
-601|Debes registrar el dispositivo de nuevo
-602|Debes registrar el dispositivo de nuevo para permitir también el reconocimiento facial
-603|Definir el código
-604|Definir el código y entrar
-605|Definir el trato…
-606|Un código para todos. Quien se une con él entra como niño. Después se puede cambiar en «Miembros de la familia» a adolescente o padre/madre, con aprobación por huella digital o reconocimiento facial.
-607|Código del correo
-608|El código del correo es incorrecto o venció.
-609|El código de verificación es incorrecto o venció.
-610|Código de unión a la hucha de {name}: {code}
-611|Código de unión de la familia
-612|El código de unión de la familia solo se muestra con huella digital o reconocimiento facial.
-613|El código de la familia cambió. Pide un código nuevo a tus padres.
-614|Código nuevo
-615|Código nuevo ({rule})
-616|Código del correo actual
-617|Código de familia
-618|Código secreto ({rule}; más largo = más seguro)
-619|Código secreto (obligatorio para padres, {rule})
-620|Código secreto (opcional — el niño podrá elegirlo él mismo)
-621|Código secreto (opcional — el niño podrá elegirlo él mismo)
-622|Código secreto (opcional — la niña podrá elegirlo ella misma)
-623|Código secreto nuevo
-624|Código secreto para {name}
-625|Tu propio código secreto (4 dígitos)
-626|Códigos de unión
-627|Primero hay que definir un código secreto a {name}
-628|Una hucha familiar solo la puede crear alguien mayor de 18 años
-629|Pequeño
-630|Recibí
-631|Recibí la diferencia ({amount})
-632|Recibí dinero
-633|Compensación mutua
-634|Compensar deudas mutuas
-635|Compensar deudas mutuas ({amount})
-636|He leído y acepto {terms} y {privacy}
-637|He leído y acepto {terms} y {privacy}
-638|He leído y acepto {terms} y {privacy}
-639|Normal
-640|Un momento, iniciando sesión…
-641|Un momento, cerrando sesión…
-642|¿Quieres que los deudores vean esto?
-643|Registrar
-644|Registrar una devolución
-645|Registrar reconocimiento facial / huella digital
-646|Registra una deuda automáticamente, cada semana o cada mes, sin escribirla cada vez.
-647|Registrar huella digital / reconocimiento facial
-648|Nuevo registro periódico
-649|Solo los padres pueden hacer esto
-650|Solo los padres pueden definir el trato
-651|Pagado por completo ✅
-652|Pagados ({n})
-653|Guardando todo…
-654|Liberar el bloqueo
-655|Pagué
-656|Pagué la diferencia ({amount})
-657|Cambiar
-658|Cambiar la moneda solo cambia el símbolo. Los montos no se convierten.
-659|Cambiar el código secreto
-660|Cambiar el nombre de la familia
-661|El cambio de rol en la familia (niño, adolescente, padre/madre) se aprueba con huella digital o reconocimiento facial.
-662|Compartir
-663|Olvidé el código
-664|Enviamos un código a {email}. Escríbelo, junto con la nueva dirección. Reemplazará a la actual solo después de verificarla.
-665|Enviamos un código de 6 dígitos a {email}. Es válido durante 10 minutos.
-666|Míos
-667|Enviar solicitud
-668|Enviar código de verificación
-669|Enviar el código por correo
-670|Enviar un código al correo actual
-671|Nombre
-672|Nombre de la familia
-673|El nombre de la familia no coincide
-674|El nombre de la familia no es válido
-675|Nombre no válido
-676|Guardar
-677|una hora
-678|{"one":"{n} hora","other":"{n} horas"}
-679|Los tipos de cambio aún no se han cargado. Inténtalo de nuevo en un momento.
-680|2 horas
-681|Idioma
-682|Fecha no válida
-683|Fecha de nacimiento (solo mayores de 18 años pueden crear una hucha)
-684|Fecha de nacimiento no válida
-685|los términos de uso
-686|Términos de uso
-687|Rol
-688|Rol:
-689|Menú principal
-690|Pago de una deuda en otra moneda
+366|debe
+367|me debe
+368|Me deben
+369|Me deben dinero
+370|debe
+371|Cargando…
+372|Aún no definida por el padre o la madre
+373|Perderán los permisos de padre o madre. Después se pedirá verificación con reconocimiento facial o huella digital.
+374|{day}
+375|Día del mes no válido (de 1 a 28)
+376|Día no válido
+377|Cerrando sesión con seguridad…
+378|Demasiadas solicitudes de código. Inténtalo de nuevo en unos minutos
+379|Demasiadas solicitudes. Inténtalo más tarde
+380|Demasiados dispositivos registrados
+381|Demasiadas familias nuevas ahora mismo. Inténtalo de nuevo en unos minutos
+382|Demasiados intentos. Inténtalo de nuevo en un minuto.
+383|Demasiados intentos. Inténtalo de nuevo en unos minutos.
+384|Demasiados registros. Inténtalo más tarde
+385|De la deuda quedarán {left}.
+386|Niño/a
+387|Niño/a
+388|Niña
+389|Cerrar sesión
+390|Salir de la demo
+391|Recibirán todos los permisos de padre o madre: ver todo, aprobar, borrar y administrar la familia. Después se pedirá verificación con reconocimiento facial o huella digital.
+392|Verde
+393|Verde + amarillo
+394|Hay demasiadas solicitudes de unión pendientes. Pide a los padres que se ocupen de ellas
+395|Hay demasiadas deudas abiertas entre los dos. Cierra deudas antes de añadir más.
+396|Hay demasiados registros activos entre los dos. Cierra deudas antes de añadir más.
+397|Hay un saldo abierto entre ustedes. Ciérralo primero
+398|Aquí hay deudas en otra moneda: se compensarán al cambio de hoy y ese cambio se guardará.
+399|Ya hay muchos amigos en la lista
+400|Ya hay muchos registros periódicos
+401|Tengo un código de familia
+402|¿Tienes un código de familia? Entra en la hucha
+403|¿Tienes un código de familia? Escríbelo aquí. Pide a tus padres el código de unión de la familia.
+404|Hay registros a su nombre. Bórralos primero
+405|Saldos
+406|Aquí se registran deudas con amigos: quién compró para quién y quién debe devolver. Tu amigo/a también necesita la aplicación, y tus padres deben aprobar.
+407|Ya hay alguien con este nombre
+408|Ya hay alguien con este nombre. Elígelo en la lista o cambia el nombre
+409|Ya hay alguien con este nombre. Rechaza la solicitud
+410|Este perfil ya tiene un código
+411|Casi listo…
+412|¿Ya usan la hucha?
+413|Para {need} se necesita un dispositivo con huella digital o reconocimiento facial configurados.
+414|Para definir un código nuevo a {name}, enviaremos un código de verificación a {email}.
+415|Azul + morado
+416|Desactivar amigos
+417|Todas las deudas abiertas
+418|Toda la familia
+419|Todos los montos se muestran en esta moneda. Puedes registrar una deuda en otra moneda (por ejemplo 100 dólares) y al pagarla se convierte al cambio de ese día.
+420|Cada mes
+421|Cada {day}
+422|Cada cuánto
+423|Cada semana
+424|¿Cuánto devolvió {from} a {to}?
+425|¿Cuánto devolvió {from} a {to}?
+426|¿Cuánto devolvió {from} a {to}?
+427|¿Cuánto me debe {name}?
+428|¿Cuánto me debe {name}?
+429|¿Cuánto me debe {name}?
+430|¿Cuánto me pagó {name}?
+431|¿Cuánto me pagó {name}?
+432|¿Cuánto me pagó {name}?
+433|¿Cuánto debo a {to}?
+434|¿Cuánto debo a {to}?
+435|¿Cuánto debo a {to}?
+436|¿Cuánto pagué a {to}?
+437|¿Cuánto?
+438|Sí
+439|Sí, continuar
+440|Sí, compensar
+441|Sí, guardar la deuda
+442|Sí, guardar el pago
+443|Entrar
+444|Escribe el correo que tu amigo/a registró con sus padres en la aplicación. Se le envía una solicitud y debe aprobarla. Solo funciona si tu amigo/a también tiene el modo amigos.
+445|Escribe el código secreto
+446|Escribe el código otra vez, para confirmar
+447|Escribe el nombre
+448|Escribe un monto
+449|Escribe un monto mayor que cero.
+450|Otra dirección
+451|La dirección de correo no es válida
+452|Dirección de correo
+453|Nueva dirección de correo
+454|Dirección de correo no válida
+455|Naranja
+456|Naranja + rosa
+457|No
+458|No pudimos activar las notificaciones en este dispositivo
+459|No pudimos registrar el dispositivo. Inténtalo de nuevo.
+460|Desconocido
+461|Incorrecto
+462|No se encontró un instalador en el teléfono. Puedes descargar el archivo directamente desde GitHub
+463|¿A qué deuda corresponde la devolución?
+464|Para confirmar, enviaremos un código de verificación a {email}.
+465|Para confirmar acciones sensibles en la hucha
+466|Restablecer y que elija por sí mismo en el próximo inicio de sesión
+467|¿Cancelar lo que registraste?
+468|¿Rechazar? Se eliminará el registro.
+469|Un nuevo padre o madre necesita un código secreto
+470|A un padre o madre hay que definirle un código (no se puede restablecer para que elija solo)
+471|Solo para padres. Quien crea la hucha es el primer padre o madre. Después recibes un código de unión para toda la familia y defines el rol de cada persona: niño, adolescente o padre/madre.
+472|¿Reemplazar el código? Quienes ya están dentro se quedan, pero el código anterior dejará de funcionar y otros dispositivos que guardaron la familia deberán introducir el código nuevo.
+473|¿Quitar a {name} de los amigos?
+474|¿Quitar a {name} de la familia?
+475|¿Detener el registro periódico? Lo ya registrado se queda.
+476|Mostrar también lo pagado en la página principal
+477|Toca para ver el detalle del cálculo ›
+478|¿Desactivar el modo amigos de {name}? Ya no se podrán añadir registros nuevos con amigos.
+479|Sin especificar
+480|¿Borrar {n} registros pagados?
+481|¿Borrar el registro de {name}?
+482|¿Borrar este registro?
+483|¿Borrar todos los registros del cuaderno? No se puede deshacer.
+484|A quién
+485|¿A quién debo dinero?
+486|¿A quién debo dinero?
+487|¿A quién debo dinero?
+488|¿A quién?
+489|Por ejemplo: helado, entrada de cine
+490|Por ejemplo: la familia García
+491|¿Desconectar el dispositivo? Tendrá que introducir de nuevo el código de unión.
+492|La moneda de la familia la determina el país. Puedes cambiarla después en la pestaña Administrar.
+493|Por moneda
+494|Por nombre (A-Z)
+495|Solo lectura. Cada registro con un amigo/a también espera su aprobación.
+496|ver el código de unión
+497|cambiar un rol
+498|Equilibrado: nadie debe nada
+499|Verificando…
+500|le deben
+501|le deben
+502|le deben
+503|País no compatible
+504|la política de privacidad
+505|Política de privacidad
+506|País de residencia
+507|Lo que los adolescentes registran con amigos
+508|Lo que está abierto
+509|Descargando actualización...
+510|Descargando actualización... {percent} %
+511|Borrar
+512|Borrar toda la hucha
+513|Moneda
+514|Moneda no compatible
+515|¿Quién me debe dinero?
+516|Quién debe a quién
+517|Quién debe (quien paga)
+518|¿Quién me debe dinero?
+519|¿Quién entra?
+520|Correo para recuperar el código
+521|El correo es solo para padres
+522|Ubicación y moneda
+523|Alguien
+524|Dispositivo
+525|El dispositivo no existe
+526|Dispositivos conectados
+527|Dispositivos que guardaron la familia. Una tarjeta sin uso durante 180 días caduca sola.
+528|Esperando la aprobación de un padre o madre en {name}. Cuando lo apruebe, elige tu nombre en la pantalla de inicio de sesión y escribe el código secreto que elegiste.
+529|Esperando la aprobación de un padre o madre. Cuando lo apruebe, elige tu nombre en la pantalla de inicio de sesión y escribe el código secreto que elegiste.
+530|Suscripción de notificaciones no válida
+531|Clave no válida
+532|Modo amigos
+533|Modo amigos aprobado ✅
+534|El modo amigos es solo para adolescentes
+535|Modo amigos desactivado
+536|Modo amigos para {name}
+537|Los padres aún no han aprobado el modo amigos
+538|Unirse a la hucha
+539|Te unes a la hucha de {name}. Un padre o madre de la familia debe aprobar la unión y definirá si eres niño, adolescente o padre/madre.
+540|Apariencia
+541|Algo salió mal. Inténtalo de nuevo.
+542|Administrar
+543|Lo intentaste demasiadas veces. Inténtalo de nuevo en {wait}.
+544|Desconectar
+545|Eliminado
+546|Se encontraron en este dispositivo datos de la versión anterior: {people} personas y {entries} registros. ¿Transferirlos al servidor?
+547|Reintentar
+548|Adolescente
+549|Adolescente
+550|Adolescente
+551|Femenino
+552|Parece que el dispositivo está en {name}. ¿Viven en {name}?
+553|Quedan {left} de {total}
+554|Quedan {left} de esta deuda.
+555|Se envía un código cuando se cambia o restablece un código secreto, y también un aviso cuando se bloquea el código de alguien de la familia.
+556|Enviado a un padre o madre para su aprobación ⏳
+557|Enviado al amigo/a para su aprobación ⏳
+558|Morado y turquesa
+559|Cerrar
+560|Orden de los registros
+561|Total
+562|Total en {cur} al cambio de hoy
+563|Monto ({cur})
+564|Monto no válido
+565|Monto no válido. Entre amigos puedes registrar hasta 500 séqueles cada vez
+566|Resumen de la familia
+567|Todavía no se ha registrado nada.
+568|Ya hay una actualización en curso
+569|Actualizar
+570|Más
+571|Todavía no hay nadie más en la familia. Un padre o madre debe añadirlos.
+572|Todavía no hay amigos aprobados
+573|Todavía no hay amigos aprobados. Añade un amigo/a con su correo.
+574|Todavía no hay amigos. Añade un amigo/a con su correo.
+575|La lista aún está vacía. Toca uno de los botones para empezar.
+576|Todavía no hay registros periódicos.
+577|Más avatares
+578|Aún no eligió código
+579|Aún no eligió código
+580|Aún no eligió código
+581|Todavía no se ha registrado nada con amigos.
+582|Todavía no se ha registrado nada.
+583|Aspecto
+584|Por {debt} (= {covers} al cambio de hoy).
+585|Por {debt}.
+586|¿Por qué? (se puede omitir)
+587|¿Por qué? (opcional)
+588|Por: {debt}
+589|¿Con quién?
+590|Enorme
+591|La verificación venció. Inténtalo de nuevo.
+592|Detalle del cálculo
+593|Acción no válida
+594|Colores de la pantalla
+595|Colores de neón
+596|El trato ya está definido y no se puede cambiar
+597|Trato
+598|Trato:
+599|Crea una hucha familiar: todos ven la misma cuenta y las deudas se actualizan para todos.
+600|Se necesita confirmación con huella digital o reconocimiento facial
+601|La aplicación necesita permiso para instalar actualizaciones: en los ajustes que aparecen, activa «Permitir desde esta fuente» y vuelve a tocar «Actualizar»
+602|Debes iniciar sesión de nuevo
+603|Debes iniciar sesión de nuevo con el código de la familia
+604|Debes registrar este teléfono una vez.
+605|Debes registrar el dispositivo
+606|Debes registrar este dispositivo y este navegador una vez.
+607|Debes registrar el dispositivo de nuevo
+608|Debes registrar el dispositivo de nuevo para permitir también el reconocimiento facial
+609|Definir el código
+610|Definir el código y entrar
+611|Definir el trato…
+612|Un código para todos. Quien se une con él entra como niño. Después se puede cambiar en «Miembros de la familia» a adolescente o padre/madre, con aprobación por huella digital o reconocimiento facial.
+613|Código del correo
+614|El código del correo es incorrecto o venció.
+615|El código de verificación es incorrecto o venció.
+616|Código de unión a la hucha de {name}: {code}
+617|Código de unión de la familia
+618|El código de unión de la familia solo se muestra con huella digital o reconocimiento facial.
+619|El código de la familia cambió. Pide un código nuevo a tus padres.
+620|Código nuevo
+621|Código nuevo ({rule})
+622|Código del correo actual
+623|Código de familia
+624|Código secreto ({rule}; más largo = más seguro)
+625|Código secreto (obligatorio para padres, {rule})
+626|Código secreto (opcional — el niño podrá elegirlo él mismo)
+627|Código secreto (opcional — el niño podrá elegirlo él mismo)
+628|Código secreto (opcional — la niña podrá elegirlo ella misma)
+629|Código secreto nuevo
+630|Código secreto para {name}
+631|Tu propio código secreto (4 dígitos)
+632|Códigos de unión
+633|Primero hay que definir un código secreto a {name}
+634|Una hucha familiar solo la puede crear alguien mayor de 18 años
+635|Pequeño
+636|Recibí
+637|Recibí la diferencia ({amount})
+638|Recibí dinero
+639|Compensación mutua
+640|Compensar deudas mutuas
+641|Compensar deudas mutuas ({amount})
+642|El enlace de invitación añade como hijo/a a cualquiera que lo abra. Compártelo solo con tu familia.
+643|He leído y acepto {terms} y {privacy}
+644|He leído y acepto {terms} y {privacy}
+645|He leído y acepto {terms} y {privacy}
+646|Normal
+647|Un momento, iniciando sesión…
+648|Un momento, cerrando sesión…
+649|¿Quieres que los deudores vean esto?
+650|Registrar
+651|Registrar una devolución
+652|Registrar reconocimiento facial / huella digital
+653|Registra una deuda automáticamente, cada semana o cada mes, sin escribirla cada vez.
+654|Registrar huella digital / reconocimiento facial
+655|Nuevo registro periódico
+656|Solo los padres pueden hacer esto
+657|Solo los padres pueden definir el trato
+658|Anota una deuda tuya en el cuaderno
+659|Pagado por completo ✅
+660|Pagados ({n})
+661|Guardando todo…
+662|Liberar el bloqueo
+663|Pagué
+664|Pagué la diferencia ({amount})
+665|Cambiar
+666|Cambiar la moneda solo cambia el símbolo. Los montos no se convierten.
+667|Cambiar el código secreto
+668|Cambiar el nombre de la familia
+669|El cambio de rol en la familia (niño, adolescente, padre/madre) se aprueba con huella digital o reconocimiento facial.
+670|Compartir
+671|Olvidé el código
+672|Enviamos un código a {email}. Escríbelo, junto con la nueva dirección. Reemplazará a la actual solo después de verificarla.
+673|Enviamos un código de 6 dígitos a {email}. Es válido durante 10 minutos.
+674|Míos
+675|Enviar solicitud
+676|Enviar código de verificación
+677|Enviar el código por correo
+678|Enviar un código al correo actual
+679|Nombre
+680|Nombre de la familia
+681|El nombre de la familia no coincide
+682|El nombre de la familia no es válido
+683|Nombre no válido
+684|Guardar
+685|una hora
+686|{"one":"{n} hora","other":"{n} horas"}
+687|Los tipos de cambio aún no se han cargado. Inténtalo de nuevo en un momento.
+688|2 horas
+689|Idioma
+690|Fecha no válida
+691|Fecha de nacimiento (solo mayores de 18 años pueden crear una hucha)
+692|Fecha de nacimiento no válida
+693|los términos de uso
+694|Términos de uso
+695|Rol
+696|Rol:
+697|Menú principal
+698|Pago de una deuda en otra moneda

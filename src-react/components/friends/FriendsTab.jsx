@@ -10,6 +10,7 @@ import { isPending, pairOwes, openDebtsOf, debtLabel, namesFor, money, fmtDate }
 import { g } from '../../lib/gender.js';
 import EntriesList from '../entries/EntriesList.jsx';
 import DebtLines from '../entries/DebtLines.jsx';
+import WhatsAppRemind from '../entries/WhatsAppRemind.jsx';
 
 // מצב חברים לבני נוער.
 export default function FriendsTab({ data, fdata, token }) {
@@ -102,6 +103,7 @@ export default function FriendsTab({ data, fdata, token }) {
             {iOwe ? t('💰 שילמתי') : t('💰 קיבלתי')}
           </button>
         )}
+        {n < 0 && <WhatsAppRemind name={p.name} open={open} total={money(amount, 'ILS')} display="ILS" />}
         <button className="small danger" type="button" aria-label={t('הסרת {name}', { name: p.name })} onClick={() => removeFriendship(f, p)}>{t('הסרה')}</button>
       </div>
     );

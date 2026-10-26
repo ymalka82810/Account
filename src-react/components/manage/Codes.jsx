@@ -63,6 +63,19 @@ export default function Codes({ data, token }) {
     } catch (e) { /* בוטל */ }
   }
 
+  // קישור הזמנה: פתיחתו ממלאת את הקוד בשדה הכניסה (Welcome מנקה אותו מהכתובת מיד).
+  async function shareLink() {
+    const c = await reveal();
+    if (!c) return;
+    const url = `${location.origin}${location.pathname}?code=${encodeURIComponent(prettyCode(c))}`;
+    const text = t('קוד ההצטרפות לקופה של {name}: {code}', { name: f.name, code: prettyCode(c) });
+    try {
+      if (navigator.share) { await navigator.share({ text, url }); return; }
+      await navigator.clipboard.writeText(`${text}\n${url}`);
+      toast(t('הועתק ✅'));
+    } catch (e) { /* בוטל */ }
+  }
+
   async function rotate() {
     if (!confirm(t('להחליף את הקוד? מי שכבר בפנים נשאר, אבל הקוד הישן יפסיק לעבוד, ומכשירים אחרים ששמרו את המשפחה יצטרכו להזין את הקוד החדש.'))) return;
     try {
@@ -93,12 +106,14 @@ export default function Codes({ data, token }) {
         <p className="hint">
           {t('קוד אחד לכולם. מי שמצטרף/ת איתו נכנס/ת בתור ילד/ה. אחר כך אפשר לשנות ב"בני המשפחה" לנער/ה או להורה, באישור טביעת אצבע או זיהוי פנים.')}
           {' '}{t('הקוד מוסתר ונחשף רק בטביעת אצבע או בזיהוי פנים.')}
+          {' '}{t('קישור ההזמנה מצרף כל מי שפותח אותו בתור ילד/ה. שתפו אותו רק עם המשפחה.')}
         </p>
         <div className="tools">
           {code
             ? <button className="small" type="button" onClick={hide}>{t('הסתרה')}</button>
             : <button className="small" type="button" onClick={reveal} disabled={busy}>{busy ? t('מאמתים…') : t('הצגת הקוד 🔒')}</button>}
           <button className="small" type="button" onClick={share} disabled={busy}>{t('שיתוף')}</button>
+          <button className="small" type="button" onClick={shareLink} disabled={busy}>{t('📎 קישור הזמנה')}</button>
           <button className="small" type="button" onClick={rotate} disabled={busy}>{t('החלפת קוד')}</button>
         </div>
       </div>

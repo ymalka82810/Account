@@ -5,7 +5,8 @@ import { useSheet } from '../shared/Sheet.jsx';
 import BalanceSheet from './BalanceSheet.jsx';
 import PendingCards from '../entries/PendingCards.jsx';
 import DebtLines from '../entries/DebtLines.jsx';
-import { pairOwes, openDebtsOf, money, namesFor } from '../../lib/computations.js';
+import WhatsAppRemind from '../entries/WhatsAppRemind.jsx';
+import { pairOwes, openDebtsOf, money, namesFor, baseCurrency } from '../../lib/computations.js';
 import { g } from '../../lib/gender.js';
 
 // מסך הבית: סיכום, כפתורי רישום, אישורים ממתינים והחובות הפתוחים.
@@ -46,6 +47,7 @@ export default function Home({ data, token }) {
             {iOwe ? t('שילמתי') : t('קיבלתי')}
           </button>
         )}
+        {!iOwe && data.me.role !== 'child' && <WhatsAppRemind name={p.name} open={open} total={money(amount)} display={baseCurrency()} />}
       </div>
     );
   }

@@ -602,6 +602,10 @@ body[data-theme="teen"] #screen-loading p {
 button.strongbtn { background: var(--coin); border-color: var(--coin-deep); color: var(--on-coin, #1d2b4f); font-weight: 700; padding: 12px 14px; }
 button.small { min-height: 40px; }
 .linkish { margin-top: 26px; width: 100%; }
+.welcome-actions { display: grid; gap: 10px; margin-top: 18px; }
+.family-code { margin-top: 18px; }
+.family-code > summary { cursor: pointer; text-align: center; font-weight: 600; padding: 8px 0; }
+.family-code[open] > summary { margin-bottom: 8px; }
 .back.ghost, .ghost { cursor: pointer; }
 
 /* אנימציית מעבר גלגל השיניים לאריח הצף */
@@ -1162,4 +1166,7 @@ body[data-theme="parent"] #screen-notebook .nb-h2, body[data-theme="teen"] #scre
 
 /* מצב דמו: פס עליון קבוע שמסביר שהנתונים לדוגמה */
 .demo-banner { display: flex; align-items: center; justify-content: space-between; gap: .6em; padding: .45em .9em; background: #fff3c4; color: #5a4300; font-size: .9rem; }
+.demo-banner { flex-wrap: wrap; }
+.demo-cta { display: flex; flex-wrap: wrap; gap: .4em; }
+.demo-cta .primary { background: #5a4300; color: #fff3c4; border-color: #5a4300; font-weight: 700; }
 .demo-banner button { background: none; border: 1px solid currentColor; border-radius: 999px; padding: .15em .8em; color: inherit; font: inherit; cursor: pointer; }
