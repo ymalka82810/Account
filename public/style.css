@@ -999,3 +999,75 @@ body[data-theme="teen"] .confirm-box { background: #07070b; border: 2px solid va
 .nb-opts.two { grid-template-columns: 1fr 1fr; }
 #screen-notebook .nb-opts .ghost, .sheet .nb-opts .ghost { text-align: center; width: 100%; }
 .ghost.danger { color: var(--owe); border-color: var(--owe); }
+
+/* ===== מטילי זהב: "אני חייב" ו"חייבים לי" (לכל תפקיד מראה אחר) ===== */
+/* משתני הצבע של המתכת: זהב רגיל ל"חייבים לי", זהב ורדרד-נחושתי ל"אני חייב" */
+.sum.get { --g-hi: #fff6c2; --g-1: #ffe27a; --g-2: #f3b81f; --g-3: #c98a08; --g-ink: #4a3000; }
+.sum.owe { --g-hi: #ffe6c8; --g-1: #f8bd80; --g-2: #e48f3f; --g-3: #b5561e; --g-ink: #3e1a05; }
+.sum { position: relative; isolation: isolate; overflow: hidden; }
+.sum .lbl, .sum .num { position: relative; z-index: 1; color: var(--g-ink); }
+
+/* --- ילדים (וגם בלי תפקיד, למשל הפנקס האישי): מטיל צעצוע עגלגל ומבריק --- */
+body[data-theme="child"] .sum.get, body[data-theme="child"] .sum.owe,
+body:not([data-theme]) .sum.get, body:not([data-theme]) .sum.owe {
+  border: 0; border-radius: 24px; padding: 16px 12px;
+  background: linear-gradient(180deg, var(--g-hi) 0%, var(--g-1) 22%, var(--g-2) 62%, var(--g-3) 100%);
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, .75), inset 0 -5px 0 rgba(0, 0, 0, .14),
+    0 5px 0 var(--g-3), 0 10px 18px rgba(120, 80, 0, .22);
+}
+body[data-theme="child"] .sum::before, body:not([data-theme]) .sum::before {
+  content: ""; position: absolute; inset: 7px; z-index: 0; pointer-events: none;
+  border-radius: 17px; border: 2px solid rgba(255, 255, 255, .55);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .3), rgba(255, 255, 255, 0));
+  box-shadow: inset 0 -2px 6px rgba(0, 0, 0, .12);
+}
+body[data-theme="child"] .sum::after, body:not([data-theme]) .sum::after {
+  content: "✦"; position: absolute; top: 9px; inset-inline-end: 14px; z-index: 1;
+  font-size: .95rem; line-height: 1; color: #fff; opacity: .9; text-shadow: 0 0 6px rgba(255, 255, 255, .9);
+}
+body[data-theme="child"] .sum .num, body:not([data-theme]) .sum .num { text-shadow: 0 1px 0 rgba(255, 255, 255, .55); }
+
+/* --- הורים: מטיל מתכת מוברשת, מחוטב כטרפז, בגוון עתיק ומאופק --- */
+body[data-theme="parent"] .summary { filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .65)); }
+body[data-theme="parent"] .sum.get { --g-hi: #ecd68f; --g-1: #d4b565; --g-2: #b18f3b; --g-3: #7d5f1d; --g-ink: #241a04; }
+body[data-theme="parent"] .sum.owe { --g-hi: #e6c4a4; --g-1: #cc9f7c; --g-2: #a8744a; --g-3: #744626; --g-ink: #241206; }
+body[data-theme="parent"] .sum.get, body[data-theme="parent"] .sum.owe {
+  border: 0; border-radius: 0; padding: 16px 22px 12px;
+  clip-path: polygon(7% 0, 93% 0, 100% 100%, 0 100%);
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .05) 0 1px, rgba(0, 0, 0, .05) 1px 3px),
+    linear-gradient(180deg, var(--g-1) 0%, var(--g-2) 60%, var(--g-3) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -3px 0 rgba(0, 0, 0, .3);
+}
+body[data-theme="parent"] .sum::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 8px; z-index: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, .08));
+}
+body[data-theme="parent"] .sum::after {
+  content: "999.9"; position: absolute; bottom: 2px; inset-inline-start: 6%; z-index: 1;
+  font-size: .5rem; letter-spacing: .14em; color: var(--g-ink); opacity: .5;
+}
+body[data-theme="parent"] .sum .num { text-shadow: 0 1px 0 rgba(255, 255, 255, .35); }
+
+/* --- נוער: מטיל נטוי בזהב חי, עם פס ניאון (לפי הפלטה שנבחרה) וברק שעובר עליו --- */
+body[data-theme="teen"] .summary { filter: drop-shadow(0 0 14px var(--neon-glow)); }
+body[data-theme="teen"] .sum.get { --g-hi: #fffbd0; --g-1: #ffe94d; --g-2: #ffc400; --g-3: #ff9d00; --g-ink: #2b1a00; }
+body[data-theme="teen"] .sum.owe { --g-hi: #ffeadb; --g-1: #ffc9a3; --g-2: #ff9a5c; --g-3: #ff6a3d; --g-ink: #2a0d00; }
+body[data-theme="teen"] .sum.get, body[data-theme="teen"] .sum.owe {
+  border: 0; border-radius: 0; padding: 16px 20px 18px;
+  clip-path: polygon(9% 0, 100% 0, 91% 100%, 0 100%);
+  background: linear-gradient(180deg, var(--g-hi) 0%, var(--g-1) 18%, var(--g-2) 58%, var(--g-3) 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .8), inset 0 0 18px rgba(255, 255, 255, .25);
+}
+body[data-theme="teen"] .sum::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .7) 50%, transparent 65%);
+  background-size: 250% 100%; background-position: 130% 0;
+  animation: gold-sweep 3.6s ease-in-out infinite;
+}
+body[data-theme="teen"] .sum::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 4px; z-index: 1; background: var(--neon-grad);
+}
+body[data-theme="teen"] .sum .num { text-shadow: 0 1px 0 rgba(255, 255, 255, .4); }
+@keyframes gold-sweep { 0%, 55% { background-position: 130% 0; } 100% { background-position: -30% 0; } }
+@media (prefers-reduced-motion: reduce) { body[data-theme="teen"] .sum::before { animation: none; } }
