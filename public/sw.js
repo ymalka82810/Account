@@ -1,4 +1,4 @@
-const CACHE = 'kupa-v25';
+const CACHE = 'kupa-v26';
 // מאז שהאתר עובר דרך Vite build, קובץ ה-JS הראשי יוצא עם hash בשם
 // (למשל assets/index-ABC123.js) שלא ידוע מראש. לכן לא מפרטים כאן כל
 // קובץ src/*.js בנפרד (כמו קודם) - caches.addAll() נכשל כולו אם קובץ
@@ -22,8 +22,11 @@ self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   // קבצים מהאתר עצמו (לא דפי ניווט): מבקשים מהשרת עם no-cache, כדי שאחרי דחיפה
   // לא יוצג קובץ ישן ממטמון הדפדפן (GitHub Pages נותן max-age=600 גם ל-style.css)
+  // גם דפי ניווט (index.html): אחרת רענון מגיש index.html ישן מהמטמון ל-10 דקות
   const sameOrigin = new URL(e.request.url).origin === location.origin;
-  const req = sameOrigin && e.request.mode !== 'navigate' ? new Request(e.request, { cache: 'no-cache' }) : e.request;
+  const req = sameOrigin
+    ? (e.request.mode === 'navigate' ? new Request(e.request.url, { cache: 'no-cache', credentials: 'same-origin' }) : new Request(e.request, { cache: 'no-cache' }))
+    : e.request;
   e.respondWith(
     fetch(req).then((r) => {
       if (r.ok && new URL(e.request.url).origin === location.origin) {
