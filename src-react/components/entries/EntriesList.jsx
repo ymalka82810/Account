@@ -13,7 +13,7 @@ export default function EntriesList({
 
   async function remove(e) {
     if (!confirm(isParent ? 'למחוק את הרשומה הזאת?' : 'לבטל את מה שרשמת?')) return;
-    try { await call(removeEndpoint || 'entries:remove', { token, id: e.id }); toast('הרשומה נמחקה'); }
+    try { await call(/** @type {'entries:remove' | 'friends:removeEntry'} */ (removeEndpoint || 'entries:remove'), { token, id: e.id }); toast('הרשומה נמחקה'); }
     catch (err) { toast(errMsg(err)); }
   }
 

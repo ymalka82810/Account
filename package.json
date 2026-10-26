@@ -9,7 +9,8 @@
     "web:dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "typecheck": "node scripts/typecheck.mjs"
   },
   "dependencies": {
     "convex": "1.45.0",
@@ -24,6 +25,7 @@
     "@edge-runtime/vm": "^5.0.0",
     "@types/web-push": "^3.6.4",
     "convex-test": "^0.0.65",
+    "typescript": "^7.0.2",
     "vite": "^8.3.4",
     "vitest": "^5.0.5"
   },

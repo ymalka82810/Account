@@ -69,11 +69,11 @@ export async function bioRegister(token, myPin) {
           timeout: 60000,
         },
       });
-      const r = cred.response;
+      const r = /** @type {AuthenticatorAttestationResponse} */ (/** @type {PublicKeyCredential} */ (cred).response);
       if (typeof r.getPublicKey !== 'function' || !r.getPublicKey()) {
         throw new BioError('unsupported', 'הדפדפן הזה ישן מדי לאימות ביומטרי. עדכנו אותו ונסו שוב.');
       }
-      const credentialId = toB64url(cred.rawId);
+      const credentialId = toB64url(/** @type {PublicKeyCredential} */ (cred).rawId);
       await call('biometric:registerFinish', {
         token, challenge, kind: 'webauthn', credentialId,
         publicKey: toB64(r.getPublicKey()), alg: r.getPublicKeyAlgorithm(),
@@ -115,7 +115,7 @@ export async function bioProve(token, personId, action, title = 'אישור שי
         timeout: 60000,
       },
     });
-    const r = cred.response;
+    const r = /** @type {AuthenticatorAssertionResponse} */ (/** @type {PublicKeyCredential} */ (cred).response);
     return {
       challenge, credentialId,
       signature: toB64url(r.signature),

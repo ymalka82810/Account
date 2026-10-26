@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useQuery } from 'convex/react';
-import { call } from '../../lib/api.js';
+import { call, useQuery } from '../../lib/api.js';
 import { toast, errMsg, prettyCode } from '../../lib/helpers.js';
 import { CODE_KEY } from '../../state/state.js';
 import { useBioConfirm } from '../shared/BioConfirm.jsx';

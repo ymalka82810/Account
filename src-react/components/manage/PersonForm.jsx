@@ -7,6 +7,7 @@ import { toast, errMsg } from '../../lib/helpers.js';
 import { g, GENDER_OPTIONS } from '../../lib/gender.js';
 import { useBioConfirm } from '../shared/BioConfirm.jsx';
 import { BioError } from '../../lib/biometric.js';
+import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
 
 // הוספת בן/בת משפחה (הורים).
 export default function PersonForm({ token }) {
@@ -27,7 +28,7 @@ export default function PersonForm({ token }) {
     ev.preventDefault();
     const trimmed = name.trim();
     if (!trimmed || busy) return;
-    if (pin && !/^\d{4}$/.test(pin)) { toast('הקוד צריך להיות 4 ספרות'); return; }
+    if (pin && !pinOk(pin, role)) { toast(`הקוד צריך להיות ${pinLabel(role)}`); return; }
     if (role === 'parent' && !pin) { toast('להורה חדש צריך לקבוע קוד סודי'); return; }
     setBusy(true);
     try {
@@ -58,9 +59,9 @@ export default function PersonForm({ token }) {
         <AvatarPicker value={avatar} onChange={setAvatar} options={role === 'parent' ? PARENT_AVATARS : undefined} compact />
       </div>
       <label className="field"><span>{role === 'parent'
-        ? 'קוד סודי (חובה להורה)'
+        ? `קוד סודי (חובה להורה, ${pinLabel('parent')})`
         : <>קוד סודי (לא חובה — אפשר ש{g(gender, 'הילד', 'הילדה', 'הילד/ה')} {g(gender, 'יבחר', 'תבחר', 'יבחר/תבחר')} לבד)</>}</span>
-        <input type="password" inputMode="numeric" pattern="\d{4}" maxLength={4} autoComplete="new-password"
+        <input type="password" inputMode="numeric" pattern={role === 'parent' ? '\\d{4,8}' : '\\d{4}'} maxLength={pinMax(role)} autoComplete="new-password"
           value={pin} onChange={(e) => setPin(e.target.value)} /></label>
       {role !== 'child' && <p className="hint">🔒 הוספה בתור {role === 'parent' ? 'הורה' : g(gender, 'נער', 'נערה', 'נער/ה')} מאושרת בטביעת אצבע או בזיהוי פנים.</p>}
       <button className="primary" type="submit" disabled={busy}>{busy ? '⏳ רגע…' : 'הוספה'}</button>

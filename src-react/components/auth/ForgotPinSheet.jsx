@@ -7,6 +7,7 @@ import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
 import { codeProps, pinProps, Err, Field } from '../shared/fields.jsx';
+import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
 
 // שכחתי קוד (הורה, במסך הכניסה): קוד למייל המאומת, ואז בוחרים קוד חדש ונכנסים.
 export function ForgotPinSheet() {
@@ -38,10 +39,10 @@ export function ForgotPinSheet() {
   return (
     <div className="form">
       <Field label="הקוד מהמייל"><input {...codeProps} value={emailCode} onChange={(e) => setEmailCode(e.target.value)} /></Field>
-      <Field label="קוד חדש (4 ספרות)"><input {...pinProps('new-password')} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
+      <Field label={`קוד חדש (${pinLabel('parent')})`}><input {...pinProps('new-password', pinMax('parent'))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
-        if (!/^\d{4}$/.test(newPin)) { setErr('הקוד החדש צריך להיות 4 ספרות.'); return; }
+        if (!pinOk(newPin, 'parent')) { setErr(`הקוד החדש צריך להיות ${pinLabel('parent')}.`); return; }
         try {
           const res = await call('emailAuth:resetWithCode', { code: state.fam.code, personId: f.person.id, emailCode, newPin });
           if (res.ok) { state.pinFlow = null; sheet.close(); setToken(res.token); return; }

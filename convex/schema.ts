@@ -50,6 +50,8 @@ export default defineSchema({
     // קוד סודי (גיבוב בלבד). אם חסר - הילד/ה בוחר/ת קוד בכניסה הראשונה.
     pinHash: v.optional(v.string()),
     pinSalt: v.optional(v.string()),
+    // אורך הקוד (מספר ספרות), כדי שמסך הכניסה ידע מתי לשלוח. חסר = 4.
+    pinLength: v.optional(v.number()),
     // הוצא משימוש: כבר לא נכתב. נשאר רק עד שמריצים maintenance:clearPinPlain, ואז מסירים.
     pinPlain: v.optional(v.string()),
     failedAttempts: v.optional(v.number()),

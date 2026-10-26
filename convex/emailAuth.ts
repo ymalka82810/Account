@@ -1,6 +1,6 @@
 import { mutation } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
-import { hashToken, normalizeEmail, requirePerson, validEmail, validPin, findFamilyByCode } from "./lib";
+import { hashToken, normalizeEmail, requirePerson, validEmail, validPin, pinRuleMessage, findFamilyByCode } from "./lib";
 import { issueCode, verifyCode } from "./emailCodes";
 import { codeThrottled, failCode, openSession, setPin } from "./auth";
 
@@ -62,7 +62,7 @@ export const changePinWithCode = mutation({
   args: { token: v.string(), code: v.string(), newPin: v.string() },
   handler: async (ctx, { token, code, newPin }) => {
     const me = await requirePerson(ctx, token);
-    if (!validPin(newPin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
+    if (!validPin(newPin, me.role)) throw new ConvexError(pinRuleMessage(me.role));
     if (!(await verifyCode(ctx, me._id, "pinChange", code))) return { ok: false as const, reason: "code" as const };
     await setPin(ctx, me._id, newPin);
     // מנתקים מכשירים אחרים, משאירים את הנוכחי.
@@ -97,7 +97,7 @@ export const resetWithCode = mutation({
     const found = await findFamilyByCode(ctx, code);
     const p = await ctx.db.get(personId);
     if (!found || !p || p.familyId !== found.family._id) return await failCode(ctx, device);
-    if (!validPin(newPin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
+    if (!validPin(newPin, p.role)) throw new ConvexError(pinRuleMessage(p.role));
     if (p.role !== "parent" || !(await verifyCode(ctx, p._id, "pinReset", emailCode))) {
       return { ok: false as const, reason: "emailCode" as const };
     }

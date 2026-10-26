@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { useQuery } from 'convex/react';
 import { state, LAST_ROLE_KEY, LAST_PALETTE_KEY, THEME_COLOR, TAB_LABELS, subscribeAuth, authVersion, bumpAuth } from './state/state.js';
-import { call } from './lib/api.js';
+import { call, callAction, useQuery } from './lib/api.js';
 import { toast } from './lib/helpers.js';
 import { restoreFamily, startPin, autoSkipPerson, dropSession } from './state/auth.js';
 import { syncPush } from './lib/push.js';
@@ -105,7 +104,7 @@ function Root() {
   const fx = useQuery('fx:rates', token ? {} : 'skip');
   useEffect(() => {
     if (fx === undefined) return;
-    if (!fx || Date.now() - fx.fetchedAt > 6 * 60 * 60 * 1000) client.action('fx:ensure', {}).catch(() => {});
+    if (!fx || Date.now() - fx.fetchedAt > 6 * 60 * 60 * 1000) callAction('fx:ensure', {}).catch(() => {});
   }, [fx]);
   const [tabSel, setTabSel] = useState(tabFromHash);
   const migrating = useRef(false);

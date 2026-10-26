@@ -42,7 +42,7 @@ export const get = query({
         localeSet: !!(family.country || family.currency),
       },
       people: people.map((p) => ({
-        id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash,
+        id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash, pinLength: p.pinLength ?? 4,
         // התראה להורים בלבד: הקוד של האדם ננעל בגלל ניסיונות כושלים בשבוע האחרון.
         lockAlert: me.role === "parent" && !!p.lastLockAt && Date.now() - p.lastLockAt < ALERT_WINDOW_MS
           ? { count: p.lockCount ?? 1, at: p.lastLockAt }

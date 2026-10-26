@@ -1,6 +1,7 @@
 import { state, CODE_KEY, LAST_PERSON_KEY, TOKEN_KEY, bumpAuth } from './state.js';
 import { toast, errMsg, fmtWait } from '../lib/helpers.js';
 import { call } from '../lib/api.js';
+import { PARENT_PIN_MAX } from '../lib/pin.js';
 
 // הלוגיקה של מסכי הכניסה. התצוגה שלהם ב-src-react/components/Auth.jsx.
 
@@ -70,7 +71,7 @@ export async function createFamily({ familyName, name, birthDate, avatar, gender
   try {
     const res = await call('auth:createFamily', { familyName, name, birthDate, avatar, gender, pin, country, currency });
     state.view = 'welcome';
-    setToken(res.token);
+    setToken(/** @type {any} */ (res).token); // join מחזיר היום רק pending, לא טוקן
     return '';
   } catch (e) { return errMsg(e); }
 }
@@ -88,7 +89,7 @@ export async function joinFamily({ name, avatar, pin, gender }) {
     // הבקשה ממתינה לאישור הורה. אין סשן עד שהורה מאשר, ואז נכנסים דרך מסך הבחירה עם הקוד שנבחר.
     if (res.pending) return { pending: true };
     state.view = 'welcome';
-    setToken(res.token);
+    setToken(/** @type {any} */ (res).token); // join מחזיר היום רק pending, לא טוקן
     return '';
   } catch (e) { return errMsg(e); }
 }
@@ -139,13 +140,26 @@ function shake() {
   bumpAuth();
 }
 
+// אורך הקוד במסך הכניסה. בכניסה האורך ידוע (נשמר בפרופיל) והשליחה אוטומטית בסופו.
+// הורה שקובע קוד חדש בוחר אורך חופשי (4 עד 8) ושולח במפורש עם ✓.
+export function pinPadSpec(f) {
+  if (f.mode === 'login') return { max: f.person.pinLength || 4, auto: true };
+  if (f.person.role === 'parent') return { max: PARENT_PIN_MAX, auto: false };
+  return { max: 4, auto: true };
+}
+
 export async function pressKey(k) {
   const f = state.pinFlow;
   if (!f || f.busy) return;
+  const { max, auto } = pinPadSpec(f);
+  if (k === 'ok') {
+    if (f.entered.length >= 4) await submitPin();
+    return;
+  }
   if (k === 'del') f.entered = f.entered.slice(0, -1);
-  else if (f.entered.length < 4) f.entered += k;
+  else if (f.entered.length < max) f.entered += k;
   renderPin();
-  if (f.entered.length === 4) await submitPin();
+  if (auto && f.entered.length === max) await submitPin();
 }
 
 // קוד משפחה שהפסיק להיות תקף באמצע הכניסה (ההורים החליפו אותו).

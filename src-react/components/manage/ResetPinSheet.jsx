@@ -7,6 +7,7 @@ import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
 import { codeProps, pinProps, Err, Field } from '../shared/fields.jsx';
 import { g } from '../../lib/gender.js';
+import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
 
 // הורה קובע קוד סודי חדש לילד/ה (אפשר גם לאפס שיבחרו לבד).
 export function ResetPinSheet({ person: p }) {
@@ -34,7 +35,7 @@ export function ResetPinSheet({ person: p }) {
   }
 
   const run = async (newPin) => {
-    if (!emailRequired && !/^\d{4}$/.test(myPin)) { setErr('הקלידו את הקוד הסודי שלכם, 4 ספרות.'); return; }
+    if (!emailRequired && !pinOk(myPin, 'parent')) { setErr('הקלידו את הקוד הסודי שלכם.'); return; }
     try {
       const res = await call('auth:resetPin', {
         token: state.token, personId: p.id, pin: newPin,
@@ -56,10 +57,10 @@ export function ResetPinSheet({ person: p }) {
     <div className="form">
       {emailRequired && <Field label="קוד אימות מהמייל"><input {...codeProps} value={emailCode} onChange={(e) => setEmailCode(e.target.value)} /></Field>}
       {!emailRequired && <Field label="הקוד הסודי שלכם, לאישור"><input {...pinProps('current-password')} value={myPin} onChange={(e) => setMyPin(e.target.value)} /></Field>}
-      <Field label="קוד חדש (4 ספרות)"><input {...pinProps('new-password')} value={pin} onChange={(e) => setPin(e.target.value)} /></Field>
+      <Field label={`קוד חדש (${pinLabel(p.role)})`}><input {...pinProps('new-password', pinMax(p.role))} value={pin} onChange={(e) => setPin(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
-        if (!/^\d{4}$/.test(pin)) { setErr('הקוד צריך להיות 4 ספרות.'); return; }
+        if (!pinOk(pin, p.role)) { setErr(`הקוד צריך להיות ${pinLabel(p.role)}.`); return; }
         await run(pin);
       }}>קביעת הקוד</AsyncButton>
       <AsyncButton className="ghost" onClick={() => run(undefined)}>לאפס, ושיבחרו לבד בכניסה הבאה</AsyncButton>

@@ -83,7 +83,12 @@ export async function hashToken(token: string): Promise<string> {
   return toHex(await sha256("session:" + token));
 }
 
-export const validPin = (pin: string) => /^\d{4}$/.test(pin);
+// ילדים ונוער: בדיוק 4 ספרות (פשוט לזכור). הורים מאשרים כסף, אז מותר להם קוד ארוך יותר (עד 8).
+export const PARENT_PIN_MAX = 8;
+export const validPin = (pin: string, role?: string) =>
+  role === "parent" ? new RegExp(`^\\d{4,${PARENT_PIN_MAX}}$`).test(pin) : /^\d{4}$/.test(pin);
+export const pinRuleMessage = (role?: string) =>
+  role === "parent" ? `הקוד צריך להיות 4 ספרות לפחות, ועד ${PARENT_PIN_MAX}` : "הקוד צריך להיות 4 ספרות";
 
 // מזהה מכשיר אקראי שהאפליקציה יוצרת. לא מזהה אישי, רק מפתח להגבלת קצב.
 export function deviceKey(device: string | undefined): string {

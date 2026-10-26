@@ -1,7 +1,7 @@
 import { call } from '../../lib/api.js';
 import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
 import { useState } from 'react';
-import { toast } from '../../lib/helpers.js';
+import { toast, errMsg } from '../../lib/helpers.js';
 import { useRun } from '../../lib/useRun.js';
 import { FRIEND_MAX } from '../../state/state.js';
 import { useApp } from '../../state/appContext.js';

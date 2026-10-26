@@ -7,6 +7,7 @@ import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
 import { codeProps, pinProps, Err, Field } from '../shared/fields.jsx';
+import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
 import AvatarPicker from '../shared/AvatarPicker.jsx';
 
 // בחירת דמות: כל אחד/ת בוחר/ת מתוך האפשרויות, אבל לא דמות שכבר תפוסה אצל בן משפחה אחר.
@@ -122,10 +123,10 @@ export function ChangePinEmailSheet() {
   return (
     <div className="form">
       <Field label="הקוד מהמייל"><input {...codeProps} value={code} onChange={(e) => setCode(e.target.value)} /></Field>
-      <Field label="קוד חדש (4 ספרות)"><input {...pinProps('new-password')} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
+      <Field label={`קוד חדש (${pinLabel(data.me.role)})`}><input {...pinProps('new-password', pinMax(data.me.role))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
-        if (!/^\d{4}$/.test(newPin)) { setErr('הקוד החדש צריך להיות 4 ספרות.'); return; }
+        if (!pinOk(newPin, data.me.role)) { setErr(`הקוד החדש צריך להיות ${pinLabel(data.me.role)}.`); return; }
         try {
           const res = await call('emailAuth:changePinWithCode', { token: state.token, code, newPin });
           if (res.ok) { sheet.close(); toast('הקוד שונה ✅'); }
@@ -139,6 +140,7 @@ export function ChangePinEmailSheet() {
 // שינוי הקוד הסודי שלי (בלי מייל מאומת): הקוד הנוכחי והקוד החדש.
 export function ChangePinSheet() {
   const sheet = useSheet();
+  const { data } = useApp();
   const [oldPin, setOldPin] = useState('');
   const [newPin, setNewPin] = useState('');
   const [err, setErr] = useState('');
@@ -146,10 +148,10 @@ export function ChangePinSheet() {
   return (
     <div className="form">
       <Field label="הקוד הנוכחי"><input {...pinProps('current-password')} value={oldPin} onChange={(e) => setOldPin(e.target.value)} /></Field>
-      <Field label="קוד חדש (4 ספרות)"><input {...pinProps('new-password')} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
+      <Field label={`קוד חדש (${pinLabel(data.me.role)})`}><input {...pinProps('new-password', pinMax(data.me.role))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
-        if (!/^\d{4}$/.test(newPin)) { setErr('הקוד החדש צריך להיות 4 ספרות.'); return; }
+        if (!pinOk(newPin, data.me.role)) { setErr(`הקוד החדש צריך להיות ${pinLabel(data.me.role)}.`); return; }
         try {
           const res = await call('auth:changeMyPin', { token: state.token, oldPin, newPin });
           if (res.ok) { sheet.close(); toast('הקוד שונה ✅'); }

@@ -199,7 +199,8 @@ export function EntryFlow({ opts }) {
       const before = totalsByCurrency(st.from, st.to, entries);
       const next = totalsByCurrency(st.from, st.to, after);
       const curs = [...new Set([...Object.keys(before), ...Object.keys(next)])]
-        .sort((a, b) => (a === display) - (b === display) || a.localeCompare(b));
+        .sort((a, b) => Number(a === display) - Number(b === display) || a.localeCompare(b));
+      /** @type {{ label: string, value: string, strong?: boolean }[]} */
       const rows = curs.map((c) => ({
         label: currencyLabel(c),
         value: `${money(before[c] || 0, c)} ← ${money(next[c] || 0, c)}`,
@@ -224,12 +225,13 @@ export function EntryFlow({ opts }) {
     const save = async () => {
       if (foreignCase && !(await confirmForeign())) return;
       try {
-        await call(opts.endpoint || 'entries:add', {
+        // entries:add ו-friends:addEntry מקבלות ארגומנטים קצת שונים (המטבע רק בקופה המשפחתית), לכן הארגומנטים כאן דינמיים.
+        await call(/** @type {'entries:add'} */ (opts.endpoint || 'entries:add'), /** @type {any} */ ({
           token: state.token, kind: opts.kind, from: st.from, to: st.to, amount: st.agorot,
           note: isDebt ? st.note.trim() : (st.note.trim() || 'החזר'), date: today(),
           ...(st.debtId ? { debtId: st.debtId } : {}),
           ...(canPickCurrency ? { currency: st.cur } : {}),
-        });
+        }));
         sheet.close();
         toast(opts.doneToast || (!isParent ? 'נשלח להורה לאישור ⏳' : isDebt ? 'החוב נשמר ✅' : 'ההחזר נשמר ✅'));
         setTab(opts.returnTab || 'home');

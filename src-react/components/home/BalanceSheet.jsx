@@ -21,7 +21,7 @@ function byCurrency(list) {
   for (const x of list) m.set(x.cur, (m.get(x.cur) || 0) + x.remaining);
   const base = baseCurrency();
   return [...m].map(([cur, amount]) => ({ cur, amount }))
-    .sort((a, b) => (b.cur === base) - (a.cur === base) || a.cur.localeCompare(b.cur));
+    .sort((a, b) => Number(b.cur === base) - Number(a.cur === base) || a.cur.localeCompare(b.cur));
 }
 const mixed = (list) => list.some((x) => x.foreign);
 

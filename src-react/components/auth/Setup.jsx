@@ -6,6 +6,7 @@ import Select from '../shared/Select.jsx';
 import LocalePicker from '../shared/LocalePicker.jsx';
 import { GENDER_OPTIONS } from '../../lib/gender.js';
 import { today } from '../../lib/helpers.js';
+import { pinLabel, pinMax } from '../../lib/pin.js';
 import { useNotebook, isAdult, parseBirth } from '../../lib/notebook.js';
 
 export default function Setup({ current }) {
@@ -48,8 +49,8 @@ export default function Setup({ current }) {
           <div className="field"><span>בחר/י דמות</span><AvatarPicker value={avatar} onChange={setAvatar} options={PARENT_AVATARS} /></div>
           <div className="field"><span>צורת פנייה</span>
             <Select value={gender} onChange={setGender} options={GENDER_OPTIONS} /></div>
-          <label className="field"><span>קוד סודי (4 ספרות)</span>
-            <input type="password" inputMode="numeric" pattern="\d{4}" maxLength={4} required autoComplete="new-password"
+          <label className="field"><span>קוד סודי ({pinLabel('parent')}; ארוך יותר = מוגן יותר)</span>
+            <input type="password" inputMode="numeric" pattern="\d{4,8}" maxLength={pinMax('parent')} required autoComplete="new-password"
               value={v.pin} onChange={set('pin')} /></label>
           <label className="check"><input type="checkbox" required /><Terms gender={gender} /></label>
           {error && <p className="error" role="alert">{error}</p>}

@@ -4,6 +4,7 @@ import { useSheet, useSheetTitle } from './Sheet.jsx';
 import AsyncButton from './AsyncButton.jsx';
 import { pinProps, Err, Field } from './fields.jsx';
 import { BioError, bioProve, bioReady, bioRegister, bioSupported } from '../../lib/biometric.js';
+import { pinOk } from '../../lib/pin.js';
 import { isNativeApp } from '../../lib/updater.js';
 
 // רישום המכשיר לאימות ביומטרי: ההורה מאשר עם הקוד הסודי שלו, ואז טביעת אצבע / זיהוי פנים.
@@ -18,10 +19,10 @@ function BioSetupSheet({ onDone, reason }) {
   useEffect(() => () => { if (!done.current) onDone(false); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function register() {
-    if (!/^\d{4}$/.test(pin)) { setErr('הקלידו את הקוד הסודי שלכם, 4 ספרות.'); return; }
+    if (!pinOk(pin, 'parent')) { setErr('הקלידו את הקוד הסודי שלכם.'); return; }
     setErr('');
     try {
-      const res = await bioRegister(token, pin);
+      const res = /** @type {{ ok: boolean, reason?: string }} */ (await bioRegister(token, pin));
       if (!res.ok) {
         setErr(res.reason === 'locked' ? 'יותר מדי ניסיונות. נסו שוב עוד כמה דקות.'
           : res.reason === 'nopin' ? 'אין לכם קוד סודי. קבעו קוד ב"החשבון שלי" ונסו שוב.'

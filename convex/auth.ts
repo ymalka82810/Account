@@ -7,7 +7,7 @@ import { verifyCode } from "./emailCodes";
 import {
   CODE_FAIL_LIMIT, CODE_FAIL_WINDOW_MS, CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS, MAX_FAMILY_SIZE, SESSION_MS,
   adoptLegacy, avatarOf, cleanFamilyName, cleanName, createFamilyDoc, deviceKey, findFamilyByCode, getSessionPerson, hashPin, isPass, issuePass, passExpiry, PASS_TTL_MS,
-  hashToken, isThrottled, legacyPeople, noteHit, randomHex, registerPinFail, requireAdultBirthDate, requireSameFamily, requireParent, validPin,
+  hashToken, isThrottled, legacyPeople, noteHit, randomHex, registerPinFail, requireAdultBirthDate, requireSameFamily, requireParent, validPin, pinRuleMessage,
   upgradePinHash, verifyPin, trustKeyOf, hitCount, guessKeys, MAX_TRUSTED_DEVICES,
   GUESS_DEVICE_LIMIT, GUESS_DEVICE_WINDOW_MS, GUESS_PERSON_LIMIT, GUESS_PERSON_WINDOW_MS,
 } from "./lib";
@@ -30,6 +30,7 @@ export async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: stri
     trustedDevices: trustKey ? [trustKey] : [],
     pinSalt,
     pinHash: await hashPin(pin, pinSalt),
+    pinLength: pin.length,
     pinPlain: undefined,
     failedAttempts: 0,
     lockedUntil: undefined,
@@ -40,7 +41,7 @@ export async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: stri
 }
 
 const publicPerson = (p: Doc<"people">) => ({
-  id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash,
+  id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash, pinLength: p.pinLength ?? 4,
 });
 
 // הערה: שגיאות של קוד משפחה מוחזרות כתוצאה (ולא נזרקות) כדי שספירת הניסיונות תישמר.
@@ -96,7 +97,7 @@ export const createFamily = mutation({
     if (await isThrottled(ctx, "create-family", CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS)) {
       throw new ConvexError("יותר מדי משפחות חדשות כרגע. נסו שוב בעוד כמה דקות");
     }
-    if (!validPin(pin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
+    if (!validPin(pin, "parent")) throw new ConvexError(pinRuleMessage("parent"));
     const birth = requireAdultBirthDate(birthDate);
     if (currency !== undefined && !isCurrency(currency)) throw new ConvexError("מטבע לא נתמך");
     if (country && !(country in COUNTRIES)) throw new ConvexError("מדינה לא נתמכת");
@@ -245,7 +246,7 @@ export const claimProfile = mutation({
     const p = await ctx.db.get(personId);
     if (!p) throw new ConvexError("אדם לא קיים");
     if (p.pinHash) throw new ConvexError("כבר יש קוד לפרופיל הזה");
-    if (!validPin(pin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
+    if (!validPin(pin, p.role)) throw new ConvexError(pinRuleMessage(p.role));
     if (p.familyId) {
       if (await codeThrottled(ctx, device)) return { ok: false as const, reason: "throttled" as const };
       const found = code ? await findFamilyByCode(ctx, code) : null;
@@ -278,7 +279,7 @@ export const deviceCard = mutation({
   args: { token: v.string() },
   handler: async (ctx, { token }) => {
     const me = await getSessionPerson(ctx, token);
-    if (!me) return { ok: false as const };
+    if (!me || !me.familyId) return { ok: false as const };
     return { ok: true as const, loginCode: await issuePass(ctx, me.familyId) };
   },
 });
@@ -336,7 +337,7 @@ export const changeMyPin = mutation({
     if (!session || session.expiresAt < Date.now()) return { ok: false as const, reason: "session" as const };
     const p = await ctx.db.get(session.personId);
     if (!p || !p.pinHash || !p.pinSalt) return { ok: false as const, reason: "session" as const };
-    if (!validPin(newPin)) return { ok: false as const, reason: "format" as const };
+    if (!validPin(newPin, p.role)) return { ok: false as const, reason: "format" as const };
     // הורה עם מייל מאומת משנה קוד רק באישור קוד מהמייל (emailAuth:changePinWithCode).
     if (p.emailVerified) return { ok: false as const, reason: "useEmail" as const };
     const now = Date.now();
@@ -380,7 +381,7 @@ export const resetPin = mutation({
       await ctx.db.delete(s._id);
     }
     if (pin) {
-      if (!validPin(pin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
+      if (!validPin(pin, target?.role)) throw new ConvexError(pinRuleMessage(target?.role));
       await setPin(ctx, personId, pin);
     } else {
       await ctx.db.patch(personId, { pinHash: undefined, pinSalt: undefined, pinPlain: undefined, failedAttempts: 0, lockedUntil: undefined, lockLevel: 0, lockCount: 0, lastLockAt: undefined });

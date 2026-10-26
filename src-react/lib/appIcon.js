@@ -43,7 +43,7 @@ export function applyAppIcon(currency) {
   if (key === shown) return;
   shown = key;
   // favicon של האתר (גם לשונית הדפדפן)
-  let link = document.querySelector('link[rel="icon"]');
+  let link = /** @type {HTMLLinkElement | null} */ (document.querySelector('link[rel="icon"]'));
   if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
   link.type = 'image/svg+xml';
   link.href = 'data:image/svg+xml,' + encodeURIComponent(iconSvg(key));

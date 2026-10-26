@@ -3,7 +3,7 @@ import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
 import { proofValidator, purgeBiometric, requireBiometric } from "./biometric";
 import { notify } from "./notify";
-import { MAX_FAMILY_SIZE, cleanName, hashPin, randomHex, requireParent, requirePerson, requireSameFamily, validPin } from "./lib";
+import { MAX_FAMILY_SIZE, cleanName, hashPin, randomHex, requireParent, requirePerson, requireSameFamily, validPin, pinRuleMessage } from "./lib";
 
 export const add = mutation({
   args: {
@@ -26,13 +26,13 @@ export const add = mutation({
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     if (members.length >= MAX_FAMILY_SIZE) throw new ConvexError("המשפחה מלאה");
     if (members.some((p) => p.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה");
-    if (pin !== undefined && !validPin(pin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
+    if (pin !== undefined && !validPin(pin, role)) throw new ConvexError(pinRuleMessage(role));
     const personAvatar = avatar?.slice(0, 8);
     if (personAvatar && members.some((p) => p.avatar === personAvatar)) throw new ConvexError("הדמות הזו כבר תפוסה על ידי מישהו אחר במשפחה");
     const id = await ctx.db.insert("people", { familyId: me.familyId, name: clean, role, avatar: personAvatar, gender });
     if (pin) {
       const pinSalt = randomHex(16);
-      await ctx.db.patch(id, { pinSalt, pinHash: await hashPin(pin, pinSalt) });
+      await ctx.db.patch(id, { pinSalt, pinHash: await hashPin(pin, pinSalt), pinLength: pin.length });
     }
     return id;
   },
