@@ -1,4 +1,5 @@
 import { call } from '../../lib/api.js';
+import { t } from '../../i18n/index.js';
 import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
 import { useState } from 'react';
 import { toast, errMsg } from '../../lib/helpers.js';
@@ -31,14 +32,14 @@ export default function FriendsTab({ data, fdata, token }) {
     return (
       <div className="card friends-lock">
         <div className="big-emoji" aria-hidden="true">🔒</div>
-        <h3>מצב חברים</h3>
-        <p className="hint">כאן רושמים חובות עם חברים: מי קנה למי, ומי צריך להחזיר. החבר/ה צריכים גם הם את האפליקציה, וההורים שלך צריכים לאשר.</p>
-        <p className="hint">{fdata.requested ? 'הבקשה נשלחה להורים. נעדכן אותך כשיאשרו.' : ''}</p>
-        {fdata.requested && <div className="badge-pending">⏳ ממתין לאישור ההורים</div>}
+        <h3>{t('מצב חברים')}</h3>
+        <p className="hint">{t('כאן רושמים חובות עם חברים: מי קנה למי, ומי צריך להחזיר. החבר/ה צריכים גם הם את האפליקציה, וההורים שלך צריכים לאשר.')}</p>
+        <p className="hint">{fdata.requested ? t('הבקשה נשלחה להורים. נעדכן אותך כשיאשרו.') : ''}</p>
+        {fdata.requested && <div className="badge-pending">{t('⏳ ממתין לאישור ההורים')}</div>}
         {!fdata.requested && (
           <button className="primary" type="button" disabled={!!busy} aria-busy={busy === 'req'}
-            onClick={() => busyRun('req', () => run('friends:requestAccess', {}, 'הבקשה נשלחה להורים ⏳'))}>
-            {busy === 'req' ? '⏳ רגע…' : 'בקשת אישור מההורים'}
+            onClick={() => busyRun('req', () => run('friends:requestAccess', {}, t('הבקשה נשלחה להורים ⏳')))}>
+            {busy === 'req' ? t('⏳ רגע…') : t('בקשת אישור מההורים')}
           </button>
         )}
       </div>
@@ -47,19 +48,19 @@ export default function FriendsTab({ data, fdata, token }) {
 
   const entries = fdata.entries;
   const lookup = (id) => data.people.find((p) => p.id === id) || fdata.people[id];
-  const { nameOf, subjectWord, toWord, gw, vw } = namesFor(me, lookup);
+  const { nameOf, owesLine, repaidLine, gw } = namesFor(me, lookup);
   const accepted = fdata.friendships.filter((f) => f.status === 'accepted').length;
   const startFlow = (opts) => {
-    if (!accepted) { toast('עוד אין חברים מאושרים. הוסיפו חבר/ה לפי המייל שלהם.'); return; }
+    if (!accepted) { toast(t('עוד אין חברים מאושרים. הוסיפו חבר/ה לפי המייל שלהם.')); return; }
     openEntryFlow({
       ...opts, entries: () => fdata.entries,
       people: fdata.friendships.filter((f) => f.status === 'accepted').map((f) => fdata.people[f.other]).filter(Boolean),
-      endpoint: 'friends:addEntry', maxEntry: FRIEND_MAX, doneToast: 'נשלח לחבר/ה לאישור ⏳', returnTab: 'friends',
+      endpoint: 'friends:addEntry', maxEntry: FRIEND_MAX, doneToast: t('נשלח לחבר/ה לאישור ⏳'), returnTab: 'friends',
     });
   };
   const removeFriendship = (f, p) => {
-    if (!confirm(`להסיר את ${p.name} מהחברים?`)) return;
-    run('friends:removeFriend', { friendshipId: f.id }, 'החבר/ה הוסרו');
+    if (!confirm(t('להסיר את {name} מהחברים?', { name: p.name }))) return;
+    run('friends:removeFriend', { friendshipId: f.id }, t('החבר/ה הוסרו'));
   };
 
   let owe = 0, get = 0;
@@ -74,9 +75,9 @@ export default function FriendsTab({ data, fdata, token }) {
           <span className="avatar-md" aria-hidden="true">{p.avatar}</span>
           <div className="text">
             <div className="who">{p.name}</div>
-            <div className="meta">⏳ ממתין שיאשרו את הבקשה</div>
+            <div className="meta">{t('⏳ ממתין שיאשרו את הבקשה')}</div>
           </div>
-          <button className="small" type="button" onClick={() => removeFriendship(f, p)}>ביטול</button>
+          <button className="small" type="button" onClick={() => removeFriendship(f, p)}>{t('ביטול')}</button>
         </div>
       );
       continue;
@@ -91,17 +92,17 @@ export default function FriendsTab({ data, fdata, token }) {
       <div key={f.id} className={'debt' + (n === 0 ? '' : iOwe ? ' owe' : ' get') + (open.length > 1 ? ' multi' : '')}>
         <span className="avatar-md" aria-hidden="true">{p.avatar}</span>
         <div className="text">
-          <div className="who">{n === 0 ? p.name : iOwe ? `${g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${p.name}` : `${p.name} ${g(p.gender, 'חייב', 'חייבת', 'חייב/ת')} לי`}</div>
-          <div className="amt">{n === 0 ? 'הכול מסודר ✅' : money(amount, 'ILS')}</div>
+          <div className="who">{n === 0 ? p.name : iOwe ? owesLine(me, p.id) : owesLine(p.id, me)}</div>
+          <div className="amt">{n === 0 ? t('הכול מסודר ✅') : money(amount, 'ILS')}</div>
           <DebtLines open={open} iOwe={iOwe} onPay={(x) => startFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })} />
         </div>
         {n !== 0 && (
           <button className="small strongbtn" type="button"
             onClick={() => startFlow(iOwe ? { kind: 'payment', from: me, to: p.id, suggest: amount } : { kind: 'payment', from: p.id, to: me, suggest: amount })}>
-            {iOwe ? '💰 שילמתי' : '💰 קיבלתי'}
+            {iOwe ? t('💰 שילמתי') : t('💰 קיבלתי')}
           </button>
         )}
-        <button className="small danger" type="button" aria-label={'הסרת ' + p.name} onClick={() => removeFriendship(f, p)}>הסרה</button>
+        <button className="small danger" type="button" aria-label={t('הסרת {name}', { name: p.name })} onClick={() => removeFriendship(f, p)}>{t('הסרה')}</button>
       </div>
     );
   }
@@ -116,7 +117,7 @@ export default function FriendsTab({ data, fdata, token }) {
       try {
         await call('friends:addFriend', { token, email });
         setEmail('');
-        toast('אם לחבר/ה יש מצב חברים, נשלחה להם בקשה 🤝');
+        toast(t('אם לחבר/ה יש מצב חברים, נשלחה להם בקשה 🤝'));
       } catch (e) { setError(errMsg(e)); }
     });
   }
@@ -124,33 +125,33 @@ export default function FriendsTab({ data, fdata, token }) {
   return (
     <>
       <div className="summary">
-        <div className="sum owe"><GoldBarArt /><div className="lbl">{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} לחברים</div><SumNum>{money(owe, 'ILS')}</SumNum></div>
-        <div className="sum get"><GoldBarArt /><div className="lbl">חברים חייבים לי</div><SumNum>{money(get, 'ILS')}</SumNum></div>
+        <div className="sum owe"><GoldBarArt /><div className="lbl">{g(data.me.gender, 'אני חייב לחברים', 'אני חייבת לחברים', 'אני חייב/ת לחברים')}</div><SumNum>{money(owe, 'ILS')}</SumNum></div>
+        <div className="sum get"><GoldBarArt /><div className="lbl">{t('חברים חייבים לי')}</div><SumNum>{money(get, 'ILS')}</SumNum></div>
       </div>
       <div className="bigbtns">
         <button className="bigbtn owe" type="button" onClick={() => startFlow({ kind: 'debt', from: me })}>
-          <span aria-hidden="true">💸</span>{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} לחבר/ה
+          <span aria-hidden="true">💸</span>{g(data.me.gender, 'אני חייב לחבר/ה', 'אני חייבת לחבר/ה', 'אני חייב/ת לחבר/ה')}
         </button>
         <button className="bigbtn get" type="button" onClick={() => startFlow({ kind: 'debt', to: me })}>
-          <span aria-hidden="true">🤝</span>חבר/ה חייב/ת לי
+          <span aria-hidden="true">🤝</span>{t('חבר/ה חייב/ת לי')}
         </button>
       </div>
 
       <div>
         {incoming.length > 0 && (
           <div className="card pending-card">
-            <h3>🤝 בקשות חברות ({incoming.length})</h3>
+            <h3>{t('🤝 בקשות חברות ({n})', { n: incoming.length })}</h3>
             {incoming.map((f) => {
               const p = fdata.people[f.other];
               return (
                 <div className="row" key={f.id}>
                   <span className="avatar-md" aria-hidden="true">{p ? p.avatar : '🙂'}</span>
-                  <div className="text">{p ? p.name : 'מישהו'} רוצה להוסיף אותך</div>
+                  <div className="text">{t('{name} רוצה להוסיף אותך', { name: p ? p.name : t('מישהו') })}</div>
                   <div className="acts">
                     <button className="small okbtn" type="button"
-                      onClick={() => run('friends:respondFriend', { friendshipId: f.id, accept: true }, 'חבר/ה נוספו ✅')}>✅ אישור</button>
+                      onClick={() => run('friends:respondFriend', { friendshipId: f.id, accept: true }, t('חבר/ה נוספו ✅'))}>{t('✅ אישור')}</button>
                     <button className="small danger" type="button"
-                      onClick={() => run('friends:respondFriend', { friendshipId: f.id, accept: false }, 'הבקשה נדחתה')}>דחייה</button>
+                      onClick={() => run('friends:respondFriend', { friendshipId: f.id, accept: false }, t('הבקשה נדחתה'))}>{t('דחייה')}</button>
                   </div>
                 </div>
               );
@@ -159,22 +160,21 @@ export default function FriendsTab({ data, fdata, token }) {
         )}
         {waiting.length > 0 && (
           <div className="card pending-card">
-            <h3>⏳ ממתין לאישור שלך ({waiting.length})</h3>
+            <h3>{t('⏳ ממתין לאישור שלך ({n})', { n: waiting.length })}</h3>
             {waiting.map((e) => (
               <div className="row" key={e.id}>
                 <div className="text">
                   <div>
-                    {nameOf(e.createdBy)} {gw(e.createdBy, 'רשם', 'רשמה', 'רשם/ה')}: {subjectWord(e.from)}{' '}
-                    {e.kind === 'debt' ? gw(e.from, 'חייב', 'חייבת', 'חייב/ת') : vw(e.from, 'החזרתי', 'החזיר', 'החזירה', 'החזיר/ה')} {toWord(e.to)}
+                    {gw(e.createdBy, '{who} רשם: {line}', '{who} רשמה: {line}', '{who} רשם/ה: {line}', { who: nameOf(e.createdBy), line: e.kind === 'debt' ? owesLine(e.from, e.to) : repaidLine(e.from, e.to) })}
                   </div>
                   <div className="meta">{[money(e.amount, 'ILS'), fmtDate(e.date), e.note].filter(Boolean).join(' • ')}</div>
                 </div>
                 <div className="acts">
                   <button className="small okbtn" type="button"
-                    onClick={() => run('friends:confirmEntry', { id: e.id }, 'אושר ✅')}>✅ נכון</button>
+                    onClick={() => run('friends:confirmEntry', { id: e.id }, t('אושר ✅'))}>{t('✅ נכון')}</button>
                   <button className="small danger" type="button" onClick={() => {
-                    if (confirm('לדחות? הרישום יימחק.')) run('friends:rejectEntry', { id: e.id }, 'הרישום נדחה');
-                  }}>לא נכון</button>
+                    if (confirm(t('לדחות? הרישום יימחק.'))) run('friends:rejectEntry', { id: e.id }, t('הרישום נדחה'));
+                  }}>{t('לא נכון')}</button>
                 </div>
               </div>
             ))}
@@ -182,29 +182,29 @@ export default function FriendsTab({ data, fdata, token }) {
         )}
       </div>
 
-      <h2>החברים שלי</h2>
+      <h2>{t('החברים שלי')}</h2>
       <div>
         {cards.length === 0
-          ? <div className="empty"><div className="big-emoji" aria-hidden="true">🤝</div>עוד אין חברים. הוסיפו חבר/ה לפי המייל שלהם.</div>
+          ? <div className="empty"><div className="big-emoji" aria-hidden="true">🤝</div>{t('עוד אין חברים. הוסיפו חבר/ה לפי המייל שלהם.')}</div>
           : cards}
       </div>
 
       <form className="form card" autoComplete="off" onSubmit={addFriend}>
-        <h3>הוספת חבר/ה</h3>
-        <p className="hint">כתבו את המייל שהחבר/ה רשמו אצל ההורים שלהם באפליקציה. נשלחת להם בקשה, והם צריכים לאשר. זה עובד רק אם גם לחבר/ה יש מצב חברים.</p>
-        <label className="field"><span>המייל של החבר/ה</span>
+        <h3>{t('הוספת חבר/ה')}</h3>
+        <p className="hint">{t('כתבו את המייל שהחבר/ה רשמו אצל ההורים שלהם באפליקציה. נשלחת להם בקשה, והם צריכים לאשר. זה עובד רק אם גם לחבר/ה יש מצב חברים.')}</p>
+        <label className="field"><span>{t('המייל של החבר/ה')}</span>
           <input type="email" dir="ltr" maxLength={254} autoComplete="off" placeholder="name@example.com" required
             value={email} onChange={(e) => setEmail(e.target.value)} /></label>
         {error && <p className="error" role="alert">{error}</p>}
-        <button className="primary" type="submit" disabled={!!busy}>{busy === 'add' ? '⏳ רגע…' : 'שליחת בקשה'}</button>
-        <p className="hint">המייל שלך לחברים: <span dir="ltr">{fdata.email || ''}</span></p>
+        <button className="primary" type="submit" disabled={!!busy}>{busy === 'add' ? t('⏳ רגע…') : t('שליחת בקשה')}</button>
+        <p className="hint">{t('המייל שלך לחברים:')} <span dir="ltr">{fdata.email || ''}</span></p>
       </form>
 
-      <h2>היסטוריה עם חברים</h2>
+      <h2>{t('היסטוריה עם חברים')}</h2>
       <div>
-        <EntriesList list={entries} emptyText="עוד לא נרשם כלום עם חברים." token={token} me={me} isParent={false} display="ILS"
+        <EntriesList list={entries} emptyText={t('עוד לא נרשם כלום עם חברים.')} token={token} me={me} isParent={false} display="ILS"
           lookup={lookup} debtList={entries} removeEndpoint="friends:removeEntry"
-          pendingLabel={(e) => (e.createdBy === me ? '⏳ ממתין לחבר/ה' : '⏳ ממתין לאישור שלך')} />
+          pendingLabel={(e) => (e.createdBy === me ? t('⏳ ממתין לחבר/ה') : t('⏳ ממתין לאישור שלך'))} />
       </div>
     </>
   );

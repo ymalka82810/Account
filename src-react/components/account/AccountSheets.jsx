@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { state, AVATARS, PARENT_AVATARS } from '../../state/state.js';
 import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
+import { t } from '../../i18n/index.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
@@ -17,7 +18,7 @@ export function AvatarSheet() {
   const me = data.me;
   const options = me.role === 'parent' ? PARENT_AVATARS : AVATARS;
   const taken = new Set(data.people.filter((p) => p.id !== me.id && p.avatar).map((p) => p.avatar));
-  useSheetTitle('דמות');
+  useSheetTitle(t('דמות'));
 
   async function pick(avatar) {
     try { await call('people:setAvatar', { token, avatar }); sheet.close(); }
@@ -43,19 +44,19 @@ export function EmailSheet() {
   const [oldCode, setOldCode] = useState('');
   const [code, setCode] = useState('');
   const [err, setErr] = useState('');
-  useSheetTitle(step === 'start' ? 'החלפת מייל' : step === 'email' ? 'מייל לשחזור הקוד' : 'אימות המייל');
+  useSheetTitle(step === 'start' ? t('החלפת מייל') : step === 'email' ? t('מייל לשחזור הקוד') : t('אימות המייל'));
 
   const go = (s) => { setErr(''); setStep(s); };
 
   if (step === 'start') {
     return (
       <div className="form">
-        <p className="hint">המייל הנוכחי: {current}. להחלפה נשלח אליו קוד אישור.</p>
+        <p className="hint">{t('המייל הנוכחי: {email}. להחלפה נשלח אליו קוד אישור.', { email: current })}</p>
         {err && <Err>{err}</Err>}
         <AsyncButton className="primary" onClick={async () => {
           try { await call('emailAuth:requestEmailChangeCode', { token: state.token }); go('email'); }
           catch (e) { setErr(errMsg(e)); }
-        }}>שליחת קוד למייל הנוכחי</AsyncButton>
+        }}>{t('שליחת קוד למייל הנוכחי')}</AsyncButton>
       </div>
     );
   }
@@ -63,10 +64,10 @@ export function EmailSheet() {
     return (
       <div className="form">
         <p className="hint">{current
-          ? `שלחנו קוד אל ${current}. כתבו אותו, ואת הכתובת החדשה. היא תחליף את הנוכחית רק אחרי אימות.`
-          : 'נשלח אליו קוד כשמשנים או מאפסים קוד סודי, וגם התראה כשהקוד של מישהו במשפחה ננעל.'}</p>
-        {current && <Field label="קוד מהמייל הנוכחי"><input {...codeProps} value={oldCode} onChange={(e) => setOldCode(e.target.value)} /></Field>}
-        <Field label={'כתובת מייל' + (current ? ' חדשה' : '')}>
+          ? t('שלחנו קוד אל {email}. כתבו אותו, ואת הכתובת החדשה. היא תחליף את הנוכחית רק אחרי אימות.', { email: current })
+          : t('נשלח אליו קוד כשמשנים או מאפסים קוד סודי, וגם התראה כשהקוד של מישהו במשפחה ננעל.')}</p>
+        {current && <Field label={t('קוד מהמייל הנוכחי')}><input {...codeProps} value={oldCode} onChange={(e) => setOldCode(e.target.value)} /></Field>}
+        <Field label={current ? t('כתובת מייל חדשה') : t('כתובת מייל')}>
           <input type="email" autoComplete="email" placeholder="name@example.com" dir="ltr" value={email} onChange={(e) => setEmail(e.target.value)} />
         </Field>
         {err && <Err>{err}</Err>}
@@ -75,25 +76,25 @@ export function EmailSheet() {
           try {
             const res = await call('emailAuth:requestVerify', { token: state.token, email, oldCode: current ? oldCode : undefined });
             if (res.ok) { setAddr(email.trim().toLowerCase()); go('code'); }
-            else setErr('הקוד מהמייל הנוכחי שגוי או שפג תוקפו.');
+            else setErr(t('הקוד מהמייל הנוכחי שגוי או שפג תוקפו.'));
           } catch (e) { setErr(errMsg(e)); }
-        }}>שליחת קוד אימות</AsyncButton>
+        }}>{t('שליחת קוד אימות')}</AsyncButton>
       </div>
     );
   }
   return (
     <div className="form">
-      <p className="hint">שלחנו קוד בן 6 ספרות אל {addr}. הוא תקף ל-10 דקות.</p>
-      <Field label="הקוד מהמייל"><input {...codeProps} value={code} onChange={(e) => setCode(e.target.value)} /></Field>
+      <p className="hint">{t('שלחנו קוד בן 6 ספרות אל {email}. הוא תקף ל-10 דקות.', { email: addr })}</p>
+      <Field label={t('הקוד מהמייל')}><input {...codeProps} value={code} onChange={(e) => setCode(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
         try {
           const res = await call('emailAuth:confirmEmail', { token: state.token, code });
-          if (res.ok) { sheet.close(); toast('המייל אומת ✅'); }
-          else setErr('הקוד שגוי או שפג תוקפו.');
+          if (res.ok) { sheet.close(); toast(t('המייל אומת ✅')); }
+          else setErr(t('הקוד שגוי או שפג תוקפו.'));
         } catch (e) { setErr(errMsg(e)); }
-      }}>אימות</AsyncButton>
-      <button className="ghost" type="button" onClick={() => go(current ? 'start' : 'email')}>כתובת אחרת</button>
+      }}>{t('אימות')}</AsyncButton>
+      <button className="ghost" type="button" onClick={() => go(current ? 'start' : 'email')}>{t('כתובת אחרת')}</button>
     </div>
   );
 }
@@ -106,33 +107,33 @@ export function ChangePinEmailSheet() {
   const [code, setCode] = useState('');
   const [newPin, setNewPin] = useState('');
   const [err, setErr] = useState('');
-  useSheetTitle('שינוי הקוד הסודי');
+  useSheetTitle(t('שינוי הקוד הסודי'));
 
   if (step === 'send') {
     return (
       <div className="form">
-        <p className="hint">לאישור נשלח קוד אימות ל-{data.me.email}.</p>
+        <p className="hint">{t('לאישור נשלח קוד אימות ל-{email}.', { email: data.me.email })}</p>
         {err && <Err>{err}</Err>}
         <AsyncButton className="primary" onClick={async () => {
           try { await call('emailAuth:requestChangeCode', { token: state.token }); setErr(''); setStep('form'); }
           catch (e) { setErr(errMsg(e)); }
-        }}>שליחת קוד למייל</AsyncButton>
+        }}>{t('שליחת קוד למייל')}</AsyncButton>
       </div>
     );
   }
   return (
     <div className="form">
-      <Field label="הקוד מהמייל"><input {...codeProps} value={code} onChange={(e) => setCode(e.target.value)} /></Field>
-      <Field label={`קוד חדש (${pinLabel(data.me.role)})`}><input {...pinProps('new-password', pinMax(data.me.role))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
+      <Field label={t('הקוד מהמייל')}><input {...codeProps} value={code} onChange={(e) => setCode(e.target.value)} /></Field>
+      <Field label={t('קוד חדש ({rule})', { rule: pinLabel(data.me.role) })}><input {...pinProps('new-password', pinMax(data.me.role))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
-        if (!pinOk(newPin, data.me.role)) { setErr(`הקוד החדש צריך להיות ${pinLabel(data.me.role)}.`); return; }
+        if (!pinOk(newPin, data.me.role)) { setErr(t('הקוד החדש צריך להיות {rule}.', { rule: pinLabel(data.me.role) })); return; }
         try {
           const res = await call('emailAuth:changePinWithCode', { token: state.token, code, newPin });
-          if (res.ok) { sheet.close(); toast('הקוד שונה ✅'); }
-          else setErr('קוד האימות שגוי או שפג תוקפו.');
+          if (res.ok) { sheet.close(); toast(t('הקוד שונה ✅')); }
+          else setErr(t('קוד האימות שגוי או שפג תוקפו.'));
         } catch (e) { setErr(errMsg(e)); }
-      }}>שמירה</AsyncButton>
+      }}>{t('שמירה')}</AsyncButton>
     </div>
   );
 }
@@ -144,23 +145,23 @@ export function ChangePinSheet() {
   const [oldPin, setOldPin] = useState('');
   const [newPin, setNewPin] = useState('');
   const [err, setErr] = useState('');
-  useSheetTitle('שינוי הקוד הסודי');
+  useSheetTitle(t('שינוי הקוד הסודי'));
   return (
     <div className="form">
-      <Field label="הקוד הנוכחי"><input {...pinProps('current-password')} value={oldPin} onChange={(e) => setOldPin(e.target.value)} /></Field>
-      <Field label={`קוד חדש (${pinLabel(data.me.role)})`}><input {...pinProps('new-password', pinMax(data.me.role))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
+      <Field label={t('הקוד הנוכחי')}><input {...pinProps('current-password')} value={oldPin} onChange={(e) => setOldPin(e.target.value)} /></Field>
+      <Field label={t('קוד חדש ({rule})', { rule: pinLabel(data.me.role) })}><input {...pinProps('new-password', pinMax(data.me.role))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
-        if (!pinOk(newPin, data.me.role)) { setErr(`הקוד החדש צריך להיות ${pinLabel(data.me.role)}.`); return; }
+        if (!pinOk(newPin, data.me.role)) { setErr(t('הקוד החדש צריך להיות {rule}.', { rule: pinLabel(data.me.role) })); return; }
         try {
           const res = await call('auth:changeMyPin', { token: state.token, oldPin, newPin });
-          if (res.ok) { sheet.close(); toast('הקוד שונה ✅'); }
-          else if (res.reason === 'wrong') setErr('הקוד הנוכחי לא נכון.');
-          else if (res.reason === 'locked') setErr('יותר מדי ניסיונות. נסו שוב עוד דקה.');
-          else if (res.reason === 'useEmail') sheet.open('שינוי הקוד הסודי', <ChangePinEmailSheet />);
-          else setErr('משהו השתבש. נסו שוב.');
+          if (res.ok) { sheet.close(); toast(t('הקוד שונה ✅')); }
+          else if (res.reason === 'wrong') setErr(t('הקוד הנוכחי לא נכון.'));
+          else if (res.reason === 'locked') setErr(t('יותר מדי ניסיונות. נסו שוב עוד דקה.'));
+          else if (res.reason === 'useEmail') sheet.open(t('שינוי הקוד הסודי'), <ChangePinEmailSheet />);
+          else setErr(t('משהו השתבש. נסו שוב.'));
         } catch (e) { setErr(errMsg(e)); }
-      }}>שמירה</AsyncButton>
+      }}>{t('שמירה')}</AsyncButton>
     </div>
   );
 }

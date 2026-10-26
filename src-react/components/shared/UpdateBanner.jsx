@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { t } from '../../i18n/index.js';
 import { isNativeApp, findUpdate, installUpdate, updateErrorText } from '../../lib/updater.js';
 
 const REPO = 'ymalka82810/Account';
@@ -29,9 +30,9 @@ export default function UpdateBanner() {
   return (
     <div className="update-banner" role="status">
       <span>
-        {error || (percent === null ? `גרסה חדשה זמינה (${update.version})` : percent < 0 ? 'מוריד עדכון...' : `מוריד עדכון... ${percent}%`)}
+        {error || (percent === null ? t('גרסה חדשה זמינה ({version})', { version: update.version }) : percent < 0 ? t('מוריד עדכון...') : t('מוריד עדכון... {percent}%', { percent }))}
       </span>
-      {percent === null && <button type="button" onClick={run}>{error ? 'נסה שוב' : 'עדכן'}</button>}
+      {percent === null && <button type="button" onClick={run}>{error ? t('נסה שוב') : t('עדכן')}</button>}
     </div>
   );
 }

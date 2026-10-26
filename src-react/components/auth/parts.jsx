@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { g } from '../../lib/gender.js';
+import { t } from '../../i18n/index.js';
 
 // החלקים המשותפים למסכי הכניסה.
 // כולם תמיד ב-DOM, ורק זה שהוא ה-current מקבל את ה-class 'active'.
@@ -14,7 +15,13 @@ export function In({ screen, current, children }) {
 
 export const Terms = ({ extra, gender }) => (
   <span>
-    קראתי ואני {g(gender, 'מסכים', 'מסכימה', 'מסכים/ה')} ל<a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ול<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a>{extra}
+    {g(gender, 'קראתי ואני מסכים ל{terms} ול{privacy}', 'קראתי ואני מסכימה ל{terms} ול{privacy}', 'קראתי ואני מסכים/ה ל{terms} ול{privacy}')
+      .split(/(\{terms\}|\{privacy\})/)
+      .map((part, i) => (part === '{terms}'
+        ? <a key={i} href="terms.html" target="_blank" rel="noopener">{t('תנאי השימוש')}</a>
+        : part === '{privacy}'
+          ? <a key={i} href="privacy.html" target="_blank" rel="noopener">{t('מדיניות הפרטיות')}</a>
+          : part))}{extra}
   </span>
 );
 

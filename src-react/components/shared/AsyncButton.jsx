@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { t } from '../../i18n/index.js';
 
 // כפתור שנועל את עצמו ומראה "⏳ רגע…" עד שהפעולה האסינכרונית מסתיימת.
 export default function AsyncButton({ onClick, children, className, type = 'button', ...rest }) {
@@ -10,7 +11,7 @@ export default function AsyncButton({ onClick, children, className, type = 'butt
   }
   return (
     <button {...rest} type={type} className={className + (busy ? ' busy' : '')} disabled={busy} aria-busy={busy || undefined} onClick={handle}>
-      {busy ? '⏳ רגע…' : children}
+      {busy ? t('⏳ רגע…') : children}
     </button>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { t, tn } from '../../i18n/index.js';
 import { useBioConfirm } from '../shared/BioConfirm.jsx';
 import { useConfirm } from '../shared/Confirm.jsx';
 import { toast, errMsg } from '../../lib/helpers.js';
@@ -13,7 +14,7 @@ import { g, GENDER_OPTIONS } from '../../lib/gender.js';
 
 // כאן זו קביעה ראשונית וחד-פעמית (לא ניתנת לשינוי אחר כך), אז בלי אפשרות "ללא ציון".
 const GENDER_SET_OPTIONS = GENDER_OPTIONS.filter((o) => o.value);
-const GENDER_PLACEHOLDER = [{ value: '', label: 'קביעת צורת פנייה…' }, ...GENDER_SET_OPTIONS];
+const genderPlaceholder = () => [{ value: '', label: t('קביעת צורת פנייה…') }, ...GENDER_SET_OPTIONS];
 
 // בני המשפחה: קוד חדש, תפקיד (ילד/נער/הורה, באישור ביומטרי), כיבוי מצב חברים והסרה.
 export default function PeopleList({ people, me, token, joinRequests = [] }) {
@@ -28,32 +29,32 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
     if (!toRole || toRole === p.role || roleBusy) return;
     if (p.role === 'teen' && p.friendsEnabled && !(await confirm({
       icon: '🤝',
-      title: 'ביטול מצב חברים',
+      title: t('ביטול מצב חברים'),
       amount: p.name,
-      message: `${g(p.gender, 'יאבד', 'תאבד', 'יאבד/תאבד')} את מצב החברים. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.`,
-      okText: 'כן, להמשיך',
+      message: g(p.gender, 'הוא יאבד את מצב החברים. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.', 'היא תאבד את מצב החברים. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.', 'הנער/ה יאבד/תאבד את מצב החברים. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.'),
+      okText: t('כן, להמשיך'),
       danger: true,
     }))) return;
     if (toRole === 'parent' && !(await confirm({
       icon: '🔐',
-      title: 'הענקת הרשאות הורה',
+      title: t('הענקת הרשאות הורה'),
       amount: p.name,
-      message: `${g(p.gender, 'יקבל', 'תקבל', 'יקבל/תקבל')} הרשאות הורה מלאות: לראות הכול, לאשר, למחוק ולנהל את המשפחה. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.`,
-      okText: 'כן, להמשיך',
+      message: g(p.gender, 'הוא יקבל הרשאות הורה מלאות: לראות הכול, לאשר, למחוק ולנהל את המשפחה. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.', 'היא תקבל הרשאות הורה מלאות: לראות הכול, לאשר, למחוק ולנהל את המשפחה. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.', 'יקבל/תקבל הרשאות הורה מלאות: לראות הכול, לאשר, למחוק ולנהל את המשפחה. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.'),
+      okText: t('כן, להמשיך'),
     }))) return;
     if (p.role === 'parent' && !(await confirm({
       icon: '⚠️',
-      title: 'ביטול הרשאות הורה',
+      title: t('ביטול הרשאות הורה'),
       amount: p.name,
-      message: `${g(p.gender, 'יאבד', 'תאבד', 'יאבד/תאבד')} את הרשאות ההורה. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.`,
-      okText: 'כן, להמשיך',
+      message: g(p.gender, 'הוא יאבד את הרשאות ההורה. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.', 'היא תאבד את הרשאות ההורה. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.', 'יאבד/תאבד את הרשאות ההורה. אחר כך תידרש אימות בזיהוי פנים או טביעת אצבע.'),
+      okText: t('כן, להמשיך'),
       danger: true,
     }))) return;
     setRoleBusy(p.id);
     try {
       const proof = await bioConfirm(`role:${p.id}:${toRole}`);
       await call('people:setRole', { token, id: p.id, role: toRole, proof });
-      toast(`${p.name} עכשיו ${roleLabel(toRole, p.gender)} ✅`);
+      toast(t('{name} עכשיו {role} ✅', { name: p.name, role: roleLabel(toRole, p.gender) }));
     } catch (e) {
       toast(e instanceof BioError ? e.message : errMsg(e));
     } finally { setRoleBusy(null); }
@@ -69,10 +70,10 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
         <div className="person" key={r.id}>
           {r.avatar && <span className="avatar-md" aria-hidden="true">{r.avatar}</span>}
           <div className="text">
-            {r.name} <span className="meta">⏳ מבקש/ת להצטרף</span>
+            {r.name} <span className="meta">{t('⏳ מבקש/ת להצטרף')}</span>
           </div>
-          <button className="small" type="button" onClick={() => run('auth:approveJoin', { requestId: r.id }, `${r.name} אושר/ה ✅`)}>אישור</button>
-          <button className="small danger" type="button" onClick={() => run('auth:rejectJoin', { requestId: r.id }, 'הבקשה נדחתה')}>דחייה</button>
+          <button className="small" type="button" onClick={() => run('auth:approveJoin', { requestId: r.id }, t('{name} אושר/ה ✅', { name: r.name }))}>{t('אישור')}</button>
+          <button className="small danger" type="button" onClick={() => run('auth:rejectJoin', { requestId: r.id }, t('הבקשה נדחתה'))}>{t('דחייה')}</button>
         </div>
       ))}
       {people.map((p) => (
@@ -85,46 +86,46 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
             </span>
             {p.lockAlert && (
               <div className="meta" style={{ color: '#b45309' }}>
-                ⚠️ הקוד של {p.name} ננעל {p.lockAlert.count === 1 ? 'פעם אחת' : p.lockAlert.count + ' פעמים'} אחרי ניסיונות שגויים.
-                {' '}{g(p.gender, 'אם זה לא הוא', 'אם זה לא היא', 'אם זה לא הוא/היא')}, כדאי לקבוע קוד חדש.
-                {' '}<button className="small" type="button" onClick={() => run('auth:unlockPerson', { personId: p.id }, 'הנעילה שוחררה ✅')}>שחרור נעילה</button>
+                {tn(p.lockAlert.count, '⚠️ הקוד של {name} ננעל פעם אחת אחרי ניסיונות שגויים.', '⚠️ הקוד של {name} ננעל {n} פעמים אחרי ניסיונות שגויים.', { name: p.name })}
+                {' '}{g(p.gender, 'אם זה לא הוא, כדאי לקבוע קוד חדש.', 'אם זה לא היא, כדאי לקבוע קוד חדש.', 'אם זה לא הוא/היא, כדאי לקבוע קוד חדש.')}
+                {' '}<button className="small" type="button" onClick={() => run('auth:unlockPerson', { personId: p.id }, t('הנעילה שוחררה ✅'))}>{t('שחרור נעילה')}</button>
               </div>
             )}
-            {p.role === 'teen' && p.friendsEnabled && <div className="meta">🤝 מצב חברים פעיל • {p.friendEmail || ''}</div>}
+            {p.role === 'teen' && p.friendsEnabled && <div className="meta">{t('🤝 מצב חברים פעיל')} • {p.friendEmail || ''}</div>}
             {p.id !== me && (
               <div className="meta">
-                תפקיד:{' '}
-                {roleBusy === p.id ? <span>⏳ מאמתים…</span> : (
+                {t('תפקיד:')}{' '}
+                {roleBusy === p.id ? <span>{t('⏳ מאמתים…')}</span> : (
                   <Select className="dd-inline" value={p.role} onChange={(r) => changeRole(p, r)} options={[
                     { value: 'child', label: g(p.gender, 'ילד', 'ילדה', 'ילד/ה') },
                     { value: 'teen', label: g(p.gender, 'נער', 'נערה', 'נער/ה') },
-                    { value: 'parent', label: 'הורה' },
+                    { value: 'parent', label: t('הורה') },
                   ]} />
                 )}
                 {' '}<span aria-hidden="true">🔒</span>
               </div>
             )}
             <div className="meta">
-              צורת פנייה:{' '}
+              {t('צורת פנייה:')}{' '}
               {p.gender ? (
                 <span>{g(p.gender, 'זכר', 'נקבה')}</span>
               ) : (
-                <Select className="dd-inline" value="" onChange={(gender) => gender && changeGender(p, gender)} options={GENDER_PLACEHOLDER} />
+                <Select className="dd-inline" value="" onChange={(gender) => gender && changeGender(p, gender)} options={genderPlaceholder()} />
               )}
             </div>
           </div>
-          <button className="small" type="button" onClick={() => sheet.open('קוד סודי ל' + p.name, <ResetPinSheet person={p} />)}>קוד חדש</button>
+          <button className="small" type="button" onClick={() => sheet.open(t('קוד סודי ל{name}', { name: p.name }), <ResetPinSheet person={p} />)}>{t('קוד חדש')}</button>
           {p.role === 'teen' && p.friendsEnabled && (
             <button className="small danger" type="button" onClick={() => {
-              if (!confirm(`לכבות את מצב החברים של ${p.name}? אי אפשר יהיה להוסיף רישומים חדשים עם חברים.`)) return;
-              run('friends:disableAccess', { personId: p.id }, 'מצב חברים כובה');
-            }}>כיבוי חברים</button>
+              if (!confirm(t('לכבות את מצב החברים של {name}? אי אפשר יהיה להוסיף רישומים חדשים עם חברים.', { name: p.name }))) return;
+              run('friends:disableAccess', { personId: p.id }, t('מצב חברים כובה'));
+            }}>{t('כיבוי חברים')}</button>
           )}
           {p.id !== me && (
-            <button className="small danger" type="button" aria-label={'הסרת ' + p.name} onClick={() => {
-              if (!confirm(`להסיר את ${p.name} מהמשפחה?`)) return;
-              run('people:remove', { id: p.id }, `${p.name} ${g(p.gender, 'הוסר', 'הוסרה', 'הוסר/ה')}`);
-            }}>הסרה</button>
+            <button className="small danger" type="button" aria-label={t('הסרת {name}', { name: p.name })} onClick={() => {
+              if (!confirm(t('להסיר את {name} מהמשפחה?', { name: p.name }))) return;
+              run('people:remove', { id: p.id }, g(p.gender, '{name} הוסר', '{name} הוסרה', '{name} הוסר/ה', { name: p.name }));
+            }}>{t('הסרה')}</button>
           )}
         </div>
       ))}

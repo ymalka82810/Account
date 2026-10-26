@@ -1,0 +1,691 @@
+0|. Dzieci dołączają za zgodą rodzica
+1|(zostało z {total})
+2|{amount} po kursie {symbol}1 = {rate}
+3|{debtLine}, według waluty (teraz ← potem)
+4|{device} · ostatnio widziano {date}
+5|{from} oddał(a) dług: {to}
+6|{from} oddał(a) mi dług
+7|{from} oddał(a) dług: {to}
+8|{from} oddał(a) mi dług
+9|{from} oddała dług: {to}
+10|{from} oddała mi dług
+11|{from} jest winien {to}
+12|{from} jest mi winien
+13|{from} jest winien(na) {to}
+14|{from} jest winien(na) mi
+15|{from} jest winna {to}
+16|{from} jest mi winna
+17|{name} zatwierdzono ✅
+18|{name} usunięto
+19|{name} usunięto
+20|{name} usunięto
+21|{name} jest mi winien
+22|{name} jest mi winien(na)
+23|{name} jest mi winna
+24|{name} wybierze nowy kod przy następnym logowaniu
+25|{name} wybierze nowy kod przy następnym logowaniu
+26|{name} będzie mógł(mogła) dodawać znajomych przez e-mail i zapisywać z nimi długi. Każdy wpis czeka też na zatwierdzenie przez znajomego, a wy widzicie je w przeglądzie. Można to wyłączyć w każdej chwili.
+27|{name} będzie mógł(mogła) dodawać znajomych przez e-mail i zapisywać z nimi długi. Każdy wpis czeka też na zatwierdzenie przez znajomego, a wy widzicie je w przeglądzie. Można to wyłączyć w każdej chwili.
+28|Kraju {name} nie ma na liście, więc walutą będzie dolar.
+29|{name} prosi o możliwość zapisywania długów ze znajomymi
+30|{name} prosi o możliwość zapisywania długów ze znajomymi
+31|{name} prosi o możliwość zapisywania długów ze znajomymi
+32|{name} dodano do rodziny ✅
+33|{name} dodano do rodziny ✅
+34|{name} dodano do rodziny ✅
+35|{name} jest teraz: {role} ✅
+36|{name} chce cię dodać
+37|{name} wybierze nowy kod przy następnym logowaniu
+38|{name} będzie mógł(mogła) dodawać znajomych przez e-mail i zapisywać z nimi długi. Każdy wpis czeka też na zatwierdzenie przez znajomego, a wy widzicie je w przeglądzie. Można to wyłączyć w każdej chwili.
+39|{who} zapisał(a): {line}
+40|{who} zapisał(a): {line}
+41|{who} zapisała: {line}
+42|→ Wybierz inny dług
+43|→ Wstecz
+44|→ Inna rodzina
+45|↩️ Jeszcze nie
+46|⏳ Wpisy czekające na zatwierdzenie przez rodzica: {n}. Zobaczysz je w „Historii”.
+47|⏳ Sprawdzanie…
+48|⏳ Prosi o dołączenie
+49|⏳ Czeka na zatwierdzenie
+50|⏳ Czeka na zatwierdzenie ({n})
+51|⏳ Czeka na zatwierdzenie przez rodziców
+52|⏳ Czeka na twoje zatwierdzenie
+53|⏳ Czeka na twoje zatwierdzenie ({n})
+54|⏳ Czeka na znajomego
+55|⏳ Czeka na zatwierdzenie prośby
+56|⏳ Chwileczkę…
+57|⏳ Jeden wpis czeka na zatwierdzenie przez rodzica. Zobaczysz go w „Historii”.
+58|{"one":"⚠️ Kod: {name} został zablokowany raz po błędnych próbach.","few":"⚠️ Kod: {name} został zablokowany {n} razy po błędnych próbach.","many":"⚠️ Kod: {name} został zablokowany {n} razy po błędnych próbach.","other":"⚠️ Kod: {name} został zablokowany {n} razy po błędnych próbach."}
+59|⚡ Neon
+60|✅ Zatwierdź
+61|✅ Zgadza się
+62|✅ Zapłacono
+63|✅ Zapisz zwrot
+64|✅ Zapisz dług
+65|✉️ Dodaj e-mail do odzyskiwania
+66|✉️ E-mail do odzyskiwania: {email}
+67|🌈 Kolorowy
+68|🌙 Ciemny
+69|🍕 Jedzenie
+70|🍦 Lody
+71|🍬 Słodycze
+72|🎨 Kolory ekranu
+73|🎮 Gra
+74|🏠 Załóż rodzinną kasę
+75|👀 Tryb demo: przykładowe dane, nic nie jest zapisywane
+76|👀 Chcesz zobaczyć, jak to działa? Demo na 10 sekund
+77|👨‍👩‍👧 Jestem rodzicem i chcę założyć nową rodzinną kasę
+78|👨‍👩‍👧 Rodzina
+79|💰 Moje pieniądze
+80|💰 Dostałem(am)
+81|💰 Zapłaciłem(am)
+82|📋 Skopiuj otwartą listę
+83|📒 Mój notes
+84|📜 Historia
+85|📜 Historia
+86|🔑 Zmień tajny kod
+87|🔒 Dodanie jako „{role}” jest zatwierdzane odciskiem palca lub rozpoznawaniem twarzy.
+88|🔔 Włącz powiadomienia
+89|🔕 Wyłącz powiadomienia
+90|🗑️ Usuń cały notes
+91|🤝 Zaproszenia do znajomych ({n})
+92|🤝 Prośby o tryb znajomych ({n})
+93|🤝 Znajomi
+94|🤝 Tryb znajomych jest włączony
+95|🧹 Usuń to, co zapłacone
+96|🙂 Wybierz awatar
+97|4 cyfry
+98|od 4 do {max} cyfr
+99|od 4 do 8 cyfr
+100|6 cyfr
+101|Tata
+102|Osoba nie może być winna sama sobie
+103|Taka osoba nie istnieje
+104|Zatwierdzono ✅
+105|Strefa zagrożenia
+106|Nie można zwrócić więcej, niż zostało z długu
+107|Nie można zwrócić więcej, niż zostało z długu ({amount})
+108|Nie możesz usunąć samego siebie
+109|Na tym urządzeniu nie można kopiować
+110|Nie możesz zmienić własnej roli
+111|Jak nazwać rodzinę?
+112|Jak masz na imię?
+113|Mama
+114|Potwierdź
+115|Potwierdzenie e-maila
+116|Brak
+117|Brak połączenia z internetem. Spróbuj ponownie, gdy będziesz online.
+118|Nic nie jest otwarte
+119|Nic nie jest otwarte!
+120|Nie masz tajnego kodu. Ustaw go w „Moim koncie” i spróbuj ponownie.
+121|Brak potwierdzonego e-maila
+122|Brak potwierdzonego e-maila do zastąpienia
+123|Brak zapłaconych wpisów
+124|Brak kursu wymiany dla waluty długu
+125|Chwilowo brak kursu
+126|Gdzie mieszkacie?
+127|Zatwierdź
+128|Potwierdzenie przez e-mail
+129|Zatwierdź tryb znajomych
+130|Potwierdź zmianę roli
+131|Jeśli ten rodzic ma potwierdzony e-mail, wyślemy na niego kod weryfikacyjny. Jeśli e-maila nie ustawiono, inny rodzic może ustawić ci nowy kod.
+132|Jeśli to nie on, warto ustawić nowy kod.
+133|Jeśli to nie on/ona, warto ustawić nowy kod.
+134|Jeśli to nie ona, warto ustawić nowy kod.
+135|Jeśli znajomy ma tryb znajomych, wysłano mu prośbę 🤝
+136|Jestem nowy(-a)
+137|Jestem winien
+138|Jestem winien pieniądze
+139|Jestem winien: {name}
+140|Jestem winien: {to}
+141|Jestem winien znajomemu
+142|Jestem winien znajomym
+143|Jestem winien(na)
+144|Jestem winien(na) pieniądze
+145|Jestem winien(na): {name}
+146|Jestem winien(na): {to}
+147|Jestem winien(na) znajomemu
+148|Jestem winien(na) znajomym
+149|Jestem winna
+150|Jestem winna pieniądze
+151|Jestem winna: {name}
+152|Jestem winna: {to}
+153|Jestem winna koleżance
+154|Jestem winna znajomym
+155|Nikt nic nie jest winien!
+156|Nikt nic nie jest winien.
+157|Anulować można tylko w ciągu pierwszych 10 minut albo poprosić rodzica
+158|Anulować można tylko w ciągu pierwszych 10 minut. Aby poprawić, zapisz zwrot
+159|Możesz zwrócić do {max}.
+160|Do długu można przypisać tylko zwrot
+161|Możesz zapisywać tylko długi, które cię dotyczą
+162|Możesz zapisywać tylko ze zatwierdzonymi znajomymi
+163|{day}. dnia każdego miesiąca
+164|Którego dnia
+165|Którego dnia miesiąca (od 1 do 28)
+166|Sprawdzamy, kto to…
+167|Sprawdzanie…
+168|Wybierz kraj
+169|Wybierz awatar
+170|Wybierz, gdzie mieszkacie
+171|Wybierz nowy tajny kod ({rule})
+172|Anuluj
+173|Odbierz uprawnienia rodzica
+174|Wyłącz tryb znajomych
+175|Między znajomymi możesz zapisać naraz do {max}.
+176|Rodzina {name}
+177|Członkowie rodziny
+178|W sumie {name} jest mi winien
+179|W sumie {name} jest mi winien(na)
+180|W sumie {name} jest mi winna
+181|W sumie jestem winien: {name}
+182|W sumie jestem winien(na): {name}
+183|W sumie jestem winna: {name}
+184|Poproś rodziców o zatwierdzenie
+185|Duży
+186|Rozmiar tekstu
+187|Przewiń w prawo
+188|Przewiń w lewo
+189|Dostępna jest nowa wersja ({version})
+190|Odrzuć
+191|Awatar
+192|Awatar {avatar}
+193|Kieszonkowe
+194|Stałe kieszonkowe
+195|minutę
+196|{"one":"{n} minuta","few":"{n} minuty","many":"{n} minut","other":"{n} minuty"}
+197|Potwierdzenie anulowane
+198|Potwierdzenie odciskiem palca / rozpoznawaniem twarzy nie powiodło się
+199|Potwierdzenie nie powiodło się. Spróbuj ponownie.
+200|Potwierdzenie nie powiodło się (nieznany adres).
+201|Potwierdzenie nie powiodło się. Spróbuj ponownie.
+202|Osoby, które dodasz, wybiorą tajny kod przy pierwszym logowaniu.
+203|Aplikacja nie jest jeszcze połączona z serwerem
+204|Rozumiem
+205|Prośba już nie istnieje
+206|Prośbę odrzucono
+207|Prośbę wysłano
+208|Prośbę wysłano twoim rodzicom ⏳
+209|Prośbę wysłano twoim rodzicom. Damy ci znać, gdy ją zatwierdzą.
+210|Ustawienia
+211|Ustawienia rodziny
+212|Ten awatar jest już zajęty przez kogoś z rodziny
+213|Ta przeglądarka jest zbyt stara do potwierdzania biometrycznego. Zaktualizuj ją i spróbuj ponownie.
+214|Pobieranie nie powiodło się. Sprawdź połączenie z internetem i spróbuj ponownie
+215|Zwrot nie pasuje do tego długu
+216|Zwrot zapisano ✅
+217|Notatka jest zbyt długa
+218|Powiadomienia włączone 🔔
+219|Powiadomienia są zablokowane. Możesz je zezwolić w ustawieniach przeglądarki.
+220|Powiadomienia wyłączone
+221|Straci uprawnienia rodzica. Potem wymagane będzie potwierdzenie rozpoznawaniem twarzy lub odciskiem palca.
+222|Straci tryb znajomych. Potem wymagane będzie potwierdzenie rozpoznawaniem twarzy lub odciskiem palca.
+223|Otrzyma pełne uprawnienia rodzica: widzenie wszystkiego, zatwierdzanie, usuwanie i zarządzanie rodziną. Potem wymagane będzie potwierdzenie rozpoznawaniem twarzy lub odciskiem palca.
+224|Dodaj
+225|Dodaj członka rodziny
+226|Dodaj znajomego
+227|Przeniesiono wpisów: {n}
+228|Skopiowano ✅
+229|Rodzic
+230|Inny rodzic musi ustawić ci tajny kod
+231|Rodzic loguje się tutaj, a potem dostaje kody dla reszty rodziny.
+232|Rodzic musi ustawić adres Convex w pliku
+233|Najpierw musi zalogować się rodzic.
+234|Znajomego usunięto
+235|Moi znajomi
+236|Dług jest w walucie {debtCur}. Płacisz w {payCur} po dzisiejszym kursie.
+237|Ten dług jest już zapłacony
+238|Dług zostanie całkowicie spłacony ✅
+239|Nie znaleziono długu
+240|Dług zapisano ✅
+241|Długi między tobą a osobą {name} zostaną spłacone do tej kwoty i zostanie tylko różnica. Historia jest zachowana.
+242|Otwarte długi według waluty
+243|Długi rozliczono ✅
+244|Zwrot
+245|Oddałem(am) dług: {to}
+246|Zmień e-mail
+247|Zmień kod
+248|Rozliczenie z osobą {name}
+249|Moje konto
+250|Straci uprawnienia rodzica. Potem wymagane będzie potwierdzenie rozpoznawaniem twarzy lub odciskiem palca.
+251|Straci tryb znajomych. Potem wymagane będzie potwierdzenie rozpoznawaniem twarzy lub odciskiem palca.
+252|Otrzyma pełne uprawnienia rodzica: widzenie wszystkiego, zatwierdzanie, usuwanie i zarządzanie rodziną. Potem wymagane będzie potwierdzenie rozpoznawaniem twarzy lub odciskiem palca.
+253|Historia
+254|Historia ze znajomymi
+255|Wszystko: {amount}
+256|Wszystko rozliczone
+257|Wszystko rozliczone ✅
+258|Wszystko jest zapisane tylko na tym urządzeniu.
+259|Najpierw najnowsze
+260|Moje pieniądze
+261|Mojego kraju nie ma na liście ($)
+262|Waluta rodziny
+263|Walutą rodziny jest {base}, a ten dług zostanie zapisany w {cur}. W saldach pokazuje się go po kursie z tamtego dnia, a przy płatności kwota jest przeliczana po kursie z dnia płatności.
+264|Waluta: {cur}
+265|E-mail potwierdzony ✅
+266|Ten e-mail jest już używany przez kogoś innego
+267|Obecny e-mail: {email}. Aby go zastąpić, wyślemy na niego kod potwierdzający.
+268|E-mail: {name}
+269|E-mail znajomego
+270|Twój e-mail dla znajomych:
+271|Lokalizację i walutę zapisano ✅
+272|Lokalizację i walutę zaktualizowano ✅
+273|To urządzenie nie jest zarejestrowane do potwierdzania. Zarejestruj je ponownie.
+274|Urządzenie nie jest obsługiwane
+275|Urządzenie odłączono ✅
+276|Dalej
+277|Nie znaleziono rodziny
+278|Rodzina jest pełna
+279|Blokadę zdjęto ✅
+280|Ten(ta) nastolatek(-tka) straci tryb znajomych. Potem wymagane będzie potwierdzenie rozpoznawaniem twarzy lub odciskiem palca.
+281|Moje dane
+282|Kwota jest zbyt duża
+283|Kwota jest zbyt duża.
+284|Najpierw największe kwoty
+285|Kwoty w notesie
+286|Usuń
+287|Usuń: {name}
+288|Ukryj
+289|Przenieś na serwer
+290|Nadaj uprawnienia rodzica
+291|Notatka
+292|Notes został opróżniony
+293|Notes jest już pusty
+294|Mój notes
+295|Zatrzymaj
+296|Włącz potwierdzanie biometryczne
+297|Pokaż kod 🔒
+298|Pokaż kod dołączenia
+299|Dołącz
+300|Plik jest zbyt duży
+301|Pobrany plik nie jest nową wersją aplikacji
+302|Pobrany plik jest nieprawidłowy. Spróbuj ponownie
+303|Kod zmieniono ✅ Możesz go pokazać odciskiem palca lub rozpoznawaniem twarzy
+304|Nowy kod musi składać się z: {rule}.
+305|Obecny kod
+306|Obecny kod jest nieprawidłowy.
+307|Tajny kod musi mieć 4 cyfry
+308|Tajny kod jest nieprawidłowy.
+309|Wpisany tajny kod jest nieprawidłowy.
+310|Twój tajny kod, do potwierdzenia
+311|Kod jest już nieważny. Poproś rodziców o nowy kod.
+312|Kod jest nieprawidłowy. Sprawdź jeszcze raz lub zapytaj rodziców.
+313|Kod jest nieprawidłowy. Pozostało prób: {left}.
+314|Kod z e-maila
+315|Kod z obecnego e-maila jest błędny lub wygasł.
+316|Kod jest ukryty
+317|Kod jest ukryty i pokazuje się tylko po użyciu odcisku palca lub rozpoznawania twarzy.
+318|Kod musi składać się z: {rule}
+319|Kod musi składać się z: {rule}.
+320|Kod musi mieć 4 cyfry
+321|Kod musi mieć co najmniej 4 cyfry, maksymalnie {max}
+322|Kod jest błędny lub wygasł.
+323|Kod zmieniono ✅
+324|Kod: {name} zaktualizowano
+325|Kody nie były takie same. Zaczynamy od nowa.
+326|Rodzinna Kasa
+327|Kasę usunięto
+328|Rozliczenie wysłano do rodzica do zatwierdzenia ⏳
+329|Rozliczenie zamyka długi po obu stronach do {amount}. Różnica pozostaje, a historia jest zachowana.
+330|Wpisz swój tajny kod.
+331|Załóż kasę
+332|Załóż rodzinną kasę
+333|Następny wpis: {date}
+334|Wpis cykliczny zatrzymano
+335|Wpis cykliczny dodano ✅
+336|Wpis odrzucono
+337|Wpis usunięto
+338|Lista
+339|Listę skopiowano
+340|Nazwę zaktualizowano ✅
+341|Kursy zaktualizowano {when}
+342|Korekty (zwroty zapisane bez konkretnego długu)
+343|Płatność w {base} zostanie przeliczona po dzisiejszym kursie i odjęta od długu w jego walucie. Po zapisaniu ten kurs zostaje zachowany i się nie zmieni.
+344|To jest demo, więc nic nie można zmienić. Załóż własną kasę!
+345|To twój e-mail
+346|To usunie całą kasę: wszystkie osoby i wszystkie wpisy, bez możliwości cofnięcia.\nAby potwierdzić, wpisz nazwę rodziny: {name}
+347|Rozpoznawanie twarzy lub odcisk palca
+348|Męska
+349|Znajomy jest mi winien
+350|Znajomego dodano ✅
+351|Znajomi są mi winni
+352|Znajomi dodają nastolatka pod tym adresem e-mail. Nic na niego nie jest wysyłane, służy tylko do wyszukiwania.
+353|Znajomi dodają nastolatka pod tym adresem e-mail. Nic na niego nie jest wysyłane, służy tylko do wyszukiwania.
+354|Znajomi dodają nastolatka pod tym adresem e-mail. Nic na niego nie jest wysyłane, służy tylko do wyszukiwania.
+355|Znajomych dodaje się przez adres e-mail. Wszystko, co zostanie zapisane, zobaczysz w przeglądzie.
+356|Znajomi: {names}
+357|Dług
+358|Dług w walucie {cur}
+359|Wstecz
+360|jest winien
+361|jest winien(na)
+362|jest mi winien
+363|Są mi winni
+364|Są mi winni pieniądze
+365|jest winna
+366|Ładowanie…
+367|Rodzic jeszcze nie ustawił
+368|Stracą uprawnienia rodzica. Potem wymagane będzie potwierdzenie rozpoznawaniem twarzy lub odciskiem palca.
+369|{day}
+370|Nieprawidłowy dzień miesiąca (od 1 do 28)
+371|Nieprawidłowy dzień
+372|Bezpieczne wylogowywanie…
+373|Zbyt wiele próśb o kod. Spróbuj za kilka minut
+374|Zbyt wiele próśb. Spróbuj później
+375|Zarejestrowano zbyt wiele urządzeń
+376|W tej chwili zbyt wiele nowych rodzin. Spróbuj za kilka minut
+377|Zbyt wiele prób. Spróbuj za minutę.
+378|Zbyt wiele prób. Spróbuj za kilka minut.
+379|Zbyt wiele wpisów. Spróbuj później
+380|Z długu zostanie {left}.
+381|Dziecko
+382|Dziecko
+383|Dziecko
+384|Wyloguj
+385|Zakończ demo
+386|Otrzymają pełne uprawnienia rodzica: widzenie wszystkiego, zatwierdzanie, usuwanie i zarządzanie rodziną. Potem wymagane będzie potwierdzenie rozpoznawaniem twarzy lub odciskiem palca.
+387|Zielony
+388|Zielony + żółty
+389|Zbyt wiele oczekujących próśb o dołączenie. Poproś rodziców, aby się nimi zajęli
+390|Między tymi dwiema osobami jest zbyt wiele otwartych długów. Zamknij część, zanim dodasz kolejne.
+391|Między tymi dwiema osobami jest zbyt wiele aktywnych wpisów. Zamknij część długów, zanim dodasz kolejne.
+392|Między wami jest otwarte saldo. Najpierw je rozlicz
+393|Są tu długi w innej walucie: zostaną rozliczone po dzisiejszym kursie, a ten kurs zostanie zapisany.
+394|Na liście jest już wielu znajomych
+395|Jest już wiele wpisów cyklicznych
+396|Masz kod rodziny? Wejdź do kasy
+397|Masz kod rodziny? Wpisz go tutaj. Poproś rodziców o kod dołączenia rodziny.
+398|Na tę osobę są wpisy. Najpierw je usuń
+399|Salda
+400|Tu zapisujesz długi ze znajomymi: kto za kogo zapłacił i kto ma oddać. Znajomy też potrzebuje aplikacji, a twoi rodzice muszą zatwierdzić.
+401|Ktoś o tym imieniu już istnieje
+402|Ktoś o tym imieniu już istnieje. Wybierz go z listy lub zmień imię
+403|Ktoś o tym imieniu już istnieje. Odrzuć prośbę
+404|Ten profil ma już kod
+405|Prawie gotowe…
+406|Już korzystacie z kasy?
+407|Aby {need}, potrzebne jest urządzenie ze skonfigurowanym odciskiem palca lub rozpoznawaniem twarzy.
+408|Aby ustawić nowy kod dla: {name}, wyślemy kod weryfikacyjny na adres {email}.
+409|Niebieski + fioletowy
+410|Wyłącz znajomych
+411|Wszystkie otwarte długi
+412|Cała rodzina
+413|Wszystkie kwoty są pokazywane w tej walucie. Możesz zapisać dług w innej walucie (np. 100 dolarów), a przy płatności zostanie przeliczony po kursie z tego dnia.
+414|Co miesiąc
+415|Co {day}
+416|Jak często
+417|Co tydzień
+418|Ile {from} oddał(a): {to}?
+419|Ile {from} oddał(a): {to}?
+420|Ile {from} oddała: {to}?
+421|Ile jest mi winien {name}?
+422|Ile jest mi winien(na) {name}?
+423|Ile jest mi winna {name}?
+424|Ile zapłacił(a) mi {name}?
+425|Ile zapłacił(a) mi {name}?
+426|Ile zapłaciła mi {name}?
+427|Ile jestem winien: {to}?
+428|Ile jestem winien(na): {to}?
+429|Ile jestem winna: {to}?
+430|Ile zapłaciłem(am): {to}?
+431|Ile?
+432|Tak
+433|Tak, kontynuuj
+434|Tak, rozlicz
+435|Tak, zapisz dług
+436|Tak, zapisz płatność
+437|Zaloguj się
+438|Wpisz e-mail, który znajomy podał swoim rodzicom w aplikacji. Zostanie do niego wysłana prośba, którą musi zatwierdzić. Działa tylko wtedy, gdy znajomy też ma tryb znajomych.
+439|Wpisz tajny kod
+440|Wpisz kod jeszcze raz, do potwierdzenia
+441|Wpisz imię
+442|Wpisz kwotę
+443|Wpisz kwotę większą od zera.
+444|Inny adres
+445|Adres e-mail jest nieprawidłowy
+446|Adres e-mail
+447|Nowy adres e-mail
+448|Nieprawidłowy adres e-mail
+449|Pomarańczowy
+450|Pomarańczowy + różowy
+451|Nie
+452|Nie udało się włączyć powiadomień na tym urządzeniu
+453|Nie udało się zarejestrować urządzenia. Spróbuj ponownie.
+454|Nieznany
+455|Nieprawidłowo
+456|Na telefonie nie znaleziono instalatora. Możesz pobrać plik bezpośrednio z GitHuba
+457|Do jakiego długu odnosi się zwrot?
+458|Aby potwierdzić, wyślemy kod weryfikacyjny na adres {email}.
+459|Aby potwierdzać wrażliwe działania w kasie
+460|Zresetuj, aby wybrał(a) sam(a) przy następnym logowaniu
+461|Anulować to, co zapisałeś(aś)?
+462|Odrzucić? Wpis zostanie usunięty.
+463|Nowy rodzic potrzebuje tajnego kodu
+464|Dla rodzica trzeba ustawić kod (nie można zresetować, aby wybrał sam)
+465|Tylko dla rodziców. Osoba zakładająca kasę jest pierwszym rodzicem. Potem dostajesz jeden kod dołączenia dla całej rodziny i ustawiasz każdemu rolę: dziecko, nastolatek lub rodzic.
+466|Zmienić kod? Osoby, które już są w środku, zostają, ale stary kod przestanie działać, a inne urządzenia, które zapisały rodzinę, będą musiały wpisać nowy kod.
+467|Usunąć {name} ze znajomych?
+468|Usunąć {name} z rodziny?
+469|Zatrzymać wpis cykliczny? To, co już zapisano, zostaje.
+470|Pokaż na stronie głównej także to, co zapłacone
+471|Dotknij, aby zobaczyć szczegóły obliczeń ›
+472|Wyłączyć tryb znajomych dla: {name}? Nowe wpisy ze znajomymi nie będą możliwe.
+473|Nie podano
+474|Usunąć zapłacone wpisy ({n})?
+475|Usunąć wpis: {name}?
+476|Usunąć ten wpis?
+477|Usunąć wszystkie wpisy w notesie? Nie można tego cofnąć.
+478|Komu
+479|Komu jestem winien?
+480|Komu jestem winien(na)?
+481|Komu jestem winna?
+482|Komu?
+483|Na przykład: lody, bilet do kina
+484|Na przykład: rodzina Kowalskich
+485|Odłączyć urządzenie? Będzie musiało ponownie wpisać kod dołączenia.
+486|Walutę rodziny określa kraj. Możesz ją zmienić później na karcie Zarządzanie.
+487|Według waluty
+488|Według imienia (A-Z)
+489|Tylko do odczytu. Każdy wpis ze znajomym czeka też na jego zatwierdzenie.
+490|zobaczyć kod dołączenia
+491|zmienić rolę
+492|Wyrównane: nikt nic nie jest winien
+493|Sprawdzanie…
+494|ma dostać
+495|ma dostać
+496|ma dostać
+497|Kraj nie jest obsługiwany
+498|polityką prywatności
+499|Polityka prywatności
+500|Kraj zamieszkania
+501|Co nastolatki zapisują ze znajomymi
+502|Co jest otwarte
+503|Pobieranie aktualizacji...
+504|Pobieranie aktualizacji... {percent}%
+505|Usuń
+506|Usuń całą kasę
+507|Waluta
+508|Waluta nie jest obsługiwana
+509|Kto jest mi winien?
+510|Kto komu jest winien
+511|Kto jest winien (płacący)
+512|Kto jest mi winien?
+513|Kto się loguje?
+514|E-mail do odzyskiwania kodu
+515|E-mail tylko dla rodziców
+516|Lokalizacja i waluta
+517|Ktoś
+518|Urządzenie
+519|Urządzenie nie istnieje
+520|Połączone urządzenia
+521|Urządzenia, które zapisały rodzinę. Karta nieużywana przez 180 dni wygasa sama.
+522|Czekamy na zatwierdzenie przez rodzica w rodzinie {name}. Gdy rodzic zatwierdzi, wybierz swoje imię na ekranie logowania i wpisz wybrany tajny kod.
+523|Czekamy na zatwierdzenie przez rodzica. Gdy rodzic zatwierdzi, wybierz swoje imię na ekranie logowania i wpisz wybrany tajny kod.
+524|Nieprawidłowa subskrypcja powiadomień
+525|Nieprawidłowy klucz
+526|Tryb znajomych
+527|Tryb znajomych zatwierdzony ✅
+528|Tryb znajomych jest tylko dla nastolatków
+529|Tryb znajomych wyłączony
+530|Tryb znajomych dla: {name}
+531|Tryb znajomych nie został jeszcze zatwierdzony przez rodziców
+532|Dołącz do kasy
+533|Dołączasz do kasy rodziny {name}. Rodzic z rodziny musi zatwierdzić dołączenie i ustali, czy jesteś dzieckiem, nastolatkiem czy rodzicem.
+534|Wygląd
+535|Coś poszło nie tak. Spróbuj ponownie.
+536|Zarządzanie
+537|Za wiele prób. Spróbuj ponownie za {wait}.
+538|Odłącz
+539|Usunięto
+540|Na tym urządzeniu znaleziono dane z poprzedniej wersji: osób — {people}, wpisów — {entries}. Przenieść je na serwer?
+541|Spróbuj ponownie
+542|Nastolatek
+543|Nastolatek(-tka)
+544|Nastolatka
+545|Żeńska
+546|Wygląda na to, że urządzenie znajduje się w kraju: {name}. Mieszkacie tam?
+547|Zostało {left} z {total}
+548|Z tego długu zostało {left}.
+549|Kod jest wysyłany, gdy tajny kod jest zmieniany lub resetowany, a także alert, gdy kod kogoś z rodziny zostaje zablokowany.
+550|Wysłano do rodzica do zatwierdzenia ⏳
+551|Wysłano znajomemu do zatwierdzenia ⏳
+552|Fioletowy i turkusowy
+553|Zamknij
+554|Kolejność wpisów
+555|Razem
+556|Razem w {cur} po dzisiejszym kursie
+557|Kwota ({cur})
+558|Nieprawidłowa kwota
+559|Nieprawidłowa kwota. Między znajomymi możesz zapisać naraz do 500 szekli
+560|Przegląd rodziny
+561|Nic jeszcze nie zapisano.
+562|Aktualizacja jest już w toku
+563|Aktualizuj
+564|Więcej
+565|W rodzinie nie ma jeszcze nikogo innego. Rodzic musi ich dodać.
+566|Nie ma jeszcze zatwierdzonych znajomych
+567|Nie ma jeszcze zatwierdzonych znajomych. Dodaj znajomego przez jego e-mail.
+568|Nie ma jeszcze znajomych. Dodaj znajomego przez jego e-mail.
+569|Lista jest jeszcze pusta. Dotknij jednego z przycisków, aby zacząć.
+570|Nie ma jeszcze wpisów cyklicznych.
+571|Więcej awatarów
+572|Jeszcze nie wybrał(a) kodu
+573|Jeszcze nie wybrał(a) kodu
+574|Jeszcze nie wybrała kodu
+575|Nic jeszcze nie zapisano ze znajomymi.
+576|Nic jeszcze nie zapisano.
+577|Wygląd
+578|Za: {debt} (= {covers} po dzisiejszym kursie).
+579|Za: {debt}.
+580|Za co? (można pominąć)
+581|Za co? (opcjonalnie)
+582|Za: {debt}
+583|Z kim?
+584|Ogromny
+585|Potwierdzenie wygasło. Spróbuj ponownie.
+586|Szczegóły obliczeń
+587|Nieprawidłowe działanie
+588|Kolory ekranu
+589|Kolory neonowe
+590|Forma zwracania się została już ustawiona i nie można jej zmienić
+591|Forma zwracania się
+592|Forma zwracania się:
+593|Załóż rodzinną kasę: wszyscy widzą to samo konto, a długi aktualizują się dla wszystkich.
+594|Wymagane jest potwierdzenie odciskiem palca lub rozpoznawaniem twarzy
+595|Aplikacja potrzebuje zgody na instalowanie aktualizacji: w otwartych ustawieniach włącz „Zezwalaj z tego źródła” i ponownie dotknij „Aktualizuj”
+596|Musisz zalogować się ponownie
+597|Musisz zalogować się ponownie kodem rodziny
+598|Musisz raz zarejestrować ten telefon.
+599|Musisz zarejestrować urządzenie
+600|Musisz raz zarejestrować to urządzenie i przeglądarkę.
+601|Musisz ponownie zarejestrować urządzenie
+602|Musisz ponownie zarejestrować urządzenie, aby zezwolić także na rozpoznawanie twarzy
+603|Ustaw kod
+604|Ustaw kod i zaloguj się
+605|Ustaw formę zwracania się…
+606|Jeden kod dla wszystkich. Kto dołącza z jego pomocą, wchodzi jako dziecko. Potem w „Członkach rodziny” można zmienić rolę na nastolatka lub rodzica, za potwierdzeniem odciskiem palca lub rozpoznawaniem twarzy.
+607|Kod z e-maila
+608|Kod z e-maila jest błędny lub wygasł.
+609|Kod weryfikacyjny jest błędny lub wygasł.
+610|Kod dołączenia do kasy rodziny {name}: {code}
+611|Kod dołączenia rodziny
+612|Kod dołączenia rodziny pokazuje się tylko po użyciu odcisku palca lub rozpoznawania twarzy.
+613|Kod rodziny się zmienił. Poproś rodziców o nowy kod.
+614|Nowy kod
+615|Nowy kod ({rule})
+616|Kod z obecnego e-maila
+617|Kod rodziny
+618|Tajny kod ({rule}; dłuższy = bezpieczniejszy)
+619|Tajny kod (wymagany dla rodzica, {rule})
+620|Tajny kod (opcjonalnie — dziecko może wybrać go samo)
+621|Tajny kod (opcjonalnie — dziecko może wybrać go samo)
+622|Tajny kod (opcjonalnie — dziecko może wybrać go samo)
+623|Nowy tajny kod
+624|Tajny kod dla: {name}
+625|Twój własny tajny kod (4 cyfry)
+626|Kody dołączenia
+627|Najpierw trzeba ustawić tajny kod dla: {name}
+628|Rodzinną kasę może założyć tylko osoba powyżej 18 lat
+629|Mały
+630|Dostałem(am)
+631|Dostałem(am) różnicę ({amount})
+632|Dostałem(am) pieniądze
+633|Wzajemne rozliczenie
+634|Rozlicz wzajemne długi
+635|Rozlicz wzajemne długi ({amount})
+636|Przeczytałem(am) i akceptuję: {terms} oraz {privacy}
+637|Przeczytałem(am) i akceptuję: {terms} oraz {privacy}
+638|Przeczytałam i akceptuję: {terms} oraz {privacy}
+639|Normalny
+640|Chwileczkę, logowanie…
+641|Chwileczkę, wylogowywanie…
+642|Chcesz, żeby dłużnicy to widzieli?
+643|Zapisz
+644|Zapisz zwrot
+645|Zarejestruj rozpoznawanie twarzy / odcisk palca
+646|Zapisuje dług automatycznie co tydzień lub co miesiąc, bez wpisywania go za każdym razem.
+647|Zarejestruj odcisk palca / rozpoznawanie twarzy
+648|Nowy wpis cykliczny
+649|Mogą to robić tylko rodzice
+650|Tylko rodzice mogą ustawić formę zwracania się
+651|Zapłacono w całości ✅
+652|Zapłacone ({n})
+653|Zapisywanie wszystkiego…
+654|Zdejmij blokadę
+655|Zapłaciłem(am)
+656|Zapłaciłem(am) różnicę ({amount})
+657|Zmień
+658|Zmiana waluty zmienia tylko symbol. Same kwoty nie są przeliczane.
+659|Zmień tajny kod
+660|Zmień nazwę rodziny
+661|Zmiana roli w rodzinie (dziecko, nastolatek, rodzic) jest zatwierdzana odciskiem palca lub rozpoznawaniem twarzy.
+662|Udostępnij
+663|Zapomniałem(am) kodu
+664|Wysłaliśmy kod na adres {email}. Wpisz go oraz nowy adres. Zastąpi obecny dopiero po potwierdzeniu.
+665|Wysłaliśmy 6-cyfrowy kod na adres {email}. Jest ważny 10 minut.
+666|Moje
+667|Wyślij prośbę
+668|Wyślij kod weryfikacyjny
+669|Wyślij kod e-mailem
+670|Wyślij kod na obecny e-mail
+671|Imię
+672|Nazwa rodziny
+673|Nazwa rodziny nie pasuje
+674|Nieprawidłowa nazwa rodziny
+675|Nieprawidłowe imię
+676|Zapisz
+677|godzinę
+678|{"one":"{n} godzina","few":"{n} godziny","many":"{n} godzin","other":"{n} godziny"}
+679|Kursy wymiany nie zostały jeszcze załadowane. Spróbuj za chwilę.
+680|2 godziny
+681|Język
+682|Nieprawidłowa data
+683|Data urodzenia (kasę może założyć tylko osoba powyżej 18 lat)
+684|Nieprawidłowa data urodzenia
+685|regulaminem
+686|Regulamin
+687|Rola
+688|Rola:
+689|Menu główne
+690|Płatność za dług w innej walucie

@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 import { debtLabel, money, debtLeftText } from '../../lib/computations.js';
 
 // פירוט חובות פתוחים בתוך כרטיס חוב: שורה לכל חוב (גם חוב יחיד), עם כפתור שילמתי/קיבלתי משלו.
@@ -11,7 +12,7 @@ export default function DebtLines({ open, iOwe, onPay }) {
             <div className="dl-name">{debtLabel(x.debt)}</div>
             <div className="dl-rem">{debtLeftText(x)}</div>
           </div>
-          <button className="small charcoalbtn" type="button" onClick={() => onPay(x)}>{iOwe ? 'שילמתי' : 'קיבלתי'}</button>
+          <button className="small charcoalbtn" type="button" onClick={() => onPay(x)}>{iOwe ? t('שילמתי') : t('קיבלתי')}</button>
         </div>
       ))}
     </div>

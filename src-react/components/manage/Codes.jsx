@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { t, intlLocale } from '../../i18n/index.js';
 import { call, useQuery } from '../../lib/api.js';
 import { toast, errMsg, prettyCode } from '../../lib/helpers.js';
 import { CODE_KEY } from '../../state/state.js';
@@ -7,11 +8,11 @@ import { BioError } from '../../lib/biometric.js';
 
 // כמה זמן הקוד נשאר גלוי אחרי האימות.
 const SHOW_MS = 30000;
-const BIO_OPTS = {
-  need: 'לראות את קוד ההצטרפות',
-  title: 'הצגת קוד ההצטרפות',
-  reason: 'קוד ההצטרפות של המשפחה נחשף רק בטביעת אצבע או בזיהוי פנים.',
-};
+const bioOpts = () => ({
+  need: t('לראות את קוד ההצטרפות'),
+  title: t('הצגת קוד ההצטרפות'),
+  reason: t('קוד ההצטרפות של המשפחה נחשף רק בטביעת אצבע או בזיהוי פנים.'),
+});
 
 // קוד ההצטרפות היחיד של המשפחה (הורים בלבד). כל מי שמצטרף/ת איתו נכנס/ת בתור ילד/ה,
 // ואז הורה קובע/ת את התפקיד ב"בני המשפחה" (ילד/ה, נער/ה או הורה), באישור ביומטרי.
@@ -37,7 +38,7 @@ export default function Codes({ data, token }) {
     if (code) return code;
     setBusy(true);
     try {
-      const proof = await bioConfirm('reveal-code', BIO_OPTS);
+      const proof = await bioConfirm('reveal-code', bioOpts());
       const res = await call('family:revealCode', { token, proof });
       setCode(res.code);
       clearTimeout(timer.current);
@@ -54,62 +55,61 @@ export default function Codes({ data, token }) {
   async function share() {
     const c = await reveal();
     if (!c) return;
-    const text = `קוד ההצטרפות לקופה של ${f.name}: ${prettyCode(c)}\n${location.origin}${location.pathname}`;
+    const text = `${t('קוד ההצטרפות לקופה של {name}: {code}', { name: f.name, code: prettyCode(c) })}\n${location.origin}${location.pathname}`;
     try {
       if (navigator.share) { await navigator.share({ text }); return; }
       await navigator.clipboard.writeText(text);
-      toast('הועתק ✅');
+      toast(t('הועתק ✅'));
     } catch (e) { /* בוטל */ }
   }
 
   async function rotate() {
-    if (!confirm('להחליף את הקוד? מי שכבר בפנים נשאר, אבל הקוד הישן יפסיק לעבוד, ומכשירים אחרים ששמרו את המשפחה יצטרכו להזין את הקוד החדש.')) return;
+    if (!confirm(t('להחליף את הקוד? מי שכבר בפנים נשאר, אבל הקוד הישן יפסיק לעבוד, ומכשירים אחרים ששמרו את המשפחה יצטרכו להזין את הקוד החדש.'))) return;
     try {
       const keepDevice = !!localStorage.getItem(CODE_KEY);
       const res = await call('family:rotateCode', { token, keepDevice });
       hide();
       // כל המכשירים ששמרו את המשפחה צריכים להזין את הקוד החדש. המכשיר הזה מקבל כרטיס חדש.
       if (res?.loginCode) localStorage.setItem(CODE_KEY, res.loginCode);
-      toast('הקוד הוחלף ✅ אפשר להציג אותו בטביעת אצבע או זיהוי פנים');
+      toast(t('הקוד הוחלף ✅ אפשר להציג אותו בטביעת אצבע או זיהוי פנים'));
     } catch (e) { toast(errMsg(e)); }
   }
 
   const devices = useQuery('auth:listDevices', { token });
-  const fmtDay = (t) => new Date(t).toLocaleDateString('he-IL');
+  const fmtDay = (ms) => new Date(ms).toLocaleDateString(intlLocale());
   async function revoke(id) {
-    if (!confirm('לנתק את המכשיר? הוא יצטרך להזין שוב את קוד ההצטרפות.')) return;
-    try { await call('auth:revokeDevice', { token, deviceId: id }); toast('המכשיר נותק ✅'); }
+    if (!confirm(t('לנתק את המכשיר? הוא יצטרך להזין שוב את קוד ההצטרפות.'))) return;
+    try { await call('auth:revokeDevice', { token, deviceId: id }); toast(t('המכשיר נותק ✅')); }
     catch (e) { toast(errMsg(e)); }
   }
 
   return (
     <div className="codes">
       <div className="codeblock">
-        <div className="meta">קוד ההצטרפות של המשפחה</div>
-        <div className={'codeval' + (code ? '' : ' masked')} dir="ltr" aria-label={code ? undefined : 'הקוד מוסתר'}>
+        <div className="meta">{t('קוד ההצטרפות של המשפחה')}</div>
+        <div className={'codeval' + (code ? '' : ' masked')} dir="ltr" aria-label={code ? undefined : t('הקוד מוסתר')}>
           {code ? prettyCode(code) : '•••••-•••••'}
         </div>
         <p className="hint">
-          קוד אחד לכולם. מי שמצטרף/ת איתו נכנס/ת בתור ילד/ה. אחר כך אפשר לשנות ב&quot;בני המשפחה&quot;
-          לנער/ה או להורה, באישור טביעת אצבע או זיהוי פנים.
-          {' '}הקוד מוסתר ונחשף רק בטביעת אצבע או בזיהוי פנים.
+          {t('קוד אחד לכולם. מי שמצטרף/ת איתו נכנס/ת בתור ילד/ה. אחר כך אפשר לשנות ב"בני המשפחה" לנער/ה או להורה, באישור טביעת אצבע או זיהוי פנים.')}
+          {' '}{t('הקוד מוסתר ונחשף רק בטביעת אצבע או בזיהוי פנים.')}
         </p>
         <div className="tools">
           {code
-            ? <button className="small" type="button" onClick={hide}>הסתרה</button>
-            : <button className="small" type="button" onClick={reveal} disabled={busy}>{busy ? 'מאמתים…' : 'הצגת הקוד 🔒'}</button>}
-          <button className="small" type="button" onClick={share} disabled={busy}>שיתוף</button>
-          <button className="small" type="button" onClick={rotate} disabled={busy}>החלפת קוד</button>
+            ? <button className="small" type="button" onClick={hide}>{t('הסתרה')}</button>
+            : <button className="small" type="button" onClick={reveal} disabled={busy}>{busy ? t('מאמתים…') : t('הצגת הקוד 🔒')}</button>}
+          <button className="small" type="button" onClick={share} disabled={busy}>{t('שיתוף')}</button>
+          <button className="small" type="button" onClick={rotate} disabled={busy}>{t('החלפת קוד')}</button>
         </div>
       </div>
       {devices?.length > 0 && (
         <div className="codeblock">
-          <div className="meta">מכשירים מחוברים</div>
-          <p className="hint">מכשירים ששמרו את המשפחה. כרטיס שלא בשימוש 180 יום פג מעצמו.</p>
+          <div className="meta">{t('מכשירים מחוברים')}</div>
+          <p className="hint">{t('מכשירים ששמרו את המשפחה. כרטיס שלא בשימוש 180 יום פג מעצמו.')}</p>
           {devices.map((d) => (
             <div className="tools" key={d.id}>
-              <span>{d.label || 'מכשיר'} · נראה לאחרונה {fmtDay(d.lastUsedAt ?? d.createdAt)}</span>
-              <button className="small" type="button" onClick={() => revoke(d.id)}>ניתוק</button>
+              <span>{t('{device} · נראה לאחרונה {date}', { device: d.label || t('מכשיר'), date: fmtDay(d.lastUsedAt ?? d.createdAt) })}</span>
+              <button className="small" type="button" onClick={() => revoke(d.id)}>{t('ניתוק')}</button>
             </div>
           ))}
         </div>

@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 // חלון אישור מעוצב במקום confirm() של הדפדפן.
@@ -60,8 +61,8 @@ export function ConfirmProvider({ children }) {
               </div>
             )}
             <div className="confirm-actions">
-              <button ref={okBtn} type="button" className={'primary' + (o.danger ? ' danger-fill' : '')} onClick={() => answer(true)}>{o.okText || 'אישור'}</button>
-              <button type="button" className="ghost" onClick={() => answer(false)}>{o.cancelText || 'ביטול'}</button>
+              <button ref={okBtn} type="button" className={'primary' + (o.danger ? ' danger-fill' : '')} onClick={() => answer(true)}>{o.okText || t('אישור')}</button>
+              <button type="button" className="ghost" onClick={() => answer(false)}>{o.cancelText || t('ביטול')}</button>
             </div>
           </div>
         </div>

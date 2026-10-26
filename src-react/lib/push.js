@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 import { state } from '../state/state.js';
 import { toast, errMsg } from './helpers.js';
 import { call } from './api.js';
@@ -25,13 +26,13 @@ export async function isPushOn() {
 export async function enablePush() {
   try {
     const perm = await Notification.requestPermission();
-    if (perm !== 'granted') { toast('ההתראות חסומות. אפשר לאשר אותן בהגדרות הדפדפן.'); return; }
+    if (perm !== 'granted') { toast(t('ההתראות חסומות. אפשר לאשר אותן בהגדרות הדפדפן.')); return; }
     const reg = await navigator.serviceWorker.ready;
     let sub = await reg.pushManager.getSubscription();
     if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyToBytes(window.VAPID_PUBLIC_KEY) });
     await sendSubToServer(sub);
-    toast('ההתראות הופעלו 🔔');
-  } catch (e) { toast(e && e.data ? errMsg(e) : 'לא הצלחנו להפעיל התראות במכשיר הזה'); }
+    toast(t('ההתראות הופעלו 🔔'));
+  } catch (e) { toast(e && e.data ? errMsg(e) : t('לא הצלחנו להפעיל התראות במכשיר הזה')); }
 }
 
 export async function disablePush() {
@@ -41,8 +42,8 @@ export async function disablePush() {
       try { await call('push:unsubscribe', { token: state.token, endpoint: sub.endpoint }); } catch (e) { /* ignore */ }
       await sub.unsubscribe();
     }
-    toast('ההתראות כובו');
-  } catch (e) { toast('משהו השתבש. נסו שוב.'); }
+    toast(t('ההתראות כובו'));
+  } catch (e) { toast(t('משהו השתבש. נסו שוב.')); }
 }
 
 // בכל כניסה מחדשים את הרישום של המכשיר על שם מי שמחובר עכשיו (חשוב במכשיר משותף).

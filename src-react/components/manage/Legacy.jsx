@@ -1,5 +1,6 @@
 import { call } from '../../lib/api.js';
 import { useState } from 'react';
+import { t } from '../../i18n/index.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { LEGACY_DONE_KEY } from '../../state/state.js';
 import { readLegacy, cleanPayload } from '../../lib/legacy.js';
@@ -14,16 +15,16 @@ export default function Legacy({ token }) {
     try {
       const res = await call('admin:importData', { token, ...cleanPayload(s) });
       localStorage.setItem(LEGACY_DONE_KEY, '1');
-      toast(`הועברו ${res.added} רשומות`);
+      toast(t('הועברו {n} רשומות', { n: res.added }));
       bump((n) => n + 1);
     } catch (e) { toast(errMsg(e)); }
   }
 
   return (
     <div className="card notice">
-      <p>נמצאו במכשיר הזה נתונים מהגרסה הקודמת: {s.people.length} אנשים ו-{s.entries.length} רשומות. להעביר אותם לשרת?</p>
-      <p className="hint">האנשים שיתווספו יבחרו קוד סודי בכניסה הראשונה שלהם.</p>
-      <button className="primary" type="button" onClick={migrate}>העברה לשרת</button>
+      <p>{t('נמצאו במכשיר הזה נתונים מהגרסה הקודמת: {people} אנשים ו-{entries} רשומות. להעביר אותם לשרת?', { people: s.people.length, entries: s.entries.length })}</p>
+      <p className="hint">{t('האנשים שיתווספו יבחרו קוד סודי בכניסה הראשונה שלהם.')}</p>
+      <button className="primary" type="button" onClick={migrate}>{t('העברה לשרת')}</button>
     </div>
   );
 }

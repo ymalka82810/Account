@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { t } from '../../i18n/index.js';
 import { state } from '../../state/state.js';
 import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
@@ -17,39 +18,39 @@ export function ForgotPinSheet() {
   const [emailCode, setEmailCode] = useState('');
   const [newPin, setNewPin] = useState('');
   const [err, setErr] = useState('');
-  useSheetTitle(step === 'send' ? 'שכחתי את הקוד' : 'קוד סודי חדש');
+  useSheetTitle(step === 'send' ? t('שכחתי את הקוד') : t('קוד סודי חדש'));
   if (!f || f.legacy) return null;
 
   if (step === 'send') {
     return (
       <div className="form">
-        <p className="hint">אם הוגדר מייל מאומת להורה הזה, נשלח אליו קוד אימות. אם לא הוגדר מייל, הורה אחר יכול לקבוע לך קוד חדש.</p>
+        <p className="hint">{t('אם הוגדר מייל מאומת להורה הזה, נשלח אליו קוד אימות. אם לא הוגדר מייל, הורה אחר יכול לקבוע לך קוד חדש.')}</p>
         {err && <Err>{err}</Err>}
         <AsyncButton className="primary" onClick={async () => {
           try {
             const res = await call('emailAuth:requestResetCode', { code: state.fam.code, personId: f.person.id });
             if (res.ok) { setErr(''); setStep('reset'); return; }
             if (res.reason === 'code') { sheet.close(); codeGone(); return; }
-            setErr('יותר מדי ניסיונות. נסו שוב עוד כמה דקות.');
+            setErr(t('יותר מדי ניסיונות. נסו שוב עוד כמה דקות.'));
           } catch (e) { setErr(errMsg(e)); }
-        }}>שליחת קוד למייל</AsyncButton>
+        }}>{t('שליחת קוד למייל')}</AsyncButton>
       </div>
     );
   }
   return (
     <div className="form">
-      <Field label="הקוד מהמייל"><input {...codeProps} value={emailCode} onChange={(e) => setEmailCode(e.target.value)} /></Field>
-      <Field label={`קוד חדש (${pinLabel('parent')})`}><input {...pinProps('new-password', pinMax('parent'))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
+      <Field label={t('הקוד מהמייל')}><input {...codeProps} value={emailCode} onChange={(e) => setEmailCode(e.target.value)} /></Field>
+      <Field label={t('קוד חדש ({rule})', { rule: pinLabel('parent') })}><input {...pinProps('new-password', pinMax('parent'))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
-        if (!pinOk(newPin, 'parent')) { setErr(`הקוד החדש צריך להיות ${pinLabel('parent')}.`); return; }
+        if (!pinOk(newPin, 'parent')) { setErr(t('הקוד החדש צריך להיות {rule}.', { rule: pinLabel('parent') })); return; }
         try {
           const res = await call('emailAuth:resetWithCode', { code: state.fam.code, personId: f.person.id, emailCode, newPin });
           if (res.ok) { state.pinFlow = null; sheet.close(); setToken(res.token); return; }
           if (res.reason === 'code') { sheet.close(); codeGone(); return; }
-          setErr(res.reason === 'throttled' ? 'יותר מדי ניסיונות. נסו שוב עוד כמה דקות.' : 'קוד האימות שגוי או שפג תוקפו.');
+          setErr(res.reason === 'throttled' ? t('יותר מדי ניסיונות. נסו שוב עוד כמה דקות.') : t('קוד האימות שגוי או שפג תוקפו.'));
         } catch (e) { setErr(errMsg(e)); }
-      }}>קביעת הקוד והכניסה</AsyncButton>
+      }}>{t('קביעת הקוד והכניסה')}</AsyncButton>
     </div>
   );
 }

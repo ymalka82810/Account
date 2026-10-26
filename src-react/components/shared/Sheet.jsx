@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { AppCtx } from '../../state/appContext.js';
+import { t } from '../../i18n/index.js';
 
 // החלון הקופץ. sheet.open(title, <Body />) מחליף את התוכן (גם כשכבר פתוח,
 // כמו בשלבים של אשף), ו-sheet.close() סוגר. הגוף יכול לקרוא ל-useSheet() בעצמו
@@ -83,7 +84,7 @@ export function SheetProvider({ children }) {
         >
           <div className="sheet-head">
             <h2 id="sheetTitle">{sheet ? sheet.title : ''}</h2>
-            <button ref={closeBtn} className="ghost" type="button" aria-label="סגירה" onClick={close}>✕</button>
+            <button ref={closeBtn} className="ghost" type="button" aria-label={t('סגירה')} onClick={close}>✕</button>
           </div>
           <div key={sheet ? sheet.key : 0}>{sheet && <AppCtx.Provider value={appCtx}>{sheet.body}</AppCtx.Provider>}</div>
         </div>

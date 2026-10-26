@@ -1,4 +1,6 @@
 // ---------- עזרים כלליים ----------
+import { t, tn } from '../i18n/index.js';
+import { translateServer } from '../i18n/serverMessages.js';
 
 let toastTimer;
 let toastMsg = '';
@@ -19,19 +21,20 @@ export const today = () => {
 };
 export const fmtDate = (iso) => { const [y, m, d] = iso.split('-'); return `${d}.${m}.${y}`; };
 
-// שגיאות מהשרת מגיעות כ-ConvexError עם טקסט בעברית ב-data.
+// שגיאות מהשרת מגיעות כ-ConvexError עם טקסט בעברית ב-data. הטקסט העברי הוא גם המפתח לתרגום
+// (ראו i18n/serverMessages.js לשגיאות עם מספרים בתוכן).
 export function errMsg(e) {
-  if (e && typeof e.data === 'string') return e.data;
-  if (!navigator.onLine) return 'אין חיבור לאינטרנט. נסו שוב כשיש.';
-  return 'משהו השתבש. נסו שוב.';
+  if (e && typeof e.data === 'string') return translateServer(e.data);
+  if (!navigator.onLine) return t('אין חיבור לאינטרנט. נסו שוב כשיש.');
+  return t('משהו השתבש. נסו שוב.');
 }
 
 // "דקה", "5 דקות", "שעה"... לפי מספר השניות שנשארו בנעילה.
 export function fmtWait(sec) {
-  if (sec < 90) return 'דקה';
-  if (sec < 3600) return Math.round(sec / 60) + ' דקות';
+  if (sec < 90) return t('דקה');
+  if (sec < 3600) return tn(Math.round(sec / 60), 'דקה', '{n} דקות');
   const h = Math.round(sec / 3600);
-  return h === 1 ? 'שעה' : h === 2 ? 'שעתיים' : h + ' שעות';
+  return h === 1 ? t('שעה') : h === 2 ? t('שעתיים') : tn(h, 'שעה', '{n} שעות');
 }
 
 export function prettyCode(code) {

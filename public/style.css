@@ -807,7 +807,7 @@ body[data-theme="parent"] .dd-opt { border-radius: 6px; }
 
 /* ===== ערכת נושא: נוער ===== */
 /* רקע שחור + שני צבעי ניאון לבחירה (--neon-a ראשי, --neon-b משני). ברירת מחדל: כחול+סגול. */
-body[data-theme="teen"], .palette-pick[data-pal="blue"] { --neon-a: #b04dff; --neon-b: #22d8ff; --neon-ink: #ffffff; }
+body[data-theme="teen"], .palette-pick[data-pal="blue"] { --neon-a: #b04dff; --neon-b: #22d8ff; --neon-ink: #0a0014; }
 body[data-theme="teen"][data-palette="green"], .palette-pick[data-pal="green"] { --neon-a: #39ff88; --neon-b: #f2ff3a; --neon-ink: #031a0b; }
 body[data-theme="teen"][data-palette="orange"], .palette-pick[data-pal="orange"] { --neon-a: #ff7a1a; --neon-b: #ff3fae; --neon-ink: #1f0a00; }
 body[data-theme="teen"] {
@@ -1159,3 +1159,7 @@ body[data-theme="teen"] .bigbtn:active { border-bottom-width: 1px; }
 body[data-theme="parent"] .sheet form button.primary { border-bottom: 4px solid #2f6f95; box-shadow: 0 4px 10px rgba(0, 0, 0, .5); font-size: 1.05rem; }
 body[data-theme="parent"] .sheet form button.primary:active { transform: translateY(3px); border-bottom-width: 1px; }
 body[data-theme="parent"] #screen-notebook .nb-h2, body[data-theme="teen"] #screen-notebook .nb-h2 { color: var(--ink); font-size: 1.1rem; font-weight: 700; }
+
+/* מצב דמו: פס עליון קבוע שמסביר שהנתונים לדוגמה */
+.demo-banner { display: flex; align-items: center; justify-content: space-between; gap: .6em; padding: .45em .9em; background: #fff3c4; color: #5a4300; font-size: .9rem; }
+.demo-banner button { background: none; border: 1px solid currentColor; border-radius: 999px; padding: .15em .8em; color: inherit; font: inherit; cursor: pointer; }

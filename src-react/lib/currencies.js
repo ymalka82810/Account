@@ -1,52 +1,53 @@
-// מטבעות ומדינות לבחירה (אותה רשימה כמו convex/currency.ts).
-export const CURRENCY_NAMES = {
-  ILS: 'שקל חדש', USD: 'דולר אמריקאי', EUR: 'אירו', GBP: 'לירה שטרלינג', CAD: 'דולר קנדי',
-  AUD: 'דולר אוסטרלי', NZD: 'דולר ניו זילנדי', CHF: 'פרנק שוויצרי', JPY: 'ין יפני', CNY: 'יואן סיני',
-  HKD: 'דולר הונג קונגי', SGD: 'דולר סינגפורי', INR: 'רופי הודי', THB: 'באט תאילנדי', AED: 'דירהם',
-  TRY: 'לירה טורקית', RUB: 'רובל', UAH: 'הריבנה', PLN: 'זלוטי', CZK: 'כתר צ׳כי', HUF: 'פורינט',
-  SEK: 'כתר שוודי', NOK: 'כתר נורווגי', DKK: 'כתר דני', ZAR: 'ראנד', BRL: 'ריאל ברזילאי',
-  ARS: 'פסו ארגנטינאי', MXN: 'פסו מקסיקני',
-};
-export const CURRENCIES = Object.keys(CURRENCY_NAMES);
+import { currentLang, intlLocale } from '../i18n/index.js';
 
-// [קוד מדינה, שם, מטבע]
+// מטבעות ומדינות לבחירה (אותה רשימה כמו convex/currency.ts). השמות של מטבעות ומדינות
+// באים מ-Intl.DisplayNames בשפת הממשק, כך שאין צורך לתרגם אותם בנפרד לכל שפה.
+export const CURRENCIES = [
+  'ILS', 'USD', 'EUR', 'GBP', 'CAD', 'AUD', 'NZD', 'CHF', 'JPY', 'CNY', 'HKD', 'SGD', 'INR', 'THB', 'AED',
+  'TRY', 'RUB', 'UAH', 'PLN', 'CZK', 'HUF', 'SEK', 'NOK', 'DKK', 'ZAR', 'BRL', 'ARS', 'MXN',
+];
+
+// [קוד מדינה, מטבע]
 export const COUNTRIES = [
-  ['IL', 'ישראל', 'ILS'], ['US', 'ארצות הברית', 'USD'], ['CA', 'קנדה', 'CAD'], ['GB', 'בריטניה', 'GBP'],
-  ['FR', 'צרפת', 'EUR'], ['BE', 'בלגיה', 'EUR'], ['DE', 'גרמניה', 'EUR'], ['NL', 'הולנד', 'EUR'],
-  ['IT', 'איטליה', 'EUR'], ['ES', 'ספרד', 'EUR'], ['PT', 'פורטוגל', 'EUR'], ['AT', 'אוסטריה', 'EUR'],
-  ['IE', 'אירלנד', 'EUR'], ['GR', 'יוון', 'EUR'], ['CH', 'שווייץ', 'CHF'], ['AU', 'אוסטרליה', 'AUD'],
-  ['NZ', 'ניו זילנד', 'NZD'], ['ZA', 'דרום אפריקה', 'ZAR'], ['AR', 'ארגנטינה', 'ARS'], ['BR', 'ברזיל', 'BRL'],
-  ['MX', 'מקסיקו', 'MXN'], ['RU', 'רוסיה', 'RUB'], ['UA', 'אוקראינה', 'UAH'], ['SE', 'שוודיה', 'SEK'],
-  ['NO', 'נורווגיה', 'NOK'], ['DK', 'דנמרק', 'DKK'], ['PL', 'פולין', 'PLN'], ['HU', 'הונגריה', 'HUF'],
-  ['CZ', 'צ׳כיה', 'CZK'], ['TR', 'טורקיה', 'TRY'], ['AE', 'איחוד האמירויות', 'AED'], ['IN', 'הודו', 'INR'],
-  ['CN', 'סין', 'CNY'], ['JP', 'יפן', 'JPY'], ['TH', 'תאילנד', 'THB'], ['SG', 'סינגפור', 'SGD'],
-  ['HK', 'הונג קונג', 'HKD'],
+  ['IL', 'ILS'], ['US', 'USD'], ['CA', 'CAD'], ['GB', 'GBP'],
+  ['FR', 'EUR'], ['BE', 'EUR'], ['DE', 'EUR'], ['NL', 'EUR'],
+  ['IT', 'EUR'], ['ES', 'EUR'], ['PT', 'EUR'], ['AT', 'EUR'],
+  ['IE', 'EUR'], ['GR', 'EUR'], ['CH', 'CHF'], ['AU', 'AUD'],
+  ['NZ', 'NZD'], ['ZA', 'ZAR'], ['AR', 'ARS'], ['BR', 'BRL'],
+  ['MX', 'MXN'], ['RU', 'RUB'], ['UA', 'UAH'], ['SE', 'SEK'],
+  ['NO', 'NOK'], ['DK', 'DKK'], ['PL', 'PLN'], ['HU', 'HUF'],
+  ['CZ', 'CZK'], ['TR', 'TRY'], ['AE', 'AED'], ['IN', 'INR'],
+  ['CN', 'CNY'], ['JP', 'JPY'], ['TH', 'THB'], ['SG', 'SGD'],
+  ['HK', 'HKD'],
 ];
 
 // הסמל של המטבע ($, ₪, €), או הקוד אם אין סמל קצר.
 export function currencySymbol(cur) {
   try {
-    const p = new Intl.NumberFormat('he-IL', { style: 'currency', currency: cur, currencyDisplay: 'narrowSymbol' })
+    const p = new Intl.NumberFormat(intlLocale(), { style: 'currency', currency: cur, currencyDisplay: 'narrowSymbol' })
       .formatToParts(0).find((x) => x.type === 'currency');
     return p ? p.value : cur;
   } catch { return cur; }
 }
 
-export const currencyLabel = (cur) => `${currencySymbol(cur)} ${CURRENCY_NAMES[cur] || cur}`;
+// שם המטבע בשפת הממשק ("שקל חדש", "US Dollar"); בלי תמיכה בדפדפן - הקוד.
+export function currencyName(cur) {
+  try { return new Intl.DisplayNames([currentLang()], { type: 'currency' }).of(cur) || cur; } catch { return cur; }
+}
+
+export const currencyLabel = (cur) => `${currencySymbol(cur)} ${currencyName(cur)}`;
 
 // מדינה שאינה ברשימה: אין מדינה, והמטבע דולר.
 export const DEFAULT_CURRENCY = 'USD';
 export function localeFor(code) {
   const hit = COUNTRIES.find((c) => c[0] === code);
-  return hit ? { country: hit[0], currency: hit[2] } : { country: undefined, currency: DEFAULT_CURRENCY };
+  return hit ? { country: hit[0], currency: hit[1] } : { country: undefined, currency: DEFAULT_CURRENCY };
 }
 export const inList = (code) => COUNTRIES.some((c) => c[0] === code);
 
-// שם מדינה בעברית (גם למדינות שלא ברשימה)
+// שם מדינה בשפת הממשק (גם למדינות שלא ברשימה)
 export function countryName(code) {
-  const hit = COUNTRIES.find((c) => c[0] === code);
-  if (hit) return hit[1];
-  try { return new Intl.DisplayNames(['he'], { type: 'region' }).of(code) || code; } catch (e) { return code; }
+  try { return new Intl.DisplayNames([currentLang()], { type: 'region' }).of(code) || code; } catch (e) { return code; }
 }
 
 // אזורי זמן של המדינות ברשימה

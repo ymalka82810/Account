@@ -1,0 +1,691 @@
+0|. I bambini si uniscono con il consenso di un genitore
+1|(resto di {total})
+2|{amount} al cambio {symbol}1 = {rate}
+3|{debtLine}, per valuta (ora ← dopo)
+4|{device} · visto l'ultima volta {date}
+5|{from} ha restituito a {to}
+6|{from} mi ha restituito
+7|{from} ha restituito a {to}
+8|{from} mi ha restituito
+9|{from} ha restituito a {to}
+10|{from} mi ha restituito
+11|{from} deve dei soldi a {to}
+12|{from} mi deve dei soldi
+13|{from} deve dei soldi a {to}
+14|{from} mi deve dei soldi
+15|{from} deve dei soldi a {to}
+16|{from} mi deve dei soldi
+17|{name} approvato/a ✅
+18|{name} rimosso/a
+19|{name} rimosso/a
+20|{name} rimossa
+21|{name} mi deve dei soldi
+22|{name} mi deve dei soldi
+23|{name} mi deve dei soldi
+24|{name} sceglierà un nuovo codice al prossimo accesso
+25|{name} sceglierà un nuovo codice al prossimo accesso
+26|{name} potrà aggiungere amici via e-mail e registrare debiti con loro. Ogni registrazione attende anche l'approvazione dell'amico, e voi le vedete nel riepilogo. Puoi disattivarlo in qualsiasi momento.
+27|{name} potrà aggiungere amici via e-mail e registrare debiti con loro. Ogni registrazione attende anche l'approvazione dell'amico, e voi le vedete nel riepilogo. Puoi disattivarlo in qualsiasi momento.
+28|{name} non è nell'elenco dei paesi, quindi la valuta sarà il dollaro.
+29|{name} chiede di registrare debiti con gli amici
+30|{name} chiede di registrare debiti con gli amici
+31|{name} chiede di registrare debiti con gli amici
+32|{name} è stato/a aggiunto/a alla famiglia ✅
+33|{name} è stato/a aggiunto/a alla famiglia ✅
+34|{name} è stata aggiunta alla famiglia ✅
+35|{name} ora è {role} ✅
+36|{name} vuole aggiungerti
+37|{name} sceglierà un nuovo codice al prossimo accesso
+38|{name} potrà aggiungere amici via e-mail e registrare debiti con loro. Ogni registrazione attende anche l'approvazione dell'amico, e voi le vedete nel riepilogo. Puoi disattivarlo in qualsiasi momento.
+39|{who} ha registrato: {line}
+40|{who} ha registrato: {line}
+41|{who} ha registrato: {line}
+42|→ Scegli un altro debito
+43|→ Indietro
+44|→ Un'altra famiglia
+45|↩️ Non ancora
+46|⏳ {n} registrazioni attendono l'approvazione di un genitore. Le vedi in «Cronologia».
+47|⏳ Verifica in corso…
+48|⏳ Chiede di unirsi
+49|⏳ In attesa di approvazione
+50|⏳ In attesa di approvazione ({n})
+51|⏳ In attesa dell'approvazione dei genitori
+52|⏳ In attesa della tua approvazione
+53|⏳ In attesa della tua approvazione ({n})
+54|⏳ In attesa dell'amico
+55|⏳ In attesa che approvino la richiesta
+56|⏳ Un attimo…
+57|⏳ Una registrazione attende l'approvazione di un genitore. La vedi in «Cronologia».
+58|{"one":"⚠️ Il codice di {name} è stato bloccato una volta dopo tentativi errati.","other":"⚠️ Il codice di {name} è stato bloccato {n} volte dopo tentativi errati."}
+59|⚡ Neon
+60|✅ Approva
+61|✅ Corretto
+62|✅ Pagato
+63|✅ Salva il rimborso
+64|✅ Salva il debito
+65|✉️ Aggiungi un'e-mail di recupero
+66|✉️ E-mail di recupero: {email}
+67|🌈 Colorato
+68|🌙 Scuro
+69|🍕 Cibo
+70|🍦 Gelato
+71|🍬 Dolciumi
+72|🎨 Colori dello schermo
+73|🎮 Gioco
+74|🏠 Crea una cassa di famiglia
+75|👀 Modalità demo: dati di esempio, nulla viene salvato
+76|👀 Vuoi vedere come funziona? Una demo di 10 secondi
+77|👨‍👩‍👧 Sono un genitore e voglio creare una nuova cassa di famiglia
+78|👨‍👩‍👧 Famiglia
+79|💰 I miei soldi
+80|💰 Ho ricevuto
+81|💰 Ho pagato
+82|📋 Copia l'elenco aperto
+83|📒 Il mio quaderno
+84|📜 Cronologia
+85|📜 Cronologia
+86|🔑 Cambia il codice segreto
+87|🔒 L'aggiunta come {role} è approvata con impronta digitale o riconoscimento facciale.
+88|🔔 Attiva le notifiche
+89|🔕 Disattiva le notifiche
+90|🗑️ Elimina tutto il quaderno
+91|🤝 Richieste di amicizia ({n})
+92|🤝 Richieste per la modalità amici ({n})
+93|🤝 Amici
+94|🤝 Modalità amici attiva
+95|🧹 Elimina ciò che è pagato
+96|🙂 Scegli un avatar
+97|4 cifre
+98|da 4 a {max} cifre
+99|da 4 a 8 cifre
+100|6 cifre
+101|Papà
+102|Una persona non può dovere soldi a se stessa
+103|La persona non esiste
+104|Approvato ✅
+105|Zona pericolosa
+106|Non puoi restituire più di quanto resta del debito
+107|Non puoi restituire più di quanto resta del debito ({amount})
+108|Non puoi rimuovere te stesso
+109|Impossibile copiare su questo dispositivo
+110|Non puoi cambiare il tuo ruolo
+111|Come vuoi chiamare la famiglia?
+112|Come ti chiami?
+113|Mamma
+114|Verifica
+115|Verifica dell'e-mail
+116|Nessuno
+117|Nessuna connessione a internet. Riprova quando sei online.
+118|Niente di aperto
+119|Niente di aperto!
+120|Non hai un codice segreto. Impostane uno in «Il mio account» e riprova.
+121|Nessuna e-mail verificata
+122|Nessuna e-mail verificata da sostituire
+123|Nessuna registrazione pagata
+124|Nessun tasso di cambio per la valuta del debito
+125|Nessun tasso al momento
+126|Dove abitate?
+127|Approva
+128|Conferma via e-mail
+129|Approva la modalità amici
+130|Conferma il cambio di ruolo
+131|Se questo genitore ha un'e-mail verificata, gli invieremo un codice di verifica. Se non è impostata un'e-mail, un altro genitore può impostare un nuovo codice per te.
+132|Se non è lui, conviene impostare un nuovo codice.
+133|Se non è lui/lei, conviene impostare un nuovo codice.
+134|Se non è lei, conviene impostare un nuovo codice.
+135|Se l'amico ha la modalità amici, gli è stata inviata una richiesta 🤝
+136|Sono nuovo/a
+137|Devo
+138|Devo dei soldi
+139|Devo dei soldi a {name}
+140|Devo dei soldi a {to}
+141|Devo dei soldi a un amico
+142|Devo dei soldi agli amici
+143|Devo
+144|Devo dei soldi
+145|Devo dei soldi a {name}
+146|Devo dei soldi a {to}
+147|Devo dei soldi a un amico / un'amica
+148|Devo dei soldi agli amici
+149|Devo
+150|Devo dei soldi
+151|Devo dei soldi a {name}
+152|Devo dei soldi a {to}
+153|Devo dei soldi a un'amica
+154|Devo dei soldi agli amici
+155|Nessuno deve niente!
+156|Nessuno deve niente.
+157|Puoi annullare solo entro i primi 10 minuti, oppure chiedere a un genitore
+158|Puoi annullare solo entro i primi 10 minuti. Per correggere, registra un rimborso
+159|Puoi restituire fino a {max}.
+160|A un debito si può collegare solo un rimborso
+161|Puoi registrare solo debiti che ti riguardano
+162|Puoi registrare solo con amici approvati
+163|Il {day} di ogni mese
+164|Quale giorno
+165|Quale giorno del mese (da 1 a 28)
+166|Controlliamo chi è…
+167|Controllo in corso…
+168|Scegli un paese
+169|Scegli un avatar
+170|Scegli dove abiti
+171|Scegli un nuovo codice segreto ({rule})
+172|Annulla
+173|Revoca i permessi da genitore
+174|Disattiva la modalità amici
+175|Tra amici puoi registrare fino a {max} alla volta.
+176|Membri di {name}
+177|Membri della famiglia
+178|In totale {name} mi deve dei soldi
+179|In totale {name} mi deve dei soldi
+180|In totale {name} mi deve dei soldi
+181|In totale devo dei soldi a {name}
+182|In totale devo dei soldi a {name}
+183|In totale devo dei soldi a {name}
+184|Chiedi l'approvazione dei genitori
+185|Grande
+186|Dimensione del testo
+187|Scorri a destra
+188|Scorri a sinistra
+189|È disponibile una nuova versione ({version})
+190|Rifiuta
+191|Avatar
+192|Avatar {avatar}
+193|Paghetta
+194|Paghetta periodica
+195|un minuto
+196|{"one":"{n} minuto","other":"{n} minuti"}
+197|Verifica annullata
+198|Verifica con impronta digitale / riconoscimento facciale non riuscita
+199|Verifica non riuscita. Riprova.
+200|Verifica non riuscita (indirizzo sconosciuto).
+201|Verifica non riuscita. Riprova.
+202|Le persone che aggiungi sceglieranno un codice segreto al primo accesso.
+203|L'app non è ancora collegata al server
+204|Ho capito
+205|La richiesta non esiste più
+206|La richiesta è stata rifiutata
+207|La richiesta è stata inviata
+208|La richiesta è stata inviata ai tuoi genitori ⏳
+209|La richiesta è stata inviata ai tuoi genitori. Ti avviseremo quando approveranno.
+210|Impostazioni
+211|Impostazioni della famiglia
+212|Questo avatar è già occupato da un altro membro della famiglia
+213|Questo browser è troppo vecchio per la verifica biometrica. Aggiornalo e riprova.
+214|Download non riuscito. Controlla la connessione a internet e riprova
+215|Il rimborso non corrisponde a questo debito
+216|Rimborso salvato ✅
+217|La nota è troppo lunga
+218|Notifiche attivate 🔔
+219|Le notifiche sono bloccate. Puoi consentirle nelle impostazioni del browser.
+220|Notifiche disattivate
+221|Perderà i permessi da genitore. Dopo sarà richiesta la verifica con riconoscimento facciale o impronta digitale.
+222|Perderà la modalità amici. Dopo sarà richiesta la verifica con riconoscimento facciale o impronta digitale.
+223|Riceverà tutti i permessi da genitore: vedere tutto, approvare, eliminare e gestire la famiglia. Dopo sarà richiesta la verifica con riconoscimento facciale o impronta digitale.
+224|Aggiungi
+225|Aggiungi un membro della famiglia
+226|Aggiungi un amico / un'amica
+227|{n} registrazioni trasferite
+228|Copiato ✅
+229|Genitore
+230|Un altro genitore deve impostare un codice segreto per te
+231|Un genitore accede qui e poi riceve i codici per il resto della famiglia.
+232|Un genitore deve impostare l'indirizzo Convex nel file
+233|Un genitore deve prima accedere.
+234|Amico/a rimosso/a
+235|I miei amici
+236|Il debito è in {debtCur}. Paghi in {payCur} al cambio di oggi.
+237|Questo debito è già stato pagato
+238|Il debito verrà chiuso del tutto ✅
+239|Debito non trovato
+240|Debito salvato ✅
+241|I debiti tra te e {name} verranno chiusi fino a questo importo e resterà solo la differenza. La cronologia viene conservata.
+242|Debiti aperti per valuta
+243|Debiti compensati ✅
+244|Rimborso
+245|Ho restituito a {to}
+246|Cambia e-mail
+247|Cambia codice
+248|Conto con {name}
+249|Il mio account
+250|Perderà i permessi da genitore. Dopo sarà richiesta la verifica con riconoscimento facciale o impronta digitale.
+251|Perderà la modalità amici. Dopo sarà richiesta la verifica con riconoscimento facciale o impronta digitale.
+252|Riceverà tutti i permessi da genitore: vedere tutto, approvare, eliminare e gestire la famiglia. Dopo sarà richiesta la verifica con riconoscimento facciale o impronta digitale.
+253|Cronologia
+254|Cronologia con gli amici
+255|Tutto: {amount}
+256|Tutto in ordine
+257|Tutto in ordine ✅
+258|Tutto è salvato solo su questo dispositivo.
+259|Prima i più recenti
+260|I miei soldi
+261|Il mio paese non è nell'elenco ($)
+262|Valuta della famiglia
+263|La valuta della famiglia è {base} e questo debito resterà in {cur}. Nei saldi viene mostrato al cambio di quel giorno e, quando viene pagato, l'importo è convertito al cambio del giorno del pagamento.
+264|Valuta: {cur}
+265|E-mail verificata ✅
+266|Questa e-mail è già usata da un'altra persona
+267|E-mail attuale: {email}. Per sostituirla le invieremo un codice di conferma.
+268|E-mail di {name}
+269|E-mail dell'amico/a
+270|La tua e-mail per gli amici:
+271|Posizione e valuta salvate ✅
+272|Posizione e valuta aggiornate ✅
+273|Questo dispositivo non è registrato per la verifica. Registralo di nuovo.
+274|Il dispositivo non è supportato
+275|Dispositivo scollegato ✅
+276|Continua
+277|Famiglia non trovata
+278|La famiglia è al completo
+279|Blocco rimosso ✅
+280|Questo/a ragazzo/a perderà la modalità amici. Dopo sarà richiesta la verifica con riconoscimento facciale o impronta digitale.
+281|I miei dati
+282|L'importo è troppo grande
+283|L'importo è troppo grande.
+284|Prima l'importo più grande
+285|Importi nel quaderno
+286|Rimuovi
+287|Rimuovi {name}
+288|Nascondi
+289|Trasferisci al server
+290|Concedi i permessi da genitore
+291|Nota
+292|Il quaderno è stato svuotato
+293|Il quaderno è già vuoto
+294|Il mio quaderno
+295|Interrompi
+296|Attiva la verifica biometrica
+297|Mostra il codice 🔒
+298|Mostra il codice di adesione
+299|Unisciti
+300|Il file è troppo grande
+301|Il file scaricato non è una nuova versione dell'app
+302|Il file scaricato non è valido. Riprova
+303|Codice sostituito ✅ Puoi mostrarlo con impronta digitale o riconoscimento facciale
+304|Il nuovo codice deve essere di {rule}.
+305|Codice attuale
+306|Il codice attuale non è corretto.
+307|Il codice segreto deve essere di 4 cifre
+308|Il codice segreto non è corretto.
+309|Il codice segreto digitato non è corretto.
+310|Il tuo codice segreto, per conferma
+311|Il codice non è più valido. Chiedi un nuovo codice ai tuoi genitori.
+312|Il codice non è corretto. Controlla di nuovo o chiedi ai tuoi genitori.
+313|Il codice non è corretto. Ti restano {left} tentativi.
+314|Il codice dell'e-mail
+315|Il codice dell'e-mail attuale è errato o scaduto.
+316|Il codice è nascosto
+317|Il codice resta nascosto e si mostra solo con impronta digitale o riconoscimento facciale.
+318|Il codice deve essere di {rule}
+319|Il codice deve essere di {rule}.
+320|Il codice deve essere di 4 cifre
+321|Il codice deve avere almeno 4 cifre, fino a {max}
+322|Il codice è errato o scaduto.
+323|Il codice è stato cambiato ✅
+324|Il codice di {name} è stato aggiornato
+325|I codici non coincidevano. Ricominciamo.
+326|La Cassa di famiglia
+327|La cassa è stata eliminata
+328|La compensazione è stata inviata a un genitore per l'approvazione ⏳
+329|La compensazione chiude i debiti da entrambe le parti fino a {amount}. La differenza resta com'è e la cronologia viene conservata.
+330|Digita il tuo codice segreto.
+331|Crea la cassa
+332|Crea una cassa di famiglia
+333|Prossima registrazione: {date}
+334|La registrazione periodica è stata interrotta
+335|La registrazione periodica è stata aggiunta ✅
+336|La registrazione è stata rifiutata
+337|La registrazione è stata eliminata
+338|Elenco
+339|L'elenco è stato copiato
+340|Il nome è stato aggiornato ✅
+341|Tassi aggiornati {when}
+342|Rettifiche (rimborsi registrati senza un debito specifico)
+343|Il pagamento in {base} verrà convertito al cambio di oggi e detratto dal debito nella sua valuta. Dopo il salvataggio questo cambio viene conservato e non cambierà.
+344|Questa è una demo, quindi non si può modificare nulla. Crea la tua cassa!
+345|Questa è la tua e-mail
+346|Questo eliminerà l'intera cassa: tutte le persone e tutte le registrazioni, e non si può annullare.\nPer confermare, digita il nome della famiglia: {name}
+347|Riconoscimento facciale o impronta digitale
+348|Maschile
+349|Un amico / un'amica mi deve dei soldi
+350|Amico/a aggiunto/a ✅
+351|Gli amici mi devono dei soldi
+352|Gli amici aggiungono il/la ragazzo/a con questa e-mail. Non gli viene inviato nulla, serve solo per la ricerca.
+353|Gli amici aggiungono il/la ragazzo/a con questa e-mail. Non gli viene inviato nulla, serve solo per la ricerca.
+354|Gli amici aggiungono il/la ragazzo/a con questa e-mail. Non gli viene inviato nulla, serve solo per la ricerca.
+355|Gli amici si aggiungono tramite indirizzo e-mail. Vedrai tutto ciò che viene registrato nel riepilogo.
+356|Amici: {names}
+357|Debito
+358|Debito in {cur}
+359|Indietro
+360|deve
+361|deve
+362|mi deve
+363|Mi devono
+364|Mi devono dei soldi
+365|deve
+366|Caricamento…
+367|Non ancora impostata dal genitore
+368|Perderanno i permessi da genitore. Dopo sarà richiesta la verifica con riconoscimento facciale o impronta digitale.
+369|{day}
+370|Giorno del mese non valido (da 1 a 28)
+371|Giorno non valido
+372|Uscita in sicurezza…
+373|Troppe richieste di codice. Riprova tra qualche minuto
+374|Troppe richieste. Riprova più tardi
+375|Troppi dispositivi registrati
+376|Troppe nuove famiglie in questo momento. Riprova tra qualche minuto
+377|Troppi tentativi. Riprova tra un minuto.
+378|Troppi tentativi. Riprova tra qualche minuto.
+379|Troppe registrazioni. Riprova più tardi
+380|Del debito resteranno {left}.
+381|Bambino/a
+382|Bambino/a
+383|Bambino/a
+384|Esci
+385|Esci dalla demo
+386|Riceveranno tutti i permessi da genitore: vedere tutto, approvare, eliminare e gestire la famiglia. Dopo sarà richiesta la verifica con riconoscimento facciale o impronta digitale.
+387|Verde
+388|Verde + giallo
+389|Ci sono troppe richieste di adesione in sospeso. Chiedi ai genitori di gestirle
+390|Ci sono troppi debiti aperti tra i due. Chiudi dei debiti prima di aggiungerne altri.
+391|Ci sono troppe registrazioni attive tra i due. Chiudi dei debiti prima di aggiungerne altre.
+392|C'è un saldo aperto tra voi. Chiudilo prima
+393|Qui ci sono debiti in un'altra valuta: verranno compensati al cambio di oggi e quel cambio verrà conservato.
+394|Ci sono già molti amici nell'elenco
+395|Ci sono già molte registrazioni periodiche
+396|Hai un codice famiglia? Accedi alla cassa
+397|Hai un codice famiglia? Digitalo qui. Chiedi ai tuoi genitori il codice di adesione della famiglia.
+398|Ci sono registrazioni a suo nome. Eliminale prima
+399|Saldi
+400|Qui registri i debiti con gli amici: chi ha comprato per chi e chi deve restituire. Anche il tuo amico/la tua amica ha bisogno dell'app e i tuoi genitori devono approvare.
+401|Esiste già qualcuno con questo nome
+402|Esiste già qualcuno con questo nome. Sceglilo dall'elenco o cambia il nome
+403|Esiste già qualcuno con questo nome. Rifiuta la richiesta
+404|Questo profilo ha già un codice
+405|Quasi fatto…
+406|Usate già la cassa?
+407|Per {need} serve un dispositivo con impronta digitale o riconoscimento facciale configurati.
+408|Per impostare un nuovo codice per {name}, invieremo un codice di verifica a {email}.
+409|Blu + viola
+410|Disattiva amici
+411|Tutti i debiti aperti
+412|Tutta la famiglia
+413|Tutti gli importi sono mostrati in questa valuta. Puoi registrare un debito in un'altra valuta (per esempio 100 dollari) e quando viene pagato è convertito al cambio di quel giorno.
+414|Ogni mese
+415|Ogni {day}
+416|Ogni quanto
+417|Ogni settimana
+418|Quanto ha restituito {from} a {to}?
+419|Quanto ha restituito {from} a {to}?
+420|Quanto ha restituito {from} a {to}?
+421|Quanto mi deve {name}?
+422|Quanto mi deve {name}?
+423|Quanto mi deve {name}?
+424|Quanto mi ha pagato {name}?
+425|Quanto mi ha pagato {name}?
+426|Quanto mi ha pagato {name}?
+427|Quanto devo a {to}?
+428|Quanto devo a {to}?
+429|Quanto devo a {to}?
+430|Quanto ho pagato a {to}?
+431|Quanto?
+432|Sì
+433|Sì, continua
+434|Sì, compensa
+435|Sì, salva il debito
+436|Sì, salva il pagamento
+437|Accedi
+438|Digita l'e-mail che il tuo amico/la tua amica ha indicato ai suoi genitori nell'app. Gli viene inviata una richiesta e deve approvare. Funziona solo se anche il tuo amico/la tua amica ha la modalità amici.
+439|Digita il codice segreto
+440|Digita di nuovo il codice, per conferma
+441|Digita il nome
+442|Digita un importo
+443|Digita un importo maggiore di zero.
+444|Un altro indirizzo
+445|L'indirizzo e-mail non è valido
+446|Indirizzo e-mail
+447|Nuovo indirizzo e-mail
+448|Indirizzo e-mail non valido
+449|Arancione
+450|Arancione + rosa
+451|No
+452|Non siamo riusciti ad attivare le notifiche su questo dispositivo
+453|Non siamo riusciti a registrare il dispositivo. Riprova.
+454|Sconosciuto
+455|Non corretto
+456|Sul telefono non è stato trovato nessun programma di installazione. Puoi scaricare il file direttamente da GitHub
+457|A quale debito si riferisce il rimborso?
+458|Per conferma invieremo un codice di verifica a {email}.
+459|Per confermare le azioni sensibili nella cassa
+460|Reimposta e lascia scegliere al prossimo accesso
+461|Annullare ciò che hai registrato?
+462|Rifiutare? La registrazione verrà eliminata.
+463|Un nuovo genitore deve avere un codice segreto
+464|Per un genitore va impostato un codice (non si può reimpostare perché lo scelga da solo)
+465|Solo per genitori. Chi crea la cassa è il primo genitore. Poi ricevi un codice di adesione per tutta la famiglia e imposti il ruolo di ciascuno: bambino, ragazzo o genitore.
+466|Sostituire il codice? Chi è già dentro resta, ma il vecchio codice smetterà di funzionare e gli altri dispositivi che hanno salvato la famiglia dovranno inserire il nuovo codice.
+467|Rimuovere {name} dagli amici?
+468|Rimuovere {name} dalla famiglia?
+469|Interrompere la registrazione periodica? Ciò che è già registrato resta.
+470|Mostra nella pagina principale anche ciò che è pagato
+471|Tocca per i dettagli del calcolo ›
+472|Disattivare la modalità amici di {name}? Non sarà più possibile aggiungere nuove registrazioni con amici.
+473|Non specificato
+474|Eliminare {n} registrazioni pagate?
+475|Eliminare la registrazione di {name}?
+476|Eliminare questa registrazione?
+477|Eliminare tutte le registrazioni del quaderno? Non si può annullare.
+478|A chi
+479|A chi devo dei soldi?
+480|A chi devo dei soldi?
+481|A chi devo dei soldi?
+482|A chi?
+483|Per esempio: gelato, biglietto del cinema
+484|Per esempio: la famiglia Rossi
+485|Scollegare il dispositivo? Dovrà inserire di nuovo il codice di adesione.
+486|La valuta della famiglia è determinata dal paese. Potrai cambiarla poi nella scheda Gestione.
+487|Per valuta
+488|Per nome (A-Z)
+489|Sola lettura. Ogni registrazione con un amico/un'amica attende anche la sua approvazione.
+490|vedere il codice di adesione
+491|cambiare un ruolo
+492|In pareggio: nessuno deve niente
+493|Verifica in corso…
+494|deve ricevere
+495|deve ricevere
+496|deve ricevere
+497|Paese non supportato
+498|l'informativa sulla privacy
+499|Informativa sulla privacy
+500|Paese di residenza
+501|Cosa registrano i ragazzi con gli amici
+502|Cosa è aperto
+503|Download dell'aggiornamento...
+504|Download dell'aggiornamento... {percent}%
+505|Elimina
+506|Elimina tutta la cassa
+507|Valuta
+508|Valuta non supportata
+509|Chi mi deve dei soldi?
+510|Chi deve a chi
+511|Chi deve (chi paga)
+512|Chi mi deve dei soldi?
+513|Chi accede?
+514|E-mail per il recupero del codice
+515|L'e-mail è solo per i genitori
+516|Posizione e valuta
+517|Qualcuno
+518|Dispositivo
+519|Il dispositivo non esiste
+520|Dispositivi collegati
+521|Dispositivi che hanno salvato la famiglia. Una scheda non usata per 180 giorni scade da sola.
+522|In attesa dell'approvazione di un genitore in {name}. Dopo che un genitore avrà approvato, scegli il tuo nome nella schermata di accesso e digita il codice segreto che hai scelto.
+523|In attesa dell'approvazione di un genitore. Dopo che un genitore avrà approvato, scegli il tuo nome nella schermata di accesso e digita il codice segreto che hai scelto.
+524|Iscrizione alle notifiche non valida
+525|Chiave non valida
+526|Modalità amici
+527|Modalità amici approvata ✅
+528|La modalità amici è solo per i ragazzi
+529|Modalità amici disattivata
+530|Modalità amici per {name}
+531|La modalità amici non è ancora stata approvata dai genitori
+532|Unisciti alla cassa
+533|Ti unisci alla cassa di {name}. Un genitore della famiglia deve approvare l'adesione e stabilirà se sei bambino, ragazzo o genitore.
+534|Aspetto
+535|Qualcosa è andato storto. Riprova.
+536|Gestione
+537|Hai provato troppe volte. Riprova tra {wait}.
+538|Scollega
+539|Eliminato
+540|Su questo dispositivo sono stati trovati dati della versione precedente: {people} persone e {entries} registrazioni. Trasferirli al server?
+541|Riprova
+542|Ragazzo/a
+543|Ragazzo/a
+544|Ragazzo/a
+545|Femminile
+546|Sembra che il dispositivo si trovi in {name}. Abitate in {name}?
+547|Restano {left} di {total}
+548|Di questo debito restano {left}.
+549|Viene inviato un codice quando un codice segreto viene cambiato o reimpostato, e anche un avviso quando il codice di qualcuno della famiglia viene bloccato.
+550|Inviato a un genitore per l'approvazione ⏳
+551|Inviato all'amico/all'amica per l'approvazione ⏳
+552|Viola e turchese
+553|Chiudi
+554|Ordine delle registrazioni
+555|Totale
+556|Totale in {cur} al cambio di oggi
+557|Importo ({cur})
+558|Importo non valido
+559|Importo non valido. Tra amici puoi registrare fino a 500 shekel alla volta
+560|Riepilogo della famiglia
+561|Non è ancora stato registrato nulla.
+562|Un aggiornamento è già in corso
+563|Aggiorna
+564|Altro
+565|Non c'è ancora nessun altro nella famiglia. Un genitore deve aggiungerli.
+566|Ancora nessun amico approvato
+567|Ancora nessun amico approvato. Aggiungi un amico/un'amica tramite la sua e-mail.
+568|Ancora nessun amico. Aggiungi un amico/un'amica tramite la sua e-mail.
+569|L'elenco è ancora vuoto. Tocca uno dei pulsanti per iniziare.
+570|Ancora nessuna registrazione periodica.
+571|Altri avatar
+572|Non ha ancora scelto un codice
+573|Non ha ancora scelto un codice
+574|Non ha ancora scelto un codice
+575|Non è ancora stato registrato nulla con gli amici.
+576|Non è ancora stato registrato nulla.
+577|Aspetto
+578|Per {debt} (= {covers} al cambio di oggi).
+579|Per {debt}.
+580|Per cosa? (si può saltare)
+581|Per cosa? (facoltativo)
+582|Per: {debt}
+583|Con chi?
+584|Enorme
+585|La verifica è scaduta. Riprova.
+586|Dettagli del calcolo
+587|Azione non valida
+588|Colori dello schermo
+589|Colori neon
+590|La forma di rivolgersi è già stata impostata e non si può cambiare
+591|Forma di rivolgersi
+592|Forma di rivolgersi:
+593|Crea una cassa di famiglia: tutti vedono lo stesso conto e i debiti si aggiornano per tutti.
+594|È richiesta la conferma con impronta digitale o riconoscimento facciale
+595|L'app deve poter installare aggiornamenti: nelle impostazioni che si aprono, attiva «Consenti da questa fonte» e tocca di nuovo «Aggiorna»
+596|Devi accedere di nuovo
+597|Devi accedere di nuovo con il codice della famiglia
+598|Devi registrare questo telefono una volta sola.
+599|Devi registrare il dispositivo
+600|Devi registrare questo dispositivo e questo browser una volta sola.
+601|Devi registrare di nuovo il dispositivo
+602|Devi registrare di nuovo il dispositivo per consentire anche il riconoscimento facciale
+603|Imposta il codice
+604|Imposta il codice e accedi
+605|Imposta la forma di rivolgersi…
+606|Un codice per tutti. Chi si unisce con questo codice entra come bambino. Poi in «Membri della famiglia» puoi passarlo a ragazzo o genitore, con approvazione tramite impronta digitale o riconoscimento facciale.
+607|Codice dell'e-mail
+608|Il codice dell'e-mail è errato o scaduto.
+609|Il codice di verifica è errato o scaduto.
+610|Codice di adesione alla cassa di {name}: {code}
+611|Codice di adesione della famiglia
+612|Il codice di adesione della famiglia si mostra solo con impronta digitale o riconoscimento facciale.
+613|Il codice della famiglia è cambiato. Chiedi un nuovo codice ai tuoi genitori.
+614|Nuovo codice
+615|Nuovo codice ({rule})
+616|Codice dall'e-mail attuale
+617|Codice famiglia
+618|Codice segreto ({rule}; più lungo = più sicuro)
+619|Codice segreto (obbligatorio per un genitore, {rule})
+620|Codice segreto (facoltativo — il bambino potrà sceglierlo da solo)
+621|Codice segreto (facoltativo — il bambino potrà sceglierlo da solo)
+622|Codice segreto (facoltativo — la bambina potrà sceglierlo da sola)
+623|Nuovo codice segreto
+624|Codice segreto per {name}
+625|Il tuo codice segreto personale (4 cifre)
+626|Codici di adesione
+627|Prima bisogna impostare un codice segreto per {name}
+628|Una cassa di famiglia può essere creata solo da chi ha più di 18 anni
+629|Piccolo
+630|Ho ricevuto
+631|Ho ricevuto la differenza ({amount})
+632|Ho ricevuto dei soldi
+633|Compensazione reciproca
+634|Compensa i debiti reciproci
+635|Compensa i debiti reciproci ({amount})
+636|Ho letto e accetto {terms} e {privacy}
+637|Ho letto e accetto {terms} e {privacy}
+638|Ho letto e accetto {terms} e {privacy}
+639|Normale
+640|Un attimo, accesso in corso…
+641|Un attimo, uscita in corso…
+642|Vuoi che i debitori lo vedano?
+643|Registra
+644|Registra un rimborso
+645|Registra riconoscimento facciale / impronta digitale
+646|Registra un debito in automatico, ogni settimana o ogni mese, senza digitarlo ogni volta.
+647|Registra impronta digitale / riconoscimento facciale
+648|Nuova registrazione periodica
+649|Solo i genitori possono farlo
+650|Solo i genitori possono impostare la forma di rivolgersi
+651|Pagato per intero ✅
+652|Pagati ({n})
+653|Salvataggio di tutto…
+654|Rimuovi il blocco
+655|Ho pagato
+656|Ho pagato la differenza ({amount})
+657|Cambia
+658|Cambiare la valuta cambia solo il simbolo. Gli importi non vengono convertiti.
+659|Cambia il codice segreto
+660|Rinomina la famiglia
+661|Il cambio di ruolo nella famiglia (bambino, ragazzo, genitore) è approvato con impronta digitale o riconoscimento facciale.
+662|Condividi
+663|Ho dimenticato il codice
+664|Abbiamo inviato un codice a {email}. Digitalo, insieme al nuovo indirizzo. Sostituirà quello attuale solo dopo la verifica.
+665|Abbiamo inviato un codice di 6 cifre a {email}. È valido per 10 minuti.
+666|Miei
+667|Invia richiesta
+668|Invia codice di verifica
+669|Invia il codice via e-mail
+670|Invia un codice all'e-mail attuale
+671|Nome
+672|Nome della famiglia
+673|Il nome della famiglia non corrisponde
+674|Il nome della famiglia non è valido
+675|Nome non valido
+676|Salva
+677|un'ora
+678|{"one":"{n} ora","other":"{n} ore"}
+679|I tassi di cambio non sono ancora stati caricati. Riprova tra un momento.
+680|2 ore
+681|Lingua
+682|Data non valida
+683|Data di nascita (solo chi ha più di 18 anni può creare una cassa)
+684|Data di nascita non valida
+685|le condizioni d'uso
+686|Condizioni d'uso
+687|Ruolo
+688|Ruolo:
+689|Menu principale
+690|Pagamento di un debito in un'altra valuta

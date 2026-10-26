@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
@@ -27,7 +28,7 @@ const mixed = (list) => list.some((x) => x.foreign);
 
 // שורת "לפי מטבע" מתחת לסה"כ, רק כשיש חובות במטבע אחר.
 const CurrencyBreakdown = ({ list }) => (mixed(list) ? (
-  <div className="calc-row calc-bycur"><span>לפי מטבע</span>
+  <div className="calc-row calc-bycur"><span>{t('לפי מטבע')}</span>
     <span>{byCurrency(list).map((x) => money(x.amount, x.cur)).join(' + ')}</span></div>
 ) : null);
 
@@ -53,7 +54,7 @@ export default function BalanceSheet({ otherId }) {
   const other = data.people.find((p) => p.id === otherId);
   const { nameOf } = namesFor(me, (id) => data.people.find((p) => p.id === id));
   const myGender = data.me.gender;
-  useSheetTitle(`החשבון מול ${other ? nameOf(otherId) : ''}`);
+  useSheetTitle(t('החשבון מול {name}', { name: other ? nameOf(otherId) : '' }));
   if (!other) return null;
 
   const mine = openDebtsOf(me, otherId, data.entries);   // אני חייב
@@ -71,19 +72,19 @@ export default function BalanceSheet({ otherId }) {
     const foreign = mixed(mine) || mixed(theirs);
     const ok = await confirm({
       icon: foreign ? '💱' : '⚖️',
-      title: 'קיזוז חובות הדדיים',
+      title: t('קיזוז חובות הדדיים'),
       amount: money(overlap),
-      message: `החובות בינך לבין ${other_} ייסגרו עד גובה הסכום הזה, ויישאר רק ההפרש. ההיסטוריה נשמרת.`
-        + (foreign ? ' יש כאן חובות במטבע אחר: הם יקוזזו לפי השער של היום, והשער הזה יישמר.' : ''),
+      message: t('החובות בינך לבין {name} ייסגרו עד גובה הסכום הזה, ויישאר רק ההפרש. ההיסטוריה נשמרת.', { name: other_ })
+        + (foreign ? ' ' + t('יש כאן חובות במטבע אחר: הם יקוזזו לפי השער של היום, והשער הזה יישמר.') : ''),
       ...(foreign ? {
-        rowsTitle: 'החובות הפתוחים לפי מטבע',
+        rowsTitle: t('החובות הפתוחים לפי מטבע'),
         rows: [
-          ...byCurrency(theirs).map((x) => ({ label: `${other_} ${g(other.gender, 'חייב', 'חייבת', 'חייב/ת')} לי • ${currencyLabel(x.cur)}`, value: money(x.amount, x.cur) })),
-          ...byCurrency(mine).map((x) => ({ label: `${g(myGender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${other_} • ${currencyLabel(x.cur)}`, value: money(x.amount, x.cur) })),
+          ...byCurrency(theirs).map((x) => ({ label: `${g(other.gender, '{name} חייב לי', '{name} חייבת לי', '{name} חייב/ת לי', { name: other_ })} • ${currencyLabel(x.cur)}`, value: money(x.amount, x.cur) })),
+          ...byCurrency(mine).map((x) => ({ label: `${g(myGender, 'אני חייב ל{name}', 'אני חייבת ל{name}', 'אני חייב/ת ל{name}', { name: other_ })} • ${currencyLabel(x.cur)}`, value: money(x.amount, x.cur) })),
         ],
       } : {}),
-      okText: 'כן, לקזז',
-      cancelText: 'ביטול',
+      okText: t('כן, לקזז'),
+      cancelText: t('ביטול'),
     });
     if (!ok) return;
     try {
@@ -94,10 +95,10 @@ export default function BalanceSheet({ otherId }) {
       for (const j of jobs) {
         await call('entries:add', {
           token: state.token, kind: 'payment', from: j.from, to: j.to, amount: j.amount,
-          note: 'קיזוז הדדי', date: today(), debtId: j.debt.id,
+          note: t('קיזוז הדדי'), date: today(), debtId: j.debt.id,
         });
       }
-      toast(data.me.role === 'parent' ? 'החובות קוזזו ✅' : 'הקיזוז נשלח להורה לאישור ⏳');
+      toast(data.me.role === 'parent' ? t('החובות קוזזו ✅') : t('הקיזוז נשלח להורה לאישור ⏳'));
     } catch (e) { toast(errMsg(e)); }
   }
 
@@ -111,8 +112,8 @@ export default function BalanceSheet({ otherId }) {
   const Rows = ({ list, sign }) => list.map((x) => (
     <div className="calc-row" key={x.debt.id}>
       <span>
-        {debtLabel(x.debt)}{x.paid > 0 ? ` (נשאר מתוך ${money(x.debt.amount, x.cur)})` : ''}
-        {x.foreign && <> • {money(x.remaining, x.cur)} לפי {currencySymbol(x.cur)}1 = {money(Math.round(x.value / x.remaining * 100), baseCurrency())}</>}
+        {debtLabel(x.debt)}{x.paid > 0 ? ' ' + t('(נשאר מתוך {total})', { total: money(x.debt.amount, x.cur) }) : ''}
+        {x.foreign && <> • {t('{amount} לפי {symbol}1 = {rate}', { amount: money(x.remaining, x.cur), symbol: currencySymbol(x.cur), rate: money(Math.round(x.value / x.remaining * 100), baseCurrency()) })}</>}
       </span>
       <span className={'calc-amt ' + sign}>{money(x.value)}</span>
     </div>
@@ -121,25 +122,25 @@ export default function BalanceSheet({ otherId }) {
   return (
     <div className="calc">
       <div className="calc-sec">
-        <div className="calc-h get">{other_} {g(other.gender, 'חייב', 'חייבת', 'חייב/ת')} לי</div>
-        {theirs.length === 0 ? <div className="calc-row"><span>אין</span></div> : <Rows list={theirs} sign="get" />}
-        <div className="calc-row calc-total"><span>סה״כ</span><span className="calc-amt get">{money(sumTheirs)}</span></div>
+        <div className="calc-h get">{g(other.gender, '{name} חייב לי', '{name} חייבת לי', '{name} חייב/ת לי', { name: other_ })}</div>
+        {theirs.length === 0 ? <div className="calc-row"><span>{t('אין')}</span></div> : <Rows list={theirs} sign="get" />}
+        <div className="calc-row calc-total"><span>{t('סה״כ')}</span><span className="calc-amt get">{money(sumTheirs)}</span></div>
         <CurrencyBreakdown list={theirs} />
       </div>
 
       <div className="calc-sec">
-        <div className="calc-h owe">{g(myGender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל{other_}</div>
-        {mine.length === 0 ? <div className="calc-row"><span>אין</span></div> : <Rows list={mine} sign="owe" />}
-        <div className="calc-row calc-total"><span>סה״כ</span><span className="calc-amt owe">{money(sumMine)}</span></div>
+        <div className="calc-h owe">{g(myGender, 'אני חייב ל{name}', 'אני חייבת ל{name}', 'אני חייב/ת ל{name}', { name: other_ })}</div>
+        {mine.length === 0 ? <div className="calc-row"><span>{t('אין')}</span></div> : <Rows list={mine} sign="owe" />}
+        <div className="calc-row calc-total"><span>{t('סה״כ')}</span><span className="calc-amt owe">{money(sumMine)}</span></div>
         <CurrencyBreakdown list={mine} />
       </div>
 
       {adjust !== 0 && (
-        <div className="calc-row"><span>התאמות (החזרים שנרשמו בלי חוב מסוים)</span><span className="calc-amt">{money(Math.abs(adjust))}</span></div>
+        <div className="calc-row"><span>{t('התאמות (החזרים שנרשמו בלי חוב מסוים)')}</span><span className="calc-amt">{money(Math.abs(adjust))}</span></div>
       )}
 
       <div className="calc-final">
-        <div>{net === 0 ? 'מאוזן: אף אחד לא חייב' : iOwe ? `בסך הכול ${g(myGender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} ל${other_}` : `בסך הכול ${other_} ${g(other.gender, 'חייב', 'חייבת', 'חייב/ת')} לי`}</div>
+        <div>{net === 0 ? t('מאוזן: אף אחד לא חייב') : iOwe ? g(myGender, 'בסך הכול אני חייב ל{name}', 'בסך הכול אני חייבת ל{name}', 'בסך הכול אני חייב/ת ל{name}', { name: other_ }) : g(other.gender, 'בסך הכול {name} חייב לי', 'בסך הכול {name} חייבת לי', 'בסך הכול {name} חייב/ת לי', { name: other_ })}</div>
         <div className="calc-eq" dir="ltr">
           <bdo dir="ltr">{`${plain(sumTheirs)} − ${plain(sumMine)}${adjust !== 0 ? ` ${adjust > 0 ? '+' : '−'} ${plain(Math.abs(adjust))}` : ''} = `}<strong>{plain(Math.abs(net))}</strong></bdo>
         </div>
@@ -147,13 +148,13 @@ export default function BalanceSheet({ otherId }) {
 
       {twoSided && (
         <>
-          <AsyncButton className="charcoalbtn" onClick={offset}>קיזוז חובות הדדיים ({money(overlap)})</AsyncButton>
-          <p className="calc-hint">הקיזוז סוגר חובות משני הצדדים עד {money(overlap)}. ההפרש נשאר כמו שהוא וההיסטוריה נשמרת.</p>
+          <AsyncButton className="charcoalbtn" onClick={offset}>{t('קיזוז חובות הדדיים ({amount})', { amount: money(overlap) })}</AsyncButton>
+          <p className="calc-hint">{t('הקיזוז סוגר חובות משני הצדדים עד {amount}. ההפרש נשאר כמו שהוא וההיסטוריה נשמרת.', { amount: money(overlap) })}</p>
         </>
       )}
       {net !== 0 && (
         <button type="button" className="charcoalbtn" onClick={payNet}>
-          {iOwe ? `שילמתי את ההפרש (${money(net)})` : `קיבלתי את ההפרש (${money(-net)})`}
+          {iOwe ? t('שילמתי את ההפרש ({amount})', { amount: money(net) }) : t('קיבלתי את ההפרש ({amount})', { amount: money(-net) })}
         </button>
       )}
     </div>

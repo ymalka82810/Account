@@ -2,6 +2,8 @@
 // אובייקט יחיד שכל המודולים מייבאים ומשנים ישירות (state.token = ...),
 // כדי להימנע מבעיות binding של ייצוא/ייבוא משתנים הדדיים ב-ES modules.
 
+import { t, intlLocale } from '../i18n/index.js';
+
 export const TOKEN_KEY = 'kupa-token';
 export const LEGACY_KEY = 'family-account-v1';
 export const LEGACY_DONE_KEY = 'kupa-legacy-imported';
@@ -40,13 +42,16 @@ export const PARENT_AVATARS = [
   '👨🏻', '👩🏻', '👨🏼', '👩🏼', '👨🏽', '👩🏽', '👨🏾', '👩🏾', '👨🏿', '👩🏿',
 ];
 export const FRIEND_MAX = 50000; // באגורות, כמו בשרת
-export const WEEKDAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+// 0 = ראשון. שמות הימים באים מ-Intl בשפת הממשק (2023-01-01 היה יום ראשון).
+export const WEEKDAYS = [0, 1, 2, 3, 4, 5, 6];
+export const weekdayName = (i) => new Date(Date.UTC(2023, 0, 1 + Number(i))).toLocaleDateString(intlLocale(), { weekday: 'long', timeZone: 'UTC' });
 export const THEME_COLOR = { parent: '#000000', child: '#fbf3f7', teen: '#000000' };
-export const TAB_LABELS = {
-  parent: { family: 'סקירה משפחתית', home: 'הכסף שלי', history: 'היסטוריה', manage: 'ניהול' },
-  child: { home: '💰 הכסף שלי', history: '📜 מה היה' },
-  teen: { home: '💰 הכסף שלי', friends: '🤝 חברים', history: '📜 היסטוריה' },
-};
+// פונקציה ולא קבוע: התרגום נקרא בזמן הרינדור, בשפה הנוכחית.
+export const tabLabels = () => ({
+  parent: { family: t('סקירה משפחתית'), home: t('הכסף שלי'), history: t('היסטוריה'), manage: t('ניהול') },
+  child: { home: t('💰 הכסף שלי'), history: t('📜 מה היה') },
+  teen: { home: t('💰 הכסף שלי'), friends: t('🤝 חברים'), history: t('📜 היסטוריה') },
+});
 
 export const state = {
   token: localStorage.getItem(TOKEN_KEY) || '',

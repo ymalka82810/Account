@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { t } from '../../i18n/index.js';
 import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { useSheet } from '../shared/Sheet.jsx';
@@ -11,15 +12,15 @@ export default function LocaleSheet({ token }) {
   const [busy, setBusy] = useState(false);
   async function save() {
     setBusy(true);
-    try { await call('family:setLocale', { token, country: locale.country || undefined, currency: locale.currency }); toast('המיקום והמטבע נשמרו ✅'); sheet.close(); }
+    try { await call('family:setLocale', { token, country: locale.country || undefined, currency: locale.currency }); toast(t('המיקום והמטבע נשמרו ✅')); sheet.close(); }
     catch (e) { toast(errMsg(e)); }
     finally { setBusy(false); }
   }
   return (
     <div className="form">
-      <p className="hint">לפי המדינה נקבע המטבע של המשפחה. אפשר לשנות אחר כך בלשונית ניהול.</p>
+      <p className="hint">{t('לפי המדינה נקבע המטבע של המשפחה. אפשר לשנות אחר כך בלשונית ניהול.')}</p>
       <LocalePicker value={locale} onChange={setLocale} />
-      {locale && <button className="primary" type="button" disabled={busy} onClick={save}>{busy ? '⏳ רגע…' : 'שמירה'}</button>}
+      {locale && <button className="primary" type="button" disabled={busy} onClick={save}>{busy ? t('⏳ רגע…') : t('שמירה')}</button>}
     </div>
   );
 }

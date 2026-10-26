@@ -1,14 +1,16 @@
 import { state, CODE_KEY, LAST_PERSON_KEY, TOKEN_KEY, bumpAuth } from './state.js';
 import { toast, errMsg, fmtWait } from '../lib/helpers.js';
 import { call } from '../lib/api.js';
+import { DEMO_TOKEN } from '../lib/demo.js';
 import { PARENT_PIN_MAX } from '../lib/pin.js';
+import { t } from '../i18n/index.js';
 
 // הלוגיקה של מסכי הכניסה. התצוגה שלהם ב-src-react/components/Auth.jsx.
 
 // בודק קוד מול השרת. מחזיר true אם נכנסנו למשפחה.
 export async function enterFamily(code, remember) {
   // התווית עוזרת להורה לזהות את המכשיר ברשימת "מכשירים מחוברים".
-  const label = remember ? (navigator.userAgentData?.platform || navigator.platform || 'מכשיר').slice(0, 40) : undefined;
+  const label = remember ? (navigator.userAgentData?.platform || navigator.platform || t('מכשיר')).slice(0, 40) : undefined;
   const res = await call('auth:enter', { code, remember: !!remember, label });
   if (!res.ok) return res.reason;
   state.fam = { code, name: res.familyName, people: res.people };
@@ -39,6 +41,13 @@ export function setToken(t) {
   bumpAuth();
 }
 
+// דמו: כניסה לאפליקציה עם נתוני דוגמה. הטוקן לא נשמר במכשיר, אז רענון מחזיר למסך הפתיחה.
+export function startDemo() {
+  state.token = DEMO_TOKEN;
+  state.pinFlow = null;
+  bumpAuth();
+}
+
 export function dropSession() {
   state.token = '';
   localStorage.removeItem(TOKEN_KEY);
@@ -55,8 +64,8 @@ export async function submitFamilyCode(code) {
   try {
     const r = await enterFamily(code, true);
     if (r === true) { state.view = 'welcome'; route(); return ''; }
-    if (r === 'throttled') return 'יותר מדי ניסיונות. נסו שוב עוד דקה.';
-    return 'הקוד לא נכון. בדקו שוב, או בקשו מההורים.';
+    if (r === 'throttled') return t('יותר מדי ניסיונות. נסו שוב עוד דקה.');
+    return t('הקוד לא נכון. בדקו שוב, או בקשו מההורים.');
   } catch (e) { return errMsg(e); }
 }
 
@@ -65,6 +74,10 @@ export function goView(view) { state.view = view; route(); }
 // מעבר לפנקס האישי ממסכי המשפחה. רק כך מוצג בפנקס כפתור חזרה (מכשיר חדש נפתח בו ישר, ואין לאן לחזור).
 export function openNotebook() { state.notebookBack = true; goView('notebook'); }
 export function closeNotebook() { state.notebookBack = false; goView('welcome'); }
+
+// שדרוג מהפנקס למשפחה (הקמה או הצטרפות עם קוד). "חזרה" מהמסך שנפתח מחזירה לפנקס.
+export function upgradeFromNotebook(view) { state.fromNotebook = true; goView(view); }
+export function backFromFamily() { const nb = state.fromNotebook; state.fromNotebook = false; goView(nb ? 'notebook' : 'welcome'); }
 
 // ---------- הקמת משפחה חדשה ----------
 export async function createFamily({ familyName, name, birthDate, avatar, gender, pin, country, currency }) {
@@ -84,7 +97,7 @@ export async function joinFamily({ name, avatar, pin, gender }) {
     const res = await call('auth:join', args);
     if (!res.ok) {
       if (res.reason === 'code') leaveFamily();
-      return res.reason === 'throttled' ? 'יותר מדי ניסיונות. נסו שוב עוד דקה.' : 'הקוד כבר לא תקף. בקשו קוד חדש מההורים.';
+      return res.reason === 'throttled' ? t('יותר מדי ניסיונות. נסו שוב עוד דקה.') : t('הקוד כבר לא תקף. בקשו קוד חדש מההורים.');
     }
     // הבקשה ממתינה לאישור הורה. אין סשן עד שהורה מאשר, ואז נכנסים דרך מסך הבחירה עם הקוד שנבחר.
     if (res.pending) return { pending: true };
@@ -164,7 +177,7 @@ export async function pressKey(k) {
 
 // קוד משפחה שהפסיק להיות תקף באמצע הכניסה (ההורים החליפו אותו).
 export function codeGone() {
-  toast('קוד המשפחה השתנה. בקשו קוד חדש מההורים.');
+  toast(t('קוד המשפחה השתנה. בקשו קוד חדש מההורים.'));
   leaveFamily();
 }
 
@@ -179,10 +192,10 @@ async function submitPin() {
       if (res.ok) { state.pinFlow = null; setToken(res.token); return; }
       f.entered = '';
       if (res.reason === 'code') { codeGone(); return; }
-      if (res.reason === 'wrong') renderPin(`הקוד לא נכון. נשארו עוד ${res.left} ניסיונות.`);
-      else if (res.reason === 'locked') renderPin(`ניסיתם יותר מדי פעמים. נסו שוב בעוד ${fmtWait(res.waitSeconds)}.`);
-      else if (res.reason === 'throttled') renderPin('יותר מדי ניסיונות. נסו שוב עוד דקה.');
-      else if (res.reason === 'legacy') renderPin('הורה צריך להיכנס קודם.');
+      if (res.reason === 'wrong') renderPin(t('הקוד לא נכון. נשארו עוד {left} ניסיונות.', { left: res.left }));
+      else if (res.reason === 'locked') renderPin(t('ניסיתם יותר מדי פעמים. נסו שוב בעוד {wait}.', { wait: fmtWait(res.waitSeconds) }));
+      else if (res.reason === 'throttled') renderPin(t('יותר מדי ניסיונות. נסו שוב עוד דקה.'));
+      else if (res.reason === 'legacy') renderPin(t('הורה צריך להיכנס קודם.'));
       else { f.mode = 'new'; renderPin(); }
       shake();
     } else if (!f.first) {
@@ -190,14 +203,14 @@ async function submitPin() {
       renderPin();
     } else if (f.first !== f.entered) {
       f.first = null; f.entered = '';
-      renderPin('הקודים לא היו זהים. נתחיל מחדש.');
+      renderPin(t('הקודים לא היו זהים. נתחיל מחדש.'));
       shake();
     } else {
       const res = await call('auth:claimProfile', { code, personId: f.person.id, pin: f.entered });
       if (!res.ok) {
         if (res.reason === 'code') { codeGone(); return; }
         f.first = null; f.entered = '';
-        renderPin(res.reason === 'throttled' ? 'יותר מדי ניסיונות. נסו שוב עוד דקה.' : 'הורה צריך להיכנס קודם.');
+        renderPin(res.reason === 'throttled' ? t('יותר מדי ניסיונות. נסו שוב עוד דקה.') : t('הורה צריך להיכנס קודם.'));
         shake();
         return;
       }

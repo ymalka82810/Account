@@ -1,0 +1,691 @@
+0|. A gyerekek szülői beleegyezéssel csatlakoznak
+1|(maradt ennyiből: {total})
+2|{amount} {symbol}1 = {rate} árfolyamon
+3|{debtLine}, pénznem szerint (most ← utána)
+4|{device} · utoljára látva: {date}
+5|{from} visszafizetett neki: {to}
+6|{from} visszafizetett nekem
+7|{from} visszafizetett neki: {to}
+8|{from} visszafizetett nekem
+9|{from} visszafizetett neki: {to}
+10|{from} visszafizetett nekem
+11|{from} tartozik neki: {to}
+12|{from} tartozik nekem
+13|{from} tartozik neki: {to}
+14|{from} tartozik nekem
+15|{from} tartozik neki: {to}
+16|{from} tartozik nekem
+17|{name} jóváhagyva ✅
+18|{name} eltávolítva
+19|{name} eltávolítva
+20|{name} eltávolítva
+21|{name} tartozik nekem
+22|{name} tartozik nekem
+23|{name} tartozik nekem
+24|{name} a következő belépéskor új kódot választ
+25|{name} a következő belépéskor új kódot választ
+26|{name} e-mailben hozzáadhat barátokat, és adósságokat rögzíthet velük. Minden bejegyzés a barát jóváhagyására is vár, ti pedig az áttekintésben látjátok őket. Bármikor kikapcsolható.
+27|{name} e-mailben hozzáadhat barátokat, és adósságokat rögzíthet velük. Minden bejegyzés a barát jóváhagyására is vár, ti pedig az áttekintésben látjátok őket. Bármikor kikapcsolható.
+28|{name} nincs az országlistában, ezért a pénznem a dollár lesz.
+29|{name} engedélyt kér, hogy barátokkal adósságokat rögzíthessen
+30|{name} engedélyt kér, hogy barátokkal adósságokat rögzíthessen
+31|{name} engedélyt kér, hogy barátokkal adósságokat rögzíthessen
+32|{name} hozzáadva a családhoz ✅
+33|{name} hozzáadva a családhoz ✅
+34|{name} hozzáadva a családhoz ✅
+35|{name} mostantól: {role} ✅
+36|{name} hozzá akar adni téged
+37|{name} a következő belépéskor új kódot választ
+38|{name} e-mailben hozzáadhat barátokat, és adósságokat rögzíthet velük. Minden bejegyzés a barát jóváhagyására is vár, ti pedig az áttekintésben látjátok őket. Bármikor kikapcsolható.
+39|{who} rögzítette: {line}
+40|{who} rögzítette: {line}
+41|{who} rögzítette: {line}
+42|→ Másik adósság választása
+43|→ Vissza
+44|→ Másik család
+45|↩️ Még nem
+46|⏳ {n} bejegyzés vár szülői jóváhagyásra. A „Előzmények” részben látod őket.
+47|⏳ Ellenőrzés…
+48|⏳ Csatlakozni kér
+49|⏳ Jóváhagyásra vár
+50|⏳ Jóváhagyásra vár ({n})
+51|⏳ A szülők jóváhagyására vár
+52|⏳ A te jóváhagyásodra vár
+53|⏳ A te jóváhagyásodra vár ({n})
+54|⏳ A barátra vár
+55|⏳ A kérés jóváhagyására vár
+56|⏳ Egy pillanat…
+57|⏳ Egy bejegyzés szülői jóváhagyásra vár. Az „Előzmények” részben látod.
+58|{"one":"⚠️ {name} kódja egyszer lezárult a hibás próbálkozások miatt.","other":"⚠️ {name} kódja {n} alkalommal lezárult a hibás próbálkozások miatt."}
+59|⚡ Neon
+60|✅ Jóváhagyás
+61|✅ Helyes
+62|✅ Kifizetve
+63|✅ Visszafizetés mentése
+64|✅ Adósság mentése
+65|✉️ Helyreállító e-mail hozzáadása
+66|✉️ Helyreállító e-mail: {email}
+67|🌈 Színes
+68|🌙 Sötét
+69|🍕 Étel
+70|🍦 Fagyi
+71|🍬 Édesség
+72|🎨 Képernyő színei
+73|🎮 Játék
+74|🏠 Családi kassza létrehozása
+75|👀 Demó mód: mintaadatok, semmi sem mentődik
+76|👀 Szeretnéd látni, hogyan működik? 10 másodperces demó
+77|👨‍👩‍👧 Szülő vagyok, és új családi kasszát szeretnék létrehozni
+78|👨‍👩‍👧 Család
+79|💰 A pénzem
+80|💰 Kaptam
+81|💰 Fizettem
+82|📋 Nyitott lista másolása
+83|📒 A jegyzetfüzetem
+84|📜 Előzmények
+85|📜 Előzmények
+86|🔑 Titkos kód módosítása
+87|🔒 A(z) „{role}” szerepkörben való hozzáadást ujjlenyomat vagy arcfelismerés hagyja jóvá.
+88|🔔 Értesítések bekapcsolása
+89|🔕 Értesítések kikapcsolása
+90|🗑️ Az egész jegyzetfüzet törlése
+91|🤝 Barátkérések ({n})
+92|🤝 Baráti mód kérések ({n})
+93|🤝 Barátok
+94|🤝 A baráti mód be van kapcsolva
+95|🧹 A kifizetettek törlése
+96|🙂 Avatár választása
+97|4 számjegy
+98|4–{max} számjegy
+99|4–8 számjegy
+100|6 számjegy
+101|Apa
+102|Senki sem tartozhat saját magának
+103|Nincs ilyen személy
+104|Jóváhagyva ✅
+105|Veszélyes terület
+106|Nem fizethető vissza több, mint amennyi az adósságból megmaradt
+107|Nem fizethető vissza több, mint amennyi az adósságból megmaradt ({amount})
+108|Magadat nem távolíthatod el
+109|Ezen az eszközön nem lehet másolni
+110|A saját szerepköröd nem módosíthatod
+111|Hogy hívják a családot?
+112|Hogy hívnak?
+113|Anya
+114|Megerősítés
+115|E-mail megerősítése
+116|Nincs
+117|Nincs internetkapcsolat. Próbáld újra, ha lesz.
+118|Nincs semmi nyitva
+119|Nincs semmi nyitva!
+120|Nincs titkos kódod. Állíts be egyet a „Fiókom” részben, és próbáld újra.
+121|Nincs megerősített e-mail
+122|Nincs megerősített e-mail, amit cserélni lehetne
+123|Nincs kifizetett bejegyzés
+124|Nincs árfolyam az adósság pénznemére
+125|Jelenleg nincs árfolyam
+126|Hol laktok?
+127|Jóváhagyás
+128|E-mailes megerősítés
+129|Baráti mód jóváhagyása
+130|Szerepkörváltás megerősítése
+131|Ha ennek a szülőnek van megerősített e-mailje, küldünk oda egy ellenőrző kódot. Ha nincs e-mail megadva, egy másik szülő állíthat be neked új kódot.
+132|Ha nem ő az, érdemes új kódot beállítani.
+133|Ha nem ő az, érdemes új kódot beállítani.
+134|Ha nem ő az, érdemes új kódot beállítani.
+135|Ha a barátnak van baráti módja, kérést küldtünk neki 🤝
+136|Új vagyok
+137|Tartozom
+138|Pénzzel tartozom
+139|Tartozom neki: {name}
+140|Tartozom neki: {to}
+141|Tartozom egy barátnak
+142|Tartozom a barátoknak
+143|Tartozom
+144|Pénzzel tartozom
+145|Tartozom neki: {name}
+146|Tartozom neki: {to}
+147|Tartozom egy barátnak
+148|Tartozom a barátoknak
+149|Tartozom
+150|Pénzzel tartozom
+151|Tartozom neki: {name}
+152|Tartozom neki: {to}
+153|Tartozom egy barátnőnek
+154|Tartozom a barátoknak
+155|Senki sem tartozik semmivel!
+156|Senki sem tartozik semmivel.
+157|Csak az első 10 percben vonható vissza, vagy kérd egy szülő segítségét
+158|Csak az első 10 percben vonható vissza. A javításhoz rögzíts egy visszafizetést
+159|Legfeljebb {max} fizethető vissza.
+160|Adóssághoz csak visszafizetés kapcsolható
+161|Csak olyan adósságot rögzíthetsz, amely téged érint
+162|Csak jóváhagyott barátokkal rögzíthetsz
+163|Minden hónap {day}. napján
+164|Melyik nap
+165|A hónap melyik napja (1–28)
+166|Megnézzük, ki az…
+167|Ellenőrzés…
+168|Ország választása
+169|Válassz avatárt
+170|Válaszd ki, hol laktok
+171|Válassz új titkos kódot ({rule})
+172|Mégse
+173|Szülői jogosultságok visszavonása
+174|Baráti mód kikapcsolása
+175|Barátok között egyszerre legfeljebb {max} rögzíthető.
+176|{name} családja
+177|Családtagok
+178|Összesen {name} tartozik nekem
+179|Összesen {name} tartozik nekem
+180|Összesen {name} tartozik nekem
+181|Összesen tartozom neki: {name}
+182|Összesen tartozom neki: {name}
+183|Összesen tartozom neki: {name}
+184|Szülői jóváhagyás kérése
+185|Nagy
+186|Betűméret
+187|Görgetés jobbra
+188|Görgetés balra
+189|Új verzió érhető el ({version})
+190|Elutasítás
+191|Avatár
+192|Avatár: {avatar}
+193|Zsebpénz
+194|Rendszeres zsebpénz
+195|egy perc
+196|{"one":"{n} perc","other":"{n} perc"}
+197|A megerősítés megszakítva
+198|Az ujjlenyomattal / arcfelismeréssel történő megerősítés nem sikerült
+199|A megerősítés nem sikerült. Próbáld újra.
+200|A megerősítés nem sikerült (ismeretlen cím).
+201|A megerősítés nem sikerült. Próbáld újra.
+202|Az általad hozzáadott személyek az első belépéskor választanak titkos kódot.
+203|Az alkalmazás még nincs csatlakoztatva a szerverhez
+204|Értem
+205|A kérés már nem létezik
+206|A kérést elutasították
+207|A kérést elküldtük
+208|A kérést elküldtük a szüleidnek ⏳
+209|A kérést elküldtük a szüleidnek. Szólunk, ha jóváhagyják.
+210|Beállítások
+211|Családi beállítások
+212|Ezt az avatárt már használja valaki a családban
+213|Ez a böngésző túl régi a biometrikus megerősítéshez. Frissítsd, és próbáld újra.
+214|A letöltés nem sikerült. Ellenőrizd az internetkapcsolatot, és próbáld újra
+215|A visszafizetés nem illik ehhez az adóssághoz
+216|Visszafizetés mentve ✅
+217|A megjegyzés túl hosszú
+218|Az értesítések bekapcsolva 🔔
+219|Az értesítések le vannak tiltva. A böngésző beállításaiban engedélyezheted őket.
+220|Az értesítések kikapcsolva
+221|Elveszíti a szülői jogosultságokat. Utána arcfelismeréses vagy ujjlenyomatos megerősítés szükséges.
+222|Elveszíti a baráti módot. Utána arcfelismeréses vagy ujjlenyomatos megerősítés szükséges.
+223|Teljes szülői jogosultságot kap: mindent láthat, jóváhagyhat, törölhet és kezelheti a családot. Utána arcfelismeréses vagy ujjlenyomatos megerősítés szükséges.
+224|Hozzáadás
+225|Családtag hozzáadása
+226|Barát hozzáadása
+227|{n} bejegyzés átvíve
+228|Másolva ✅
+229|Szülő
+230|Egy másik szülőnek kell titkos kódot beállítania neked
+231|A szülő itt lép be, majd kódokat kap a család többi tagjának.
+232|A szülőnek meg kell adnia a Convex címét a fájlban
+233|Először egy szülőnek be kell lépnie.
+234|A barát eltávolítva
+235|A barátaim
+236|Az adósság pénzneme: {debtCur}. Ma érvényes árfolyamon fizetsz {payCur} pénznemben.
+237|Ez az adósság már ki van fizetve
+238|Az adósság teljesen lezárul ✅
+239|Az adósság nem található
+240|Adósság mentve ✅
+241|A közted és {name} közötti adósságok ennyi összegig lezárulnak, és csak a különbség marad. Az előzmények megmaradnak.
+242|Nyitott adósságok pénznem szerint
+243|Az adósságok beszámítva ✅
+244|Visszafizetés
+245|Visszafizettem neki: {to}
+246|E-mail módosítása
+247|Kód módosítása
+248|Elszámolás vele: {name}
+249|Fiókom
+250|Elveszíti a szülői jogosultságokat. Utána arcfelismeréses vagy ujjlenyomatos megerősítés szükséges.
+251|Elveszíti a baráti módot. Utána arcfelismeréses vagy ujjlenyomatos megerősítés szükséges.
+252|Teljes szülői jogosultságot kap: mindent láthat, jóváhagyhat, törölhet és kezelheti a családot. Utána arcfelismeréses vagy ujjlenyomatos megerősítés szükséges.
+253|Előzmények
+254|Előzmények a barátokkal
+255|Az összes: {amount}
+256|Minden rendezve
+257|Minden rendezve ✅
+258|Minden csak ezen az eszközön van tárolva.
+259|Legújabb elöl
+260|A pénzem
+261|Az országom nincs a listán ($)
+262|A család pénzneme
+263|A család pénzneme {base}, ez az adósság pedig {cur} pénznemben marad. Az egyenlegekben az adott napi árfolyamon jelenik meg, kifizetéskor pedig az összeg a fizetés napi árfolyamán kerül átváltásra.
+264|Pénznem: {cur}
+265|E-mail megerősítve ✅
+266|Ezt az e-mail-címet már használja valaki más
+267|Jelenlegi e-mail: {email}. A cseréhez megerősítő kódot küldünk rá.
+268|{name} e-mail-címe
+269|A barát e-mail-címe
+270|Az e-mail-címed a barátoknak:
+271|A hely és a pénznem mentve ✅
+272|A hely és a pénznem frissítve ✅
+273|Ez az eszköz nincs regisztrálva megerősítésre. Regisztráld újra.
+274|Az eszköz nem támogatott
+275|Eszköz leválasztva ✅
+276|Tovább
+277|A család nem található
+278|A család megtelt
+279|A zárolás feloldva ✅
+280|Ez a tinédzser elveszíti a baráti módot. Utána arcfelismeréses vagy ujjlenyomatos megerősítés szükséges.
+281|Az adataim
+282|Az összeg túl nagy
+283|Az összeg túl nagy.
+284|Legnagyobb összeg elöl
+285|Összegek a jegyzetfüzetben
+286|Eltávolítás
+287|{name} eltávolítása
+288|Elrejtés
+289|Átvitel a szerverre
+290|Szülői jogosultság megadása
+291|Megjegyzés
+292|A jegyzetfüzet kiürítve
+293|A jegyzetfüzet már üres
+294|A jegyzetfüzetem
+295|Leállítás
+296|Biometrikus megerősítés bekapcsolása
+297|Kód megjelenítése 🔒
+298|Csatlakozási kód megjelenítése
+299|Csatlakozás
+300|A fájl túl nagy
+301|A letöltött fájl nem az alkalmazás új verziója
+302|A letöltött fájl érvénytelen. Próbáld újra
+303|A kód lecserélve ✅ Ujjlenyomattal vagy arcfelismeréssel megjelenítheted
+304|Az új kódnak ennyinek kell lennie: {rule}.
+305|Jelenlegi kód
+306|A jelenlegi kód nem helyes.
+307|A titkos kódnak 4 számjegyűnek kell lennie
+308|A titkos kód helytelen.
+309|A beírt titkos kód helytelen.
+310|A titkos kódod, megerősítésként
+311|A kód már nem érvényes. Kérj új kódot a szüleidtől.
+312|A kód nem helyes. Ellenőrizd újra, vagy kérdezd meg a szüleidet.
+313|A kód nem helyes. Még {left} próbálkozásod maradt.
+314|Az e-mailben kapott kód
+315|A jelenlegi e-mailben kapott kód hibás vagy lejárt.
+316|A kód el van rejtve
+317|A kód el van rejtve, és csak ujjlenyomattal vagy arcfelismeréssel jeleníthető meg.
+318|A kódnak ennyinek kell lennie: {rule}
+319|A kódnak ennyinek kell lennie: {rule}.
+320|A kódnak 4 számjegyűnek kell lennie
+321|A kódnak legalább 4, legfeljebb {max} számjegyűnek kell lennie
+322|A kód hibás vagy lejárt.
+323|A kód módosítva ✅
+324|{name} kódja frissítve
+325|A kódok nem egyeztek. Kezdjük elölről.
+326|A Családi Kassza
+327|A kassza törölve
+328|A beszámítást elküldtük egy szülőnek jóváhagyásra ⏳
+329|A beszámítás mindkét oldalon lezárja az adósságokat {amount} összegig. A különbség megmarad, az előzmények pedig megmaradnak.
+330|Írd be a titkos kódodat.
+331|Kassza létrehozása
+332|Családi kassza létrehozása
+333|Következő bejegyzés: {date}
+334|A rendszeres bejegyzés leállítva
+335|A rendszeres bejegyzés hozzáadva ✅
+336|A bejegyzést elutasították
+337|A bejegyzés törölve
+338|Lista
+339|A lista átmásolva
+340|A név frissítve ✅
+341|Árfolyamok frissítve: {when}
+342|Korrekciók (konkrét adósság nélkül rögzített visszafizetések)
+343|A {base} pénznemű fizetés a mai árfolyamon kerül átváltásra, és levonásra kerül az adósságból annak saját pénznemében. Mentés után ez az árfolyam megmarad, és nem változik.
+344|Ez egy demó, ezért semmi sem módosítható. Hozd létre a saját kasszádat!
+345|Ez a te e-mail-címed
+346|Ez törli az egész kasszát: minden személyt és minden bejegyzést, és nem vonható vissza.\nA megerősítéshez írd be a család nevét: {name}
+347|Arcfelismerés vagy ujjlenyomat
+348|Férfi
+349|Egy barát tartozik nekem
+350|Barát hozzáadva ✅
+351|A barátok tartoznak nekem
+352|A barátok ezen az e-mail-címen adják hozzá a tinédzsert. Ide semmi sem megy, csak keresésre szolgál.
+353|A barátok ezen az e-mail-címen adják hozzá a tinédzsert. Ide semmi sem megy, csak keresésre szolgál.
+354|A barátok ezen az e-mail-címen adják hozzá a tinédzsert. Ide semmi sem megy, csak keresésre szolgál.
+355|A barátokat e-mail-címmel lehet hozzáadni. Mindent, ami rögzítésre kerül, az áttekintésben látsz.
+356|Barátok: {names}
+357|Adósság
+358|Adósság ({cur})
+359|Vissza
+360|tartozik
+361|tartozik
+362|tartozik nekem
+363|Tartoznak nekem
+364|Pénzzel tartoznak nekem
+365|tartozik
+366|Betöltés…
+367|A szülő még nem állította be
+368|Elveszítik a szülői jogosultságokat. Utána arcfelismeréses vagy ujjlenyomatos megerősítés szükséges.
+369|{day}.
+370|Érvénytelen nap a hónapban (1–28)
+371|Érvénytelen nap
+372|Biztonságos kijelentkezés…
+373|Túl sok kódkérés. Próbáld újra néhány perc múlva
+374|Túl sok kérés. Próbáld újra később
+375|Túl sok regisztrált eszköz
+376|Jelenleg túl sok új család van. Próbáld újra néhány perc múlva
+377|Túl sok próbálkozás. Próbáld újra egy perc múlva.
+378|Túl sok próbálkozás. Próbáld újra néhány perc múlva.
+379|Túl sok bejegyzés. Próbáld újra később
+380|Az adósságból {left} marad.
+381|Gyerek
+382|Gyerek
+383|Gyerek
+384|Kijelentkezés
+385|Kilépés a demóból
+386|Teljes szülői jogosultságot kapnak: mindent láthatnak, jóváhagyhatnak, törölhetnek és kezelhetik a családot. Utána arcfelismeréses vagy ujjlenyomatos megerősítés szükséges.
+387|Zöld
+388|Zöld + sárga
+389|Túl sok függőben lévő csatlakozási kérés van. Kérd meg a szülőket, hogy kezeljék őket
+390|A kettejük között túl sok nyitott adósság van. Zárj le néhányat, mielőtt újat adnál hozzá.
+391|A kettejük között túl sok aktív bejegyzés van. Zárj le néhány adósságot, mielőtt újat adnál hozzá.
+392|Köztetek nyitott egyenleg van. Előbb rendezd
+393|Itt más pénznemű adósságok is vannak: a mai árfolyamon kerülnek beszámításra, és ez az árfolyam elmentődik.
+394|Már sok barát van a listán
+395|Már sok rendszeres bejegyzés van
+396|Van családkódod? Belépés a kasszába
+397|Van családkódod? Írd be ide. Kérd el a szüleidtől a család csatlakozási kódját.
+398|Erre a névre bejegyzések vannak. Előbb töröld őket
+399|Egyenlegek
+400|Itt rögzíthetsz adósságokat barátokkal: ki kinek vett valamit, és ki köteles visszafizetni. A barátodnak is szüksége van az alkalmazásra, és a szüleidnek jóvá kell hagyniuk.
+401|Már van valaki ezzel a névvel
+402|Már van valaki ezzel a névvel. Válaszd ki a listából, vagy változtasd meg a nevet
+403|Már van valaki ezzel a névvel. Utasítsd el a kérést
+404|Ennek a profilnak már van kódja
+405|Mindjárt kész…
+406|Már használjátok a kasszát?
+407|Ehhez: {need}, olyan eszköz kell, amelyen be van állítva az ujjlenyomat vagy az arcfelismerés.
+408|Hogy új kódot állíthass be neki: {name}, ellenőrző kódot küldünk erre a címre: {email}.
+409|Kék + lila
+410|Barátok kikapcsolása
+411|Az összes nyitott adósság
+412|Az egész család
+413|Minden összeg ebben a pénznemben látható. Rögzíthetsz adósságot más pénznemben is (pl. 100 dollár), és kifizetéskor az adott napi árfolyamon kerül átváltásra.
+414|Minden hónapban
+415|Minden {day}.
+416|Milyen gyakran
+417|Minden héten
+418|Mennyit fizetett vissza {from} neki: {to}?
+419|Mennyit fizetett vissza {from} neki: {to}?
+420|Mennyit fizetett vissza {from} neki: {to}?
+421|Mennyivel tartozik nekem {name}?
+422|Mennyivel tartozik nekem {name}?
+423|Mennyivel tartozik nekem {name}?
+424|Mennyit fizetett nekem {name}?
+425|Mennyit fizetett nekem {name}?
+426|Mennyit fizetett nekem {name}?
+427|Mennyivel tartozom neki: {to}?
+428|Mennyivel tartozom neki: {to}?
+429|Mennyivel tartozom neki: {to}?
+430|Mennyit fizettem neki: {to}?
+431|Mennyit?
+432|Igen
+433|Igen, tovább
+434|Igen, beszámítás
+435|Igen, adósság mentése
+436|Igen, fizetés mentése
+437|Belépés
+438|Írd be azt az e-mail-címet, amelyet a barátod megadott a szüleinek az alkalmazásban. Kérést kap, amelyet jóvá kell hagynia. Csak akkor működik, ha a barátodnak is van baráti módja.
+439|Írd be a titkos kódot
+440|Írd be a kódot még egyszer, megerősítésként
+441|Írd be a nevet
+442|Írj be egy összeget
+443|Írj be nullánál nagyobb összeget.
+444|Másik cím
+445|Az e-mail-cím érvénytelen
+446|E-mail-cím
+447|Új e-mail-cím
+448|Érvénytelen e-mail-cím
+449|Narancs
+450|Narancs + rózsaszín
+451|Nem
+452|Nem sikerült bekapcsolni az értesítéseket ezen az eszközön
+453|Nem sikerült regisztrálni az eszközt. Próbáld újra.
+454|Ismeretlen
+455|Helytelen
+456|A telefonon nem található telepítő. A fájlt közvetlenül a GitHubról töltheted le
+457|Melyik adóssághoz tartozik a visszafizetés?
+458|A megerősítéshez ellenőrző kódot küldünk erre a címre: {email}.
+459|A kasszában végzett érzékeny műveletek megerősítéséhez
+460|Visszaállítás, és a következő belépéskor ő választ
+461|Visszavonod, amit rögzítettél?
+462|Elutasítod? A bejegyzés törlődik.
+463|Az új szülőnek titkos kódra van szüksége
+464|A szülőnek be kell állítani egy kódot (nem állítható vissza úgy, hogy ő válasszon)
+465|Csak szülőknek. Aki létrehozza a kasszát, az az első szülő. Utána kapsz egy csatlakozási kódot az egész családnak, és beállítod mindenki szerepkörét: gyerek, tinédzser vagy szülő.
+466|Lecseréled a kódot? Akik már bent vannak, bent maradnak, de a régi kód nem működik tovább, és a családot elmentő többi eszköznek az új kódot kell megadnia.
+467|Eltávolítod őt a barátok közül: {name}?
+468|Eltávolítod őt a családból: {name}?
+469|Leállítod a rendszeres bejegyzést? Ami már rögzítve van, megmarad.
+470|A főoldalon a kifizetettek is jelenjenek meg
+471|Koppints a számítás részleteihez ›
+472|Kikapcsolod a baráti módot neki: {name}? Új bejegyzések barátokkal nem lesznek lehetségesek.
+473|Nincs megadva
+474|Törölsz {n} kifizetett bejegyzést?
+475|Törlöd ezt a bejegyzést: {name}?
+476|Törlöd ezt a bejegyzést?
+477|Törlöd a jegyzetfüzet összes bejegyzését? Ez nem vonható vissza.
+478|Kinek
+479|Kinek tartozom?
+480|Kinek tartozom?
+481|Kinek tartozom?
+482|Kinek?
+483|Például: fagyi, mozijegy
+484|Például: Kovács család
+485|Leválasztod az eszközt? Újra meg kell adnia a csatlakozási kódot.
+486|A család pénznemét az ország határozza meg. Később módosíthatod a Kezelés lapon.
+487|Pénznem szerint
+488|Név szerint (A–Z)
+489|Csak olvasható. A baráttal rögzített minden bejegyzés az ő jóváhagyására is vár.
+490|megtekintsd a csatlakozási kódot
+491|módosíts egy szerepkört
+492|Kiegyenlítve: senki sem tartozik semmivel
+493|Ellenőrzés…
+494|kap még
+495|kap még
+496|kap még
+497|Az ország nem támogatott
+498|az adatvédelmi irányelveket
+499|Adatvédelmi irányelvek
+500|Lakóhely szerinti ország
+501|Mit rögzítenek a tinédzserek a barátaikkal
+502|Ami nyitva van
+503|Frissítés letöltése...
+504|Frissítés letöltése... {percent}%
+505|Törlés
+506|Az egész kassza törlése
+507|Pénznem
+508|A pénznem nem támogatott
+509|Ki tartozik nekem?
+510|Ki kinek tartozik
+511|Ki tartozik (a fizető)
+512|Ki tartozik nekem?
+513|Ki lép be?
+514|E-mail a kód helyreállításához
+515|Az e-mail csak szülőknek való
+516|Hely és pénznem
+517|Valaki
+518|Eszköz
+519|Az eszköz nem létezik
+520|Csatlakoztatott eszközök
+521|A családot elmentő eszközök. A 180 napig nem használt kártya magától lejár.
+522|Egy szülő jóváhagyására várunk itt: {name}. Miután egy szülő jóváhagyta, válaszd ki a neved a belépési képernyőn, és írd be a választott titkos kódot.
+523|Egy szülő jóváhagyására várunk. Miután egy szülő jóváhagyta, válaszd ki a neved a belépési képernyőn, és írd be a választott titkos kódot.
+524|Érvénytelen értesítési feliratkozás
+525|Érvénytelen kulcs
+526|Baráti mód
+527|Baráti mód jóváhagyva ✅
+528|A baráti mód csak tinédzsereknek van
+529|Baráti mód kikapcsolva
+530|Baráti mód neki: {name}
+531|A baráti módot a szülők még nem hagyták jóvá
+532|Csatlakozás a kasszához
+533|Csatlakozol a(z) {name} család kasszájához. A család egyik szülőjének jóvá kell hagynia a csatlakozást, és ő állítja be, hogy gyerek, tinédzser vagy szülő vagy-e.
+534|Megjelenés
+535|Valami elromlott. Próbáld újra.
+536|Kezelés
+537|Túl sokszor próbálkoztál. Próbáld újra ennyi idő múlva: {wait}.
+538|Leválasztás
+539|Törölve
+540|Ezen az eszközön az előző verzió adatai találhatók: {people} személy és {entries} bejegyzés. Átviszed őket a szerverre?
+541|Újra
+542|Tinédzser
+543|Tinédzser
+544|Tinédzser
+545|Női
+546|Úgy tűnik, az eszköz itt van: {name}. Ott laktok?
+547|Maradt {left} ennyiből: {total}
+548|Ebből az adósságból {left} maradt.
+549|Kód érkezik, ha egy titkos kódot módosítanak vagy visszaállítanak, és értesítés is, ha valakinek a családban zárolódik a kódja.
+550|Elküldve egy szülőnek jóváhagyásra ⏳
+551|Elküldve a barátnak jóváhagyásra ⏳
+552|Lila és türkiz
+553|Bezárás
+554|A bejegyzések sorrendje
+555|Összesen
+556|Összesen {cur} pénznemben a mai árfolyamon
+557|Összeg ({cur})
+558|Érvénytelen összeg
+559|Érvénytelen összeg. Barátok között egyszerre legfeljebb 500 sékel rögzíthető
+560|Családi áttekintés
+561|Még nincs semmi rögzítve.
+562|Már folyamatban van egy frissítés
+563|Frissítés
+564|Több
+565|A családban még nincs senki más. Egy szülőnek kell hozzáadnia őket.
+566|Még nincsenek jóváhagyott barátok
+567|Még nincsenek jóváhagyott barátok. Adj hozzá egy barátot az e-mail-címével.
+568|Még nincsenek barátok. Adj hozzá egy barátot az e-mail-címével.
+569|A lista még üres. A kezdéshez koppints az egyik gombra.
+570|Még nincsenek rendszeres bejegyzések.
+571|További avatárok
+572|Még nem választott kódot
+573|Még nem választott kódot
+574|Még nem választott kódot
+575|A barátokkal még nincs semmi rögzítve.
+576|Még nincs semmi rögzítve.
+577|Megjelenés
+578|Ezért: {debt} (= {covers} a mai árfolyamon).
+579|Ezért: {debt}.
+580|Miért? (kihagyható)
+581|Miért? (nem kötelező)
+582|Ezért: {debt}
+583|Kivel?
+584|Hatalmas
+585|A megerősítés lejárt. Próbáld újra.
+586|A számítás részletei
+587|Érvénytelen művelet
+588|Képernyő színei
+589|Neonszínek
+590|A megszólítás már be van állítva, és nem módosítható
+591|Megszólítás
+592|Megszólítás:
+593|Hozz létre családi kasszát: mindenki ugyanazt a számlát látja, és az adósságok mindenkinél frissülnek.
+594|Ujjlenyomattal vagy arcfelismeréssel történő megerősítés szükséges
+595|Az alkalmazásnak engedélyre van szüksége a frissítések telepítéséhez: a megnyíló beállításokban kapcsold be az „Engedélyezés ebből a forrásból” opciót, és koppints újra a „Frissítés” gombra
+596|Újra be kell lépned
+597|Újra be kell lépned a családkóddal
+598|Ezt a telefont egyszer regisztrálnod kell.
+599|Regisztrálnod kell az eszközt
+600|Ezt az eszközt és böngészőt egyszer regisztrálnod kell.
+601|Újra regisztrálnod kell az eszközt
+602|Újra regisztrálnod kell az eszközt, hogy az arcfelismerés is engedélyezett legyen
+603|Kód beállítása
+604|Kód beállítása és belépés
+605|Megszólítás beállítása…
+606|Egy kód mindenkinek. Aki ezzel csatlakozik, gyerekként lép be. Utána a „Családtagok” részben átállítható tinédzserre vagy szülőre, ujjlenyomatos vagy arcfelismeréses jóváhagyással.
+607|Kód az e-mailből
+608|Az e-mailben kapott kód hibás vagy lejárt.
+609|Az ellenőrző kód hibás vagy lejárt.
+610|Csatlakozási kód a(z) {name} család kasszájához: {code}
+611|A család csatlakozási kódja
+612|A család csatlakozási kódja csak ujjlenyomattal vagy arcfelismeréssel jeleníthető meg.
+613|A családkód megváltozott. Kérj új kódot a szüleidtől.
+614|Új kód
+615|Új kód ({rule})
+616|Kód a jelenlegi e-mailből
+617|Családkód
+618|Titkos kód ({rule}; hosszabb = biztonságosabb)
+619|Titkos kód (szülőnek kötelező, {rule})
+620|Titkos kód (nem kötelező — a gyerek maga is választhat)
+621|Titkos kód (nem kötelező — a gyerek maga is választhat)
+622|Titkos kód (nem kötelező — a gyerek maga is választhat)
+623|Új titkos kód
+624|Titkos kód neki: {name}
+625|Saját titkos kódod (4 számjegy)
+626|Csatlakozási kódok
+627|Előbb titkos kódot kell beállítani neki: {name}
+628|Családi kasszát csak 18 évnél idősebb személy hozhat létre
+629|Kicsi
+630|Kaptam
+631|Megkaptam a különbözetet ({amount})
+632|Pénzt kaptam
+633|Kölcsönös beszámítás
+634|Kölcsönös adósságok beszámítása
+635|Kölcsönös adósságok beszámítása ({amount})
+636|Elolvastam és elfogadom: {terms} és {privacy}
+637|Elolvastam és elfogadom: {terms} és {privacy}
+638|Elolvastam és elfogadom: {terms} és {privacy}
+639|Normál
+640|Egy pillanat, belépés…
+641|Egy pillanat, kijelentkezés…
+642|Szeretnéd, ha az adósok is látnák ezt?
+643|Rögzítés
+644|Visszafizetés rögzítése
+645|Arcfelismerés / ujjlenyomat regisztrálása
+646|Automatikusan rögzít egy adósságot hetente vagy havonta, anélkül hogy minden alkalommal be kellene írnod.
+647|Ujjlenyomat / arcfelismerés regisztrálása
+648|Új rendszeres bejegyzés
+649|Ezt csak a szülők tehetik meg
+650|A megszólítást csak a szülők állíthatják be
+651|Teljesen kifizetve ✅
+652|Kifizetve ({n})
+653|Mindent mentünk…
+654|Zárolás feloldása
+655|Fizettem
+656|Kifizettem a különbözetet ({amount})
+657|Módosítás
+658|A pénznem módosítása csak a jelet változtatja. Az összegek nem kerülnek átváltásra.
+659|Titkos kód módosítása
+660|A család átnevezése
+661|A családi szerepkör (gyerek, tinédzser, szülő) módosítását ujjlenyomat vagy arcfelismerés hagyja jóvá.
+662|Megosztás
+663|Elfelejtettem a kódot
+664|Kódot küldtünk erre a címre: {email}. Írd be, valamint az új címet. Az új cím csak megerősítés után váltja le a jelenlegit.
+665|6 számjegyű kódot küldtünk erre a címre: {email}. 10 percig érvényes.
+666|Az enyéim
+667|Kérés küldése
+668|Ellenőrző kód küldése
+669|Kód küldése e-mailben
+670|Kód küldése a jelenlegi e-mail-címre
+671|Név
+672|A család neve
+673|A család neve nem egyezik
+674|A család neve érvénytelen
+675|Érvénytelen név
+676|Mentés
+677|egy óra
+678|{"one":"{n} óra","other":"{n} óra"}
+679|Az árfolyamok még nem töltődtek be. Próbáld újra egy pillanat múlva.
+680|2 óra
+681|Nyelv
+682|Érvénytelen dátum
+683|Születési dátum (kasszát csak 18 évnél idősebb személy hozhat létre)
+684|Érvénytelen születési dátum
+685|a felhasználási feltételeket
+686|Felhasználási feltételek
+687|Szerepkör
+688|Szerepkör:
+689|Főmenü
+690|Fizetés más pénznemű adósságra

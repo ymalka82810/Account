@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { t } from '../../i18n/index.js';
+import LanguagePicker from '../shared/LanguagePicker.jsx';
 import { call } from '../../lib/api.js';
 import { state, CODE_KEY } from '../../state/state.js';
 import { toast, errMsg } from '../../lib/helpers.js';
@@ -13,17 +15,17 @@ import { GENDER_OPTIONS } from '../../lib/gender.js';
 import { g } from '../../lib/gender.js';
 
 // צבעי הניאון שנוער יכולים לבחור למסך שלהם.
-const PALETTES = [
-  { id: 'blue', label: 'כחול + סגול' },
-  { id: 'green', label: 'ירוק + צהוב' },
-  { id: 'orange', label: 'כתום + ורוד' },
+const palettes = () => [
+  { id: 'blue', label: t('כחול + סגול') },
+  { id: 'green', label: t('ירוק + צהוב') },
+  { id: 'orange', label: t('כתום + ורוד') },
 ];
 
 function PaletteSheet() {
   const { data, token } = useApp();
   const sheet = useSheet();
   const me = data.me;
-  useSheetTitle('צבעי המסך');
+  useSheetTitle(t('צבעי המסך'));
 
   async function setPalette(palette) {
     try { await call('people:setPalette', { token, palette }); sheet.close(); }
@@ -32,8 +34,8 @@ function PaletteSheet() {
 
   return (
     <div className="form">
-      <div className="palette-picks" role="radiogroup" aria-label="צבעי המסך">
-        {PALETTES.map((p) => (
+      <div className="palette-picks" role="radiogroup" aria-label={t('צבעי המסך')}>
+        {palettes().map((p) => (
           <button key={p.id} type="button" role="radio" aria-checked={me.palette === p.id}
             className={'palette-pick' + (me.palette === p.id ? ' sel' : '')} data-pal={p.id}
             onClick={() => setPalette(p.id)}>
@@ -67,7 +69,7 @@ export function AccountSheet() {
   const sheet = useSheet();
   const me = data.me;
   const [pushOn, setPushOn] = useState(null);
-  useSheetTitle('החשבון שלי');
+  useSheetTitle(t('החשבון שלי'));
 
   useEffect(() => { if (pushSupported()) isPushOn().then(setPushOn); }, []);
 
@@ -83,21 +85,23 @@ export function AccountSheet() {
     ? (me.gender
         ? <span>{g(me.gender, 'זכר', 'נקבה')}</span>
         : <Select value="" onChange={setGender}
-            options={[{ value: '', label: 'קביעת צורת פנייה…' }, ...GENDER_OPTIONS.filter((o) => o.value)]} />)
-    : (me.gender ? <span>{g(me.gender, 'זכר', 'נקבה')}</span> : <span className="hint">טרם נקבעה ע״י ההורה</span>);
+            options={[{ value: '', label: t('קביעת צורת פנייה…') }, ...GENDER_OPTIONS.filter((o) => o.value)]} />)
+    : (me.gender ? <span>{g(me.gender, 'זכר', 'נקבה')}</span> : <span className="hint">{t('טרם נקבעה ע״י ההורה')}</span>);
 
   return (
     <div className="form">
-      <div className="field"><span>צורת פנייה</span>
+      <div className="field"><span>{t('צורת פנייה')}</span>
         {genderField}</div>
 
-      <button className="ghost" type="button" onClick={() => sheet.open('דמות', <AvatarSheet />)}>
-        {me.avatar ? me.avatar + ' דמות' : '🙂 בחירת דמות'}
+      <LanguagePicker />
+
+      <button className="ghost" type="button" onClick={() => sheet.open(t('דמות'), <AvatarSheet />)}>
+        {me.avatar ? me.avatar + ' ' + t('דמות') : t('🙂 בחירת דמות')}
       </button>
 
       {me.role === 'teen' && (
-        <button className="ghost" type="button" onClick={() => sheet.open('צבעי המסך', <PaletteSheet />)}>
-          🎨 צבעי המסך
+        <button className="ghost" type="button" onClick={() => sheet.open(t('צבעי המסך'), <PaletteSheet />)}>
+          {t('🎨 צבעי המסך')}
         </button>
       )}
 
@@ -105,23 +109,23 @@ export function AccountSheet() {
         <AsyncButton className="ghost" onClick={async () => {
           if (pushOn) await disablePush(); else await enablePush();
           setPushOn(await isPushOn());
-        }}>{pushOn ? '🔕 כיבוי התראות' : '🔔 הפעלת התראות'}</AsyncButton>
+        }}>{pushOn ? t('🔕 כיבוי התראות') : t('🔔 הפעלת התראות')}</AsyncButton>
       )}
 
       <button className="ghost" type="button"
-        onClick={() => sheet.open('שינוי הקוד הסודי', me.email ? <ChangePinEmailSheet /> : <ChangePinSheet />)}>
-        🔑 שינוי הקוד הסודי
+        onClick={() => sheet.open(t('שינוי הקוד הסודי'), me.email ? <ChangePinEmailSheet /> : <ChangePinSheet />)}>
+        {t('🔑 שינוי הקוד הסודי')}
       </button>
 
       {me.role === 'parent' && (
         <button className="ghost" type="button" onClick={() => sheet.open('', <EmailSheet />)}>
-          {me.email ? '✉️ מייל לשחזור: ' + me.email : '✉️ הוספת מייל לשחזור קוד'}
+          {me.email ? t('✉️ מייל לשחזור: {email}', { email: me.email }) : t('✉️ הוספת מייל לשחזור קוד')}
         </button>
       )}
 
-      <AsyncButton className="ghost" onClick={async () => { sheet.close(); await logout(); }}>יציאה</AsyncButton>
+      <AsyncButton className="ghost" onClick={async () => { sheet.close(); await logout(); }}>{t('יציאה')}</AsyncButton>
 
-      <p className="legal"><a href="terms.html">תנאי שימוש</a> · <a href="privacy.html">מדיניות פרטיות</a></p>
+      <p className="legal"><a href="terms.html">{t('תנאי שימוש')}</a> · <a href="privacy.html">{t('מדיניות פרטיות')}</a></p>
     </div>
   );
 }

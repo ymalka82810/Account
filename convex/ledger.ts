@@ -11,6 +11,12 @@ import { loadRates } from "./fx";
 // אם מוחקים רשומה מכוונת מאורכבת, מחזירים את כולן לפעילות (unarchivePair) כדי שהחישוב ייצא כמו על הכול.
 
 const EPS = 0.5; // כמו בלקוח (computations.js): פחות מחצי אגורה = שולם
+
+// תקרה מפורשת לרשומות פעילות בכיוון אחד (from → to). היא חוסמת את כל הקריאות שגדלות עם הזמן:
+// data:get (סכום התקרות של הזוגות במשפחה), entries.add ו-isSettled. חוב חדש נחסם כבר ב-MAX_PAIR_DEBTS
+// כדי שיישאר מקום להחזרים שסוגרים אותם. מעבר ל-MAX_PAIR_ACTIVE נחסם גם החזר.
+export const MAX_PAIR_DEBTS = 300;
+export const MAX_PAIR_ACTIVE = 400;
 type Entry = Doc<"entries">;
 
 const order = (a: Entry, b: Entry) =>
@@ -57,7 +63,9 @@ export function isSettled(entries: Entry[], rates: Rates | null): boolean {
 
 // מארכב את הכיוון from → to אם הוא סגור. רשומות שממתינות לאישור נשארות פעילות.
 export async function archivePair(ctx: MutationCtx, from: Id<"people">, to: Id<"people">, rates: Rates | null): Promise<void> {
-  const rows = await ctx.db.query("entries").withIndex("by_pair", (q) => q.eq("from", from).eq("to", to).eq("archived", undefined)).collect();
+  // הוספה נחסמת ב-MAX_PAIR_ACTIVE, אז יותר מזה בא רק מנתונים ישנים: לא מארכבים על בסיס חלקי.
+  const rows = await ctx.db.query("entries").withIndex("by_pair", (q) => q.eq("from", from).eq("to", to).eq("archived", undefined)).take(MAX_PAIR_ACTIVE + 1);
+  if (rows.length > MAX_PAIR_ACTIVE) return;
   const approved = rows.filter((e) => e.status !== "pending");
   if (!approved.length || !isSettled(approved, rates)) return;
   for (const e of approved) await ctx.db.patch(e._id, { archived: true });

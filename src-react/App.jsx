@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { state, LAST_ROLE_KEY, LAST_PALETTE_KEY, THEME_COLOR, TAB_LABELS, subscribeAuth, authVersion, bumpAuth } from './state/state.js';
+import { state, LAST_ROLE_KEY, LAST_PALETTE_KEY, THEME_COLOR, tabLabels, subscribeAuth, authVersion, bumpAuth } from './state/state.js';
+import { t } from './i18n/index.js';
 import { call, callAction, useQuery } from './lib/api.js';
 import { toast } from './lib/helpers.js';
 import { restoreFamily, startPin, autoSkipPerson, dropSession } from './state/auth.js';
 import { syncPush } from './lib/push.js';
 import { client } from './lib/client.js';
+import { isDemo } from './lib/demo.js';
 import { isPending, setFx } from './lib/computations.js';
 import { applyAppIcon, deviceCurrency } from './lib/appIcon.js';
 import { AppCtx, useApp } from './state/appContext.js';
@@ -58,15 +60,15 @@ function loadingTheme() {
 const TAB_IDS = ['home', 'friends', 'history', 'family', 'manage'];
 const tabFromHash = () => { const h = location.hash.slice(1); return TAB_IDS.includes(h) ? h : null; };
 
-const DEFAULT_LABELS = { home: '💰 הכסף שלי', friends: '🤝 חברים', history: '📜 מה היה', family: '👨‍👩‍👧 המשפחה', manage: 'ניהול' };
+const defaultLabels = () => ({ home: t('💰 הכסף שלי'), friends: t('🤝 חברים'), history: t('📜 מה היה'), family: t('👨‍👩‍👧 המשפחה'), manage: t('ניהול') });
 
 // משך האנימציה של מסך הטעינה (coin-drop-cycle ב-style.css) - מסך הטעינה
 // נשאר מוצג לפחות עד שקטע אנימציה שלם אחד מסתיים, גם אם הטעינה עצמה הסתיימה קודם.
 const LOADING_MIN_MS = 4500;
 
 // טקסטים שמתחלפים במסך הטעינה, לפי מה שבאמת קורה (כניסה או יציאה).
-const LOGIN_TEXTS = ['רגע, מתחברים…', 'בודקים מי זה…', 'כבר כמעט…'];
-const LOGOUT_TEXTS = ['רגע, מתנתקים…', 'שומרים הכל…', 'יוצאים בבטחה…'];
+const loginTexts = () => [t('רגע, מתחברים…'), t('בודקים מי זה…'), t('כבר כמעט…')];
+const logoutTexts = () => [t('רגע, מתנתקים…'), t('שומרים הכל…'), t('יוצאים בבטחה…')];
 
 function LoadingText({ active, texts }) {
   const [i, setI] = useState(0);
@@ -84,8 +86,8 @@ export default function App() {
     return (
       <section id="screen-noserver" className="screen center active">
         <div className="big-emoji" aria-hidden="true">🔌</div>
-        <h1>האפליקציה עוד לא מחוברת לשרת</h1>
-        <p className="hint">הורה צריך להגדיר את כתובת Convex בקובץ <code>config.js</code>.</p>
+        <h1>{t('האפליקציה עוד לא מחוברת לשרת')}</h1>
+        <p className="hint">{t('הורה צריך להגדיר את כתובת Convex בקובץ')} <code>config.js</code>.</p>
       </section>
     );
   }
@@ -131,7 +133,7 @@ function Root() {
     if (!token || data === undefined) return;
     if (data === null) { dropSession(); return; }
     if (!data.legacy || migrating.current) return;
-    if (!data.canMigrate) { toast('צריך להיכנס מחדש עם קוד המשפחה'); dropSession(); return; }
+    if (!data.canMigrate) { toast(t('צריך להיכנס מחדש עם קוד המשפחה')); dropSession(); return; }
     migrating.current = true;
     call('auth:migrateMe', { token }).catch(() => dropSession()).finally(() => { migrating.current = false; });
   }, [token, data]);
@@ -150,8 +152,8 @@ function Root() {
     if (loadingSince.current == null) { setScreen(rawScreen); return; }
     const remain = LOADING_MIN_MS - (Date.now() - loadingSince.current);
     if (remain <= 0) { loadingSince.current = null; setScreen(rawScreen); state.exiting = false; return; }
-    const t = setTimeout(() => { loadingSince.current = null; setScreen(rawScreen); state.exiting = false; }, remain);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => { loadingSince.current = null; setScreen(rawScreen); state.exiting = false; }, remain);
+    return () => clearTimeout(timer);
   }, [rawScreen]);
 
   // דילוג ישר לקוד הסודי כשברור מי נכנס.
@@ -203,7 +205,7 @@ function Root() {
   useEffect(() => {
     if (!needLocale || askedLocale.current) return;
     askedLocale.current = true;
-    sheet.open('איפה אתם גרים?', <LocaleSheet token={token} />);
+    sheet.open(t('איפה אתם גרים?'), <LocaleSheet token={token} />);
   }, [needLocale]); // eslint-disable-line react-hooks/exhaustive-deps
   // אייקון לפי המטבע: של המשפחה אחרי כניסה, אם הוגדר לה מיקום (ונשמר לפעם הבאה). אחרת האחרון שנשמר,
   // או לפי המיקום של המכשיר, ואם גם הוא לא ידוע - דולר.
@@ -223,9 +225,9 @@ function Root() {
 
   const isParent = role === 'parent';
   const isTeen = role === 'teen';
-  const setTab = useCallback((t) => {
-    setTabSel(t);
-    if (location.hash !== '#' + t) history.pushState(null, '', '#' + t);
+  const setTab = useCallback((tabId) => {
+    setTabSel(tabId);
+    if (location.hash !== '#' + tabId) history.pushState(null, '', '#' + tabId);
     window.scrollTo({ top: 0 });
   }, []);
   const openEntryFlow = useCallback((opts) => sheet.open('', <EntryFlow opts={opts} />), [sheet]);
@@ -247,7 +249,7 @@ function Root() {
           </div>
           <div className="coin-drop__floor" />
         </div>
-        <LoadingText active={screen === 'loading'} texts={state.exiting ? LOGOUT_TEXTS : LOGIN_TEXTS} />
+        <LoadingText active={screen === 'loading'} texts={state.exiting ? logoutTexts() : loginTexts()} />
       </section>
       <Auth current={screen} />
       <section id="screen-app" className={'screen' + (screen === 'app' ? ' active' : '')}>
@@ -334,7 +336,9 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
   let tab = tabSel || (isParent ? 'family' : 'home');
   if (((tab === 'family' || tab === 'manage') && !isParent) || (tab === 'friends' && !isTeen)) tab = 'home';
 
-  const labels = TAB_LABELS[role] || TAB_LABELS.child;
+  const allLabels = tabLabels();
+  const labels = allLabels[role] || allLabels.child;
+  const fallbackLabels = defaultLabels();
   const friendReqs = data.people.filter((p) => p.friendsRequested).length;
   const parentCount = data.entries.filter(isPending).length + friendReqs;
   const friendsCount = fdata && fdata.kind === 'teen' && fdata.enabled
@@ -362,6 +366,12 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
 
   return (
     <>
+      {isDemo(token) && (
+        <div className="demo-banner" role="status">
+          <span>{t('👀 מצב דמו: נתוני דוגמה, שום דבר לא נשמר')}</span>
+          <button type="button" onClick={() => { state.exiting = true; dropSession(); }}>{t('יציאה מהדמו')}</button>
+        </div>
+      )}
       <header className="top">
         <div className="who-am-i">
           {data.me.avatar && <span className="avatar-sm" aria-hidden="true">{data.me.avatar}</span>}
@@ -369,19 +379,19 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
             <h1>{data.me.name} {data.family.name.replace(/^משפחת\s+/, '')}</h1>
           </div>
         </div>
-        <button className="ghost light" type="button" aria-label="החשבון שלי" onClick={openAccount}>
+        <button className="ghost light" type="button" aria-label={t('החשבון שלי')} onClick={openAccount}>
           {/* בזמן האנימציה הגלגל "יוצא" מהכפתור, אז המקום שלו מתכווץ והטקסט נשאר לבד */}
-          <span ref={gearRef} aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'bottom', overflow: 'hidden', whiteSpace: 'nowrap', transition: 'max-width .3s ease, opacity .2s ease, margin .3s ease', ...(launchRect ? { maxWidth: 0, opacity: 0, marginInlineStart: '-.3em' } : { maxWidth: '2em' }) }}>⚙️</span> החשבון שלי
+          <span ref={gearRef} aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'bottom', overflow: 'hidden', whiteSpace: 'nowrap', transition: 'max-width .3s ease, opacity .2s ease, margin .3s ease', ...(launchRect ? { maxWidth: 0, opacity: 0, marginInlineStart: '-.3em' } : { maxWidth: '2em' }) }}>⚙️</span> {t('החשבון שלי')}
         </button>
       </header>
       {launchRect && <GearLaunch fromRect={launchRect} onSinking={() => setSparksOn(true)} onDone={finishLaunch} />}
       {sparksOn && <GearSparks onEnd={() => setSparksOn(false)} />}
 
-      <nav className="tabs" role="tablist" aria-label="תפריט ראשי">
-        {tabs.map((t) => (
-          <button key={t} id={'tabbtn-' + t} role="tab" aria-controls={'tab-' + t} data-tab={t} className={'tab' + (tab === t ? ' active' : '')} aria-selected={tab === t} onClick={() => setTab(t)}>
-            {labels[t] || DEFAULT_LABELS[t]}
-            {badge[t] ? <span className="badge">{badge[t]}</span> : null}
+      <nav className="tabs" role="tablist" aria-label={t('תפריט ראשי')}>
+        {tabs.map((id) => (
+          <button key={id} id={'tabbtn-' + id} role="tab" aria-controls={'tab-' + id} data-tab={id} className={'tab' + (tab === id ? ' active' : '')} aria-selected={tab === id} onClick={() => setTab(id)}>
+            {labels[id] || fallbackLabels[id]}
+            {badge[id] ? <span className="badge">{badge[id]}</span> : null}
           </button>
         ))}
       </nav>

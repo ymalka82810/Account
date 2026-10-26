@@ -5,7 +5,7 @@ import { entryLine, entryTextFor, notify } from "./notify";
 import { internal } from "./_generated/api";
 import { LEGACY_CURRENCY, Rates, convert, curOf, fmtMoney, isCurrency, paidOnDebt } from "./currency";
 import { loadRates } from "./fx";
-import { archivePair, unarchivePair } from "./ledger";
+import { archivePair, unarchivePair, MAX_PAIR_ACTIVE, MAX_PAIR_DEBTS } from "./ledger";
 
 // סכום מקסימלי לרשומה: 10,000 ש"ח או השווי שלהם במטבע אחר (בלי שערים: גבול רחב).
 function amountOk(amount: number, currency: string, rates: Rates | null): boolean {
@@ -55,9 +55,13 @@ export const add = mutation({
     // בהחזר: שומרים את שערי ההמרה של הרגע הזה לכל מטבע של חוב באותו כיוון, כדי שהחלוקה של
     // ההחזר על חובות במטבע אחר (למשל 100 דולר) תהיה לפי השער ביום התשלום ולא תזוז אחר כך.
     let fx: Rates | undefined;
+    // רק הרשומות הפעילות של הזוג הזה (by_pair): בלי מה שכבר נסגר ובלי שאר רשומות המשפחה. עם תקרה מפורשת.
+    const pair = await ctx.db.query("entries").withIndex("by_pair", (q) => q.eq("from", e.from).eq("to", e.to).eq("archived", undefined)).take(MAX_PAIR_ACTIVE + 1);
+    if (pair.length >= MAX_PAIR_ACTIVE) throw new ConvexError("יש יותר מדי רישומים פעילים בין השניים. סגרו חובות לפני שמוסיפים עוד.");
+    if (e.kind === "debt" && pair.filter((x) => x.kind === "debt").length >= MAX_PAIR_DEBTS) {
+      throw new ConvexError("יש יותר מדי חובות פתוחים בין השניים. סגרו חובות לפני שמוסיפים עוד.");
+    }
     if (e.kind === "payment") {
-      // רק הרשומות הפעילות של הזוג הזה (by_pair): בלי מה שכבר נסגר ובלי שאר רשומות המשפחה.
-      const pair = await ctx.db.query("entries").withIndex("by_pair", (q) => q.eq("from", e.from).eq("to", e.to).eq("archived", undefined)).collect();
       const curs = new Set(pair.filter((x) => x.kind === "debt" && x.familyId === me.familyId).map(curOf));
       curs.add(currency);
       if (curs.size > 1) {
@@ -76,7 +80,8 @@ export const add = mutation({
           throw new ConvexError("החוב לא נמצא");
         }
         if (debt.from !== e.from || debt.to !== e.to) throw new ConvexError("ההחזר לא מתאים לחוב הזה");
-        const linked = await ctx.db.query("entries").withIndex("by_debt", (q) => q.eq("debtId", debt._id)).collect();
+        // ההחזרים המקושרים נמצאים כולם בזוג הזה, אז הם חסומים בתקרה של הזוג.
+        const linked = await ctx.db.query("entries").withIndex("by_debt", (q) => q.eq("debtId", debt._id)).take(MAX_PAIR_ACTIVE);
         const remaining = debt.amount - paidOnDebt(debt, linked, rates);
         if (remaining < 0.5) throw new ConvexError("החוב הזה כבר שולם");
         const inDebtCur = convert(e.amount, currency, curOf(debt), fx ?? rates);

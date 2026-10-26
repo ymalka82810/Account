@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 import { useEffect, useRef, useState } from 'react';
 import { AVATARS } from '../../state/state.js';
 import { useSheet } from './Sheet.jsx';
@@ -50,10 +51,10 @@ function ScrollRow({ children }) {
     <div className="avatars-row-wrap">
       <div className="avatars-row" ref={ref}>{children}</div>
       <div className={'row-edge left' + (edge.left ? ' show' : '')} aria-hidden={!edge.left}>
-        <button type="button" tabIndex={edge.left ? 0 : -1} aria-label="גלול שמאלה" onClick={() => go(-1)}><Chevron dir="left" /></button>
+        <button type="button" tabIndex={edge.left ? 0 : -1} aria-label={t('גלול שמאלה')} onClick={() => go(-1)}><Chevron dir="left" /></button>
       </div>
       <div className={'row-edge right' + (edge.right ? ' show' : '')} aria-hidden={!edge.right}>
-        <button type="button" tabIndex={edge.right ? 0 : -1} aria-label="גלול ימינה" onClick={() => go(1)}><Chevron dir="right" /></button>
+        <button type="button" tabIndex={edge.right ? 0 : -1} aria-label={t('גלול ימינה')} onClick={() => go(1)}><Chevron dir="right" /></button>
       </div>
     </div>
   );
@@ -65,7 +66,7 @@ export default function AvatarPicker({ value, onChange, options = AVATARS, taken
   const shown = taken ? options.filter((a) => a === value || !taken.has(a)) : options;
 
   function openFull() {
-    sheet.open('דמות', (
+    sheet.open(t('דמות'), (
       <div className="form">
         <AvatarPicker value={value} onChange={(a) => { onChange(a); sheet.close(); }} options={options} taken={taken} />
       </div>
@@ -80,7 +81,7 @@ export default function AvatarPicker({ value, onChange, options = AVATARS, taken
   }, []);
 
   const btn = (a) => (
-    <button key={a} type="button" className={'av' + (a === value ? ' on' : '')} aria-label={'דמות ' + a}
+    <button key={a} type="button" className={'av' + (a === value ? ' on' : '')} aria-label={t('דמות {avatar}', { avatar: a })}
       aria-pressed={a === value} onClick={() => onChange(a)}>{a}</button>
   );
 
@@ -96,7 +97,7 @@ export default function AvatarPicker({ value, onChange, options = AVATARS, taken
   return (
     <div className="avatars-compact" ref={box}>
       {rows.map((r, i) => <ScrollRow key={i}>{r.map(btn)}</ScrollRow>)}
-      <button type="button" className="ghost av-more" aria-label="עוד דמויות" onClick={openFull}>עוד דמויות</button>
+      <button type="button" className="ghost av-more" aria-label={t('עוד דמויות')} onClick={openFull}>{t('עוד דמויות')}</button>
     </div>
   );
 }

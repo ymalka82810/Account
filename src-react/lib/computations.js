@@ -3,6 +3,7 @@
 // מחדש אוטומטית בכל שינוי ב-data (ללא קריאות renderX ידניות).
 
 import { g } from './gender.js';
+import { t, intlLocale } from '../i18n/index.js';
 
 export const isPending = (e) => e.status === 'pending';
 
@@ -128,15 +129,15 @@ export function fmtDate(iso) {
   return `${d}.${m}.${y}`;
 }
 
-export const debtLabel = (d) => (d.note || 'חוב') + ' • ' + fmtDate(d.date);
+export const debtLabel = (d) => (d.note || t('חוב')) + ' • ' + fmtDate(d.date);
 
 export const money = (amount, currency = FX.base) =>
-  (amount / 100).toLocaleString('he-IL', { style: 'currency', currency });
+  (amount / 100).toLocaleString(intlLocale(), { style: 'currency', currency });
 
 // מה נשאר מחוב פתוח (פריט מ-openDebtsOf): "נשאר $50 מתוך $100 (≈ ₪185)".
 export function debtLeftText(x) {
   const rem = money(x.remaining, x.cur);
-  const base = x.paid > 0 ? `נשאר ${rem} מתוך ${money(x.debt.amount, x.cur)}` : rem;
+  const base = x.paid > 0 ? t('נשאר {left} מתוך {total}', { left: rem, total: money(x.debt.amount, x.cur) }) : rem;
   return x.foreign && x.value ? `${base} (≈ ${money(x.value, x.valueCur)})` : base;
 }
 
@@ -149,7 +150,7 @@ export function moneyWithValue(amount, currency, display = FX.base) {
 }
 
 export const roleLabel = (r, gender) =>
-  r === 'parent' ? 'הורה' : r === 'teen' ? g(gender, 'נער', 'נערה', 'נער/ה') : g(gender, 'ילד', 'ילדה', 'ילד/ה');
+  r === 'parent' ? t('הורה') : r === 'teen' ? g(gender, 'נער', 'נערה', 'נער/ה') : g(gender, 'ילד', 'ילדה', 'ילד/ה');
 
 // כמה כל אחד חייב / מגיע לו, לפי כל החובות הפתוחים (גרסת React של openDebts).
 export function openDebts(people, entries) {
@@ -170,8 +171,8 @@ export function namesFor(me, lookup) {
   // הורה עם מגדר מוגדר מוצג כ"אבא"/"אימא" ולא בשם הפרטי שלו/ה.
   const nameOf = (id) => {
     const p = lookup(id);
-    if (!p) return 'לא ידוע';
-    if (p.role === 'parent' && (p.gender === 'male' || p.gender === 'female')) return p.gender === 'male' ? 'אבא' : 'אימא';
+    if (!p) return t('לא ידוע');
+    if (p.role === 'parent' && (p.gender === 'male' || p.gender === 'female')) return p.gender === 'male' ? t('אבא') : t('אימא');
     return p.name;
   };
   const genderOf = (id) => lookup(id)?.gender;
@@ -179,11 +180,19 @@ export function namesFor(me, lookup) {
     nameOf,
     genderOf,
     // בוחר צורת פנייה (זכר/נקבה/כפולה) לפי המגדר של מי שמזוהה/ת ב-id.
-    gw: (id, male, female, neutral) => g(genderOf(id), male, female, neutral),
-    // כמו gw, אבל לפועל שמשתנה גם לפי גוף: כש-id הוא "אני" צריך נטיית גוף ראשון (meForm), לא סתם מגדר.
-    vw: (id, meForm, male, female, neutral) => (id === me ? meForm : g(genderOf(id), male, female, neutral)),
-    subjectWord: (id) => (id === me ? 'אני' : nameOf(id)),
-    toWord: (id) => (id === me ? 'לי' : 'ל' + nameOf(id)),
+    gw: (id, male, female, neutral, params) => g(genderOf(id), male, female, neutral, params),
+    // "X חייב/ת ל-Y" ו-"X החזיר/ה ל-Y" כמשפט שלם. אי אפשר להרכיב אותם ממילים, כי סדר המילים
+    // והנטייה (גוף, מגדר) שונים בין שפות, ולכן לכל צירוף (אני/אחר) יש נוסח משלו.
+    owesLine: (from, to) => (from === me
+      ? g(genderOf(from), 'אני חייב ל{to}', 'אני חייבת ל{to}', 'אני חייב/ת ל{to}', { to: nameOf(to) })
+      : to === me
+        ? g(genderOf(from), '{from} חייב לי', '{from} חייבת לי', '{from} חייב/ת לי', { from: nameOf(from) })
+        : g(genderOf(from), '{from} חייב ל{to}', '{from} חייבת ל{to}', '{from} חייב/ת ל{to}', { from: nameOf(from), to: nameOf(to) })),
+    repaidLine: (from, to) => (from === me
+      ? t('החזרתי ל{to}', { to: nameOf(to) })
+      : to === me
+        ? g(genderOf(from), '{from} החזיר לי', '{from} החזירה לי', '{from} החזיר/ה לי', { from: nameOf(from) })
+        : g(genderOf(from), '{from} החזיר ל{to}', '{from} החזירה ל{to}', '{from} החזיר/ה ל{to}', { from: nameOf(from), to: nameOf(to) })),
   };
 }
 

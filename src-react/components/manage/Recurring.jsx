@@ -1,25 +1,26 @@
+import { t } from '../../i18n/index.js';
 import { call } from '../../lib/api.js';
 import { useState } from 'react';
 import { toast, errMsg } from '../../lib/helpers.js';
-import { WEEKDAYS } from '../../state/state.js';
+import { WEEKDAYS, weekdayName } from '../../state/state.js';
 import { money, fmtDate, namesFor, baseCurrency } from '../../lib/computations.js';
 import { currencySymbol } from '../../lib/currencies.js';
 import { g } from '../../lib/gender.js';
 import Select from '../shared/Select.jsx';
 
-const recurringWhen = (r) => (r.frequency === 'weekly' ? `כל יום ${WEEKDAYS[r.weekday]}` : `ב-${r.monthDay} בכל חודש`);
+const recurringWhen = (r) => (r.frequency === 'weekly' ? t('כל יום {day}', { day: weekdayName(r.weekday) }) : t('ב-{day} בכל חודש', { day: r.monthDay }));
 
 // דמי כיס קבועים (הורים בלבד).
 export default function Recurring({ data, token }) {
   const me = data.me.id;
   const people = data.people;
-  const { nameOf, genderOf } = namesFor(me, (id) => people.find((p) => p.id === id));
+  const { owesLine, nameOf } = namesFor(me, (id) => people.find((p) => p.id === id));
 
   const defaultTo = (people.find((p) => p.role === 'child') || people.find((p) => p.id !== me) || data.me).id;
   const [from, setFrom] = useState(me);
   const [to, setTo] = useState(defaultTo);
   const [amount, setAmount] = useState('');
-  const [note, setNote] = useState('דמי כיס');
+  const [note, setNote] = useState(() => t('דמי כיס'));
   const [freq, setFreq] = useState('weekly');
   const [weekday, setWeekday] = useState('5');
   const [monthDay, setMonthDay] = useState('1');
@@ -31,8 +32,8 @@ export default function Recurring({ data, token }) {
   const toVal = exists(to) ? to : defaultTo;
 
   async function remove(r) {
-    if (!confirm('להפסיק את הרישום הקבוע? מה שכבר נרשם נשאר.')) return;
-    try { await call('recurring:remove', { token, id: r.id }); toast('הרישום הקבוע הופסק'); }
+    if (!confirm(t('להפסיק את הרישום הקבוע? מה שכבר נרשם נשאר.'))) return;
+    try { await call('recurring:remove', { token, id: r.id }); toast(t('הרישום הקבוע הופסק')); }
     catch (err) { toast(errMsg(err)); }
   }
 
@@ -40,7 +41,7 @@ export default function Recurring({ data, token }) {
     ev.preventDefault();
     setError('');
     const agorot = Math.round(parseFloat(amount) * 100);
-    if (!Number.isFinite(agorot) || agorot <= 0) { setError('כתבו סכום גדול מאפס.'); return; }
+    if (!Number.isFinite(agorot) || agorot <= 0) { setError(t('כתבו סכום גדול מאפס.')); return; }
     try {
       await call('recurring:add', {
         token, from: fromVal, to: toVal, amount: agorot, note,
@@ -49,7 +50,7 @@ export default function Recurring({ data, token }) {
         monthDay: freq === 'monthly' ? Number(monthDay) : undefined,
       });
       setAmount('');
-      toast('הרישום הקבוע נוסף ✅');
+      toast(t('הרישום הקבוע נוסף ✅'));
     } catch (e) { setError(errMsg(e)); }
   }
 
@@ -58,44 +59,44 @@ export default function Recurring({ data, token }) {
   return (
     <>
       <div id="recurringList">
-        {data.recurring.length === 0 && <div className="empty">עוד אין רישומים קבועים.</div>}
+        {data.recurring.length === 0 && <div className="empty">{t('עוד אין רישומים קבועים.')}</div>}
         {data.recurring.map((r) => (
           <div className="row" key={r.id}>
             <div className="text">
-              <div>{nameOf(r.from)} {g(genderOf(r.from), 'חייב', 'חייבת', 'חייב/ת')} ל{nameOf(r.to)} {money(r.amount, r.currency)}</div>
-              <div className="meta">{[recurringWhen(r), r.note, 'הרישום הבא: ' + fmtDate(r.nextDate)].filter(Boolean).join(' • ')}</div>
+              <div>{owesLine(r.from, r.to)} {money(r.amount, r.currency)}</div>
+              <div className="meta">{[recurringWhen(r), r.note, t('הרישום הבא: {date}', { date: fmtDate(r.nextDate) })].filter(Boolean).join(' • ')}</div>
             </div>
-            <button className="small danger" type="button" onClick={() => remove(r)}>הפסקה</button>
+            <button className="small danger" type="button" onClick={() => remove(r)}>{t('הפסקה')}</button>
           </div>
         ))}
       </div>
       <form className="form card" autoComplete="off" onSubmit={submit}>
-        <h3>רישום קבוע חדש</h3>
-        <div className="field"><span>מי חייב/ת (משלם/ת)</span>
+        <h3>{t('רישום קבוע חדש')}</h3>
+        <div className="field"><span>{t('מי חייב/ת (משלם/ת)')}</span>
           <Select value={fromVal} onChange={setFrom} options={personOptions} /></div>
-        <div className="field"><span>למי</span>
+        <div className="field"><span>{t('למי')}</span>
           <Select value={toVal} onChange={setTo} options={personOptions} /></div>
-        <label className="field"><span>סכום ({currencySymbol(baseCurrency())})</span>
+        <label className="field"><span>{t('סכום ({cur})', { cur: currencySymbol(baseCurrency()) })}</span>
           <input type="number" inputMode="decimal" min="0.01" max="10000" step="0.01" required
             value={amount} onChange={(e) => setAmount(e.target.value)} /></label>
-        <label className="field"><span>הערה</span>
+        <label className="field"><span>{t('הערה')}</span>
           <input type="text" maxLength={80} value={note} onChange={(e) => setNote(e.target.value)} /></label>
-        <div className="field"><span>כל כמה זמן</span>
+        <div className="field"><span>{t('כל כמה זמן')}</span>
           <Select value={freq} onChange={setFreq} options={[
-            { value: 'weekly', label: 'כל שבוע' },
-            { value: 'monthly', label: 'כל חודש' },
+            { value: 'weekly', label: t('כל שבוע') },
+            { value: 'monthly', label: t('כל חודש') },
           ]} /></div>
         {freq === 'weekly' ? (
-          <div className="field"><span>באיזה יום</span>
+          <div className="field"><span>{t('באיזה יום')}</span>
             <Select value={weekday} onChange={setWeekday}
-              options={WEEKDAYS.map((d, i) => ({ value: String(i), label: 'יום ' + d }))} /></div>
+              options={WEEKDAYS.map((d, i) => ({ value: String(i), label: t('יום {day}', { day: weekdayName(i) }) }))} /></div>
         ) : (
-          <div className="field"><span>באיזה יום בחודש (1 עד 28)</span>
+          <div className="field"><span>{t('באיזה יום בחודש (1 עד 28)')}</span>
             <Select value={monthDay} onChange={setMonthDay}
               options={Array.from({ length: 28 }, (_, i) => ({ value: String(i + 1), label: String(i + 1) }))} /></div>
         )}
         {error && <p className="error" role="alert">{error}</p>}
-        <button className="primary" type="submit">הוספה</button>
+        <button className="primary" type="submit">{t('הוספה')}</button>
       </form>
     </>
   );

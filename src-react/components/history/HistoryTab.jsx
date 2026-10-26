@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { usePaginatedQuery } from 'convex/react';
+import { t } from '../../i18n/index.js';
 import EntriesList from '../entries/EntriesList.jsx';
 
 const PAGE_SIZE = 30;
@@ -15,16 +16,16 @@ export default function HistoryTab({ data, token, me, isParent }) {
     <>
       {isParent && (
         <div className="tools">
-          <button className={'ghost' + (!all ? ' active' : '')} type="button" aria-pressed={!all} onClick={() => setAll(false)}>שלי</button>
-          <button className={'ghost' + (all ? ' active' : '')} type="button" aria-pressed={all} onClick={() => setAll(true)}>כל המשפחה</button>
+          <button className={'ghost' + (!all ? ' active' : '')} type="button" aria-pressed={!all} onClick={() => setAll(false)}>{t('שלי')}</button>
+          <button className={'ghost' + (all ? ' active' : '')} type="button" aria-pressed={all} onClick={() => setAll(true)}>{t('כל המשפחה')}</button>
         </div>
       )}
       {status === 'LoadingFirstPage'
-        ? <div className="empty">טוען…</div>
-        : <EntriesList list={results} emptyText="עדיין לא נרשם כלום." token={token} me={me} isParent={isParent}
+        ? <div className="empty">{t('טוען…')}</div>
+        : <EntriesList list={results} emptyText={t('עדיין לא נרשם כלום.')} token={token} me={me} isParent={isParent}
             lookup={(id) => data.people.find((p) => p.id === id)} debtList={data.entries} />}
       {status === 'CanLoadMore' && (
-        <button className="ghost" type="button" onClick={() => loadMore(PAGE_SIZE)}>עוד</button>
+        <button className="ghost" type="button" onClick={() => loadMore(PAGE_SIZE)}>{t('עוד')}</button>
       )}
     </>
   );

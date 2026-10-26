@@ -4,6 +4,7 @@
 // השרת (convex/biometric.ts) בודק את החתימה, כך שאי אפשר לדלג על השלב הזה מהדפדפן.
 import { call } from './api.js';
 import { isNativeApp } from './updater.js';
+import { t } from '../i18n/index.js';
 
 const cap = window.Capacitor;
 const native = (method, options) => cap.nativePromise('BiometricAuth', method, options);
@@ -51,7 +52,7 @@ export async function bioRegister(token, myPin) {
       const { publicKey } = await native('register', { alias });
       const { signature } = await native('sign', {
         alias, message: 'account-bio:' + challenge,
-        title: 'רישום זיהוי פנים / טביעת אצבע', subtitle: 'לאישור פעולות רגישות בקופה',
+        title: t('רישום זיהוי פנים / טביעת אצבע'), subtitle: t('לאישור פעולות רגישות בקופה'),
       });
       await call('biometric:registerFinish', {
         token, challenge, kind: 'android', credentialId: alias, publicKey, alg: -7, signature, label: 'אפליקציה',
@@ -61,7 +62,7 @@ export async function bioRegister(token, myPin) {
       const cred = await navigator.credentials.create({
         publicKey: {
           challenge: hexToBytes(challenge),
-          rp: { name: 'הקופה המשפחתית', id: location.hostname },
+          rp: { name: t('הקופה המשפחתית'), id: location.hostname },
           user: { id: new TextEncoder().encode(userId), name, displayName: name },
           pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
           authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'discouraged' },
@@ -71,7 +72,7 @@ export async function bioRegister(token, myPin) {
       });
       const r = /** @type {AuthenticatorAttestationResponse} */ (/** @type {PublicKeyCredential} */ (cred).response);
       if (typeof r.getPublicKey !== 'function' || !r.getPublicKey()) {
-        throw new BioError('unsupported', 'הדפדפן הזה ישן מדי לאימות ביומטרי. עדכנו אותו ונסו שוב.');
+        throw new BioError('unsupported', t('הדפדפן הזה ישן מדי לאימות ביומטרי. עדכנו אותו ונסו שוב.'));
       }
       const credentialId = toB64url(/** @type {PublicKeyCredential} */ (cred).rawId);
       await call('biometric:registerFinish', {
@@ -83,26 +84,26 @@ export async function bioRegister(token, myPin) {
     }
   } catch (e) {
     if (e instanceof BioError) throw e;
-    if (isCancel(e)) throw new BioError('cancel', 'האימות בוטל');
+    if (isCancel(e)) throw new BioError('cancel', t('האימות בוטל'));
     if (e && typeof e.data === 'string') throw e; // שגיאה מהשרת
-    throw new BioError('failed', 'לא הצלחנו לרשום את המכשיר. נסו שוב.');
+    throw new BioError('failed', t('לא הצלחנו לרשום את המכשיר. נסו שוב.'));
   }
   return { ok: true };
 }
 
 // אישור פעולה: מבקש אתגר מהשרת, מפעיל טביעת אצבע / זיהוי פנים, ומחזיר proof
 // שמצרפים לקריאה עצמה (למשל people:setRole). action חייב להתאים בדיוק למה שהשרת מצפה.
-export async function bioProve(token, personId, action, title = 'אישור שינוי תפקיד') {
+export async function bioProve(token, personId, action, title = t('אישור שינוי תפקיד')) {
   const credentialId = localStorage.getItem(LOCAL_KEY(personId));
-  if (!credentialId) throw new BioError('needSetup', 'צריך לרשום את המכשיר');
+  if (!credentialId) throw new BioError('needSetup', t('צריך לרשום את המכשיר'));
   const res = await call('biometric:challenge', { token, action, credentialId });
-  if (!res.ok) { bioForgetLocal(personId); throw new BioError('needSetup', 'צריך לרשום את המכשיר מחדש'); }
+  if (!res.ok) { bioForgetLocal(personId); throw new BioError('needSetup', t('צריך לרשום את המכשיר מחדש')); }
   const { challenge } = res;
   try {
     if (isNativeApp) {
       const { signature } = await native('sign', {
         alias: credentialId, message: 'account-bio:' + challenge,
-        title, subtitle: 'זיהוי פנים או טביעת אצבע',
+        title, subtitle: t('זיהוי פנים או טביעת אצבע'),
       });
       return { challenge, credentialId, signature };
     }
@@ -123,12 +124,12 @@ export async function bioProve(token, personId, action, title = 'אישור שי
       authenticatorData: toB64url(r.authenticatorData),
     };
   } catch (e) {
-    if (isCancel(e)) throw new BioError('cancel', 'האימות בוטל');
+    if (isCancel(e)) throw new BioError('cancel', t('האימות בוטל'));
     // באפליקציה: מפתח מהגרסה הקודמת (רק טביעת אצבע) או מפתח שנמחק - נרשמים מחדש.
     if (e && (e.message === 'invalidated' || e.message === 'nokey')) {
       bioForgetLocal(personId);
-      throw new BioError('needSetup', 'צריך לרשום את המכשיר מחדש כדי לאפשר גם זיהוי פנים');
+      throw new BioError('needSetup', t('צריך לרשום את המכשיר מחדש כדי לאפשר גם זיהוי פנים'));
     }
-    throw new BioError('failed', 'האימות לא הצליח. נסו שוב.');
+    throw new BioError('failed', t('האימות לא הצליח. נסו שוב.'));
   }
 }

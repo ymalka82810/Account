@@ -3,6 +3,8 @@
 // so it works without bundling @capacitor/core.
 // הקוד מבוסס על מנגנון העדכון של פרויקט Reader (resources/android-updater + src/lib/updater.ts).
 
+import { t } from '../i18n/index.js';
+
 const cap = window.Capacitor;
 const call = (method, options) => cap.nativePromise('AppUpdater', method, options);
 
@@ -71,10 +73,10 @@ export async function installUpdate(url, sha256, onProgress) {
 // הודעה בעברית לפי קוד השגיאה של הפלאגין.
 export function updateErrorText(e) {
   const code = e instanceof Error ? e.message : String(e || '');
-  if (code.includes('permission')) return 'צריך לאפשר לאפליקציה להתקין עדכונים: בהגדרות שמופיעות, מפעילים "אפשר מהמקור הזה" וחוזרים ללחוץ "עדכן"';
-  if (code.includes('no installer')) return 'לא נמצאה בטלפון תוכנת התקנה. אפשר להוריד את הקובץ ישירות מ-GitHub';
-  if (code.includes('checksum')) return 'הקובץ שירד לא תקין. נסו שוב';
-  if (code.includes('not an update')) return 'הקובץ שירד אינו גרסה חדשה של האפליקציה';
-  if (code.includes('busy')) return 'עדכון כבר מתבצע';
-  return 'ההורדה נכשלה. בדקו חיבור לאינטרנט ונסו שוב';
+  if (code.includes('permission')) return t('צריך לאפשר לאפליקציה להתקין עדכונים: בהגדרות שמופיעות, מפעילים "אפשר מהמקור הזה" וחוזרים ללחוץ "עדכן"');
+  if (code.includes('no installer')) return t('לא נמצאה בטלפון תוכנת התקנה. אפשר להוריד את הקובץ ישירות מ-GitHub');
+  if (code.includes('checksum')) return t('הקובץ שירד לא תקין. נסו שוב');
+  if (code.includes('not an update')) return t('הקובץ שירד אינו גרסה חדשה של האפליקציה');
+  if (code.includes('busy')) return t('עדכון כבר מתבצע');
+  return t('ההורדה נכשלה. בדקו חיבור לאינטרנט ונסו שוב');
 }
