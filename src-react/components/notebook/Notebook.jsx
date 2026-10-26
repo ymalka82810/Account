@@ -1,27 +1,18 @@
 import { useState } from 'react';
-import { state } from '../../state/state.js';
-import { goView } from '../../state/auth.js';
-import { today, toast } from '../../lib/helpers.js';
+import { today } from '../../lib/helpers.js';
 import { money, fmtDate } from '../../lib/computations.js';
-import {
-  useNotebook, notebookCurrency, addEntry, setPaid, removeEntry, setBirthDate, ageOf, isAdult, parseBirth,
-} from '../../lib/notebook.js';
+import { useNotebook, notebookCurrency, addEntry, setPaid, removeEntry } from '../../lib/notebook.js';
 import { In } from '../auth/parts.jsx';
 
 // פנקס חובות אישי: כל אחד (גם ילד/ה) רושם לעצמו למי הוא חייב ומי חייב לו.
-// הכול נשמר במכשיר, בלי כניסה. ממנו אפשר לעבור להקמת קופה משפחתית (רק מעל גיל 18).
+// הכול נשמר במכשיר, בלי כניסה. זה מסך הפתיחה של מכשיר חדש. החיבור למשפחה עוד לא קיים.
 export default function Notebook({ current }) {
   const nb = useNotebook();
   const cur = notebookCurrency();
   const [dir, setDir] = useState('iowe');
   const [form, setForm] = useState({ name: '', amount: '', note: '' });
   const [error, setError] = useState('');
-  const [upgrade, setUpgrade] = useState(false);
-  const [birth, setBirth] = useState(nb.birthDate || '');
-  const [birthErr, setBirthErr] = useState('');
-  const [tooYoung, setTooYoung] = useState(false);
   const set = (k) => (e) => { setForm((f) => ({ ...f, [k]: e.target.value })); setError(''); };
-
   const open = nb.entries.filter((e) => !e.paid);
   const done = nb.entries.filter((e) => e.paid);
   const sum = (d) => open.filter((e) => e.dir === d).reduce((s, e) => s + e.amount, 0);
@@ -39,24 +30,6 @@ export default function Notebook({ current }) {
 
   const del = (e) => { if (window.confirm(`למחוק את הרישום של ${e.name}?`)) removeEntry(e.id); };
 
-  const startUpgrade = () => {
-    setBirthErr('');
-    if (nb.birthDate) return decide(nb.birthDate);
-    setUpgrade(true);
-  };
-  const decide = (iso) => {
-    if (isAdult(iso)) { setUpgrade(false); setTooYoung(false); goView('setup'); return; }
-    setUpgrade(true);
-    setTooYoung(true);
-  };
-  const saveBirth = (ev) => {
-    ev.preventDefault();
-    if (!parseBirth(birth)) { setBirthErr('תאריך לידה לא תקין'); return; }
-    setBirthDate(birth);
-    setBirthErr('');
-    decide(birth);
-  };
-
   const row = (e) => (
     <div className={'row' + (e.paid ? ' paid' : '')} key={e.id}>
       <div className="text">
@@ -73,7 +46,6 @@ export default function Notebook({ current }) {
 
   return (
     <In screen="notebook" current={current}>
-      <button className="ghost back" type="button" onClick={() => goView('welcome')}>→ חזרה</button>
       <div className="card-narrow">
         <div className="big-emoji" aria-hidden="true">📒</div>
         <h1>הפנקס שלי</h1>
@@ -107,28 +79,6 @@ export default function Notebook({ current }) {
             <div className="list">{done.map(row)}</div>
           </details>
         )}
-
-        <div className="card notice">
-          <p><strong>👨‍👩‍👧 רוצים לנהל את זה עם המשפחה?</strong></p>
-          <p className="hint">הורה פותח קופה משפחתית, ובני המשפחה מצטרפים אליה עם קוד.</p>
-          {!upgrade && <button className="ghost" type="button" onClick={startUpgrade}>הקמת קופה משפחתית</button>}
-          {upgrade && !tooYoung && (
-            <form className="form" onSubmit={saveBirth}>
-              <label className="field"><span>תאריך לידה (קופה נפתחת רק על ידי מי שמעל גיל {18})</span>
-                <input type="date" required max={today()} value={birth} onChange={(e) => { setBirth(e.target.value); setBirthErr(''); }} /></label>
-              {birthErr && <p className="error" role="alert">{birthErr}</p>}
-              <button className="primary" type="submit">המשך</button>
-              <button className="ghost" type="button" onClick={() => setUpgrade(false)}>לא עכשיו</button>
-            </form>
-          )}
-          {upgrade && tooYoung && (
-            <div>
-              <p>קופה משפחתית נפתחת רק על ידי הורה מעל גיל 18. אם ההורים שלך כבר פתחו קופה, בקשו מהם את קוד ההצטרפות וכתבו אותו במסך הראשון.</p>
-              <button className="primary" type="button" onClick={() => goView('welcome')}>למסך הכניסה עם קוד</button>
-              <button className="ghost" type="button" onClick={() => { setTooYoung(false); setUpgrade(true); }}>הזנתי תאריך לא נכון</button>
-            </div>
-          )}
-        </div>
       </div>
     </In>
   );

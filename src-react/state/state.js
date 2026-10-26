@@ -53,7 +53,8 @@ export const state = {
   legacyPeople: null, // null = עוד לא נטען. הורים מהגרסה הישנה (בלי קוד משפחה)
   codeChecked: false, // האם בדקנו קוד שמור במכשיר
   fam: null,         // {code, name, people} אחרי שהוזן קוד משפחה תקין
-  view: 'welcome',   // welcome | setup | join
+  // מכשיר בלי כניסה שמורה ובלי משפחה שמורה נפתח ישר בפנקס האישי.
+  view: (localStorage.getItem(TOKEN_KEY) || localStorage.getItem(CODE_KEY)) ? 'welcome' : 'notebook', // welcome | setup | join | notebook
   pinFlow: null,     // {person, legacy, mode:'login'|'new', first, entered, busy, error, shakes}
   pushSyncedFor: '',
 };

@@ -26,7 +26,7 @@ function commit(next) {
   listeners.forEach((fn) => fn());
 }
 
-export const useNotebook = () => useSyncExternalStore(subscribe, snapshot);
+export const useNotebook = () => useSyncExternalStore(subscribe, snapshot, snapshot);
 
 export const notebookCurrency = () => data.currency || deviceCurrency() || 'ILS';
 

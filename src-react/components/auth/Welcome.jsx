@@ -39,7 +39,6 @@ export default function Welcome({ current }) {
             </div>
           </div>
         )}
-        <button className="ghost linkish" type="button" onClick={() => goView('notebook')}>📒 פנקס חובות אישי (בלי כניסה)</button>
         <button className="ghost linkish" type="button" onClick={() => goView('setup')}>👨‍👩‍👧 אני הורה ורוצה להקים קופה חדשה</button>
         <p className="legal"><a href="terms.html">תנאי שימוש</a> · <a href="privacy.html">מדיניות פרטיות</a></p>
       </div>
