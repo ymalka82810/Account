@@ -1114,22 +1114,23 @@ body[data-theme] .sum .lbl, body:not([data-theme]) .sum .lbl { font-weight: 800;
 #screen-notebook { overflow-x: clip; }
 
 /* ---------- חידוד הפנקס האישי: ניגודיות, כפתורים וסרגל הגדרות ---------- */
-/* ערכה בהירה (צבעוני) בלבד: בכהה ובניאון הצבעים כבר ברורים */
-body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .bigbtn {
-  border-width: 0 0 5px; border-style: solid; border-radius: 22px;
-  box-shadow: 0 6px 14px rgba(74, 68, 104, .22);
+/* כפתורי הרישום (בפנקס ובאזור המשפחה) נראים כפתורים בכל שלוש הערכות: מילוי, קצה תחתון וצל */
+.bigbtn {
+  border-width: 0 0 5px; border-style: solid;
   transition: transform .08s ease, border-width .08s ease, box-shadow .08s ease;
 }
-body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .bigbtn.owe {
-  background: linear-gradient(180deg, #ffb2a9, #f4806f); border-color: #c4584a; color: #4a0f08;
-}
-body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .bigbtn.get {
-  background: linear-gradient(180deg, #9be3bd, #52b583); border-color: #2f8559; color: #05301c;
-}
-body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .bigbtn:active {
-  transform: translateY(4px); border-bottom-width: 1px; box-shadow: 0 2px 6px rgba(74, 68, 104, .2);
-}
-#screen-notebook .bigbtn::after { content: "‹"; font-size: 1.3rem; line-height: .6; opacity: .7; }
+.bigbtn:active { transform: translateY(4px); border-bottom-width: 1px; }
+/* צבעוני (ילדים) */
+body:not([data-theme="parent"]):not([data-theme="teen"]) .bigbtn { border-radius: 22px; box-shadow: 0 6px 14px rgba(74, 68, 104, .22); }
+body:not([data-theme="parent"]):not([data-theme="teen"]) .bigbtn.owe { background: linear-gradient(180deg, #ffb2a9, #f4806f); border-color: #c4584a; color: #4a0f08; }
+body:not([data-theme="parent"]):not([data-theme="teen"]) .bigbtn.get { background: linear-gradient(180deg, #9be3bd, #52b583); border-color: #2f8559; color: #05301c; }
+/* כהה (הורים) */
+body[data-theme="parent"] .bigbtn { box-shadow: 0 4px 10px rgba(0, 0, 0, .5); }
+body[data-theme="parent"] .bigbtn.owe { background: linear-gradient(180deg, #f58a92, #e05a66); border-color: #a83743; color: #2a0709; }
+body[data-theme="parent"] .bigbtn.get { background: linear-gradient(180deg, #5bd6a4, #2fae7d); border-color: #1c7a57; color: #04241a; }
+/* ניאון (נוער) */
+body[data-theme="teen"] .bigbtn.owe { background: linear-gradient(180deg, #ff8aa3, #ff4f77); border-color: #b32a4c; color: #2b0610; box-shadow: 0 6px 20px rgba(255, 107, 138, .35); }
+body[data-theme="teen"] .bigbtn.get { background: linear-gradient(180deg, #6df0bb, #1fcf8e); border-color: #0f8f62; color: #03251a; box-shadow: 0 6px 20px rgba(53, 224, 161, .35); }
 body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .nb-h2 { color: var(--ink); font-size: 1.1rem; font-weight: 700; }
 body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .empty {
   color: var(--ink); background: rgba(255, 255, 255, .6); border-color: rgba(74, 68, 104, .35);
@@ -1152,3 +1153,5 @@ body:not([data-theme="parent"]):not([data-theme="teen"]) .sheet form button.prim
   background: color-mix(in srgb, var(--bg) 82%, transparent);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
 }
+body[data-theme="teen"] .bigbtn { border-width: 0 0 5px; }
+body[data-theme="teen"] .bigbtn:active { border-bottom-width: 1px; }
