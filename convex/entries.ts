@@ -55,8 +55,9 @@ export const add = mutation({
     // ההחזר על חובות במטבע אחר (למשל 100 דולר) תהיה לפי השער ביום התשלום ולא תזוז אחר כך.
     let fx: Rates | undefined;
     if (e.kind === "payment") {
-      const all = await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
-      const curs = new Set(all.filter((x) => x.kind === "debt" && x.from === e.from && x.to === e.to).map(curOf));
+      // רק רשומות של הזוג הזה (אינדקס by_from_to), לא כל רשומות המשפחה.
+      const pair = await ctx.db.query("entries").withIndex("by_from_to", (q) => q.eq("from", e.from).eq("to", e.to)).collect();
+      const curs = new Set(pair.filter((x) => x.kind === "debt" && x.familyId === me.familyId).map(curOf));
       curs.add(currency);
       if (curs.size > 1) {
         if (!rates) {
@@ -74,7 +75,8 @@ export const add = mutation({
           throw new ConvexError("החוב לא נמצא");
         }
         if (debt.from !== e.from || debt.to !== e.to) throw new ConvexError("ההחזר לא מתאים לחוב הזה");
-        const remaining = debt.amount - paidOnDebt(debt, all, rates);
+        const linked = await ctx.db.query("entries").withIndex("by_debt", (q) => q.eq("debtId", debt._id)).collect();
+        const remaining = debt.amount - paidOnDebt(debt, linked, rates);
         if (remaining < 0.5) throw new ConvexError("החוב הזה כבר שולם");
         const inDebtCur = convert(e.amount, currency, curOf(debt), fx ?? rates);
         if (inDebtCur === null) throw new ConvexError("אין שער המרה למטבע של החוב");
@@ -159,8 +161,8 @@ export const remove = mutation({
     if (me.role !== "parent" && !mine) throw new ConvexError("אפשר לבטל רק ב-10 הדקות הראשונות, או לבקש מהורה");
     // מחיקת חוב: ההחזרים שקושרו אליו נשארים כהחזרים כלליים, כדי שהיתרה לא תשתנה.
     if (e.kind === "debt") {
-      const all = await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
-      for (const x of all) if (x.debtId === id) await ctx.db.patch(x._id, { debtId: undefined });
+      const linked = await ctx.db.query("entries").withIndex("by_debt", (q) => q.eq("debtId", id)).collect();
+      for (const x of linked) await ctx.db.patch(x._id, { debtId: undefined });
     }
     await ctx.db.delete(id);
   },

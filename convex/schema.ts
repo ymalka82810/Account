@@ -111,7 +111,9 @@ export default defineSchema({
   })
     .index("by_family", ["familyId"])
     .index("by_from", ["from"])
-    .index("by_to", ["to"]),
+    .index("by_to", ["to"])
+    .index("by_from_to", ["from", "to"])
+    .index("by_debt", ["debtId"]),
 
   // חברות בין בני נוער (גם ממשפחות שונות). a ביקש/ה, b צריך/ה לאשר.
   friendships: defineTable({
