@@ -1067,3 +1067,16 @@ body[data-theme="teen"] .gb-rim { display: inline; stroke: var(--neon-b); stroke
 body[data-theme="parent"] .summary .sum { --num-fs: 1.35rem; --num-room: 122cqi; }
 body[data-theme="teen"] .summary .sum { --num-fs: 1.6rem; --num-room: 122cqi; }
 body .summary .sum .num { font-size: min(var(--num-fs), calc(var(--num-room) / var(--len, 6))); white-space: nowrap; }
+
+/* ===== הטבעה: הכתב על המטילים נראה כמו חתום/לחוץ לתוך המתכת =====
+   האור מגיע מלמעלה, אז בתוך אות לחוצה הקצה העליון כהה (צל פנימי) והקצה התחתון מקבל ברק בהיר.
+   הצבע כהה מעט מהמתכת עצמה ולא שחור מלא, כמו חריטה שקועה. לא משנים גודל או ריווח, כדי שהתאמת האורך תמשיך לעבוד. */
+body[data-theme] .sum .lbl, body:not([data-theme]) .sum .lbl,
+body[data-theme] .sum .num, body:not([data-theme]) .sum .num {
+  color: color-mix(in srgb, var(--g-ink) 78%, var(--g-3));
+  text-shadow:
+    0 1.5px 0 rgba(255, 255, 255, .62),
+    0 -1px 0 rgba(0, 0, 0, .5),
+    0 0 1.5px rgba(0, 0, 0, .28);
+}
+body[data-theme] .sum .lbl, body:not([data-theme]) .sum .lbl { font-weight: 800; }

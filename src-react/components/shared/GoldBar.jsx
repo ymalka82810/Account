@@ -58,6 +58,8 @@ export function GoldBarArt() {
         <polygon points={FRONT} fill={url('f')} />
         {/* לוחית חרוטה על הפאה העליונה */}
         <polygon points="70.1,18 124.1,18 132,6.7 78,6.7" fill="rgba(0,0,0,.07)" stroke="rgba(255,255,255,.45)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        {/* הטבעה: ברק בהיר דק מתחת לחותמת, והחותמת עצמה כהה מעל */}
+        <text className="gb-stamp" aria-hidden="true" style={{ direction: 'ltr', unicodeBidi: 'bidi-override' }} textAnchor="middle" transform="matrix(1 0 -0.66 0.94 103.4 16.3)" fontSize="7.5" fontWeight="700" letterSpacing="1.2" fill="rgba(255,255,255,.6)">999.9</text>
         <text className="gb-stamp" style={{ direction: 'ltr', unicodeBidi: 'bidi-override' }} textAnchor="middle" transform="matrix(1 0 -0.66 0.94 103 15.6)" fontSize="7.5" fontWeight="700" letterSpacing="1.2" fill="rgba(0,0,0,.55)">999.9</text>
         {/* גרעין מוברש ודק על כל המטיל */}
         <rect x="0" y="0" width="202" height="124" filter={url('n')} opacity=".16" style={{ mixBlendMode: 'overlay' }} />
