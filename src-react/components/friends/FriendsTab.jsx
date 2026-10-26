@@ -1,4 +1,5 @@
 import { call } from '../../lib/api.js';
+import { GoldBarArt } from '../shared/GoldBar.jsx';
 import { useState } from 'react';
 import { toast } from '../../lib/helpers.js';
 import { useRun } from '../../lib/useRun.js';
@@ -123,8 +124,8 @@ export default function FriendsTab({ data, fdata, token }) {
   return (
     <>
       <div className="summary">
-        <div className="sum owe"><div className="lbl">{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} לחברים</div><div className="num">{money(owe, 'ILS')}</div></div>
-        <div className="sum get"><div className="lbl">חברים חייבים לי</div><div className="num">{money(get, 'ILS')}</div></div>
+        <div className="sum owe"><GoldBarArt /><div className="lbl">{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')} לחברים</div><div className="num">{money(owe, 'ILS')}</div></div>
+        <div className="sum get"><GoldBarArt /><div className="lbl">חברים חייבים לי</div><div className="num">{money(get, 'ILS')}</div></div>
       </div>
       <div className="bigbtns">
         <button className="bigbtn owe" type="button" onClick={() => startFlow({ kind: 'debt', from: me })}>

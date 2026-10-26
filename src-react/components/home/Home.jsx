@@ -1,4 +1,5 @@
 import { useApp } from '../../state/appContext.js';
+import { GoldBarArt } from '../shared/GoldBar.jsx';
 import { useSheet } from '../shared/Sheet.jsx';
 import BalanceSheet from './BalanceSheet.jsx';
 import PendingCards from '../entries/PendingCards.jsx';
@@ -51,8 +52,8 @@ export default function Home({ data, token }) {
   return (
     <>
       <div className="summary">
-        <div className="sum owe"><div className="lbl">{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')}</div><div className="num">{money(owe)}</div></div>
-        <div className="sum get"><div className="lbl">חייבים לי</div><div className="num">{money(get)}</div></div>
+        <div className="sum owe"><GoldBarArt /><div className="lbl">{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')}</div><div className="num">{money(owe)}</div></div>
+        <div className="sum get"><GoldBarArt /><div className="lbl">חייבים לי</div><div className="num">{money(get)}</div></div>
       </div>
 
       <div className="bigbtns">
