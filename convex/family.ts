@@ -1,9 +1,12 @@
-import { mutation } from "./_generated/server";
+import { internalMutation, mutation } from "./_generated/server";
+import { internal } from "./_generated/api";
 import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
 import { proofValidator, purgeBiometric, requireBiometric } from "./biometric";
 import { cleanFamilyName, freshCode, issuePass, purgePasses, requireParent } from "./lib";
 import { COUNTRIES, isCurrency } from "./currency";
+
+const PURGE_BATCH = 500;
 
 export const rename = mutation({
   args: { token: v.string(), name: v.string() },
@@ -60,9 +63,6 @@ export const remove = mutation({
     if (!family) return;
     if (confirmName.trim() !== family.name) throw new ConvexError("שם המשפחה לא תואם");
     const familyId = me.familyId;
-    for (const e of await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()) {
-      await ctx.db.delete(e._id);
-    }
     for (const r of await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()) {
       await ctx.db.delete(r._id);
     }
@@ -82,5 +82,16 @@ export const remove = mutation({
     }
     await purgePasses(ctx, familyId);
     await ctx.db.delete(familyId);
+    // הרשומות נמחקות בקבוצות, כדי שהרבה היסטוריה לא תחרוג ממגבלת הכתיבות של טרנזקציה אחת.
+    await ctx.scheduler.runAfter(0, internal.family.purgeEntries, { familyId });
+  },
+});
+
+export const purgeEntries = internalMutation({
+  args: { familyId: v.id("families") },
+  handler: async (ctx, { familyId }): Promise<void> => {
+    const batch = await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", familyId)).take(PURGE_BATCH);
+    for (const e of batch) await ctx.db.delete(e._id);
+    if (batch.length === PURGE_BATCH) await ctx.scheduler.runAfter(0, internal.family.purgeEntries, { familyId });
   },
 });

@@ -29,7 +29,7 @@ export const add = mutation({
     await requireSameFamily(ctx, me, r.from);
     await requireSameFamily(ctx, me, r.to);
     const family = await ctx.db.get(me.familyId);
-    const existing = await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
+    const existing = await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).take(MAX_PER_FAMILY);
     if (existing.length >= MAX_PER_FAMILY) throw new ConvexError("יש כבר הרבה רישומים קבועים");
     return await ctx.db.insert("recurring", {
       familyId: me.familyId, from: r.from, to: r.to, amount: r.amount, note,

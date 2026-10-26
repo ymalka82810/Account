@@ -55,9 +55,9 @@ export const add = mutation({
     // ההחזר על חובות במטבע אחר (למשל 100 דולר) תהיה לפי השער ביום התשלום ולא תזוז אחר כך.
     let fx: Rates | undefined;
     if (e.kind === "payment") {
-      // רק רשומות של הזוג הזה (אינדקס by_from_to), לא כל רשומות המשפחה.
-      const pair = await ctx.db.query("entries").withIndex("by_from_to", (q) => q.eq("from", e.from).eq("to", e.to)).collect();
-      const curs = new Set(pair.filter((x) => x.kind === "debt" && x.familyId === me.familyId).map(curOf));
+      // רק החובות של הזוג הזה (אינדקס by_from_to_kind), בלי ההחזרים ובלי שאר רשומות המשפחה.
+      const pair = await ctx.db.query("entries").withIndex("by_from_to_kind", (q) => q.eq("from", e.from).eq("to", e.to).eq("kind", "debt")).collect();
+      const curs = new Set(pair.filter((x) => x.familyId === me.familyId).map(curOf));
       curs.add(currency);
       if (curs.size > 1) {
         if (!rates) {

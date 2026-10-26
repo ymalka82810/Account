@@ -132,6 +132,7 @@ export default defineSchema({
     .index("by_from", ["from"])
     .index("by_to", ["to"])
     .index("by_from_to", ["from", "to"])
+    .index("by_from_to_kind", ["from", "to", "kind"])
     .index("by_debt", ["debtId"]),
 
   // חברות בין בני נוער (גם ממשפחות שונות). a ביקש/ה, b צריך/ה לאשר.
