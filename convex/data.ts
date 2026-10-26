@@ -14,7 +14,8 @@ export const get = query({
     const family = await ctx.db.get(familyId);
     if (!family) return null;
     const people = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
-    let entries = await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
+    // רק רשומות פעילות: מה שנסגר לגמרי (archived) נשאר בהיסטוריה, ראו history.page.
+    let entries = await ctx.db.query("entries").withIndex("by_family_active", (q) => q.eq("familyId", familyId).eq("archived", undefined)).collect();
     // ילדים רואים רק רשומות שקשורות אליהם. הורים רואים הכול.
     // רשומות שממתינות לאישור מוצגות רק למי שיצר/ה אותן ולהורים.
     if (me.role !== "parent") {

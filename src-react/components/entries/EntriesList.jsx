@@ -24,8 +24,10 @@ export default function EntriesList({
     const st = debtMap.get(e.id);
     if (isDebt && !isPending(e) && st && st.paid > 0) {
       extra = st.remaining > 0 ? `נשאר ${money(Math.round(st.remaining), st.cur)} מתוך ${money(e.amount, st.cur)}` : 'שולם במלואו ✅';
-    } else if (!isDebt && e.debtId && debtMap.get(e.debtId)) {
-      extra = 'על: ' + (debtMap.get(e.debtId).debt.note || 'חוב');
+    } else if (isDebt && e.archived) {
+      extra = 'שולם במלואו ✅'; // חוב שנסגר לא נשלח עם הנתונים הראשיים, אז אין לו מצב ב-debtMap
+    } else if (!isDebt && e.debtId && (debtMap.get(e.debtId) || e.debtNote != null)) {
+      extra = 'על: ' + ((debtMap.get(e.debtId)?.debt.note ?? e.debtNote) || 'חוב');
     }
     return (
       <div className={'row' + (isPending(e) ? ' pending' : '')} key={e.id}>
@@ -37,7 +39,7 @@ export default function EntriesList({
           </div>
           <div className="meta">{[fmtDate(e.date), e.note, extra].filter(Boolean).join(' • ')}</div>
         </div>
-        <strong>{isDebt && !isPending(e) && !(st && st.remaining <= 0) ? moneyWithValue(e.amount, curOf(e), display || undefined) : money(e.amount, curOf(e))}</strong>
+        <strong>{isDebt && !isPending(e) && !e.archived && !(st && st.remaining <= 0) ? moneyWithValue(e.amount, curOf(e), display || undefined) : money(e.amount, curOf(e))}</strong>
         {canDelete(e, me, isParent) && (
           <button className="small danger" type="button" onClick={() => remove(e)}>{isParent ? 'מחיקה' : 'ביטול'}</button>
         )}

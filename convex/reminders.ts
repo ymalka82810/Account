@@ -30,7 +30,7 @@ export const forFamily = internalMutation({
     const rates = (await loadRates(ctx))?.rates ?? null;
     const people = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
     const name = new Map(people.map((p) => [p._id, p.name]));
-    const entries = (await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect())
+    const entries = (await ctx.db.query("entries").withIndex("by_family_active", (q) => q.eq("familyId", familyId).eq("archived", undefined)).collect())
       .filter((e) => e.status !== "pending");
 
     type Pair = { net: number; last: string; debtor: Id<"people">; creditor: Id<"people"> };

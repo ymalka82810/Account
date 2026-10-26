@@ -5,6 +5,7 @@ import { entryLine, entryTextFor, notify } from "./notify";
 import { internal } from "./_generated/api";
 import { LEGACY_CURRENCY, Rates, convert, curOf, fmtMoney, isCurrency, paidOnDebt } from "./currency";
 import { loadRates } from "./fx";
+import { archivePair, unarchivePair } from "./ledger";
 
 // סכום מקסימלי לרשומה: 10,000 ש"ח או השווי שלהם במטבע אחר (בלי שערים: גבול רחב).
 function amountOk(amount: number, currency: string, rates: Rates | null): boolean {
@@ -55,9 +56,9 @@ export const add = mutation({
     // ההחזר על חובות במטבע אחר (למשל 100 דולר) תהיה לפי השער ביום התשלום ולא תזוז אחר כך.
     let fx: Rates | undefined;
     if (e.kind === "payment") {
-      // רק החובות של הזוג הזה (אינדקס by_from_to_kind), בלי ההחזרים ובלי שאר רשומות המשפחה.
-      const pair = await ctx.db.query("entries").withIndex("by_from_to_kind", (q) => q.eq("from", e.from).eq("to", e.to).eq("kind", "debt")).collect();
-      const curs = new Set(pair.filter((x) => x.familyId === me.familyId).map(curOf));
+      // רק הרשומות הפעילות של הזוג הזה (by_pair): בלי מה שכבר נסגר ובלי שאר רשומות המשפחה.
+      const pair = await ctx.db.query("entries").withIndex("by_pair", (q) => q.eq("from", e.from).eq("to", e.to).eq("archived", undefined)).collect();
+      const curs = new Set(pair.filter((x) => x.kind === "debt" && x.familyId === me.familyId).map(curOf));
       curs.add(currency);
       if (curs.size > 1) {
         if (!rates) {
@@ -97,6 +98,8 @@ export const add = mutation({
       ...(pending ? { status: "pending" as const } : {}),
     });
 
+    if (!pending && e.kind === "payment") await archivePair(ctx, e.from, e.to, rates);
+
     const names = { from: from.name, to: to.name, creator: me.name };
     const ec = { ...e, currency };
     if (pending) {
@@ -120,6 +123,7 @@ export const approve = mutation({
     const e = await ctx.db.get(id);
     if (!e || e.familyId !== me.familyId || e.status !== "pending") return;
     await ctx.db.patch(id, { status: undefined });
+    if (e.kind === "payment") await archivePair(ctx, e.from, e.to, (await loadRates(ctx))?.rates ?? null);
     const from = await ctx.db.get(e.from);
     const to = await ctx.db.get(e.to);
     const creator = e.createdBy ? await ctx.db.get(e.createdBy) : null;
@@ -159,11 +163,14 @@ export const remove = mutation({
     if (!e || e.familyId !== me.familyId) return;
     const mine = e.createdBy === me._id && (e.status === "pending" || Date.now() - (e.createdAt ?? 0) < UNDO_MS);
     if (me.role !== "parent" && !mine) throw new ConvexError("אפשר לבטל רק ב-10 הדקות הראשונות, או לבקש מהורה");
+    // רשומה מאורכבת נמחקת רק אחרי שכל הכיוון חוזר להיות פעיל, כדי שהחישוב מחדש ייצא כמו על כל הרשומות.
+    if (e.archived) await unarchivePair(ctx, e.from, e.to);
     // מחיקת חוב: ההחזרים שקושרו אליו נשארים כהחזרים כלליים, כדי שהיתרה לא תשתנה.
     if (e.kind === "debt") {
       const linked = await ctx.db.query("entries").withIndex("by_debt", (q) => q.eq("debtId", id)).collect();
       for (const x of linked) await ctx.db.patch(x._id, { debtId: undefined });
     }
     await ctx.db.delete(id);
+    if (e.archived) await archivePair(ctx, e.from, e.to, (await loadRates(ctx))?.rates ?? null);
   },
 });

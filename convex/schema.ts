@@ -127,12 +127,16 @@ export default defineSchema({
     debtId: v.optional(v.id("entries")),
     // רשומה שילד/ה יצר/ה ממתינה לאישור הורה ולא נספרת ביתרות. חסר = מאושר.
     status: v.optional(v.literal("pending")),
+    // החובות וההחזרים של הכיוון הזה (from → to) נסגרו לגמרי, ולכן אין להם יותר השפעה על יתרות.
+    // הם נשארים בהיסטוריה אבל לא נשלחים עם הנתונים הראשיים. ראו ledger.ts.
+    archived: v.optional(v.literal(true)),
   })
     .index("by_family", ["familyId"])
+    .index("by_family_active", ["familyId", "archived"])
     .index("by_from", ["from"])
     .index("by_to", ["to"])
     .index("by_from_to", ["from", "to"])
-    .index("by_from_to_kind", ["from", "to", "kind"])
+    .index("by_pair", ["from", "to", "archived"])
     .index("by_debt", ["debtId"]),
 
   // חברות בין בני נוער (גם ממשפחות שונות). a ביקש/ה, b צריך/ה לאשר.
