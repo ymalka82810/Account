@@ -1,6 +1,6 @@
 import { useId } from 'react';
 
-// איור מטיל זהב אמיתי: חתך טרפזי סימטרי (שיפוע זהה בשני הצדדים), במבט אלכסוני מלמעלה עם וקטור עומק אחיד (20,-18):
+// איור מטיל זהב אמיתי: חתך טרפזי סימטרי ועדין (שיפוע 8 בכל צד), במבט אלכסוני מלמעלה עם וקטור עומק אחיד (16,-14):
 // פאת חזית משופעת, פאה עליונה ופאת קצה משופעת. הצבעים לוקחים מ-CSS (--g-1 ... --g-3 ו---neon-*).
 // מוצג רק בעיצובי הורה ונוער (ב-CSS); בעיצוב ילדים הוא מוסתר.
 export function GoldBarArt() {
@@ -9,7 +9,7 @@ export function GoldBarArt() {
   const url = (s) => `url(#${n(s)})`;
   const stop = (offset, color) => <stop offset={offset} style={{ stopColor: color }} />;
   return (
-    <svg className="gb-art" viewBox="0 6 200 122" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <svg className="gb-art" viewBox="0 10 190 118" preserveAspectRatio="none" aria-hidden="true" focusable="false">
       <defs>
         <linearGradient id={n('f')} x1="0" y1="0" x2="0" y2="1">
           {stop(0, 'var(--g-1)')}{stop(0.55, 'var(--g-2)')}{stop(1, 'var(--g-3)')}
@@ -33,26 +33,26 @@ export function GoldBarArt() {
           <stop offset="1" style={{ stopColor: 'var(--neon-b, #22d8ff)', stopOpacity: 0.34 }} />
         </linearGradient>
         <clipPath id={n('c')}>
-          <polygon points="2,124 170,124 156,28 16,28" />
-          <polygon points="16,28 156,28 176,10 36,10" />
-          <polygon points="170,124 190,106 176,10 156,28" />
+          <polygon points="2,124 170,124 162,28 10,28" />
+          <polygon points="10,28 162,28 178,14 26,14" />
+          <polygon points="170,124 186,110 178,14 162,28" />
         </clipPath>
       </defs>
       {/* פאת קצה (ימין), הכהה ביותר */}
-      <polygon points="170,124 190,106 176,10 156,28" fill={url('e')} />
+      <polygon points="170,124 186,110 178,14 162,28" fill={url('e')} />
       {/* פאה עליונה, הבהירה ביותר */}
-      <polygon points="16,28 156,28 176,10 36,10" fill={url('t')} />
+      <polygon points="10,28 162,28 178,14 26,14" fill={url('t')} />
       {/* פאת חזית משופעת */}
-      <polygon points="2,124 170,124 156,28 16,28" fill={url('f')} />
+      <polygon points="2,124 170,124 162,28 10,28" fill={url('f')} />
       {/* לוחית חרוטה על הפאה העליונה */}
-      <polygon points="37.2,24 143.6,24 154.8,14 48.4,14" fill="rgba(0,0,0,.08)" stroke="rgba(255,255,255,.5)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-      <text className="gb-stamp" style={{ direction: 'ltr', unicodeBidi: 'bidi-override' }} transform="matrix(1 0 -1.11 1.2 78 23)" fontSize="6" letterSpacing="1" fill="rgba(0,0,0,.5)">999.9</text>
+      <polygon points="31.7,24.9 147.3,24.9 156.3,17.1 40.7,17.1" fill="rgba(0,0,0,.08)" stroke="rgba(255,255,255,.5)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+      <text className="gb-stamp" style={{ direction: 'ltr', unicodeBidi: 'bidi-override' }} transform="matrix(1 0 -1.14 1.2 76 25)" fontSize="6" letterSpacing="1" fill="rgba(0,0,0,.5)">999.9</text>
       {/* קווי מסגרת: קצה עליון בוהק, מפגש חזית-קצה, בסיס כהה */}
       <g fill="none" vectorEffect="non-scaling-stroke">
-        <polyline points="16,28 156,28" stroke="rgba(255,255,255,.9)" strokeWidth="1.4" vectorEffect="non-scaling-stroke" />
-        <polyline points="2,124 16,28" stroke="rgba(255,255,255,.45)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-        <polyline points="170,124 156,28" stroke="rgba(255,255,255,.35)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-        <polyline points="156,28 176,10" stroke="rgba(255,255,255,.6)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        <polyline points="10,28 162,28" stroke="rgba(255,255,255,.9)" strokeWidth="1.4" vectorEffect="non-scaling-stroke" />
+        <polyline points="2,124 10,28" stroke="rgba(255,255,255,.45)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        <polyline points="170,124 162,28" stroke="rgba(255,255,255,.35)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        <polyline points="162,28 178,14" stroke="rgba(255,255,255,.6)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
         <polyline points="2,124 170,124" stroke="rgba(0,0,0,.4)" strokeWidth="2" vectorEffect="non-scaling-stroke" />
       </g>
       {/* ברק שעובר על המטיל (נוער) */}
@@ -63,9 +63,9 @@ export function GoldBarArt() {
       </g>
       {/* קו מתאר ניאון דק */}
       <g className="gb-rim" fill="none" vectorEffect="non-scaling-stroke">
-        <polygon points="2,124 170,124 156,28 16,28" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-        <polygon points="170,124 190,106 176,10 156,28" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-        <polygon points="16,28 156,28 176,10 36,10" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        <polygon points="2,124 170,124 162,28 10,28" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        <polygon points="170,124 186,110 178,14 162,28" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        <polygon points="10,28 162,28 178,14 26,14" strokeWidth="1" vectorEffect="non-scaling-stroke" />
       </g>
     </svg>
   );
