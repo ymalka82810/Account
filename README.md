@@ -51,8 +51,9 @@ npm install
 npx convex dev        # מתחבר לחשבון Convex, יוצר פרויקט ופורס את convex/ (ויוצר convex/_generated)
 ```
 1. את הכתובת שמודפסת (`https://....convex.cloud`) מדביקים ב-`public/config.js` בשורה `window.CONVEX_URL`.
-2. לפריסה קבועה: `npx convex deploy`, ובקובץ `public/config.js` שמים את כתובת ה-production.
+2. לפריסה קבועה: `npx convex deploy` בפעם הראשונה, ובקובץ `public/config.js` שמים את כתובת ה-production.
 3. ב-GitHub: Settings > Pages > Source: **GitHub Actions**. אחרי זה כל push ל-`main` בונה ופורס את האתר (`.github/workflows/pages-deploy.yml`).
+4. השרת (Convex) נפרס אוטומטית בכל push ל-`main` שנוגע ב-`convex/` או ב-`package.json` (`.github/workflows/convex-deploy.yml`). הוא דורש את הסוד `CONVEX_DEPLOY_KEY` ב-GitHub. לכן אין צורך להריץ `npm run deploy` ידנית.
 
 פיתוח מקומי: `npm run web:dev` (Vite) ובמקביל `npm run dev` (Convex). בנייה: `npm run build`.
 
