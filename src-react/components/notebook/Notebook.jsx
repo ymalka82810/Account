@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { state } from '../../state/state.js';
+import { closeNotebook } from '../../state/auth.js';
 import { today } from '../../lib/helpers.js';
 import { money, fmtDate } from '../../lib/computations.js';
 import { useNotebook, notebookCurrency, addEntry, setPaid, removeEntry } from '../../lib/notebook.js';
@@ -46,6 +48,7 @@ export default function Notebook({ current }) {
 
   return (
     <In screen="notebook" current={current}>
+      {state.notebookBack && <button className="ghost back" type="button" onClick={closeNotebook}>→ חזרה</button>}
       <div className="card-narrow">
         <div className="big-emoji" aria-hidden="true">📒</div>
         <h1>הפנקס שלי</h1>

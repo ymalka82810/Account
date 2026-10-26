@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { state } from '../../state/state.js';
-import { goView, leaveFamily, startPin } from '../../state/auth.js';
+import { goView, leaveFamily, startPin, openNotebook } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 
 export default function Login({ current }) {
@@ -14,6 +14,7 @@ export default function Login({ current }) {
       <div className="tiles">
         {fam && fam.people.map((p) => <Tile key={p.id} avatar={p.avatar} name={p.name} onClick={() => startPin(p, false)} />)}
         <Tile avatar="➕" name="אני חדש/ה" onClick={() => goView('join')} />
+        <Tile avatar="📒" name="הפנקס שלי" onClick={openNotebook} />
       </div>
     </In>
   );

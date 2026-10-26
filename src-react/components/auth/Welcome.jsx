@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { state } from '../../state/state.js';
 import { prettyCode } from '../../lib/helpers.js';
-import { submitFamilyCode, goView, startPin } from '../../state/auth.js';
+import { submitFamilyCode, goView, startPin, openNotebook } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 
 export default function Welcome({ current }) {
@@ -39,6 +39,7 @@ export default function Welcome({ current }) {
             </div>
           </div>
         )}
+        <button className="ghost linkish" type="button" onClick={openNotebook}>📒 הפנקס שלי</button>
         <button className="ghost linkish" type="button" onClick={() => goView('setup')}>👨‍👩‍👧 אני הורה ורוצה להקים קופה חדשה</button>
         <p className="legal"><a href="terms.html">תנאי שימוש</a> · <a href="privacy.html">מדיניות פרטיות</a></p>
       </div>

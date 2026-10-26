@@ -59,6 +59,10 @@ export async function submitFamilyCode(code) {
 
 export function goView(view) { state.view = view; route(); }
 
+// מעבר לפנקס האישי ממסכי המשפחה. רק כך מוצג בפנקס כפתור חזרה (מכשיר חדש נפתח בו ישר, ואין לאן לחזור).
+export function openNotebook() { state.notebookBack = true; goView('notebook'); }
+export function closeNotebook() { state.notebookBack = false; goView('welcome'); }
+
 // ---------- הקמת משפחה חדשה ----------
 export async function createFamily({ familyName, name, birthDate, avatar, gender, pin, country, currency }) {
   try {
