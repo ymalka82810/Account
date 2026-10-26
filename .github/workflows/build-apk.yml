@@ -99,13 +99,17 @@ jobs:
           name: account-apk
           path: account.apk
 
+      # בהערות הגרסה: versionCode ו-sha256 של ה-APK. האפליקציה משווה לפי ה-versionCode ובודקת את הקובץ שירד מול ה-sha256.
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG="v1.0.$VERSION_CODE"
+          SHA=$(sha256sum account.apk | cut -d' ' -f1)
+          NOTES=$(printf 'versionCode: %s\nsha256: %s\n\nAPK חתום. מותקן מעל גרסה קודמת ומתעדכן מתוך האפליקציה.' "$VERSION_CODE" "$SHA")
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" account.apk --clobber
+            gh release edit "$TAG" --notes "$NOTES"
           else
-            gh release create "$TAG" account.apk --title "גרסה 1.0.$VERSION_CODE" --notes "APK חתום. מותקן מעל גרסה קודמת ומתעדכן מתוך האפליקציה."
+            gh release create "$TAG" account.apk --title "גרסה 1.0.$VERSION_CODE" --notes "$NOTES"
           fi

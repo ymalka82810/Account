@@ -24,18 +24,23 @@ import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Self-update for a sideloaded APK: downloads the new APK and opens the system install dialog,
  * so the user only taps "Update" (no hunting for the file in Downloads).
  *
- * The download runs in the system DownloadManager, so it carries on (with a progress notification)
- * when the user leaves the app. Android won't let a background app open the installer, so if the
+ * The APK is fetched directly by the app, at full network speed (the system DownloadManager runs at a low
+ * priority, and on some phones it took minutes for a ~20 MB APK). If that fails, the DownloadManager is the
+ * fallback: it carries on (with a progress notification) when the user leaves the app. Android won't let a background app open the installer, so if the
  * download finishes while we're in the background, the install dialog opens when the app returns.
  * If the app was closed altogether, the next downloadAndInstall for the same url picks up the
  * running or finished download instead of starting over.
@@ -45,8 +50,8 @@ import java.net.URL;
  * Register it in MainActivity: registerPlugin(AppUpdaterPlugin.class) before super.onCreate().
  *
  * JS: appInfo() -> {versionCode, versionName}
- *     downloadAndInstall({url}) -> resolves once the install dialog is shown; rejects with
- *       "busy", "bad url", "download", "not an update", "permission" or "no installer"
+ *     downloadAndInstall({url, sha256?}) -> resolves once the install dialog is shown; rejects with
+ *       "busy", "bad url", "download", "checksum", "not an update", "permission" or "no installer"
  *     event "progress" -> {percent} while downloading (-1 when the size is unknown)
  */
 @CapacitorPlugin(name = "AppUpdater")
@@ -102,14 +107,22 @@ public class AppUpdaterPlugin extends Plugin {
                 File apk = apkFile();
                 boolean sameUrl = url.equals(prefs().getString("url", null));
                 if (!(sameUrl && apk.exists() && isUpdateOfThisApp(apk))) {
-                    try {
-                        long id = sameUrl ? runningDownload() : -1;
-                        if (id == -1) id = enqueue(url);
-                        waitFor(id);
-                    } catch (IOException e) {
-                        // The DownloadManager failed or got stuck (paused/pending forever): download directly instead
-                        downloadDirect(url, apk);
+                    long id = sameUrl ? runningDownload() : -1;
+                    if (id != -1) {
+                        waitFor(id); // a DownloadManager download from an earlier try is still running
+                    } else {
+                        try {
+                            downloadDirect(url);
+                        } catch (IOException e) {
+                            waitFor(enqueue(url));
+                        }
                     }
+                }
+                String sha256 = call.getString("sha256");
+                if (sha256 != null && !sha256.equalsIgnoreCase(sha256(apk))) {
+                    apk.delete();
+                    call.reject("checksum");
+                    return;
                 }
                 if (!isUpdateOfThisApp(apk)) {
                     apk.delete();
@@ -123,6 +136,54 @@ public class AppUpdaterPlugin extends Plugin {
                 busy = false;
             }
         }).start();
+    }
+
+    // Downloads url straight into apkFile() (through a .part file, so a broken download never looks finished),
+    // reporting progress like waitFor; remembers the url so a second try reuses the finished file
+    private void downloadDirect(String url) throws IOException {
+        DownloadManager dm = downloadManager();
+        long old = prefs().getLong("id", -1);
+        if (old != -1) dm.remove(old);
+        prefs().edit().clear().apply();
+        deleteDir(updateDir());
+        File dir = updateDir();
+        if (dir == null || !(dir.isDirectory() || dir.mkdirs())) throw new IOException("no external storage");
+        File part = new File(dir, APK + ".part");
+        HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+        conn.setInstanceFollowRedirects(true); // GitHub answers with a redirect to its file server (https to https)
+        conn.setConnectTimeout(15000);
+        conn.setReadTimeout(30000);
+        try {
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) throw new IOException("HTTP " + conn.getResponseCode());
+            long total = contentLength(conn);
+            long done = 0;
+            int lastPercent = -2;
+            long lastReport = 0;
+            try (InputStream in = conn.getInputStream(); OutputStream out = new FileOutputStream(part)) {
+                byte[] buf = new byte[256 * 1024];
+                for (int n; (n = in.read(buf)) > 0; ) {
+                    out.write(buf, 0, n);
+                    done += n;
+                    int percent = total > 0 ? (int) (done * 100 / total) : -1;
+                    long now = System.currentTimeMillis();
+                    if (percent != lastPercent && now - lastReport >= 200) {
+                        lastPercent = percent;
+                        lastReport = now;
+                        JSObject ev = new JSObject();
+                        ev.put("percent", percent);
+                        notifyListeners("progress", ev);
+                    }
+                }
+            }
+            if (total > 0 && done != total) throw new IOException("incomplete");
+            if (!part.renameTo(apkFile())) throw new IOException("rename");
+            prefs().edit().putString("url", url).apply();
+        } catch (IOException e) {
+            part.delete();
+            throw e;
+        } finally {
+            conn.disconnect();
+        }
     }
 
     // Starts a fresh download of url into updateDir(), remembering it across app restarts
@@ -188,48 +249,6 @@ public class AppUpdaterPlugin extends Plugin {
         }
     }
 
-    // Plain HTTPS download into apk (follows GitHub's redirect to the asset CDN), with progress events
-    private void downloadDirect(String url, File apk) throws IOException {
-        File dir = updateDir();
-        if (dir == null) throw new IOException("no external storage");
-        dir.mkdirs();
-        File tmp = new File(dir, APK + ".part");
-        HttpURLConnection conn = null;
-        try {
-            conn = (HttpURLConnection) new URL(url).openConnection();
-            conn.setConnectTimeout(15000);
-            conn.setReadTimeout(20000);
-            conn.setInstanceFollowRedirects(true);
-            int code = conn.getResponseCode();
-            if (code != 200) throw new IOException("HTTP " + code);
-            long total = conn.getContentLengthLong();
-            long done = 0;
-            int lastPercent = -2;
-            try (InputStream in = conn.getInputStream(); FileOutputStream out = new FileOutputStream(tmp)) {
-                byte[] buf = new byte[32 * 1024];
-                int n;
-                while ((n = in.read(buf)) != -1) {
-                    out.write(buf, 0, n);
-                    done += n;
-                    int percent = total > 0 ? (int) (done * 100 / total) : -1;
-                    if (percent != lastPercent) {
-                        lastPercent = percent;
-                        JSObject ev = new JSObject();
-                        ev.put("percent", percent);
-                        notifyListeners("progress", ev);
-                    }
-                }
-            }
-            if (total > 0 && tmp.length() != total) throw new IOException("incomplete download");
-            apk.delete();
-            if (!tmp.renameTo(apk)) throw new IOException("rename failed");
-            prefs().edit().putString("url", url).apply();
-        } finally {
-            if (conn != null) conn.disconnect();
-            tmp.delete();
-        }
-    }
-
     // The id of our download if the DownloadManager is still working on it, else -1
     private long runningDownload() {
         long id = prefs().getLong("id", -1);
@@ -253,6 +272,28 @@ public class AppUpdaterPlugin extends Plugin {
         Runnable action = onResume;
         onResume = null;
         if (action != null) action.run();
+    }
+
+    // getContentLengthLong needs Android 7; the app still runs on 6
+    static long contentLength(HttpURLConnection conn) {
+        try {
+            return Long.parseLong(conn.getHeaderField("Content-Length"));
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    static String sha256(File file) throws IOException {
+        try (InputStream in = new FileInputStream(file)) {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] buf = new byte[65536];
+            for (int n; (n = in.read(buf)) > 0; ) md.update(buf, 0, n);
+            StringBuilder hex = new StringBuilder();
+            for (byte b : md.digest()) hex.append(String.format("%02x", b));
+            return hex.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new IOException(e);
+        }
     }
 
     // Same package and a newer version; otherwise the installer would fail with a vaguer message
@@ -321,11 +362,11 @@ public class AppUpdaterPlugin extends Plugin {
         return getContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
     }
 
-    private static long versionCode(PackageInfo info) {
+    static long versionCode(PackageInfo info) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? info.getLongVersionCode() : info.versionCode;
     }
 
-    private static void deleteDir(File dir) {
+    static void deleteDir(File dir) {
         if (dir == null) return;
         File[] files = dir.listFiles();
         if (files != null) for (File f : files) f.delete();
