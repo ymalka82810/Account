@@ -5,6 +5,23 @@ const BATCH = 500;
 // כל חלונות ההגבלה קצרים מזה, אז רשומה ישנה יותר מיממה כבר לא משפיעה על כלום.
 const THROTTLE_KEEP_MS = 24 * 60 * 60 * 1000;
 
+// מחיקה חד-פעמית של קודים שנשמרו בעבר בטקסט גלוי (pinPlain). להרצה ידנית:
+// npx convex run maintenance:clearPinPlain. אחרי שהחזירה cleared=0 אפשר להסיר את השדה מה-schema.
+export const clearPinPlain = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const people = await ctx.db.query("people").collect();
+    let cleared = 0;
+    for (const p of people) {
+      if (p.pinPlain !== undefined) {
+        await ctx.db.patch(p._id, { pinPlain: undefined });
+        cleared++;
+      }
+    }
+    return { cleared };
+  },
+});
+
 // מוחק כניסות וקודי מייל שפג תוקפם ומוני הגבלת קצב ישנים. רץ פעם ביום (crons.ts).
 // אם יש יותר מ-BATCH רשומות, מתזמן את עצמו שוב כדי לא לחרוג ממגבלות הפעולה.
 export const cleanup = internalMutation({

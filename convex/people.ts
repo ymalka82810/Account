@@ -32,7 +32,7 @@ export const add = mutation({
     const id = await ctx.db.insert("people", { familyId: me.familyId, name: clean, role, avatar: personAvatar, gender });
     if (pin) {
       const pinSalt = randomHex(16);
-      await ctx.db.patch(id, { pinSalt, pinHash: await hashPin(pin, pinSalt), pinPlain: pin });
+      await ctx.db.patch(id, { pinSalt, pinHash: await hashPin(pin, pinSalt) });
     }
     return id;
   },
@@ -58,16 +58,6 @@ export const remove = mutation({
     const rec = await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     for (const r of rec) if (r.from === id || r.to === id) await ctx.db.delete(r._id);
     await ctx.db.delete(id);
-  },
-});
-
-// הורה מציג את הקוד הסודי הנוכחי של ילד/ה (בטקסט גלוי, לכפתור "הצג קוד").
-export const getPin = mutation({
-  args: { token: v.string(), id: v.id("people") },
-  handler: async (ctx, { token, id }) => {
-    const me = await requireParent(ctx, token);
-    const p = await requireSameFamily(ctx, me, id);
-    return p.pinPlain ?? null;
   },
 });
 

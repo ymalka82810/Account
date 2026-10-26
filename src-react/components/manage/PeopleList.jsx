@@ -20,18 +20,8 @@ export default function PeopleList({ people, me, token }) {
   const sheet = useSheet();
   const run = useRun(token);
   const confirm = useConfirm();
-  const [shownPins, setShownPins] = useState({});
   const [roleBusy, setRoleBusy] = useState(null);
   const bioConfirm = useBioConfirm();
-
-  async function togglePin(p) {
-    if (shownPins[p.id] !== undefined) {
-      setShownPins((s) => { const n = { ...s }; delete n[p.id]; return n; });
-      return;
-    }
-    const pin = await call('people:getPin', { token, id: p.id });
-    setShownPins((s) => ({ ...s, [p.id]: pin }));
-  }
 
   // שינוי תפקיד (ילד/ה, נער/ה, הורה) דורש אישור בטביעת אצבע או זיהוי פנים.
   async function changeRole(p, toRole) {
@@ -90,11 +80,6 @@ export default function PeopleList({ people, me, token }) {
               </div>
             )}
             {p.role === 'teen' && p.friendsEnabled && <div className="meta">🤝 מצב חברים פעיל • {p.friendEmail || ''}</div>}
-            {shownPins[p.id] !== undefined && (
-              <div className="meta">
-                {shownPins[p.id] ? <>הקוד הנוכחי: <strong>{shownPins[p.id]}</strong></> : 'הקוד נקבע לפני העדכון ואי אפשר להציג אותו. אפשר לקבוע קוד חדש.'}
-              </div>
-            )}
             {p.id !== me && (
               <div className="meta">
                 תפקיד:{' '}
@@ -117,11 +102,6 @@ export default function PeopleList({ people, me, token }) {
               )}
             </div>
           </div>
-          {p.role !== 'parent' && p.hasPin && (
-            <button className="small" type="button" onClick={() => togglePin(p)}>
-              {shownPins[p.id] !== undefined ? 'הסתר קוד' : 'הצג קוד'}
-            </button>
-          )}
           <button className="small" type="button" onClick={() => sheet.open('קוד סודי ל' + p.name, <ResetPinSheet person={p} />)}>קוד חדש</button>
           {p.role === 'teen' && p.friendsEnabled && (
             <button className="small danger" type="button" onClick={() => {

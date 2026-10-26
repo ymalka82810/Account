@@ -41,9 +41,10 @@ export default defineSchema({
     gender: v.optional(v.union(v.literal("male"), v.literal("female"))),
     // צבעי הניאון שנער/ה בחר/ה למסך שלו/ה. חסר = כחול+סגול.
     palette: v.optional(v.union(v.literal("blue"), v.literal("green"), v.literal("orange"))),
-    // קוד סודי (נשמר גם כגיבוב וגם בטקסט גלוי, כדי שהורה יוכל להציג אותו לילד/ה). אם חסר - הילד/ה בוחר/ת קוד בכניסה הראשונה.
+    // קוד סודי (גיבוב בלבד). אם חסר - הילד/ה בוחר/ת קוד בכניסה הראשונה.
     pinHash: v.optional(v.string()),
     pinSalt: v.optional(v.string()),
+    // הוצא משימוש: כבר לא נכתב. נשאר רק עד שמריצים maintenance:clearPinPlain, ואז מסירים.
     pinPlain: v.optional(v.string()),
     failedAttempts: v.optional(v.number()),
     lockedUntil: v.optional(v.number()),

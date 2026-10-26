@@ -29,3 +29,7 @@ jobs:
       - run: npx convex deploy --yes --cmd-url-env-var-name CONVEX_URL --cmd 'echo "::notice title=convex-url::$CONVEX_URL"'
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+      # זמני: מוחק קודים שנשמרו בטקסט גלוי (pinPlain). להסיר ביחד עם השדה מה-schema אחרי ריצה אחת.
+      - run: npx convex run maintenance:clearPinPlain
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}

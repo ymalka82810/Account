@@ -25,7 +25,7 @@ export async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: stri
   await ctx.db.patch(personId, {
     pinSalt,
     pinHash: await hashPin(pin, pinSalt),
-    pinPlain: pin,
+    pinPlain: undefined,
     failedAttempts: 0,
     lockedUntil: undefined,
     lockLevel: 0,
