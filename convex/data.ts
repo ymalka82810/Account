@@ -51,6 +51,11 @@ export const get = query({
         friendsRequested: me.role === "parent" ? !!p.friendsRequested : false,
         friendEmail: me.role === "parent" ? p.friendEmail ?? null : null,
       })),
+      // בקשות הצטרפות שממתינות לאישור. להורים בלבד.
+      joinRequests: me.role === "parent"
+        ? (await ctx.db.query("joinRequests").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect())
+            .map((r) => ({ id: r._id, name: r.name, avatar: r.avatar ?? null, createdAt: r.createdAt }))
+        : [],
       entries: entries.map((e) => ({
         id: e._id, kind: e.kind, from: e.from, to: e.to, amount: e.amount, note: e.note,
         currency: e.currency ?? "ILS", fx: e.fx ?? null,

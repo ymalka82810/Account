@@ -9,15 +9,30 @@ export default function Join({ current }) {
   const [avatar, setAvatar] = useState(() => randomAvatar());
   const [error, setError] = useState('');
   const [busy, run] = useBusy();
+  const [sent, setSent] = useState(false);
   const set = (k) => (e) => setV((x) => ({ ...x, [k]: e.target.value }));
   const submit = (ev) => {
     ev.preventDefault();
     setError('');
     run(async () => {
       const err = await joinFamily({ ...v, avatar });
-      if (err) setError(err); else setV({ name: '', pin: '' });
+      if (err && err.pending) setSent(true);
+      else if (err) setError(err);
+      setV({ name: '', pin: '' });
     });
   };
+  if (sent) {
+    return (
+      <In screen="join" current={current}>
+        <div className="card-narrow">
+          <div className="big-emoji" aria-hidden="true">⏳</div>
+          <h1>הבקשה נשלחה</h1>
+          <p className="hint">ממתינים לאישור הורה{fam ? ` ב${fam.name}` : ''}. אחרי שהורה יאשר, בוחרים את השם שלך במסך הכניסה ומקלידים את הקוד הסודי שבחרת.</p>
+          <button className="primary" type="button" onClick={() => goView('welcome')}>הבנתי</button>
+        </div>
+      </In>
+    );
+  }
   return (
     <In screen="join" current={current}>
       <button className="ghost back" type="button" onClick={() => goView('welcome')}>→ חזרה</button>
@@ -25,7 +40,7 @@ export default function Join({ current }) {
         <div className="big-emoji" aria-hidden="true">👋</div>
         <h1>מצטרפים לקופה</h1>
         <p className="hint">
-          {fam && `מצטרפים לקופה של ${fam.name}. הורה במשפחה יקבע אם את/ה ילד/ה, נער/ה או הורה.`}
+          {fam && `מצטרפים לקופה של ${fam.name}. הורה במשפחה צריך לאשר את ההצטרפות ויקבע אם את/ה ילד/ה, נער/ה או הורה.`}
         </p>
         <form className="form" autoComplete="off" onSubmit={submit}>
           <label className="field"><span>איך קוראים לך?</span>

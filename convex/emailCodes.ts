@@ -4,7 +4,7 @@ import { internal } from "./_generated/api";
 import { Doc } from "./_generated/dataModel";
 import {
   EMAIL_CODE_MAX_ATTEMPTS, EMAIL_CODE_TTL_MS, EMAIL_SEND_LIMIT, EMAIL_SEND_WINDOW_MS,
-  generateEmailCode, hashPin, isThrottled, noteHit, randomHex,
+  generateEmailCode, hashPin, isThrottled, noteHit, randomHex, verifyPin,
 } from "./lib";
 
 export type CodePurpose = "verify" | "pinChange" | "pinReset" | "childReset" | "emailChange";
@@ -40,7 +40,7 @@ export async function verifyCode(ctx: MutationCtx, personId: Doc<"people">["_id"
   const row = rows.find((r) => r.purpose === purpose);
   if (!row) return null;
   if (row.expiresAt < Date.now() || row.attempts >= EMAIL_CODE_MAX_ATTEMPTS) return null;
-  if (code.length !== 6 || (await hashPin(code, row.salt)) !== row.codeHash) {
+  if (code.length !== 6 || !(await verifyPin(code, row.salt, row.codeHash))) {
     await ctx.db.patch(row._id, { attempts: row.attempts + 1 });
     return null;
   }

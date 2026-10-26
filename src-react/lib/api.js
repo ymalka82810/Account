@@ -15,5 +15,5 @@ export function deviceId() {
   } catch (e) { return undefined; }
 }
 
-const AUTH_CALLS = ['auth:enter', 'auth:join', 'auth:login', 'auth:claimProfile', 'emailAuth:requestResetCode', 'emailAuth:resetWithCode'];
+const AUTH_CALLS = ['auth:enter', 'auth:join', 'auth:createFamily','auth:login', 'auth:claimProfile', 'emailAuth:requestResetCode', 'emailAuth:resetWithCode'];
 export const call = (name, args) => client.mutation(name, AUTH_CALLS.includes(name) ? { ...args, device: deviceId() } : args);

@@ -3,7 +3,7 @@ import { v, ConvexError } from "convex/values";
 import { internal } from "./_generated/api";
 import { Doc, Id } from "./_generated/dataModel";
 import { concat, derToRaw } from "./der";
-import { Member, hashPin, randomHex, registerPinFail, requireParent } from "./lib";
+import { Member, randomHex, registerPinFail, requireParent, upgradePinHash, verifyPin } from "./lib";
 
 // אימות ביומטרי (טביעת אצבע / זיהוי פנים) לפעולות רגישות של הורים, כמו שינוי תפקיד.
 //
@@ -115,12 +115,13 @@ export const registerStart = mutation({
     if (!me.pinHash || !me.pinSalt) return { ok: false as const, reason: "nopin" as const };
     const now = Date.now();
     if (me.lockedUntil && me.lockedUntil > now) return { ok: false as const, reason: "locked" as const };
-    if ((await hashPin(myPin, me.pinSalt)) !== me.pinHash) {
+    if (!(await verifyPin(myPin, me.pinSalt, me.pinHash))) {
       const r = await registerPinFail(ctx, me);
       if (r.locked) await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: me._id });
       return { ok: false as const, reason: "wrong" as const };
     }
     await ctx.db.patch(me._id, { failedAttempts: 0 });
+    await upgradePinHash(ctx, me, myPin);
     return { ok: true as const, challenge: await newChallenge(ctx, me._id, "register"), userId: me._id, name: me.name };
   },
 });

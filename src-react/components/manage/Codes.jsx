@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useQuery } from 'convex/react';
 import { call } from '../../lib/api.js';
 import { toast, errMsg, prettyCode } from '../../lib/helpers.js';
 import { CODE_KEY } from '../../state/state.js';
@@ -74,6 +75,14 @@ export default function Codes({ data, token }) {
     } catch (e) { toast(errMsg(e)); }
   }
 
+  const devices = useQuery('auth:listDevices', { token });
+  const fmtDay = (t) => new Date(t).toLocaleDateString('he-IL');
+  async function revoke(id) {
+    if (!confirm('לנתק את המכשיר? הוא יצטרך להזין שוב את קוד ההצטרפות.')) return;
+    try { await call('auth:revokeDevice', { token, deviceId: id }); toast('המכשיר נותק ✅'); }
+    catch (e) { toast(errMsg(e)); }
+  }
+
   return (
     <div className="codes">
       <div className="codeblock">
@@ -94,6 +103,18 @@ export default function Codes({ data, token }) {
           <button className="small" type="button" onClick={rotate} disabled={busy}>החלפת קוד</button>
         </div>
       </div>
+      {devices?.length > 0 && (
+        <div className="codeblock">
+          <div className="meta">מכשירים מחוברים</div>
+          <p className="hint">מכשירים ששמרו את המשפחה. כרטיס שלא בשימוש 180 יום פג מעצמו.</p>
+          {devices.map((d) => (
+            <div className="tools" key={d.id}>
+              <span>{d.label || 'מכשיר'} · נראה לאחרונה {fmtDay(d.lastUsedAt ?? d.createdAt)}</span>
+              <button className="small" type="button" onClick={() => revoke(d.id)}>ניתוק</button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -16,7 +16,7 @@ const GENDER_SET_OPTIONS = GENDER_OPTIONS.filter((o) => o.value);
 const GENDER_PLACEHOLDER = [{ value: '', label: 'קביעת צורת פנייה…' }, ...GENDER_SET_OPTIONS];
 
 // בני המשפחה: קוד חדש, תפקיד (ילד/נער/הורה, באישור ביומטרי), כיבוי מצב חברים והסרה.
-export default function PeopleList({ people, me, token }) {
+export default function PeopleList({ people, me, token, joinRequests = [] }) {
   const sheet = useSheet();
   const run = useRun(token);
   const confirm = useConfirm();
@@ -65,6 +65,16 @@ export default function PeopleList({ people, me, token }) {
 
   return (
     <div id="peopleList">
+      {joinRequests.map((r) => (
+        <div className="person" key={r.id}>
+          {r.avatar && <span className="avatar-md" aria-hidden="true">{r.avatar}</span>}
+          <div className="text">
+            {r.name} <span className="meta">⏳ מבקש/ת להצטרף</span>
+          </div>
+          <button className="small" type="button" onClick={() => run('auth:approveJoin', { requestId: r.id }, `${r.name} אושר/ה ✅`)}>אישור</button>
+          <button className="small danger" type="button" onClick={() => run('auth:rejectJoin', { requestId: r.id }, 'הבקשה נדחתה')}>דחייה</button>
+        </div>
+      ))}
       {people.map((p) => (
         <div className="person" key={p.id}>
           {p.avatar && <span className="avatar-md" aria-hidden="true">{p.avatar}</span>}
@@ -77,6 +87,7 @@ export default function PeopleList({ people, me, token }) {
               <div className="meta" style={{ color: '#b45309' }}>
                 ⚠️ הקוד של {p.name} ננעל {p.lockAlert.count === 1 ? 'פעם אחת' : p.lockAlert.count + ' פעמים'} אחרי ניסיונות שגויים.
                 {' '}{g(p.gender, 'אם זה לא הוא', 'אם זה לא היא', 'אם זה לא הוא/היא')}, כדאי לקבוע קוד חדש.
+                {' '}<button className="small" type="button" onClick={() => run('auth:unlockPerson', { personId: p.id }, 'הנעילה שוחררה ✅')}>שחרור נעילה</button>
               </div>
             )}
             {p.role === 'teen' && p.friendsEnabled && <div className="meta">🤝 מצב חברים פעיל • {p.friendEmail || ''}</div>}

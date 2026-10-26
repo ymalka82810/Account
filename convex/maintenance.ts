@@ -46,7 +46,14 @@ export const cleanup = internalMutation({
       .take(BATCH);
     for (const c of codes) await ctx.db.delete(c._id);
 
-    if (sessions.length === BATCH || throttles.length === BATCH || codes.length === BATCH) {
+    // gt(0) משאיר בחוץ כרטיסים ישנים בלי expiresAt (ב-Convex undefined קטן מכל מספר).
+    const passes = await ctx.db
+      .query("devicePasses")
+      .withIndex("by_expires", (q) => q.gt("expiresAt", 0).lt("expiresAt", now))
+      .take(BATCH);
+    for (const p of passes) await ctx.db.delete(p._id);
+
+    if (sessions.length === BATCH || throttles.length === BATCH || codes.length === BATCH || passes.length === BATCH) {
       await ctx.scheduler.runAfter(0, internal.maintenance.cleanup, {});
     }
   },

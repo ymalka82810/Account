@@ -6,8 +6,10 @@ import { internal } from "./_generated/api";
 import { verifyCode } from "./emailCodes";
 import {
   CODE_FAIL_LIMIT, CODE_FAIL_WINDOW_MS, CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS, MAX_FAMILY_SIZE, SESSION_MS,
-  adoptLegacy, avatarOf, cleanFamilyName, cleanName, createFamilyDoc, deviceKey, findFamilyByCode, getSessionPerson, hashPin, isPass, issuePass,
+  adoptLegacy, avatarOf, cleanFamilyName, cleanName, createFamilyDoc, deviceKey, findFamilyByCode, getSessionPerson, hashPin, isPass, issuePass, passExpiry, PASS_TTL_MS,
   hashToken, isThrottled, legacyPeople, noteHit, randomHex, registerPinFail, requireAdultBirthDate, requireSameFamily, requireParent, validPin,
+  upgradePinHash, verifyPin, trustKeyOf, hitCount, guessKeys, MAX_TRUSTED_DEVICES,
+  GUESS_DEVICE_LIMIT, GUESS_DEVICE_WINDOW_MS, GUESS_PERSON_LIMIT, GUESS_PERSON_WINDOW_MS,
 } from "./lib";
 
 export async function openSession(ctx: MutationCtx, personId: Id<"people">): Promise<string> {
@@ -20,9 +22,12 @@ export async function openSession(ctx: MutationCtx, personId: Id<"people">): Pro
   return token;
 }
 
-export async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: string) {
+// device: המכשיר שקבע את הקוד הופך למהימן; קביעה על ידי הורה (בלי device) מנקה את הרשימה.
+export async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: string, device?: string) {
   const pinSalt = randomHex(16);
+  const trustKey = await trustKeyOf(personId, device);
   await ctx.db.patch(personId, {
+    trustedDevices: trustKey ? [trustKey] : [],
     pinSalt,
     pinHash: await hashPin(pin, pinSalt),
     pinPlain: undefined,
@@ -56,17 +61,21 @@ export const legacyRoster = query({
 // בדיקת קוד משפחה ורשימת בני המשפחה למסך הכניסה.
 // remember: המכשיר רוצה לזכור את המשפחה. אז מקבלים כרטיס כניסה (loginCode) ולא את הקוד עצמו.
 export const enter = mutation({
-  args: { code: v.string(), device: v.optional(v.string()), remember: v.optional(v.boolean()) },
-  handler: async (ctx, { code, device, remember }) => {
+  args: { code: v.string(), device: v.optional(v.string()), remember: v.optional(v.boolean()), label: v.optional(v.string()) },
+  handler: async (ctx, { code, device, remember, label }) => {
     if (await codeThrottled(ctx, device)) return { ok: false as const, reason: "throttled" as const };
     const found = await findFamilyByCode(ctx, code);
     if (!found) return await failCode(ctx, device);
+    if (found.passId) {
+      const now = Date.now();
+      await ctx.db.patch(found.passId, { lastUsedAt: now, expiresAt: now + PASS_TTL_MS });
+    }
     const people = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", found.family._id)).collect();
     return {
       ok: true as const,
       familyName: found.family.name,
       // מה שנשמר במכשיר לכניסות הבאות: כרטיס כניסה, אף פעם לא קוד ההצטרפות.
-      loginCode: found.passId ? code : remember ? await issuePass(ctx, found.family._id) : undefined,
+      loginCode: found.passId ? code : remember ? await issuePass(ctx, found.family._id, label) : undefined,
       people: people.map(publicPerson),
     };
   },
@@ -81,8 +90,9 @@ export const createFamily = mutation({
     avatar: v.optional(v.string()), gender: v.optional(v.union(v.literal("male"), v.literal("female"))),
     // מדינת המגורים (חסרה = לא ברשימה) והמטבע שלה, כפי שנבחרו בהקמה
     country: v.optional(v.string()), currency: v.optional(v.string()),
+    device: v.optional(v.string()),
   },
-  handler: async (ctx, { familyName, name, pin, birthDate, avatar, gender, country, currency }) => {
+  handler: async (ctx, { familyName, name, pin, birthDate, avatar, gender, country, currency, device }) => {
     if (await isThrottled(ctx, "create-family", CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS)) {
       throw new ConvexError("יותר מדי משפחות חדשות כרגע. נסו שוב בעוד כמה דקות");
     }
@@ -95,7 +105,7 @@ export const createFamily = mutation({
     const familyId = await createFamilyDoc(ctx, family);
     if (currency) await ctx.db.patch(familyId, { currency, country: country || undefined });
     const id = await ctx.db.insert("people", { familyId, name: personName, role: "parent", avatar: avatar?.slice(0, 8), gender, birthDate: birth });
-    await setPin(ctx, id, pin);
+    await setPin(ctx, id, pin, device);
     await noteHit(ctx, "create-family", CREATE_FAMILY_WINDOW_MS);
     return { token: await openSession(ctx, id) };
   },
@@ -119,11 +129,45 @@ export const join = mutation({
     const familyId = found.family._id;
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
     if (members.length >= MAX_FAMILY_SIZE) throw new ConvexError("המשפחה מלאה");
-    if (members.some((p) => p.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה. בחרו אותו ברשימה, או שנו את השם");
+    const requests = await ctx.db.query("joinRequests").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
+    if (requests.length >= MAX_JOIN_REQUESTS) throw new ConvexError("יש יותר מדי בקשות הצטרפות ממתינות. בקשו מההורים לטפל בהן");
+    if (members.some((p) => p.name === clean) || requests.some((r) => r.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה. בחרו אותו ברשימה, או שנו את השם");
     void gender; // נשאר בחתימה בשביל גרסאות ישנות של האפליקציה, ולא נשמר.
-    const id = await ctx.db.insert("people", { familyId, name: clean, role: "child", avatar: avatar?.slice(0, 8) });
-    await setPin(ctx, id, pin);
-    return { ok: true as const, token: await openSession(ctx, id) };
+    // לא נכנסים מיד: הבקשה ממתינה עד שהורה מאשר (auth:approveJoin).
+    const pinSalt = randomHex(16);
+    await ctx.db.insert("joinRequests", {
+      familyId, name: clean, avatar: avatar?.slice(0, 8), device, pinSalt, pinHash: await hashPin(pin, pinSalt), createdAt: Date.now(),
+    });
+    return { ok: true as const, pending: true as const };
+  },
+});
+
+const MAX_JOIN_REQUESTS = 10;
+
+// הורה מאשר בקשת הצטרפות: נוצר ילד/ה עם הקוד הסודי שהמצטרף/ת בחר/ה, ואז נכנסים כרגיל.
+export const approveJoin = mutation({
+  args: { token: v.string(), requestId: v.id("joinRequests") },
+  handler: async (ctx, { token, requestId }) => {
+    const me = await requireParent(ctx, token);
+    const r = await ctx.db.get(requestId);
+    if (!r || r.familyId !== me.familyId) throw new ConvexError("הבקשה לא קיימת יותר");
+    const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
+    if (members.length >= MAX_FAMILY_SIZE) throw new ConvexError("המשפחה מלאה");
+    if (members.some((p) => p.name === r.name)) throw new ConvexError("כבר יש מישהו בשם הזה. דחו את הבקשה");
+    const id = await ctx.db.insert("people", { familyId: r.familyId, name: r.name, role: "child", avatar: r.avatar });
+    const trustKey = await trustKeyOf(id, r.device);
+    await ctx.db.patch(id, { pinSalt: r.pinSalt, pinHash: r.pinHash, trustedDevices: trustKey ? [trustKey] : [] });
+    await ctx.db.delete(requestId);
+  },
+});
+
+export const rejectJoin = mutation({
+  args: { token: v.string(), requestId: v.id("joinRequests") },
+  handler: async (ctx, { token, requestId }) => {
+    const me = await requireParent(ctx, token);
+    const r = await ctx.db.get(requestId);
+    if (!r || r.familyId !== me.familyId) return;
+    await ctx.db.delete(requestId);
   },
 });
 
@@ -145,7 +189,25 @@ export const login = mutation({
     if (p.lockedUntil && p.lockedUntil > now) {
       return { ok: false as const, reason: "locked" as const, waitSeconds: Math.ceil((p.lockedUntil - now) / 1000) };
     }
-    if ((await hashPin(pin, p.pinSalt)) !== p.pinHash) {
+    // מכשיר מהימן: כשלונות נועלים את האדם (נעילה מדורגת). מכשיר זר: הגבלה נפרדת שלא נועלת
+    // את האדם, כדי שמי שמחזיק קוד משפחה לא יוכל לנעול ילד מול המכשיר שלו.
+    const trustKey = await trustKeyOf(p._id, device);
+    const trusted = !!trustKey && (p.trustedDevices ?? []).includes(trustKey);
+    const keys = guessKeys(p._id, device);
+    if (!trusted && (
+      (await hitCount(ctx, keys.person, GUESS_PERSON_WINDOW_MS)) >= GUESS_PERSON_LIMIT
+      || (await hitCount(ctx, keys.device, GUESS_DEVICE_WINDOW_MS)) >= GUESS_DEVICE_LIMIT
+    )) {
+      return { ok: false as const, reason: "locked" as const, waitSeconds: GUESS_DEVICE_WINDOW_MS / 1000 };
+    }
+    if (!(await verifyPin(pin, p.pinSalt, p.pinHash))) {
+      if (!trusted) {
+        await noteHit(ctx, keys.person, GUESS_PERSON_WINDOW_MS);
+        await noteHit(ctx, keys.device, GUESS_DEVICE_WINDOW_MS);
+        const left = GUESS_DEVICE_LIMIT - (await hitCount(ctx, keys.device, GUESS_DEVICE_WINDOW_MS));
+        if (left <= 0) return { ok: false as const, reason: "locked" as const, waitSeconds: GUESS_DEVICE_WINDOW_MS / 1000 };
+        return { ok: false as const, reason: "wrong" as const, left };
+      }
       const r = await registerPinFail(ctx, p);
       if (r.locked) {
         await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: p._id });
@@ -154,9 +216,25 @@ export const login = mutation({
       return { ok: false as const, reason: "wrong" as const, left: r.left };
     }
     // כניסה מוצלחת מאפסת את הרמה. lockCount/lastLockAt נשארים כדי שההורה יראה התראה.
-    await ctx.db.patch(personId, { failedAttempts: 0, lockedUntil: undefined, lockLevel: 0 });
+    await ctx.db.patch(personId, {
+      failedAttempts: 0, lockedUntil: undefined, lockLevel: 0,
+      ...(trustKey && !trusted ? { trustedDevices: [...(p.trustedDevices ?? []), trustKey].slice(-MAX_TRUSTED_DEVICES) } : {}),
+    });
+    await upgradePinHash(ctx, p, pin);
     if (!p.familyId) await adoptLegacy(ctx);
     return { ok: true as const, token: await openSession(ctx, personId) };
+  },
+});
+
+// הורה משחרר נעילה של מישהו מהמשפחה (למשל אחרי ניסיונות שגויים של זרים).
+export const unlockPerson = mutation({
+  args: { token: v.string(), personId: v.id("people") },
+  handler: async (ctx, { token, personId }) => {
+    const me = await requireParent(ctx, token);
+    await requireSameFamily(ctx, me, personId);
+    await ctx.db.patch(personId, { failedAttempts: 0, lockedUntil: undefined, lockLevel: 0, lockCount: 0, lastLockAt: undefined });
+    const row = await ctx.db.query("throttles").withIndex("by_key", (q) => q.eq("key", guessKeys(personId, undefined).person)).first();
+    if (row) await ctx.db.delete(row._id);
   },
 });
 
@@ -178,7 +256,7 @@ export const claimProfile = mutation({
     } else if (p.role !== "parent") {
       return { ok: false as const, reason: "legacy" as const };
     }
-    await setPin(ctx, personId, pin);
+    await setPin(ctx, personId, pin, device);
     if (!p.familyId) await adoptLegacy(ctx);
     return { ok: true as const, token: await openSession(ctx, personId) };
   },
@@ -202,6 +280,31 @@ export const deviceCard = mutation({
     const me = await getSessionPerson(ctx, token);
     if (!me) return { ok: false as const };
     return { ok: true as const, loginCode: await issuePass(ctx, me.familyId) };
+  },
+});
+
+// רשימת המכשירים שזוכרים את המשפחה (להורים). הגיבוב עצמו לא נחשף, רק מזהה הרשומה.
+export const listDevices = query({
+  args: { token: v.string() },
+  handler: async (ctx, { token }) => {
+    const me = await requireParent(ctx, token);
+    const now = Date.now();
+    const rows = await ctx.db.query("devicePasses").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
+    return rows
+      .filter((r) => passExpiry(r) >= now)
+      .map((r) => ({ id: r._id, label: r.label ?? null, createdAt: r.createdAt, lastUsedAt: r.lastUsedAt ?? null, expiresAt: passExpiry(r) }))
+      .sort((a, b) => (b.lastUsedAt ?? b.createdAt) - (a.lastUsedAt ?? a.createdAt));
+  },
+});
+
+// הורה מבטל מכשיר מסוים: הכרטיס שלו נמחק ולא פותח יותר את מסך הכניסה.
+export const revokeDevice = mutation({
+  args: { token: v.string(), deviceId: v.id("devicePasses") },
+  handler: async (ctx, { token, deviceId }) => {
+    const me = await requireParent(ctx, token);
+    const row = await ctx.db.get(deviceId);
+    if (!row || row.familyId !== me.familyId) throw new ConvexError("מכשיר לא קיים");
+    await ctx.db.delete(deviceId);
   },
 });
 
@@ -238,7 +341,7 @@ export const changeMyPin = mutation({
     if (p.emailVerified) return { ok: false as const, reason: "useEmail" as const };
     const now = Date.now();
     if (p.lockedUntil && p.lockedUntil > now) return { ok: false as const, reason: "locked" as const };
-    if ((await hashPin(oldPin, p.pinSalt)) !== p.pinHash) {
+    if (!(await verifyPin(oldPin, p.pinSalt, p.pinHash))) {
       const r = await registerPinFail(ctx, p);
       if (r.locked) await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: p._id });
       return { ok: false as const, reason: "wrong" as const };
@@ -264,11 +367,12 @@ export const resetPin = mutation({
       if (!myPin) return { ok: false as const, reason: "needMyPin" as const };
       const now = Date.now();
       if (me.lockedUntil && me.lockedUntil > now) return { ok: false as const, reason: "locked" as const };
-      if ((await hashPin(myPin, me.pinSalt)) !== me.pinHash) {
+      if (!(await verifyPin(myPin, me.pinSalt, me.pinHash))) {
         const r = await registerPinFail(ctx, me);
         if (r.locked) await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: me._id });
         return { ok: false as const, reason: "wrongMyPin" as const };
       }
+      await upgradePinHash(ctx, me, myPin);
     }
     const target = await ctx.db.get(personId);
     if (!pin && target?.role === "parent") throw new ConvexError("להורה צריך לקבוע קוד (אי אפשר לאפס שיבחר לבד)");

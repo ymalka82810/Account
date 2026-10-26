@@ -15,7 +15,7 @@ export default function ManageTab({ data, token }) {
       <Legacy token={token} />
 
       <Collapsible name="manage-tiles" title={data.family?.name ? `בני ${data.family.name}` : 'בני המשפחה'} defaultOpen>
-        <PeopleList people={data.people} me={me} token={token} />
+        <PeopleList people={data.people} me={me} token={token} joinRequests={data.joinRequests} />
       </Collapsible>
 
       <Collapsible name="manage-tiles" title="הגדרות המשפחה">

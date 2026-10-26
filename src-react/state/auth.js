@@ -6,7 +6,9 @@ import { call } from '../lib/api.js';
 
 // בודק קוד מול השרת. מחזיר true אם נכנסנו למשפחה.
 export async function enterFamily(code, remember) {
-  const res = await call('auth:enter', { code, remember: !!remember });
+  // התווית עוזרת להורה לזהות את המכשיר ברשימת "מכשירים מחוברים".
+  const label = remember ? (navigator.userAgentData?.platform || navigator.platform || 'מכשיר').slice(0, 40) : undefined;
+  const res = await call('auth:enter', { code, remember: !!remember, label });
   if (!res.ok) return res.reason;
   state.fam = { code, name: res.familyName, people: res.people };
   // שומרים במכשיר כרטיס כניסה (לא את קוד ההצטרפות), לכניסות הבאות.
@@ -83,6 +85,8 @@ export async function joinFamily({ name, avatar, pin, gender }) {
       if (res.reason === 'code') leaveFamily();
       return res.reason === 'throttled' ? 'יותר מדי ניסיונות. נסו שוב עוד דקה.' : 'הקוד כבר לא תקף. בקשו קוד חדש מההורים.';
     }
+    // הבקשה ממתינה לאישור הורה. אין סשן עד שהורה מאשר, ואז נכנסים דרך מסך הבחירה עם הקוד שנבחר.
+    if (res.pending) return { pending: true };
     state.view = 'welcome';
     setToken(res.token);
     return '';

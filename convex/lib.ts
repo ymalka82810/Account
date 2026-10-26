@@ -27,10 +27,56 @@ export function randomHex(bytes: number): string {
   return [...a].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-export async function hashPin(pin: string, salt: string): Promise<string> {
+// גיבוב קוד סודי: PBKDF2-SHA256 עם 100K סבבים. הקידומת מציינת את הגרסה:
+//   v2:  בלי pepper.   v2p:  עם pepper (משתנה הסביבה PIN_PEPPER, שלא נשמר במסד).
+// בלי קידומת = הגיבוב הישן (SHA-256 בלולאה של 2000), שמשודרג בכניסה מוצלחת.
+const PBKDF2_ITERATIONS = 100_000;
+const pepper = () => process.env.PIN_PEPPER ?? "";
+
+async function pbkdf2Hex(pin: string, salt: string, pep: string): Promise<string> {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey("raw", enc.encode(pep + ":" + pin), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits(
+    { name: "PBKDF2", hash: "SHA-256", salt: enc.encode(salt), iterations: PBKDF2_ITERATIONS }, key, 256,
+  );
+  return toHex(bits);
+}
+
+async function legacyHashPin(pin: string, salt: string): Promise<string> {
   let h = await sha256(salt + ":" + pin);
   for (let i = 0; i < 2000; i++) h = await sha256(toHex(h) + salt);
   return toHex(h);
+}
+
+function safeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+export async function hashPin(pin: string, salt: string): Promise<string> {
+  const pep = pepper();
+  return (pep ? "v2p:" : "v2:") + (await pbkdf2Hex(pin, salt, pep));
+}
+
+export async function verifyPin(pin: string, salt: string, stored: string): Promise<boolean> {
+  if (stored.startsWith("v2p:")) {
+    const pep = pepper();
+    // pepper שנעלם מהסביבה: אי אפשר לאמת, ולכן נכשלים (ולא מתחזים ל"אין pepper").
+    return pep !== "" && safeEqual(stored.slice(4), await pbkdf2Hex(pin, salt, pep));
+  }
+  if (stored.startsWith("v2:")) return safeEqual(stored.slice(3), await pbkdf2Hex(pin, salt, ""));
+  return safeEqual(stored, await legacyHashPin(pin, salt));
+}
+
+// גיבוב ישן, או כזה שאינו תואם למצב ה-pepper הנוכחי: כדאי לגבב מחדש אחרי אימות מוצלח.
+export const pinNeedsUpgrade = (stored: string) => !stored.startsWith(pepper() ? "v2p:" : "v2:");
+
+// אחרי אימות מוצלח של הקוד: משדרג את הגיבוב השמור לפורמט הנוכחי.
+export async function upgradePinHash(ctx: MutationCtx, p: Doc<"people">, pin: string) {
+  if (!p.pinHash || !p.pinSalt || !pinNeedsUpgrade(p.pinHash)) return;
+  await ctx.db.patch(p._id, { pinHash: await hashPin(pin, p.pinSalt) });
 }
 
 export async function hashToken(token: string): Promise<string> {
@@ -110,10 +156,18 @@ function randomCode(): string {
 // ---------- כרטיסי כניסה למכשיר ----------
 export const PASS_PREFIX = "dev_";
 export const isPass = (raw: string) => raw.startsWith(PASS_PREFIX);
+// כרטיס פג אחרי PASS_TTL_MS בלי שימוש. כל כניסה למסך המשפחה מחדשת אותו.
+// כרטיסים ישנים בלי expiresAt נחשבים לפי createdAt.
+export const PASS_TTL_MS = 180 * 24 * 60 * 60 * 1000;
+export const passExpiry = (p: Doc<"devicePasses">) => p.expiresAt ?? p.createdAt + PASS_TTL_MS;
 
-export async function issuePass(ctx: MutationCtx, familyId: Id<"families">): Promise<string> {
+export async function issuePass(ctx: MutationCtx, familyId: Id<"families">, label?: string): Promise<string> {
   const pass = PASS_PREFIX + randomHex(32);
-  await ctx.db.insert("devicePasses", { familyId, passHash: await hashToken(pass), createdAt: Date.now() });
+  const now = Date.now();
+  await ctx.db.insert("devicePasses", {
+    familyId, passHash: await hashToken(pass), createdAt: now, expiresAt: now + PASS_TTL_MS,
+    label: label?.trim().slice(0, 40) || undefined,
+  });
   return pass;
 }
 
@@ -133,7 +187,7 @@ export async function findFamilyByCode(
     if (rawCode.length > 100) return null;
     const passHash = await hashToken(rawCode);
     const pass = await ctx.db.query("devicePasses").withIndex("by_hash", (q) => q.eq("passHash", passHash)).first();
-    if (!pass) return null;
+    if (!pass || passExpiry(pass) < Date.now()) return null;
     const family = await ctx.db.get(pass.familyId);
     return family ? { family, passId: pass._id } : null;
   }
@@ -319,3 +373,30 @@ export function maskEmail(email: string): string {
   const [name, domain] = email.split("@");
   return (name[0] ?? "") + "***@" + (domain ?? "");
 }
+
+// ---------- מכשירים מהימנים וניחושים ממכשירים זרים ----------
+// הנעילה המדורגת של אדם נספרת רק מכשלונות ממכשיר מהימן שלו (מכשיר שנכנס ממנו בהצלחה
+// או שהקים/הצטרף ממנו). ניחושים ממכשיר אחר לא נועלים את האדם: הם מוגבלים לפי
+// (אדם, מכשיר) ובסך הכול לאדם, ולכן מי שמחזיק קוד משפחה לא יכול לנעול ילד מול המכשיר שלו.
+export const MAX_TRUSTED_DEVICES = 5;
+export const GUESS_DEVICE_LIMIT = 5;
+export const GUESS_DEVICE_WINDOW_MS = 10 * 60 * 1000;
+export const GUESS_PERSON_LIMIT = 20;
+export const GUESS_PERSON_WINDOW_MS = 60 * 60 * 1000;
+
+export const cleanDeviceId = (device: string | undefined) => (device ?? "").replace(/[^A-Za-z0-9]/g, "").slice(0, 40);
+
+export async function trustKeyOf(personId: Id<"people">, device: string | undefined): Promise<string | null> {
+  const d = cleanDeviceId(device);
+  return d ? toHex(await sha256("trust:" + personId + ":" + d)) : null;
+}
+
+export async function hitCount(ctx: QueryCtx, key: string, windowMs: number): Promise<number> {
+  const row = await ctx.db.query("throttles").withIndex("by_key", (q) => q.eq("key", key)).first();
+  return row && Date.now() - row.windowStart <= windowMs ? row.count : 0;
+}
+
+export const guessKeys = (personId: Id<"people">, device: string | undefined) => ({
+  person: "guess:" + personId,
+  device: "guess:" + personId + ":" + (cleanDeviceId(device) || "anon"),
+});

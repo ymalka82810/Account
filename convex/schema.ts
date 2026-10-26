@@ -25,9 +25,15 @@ export default defineSchema({
     familyId: v.id("families"),
     passHash: v.string(),
     createdAt: v.number(),
+    // חסר = כרטיס ישן: פג 180 יום אחרי createdAt. כל כניסה מחדשת (auth:enter).
+    expiresAt: v.optional(v.number()),
+    lastUsedAt: v.optional(v.number()),
+    // שם שהמכשיר נתן לעצמו, כדי שהורה יזהה אותו ברשימה.
+    label: v.optional(v.string()),
   })
     .index("by_hash", ["passHash"])
-    .index("by_family", ["familyId"]),
+    .index("by_family", ["familyId"])
+    .index("by_expires", ["expiresAt"]),
 
   people: defineTable({
     // חסר רק אצל נתונים מהגרסה של משפחה אחת. הם עוברים למשפחה בכניסה הראשונה של הורה.
@@ -48,6 +54,8 @@ export default defineSchema({
     pinPlain: v.optional(v.string()),
     failedAttempts: v.optional(v.number()),
     lockedUntil: v.optional(v.number()),
+    // גיבובי מכשירים מהימנים (עד 5). רק כשלונות מהם נועלים את האדם; ראו lib.ts.
+    trustedDevices: v.optional(v.array(v.string())),
     // נעילה מדורגת: רמה עולה בכל נעילה (דקה, 5 דקות, שעה...). מתאפסת בכניסה מוצלחת.
     lockLevel: v.optional(v.number()),
     // מייל להורים בלבד (לשינוי/איפוס קוד ולהתראות נעילה). pendingEmail = ממתין לאימות.
@@ -67,6 +75,17 @@ export default defineSchema({
   })
     .index("by_family", ["familyId"])
     .index("by_friendEmail", ["friendEmail"]),
+
+  // בקשות הצטרפות שממתינות לאישור הורה. רק אחרי האישור נוצר אדם במשפחה (עם הקוד הסודי שבחר/ה).
+  joinRequests: defineTable({
+    familyId: v.id("families"),
+    name: v.string(),
+    avatar: v.optional(v.string()),
+    device: v.optional(v.string()),
+    pinHash: v.string(),
+    pinSalt: v.string(),
+    createdAt: v.number(),
+  }).index("by_family", ["familyId"]),
 
   sessions: defineTable({
     personId: v.id("people"),
