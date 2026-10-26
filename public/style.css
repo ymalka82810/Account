@@ -1082,12 +1082,13 @@ body[data-theme] .sum .num, body:not([data-theme]) .sum .num {
 body[data-theme] .sum .lbl, body:not([data-theme]) .sum .lbl { font-weight: 800; }
 
 /* גלגל ההגדרות בפנקס: מסתובב במקום ומושך את ההגדרות פנימה מהצד שלו (שמאל, כי הממשק מימין לשמאל) */
+#screen-notebook { overflow-x: clip; }
 #screen-notebook .nb-gear-ico { display: inline-block; }
 @media (prefers-reduced-motion: no-preference) {
   #screen-notebook .nb-gear-spin .nb-gear-ico { animation: nb-gear-turn .38s cubic-bezier(.5, 0, .3, 1) forwards; }
-  #screen-notebook .nb-page { transition: transform .38s cubic-bezier(.5, 0, .3, 1), opacity .38s ease-in; }
+  #screen-notebook .nb-page.nb-pulled { transition: transform .38s cubic-bezier(.5, 0, .3, 1), opacity .38s ease-in; }
   #screen-notebook .nb-page.nb-pulled { transform: translateX(26%); opacity: .35; }
-  #screen-notebook .nb-pull-in { animation: nb-pull-in .42s cubic-bezier(.2, .8, .25, 1) both; }
+  #screen-notebook .nb-pull-in { animation: nb-pull-in .42s cubic-bezier(.2, .8, .25, 1) backwards; }
 }
 @keyframes nb-gear-turn { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 @keyframes nb-pull-in { from { transform: translateX(-70%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
