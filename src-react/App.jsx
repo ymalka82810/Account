@@ -23,9 +23,11 @@ import LocaleSheet from './components/manage/LocaleSheet.jsx';
 const ICON_CURRENCY_KEY = 'app-icon-currency';
 
 // ---------- איזה מסך מוצג ----------
-// loading | noserver | welcome | setup | login | join | pin | app
+// loading | noserver | welcome | setup | login | join | pin | notebook | app
 function currentScreen(data) {
   if (!client) return 'noserver';
+  // הפנקס האישי עובד במכשיר בלבד, בלי כניסה, ולכן לא מחכים לשרת.
+  if (!state.token && state.view === 'notebook') return 'notebook';
   if (state.token) return data && !data.legacy ? 'app' : 'loading';
   if (state.legacyPeople === null || !state.codeChecked) return 'loading';
   if (state.pinFlow) return 'pin';
@@ -154,7 +156,7 @@ function Root() {
   // דילוג ישר לקוד הסודי כשברור מי נכנס.
   useEffect(() => {
     if (state.token || state.legacyPeople === null || !state.codeChecked || state.pinFlow) return;
-    if (state.view === 'setup' || (state.view === 'join' && state.fam) || !state.fam) return;
+    if (state.view === 'setup' || state.view === 'notebook' || (state.view === 'join' && state.fam) || !state.fam) return;
     const skip = autoSkipPerson();
     if (skip) startPin(skip, false);
   });

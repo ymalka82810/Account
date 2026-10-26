@@ -6,6 +6,7 @@ import Setup from './Setup.jsx';
 import Login from './Login.jsx';
 import Join from './Join.jsx';
 import Pin from './Pin.jsx';
+import Notebook from '../notebook/Notebook.jsx';
 
 // מסכי הכניסה (welcome / setup / login / join / pin). כל מסך בקובץ משלו ב-auth/.
 // ה-state המשותף (view, fam, pinFlow, legacyPeople) נשאר ב-state.js, וכל
@@ -33,6 +34,7 @@ export default function Auth({ current }) {
       <Login current={current} />
       <Join current={current} />
       <Pin current={current} />
+      <Notebook current={current} />
     </>
   );
 }

@@ -154,6 +154,24 @@ export async function freshCode(ctx: QueryCtx): Promise<string> {
   throw new ConvexError("משהו השתבש. נסו שוב.");
 }
 
+// תאריך הלידה של מי שמקים קופה משפחתית (YYYY-MM-DD): חייב להיות תקין ולהראות גיל 18 ומעלה.
+// זו הצהרה עצמית, בלי אימות, אבל נשמרת בשרת ונבדקת שם ולא רק באפליקציה.
+export function requireAdultBirthDate(raw: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
+  const bad = () => new ConvexError("תאריך לידה לא תקין");
+  if (!m) throw bad();
+  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+  const dt = new Date(Date.UTC(y, mo - 1, d));
+  if (y < 1900 || dt.getUTCFullYear() !== y || dt.getUTCMonth() !== mo - 1 || dt.getUTCDate() !== d) throw bad();
+  const now = new Date();
+  const nm = now.getUTCMonth() + 1;
+  let age = now.getUTCFullYear() - y;
+  if (nm < mo || (nm === mo && now.getUTCDate() < d)) age--;
+  if (age < 0) throw bad();
+  if (age < 18) throw new ConvexError("קופה משפחתית נפתחת רק על ידי מי שמעל גיל 18");
+  return raw;
+}
+
 export async function createFamilyDoc(ctx: MutationCtx, name: string): Promise<Id<"families">> {
   return await ctx.db.insert("families", { name, childCode: await freshCode(ctx), createdAt: Date.now() });
 }

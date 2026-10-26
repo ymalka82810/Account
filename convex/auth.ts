@@ -7,7 +7,7 @@ import { verifyCode } from "./emailCodes";
 import {
   CODE_FAIL_LIMIT, CODE_FAIL_WINDOW_MS, CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS, MAX_FAMILY_SIZE, SESSION_MS,
   adoptLegacy, avatarOf, cleanFamilyName, cleanName, createFamilyDoc, deviceKey, findFamilyByCode, getSessionPerson, hashPin, isPass, issuePass,
-  hashToken, isThrottled, legacyPeople, noteHit, randomHex, registerPinFail, requireSameFamily, requireParent, validPin,
+  hashToken, isThrottled, legacyPeople, noteHit, randomHex, registerPinFail, requireAdultBirthDate, requireSameFamily, requireParent, validPin,
 } from "./lib";
 
 export async function openSession(ctx: MutationCtx, personId: Id<"people">): Promise<string> {
@@ -76,22 +76,25 @@ export const enter = mutation({
 export const createFamily = mutation({
   args: {
     familyName: v.string(), name: v.string(), pin: v.string(),
+    // תאריך לידה (YYYY-MM-DD). חובה, ורק מי שמעל גיל 18 יכול להקים קופה.
+    birthDate: v.string(),
     avatar: v.optional(v.string()), gender: v.optional(v.union(v.literal("male"), v.literal("female"))),
     // מדינת המגורים (חסרה = לא ברשימה) והמטבע שלה, כפי שנבחרו בהקמה
     country: v.optional(v.string()), currency: v.optional(v.string()),
   },
-  handler: async (ctx, { familyName, name, pin, avatar, gender, country, currency }) => {
+  handler: async (ctx, { familyName, name, pin, birthDate, avatar, gender, country, currency }) => {
     if (await isThrottled(ctx, "create-family", CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS)) {
       throw new ConvexError("יותר מדי משפחות חדשות כרגע. נסו שוב בעוד כמה דקות");
     }
     if (!validPin(pin)) throw new ConvexError("הקוד צריך להיות 4 ספרות");
+    const birth = requireAdultBirthDate(birthDate);
     if (currency !== undefined && !isCurrency(currency)) throw new ConvexError("מטבע לא נתמך");
     if (country && !(country in COUNTRIES)) throw new ConvexError("מדינה לא נתמכת");
     const family = cleanFamilyName(familyName);
     const personName = cleanName(name);
     const familyId = await createFamilyDoc(ctx, family);
     if (currency) await ctx.db.patch(familyId, { currency, country: country || undefined });
-    const id = await ctx.db.insert("people", { familyId, name: personName, role: "parent", avatar: avatar?.slice(0, 8), gender });
+    const id = await ctx.db.insert("people", { familyId, name: personName, role: "parent", avatar: avatar?.slice(0, 8), gender, birthDate: birth });
     await setPin(ctx, id, pin);
     await noteHit(ctx, "create-family", CREATE_FAMILY_WINDOW_MS);
     return { token: await openSession(ctx, id) };

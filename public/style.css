@@ -981,3 +981,10 @@ body[data-theme="teen"] .confirm-box { background: #07070b; border: 2px solid va
 .locale-ask-btns { display: flex; gap: 8px; }
 .locale-ask-btns button { flex: 1; }
 .locale-picked { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+
+/* ---------- הפנקס האישי ---------- */
+#screen-notebook .list { display: grid; gap: 8px; text-align: start; }
+#screen-notebook .row.paid { opacity: .6; }
+#screen-notebook details { text-align: start; }
+#screen-notebook details summary { cursor: pointer; padding: 8px 0; font-weight: 500; }
+#screen-notebook .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

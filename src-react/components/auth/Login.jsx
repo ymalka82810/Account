@@ -14,6 +14,7 @@ export default function Login({ current }) {
       <div className="tiles">
         {fam && fam.people.map((p) => <Tile key={p.id} avatar={p.avatar} name={p.name} onClick={() => startPin(p, false)} />)}
         <Tile avatar="➕" name="אני חדש/ה" onClick={() => goView('join')} />
+        <Tile avatar="📒" name="הפנקס שלי" onClick={() => goView('notebook')} />
       </div>
     </In>
   );

@@ -35,6 +35,8 @@ export default defineSchema({
     name: v.string(),
     role: v.union(v.literal("parent"), v.literal("child"), v.literal("teen")),
     avatar: v.optional(v.string()),
+    // תאריך לידה (YYYY-MM-DD), הצהרה עצמית. נשמר רק אצל מי שהקים קופה (חייב להיות מעל 18).
+    birthDate: v.optional(v.string()),
     // מגדר, לצורת פנייה מותאמת (זכר/נקבה). חסר = ללא ציון, וצורת הפנייה נשארת כפולה כמו היום.
     gender: v.optional(v.union(v.literal("male"), v.literal("female"))),
     // צבעי הניאון שנער/ה בחר/ה למסך שלו/ה. חסר = כחול+סגול.

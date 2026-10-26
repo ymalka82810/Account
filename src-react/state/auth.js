@@ -60,9 +60,9 @@ export async function submitFamilyCode(code) {
 export function goView(view) { state.view = view; route(); }
 
 // ---------- הקמת משפחה חדשה ----------
-export async function createFamily({ familyName, name, avatar, gender, pin, country, currency }) {
+export async function createFamily({ familyName, name, birthDate, avatar, gender, pin, country, currency }) {
   try {
-    const res = await call('auth:createFamily', { familyName, name, avatar, gender, pin, country, currency });
+    const res = await call('auth:createFamily', { familyName, name, birthDate, avatar, gender, pin, country, currency });
     state.view = 'welcome';
     setToken(res.token);
     return '';
