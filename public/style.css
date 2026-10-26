@@ -983,8 +983,19 @@ body[data-theme="teen"] .confirm-box { background: #07070b; border: 2px solid va
 .locale-picked { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 
 /* ---------- הפנקס האישי ---------- */
-#screen-notebook .list { display: grid; gap: 8px; text-align: start; }
+#screen-notebook .nb-page { max-width: 520px; margin: 0 auto; display: grid; gap: 14px; text-align: start;
+  padding: calc(18px + env(safe-area-inset-top, 0)) 18px calc(28px + env(safe-area-inset-bottom, 0)); }
+#screen-notebook .nb-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+#screen-notebook .nb-head h1 { margin: 0; font-size: 1.6rem; }
+#screen-notebook .nb-gear { font-size: 1.4rem; line-height: 1; min-width: 48px; min-height: 48px; padding: 0 12px; border-radius: 16px; }
+#screen-notebook .nb-h2 { margin: 6px 0 0; font-size: 1rem; color: var(--ink-soft); }
+#screen-notebook .list { display: grid; gap: 8px; }
 #screen-notebook .row.paid { opacity: .6; }
-#screen-notebook details { text-align: start; }
-#screen-notebook details summary { cursor: pointer; padding: 8px 0; font-weight: 500; }
-#screen-notebook .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+#screen-notebook .nb-paid summary { cursor: pointer; padding: 8px 0; font-weight: 500; }
+#screen-notebook .empty { text-align: center; }
+#screen-notebook .nb-section { display: grid; gap: 12px; }
+#screen-notebook .nb-section .ghost { width: 100%; text-align: start; }
+.nb-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 8px; }
+.nb-opts.two { grid-template-columns: 1fr 1fr; }
+#screen-notebook .nb-opts .ghost, .sheet .nb-opts .ghost { text-align: center; width: 100%; }
+.ghost.danger { color: var(--owe); border-color: var(--owe); }

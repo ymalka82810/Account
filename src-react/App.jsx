@@ -9,6 +9,7 @@ import { client } from './lib/client.js';
 import { isPending, setFx } from './lib/computations.js';
 import { applyAppIcon, deviceCurrency } from './lib/appIcon.js';
 import { AppCtx, useApp } from './state/appContext.js';
+import { useNotebook, TEXT_SCALE } from './lib/notebook.js';
 import { useSheet } from './components/shared/Sheet.jsx';
 import { EntryFlow } from './components/entries/EntryFlow.jsx';
 import { AccountSheet } from './components/account/AccountSheet.jsx';
@@ -94,6 +95,7 @@ export default function App() {
 
 function Root() {
   useSyncExternalStore(subscribeAuth, authVersion);
+  const nb = useNotebook();
   const sheet = useSheet();
   const token = state.token;
   const data = useQuery('data:get', token ? { token } : 'skip');
@@ -183,8 +185,17 @@ function Root() {
   // במסך הטעינה מחילים את ערכת הנושא של מי שנכנס או יצא, כדי שהמעבר ייראה
   // כמו המשך של שאר המסכים שלו ולא כמו מסך של ילדים.
   const lt = screen === 'loading' ? loadingTheme() : null;
-  const themeRole = screen === 'app' ? role : (lt ? lt.role : '');
-  const themePalette = screen === 'app' ? palette : (lt ? lt.palette : '');
+  // הפנקס האישי: המראה לפי ההגדרות שלו (צבעוני = בלי ערכת נושא, כהה = של הורים, ניאון = של נוער)
+  const nbLook = screen === 'notebook' ? nb.settings.look : '';
+  const nbRole = nbLook === 'dark' ? 'parent' : nbLook === 'neon' ? 'teen' : '';
+  const themeRole = screen === 'app' ? role : screen === 'notebook' ? nbRole : (lt ? lt.role : '');
+  const themePalette = screen === 'app' ? palette : screen === 'notebook' ? (nbRole === 'teen' ? nb.settings.palette : '') : (lt ? lt.palette : '');
+  // גודל הכתב של הפנקס (רק בו)
+  const nbScale = screen === 'notebook' ? (TEXT_SCALE[nb.settings.textSize] || 100) : 100;
+  useEffect(() => {
+    document.documentElement.style.fontSize = nbScale === 100 ? '' : nbScale + '%';
+    return () => { document.documentElement.style.fontSize = ''; };
+  }, [nbScale]);
   useEffect(() => { applyTheme(themeRole, themePalette); }, [themeRole, themePalette]);
   useEffect(() => { window.scrollTo({ top: 0 }); }, [screen]);
   // הורה במשפחה שעוד לא בחרה איפה היא גרה: שואלים פעם אחת בכל כניסה

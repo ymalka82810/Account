@@ -7,12 +7,16 @@ import { deviceCurrency } from './appIcon.js';
 export const NOTEBOOK_KEY = 'kupa-notebook-v1';
 export const ADULT_AGE = 18;
 
+// הגדרות מראה ורשימה של הפנקס. look: kid = צבעוני, dark = כהה רגוע, neon = ניאון (עם palette).
+export const DEFAULT_SETTINGS = { look: 'kid', palette: 'blue', textSize: 'normal', sort: 'new', showPaid: true };
+export const TEXT_SCALE = { small: 90, normal: 100, large: 115, xlarge: 130 };
+
 const load = () => {
   try {
     const d = JSON.parse(localStorage.getItem(NOTEBOOK_KEY) || 'null');
-    if (d && Array.isArray(d.entries)) return d;
+    if (d && Array.isArray(d.entries)) return { birthDate: '', currency: '', ...d, settings: { ...DEFAULT_SETTINGS, ...(d.settings || {}) } };
   } catch (e) { /* פגום: מתחילים מחדש */ }
-  return { entries: [], birthDate: '', currency: '' };
+  return { entries: [], birthDate: '', currency: '', settings: { ...DEFAULT_SETTINGS } };
 };
 
 let data = load();
@@ -42,6 +46,10 @@ export const setPaid = (id, paid) =>
 export const removeEntry = (id) =>
   commit({ ...data, entries: data.entries.filter((e) => e.id !== id) });
 export const setBirthDate = (birthDate) => commit({ ...data, birthDate });
+export const setSetting = (key, value) => commit({ ...data, settings: { ...data.settings, [key]: value } });
+export const setCurrencyChoice = (currency) => commit({ ...data, currency });
+export const clearPaid = () => commit({ ...data, entries: data.entries.filter((e) => !e.paid) });
+export const clearAll = () => commit({ ...data, entries: [] });
 
 // ---------- גיל ----------
 // תאריך לידה תקין (YYYY-MM-DD, לא בעתיד, לא לפני 1900), או null.
