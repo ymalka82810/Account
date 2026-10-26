@@ -22,9 +22,15 @@ export function GoldBarArt() {
         </linearGradient>
         <linearGradient id={n('s')} x1="0" y1="0" x2="1" y2="0">
           <stop offset="0" style={{ stopColor: 'var(--neon-a, #b04dff)', stopOpacity: 0 }} />
-          <stop offset="0.35" style={{ stopColor: 'var(--neon-a, #b04dff)', stopOpacity: 0.9 }} />
-          <stop offset="0.65" style={{ stopColor: 'var(--neon-b, #22d8ff)', stopOpacity: 0.9 }} />
+          <stop offset="0.3" style={{ stopColor: 'var(--neon-a, #b04dff)', stopOpacity: 0.75 }} />
+          <stop offset="0.5" style={{ stopColor: '#fff', stopOpacity: 0.85 }} />
+          <stop offset="0.7" style={{ stopColor: 'var(--neon-b, #22d8ff)', stopOpacity: 0.75 }} />
           <stop offset="1" style={{ stopColor: 'var(--neon-b, #22d8ff)', stopOpacity: 0 }} />
+        </linearGradient>
+        <linearGradient id={n('g')} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" style={{ stopColor: 'var(--neon-a, #b04dff)', stopOpacity: 0.28 }} />
+          <stop offset="0.5" style={{ stopColor: 'var(--neon-a, #b04dff)', stopOpacity: 0.04 }} />
+          <stop offset="1" style={{ stopColor: 'var(--neon-b, #22d8ff)', stopOpacity: 0.34 }} />
         </linearGradient>
         <clipPath id={n('c')}>
           <polygon points="2,124 170,124 162,28 22,28" />
@@ -51,7 +57,15 @@ export function GoldBarArt() {
       </g>
       {/* ברק שעובר על המטיל (נוער) */}
       <g clipPath={url('c')}>
-        <g className="gb-shine"><rect x="-70" y="0" width="34" height="140" transform="skewX(-22)" fill={url('s')} /></g>
+        {/* בוהק ניאון קבוע ועדין על כל המטיל (נוער) */}
+        <rect className="gb-glow" x="0" y="0" width="200" height="130" fill={url('g')} />
+        <g className="gb-shine"><rect x="-86" y="0" width="50" height="140" transform="skewX(-22)" fill={url('s')} /></g>
+      </g>
+      {/* קו מתאר ניאון דק */}
+      <g className="gb-rim" fill="none" vectorEffect="non-scaling-stroke">
+        <polygon points="2,124 170,124 162,28 22,28" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        <polygon points="170,124 198,100 182,10 162,28" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        <polygon points="22,28 162,28 182,10 42,10" strokeWidth="1" vectorEffect="non-scaling-stroke" />
       </g>
     </svg>
   );

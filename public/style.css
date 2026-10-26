@@ -1029,7 +1029,7 @@ body[data-theme="child"] .sum .num, body:not([data-theme]) .sum .num { text-shad
 
 /* --- הורים ונוער: מטיל זהב אמיתי (חתך טרפזי) כאיור SVG מאחורי הטקסט, ראו GoldBar.jsx --- */
 .gb-art { display: none; }
-.gb-shine { display: none; }
+.gb-shine, .gb-glow, .gb-rim { display: none; }
 body[data-theme="parent"] .gb-art, body[data-theme="teen"] .gb-art {
   display: block; position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: visible;
 }
@@ -1048,12 +1048,15 @@ body[data-theme="parent"] .sum .lbl { font-size: .9rem; }
 body[data-theme="parent"] .sum .num { font-size: 1.35rem; text-shadow: 0 1px 0 rgba(255, 255, 255, .35); }
 
 /* נוער: זהב חי, וברק בצבעי הניאון של הפלטה שנבחרה */
-body[data-theme="teen"] .summary { filter: drop-shadow(0 8px 10px var(--neon-glow)); }
+body[data-theme="teen"] .summary {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--neon-b) 55%, transparent)) drop-shadow(0 8px 12px color-mix(in srgb, var(--neon-a) 45%, transparent));
+}
 body[data-theme="teen"] .sum.get { --g-hi: #fffbd0; --g-1: #ffe94d; --g-2: #ffc400; --g-3: #ff9d00; --g-ink: #2b1a00; }
 body[data-theme="teen"] .sum.owe { --g-hi: #ffeadb; --g-1: #ffc9a3; --g-2: #ff9a5c; --g-3: #ff6a3d; --g-ink: #2a0d00; }
 body[data-theme="teen"] .sum .lbl { font-size: .9rem; }
 body[data-theme="teen"] .sum .num { font-size: 1.6rem; text-shadow: 0 1px 0 rgba(255, 255, 255, .4); }
-body[data-theme="teen"] .gb-shine { display: inline; }
-body[data-theme="teen"] .gb-shine { animation: gb-shine 3.6s ease-in-out infinite; }
-@keyframes gb-shine { 0%, 55% { transform: translateX(0); } 100% { transform: translateX(330px); } }
+body[data-theme="teen"] .gb-shine { display: inline; filter: blur(1.2px); animation: gb-shine 7s ease-in-out infinite; }
+body[data-theme="teen"] .gb-glow { display: inline; }
+body[data-theme="teen"] .gb-rim { display: inline; stroke: var(--neon-b); stroke-opacity: .55; }
+@keyframes gb-shine { 0%, 40% { transform: translateX(0); } 100% { transform: translateX(340px); } }
 @media (prefers-reduced-motion: reduce) { body[data-theme="teen"] .gb-shine { animation: none; } }
