@@ -1027,65 +1027,72 @@ body[data-theme="child"] .sum::after, body:not([data-theme]) .sum::after {
 }
 body[data-theme="child"] .sum .num, body:not([data-theme]) .sum .num { text-shadow: 0 1px 0 rgba(255, 255, 255, .55); }
 
-/* --- הורים: מטיל במבט מלמעלה (פאה עליונה + פאת חזית), מתכת מוברשת בגוון עתיק --- */
-body[data-theme="parent"] .summary { padding-top: 18px; filter: drop-shadow(0 6px 5px rgba(0, 0, 0, .7)); }
+/* --- הורים: מטיל תלת־ממדי עם שלוש פאות (עליונה, חזית, צד), מתכת מוברשת בגוון עתיק --- */
+/* ::before = פאה עליונה + חזית, ::after = פאת הצד. עומק העליונה/הצד: 14px */
+body[data-theme="parent"] .summary { padding: 20px 14px 4px 0; column-gap: 28px; filter: drop-shadow(0 6px 5px rgba(0, 0, 0, .7)); }
 body[data-theme="parent"] .sum.get { --g-hi: #f1dd9d; --g-1: #d9ba6b; --g-2: #b18f3b; --g-3: #7d5f1d; --g-ink: #241a04; }
 body[data-theme="parent"] .sum.owe { --g-hi: #ebcdb0; --g-1: #cfa482; --g-2: #a8744a; --g-3: #744626; --g-ink: #241206; }
 body[data-theme="parent"] .sum.get, body[data-theme="parent"] .sum.owe {
-  border: 0; border-radius: 0; overflow: visible; background: none; padding: 12px 22px 12px;
+  border: 0; border-radius: 0; overflow: visible; background: none; padding: 12px 18px;
 }
-/* פאת החזית */
-body[data-theme="parent"] .sum::after {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  clip-path: polygon(4% 0, 96% 0, 100% 100%, 0 100%);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, .6) 0 2px, transparent 2px),
-    linear-gradient(180deg, transparent calc(100% - 4px), rgba(0, 0, 0, .35) calc(100% - 4px)),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, .05) 0 1px, rgba(0, 0, 0, .05) 1px 3px),
-    linear-gradient(180deg, var(--g-1) 0%, var(--g-2) 60%, var(--g-3) 100%);
-}
-/* הפאה העליונה: נראית מלמעלה, הקצה האחורי צר יותר */
 body[data-theme="parent"] .sum::before {
-  content: "999.9"; position: absolute; left: 4%; right: 4%; bottom: 100%; height: 15px; z-index: -1;
-  display: grid; place-items: center; font-size: .5rem; line-height: 1; letter-spacing: .2em; color: var(--g-ink);
-  clip-path: polygon(9% 0, 91% 0, 100% 100%, 0 100%);
+  content: "999.9"; box-sizing: border-box; position: absolute; z-index: -1; pointer-events: none;
+  top: -14px; left: 0; right: -14px; bottom: 0;
+  padding-right: 14px; text-align: center; line-height: 14px; font-size: .5rem; letter-spacing: .2em;
+  color: var(--g-ink); text-shadow: 0 1px 0 rgba(255, 255, 255, .4);
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(180deg, transparent, rgba(0, 0, 0, .38)),
+    linear-gradient(180deg, rgba(255, 255, 255, .75), rgba(255, 255, 255, .75)),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .06) 0 1px, rgba(0, 0, 0, .05) 1px 3px),
+    linear-gradient(180deg, var(--g-hi) 0%, var(--g-1) 100%),
+    linear-gradient(180deg, var(--g-1) 0%, var(--g-2) 60%, var(--g-3) 100%);
+  background-size: calc(100% - 14px) 5px, calc(100% - 14px) 2px, 100% 100%, 100% 14px, 100% calc(100% - 14px);
+  background-position: 0 100%, 0 14px, 0 0, 0 0, 0 14px;
+}
+body[data-theme="parent"] .sum::after {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  top: -14px; right: -14px; width: 14px; bottom: 0;
+  clip-path: polygon(0 14px, 100% 0, 100% calc(100% - 14px), 0 100%);
   background:
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, .06) 0 1px, rgba(0, 0, 0, .04) 1px 3px),
-    linear-gradient(180deg, var(--g-hi) 0%, var(--g-1) 100%);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, .4);
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .05) 0 1px, rgba(0, 0, 0, .06) 1px 3px),
+    linear-gradient(180deg, var(--g-3), color-mix(in srgb, var(--g-3) 55%, #000));
 }
 body[data-theme="parent"] .sum .num { text-shadow: 0 1px 0 rgba(255, 255, 255, .35); }
 
-/* --- נוער: מטיל במבט מלמעלה בפרספקטיבה חדה, זהב חי, ברק ופס ניאון (לפי הפלטה) --- */
-body[data-theme="teen"] .summary { padding-top: 24px; filter: drop-shadow(0 8px 10px var(--neon-glow)); }
+/* --- נוער: מטיל תלת־ממדי בפרספקטיבה חדה (עליונה, חזית, צד), זהב חי, ברק ופס ניאון --- */
+/* עומק העליונה: 20px, עומק הצד: 22px */
+body[data-theme="teen"] .summary { padding: 26px 22px 4px 0; column-gap: 36px; filter: drop-shadow(0 8px 10px var(--neon-glow)); }
 body[data-theme="teen"] .sum.get { --g-hi: #fffbd0; --g-1: #ffe94d; --g-2: #ffc400; --g-3: #ff9d00; --g-ink: #2b1a00; }
 body[data-theme="teen"] .sum.owe { --g-hi: #ffeadb; --g-1: #ffc9a3; --g-2: #ff9a5c; --g-3: #ff6a3d; --g-ink: #2a0d00; }
 body[data-theme="teen"] .sum.get, body[data-theme="teen"] .sum.owe {
-  border: 0; border-radius: 0; overflow: visible; background: none; padding: 10px 20px 16px;
+  border: 0; border-radius: 0; overflow: visible; background: none; padding: 10px 16px 16px;
 }
-body[data-theme="teen"] .sum::after {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  clip-path: polygon(7% 0, 93% 0, 100% 100%, 0 100%);
+body[data-theme="teen"] .sum::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  top: -20px; left: 0; right: -22px; bottom: 0;
+  clip-path: polygon(22px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 22px) 100%, 0 100%, 0 20px);
   background-repeat: no-repeat;
-  background-size: 250% 100%, 100% 4px, 100% 2px, auto;
-  background-position: 130% 0, 0 100%, 0 0, 0 0;
   background-image:
     linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .7) 50%, transparent 65%),
     var(--neon-grad),
-    linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(255, 255, 255, .9)),
+    linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .95)),
+    linear-gradient(180deg, var(--g-hi) 0%, var(--g-1) 100%),
     linear-gradient(180deg, var(--g-1) 0%, var(--g-2) 55%, var(--g-3) 100%);
+  background-size: 250% 100%, calc(100% - 22px) 4px, calc(100% - 22px) 2px, 100% 20px, 100% calc(100% - 20px);
+  background-position: 130% 0, 0 100%, 0 20px, 0 0, 0 20px;
   animation: gold-sweep 3.6s ease-in-out infinite;
 }
-body[data-theme="teen"] .sum::before {
-  content: ""; position: absolute; left: 7%; right: 7%; bottom: 100%; height: 20px; z-index: -1;
-  clip-path: polygon(15% 0, 85% 0, 100% 100%, 0 100%);
-  background:
-    linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .85) 45%, transparent 60%),
-    linear-gradient(180deg, var(--g-hi) 0%, var(--g-1) 100%);
+body[data-theme="teen"] .sum::after {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  top: -20px; right: -22px; width: 22px; bottom: 0;
+  clip-path: polygon(0 20px, 100% 0, 100% calc(100% - 20px), 0 100%);
+  background: linear-gradient(180deg, var(--g-3), color-mix(in srgb, var(--g-3) 55%, #000));
 }
 body[data-theme="teen"] .sum .num { text-shadow: 0 1px 0 rgba(255, 255, 255, .4); }
 @keyframes gold-sweep {
-  0%, 55% { background-position: 130% 0, 0 100%, 0 0, 0 0; }
-  100% { background-position: -30% 0, 0 100%, 0 0, 0 0; }
+  0%, 55% { background-position: 130% 0, 0 100%, 0 20px, 0 0, 0 20px; }
+  100% { background-position: -30% 0, 0 100%, 0 20px, 0 0, 0 20px; }
 }
-@media (prefers-reduced-motion: reduce) { body[data-theme="teen"] .sum::after { animation: none; } }
+@media (prefers-reduced-motion: reduce) { body[data-theme="teen"] .sum::before { animation: none; } }
