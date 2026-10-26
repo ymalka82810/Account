@@ -1092,3 +1092,15 @@ body[data-theme] .sum .lbl, body:not([data-theme]) .sum .lbl { font-weight: 800;
 }
 @keyframes nb-gear-turn { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 @keyframes nb-pull-in { from { transform: translateX(-70%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* כתב גדול בפנקס: עמודות grid לא מתרחבות מעבר למסך (ברירת המחדל min-content דוחפת תוכן החוצה) */
+#screen-notebook .nb-page { grid-template-columns: minmax(0, 1fr); }
+#screen-notebook .nb-page > *, #screen-notebook .nb-section > *, #screen-notebook .field > * { min-width: 0; }
+#screen-notebook .nb-section, #screen-notebook .field { grid-template-columns: minmax(0, 1fr); }
+#screen-notebook .summary, #screen-notebook .bigbtns, #screen-notebook .nb-opts.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#screen-notebook .nb-opts { grid-template-columns: repeat(auto-fit, minmax(min(84px, 100%), 1fr)); }
+#screen-notebook .nb-head h1 { min-width: 0; overflow-wrap: anywhere; }
+#screen-notebook .nb-gear { flex: none; }
+#screen-notebook .row .text, #screen-notebook .row .meta { min-width: 0; overflow-wrap: anywhere; }
+#screen-notebook button, #screen-notebook .ghost { max-width: 100%; overflow-wrap: anywhere; white-space: normal; }
+#screen-notebook { overflow-x: clip; }
