@@ -37,24 +37,36 @@ export default function Notebook({ current }) {
     if (pulling) return;
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce) { location.hash = SETTINGS_HASH; setPage('settings'); return; }
+    setReturned(false);
     setPulling(true);
     setTimeout(() => { setPulling(false); location.hash = SETTINGS_HASH; setPage('settings'); }, 380);
   };
-  const closeSettings = () => {
+  // סגירה הפוכה מהפתיחה: הגלגל מסתובב לכיוון ההפוך ודוחף את ההגדרות החוצה לצד שלו,
+  // והעמוד הראשי חוזר פנימה מהצד שאליו נדחף בפתיחה
+  const [closing, setClosing] = useState(false);
+  const [returned, setReturned] = useState(false);
+  const leaveSettings = () => {
     if (location.hash === SETTINGS_HASH) history.back();
     else setPage('home');
+  };
+  const closeSettings = () => {
+    if (closing) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { leaveSettings(); return; }
+    setClosing(true);
+    setTimeout(() => { setClosing(false); setReturned(true); leaveSettings(); }, 380);
   };
 
   return (
     <In screen="notebook" current={current}>
       {state.notebookBack && page === 'home' && <button className="ghost back" type="button" onClick={closeNotebook}>→ חזרה</button>}
-      {page === 'home' ? <Home nb={nb} onSettings={openSettings} pulling={pulling} /> : <Settings nb={nb} onBack={closeSettings} />}
+      {page === 'home' ? <Home nb={nb} onSettings={openSettings} pulling={pulling} returned={returned} /> : <Settings nb={nb} onBack={closeSettings} closing={closing} />}
     </In>
   );
 }
 
 // ---------- עמוד ראשי ----------
-function Home({ nb, onSettings, pulling }) {
+function Home({ nb, onSettings, pulling, returned }) {
   const sheet = useSheet();
   const cur = notebookCurrency();
   const { sort, showPaid } = nb.settings;
@@ -82,7 +94,7 @@ function Home({ nb, onSettings, pulling }) {
   );
 
   return (
-    <div className={'nb-page' + (pulling ? ' nb-pulled' : '')}>
+    <div className={'nb-page' + (pulling ? ' nb-pulled' : '') + (returned ? ' nb-push-back' : '')}>
       <div className="nb-head">
         <h1>📒 הפנקס שלי</h1>
         <button className={'ghost nb-gear' + (pulling ? ' nb-gear-spin' : '')} type="button" aria-label="הגדרות" onClick={onSettings}>
@@ -185,7 +197,7 @@ function listAsText(nb, cur) {
   return open.length ? open.map(line).join('\n') : 'אין כלום פתוח';
 }
 
-function Settings({ nb, onBack }) {
+function Settings({ nb, onBack, closing }) {
   const s = nb.settings;
   const cur = notebookCurrency();
   const paidCount = nb.entries.filter((e) => e.paid).length;
@@ -204,10 +216,10 @@ function Settings({ nb, onBack }) {
   };
 
   return (
-    <div className="nb-page nb-settings nb-pull-in">
+    <div className={'nb-page nb-settings' + (closing ? ' nb-pushed-out' : ' nb-pull-in')}>
       <div className="nb-head">
         <button className="ghost nb-gear" type="button" aria-label="חזרה" onClick={onBack}>→</button>
-        <h1>⚙️ הגדרות</h1>
+        <h1 className={closing ? 'nb-gear-spin-back' : undefined}><span className="nb-gear-ico">⚙️</span> הגדרות</h1>
       </div>
 
       <section className="card nb-section">
