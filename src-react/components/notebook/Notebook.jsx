@@ -165,7 +165,7 @@ function AddEntry({ initialDir }) {
       <label className="field"><span>על מה? (אפשר לדלג)</span>
         <input type="text" maxLength={60} value={form.note} onChange={set('note')} /></label>
       {error && <p className="error" role="alert">{error}</p>}
-      <button className="primary" type="submit">➕ רישום</button>
+      <button className="primary" type="submit">רישום</button>
     </form>
   );
 }

@@ -1155,3 +1155,7 @@ body:not([data-theme="parent"]):not([data-theme="teen"]) .sheet form button.prim
 }
 body[data-theme="teen"] .bigbtn { border-width: 0 0 5px; }
 body[data-theme="teen"] .bigbtn:active { border-bottom-width: 1px; }
+/* כהה: כפתור הרישום נבדל מהבחירה הפעילה, וכותרת הרשימה קריאה */
+body[data-theme="parent"] .sheet form button.primary { border-bottom: 4px solid #2f6f95; box-shadow: 0 4px 10px rgba(0, 0, 0, .5); font-size: 1.05rem; }
+body[data-theme="parent"] .sheet form button.primary:active { transform: translateY(3px); border-bottom-width: 1px; }
+body[data-theme="parent"] #screen-notebook .nb-h2, body[data-theme="teen"] #screen-notebook .nb-h2 { color: var(--ink); font-size: 1.1rem; font-weight: 700; }
