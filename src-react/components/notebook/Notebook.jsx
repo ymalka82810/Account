@@ -31,7 +31,15 @@ export default function Notebook({ current }) {
   }, []);
   useEffect(() => { if (current === 'notebook') window.scrollTo({ top: 0 }); }, [page, current]);
 
-  const openSettings = () => { location.hash = SETTINGS_HASH; setPage('settings'); };
+  // הגלגל מסתובב במקום, ורק אחרי רגע ההגדרות נמשכות פנימה מהצד שלו
+  const [pulling, setPulling] = useState(false);
+  const openSettings = () => {
+    if (pulling) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { location.hash = SETTINGS_HASH; setPage('settings'); return; }
+    setPulling(true);
+    setTimeout(() => { setPulling(false); location.hash = SETTINGS_HASH; setPage('settings'); }, 380);
+  };
   const closeSettings = () => {
     if (location.hash === SETTINGS_HASH) history.back();
     else setPage('home');
@@ -40,13 +48,13 @@ export default function Notebook({ current }) {
   return (
     <In screen="notebook" current={current}>
       {state.notebookBack && page === 'home' && <button className="ghost back" type="button" onClick={closeNotebook}>→ חזרה</button>}
-      {page === 'home' ? <Home nb={nb} onSettings={openSettings} /> : <Settings nb={nb} onBack={closeSettings} />}
+      {page === 'home' ? <Home nb={nb} onSettings={openSettings} pulling={pulling} /> : <Settings nb={nb} onBack={closeSettings} />}
     </In>
   );
 }
 
 // ---------- עמוד ראשי ----------
-function Home({ nb, onSettings }) {
+function Home({ nb, onSettings, pulling }) {
   const sheet = useSheet();
   const cur = notebookCurrency();
   const { sort, showPaid } = nb.settings;
@@ -74,10 +82,12 @@ function Home({ nb, onSettings }) {
   );
 
   return (
-    <div className="nb-page">
+    <div className={'nb-page' + (pulling ? ' nb-pulled' : '')}>
       <div className="nb-head">
         <h1>📒 הפנקס שלי</h1>
-        <button className="ghost nb-gear" type="button" aria-label="הגדרות" onClick={onSettings}>⚙️</button>
+        <button className={'ghost nb-gear' + (pulling ? ' nb-gear-spin' : '')} type="button" aria-label="הגדרות" onClick={onSettings}>
+          <span className="nb-gear-ico">⚙️</span>
+        </button>
       </div>
 
       <div className="summary">
@@ -194,7 +204,7 @@ function Settings({ nb, onBack }) {
   };
 
   return (
-    <div className="nb-page nb-settings">
+    <div className="nb-page nb-settings nb-pull-in">
       <div className="nb-head">
         <button className="ghost nb-gear" type="button" aria-label="חזרה" onClick={onBack}>→</button>
         <h1>⚙️ הגדרות</h1>
