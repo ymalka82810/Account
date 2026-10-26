@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { GoldBarArt } from '../shared/GoldBar.jsx';
+import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
 import { today, toast } from '../../lib/helpers.js';
 import { money, fmtDate } from '../../lib/computations.js';
 import { CURRENCIES, currencyLabel } from '../../lib/currencies.js';
@@ -81,8 +81,8 @@ function Home({ nb, onSettings }) {
       </div>
 
       <div className="summary">
-        <div className="sum owe"><GoldBarArt /><div className="lbl">אני חייב</div><div className="num">{money(sum('iowe'), cur)}</div></div>
-        <div className="sum get"><GoldBarArt /><div className="lbl">חייבים לי</div><div className="num">{money(sum('owed'), cur)}</div></div>
+        <div className="sum owe"><GoldBarArt /><div className="lbl">אני חייב</div><SumNum>{money(sum('iowe'), cur)}</SumNum></div>
+        <div className="sum get"><GoldBarArt /><div className="lbl">חייבים לי</div><SumNum>{money(sum('owed'), cur)}</SumNum></div>
       </div>
 
       <div className="bigbtns">

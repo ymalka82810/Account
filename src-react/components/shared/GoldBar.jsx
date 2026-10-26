@@ -46,7 +46,7 @@ export function GoldBarArt() {
       <polygon points="2,124 170,124 162,28 22,28" fill={url('f')} />
       {/* לוחית חרוטה על הפאה העליונה */}
       <polygon points="47.4,24 145.4,24 156.6,14 58.6,14" fill="rgba(0,0,0,.08)" stroke="rgba(255,255,255,.5)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-      <text className="gb-stamp" style={{ direction: 'ltr', unicodeBidi: 'bidi-override' }} transform="matrix(1 0 -1.33 1.2 83 23)" fontSize="6" letterSpacing="1" fill="rgba(0,0,0,.5)">999.9</text>
+      <text className="gb-stamp" style={{ direction: 'ltr', unicodeBidi: 'bidi-override' }} transform="matrix(1 0 -1.33 1.1 76 23)" fontSize="8" fontWeight="700" letterSpacing="1.5" fill="rgba(0,0,0,.6)">999.9</text>
       {/* קווי מסגרת: קצה עליון בוהק, מפגש חזית-קצה, בסיס כהה */}
       <g fill="none" vectorEffect="non-scaling-stroke">
         <polyline points="22,28 162,28" stroke="rgba(255,255,255,.9)" strokeWidth="1.4" vectorEffect="non-scaling-stroke" />
@@ -69,4 +69,10 @@ export function GoldBarArt() {
       </g>
     </svg>
   );
+}
+
+// סכום בתוך מטיל: הגופן קטן אוטומטית לפי אורך הטקסט כדי שלא יגלוש מהמטיל (ראו --len ב-CSS)
+export function SumNum({ children }) {
+  const text = String(children ?? '');
+  return <div className="num" style={{ '--len': Math.max(text.length, 5) }}>{text}</div>;
 }

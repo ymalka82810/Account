@@ -1060,3 +1060,10 @@ body[data-theme="teen"] .gb-glow { display: inline; }
 body[data-theme="teen"] .gb-rim { display: inline; stroke: var(--neon-b); stroke-opacity: .55; }
 @keyframes gb-shine { 0%, 40% { transform: translateX(0); } 100% { transform: translateX(340px); } }
 @media (prefers-reduced-motion: reduce) { body[data-theme="teen"] .gb-shine { animation: none; } }
+
+/* סכום ארוך לא גולש: העמודות לא מתרחבות בגלל התוכן, והגופן קטן לפי אורך הטקסט (--len מ-SumNum) */
+.summary { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.summary .sum { container-type: inline-size; --num-fs: 1.85rem; --num-room: 150cqi; }
+body[data-theme="parent"] .summary .sum { --num-fs: 1.35rem; --num-room: 122cqi; }
+body[data-theme="teen"] .summary .sum { --num-fs: 1.6rem; --num-room: 122cqi; }
+body .summary .sum .num { font-size: min(var(--num-fs), calc(var(--num-room) / var(--len, 6))); white-space: nowrap; }
