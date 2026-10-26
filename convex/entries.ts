@@ -3,7 +3,7 @@ import { v, ConvexError } from "convex/values";
 import { MAX_AMOUNT, requireParent, requirePerson } from "./lib";
 import { entryLine, entryTextFor, notify } from "./notify";
 import { internal } from "./_generated/api";
-import { LEGACY_CURRENCY, Rates, convert, curOf, fmtMoney, isCurrency } from "./currency";
+import { LEGACY_CURRENCY, Rates, convert, curOf, fmtMoney, isCurrency, paidOnDebt } from "./currency";
 import { loadRates } from "./fx";
 
 // סכום מקסימלי לרשומה: 10,000 ש"ח או השווי שלהם במטבע אחר (בלי שערים: גבול רחב).
@@ -11,17 +11,6 @@ function amountOk(amount: number, currency: string, rates: Rates | null): boolea
   if (!Number.isInteger(amount) || amount <= 0) return false;
   const ils = convert(amount, currency, LEGACY_CURRENCY, rates);
   return ils === null ? amount <= 100 * MAX_AMOUNT : ils <= MAX_AMOUNT * 1.001;
-}
-
-// כמה מחוב מסוים כבר הוחזר (במטבע החוב), לפי ההחזרים שקושרו אליו ושערי ההמרה שנשמרו בהם.
-function paidOnDebt(debt: { _id: unknown; currency?: string }, all: { kind: string; debtId?: unknown; amount: number; currency?: string; fx?: Rates }[], rates: Rates | null): number {
-  let paid = 0;
-  for (const x of all) {
-    if (x.kind !== "payment" || x.debtId !== debt._id) continue;
-    const c = convert(x.amount, curOf(x), curOf(debt), x.fx ?? rates);
-    if (c !== null) paid += c;
-  }
-  return paid;
 }
 
 const UNDO_MS = 10 * 60 * 1000;

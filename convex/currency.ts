@@ -39,3 +39,14 @@ export function fmtMoney(amount: number, currency: string = LEGACY_CURRENCY): st
   const sym = SYMBOLS[currency];
   return sym ? sym + n : `${n} ${currency}`;
 }
+
+// כמה מחוב מסוים כבר הוחזר (במטבע החוב), לפי ההחזרים שקושרו אליו ושערי ההמרה שנשמרו בהם.
+export function paidOnDebt(debt: { _id: unknown; currency?: string }, all: { kind: string; debtId?: unknown; amount: number; currency?: string; fx?: Rates }[], rates: Rates | null): number {
+  let paid = 0;
+  for (const x of all) {
+    if (x.kind !== "payment" || x.debtId !== debt._id) continue;
+    const c = convert(x.amount, curOf(x), curOf(debt), x.fx ?? rates);
+    if (c !== null) paid += c;
+  }
+  return paid;
+}

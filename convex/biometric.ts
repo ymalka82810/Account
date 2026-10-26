@@ -2,6 +2,7 @@ import { mutation, MutationCtx } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { internal } from "./_generated/api";
 import { Doc, Id } from "./_generated/dataModel";
+import { concat, derToRaw } from "./der";
 import { Member, hashPin, randomHex, registerPinFail, requireParent } from "./lib";
 
 // אימות ביומטרי (טביעת אצבע / זיהוי פנים) לפעולות רגישות של הורים, כמו שינוי תפקיד.
@@ -42,35 +43,9 @@ function hexToBytes(hex: string): Uint8Array {
   return out;
 }
 
-function concat(a: Uint8Array, b: Uint8Array): Uint8Array {
-  const out = new Uint8Array(a.length + b.length);
-  out.set(a, 0);
-  out.set(b, a.length);
-  return out;
-}
-
 // WebCrypto מקבל BufferSource. ההמרה כאן רק בשביל TypeScript (Uint8Array<ArrayBufferLike>).
 const bs = (b: Uint8Array) => b as unknown as BufferSource;
 const sha256 = async (b: Uint8Array) => new Uint8Array(await crypto.subtle.digest("SHA-256", bs(b)));
-
-// חתימת ECDSA מגיעה בקידוד DER, ו-WebCrypto מצפה ל-r||s גולמי (64 בתים ל-P-256).
-function derToRaw(der: Uint8Array): Uint8Array {
-  let i = 0;
-  if (der[i++] !== 0x30) throw new Error("bad der");
-  if (der[i] & 0x80) i += 1 + (der[i] & 0x7f); else i++;
-  const readInt = () => {
-    if (der[i++] !== 0x02) throw new Error("bad der");
-    const len = der[i++];
-    let n = der.slice(i, i + len);
-    i += len;
-    while (n.length > 32 && n[0] === 0) n = n.slice(1);
-    if (n.length > 32) throw new Error("bad der");
-    const out = new Uint8Array(32);
-    out.set(n, 32 - n.length);
-    return out;
-  };
-  return concat(readInt(), readInt());
-}
 
 // alg לפי COSE: -7 = ES256 (P-256), -257 = RS256.
 async function verifySig(publicKeyB64: string, alg: number, sigDer: Uint8Array, data: Uint8Array): Promise<boolean> {
