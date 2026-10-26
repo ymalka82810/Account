@@ -1112,3 +1112,43 @@ body[data-theme] .sum .lbl, body:not([data-theme]) .sum .lbl { font-weight: 800;
 #screen-notebook .row .text, #screen-notebook .row .meta { min-width: 0; overflow-wrap: anywhere; }
 #screen-notebook button, #screen-notebook .ghost { max-width: 100%; overflow-wrap: anywhere; white-space: normal; }
 #screen-notebook { overflow-x: clip; }
+
+/* ---------- חידוד הפנקס האישי: ניגודיות, כפתורים וסרגל הגדרות ---------- */
+/* ערכה בהירה (צבעוני) בלבד: בכהה ובניאון הצבעים כבר ברורים */
+body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .bigbtn {
+  border-width: 0 0 5px; border-style: solid; border-radius: 22px;
+  box-shadow: 0 6px 14px rgba(74, 68, 104, .22);
+  transition: transform .08s ease, border-width .08s ease, box-shadow .08s ease;
+}
+body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .bigbtn.owe {
+  background: linear-gradient(180deg, #ffb2a9, #f4806f); border-color: #c4584a; color: #4a0f08;
+}
+body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .bigbtn.get {
+  background: linear-gradient(180deg, #9be3bd, #52b583); border-color: #2f8559; color: #05301c;
+}
+body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .bigbtn:active {
+  transform: translateY(4px); border-bottom-width: 1px; box-shadow: 0 2px 6px rgba(74, 68, 104, .2);
+}
+#screen-notebook .bigbtn::after { content: "‹"; font-size: 1.3rem; line-height: .6; opacity: .7; }
+body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .nb-h2 { color: var(--ink); font-size: 1.1rem; font-weight: 700; }
+body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .empty {
+  color: var(--ink); background: rgba(255, 255, 255, .6); border-color: rgba(74, 68, 104, .35);
+}
+
+/* חלון הרישום: פס גלילה דק, סימן מטבע בשדה הסכום וכפתור רישום בולט */
+.sheet { scrollbar-width: thin; scrollbar-color: rgba(127, 127, 127, .45) transparent; }
+.amt-field { position: relative; display: block; }
+.amt-field input { padding-left: 40px; }
+.amt-field .amt-cur { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-weight: 700; color: var(--ink-soft); pointer-events: none; }
+body:not([data-theme="parent"]):not([data-theme="teen"]) .sheet form button.primary {
+  background: linear-gradient(180deg, #ff9d8a, #f0705f); color: #3d0c05; font-size: 1.05rem;
+  border-bottom: 4px solid #b8473a; border-radius: 16px; box-shadow: 0 6px 14px rgba(240, 112, 95, .35);
+}
+body:not([data-theme="parent"]):not([data-theme="teen"]) .sheet form button.primary:active { transform: translateY(3px); border-bottom-width: 1px; }
+
+/* כפתור החזרה בהגדרות נשאר צמוד למעלה בזמן גלילה */
+#screen-notebook .nb-settings .nb-head {
+  position: sticky; top: 0; z-index: 4; padding-block: 8px; margin-block: -8px 0;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}

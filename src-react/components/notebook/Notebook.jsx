@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
 import { today, toast } from '../../lib/helpers.js';
 import { money, fmtDate } from '../../lib/computations.js';
-import { CURRENCIES, currencyLabel } from '../../lib/currencies.js';
+import { CURRENCIES, currencyLabel, currencySymbol } from '../../lib/currencies.js';
 import {
   useNotebook, notebookCurrency, addEntry, setPaid, removeEntry, setSetting, setCurrencyChoice, clearPaid, clearAll,
 } from '../../lib/notebook.js';
@@ -160,7 +160,8 @@ function AddEntry({ initialDir }) {
       <label className="field"><span>{dir === 'iowe' ? 'למי?' : 'מי חייב לי?'}</span>
         <input type="text" maxLength={30} autoFocus value={form.name} onChange={set('name')} /></label>
       <label className="field"><span>כמה?</span>
-        <input type="text" inputMode="decimal" dir="ltr" placeholder="0" value={form.amount} onChange={set('amount')} /></label>
+        <span className="amt-field"><span className="amt-cur" aria-hidden="true">{currencySymbol(notebookCurrency())}</span>
+          <input type="text" inputMode="decimal" dir="ltr" placeholder="0" value={form.amount} onChange={set('amount')} /></span></label>
       <label className="field"><span>על מה? (אפשר לדלג)</span>
         <input type="text" maxLength={60} value={form.note} onChange={set('note')} /></label>
       {error && <p className="error" role="alert">{error}</p>}
