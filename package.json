@@ -21,7 +21,9 @@
     "@capacitor/android": "^8.5.3",
     "@capacitor/cli": "^8.5.3",
     "@capacitor/core": "^8.5.3",
+    "@edge-runtime/vm": "^5.0.0",
     "@types/web-push": "^3.6.4",
+    "convex-test": "^0.0.65",
     "vite": "^8.3.4",
     "vitest": "^5.0.5"
   },
