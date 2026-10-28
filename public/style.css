@@ -1177,3 +1177,11 @@ body[data-theme="parent"] #screen-notebook .nb-h2, body[data-theme="teen"] #scre
 }
 #screen-notebook .nb-page:not(.nb-settings) .nb-head h1 { grid-column: 2; text-align: center; }
 #screen-notebook .nb-page:not(.nb-settings) .nb-head .nb-gear { grid-column: 3; justify-self: end; }
+
+/* כפתור "חזרה למשפחה" בפנקס: בשורה משלו מעל הכותרת (לא צף עליה), והכותרת נשארת במרכז */
+#screen-notebook .back.nb-back {
+  position: static; display: block; width: fit-content; max-width: 520px;
+  margin: calc(12px + env(safe-area-inset-top, 0)) 18px 0;
+}
+#screen-notebook:has(.nb-back) .nb-page:not(.nb-settings) { padding-top: 8px; }
+#screen-notebook .nb-page:not(.nb-settings) .nb-head { grid-template-columns: 56px minmax(0, 1fr) 56px; }

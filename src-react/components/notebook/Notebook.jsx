@@ -62,7 +62,7 @@ export default function Notebook({ current }) {
 
   return (
     <In screen="notebook" current={current}>
-      {state.notebookBack && page === 'home' && <button className="ghost back" type="button" onClick={closeNotebook}>{t('→ חזרה')}</button>}
+      {state.notebookBack && page === 'home' && <button className="ghost back nb-back" type="button" onClick={closeNotebook}>{t('→ חזרה למשפחה')}</button>}
       {page === 'home' ? <Home nb={nb} onSettings={openSettings} pulling={pulling} returned={returned} /> : <Settings nb={nb} onBack={closeSettings} closing={closing} />}
     </In>
   );
