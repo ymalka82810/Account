@@ -7,7 +7,7 @@ import {
   generateEmailCode, hashPin, isThrottled, noteHit, randomHex, verifyPin,
 } from "./lib";
 
-export type CodePurpose = "verify" | "pinChange" | "pinReset" | "childReset" | "emailChange";
+export type CodePurpose = "verify" | "pinChange" | "pinReset" | "childReset" | "emailChange" | "deviceMove" | "deviceBind";
 
 // יוצר קוד חדש (מבטל קודם באותה מטרה), שומר גיבוב ומתזמן שליחה למייל.
 export async function issueCode(ctx: MutationCtx, person: Doc<"people">, email: string, purpose: CodePurpose): Promise<void> {
@@ -46,4 +46,23 @@ export async function verifyCode(ctx: MutationCtx, personId: Doc<"people">["_id"
   }
   await ctx.db.delete(row._id);
   return row;
+}
+
+// קוד שלא נשלח בשום ערוץ: מוחזר למי שביקש, והוא מוסר אותו ביד (למשל הורה שמוסר להורה אחר).
+export async function issueLocalCode(ctx: MutationCtx, person: Doc<"people">, purpose: CodePurpose, ttlMs: number): Promise<string> {
+  for (const old of await ctx.db.query("emailCodes").withIndex("by_person", (q) => q.eq("personId", person._id)).collect()) {
+    if (old.purpose === purpose) await ctx.db.delete(old._id);
+  }
+  const code = generateEmailCode();
+  const salt = randomHex(16);
+  await ctx.db.insert("emailCodes", {
+    personId: person._id,
+    email: "",
+    purpose,
+    codeHash: await hashPin(code, salt),
+    salt,
+    expiresAt: Date.now() + ttlMs,
+    attempts: 0,
+  });
+  return code;
 }

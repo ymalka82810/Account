@@ -235,6 +235,15 @@ export async function createFamilyDoc(ctx: MutationCtx, name: string): Promise<I
   return await ctx.db.insert("families", { name, childCode: await freshCode(ctx), createdAt: Date.now() });
 }
 
+// הערה: שגיאות של קוד משפחה מוחזרות כתוצאה (ולא נזרקות) כדי שספירת הניסיונות תישמר.
+// הספירה היא לפי מכשיר (device), לא גלובלית, כדי שמנחש אחד לא ינעל את כולם.
+export const failCode = async (ctx: MutationCtx, device: string | undefined) => {
+  await noteHit(ctx, deviceKey(device), CODE_FAIL_WINDOW_MS);
+  return { ok: false as const, reason: "code" as const };
+};
+export const codeThrottled = (ctx: MutationCtx, device: string | undefined) =>
+  isThrottled(ctx, deviceKey(device), CODE_FAIL_LIMIT, CODE_FAIL_WINDOW_MS);
+
 // ---------- הגבלת קצב ----------
 export async function isThrottled(ctx: QueryCtx, key: string, limit: number, windowMs: number): Promise<boolean> {
   const row = await ctx.db.query("throttles").withIndex("by_key", (q) => q.eq("key", key)).first();
@@ -378,6 +387,14 @@ export function maskEmail(email: string): string {
   const [name, domain] = email.split("@");
   return (name[0] ?? "") + "***@" + (domain ?? "");
 }
+
+// ---------- קישור הורה למכשיר ----------
+export const TICKET_TTL_MS = 10 * 60 * 1000; // מהרגע שהקודים אומתו ועד שהמכשיר החדש נרשם
+export const BIND_CODE_TTL_MS = 30 * 60 * 1000; // קוד קישור שהורה מוסר להורה אחר
+export const RECOVERY_WAIT_MS = 24 * 60 * 60 * 1000; // המתנה לפני החלפת מכשיר שאבד
+export const RECOVERY_TTL_MS = 7 * 24 * 60 * 60 * 1000; // כמה זמן הבקשה תקפה אחרי שהוגשה
+export const LOGIN_CHALLENGES_PER_DEVICE = 3;
+export const LOGIN_CHALLENGES_PER_PERSON = 200;
 
 // ---------- מכשירים מהימנים וניחושים ממכשירים זרים ----------
 // הנעילה המדורגת של אדם נספרת רק מכשלונות ממכשיר מהימן שלו (מכשיר שנכנס ממנו בהצלחה

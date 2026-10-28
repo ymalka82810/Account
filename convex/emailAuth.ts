@@ -3,6 +3,7 @@ import { v, ConvexError } from "convex/values";
 import { hashToken, normalizeEmail, requirePerson, validEmail, validPin, pinRuleMessage, findFamilyByCode } from "./lib";
 import { issueCode, verifyCode } from "./emailCodes";
 import { codeThrottled, failCode, openSession, setPin } from "./auth";
+import { isBound } from "./biometric";
 
 // ---------- חיבור מייל להורה ----------
 // הורה שכבר יש לו מייל מאומת צריך קודם קוד מהמייל הישן (requestEmailChangeCode),
@@ -105,6 +106,9 @@ export const resetWithCode = mutation({
     for (const s of await ctx.db.query("sessions").withIndex("by_person", (q) => q.eq("personId", p._id)).collect()) {
       await ctx.db.delete(s._id);
     }
+    // הורה שקשור למכשיר נכנס רק מהמכשיר שלו (עם חתימה), לכן איפוס הקוד לא פותח לו סשן כאן.
+    // הוא נכנס עם הקוד החדש מהמכשיר שלו. (מכשיר שאבד: deviceMove, החלפה בהמתנה של 24 שעות.)
+    if (await isBound(ctx, p._id)) return { ok: true as const, token: undefined };
     return { ok: true as const, token: await openSession(ctx, p._id) };
   },
 });

@@ -32,6 +32,7 @@ const SUBJECTS: Record<string, string> = {
   pinReset: "קוד לאיפוס הקוד הסודי בקופה",
   childReset: "קוד לאישור קוד סודי חדש לילד/ה בקופה",
   emailChange: "קוד לאישור החלפת המייל בקופה",
+  deviceMove: "קוד לאישור החלפת מכשיר בקופה",
 };
 
 export const sendCode = internalAction({
@@ -72,5 +73,38 @@ export const notifyLock = internalAction({
           `אם זה לא הוא/היא, כדאי להיכנס לקופה ולקבוע קוד חדש.`,
       );
     }
+  },
+});
+
+// התראה על החלפת מכשיר של הורה: אל ההורה עצמו ואל שאר ההורים (עם מייל מאומת).
+//   requested = הוגשה בקשה שתבשיל בעוד 24 שעות (אפשר לבטל מהמכשיר הקשור).   changed = המכשיר הוחלף.
+export const notifyDeviceChange = internalAction({
+  args: { personId: v.id("people"), kind: v.union(v.literal("requested"), v.literal("changed")) },
+  handler: async (ctx, { personId, kind }) => {
+    const { name, emails } = await ctx.runQuery(internal.email.deviceRecipients, { personId });
+    for (const to of emails) {
+      await deliver(
+        to,
+        kind === "requested" ? "בקשה להחלפת מכשיר של " + name + " בקופה" : "המכשיר של " + name + " הוחלף בקופה",
+        kind === "requested"
+          ? `הוגשה בקשה להחליף את המכשיר שממנו ${name} נכנס/ת לקופה כהורה.\n` +
+            `ההחלפה תתאפשר רק בעוד 24 שעות. אם זה לא את/ה, היכנסו לקופה מהמכשיר הרגיל וביטלו את הבקשה בלשונית "ניהול".`
+          : `${name} נכנס/ת עכשיו לקופה כהורה ממכשיר חדש, והמכשיר הקודם נותק.\n` +
+            `אם זה לא ${name}, כדאי להודיע להורה השני ולשנות את הקוד הסודי.`,
+      );
+    }
+  },
+});
+
+// כל מי שצריך לדעת על החלפת מכשיר של הורה: ההורה עצמו וההורים האחרים במשפחה, עם מייל מאומת.
+export const deviceRecipients = internalQuery({
+  args: { personId: v.id("people") },
+  handler: async (ctx, { personId }) => {
+    const p = await ctx.db.get(personId);
+    if (!p || !p.familyId) return { name: "", emails: [] as string[] };
+    const familyId = p.familyId;
+    const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
+    const emails = members.filter((m) => m.role === "parent" && m.emailVerified && m.email).map((m) => m.email as string);
+    return { name: p.name, emails: [...new Set(emails)] };
   },
 });

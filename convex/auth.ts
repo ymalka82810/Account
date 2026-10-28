@@ -1,11 +1,12 @@
-import { mutation, query, MutationCtx } from "./_generated/server";
+import { mutation, query, MutationCtx, QueryCtx } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { COUNTRIES, isCurrency } from "./currency";
 import { Doc, Id } from "./_generated/dataModel";
 import { internal } from "./_generated/api";
 import { verifyCode } from "./emailCodes";
+import { checkBiometric, familyHasBoundParent, isBound, proofValidator } from "./biometric";
 import {
-  CODE_FAIL_LIMIT, CODE_FAIL_WINDOW_MS, CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS, MAX_FAMILY_SIZE, SESSION_MS,
+  codeThrottled, failCode, CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS, MAX_FAMILY_SIZE, SESSION_MS,
   adoptLegacy, avatarOf, cleanFamilyName, cleanName, createFamilyDoc, deviceKey, findFamilyByCode, getSessionPerson, hashPin, isPass, issuePass, passExpiry, PASS_TTL_MS,
   hashToken, isThrottled, legacyPeople, noteHit, randomHex, registerPinFail, requireAdultBirthDate, requireSameFamily, requireParent, validPin, pinRuleMessage,
   upgradePinHash, verifyPin, trustKeyOf, hitCount, guessKeys, MAX_TRUSTED_DEVICES,
@@ -40,23 +41,24 @@ export async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: stri
   });
 }
 
-const publicPerson = (p: Doc<"people">) => ({
+// deviceBound: הורה שקשור למכשיר. מסך הכניסה משתמש בזה כדי לדעת שצריך גם חתימה מהמכשיר.
+const publicPerson = (p: Doc<"people">, bound = false) => ({
   id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash, pinLength: p.pinLength ?? 4,
+  deviceBound: bound,
 });
-
-// הערה: שגיאות של קוד משפחה מוחזרות כתוצאה (ולא נזרקות) כדי שספירת הניסיונות תישמר.
-// הספירה היא לפי מכשיר (device), לא גלובלית, כדי שמנחש אחד לא ינעל את כולם.
-export const failCode = async (ctx: MutationCtx, device: string | undefined) => {
-  await noteHit(ctx, deviceKey(device), CODE_FAIL_WINDOW_MS);
-  return { ok: false as const, reason: "code" as const };
+const boundParentIds = async (ctx: QueryCtx, people: Doc<"people">[]) => {
+  const ids = new Set<string>();
+  for (const p of people) if (p.role === "parent" && (await isBound(ctx, p._id))) ids.add(p._id);
+  return ids;
 };
-export const codeThrottled = (ctx: MutationCtx, device: string | undefined) =>
-  isThrottled(ctx, deviceKey(device), CODE_FAIL_LIMIT, CODE_FAIL_WINDOW_MS);
+
+// failCode ו-codeThrottled עברו ל-lib.ts (כדי ש-biometric.ts ישתמש בהם בלי תלות מעגלית), ומיוצאים מכאן לשימוש מודולים קיימים.
+export { failCode, codeThrottled } from "./lib";
 
 // הורים מהגרסה הישנה (משפחה אחת בלי קוד). נעלם מעצמו אחרי שהורה נכנס פעם אחת.
 export const legacyRoster = query({
   args: {},
-  handler: async (ctx) => (await legacyPeople(ctx)).filter((p) => p.role === "parent").map(publicPerson),
+  handler: async (ctx) => (await legacyPeople(ctx)).filter((p) => p.role === "parent").map((p) => publicPerson(p)),
 });
 
 // בדיקת קוד משפחה ורשימת בני המשפחה למסך הכניסה.
@@ -77,7 +79,10 @@ export const enter = mutation({
       familyName: found.family.name,
       // מה שנשמר במכשיר לכניסות הבאות: כרטיס כניסה, אף פעם לא קוד ההצטרפות.
       loginCode: found.passId ? code : remember ? await issuePass(ctx, found.family._id, label) : undefined,
-      people: people.map(publicPerson),
+      people: await (async () => {
+        const bound = await boundParentIds(ctx, people);
+        return people.map((p) => publicPerson(p, bound.has(p._id)));
+      })(),
     };
   },
 });
@@ -172,9 +177,36 @@ export const rejectJoin = mutation({
   },
 });
 
+// בדיקת קוד סודי ממכשיר שהאדם לא נכנס ממנו (החלפת מכשיר, שחזור). כמו בכניסה ממכשיר זר: מוגבל לפי
+// (אדם, מכשיר) ובסך הכול לאדם, ולא נועל את האדם עצמו. מחזיר ok או את סיבת הכישלון.
+export async function checkPinForeign(
+  ctx: MutationCtx, p: Doc<"people">, pin: string, device: string | undefined,
+): Promise<{ ok: true } | { ok: false; reason: "nopin" | "locked" | "wrong"; waitSeconds?: number; left?: number }> {
+  if (!p.pinHash || !p.pinSalt) return { ok: false, reason: "nopin" };
+  const now = Date.now();
+  if (p.lockedUntil && p.lockedUntil > now) return { ok: false, reason: "locked", waitSeconds: Math.ceil((p.lockedUntil - now) / 1000) };
+  const keys = guessKeys(p._id, device);
+  if ((await hitCount(ctx, keys.person, GUESS_PERSON_WINDOW_MS)) >= GUESS_PERSON_LIMIT
+    || (await hitCount(ctx, keys.device, GUESS_DEVICE_WINDOW_MS)) >= GUESS_DEVICE_LIMIT) {
+    return { ok: false, reason: "locked", waitSeconds: GUESS_DEVICE_WINDOW_MS / 1000 };
+  }
+  if (!(await verifyPin(pin, p.pinSalt, p.pinHash))) {
+    await noteHit(ctx, keys.person, GUESS_PERSON_WINDOW_MS);
+    await noteHit(ctx, keys.device, GUESS_DEVICE_WINDOW_MS);
+    const left = GUESS_DEVICE_LIMIT - (await hitCount(ctx, keys.device, GUESS_DEVICE_WINDOW_MS));
+    return left <= 0 ? { ok: false, reason: "locked", waitSeconds: GUESS_DEVICE_WINDOW_MS / 1000 } : { ok: false, reason: "wrong", left };
+  }
+  return { ok: true };
+}
+
+// הורה שקשור למכשיר נכנס רק עם חתימה של המפתח שבמכשיר (proof, מ-biometric:loginChallenge),
+// נוסף על הקוד הסודי. בלי חתימה תקפה מחזירים "device" בלי לבדוק את הקוד הסודי בכלל, כך שאי אפשר
+// לנחש קוד סודי ממכשיר אחר, וגם לא ללמוד אם הוא נכון.
+// הורה שעוד לא קשור: אם במשפחה כבר יש הורה קשור הוא חייב להיקשר בקוד קישור (deviceMove:bindStart);
+// אם אין (הקמה, או הורה מהגרסה הקודמת) הוא נכנס, ומתבקש לקשור את המכשיר מיד (needBind).
 export const login = mutation({
-  args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string(), device: v.optional(v.string()) },
-  handler: async (ctx, { code, personId, pin, device }) => {
+  args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string(), device: v.optional(v.string()), proof: v.optional(proofValidator) },
+  handler: async (ctx, { code, personId, pin, device, proof }) => {
     const p = await ctx.db.get(personId);
     if (!p) return { ok: false as const, reason: "code" as const };
     if (p.familyId) {
@@ -184,6 +216,16 @@ export const login = mutation({
     } else if (p.role !== "parent") {
       // נתונים ישנים: רק הורה פותח את המעבר למשפחה. ילדים מקבלים קוד מההורים.
       return { ok: false as const, reason: "legacy" as const };
+    }
+    let needBind = false;
+    if (p.role === "parent" && p.familyId) {
+      if (await isBound(ctx, p._id)) {
+        if (!proof || !(await checkBiometric(ctx, p._id, "login", proof))) return { ok: false as const, reason: "device" as const };
+      } else if (await familyHasBoundParent(ctx, p.familyId)) {
+        return { ok: false as const, reason: "needBind" as const };
+      } else {
+        needBind = true;
+      }
     }
     if (!p.pinHash || !p.pinSalt) return { ok: false as const, reason: "nopin" as const };
     const now = Date.now();
@@ -223,7 +265,7 @@ export const login = mutation({
     });
     await upgradePinHash(ctx, p, pin);
     if (!p.familyId) await adoptLegacy(ctx);
-    return { ok: true as const, token: await openSession(ctx, personId) };
+    return { ok: true as const, token: await openSession(ctx, personId), needBind };
   },
 });
 

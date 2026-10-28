@@ -102,7 +102,9 @@ export default defineSchema({
   emailCodes: defineTable({
     personId: v.id("people"),
     email: v.string(),
-    purpose: v.union(v.literal("verify"), v.literal("pinChange"), v.literal("pinReset"), v.literal("childReset"), v.literal("emailChange")),
+    purpose: v.union(v.literal("verify"), v.literal("pinChange"), v.literal("pinReset"), v.literal("childReset"), v.literal("emailChange"),
+      // החלפת מכשיר להורה: deviceMove נשלח למייל המאומת, deviceBind הורה אחר מוסר ביד (לא נשלח)
+      v.literal("deviceMove"), v.literal("deviceBind")),
     codeHash: v.string(),
     salt: v.string(),
     expiresAt: v.number(),
@@ -216,6 +218,28 @@ export default defineSchema({
     personId: v.id("people"),
     action: v.string(),
     challenge: v.string(),
+    expiresAt: v.number(),
+    // רק באתגרי כניסה (action = "login"): המכשיר שביקש. מגביל כמה אתגרים פתוחים יש לכל מכשיר,
+    // כדי שמי שמחזיק קוד משפחה לא יוכל להציף ולמנוע מההורה להיכנס.
+    device: v.optional(v.string()),
+  }).index("by_person", ["personId"]),
+
+  // כרטיס חד-פעמי להשלמת קישור מכשיר חדש להורה (נוצר אחרי שהקוד הסודי והקוד השני אומתו).
+  deviceTickets: defineTable({
+    personId: v.id("people"),
+    ticketHash: v.string(),
+    expiresAt: v.number(),
+  })
+    .index("by_hash", ["ticketHash"])
+    .index("by_person", ["personId"]),
+
+  // בקשת החלפת מכשיר כשהמכשיר הישן אבד (אין אישור מהמכשיר הישן ואין הורה אחר שיעזור).
+  // ההחלפה אפשרית רק אחרי readyAt (24 שעות), וההורים מקבלים על זה מייל ויכולים לבטל.
+  deviceRecoveries: defineTable({
+    personId: v.id("people"),
+    secretHash: v.string(),
+    requestedAt: v.number(),
+    readyAt: v.number(),
     expiresAt: v.number(),
   }).index("by_person", ["personId"]),
 
