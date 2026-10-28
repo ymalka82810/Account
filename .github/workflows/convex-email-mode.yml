@@ -1,0 +1,36 @@
+name: Convex email mode
+
+# מפעילים ידנית. dev = המיילים מודפסים ללוג של Convex במקום להישלח (לבדיקות, לא לפרודקשן).
+# off = מוחק את המשתנה, וחוזרים לשליחה אמיתית דרך Resend.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "dev או off"
+        required: true
+        default: dev
+        type: choice
+        options: [dev, off]
+
+jobs:
+  set-mode:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: |
+          if [ "$MODE" = "dev" ]; then
+            npx convex env set EMAIL_MODE dev
+          else
+            npx convex env remove EMAIL_MODE
+          fi
+          npx convex env list | sed -E 's/=.*/=<hidden>/' | grep -E "^(EMAIL_MODE|RESEND_API_KEY|EMAIL_FROM)=" || true
+        env:
+          MODE: ${{ inputs.mode }}
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
