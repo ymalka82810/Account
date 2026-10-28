@@ -3,7 +3,7 @@ import { t } from '../../i18n/index.js';
 import { state } from '../../state/state.js';
 import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
-import { codeGone, setToken } from '../../state/auth.js';
+import { codeGone, route, setToken } from '../../state/auth.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
@@ -46,7 +46,12 @@ export function ForgotPinSheet() {
         if (!pinOk(newPin, 'parent')) { setErr(t('הקוד החדש צריך להיות {rule}.', { rule: pinLabel('parent') })); return; }
         try {
           const res = await call('emailAuth:resetWithCode', { code: state.fam.code, personId: f.person.id, emailCode, newPin });
-          if (res.ok) { state.pinFlow = null; sheet.close(); setToken(res.token); return; }
+          if (res.ok) {
+            sheet.close();
+            // הורה שקשור למכשיר נכנס רק מהמכשיר שלו, ולכן אחרי האיפוס חוזרים למסך הקוד להיכנס עם הקוד החדש.
+            if (!res.token) { toast(t('הקוד עודכן. היכנסו עם הקוד החדש מהמכשיר שלכם.')); state.pinFlow = null; route(); return; }
+            state.pinFlow = null; setToken(res.token); return;
+          }
           if (res.reason === 'code') { sheet.close(); codeGone(); return; }
           setErr(res.reason === 'throttled' ? t('יותר מדי ניסיונות. נסו שוב עוד כמה דקות.') : t('קוד האימות שגוי או שפג תוקפו.'));
         } catch (e) { setErr(errMsg(e)); }

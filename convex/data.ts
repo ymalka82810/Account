@@ -1,6 +1,7 @@
 import { query } from "./_generated/server";
 import { v } from "convex/values";
 import { ALERT_WINDOW_MS, avatarOf, getSessionPerson, maskEmail } from "./lib";
+import { isBound } from "./biometric";
 
 // כל נתוני המשפחה למי שמחובר/ת. בלי כניסה תקינה מחזיר null.
 // אם החשבון הוא מהגרסה הישנה (בלי משפחה), מחזיר legacy כדי שהאפליקציה תעביר אותו.
@@ -41,8 +42,10 @@ export const get = query({
         // האם הוגדרו למשפחה מיקום או מטבע (אחרת הערכים למעלה הם ברירת המחדל של הנתונים הישנים)
         localeSet: !!(family.country || family.currency),
       },
-      people: people.map((p) => ({
+      people: await Promise.all(people.map(async (p) => ({
         id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash, pinLength: p.pinLength ?? 4,
+        // הורה שקשור למכשיר (ראו biometric.ts). להורים בלבד, כדי שיראו מי עוד צריך קוד קישור.
+        deviceBound: me.role === "parent" && p.role === "parent" ? await isBound(ctx, p._id) : false,
         // התראה להורים בלבד: הקוד של האדם ננעל בגלל ניסיונות כושלים בשבוע האחרון.
         lockAlert: me.role === "parent" && !!p.lastLockAt && Date.now() - p.lastLockAt < ALERT_WINDOW_MS
           ? { count: p.lockCount ?? 1, at: p.lastLockAt }
@@ -51,7 +54,7 @@ export const get = query({
         friendsEnabled: !!p.friendsEnabled,
         friendsRequested: me.role === "parent" ? !!p.friendsRequested : false,
         friendEmail: me.role === "parent" ? p.friendEmail ?? null : null,
-      })),
+      }))),
       // בקשות הצטרפות שממתינות לאישור. להורים בלבד.
       joinRequests: me.role === "parent"
         ? (await ctx.db.query("joinRequests").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect())

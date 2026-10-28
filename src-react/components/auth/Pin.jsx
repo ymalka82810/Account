@@ -4,6 +4,7 @@ import { state } from '../../state/state.js';
 import { pinBack, pinPadSpec, pressKey } from '../../state/auth.js';
 import { useSheet } from '../shared/Sheet.jsx';
 import { ForgotPinSheet } from './ForgotPinSheet.jsx';
+import { NewDeviceSheet } from './NewDeviceSheet.jsx';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del'];
@@ -38,6 +39,9 @@ export default function Pin({ current }) {
       </div>
       {f.mode === 'login' && f.person.role === 'parent' && !f.legacy && (
         <button className="ghost linkish" type="button" onClick={() => sheet.open(t('שכחתי את הקוד'), <ForgotPinSheet />)}>{t('שכחתי את הקוד')}</button>
+      )}
+      {f.mode === 'login' && f.person.role === 'parent' && !f.legacy && (
+        <button className="ghost linkish" type="button" onClick={() => sheet.open(t('מכשיר חדש / החלפת מכשיר'), <NewDeviceSheet />)}>{t('מכשיר חדש / החלפת מכשיר')}</button>
       )}
     </In>
   );

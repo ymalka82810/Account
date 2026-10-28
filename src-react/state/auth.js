@@ -3,6 +3,7 @@ import { toast, errMsg, fmtWait } from '../lib/helpers.js';
 import { call } from '../lib/api.js';
 import { DEMO_TOKEN } from '../lib/demo.js';
 import { PARENT_PIN_MAX } from '../lib/pin.js';
+import { BioError, bioLoginProof, bioRegister, bioSupported } from '../lib/biometric.js';
 import { t } from '../i18n/index.js';
 
 // הלוגיקה של מסכי הכניסה. התצוגה שלהם ב-src-react/components/Auth.jsx.
@@ -92,6 +93,9 @@ export function backFromFamily() { const nb = state.fromNotebook; state.fromNote
 export async function createFamily({ familyName, name, birthDate, avatar, gender, pin, country, currency }) {
   try {
     const res = await call('auth:createFamily', { familyName, name, birthDate, avatar, gender, pin, country, currency });
+    // ההורה הראשון נקשר למכשיר הזה מיד, בזמן שהקוד הסודי עוד בידינו. אם זה נכשל או בוטל,
+    // מסך "קישור המכשיר" בתוך האפליקציה לא יניח להמשיך בלי זה.
+    try { if (await bioSupported()) await bioRegister(/** @type {any} */ (res).token, pin); } catch (e) { /* המסך בתוך האפליקציה ימשיך משם */ }
     state.view = 'welcome';
     setToken(/** @type {any} */ (res).token); // join מחזיר היום רק pending, לא טוקן
     return '';
@@ -197,10 +201,24 @@ async function submitPin() {
   const code = f.legacy ? undefined : state.fam.code;
   try {
     if (f.mode === 'login') {
-      const res = await call('auth:login', { code, personId: f.person.id, pin: f.entered });
+      // הורה שקשור למכשיר נכנס רק מהמכשיר שלו: חתימה של המפתח שבמכשיר, נוסף על הקוד הסודי.
+      let proof;
+      if (f.person.role === 'parent' && f.person.deviceBound && !f.legacy) {
+        try { proof = await bioLoginProof(f.person.id, code); }
+        catch (e) {
+          f.entered = '';
+          if (e instanceof BioError && e.code === 'code') { codeGone(); return; }
+          renderPin(e instanceof BioError ? e.message : errMsg(e));
+          shake();
+          return;
+        }
+      }
+      const res = await call('auth:login', { code, personId: f.person.id, pin: f.entered, proof });
       if (res.ok) { state.pinFlow = null; setToken(res.token); return; }
       f.entered = '';
       if (res.reason === 'code') { codeGone(); return; }
+      if (res.reason === 'device') { renderPin(t('ההורה הזה נכנס רק מהמכשיר שלו. אם החלפתם מכשיר, לחצו על "מכשיר חדש / החלפת מכשיר".')); shake(); return; }
+      if (res.reason === 'needBind') { renderPin(t('כדי להיכנס כהורה צריך לקשר את המכשיר הזה עם קוד קישור מהורה אחר. לחצו על "מכשיר חדש / החלפת מכשיר".')); shake(); return; }
       if (res.reason === 'wrong') renderPin(t('הקוד לא נכון. נשארו עוד {left} ניסיונות.', { left: res.left }));
       else if (res.reason === 'locked') renderPin(t('ניסיתם יותר מדי פעמים. נסו שוב בעוד {wait}.', { wait: fmtWait(res.waitSeconds) }));
       else if (res.reason === 'throttled') renderPin(t('יותר מדי ניסיונות. נסו שוב עוד דקה.'));

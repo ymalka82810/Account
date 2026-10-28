@@ -6,6 +6,7 @@ import { toast, errMsg } from '../../lib/helpers.js';
 import { BioError } from '../../lib/biometric.js';
 import { useSheet } from '../shared/Sheet.jsx';
 import { ResetPinSheet } from './ResetPinSheet.jsx';
+import { BindCodeSheet } from './BindCodeSheet.jsx';
 import { useRun } from '../../lib/useRun.js';
 import { call } from '../../lib/api.js';
 import { roleLabel } from '../../lib/computations.js';
@@ -60,6 +61,17 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
     } finally { setRoleBusy(null); }
   }
 
+  // קוד קישור להורה אחר: לקישור מכשיר חדש, או כשהטלפון שלו נהרס. דורש טביעת אצבע, וקשור להורה הזה.
+  async function bindCode(p) {
+    try {
+      const proof = await bioConfirm(`bind:${p.id}`, { title: t('קוד קישור ל{name}', { name: p.name }), need: t('להנפיק קוד קישור') });
+      const res = await call('deviceMove:issueBindCode', { token, personId: p.id, proof });
+      sheet.open(t('קוד קישור ל{name}', { name: res.name }), <BindCodeSheet code={res.code} name={res.name} />);
+    } catch (e) {
+      toast(e instanceof BioError ? e.message : errMsg(e));
+    }
+  }
+
   function changeGender(p, gender) {
     run('people:setGender', { id: p.id, gender });
   }
@@ -82,7 +94,7 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
           <div className="text">
             {p.name}{' '}
             <span className="meta">
-              {roleLabel(p.role, p.gender) + (p.hasPin ? '' : ' • ' + g(p.gender, 'עוד לא בחר קוד', 'עוד לא בחרה קוד', 'עוד לא בחר/ה קוד'))}
+              {roleLabel(p.role, p.gender) + (p.hasPin ? '' : ' • ' + g(p.gender, 'עוד לא בחר קוד', 'עוד לא בחרה קוד', 'עוד לא בחר/ה קוד')) + (p.role === 'parent' && !p.deviceBound ? ' • ' + t('⏳ עוד לא קשור/ה למכשיר') : '')}
             </span>
             {p.lockAlert && (
               <div className="meta" style={{ color: '#b45309' }}>
@@ -115,6 +127,9 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
             </div>
           </div>
           <button className="small" type="button" onClick={() => sheet.open(t('קוד סודי ל{name}', { name: p.name }), <ResetPinSheet person={p} />)}>{t('קוד חדש')}</button>
+          {p.role === 'parent' && p.id !== me && (
+            <button className="small" type="button" onClick={() => bindCode(p)}>{t('קוד קישור למכשיר')}</button>
+          )}
           {p.role === 'teen' && p.friendsEnabled && (
             <button className="small danger" type="button" onClick={() => {
               if (!confirm(t('לכבות את מצב החברים של {name}? אי אפשר יהיה להוסיף רישומים חדשים עם חברים.', { name: p.name }))) return;

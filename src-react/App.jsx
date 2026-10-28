@@ -21,6 +21,8 @@ import FamilyTab from './components/family/FamilyTab.jsx';
 import ManageTab from './components/manage/ManageTab.jsx';
 import HistoryTab from './components/history/HistoryTab.jsx';
 import LocaleSheet from './components/manage/LocaleSheet.jsx';
+import DeviceGate from './components/account/DeviceGate.jsx';
+import PendingMoves from './components/account/PendingMoves.jsx';
 
 const ICON_CURRENCY_KEY = 'app-icon-currency';
 
@@ -353,6 +355,8 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
   const sheet = useSheet();
   const gearRef = useRef(null);
   const [launchRect, setLaunchRect] = useState(null);
+  // הורה שהמכשיר שלו עוד לא קשור (ראו biometric.ts) לא ממשיך לפני הקישור.
+  const dev = useQuery('biometric:deviceStatus', isParent && !isDemo(token) ? { token } : 'skip');
 
   const openAccount = () => {
     if (gearRef.current) setLaunchRect(gearRef.current.getBoundingClientRect());
@@ -364,8 +368,11 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
     sheet.open('', <AccountSheet />, { x: window.innerWidth / 2, y: window.innerHeight / 2 });
   }, [sheet]);
 
+  if (isParent && dev && !dev.bound) return <DeviceGate />;
+
   return (
     <>
+      {isParent && !isDemo(token) && <PendingMoves />}
       {isDemo(token) && (
         <div className="demo-banner" role="status">
           <span>{t('👀 מצב דמו: נתוני דוגמה, שום דבר לא נשמר')}</span>

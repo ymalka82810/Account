@@ -83,6 +83,10 @@ export const setRole = mutation({
       : { role, teenRequested: undefined, friendsEnabled: false, friendsRequested: false, friendEmail: undefined });
     // הורה שהפך לילד/ה או לנער/ה לא צריך את המכשירים הביומטריים שלו.
     if (p.role === "parent") await purgeBiometric(ctx, id);
+    // מי שהפך להורה לא ממשיך עם הסשן הקיים: הוא נכנס מחדש וקושר מכשיר בקוד קישור (הורה לא קשור לא פועל כהורה).
+    if (role === "parent") {
+      for (const s of await ctx.db.query("sessions").withIndex("by_person", (q) => q.eq("personId", id)).collect()) await ctx.db.delete(s._id);
+    }
   },
 });
 

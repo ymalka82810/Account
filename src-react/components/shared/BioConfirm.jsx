@@ -1,57 +1,22 @@
 import { t } from '../../i18n/index.js';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from './Sheet.jsx';
-import AsyncButton from './AsyncButton.jsx';
-import { pinProps, Err, Field } from './fields.jsx';
-import { BioError, bioProve, bioReady, bioRegister, bioSupported } from '../../lib/biometric.js';
-import { pinOk } from '../../lib/pin.js';
-import { translateServer } from '../../i18n/serverMessages.js';
-import { isNativeApp } from '../../lib/updater.js';
+import FirstBindForm from '../account/FirstBind.jsx';
+import { BioError, bioProve, bioReady, bioSupported } from '../../lib/biometric.js';
 
-// רישום המכשיר לאימות ביומטרי: ההורה מאשר עם הקוד הסודי שלו, ואז טביעת אצבע / זיהוי פנים.
-// onDone(true) אחרי רישום, onDone(false) אם החלון נסגר בלי רישום.
+// קישור המכשיר להורה (בדרך כלל כבר נעשה בהקמה, ולכן זה נפתח רק אם משהו חסר במכשיר הזה).
+// onDone(true) אחרי קישור, onDone(false) אם החלון נסגר בלי קישור.
 function BioSetupSheet({ onDone, reason }) {
-  const { token } = useApp();
   const sheet = useSheet();
-  const [pin, setPin] = useState('');
-  const [err, setErr] = useState('');
   const done = useRef(false);
-  useSheetTitle(t('הפעלת אימות ביומטרי'));
+  useSheetTitle(t('קישור המכשיר'));
   useEffect(() => () => { if (!done.current) onDone(false); }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  async function register() {
-    if (!pinOk(pin, 'parent')) { setErr(t('הקלידו את הקוד הסודי שלכם.')); return; }
-    setErr('');
-    try {
-      const res = /** @type {{ ok: boolean, reason?: string }} */ (await bioRegister(token, pin));
-      if (!res.ok) {
-        setErr(res.reason === 'locked' ? t('יותר מדי ניסיונות. נסו שוב עוד כמה דקות.')
-          : res.reason === 'nopin' ? t('אין לכם קוד סודי. קבעו קוד ב"החשבון שלי" ונסו שוב.')
-            : t('הקוד הסודי שגוי.'));
-        setPin('');
-        return;
-      }
-      done.current = true;
-      sheet.close();
-      onDone(true);
-    } catch (e) {
-      setErr(e instanceof BioError ? e.message : (typeof e?.data === 'string' ? translateServer(e.data) : t('משהו השתבש. נסו שוב.')));
-    }
-  }
-
   return (
-    <div className="form">
-      <p className="hint">
-        {reason || t('שינוי תפקיד במשפחה (ילד/ה, נער/ה, הורה) מאושר בטביעת אצבע או בזיהוי פנים.')}
-        {' '}{isNativeApp ? t('צריך לרשום את הטלפון הזה פעם אחת.') : t('צריך לרשום את המכשיר והדפדפן הזה פעם אחת.')}
-      </p>
-      <Field label={t('הקוד הסודי שלכם, לאישור')}>
-        <input {...pinProps('current-password')} value={pin} onChange={(e) => setPin(e.target.value)} />
-      </Field>
-      {err && <Err>{err}</Err>}
-      <AsyncButton className="primary" onClick={register}>{t('רישום טביעת אצבע / זיהוי פנים')}</AsyncButton>
-    </div>
+    <>
+      {reason && <p className="hint">{reason}</p>}
+      <FirstBindForm onDone={() => { done.current = true; sheet.close(); onDone(true); }} />
+    </>
   );
 }
 

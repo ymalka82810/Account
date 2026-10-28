@@ -33,6 +33,10 @@ type Gate =
   | { ok: true; person: Doc<"people"> }
   | { ok: false; reason: "throttled" | "code" | "nopin" | "locked" | "wrong"; waitSeconds?: number; left?: number };
 
+// בדיקת הטיפוסים של ה-frontend לא ב-strict ואז הצמצום של union לא עובד; כך התוצאה נשארת כישלון בלבד גם שם.
+type Fail = Exclude<Gate, { ok: true }>;
+const asFail = (g: Gate): Fail => g as Fail;
+
 // זהות לפני החלפת מכשיר: קוד המשפחה (או כרטיס מכשיר) והקוד הסודי של ההורה, בלי סשן.
 async function gate(ctx: MutationCtx, a: { code?: string; personId: Id<"people">; pin: string; device?: string }): Promise<Gate> {
   if (await codeThrottled(ctx, a.device)) return { ok: false, reason: "throttled" };
@@ -105,7 +109,7 @@ export const moveStart = mutation({
   },
   handler: async (ctx, { code, personId, pin, method, secretCode, device }) => {
     const g = await gate(ctx, { code, personId, pin, device });
-    if (!g.ok) return g;
+    if (!g.ok) return asFail(g);
     const row = await verifyCode(ctx, personId, method === "email" ? "deviceMove" : "deviceBind", secretCode);
     if (!row) return { ok: false as const, reason: "secretCode" as const };
     return await issueTicket(ctx, g.person);
@@ -137,7 +141,7 @@ export const recoveryRequest = mutation({
   args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string(), device: v.optional(v.string()) },
   handler: async (ctx, { code, personId, pin, device }) => {
     const g = await gate(ctx, { code, personId, pin, device });
-    if (!g.ok) return g;
+    if (!g.ok) return asFail(g);
     if (!g.person.emailVerified || !g.person.email) return { ok: false as const, reason: "noEmail" as const };
     await issueCode(ctx, g.person, g.person.email, "deviceMove");
     return { ok: true as const };
@@ -149,7 +153,7 @@ export const recoveryConfirm = mutation({
   args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string(), emailCode: v.string(), device: v.optional(v.string()) },
   handler: async (ctx, { code, personId, pin, emailCode, device }) => {
     const g = await gate(ctx, { code, personId, pin, device });
-    if (!g.ok) return g;
+    if (!g.ok) return asFail(g);
     if (!(await verifyCode(ctx, personId, "deviceMove", emailCode))) return { ok: false as const, reason: "secretCode" as const };
     for (const r of await ctx.db.query("deviceRecoveries").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) await ctx.db.delete(r._id);
     const secret = randomHex(32);
@@ -167,7 +171,7 @@ export const recoveryFinish = mutation({
   args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string(), secret: v.string(), device: v.optional(v.string()) },
   handler: async (ctx, { code, personId, pin, secret, device }) => {
     const g = await gate(ctx, { code, personId, pin, device });
-    if (!g.ok) return g;
+    if (!g.ok) return asFail(g);
     const rows = await ctx.db.query("deviceRecoveries").withIndex("by_person", (q) => q.eq("personId", personId)).collect();
     const hash = secret.length <= 100 ? await hashSecret(secret) : "";
     const row = rows.find((r) => r.secretHash === hash);

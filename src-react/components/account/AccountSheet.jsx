@@ -9,6 +9,7 @@ import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } f
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import { ChangePinSheet, ChangePinEmailSheet, EmailSheet, AvatarSheet } from './AccountSheets.jsx';
+import { DeviceSheet } from './DeviceSheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
 import Select from '../shared/Select.jsx';
 import { GENDER_OPTIONS } from '../../lib/gender.js';
@@ -116,6 +117,12 @@ export function AccountSheet() {
         onClick={() => sheet.open(t('שינוי הקוד הסודי'), me.email ? <ChangePinEmailSheet /> : <ChangePinSheet />)}>
         {t('🔑 שינוי הקוד הסודי')}
       </button>
+
+      {me.role === 'parent' && (
+        <button className="ghost" type="button" onClick={() => sheet.open(t('המכשיר שלי'), <DeviceSheet />)}>
+          {t('📱 המכשיר שלי')}
+        </button>
+      )}
 
       {me.role === 'parent' && (
         <button className="ghost" type="button" onClick={() => sheet.open('', <EmailSheet />)}>
