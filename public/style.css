@@ -1171,17 +1171,11 @@ body[data-theme="parent"] #screen-notebook .nb-h2, body[data-theme="teen"] #scre
 .demo-cta .primary { background: #5a4300; color: #fff3c4; border-color: #5a4300; font-weight: 700; }
 .demo-banner button { background: none; border: 1px solid currentColor; border-radius: 999px; padding: .15em .8em; color: inherit; font: inherit; cursor: pointer; }
 
-/* עמוד הפנקס הראשי: הכותרת במרכז; העמודה הימנית שמורה לכפתור "חזרה", והגלגל בשמאל */
+/* עמוד הפנקס הראשי: שורה אחת: כפתור משפחה (חזרה / יצירה) בצד ימין, הכותרת באמצע, הגלגל בשמאל */
 #screen-notebook .nb-page:not(.nb-settings) .nb-head {
-  display: grid; grid-template-columns: 88px minmax(0, 1fr) 88px; align-items: center; gap: 6px;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px;
 }
-#screen-notebook .nb-page:not(.nb-settings) .nb-head h1 { grid-column: 2; text-align: center; }
-#screen-notebook .nb-page:not(.nb-settings) .nb-head .nb-gear { grid-column: 3; justify-self: end; }
-
-/* כפתור "חזרה למשפחה" בפנקס: בשורה משלו מעל הכותרת (לא צף עליה), והכותרת נשארת במרכז */
-#screen-notebook .back.nb-back {
-  position: static; display: block; width: fit-content; max-width: 520px;
-  margin: calc(12px + env(safe-area-inset-top, 0)) 18px 0;
+#screen-notebook .nb-page:not(.nb-settings) .nb-head h1 { text-align: center; font-size: 1.3rem; }
+#screen-notebook .nb-fam-btn {
+  white-space: nowrap; font-size: .9rem; font-weight: 700; min-height: 48px; padding: 0 14px; border-radius: 16px;
 }
-#screen-notebook:has(.nb-back) .nb-page:not(.nb-settings) { padding-top: 8px; }
-#screen-notebook .nb-page:not(.nb-settings) .nb-head { grid-template-columns: 56px minmax(0, 1fr) 56px; }

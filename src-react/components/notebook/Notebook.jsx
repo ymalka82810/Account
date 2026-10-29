@@ -10,7 +10,7 @@ import {
 } from '../../lib/notebook.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import Select from '../shared/Select.jsx';
-import { state } from '../../state/state.js';
+import { state, CODE_KEY, TOKEN_KEY } from '../../state/state.js';
 import { closeNotebook, goView, upgradeFromNotebook } from '../../state/auth.js';
 import { In } from '../auth/parts.jsx';
 
@@ -21,6 +21,11 @@ import { In } from '../auth/parts.jsx';
 // ההגדרות נפתחות עם #nb-settings בכתובת, כדי שכפתור "חזרה" של הטלפון יחזיר לעמוד הראשי.
 const SETTINGS_HASH = '#nb-settings';
 const pageFromHash = () => (location.hash === SETTINGS_HASH ? 'settings' : 'home');
+// האם באמת נפתחה/הצטרפו למשפחה במכשיר הזה (ולא רק עברו למסך הכניסה וחזרו)
+const hasFamily = () => {
+  try { return !!(state.fam || state.token || localStorage.getItem(CODE_KEY) || localStorage.getItem(TOKEN_KEY)); }
+  catch (e) { return !!state.fam; }
+};
 
 export default function Notebook({ current }) {
   const nb = useNotebook();
@@ -62,14 +67,13 @@ export default function Notebook({ current }) {
 
   return (
     <In screen="notebook" current={current}>
-      {state.notebookBack && page === 'home' && <button className="ghost back nb-back" type="button" onClick={closeNotebook}>{t('→ חזרה למשפחה')}</button>}
-      {page === 'home' ? <Home nb={nb} onSettings={openSettings} pulling={pulling} returned={returned} /> : <Settings nb={nb} onBack={closeSettings} closing={closing} />}
+      {page === 'home' ? <Home nb={nb} onSettings={openSettings} pulling={pulling} returned={returned} family={hasFamily()} /> : <Settings nb={nb} onBack={closeSettings} closing={closing} />}
     </In>
   );
 }
 
 // ---------- עמוד ראשי ----------
-function Home({ nb, onSettings, pulling, returned }) {
+function Home({ nb, onSettings, pulling, returned, family }) {
   const sheet = useSheet();
   const cur = notebookCurrency();
   const { sort, showPaid } = nb.settings;
@@ -99,6 +103,9 @@ function Home({ nb, onSettings, pulling, returned }) {
   return (
     <div className={'nb-page' + (pulling ? ' nb-pulled' : '') + (returned ? ' nb-push-back' : '')}>
       <div className="nb-head">
+        {family
+          ? <button className="ghost nb-fam-btn" type="button" onClick={closeNotebook}>{t('חזרה למשפחה')}</button>
+          : <button className="ghost nb-fam-btn" type="button" onClick={() => upgradeFromNotebook('setup')}>{t('🏠 צור משפחה')}</button>}
         <h1>{t('📒 הפנקס שלי')}</h1>
         <button className={'ghost nb-gear' + (pulling ? ' nb-gear-spin' : '')} type="button" aria-label={t('הגדרות')} onClick={onSettings}>
           <span className="nb-gear-ico">⚙️</span>
