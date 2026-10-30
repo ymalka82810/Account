@@ -66,7 +66,16 @@ const defaultLabels = () => ({ home: t('💰 הכסף שלי'), friends: t('🤝
 
 // משך האנימציה של מסך הטעינה (coin-drop-cycle ב-style.css) - מסך הטעינה
 // נשאר מוצג לפחות עד שקטע אנימציה שלם אחד מסתיים, גם אם הטעינה עצמה הסתיימה קודם.
+// האנימציה המלאה היא בונוס חד-פעמי: רק בפעם הראשונה במכשיר. אחר כך המסך נעלם ברגע שהנתונים הגיעו.
 const LOADING_MIN_MS = 4500;
+const LOADING_SEEN_KEY = 'loadingAnimSeen';
+const loadingMinMs = () => {
+  try {
+    if (localStorage.getItem(LOADING_SEEN_KEY)) return 0;
+    localStorage.setItem(LOADING_SEEN_KEY, '1');
+  } catch (e) { /* */ }
+  return LOADING_MIN_MS;
+};
 
 // טקסטים שמתחלפים במסך הטעינה, לפי מה שבאמת קורה (כניסה או יציאה).
 const loginTexts = () => [t('רגע, מתחברים…'), t('בודקים מי זה…'), t('כבר כמעט…')];
@@ -145,6 +154,8 @@ function Root() {
   // יציאה מהאפליקציה מוצגת מיד: בלי הנתונים אי אפשר לרנדר את המסך הראשי אפילו פעם אחת.
   const screen = shownScreen === 'app' && rawScreen !== 'app' ? rawScreen : shownScreen;
   const loadingSince = useRef(rawScreen === 'loading' ? Date.now() : null);
+  const minMs = useRef(null);
+  if (minMs.current == null) minMs.current = loadingMinMs();
   useEffect(() => {
     if (rawScreen === 'loading') {
       if (loadingSince.current == null) loadingSince.current = Date.now();
@@ -152,7 +163,7 @@ function Root() {
       return;
     }
     if (loadingSince.current == null) { setScreen(rawScreen); return; }
-    const remain = LOADING_MIN_MS - (Date.now() - loadingSince.current);
+    const remain = minMs.current - (Date.now() - loadingSince.current);
     if (remain <= 0) { loadingSince.current = null; setScreen(rawScreen); state.exiting = false; return; }
     const timer = setTimeout(() => { loadingSince.current = null; setScreen(rawScreen); state.exiting = false; }, remain);
     return () => clearTimeout(timer);

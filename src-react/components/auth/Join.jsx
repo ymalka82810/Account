@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { state } from '../../state/state.js';
-import { goView, joinFamily } from '../../state/auth.js';
+import { goView, joinFamily, openNotebook } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 
 export default function Join({ current }) {
@@ -11,16 +11,23 @@ export default function Join({ current }) {
   const [error, setError] = useState('');
   const [busy, run] = useBusy();
   const [sent, setSent] = useState(false);
+  const [sentName, setSentName] = useState('');
   const set = (k) => (e) => setV((x) => ({ ...x, [k]: e.target.value }));
   const submit = (ev) => {
     ev.preventDefault();
     setError('');
     run(async () => {
       const err = await joinFamily({ ...v, avatar });
-      if (err && err.pending) setSent(true);
+      if (err && err.pending) { setSentName(v.name); setSent(true); }
       else if (err) setError(err);
       setV({ name: '', pin: '' });
     });
+  };
+  // הודעה מוכנה להורה בוואטסאפ, כמו תזכורת החוב (WhatsAppRemind): איש הקשר נבחר שם, ושום מספר לא נשמר.
+  // הקישור הוא לאפליקציה בלבד, בלי קוד המשפחה: ההורה כבר מכיר אותו.
+  const askParent = () => {
+    const text = t('היי, {name} ביקש/ה להצטרף לקופה המשפחתית. אפשר להיכנס ולאשר: {url}', { name: sentName, url: location.origin + location.pathname });
+    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
   };
   if (sent) {
     return (
@@ -29,7 +36,10 @@ export default function Join({ current }) {
           <div className="big-emoji" aria-hidden="true">⏳</div>
           <h1>{t('הבקשה נשלחה')}</h1>
           <p className="hint">{fam ? t('ממתינים לאישור הורה ב{name}. אחרי שהורה יאשר, בוחרים את השם שלך במסך הכניסה ומקלידים את הקוד הסודי שבחרת.', { name: fam.name }) : t('ממתינים לאישור הורה. אחרי שהורה יאשר, בוחרים את השם שלך במסך הכניסה ומקלידים את הקוד הסודי שבחרת.')}</p>
-          <button className="primary" type="button" onClick={() => goView('welcome')}>{t('הבנתי')}</button>
+          <button className="primary" type="button" onClick={askParent}>{t('💬 שלחו להורה בוואטסאפ')}</button>
+          <p className="hint">{t('בינתיים אפשר לרשום בפנקס האישי, שנשמר במכשיר שלך.')}</p>
+          <button className="ghost" type="button" onClick={openNotebook}>{t('📒 בינתיים, לפנקס האישי')}</button>
+          <button className="ghost linkish" type="button" onClick={() => goView('welcome')}>{t('הבנתי')}</button>
         </div>
       </In>
     );
