@@ -33,13 +33,14 @@ export function AvatarSheet() {
 }
 
 // הוספה או החלפה של מייל להורה: כתובת, ואז קוד אימות שנשלח אליה.
-export function EmailSheet() {
+export function EmailSheet({ sentTo = '' }) {
   const { data } = useApp();
   const sheet = useSheet();
-  const current = data.me.email;
+  const current = data?.me?.email;
   // נקודת ההתחלה: בלי מייל, ישר לכתובת. עם מייל מאומת, קודם שולחים קוד למייל הישן.
-  const [step, setStep] = useState(current ? 'start' : 'email');
-  const [addr, setAddr] = useState('');
+  // sentTo: קוד כבר נשלח לכתובת הזו (מההקמה), ולכן מתחילים ישר באימות.
+  const [step, setStep] = useState(sentTo ? 'code' : current ? 'start' : 'email');
+  const [addr, setAddr] = useState(sentTo);
   const [email, setEmail] = useState('');
   const [oldCode, setOldCode] = useState('');
   const [code, setCode] = useState('');

@@ -71,10 +71,24 @@ const readPack = (code) => { try { return JSON.parse(read(PACK_PREFIX + code) ||
 // עברית היא שפת המקור (בלי מילון), אנגלית מובנית; כל השאר צריכות חבילה שהורדה.
 export const isInstalled = (code) => code === DEFAULT_LANG || code === SOURCE_LANG || !!readPack(code);
 
-// השפה השמורה אם היא מותקנת, אחרת אנגלית. אין זיהוי אוטומטי: המשתמש בוחר ומוריד בעצמו.
+const LANG_ALIASES = { iw: 'he', no: 'nb', nn: 'nb' };
+
+// שפת המכשיר הראשונה ברשימת ההעדפות שיש לנו עבורה, או null.
+export function deviceLang() {
+  const prefs = (typeof navigator !== 'undefined' && (navigator.languages || [navigator.language])) || [];
+  for (const p of prefs) {
+    const base = String(p || '').toLowerCase().split('-')[0];
+    const code = LANG_ALIASES[base] || base;
+    if (LANGUAGES[code]) return code;
+  }
+  return null;
+}
+
+// השפה ששמר המשתמש (גם אם החבילה עוד לא הורדה: setLang יוריד אותה), אחרת שפת המכשיר, אחרת אנגלית.
 export function initialLang() {
   const saved = read(LANG_KEY);
-  return saved && LANGUAGES[saved] && isInstalled(saved) ? saved : DEFAULT_LANG;
+  if (saved && LANGUAGES[saved]) return saved;
+  return deviceLang() || DEFAULT_LANG;
 }
 
 // מחזיר את המילון: מובנה, שמור במכשיר, או מוריד עכשיו (ושומר). זורק אם ההורדה נכשלה.

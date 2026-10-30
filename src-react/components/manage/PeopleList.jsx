@@ -53,7 +53,7 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
     }))) return;
     setRoleBusy(p.id);
     try {
-      const proof = await bioConfirm(`role:${p.id}:${toRole}`);
+      const proof = await bioConfirm(`role:${p.id}:${toRole}`, { why: t('כדי שילד לא יהפוך את עצמו להורה, שינוי תפקיד מאושר על ידי הורה. תיפתח עכשיו בקשת אימות מהמכשיר.') });
       await call('people:setRole', { token, id: p.id, role: toRole, proof });
       toast(t('{name} עכשיו {role} ✅', { name: p.name, role: roleLabel(toRole, p.gender) }));
     } catch (e) {

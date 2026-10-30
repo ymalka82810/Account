@@ -35,7 +35,7 @@ export default function PersonForm({ token }) {
     try {
       // הוספה בתור נער/ה או הורה מאושרת בטביעת אצבע / זיהוי פנים, כמו שינוי תפקיד.
       const clean = trimmed.replace(/\s+/g, ' ');
-      const proof = role === 'child' ? undefined : await bioConfirm(`add:${role}:${clean}`);
+      const proof = role === 'child' ? undefined : await bioConfirm(`add:${role}:${clean}`, { why: t('כדי שילד לא יהפוך את עצמו להורה, הוספה בתור נער/ה או הורה מאושרת על ידי הורה. תיפתח עכשיו בקשת אימות מהמכשיר.') });
       await call('people:add', { token: state.token || token, name: clean, role, avatar, gender: gender || undefined, pin: pin || undefined, proof });
       setName(''); setPin('');
       toast(g(gender, '{name} נוסף למשפחה ✅', '{name} נוספה למשפחה ✅', '{name} נוסף/ה למשפחה ✅', { name: trimmed }));

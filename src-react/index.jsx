@@ -17,7 +17,8 @@ function Root() {
   return client ? <ConvexProvider client={client}>{tree}</ConvexProvider> : tree;
 }
 
-// טוענים את מילון השפה לפני הרינדור הראשון, כדי שלא יהבהב טקסט עברי.
+// טוענים את מילון השפה (שפה שמורה או שפת המכשיר) לפני הרינדור הראשון, כדי שלא יהבהב טקסט בשפה הלא נכונה.
+// אם ההורדה נכשלה (אין חיבור) נשארים באנגלית.
 setLang(initialLang(), { persist: false }).finally(() => {
   createRoot(document.getElementById('root')).render(<Root />);
 });

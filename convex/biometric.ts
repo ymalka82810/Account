@@ -279,7 +279,7 @@ export const deviceStatus = query({
   },
 });
 
-export const proofValidator = v.object({
+const deviceProofValidator = v.object({
   challenge: v.string(),
   credentialId: v.string(),
   signature: v.string(),
@@ -287,13 +287,48 @@ export const proofValidator = v.object({
   authenticatorData: v.optional(v.string()),
 });
 
+// הוכחה: חתימה של המפתח שבמכשיר, או (רק להוספת נער/הורה ולשינוי תפקיד, כשאין במכשיר ביומטריה)
+// הקוד הסודי של ההורה עצמו.
+// pinChallenge: אתגר חד־פעמי שהונפק אחרי אימות הקוד הסודי (biometric:pinConfirm).
+export const proofValidator = v.union(deviceProofValidator, v.object({ pinChallenge: v.string() }));
+
 export type BioProof = {
   challenge: string; credentialId: string; signature: string;
   clientDataJSON?: string; authenticatorData?: string;
-};
+} | { pinChallenge: string };
 
-// בודק שההורה אישר את הפעולה הזו בטביעת אצבע / זיהוי פנים. זורק שגיאה אם לא.
+// פעולות שמותר לאשר בקוד סודי כשאין טביעת אצבע / זיהוי פנים במכשיר. שאר הפעולות (קוד משפחה,
+// קוד קישור, החלפת מכשיר) נשארות ביומטריות בלבד.
+const PIN_FALLBACK_ACTIONS = /^(add|role):/;
+const PIN_ACTION_PREFIX = "pin:";
+
+// מסלול חלופי למכשיר בלי ביומטריה: ההורה מקליד את הקוד הסודי שלו ומקבל אתגר חד־פעמי לפעולה הזו.
+// התשובה היא ערך (לא שגיאה), כי ב-Convex זריקת שגיאה מבטלת גם את רישום הניסיון הכושל.
+export const pinConfirm = mutation({
+  args: { token: v.string(), action: v.string(), myPin: v.string() },
+  handler: async (ctx, { token, action, myPin }) => {
+    const me = await requireParent(ctx, token);
+    if (action.length > 200 || !PIN_FALLBACK_ACTIONS.test(action)) throw new ConvexError("פעולה לא תקינה");
+    if (!me.pinHash || !me.pinSalt) return { ok: false as const, reason: "nopin" as const };
+    if (me.lockedUntil && me.lockedUntil > Date.now()) return { ok: false as const, reason: "locked" as const };
+    if (!(await verifyPin(myPin, me.pinSalt, me.pinHash))) {
+      const r = await registerPinFail(ctx, me);
+      if (r.locked) await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: me._id });
+      return { ok: false as const, reason: "wrong" as const };
+    }
+    await ctx.db.patch(me._id, { failedAttempts: 0 });
+    await upgradePinHash(ctx, me, myPin);
+    return { ok: true as const, challenge: await newChallenge(ctx, me._id, PIN_ACTION_PREFIX + action) };
+  },
+});
+
+// בודק שההורה אישר את הפעולה הזו בטביעת אצבע / זיהוי פנים (או בקוד סודי, במסלול החלופי). זורק שגיאה אם לא.
 export async function requireBiometric(ctx: MutationCtx, me: Member, action: string, proof: BioProof | undefined) {
+  if (proof && "pinChallenge" in proof) {
+    if (!PIN_FALLBACK_ACTIONS.test(action)) throw new ConvexError("הפעולה הזו מאושרת רק בטביעת אצבע או בזיהוי פנים");
+    await takeChallenge(ctx, me._id, PIN_ACTION_PREFIX + action, proof.pinChallenge);
+    return;
+  }
   await requireBiometricFor(ctx, me._id, action, proof);
 }
 
@@ -309,7 +344,7 @@ export async function checkBiometric(ctx: MutationCtx, personId: Id<"people">, a
 }
 
 async function requireBiometricFor(ctx: MutationCtx, personId: Id<"people">, action: string, proof: BioProof | undefined) {
-  if (!proof) throw new ConvexError("צריך אישור בטביעת אצבע או בזיהוי פנים");
+  if (!proof || "pinChallenge" in proof) throw new ConvexError("צריך אישור בטביעת אצבע או בזיהוי פנים");
   await takeChallenge(ctx, personId, action, proof.challenge);
   const keys = await ctx.db.query("bioKeys").withIndex("by_person", (q) => q.eq("personId", personId)).collect();
   const key: Doc<"bioKeys"> | undefined = keys.find((k) => k.credentialId === proof.credentialId);

@@ -4,6 +4,7 @@ import { COUNTRIES, isCurrency } from "./currency";
 import { Doc, Id } from "./_generated/dataModel";
 import { internal } from "./_generated/api";
 import { verifyCode } from "./emailCodes";
+import { notify } from "./notify";
 import { checkBiometric, familyHasBoundParent, isBound, proofValidator } from "./biometric";
 import {
   codeThrottled, failCode, CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS, MAX_FAMILY_SIZE, SESSION_MS,
@@ -144,6 +145,8 @@ export const join = mutation({
     await ctx.db.insert("joinRequests", {
       familyId, name: clean, avatar: avatar?.slice(0, 8), device, pinSalt, pinHash: await hashPin(pin, pinSalt), createdAt: Date.now(),
     });
+    // התראה להורים, כדי שלא יצטרכו לגלות את הבקשה בעצמם (רק למי שיש לו מכשיר רשום להתראות).
+    await notify(ctx, members.filter((p) => p.role === "parent").map((p) => p._id), "בקשת הצטרפות 👋", `${clean} מבקש/ת להצטרף לקופה. צריך את האישור שלך.`);
     return { ok: true as const, pending: true as const };
   },
 });
