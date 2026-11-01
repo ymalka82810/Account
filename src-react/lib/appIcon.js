@@ -47,7 +47,7 @@ export function applyAppIcon(currency) {
   if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
   // אייקון תלת-ממדי מרונדר ב-Blender (public/icons/<KEY>.png, ראו scripts/blender)
   link.type = 'image/png';
-  link.href = `${import.meta.env.BASE_URL}icons/${key}.png`;
+  link.href = `icons/${key}.png`;
   if (isNativeApp) {
     // גרסה ישנה בלי הפלאגין פשוט נשארת עם האייקון שלה
     window.Capacitor.nativePromise('AppIcon', 'setIcon', { name: key, all: KEYS }).catch(() => {});
