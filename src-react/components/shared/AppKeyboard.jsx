@@ -113,14 +113,26 @@ export default function AppKeyboard() {
       if (isKbTarget(this) && !(/** @type {any} */ (this)).dataset.kbSys) arm(this);
       return origFocus.apply(this, a);
     };
+    // לחיצה על כפתור כשהמקלדת פתוחה לא מעבירה אליו פוקוס: אחרת המקלדת נסגרת, הפריסה קופצת והלחיצה הראשונה אובדת.
+    // הכפתור עדיין מקבל click רגיל, והמקלדת נסגרת כשהחלון נסגר או כשלוחצים על שדה אחר / על ⌄.
+    const onMouseDown = (/** @type {any} */ e) => {
+      if (!targetRef.current || rootRef.current?.contains(e.target)) return;
+      if (e.target.closest?.('button, [role="button"]')) e.preventDefault();
+    };
+    // שדה שיצא מהמסמך (למשל חלון שנסגר אחרי רישום) לא משאיר מקלדת פתוחה
+    const mo2 = new MutationObserver(() => { if (targetRef.current && !targetRef.current.isConnected) hide(); });
+    mo2.observe(document.body, { childList: true, subtree: true });
+    document.addEventListener('mousedown', onMouseDown, true);
     document.addEventListener('pointerdown', onDown, true);
     document.addEventListener('focusin', onIn);
     document.addEventListener('focusout', onOut);
     // שדה שכבר בפוקוס כשהמקלדת עולה (למשל autoFocus)
     if (isKbTarget(document.activeElement)) { arm(document.activeElement); show(document.activeElement); }
     return () => {
+      document.removeEventListener('mousedown', onMouseDown, true);
       document.removeEventListener('pointerdown', onDown, true);
       document.removeEventListener('focusin', onIn);
+      mo2.disconnect();
       document.removeEventListener('focusout', onOut);
       mo.disconnect();
       HTMLElement.prototype.focus = origFocus;

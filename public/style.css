@@ -262,6 +262,7 @@ button.primary:active { transform: translateY(1px); }
 .ghost:hover, .ghost:focus-visible, .ghost:active { border-color: var(--coin); }
 button.danger { color: var(--owe); }
 .error { color: var(--owe); font-weight: 500; margin: 0; }
+input.invalid { border-color: var(--owe); box-shadow: 0 0 0 2px var(--owe); }
 
 /* היסטוריה ואנשים */
 .row {

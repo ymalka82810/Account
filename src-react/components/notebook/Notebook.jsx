@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { t, intlLocale } from '../../i18n/index.js';
 import LanguagePicker from '../shared/LanguagePicker.jsx';
 import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
@@ -166,8 +166,12 @@ function AddEntry({ initialDir }) {
   const [personId, setPersonId] = useState(null); // נבחר מהרשימה הידועה
   const [similar, setSimilar] = useState(null); // {name, amount, people} בזמן שאלת האיחוד
   const [error, setError] = useState('');
+  const [bad, setBad] = useState(''); // השדה החסר: 'name' | 'amount'
+  const nameRef = useRef(null);
+  const amountRef = useRef(null);
+  const errRef = useRef(null);
   useSheetTitle(dir === 'iowe' ? t('אני חייב כסף') : t('חייבים לי כסף'));
-  const set = (k) => (e) => { setForm((f) => ({ ...f, [k]: e.target.value })); setError(''); if (k === 'name') setPersonId(null); };
+  const set = (k) => (e) => { setForm((f) => ({ ...f, [k]: e.target.value })); setError(''); setBad(''); if (k === 'name') setPersonId(null); };
 
   const people = knownPeople(nb);
   const typed = normName(form.name);
@@ -183,9 +187,15 @@ function AddEntry({ initialDir }) {
     ev.preventDefault();
     const name = form.name.trim();
     const amount = Math.round(parseFloat(String(form.amount).replace(',', '.')) * 100);
-    if (!name) { setError(t('כתבו את השם')); return; }
-    if (!Number.isFinite(amount) || amount <= 0) { setError(t('כתבו סכום')); return; }
-    if (amount > 1e9) { setError(t('הסכום גדול מדי')); return; }
+    // שגיאה גלויה: מסמנים את השדה, מחזירים אליו פוקוס (המקלדת נשארת) וגוללים להודעה
+    const fail = (msg, field, ref) => {
+      setError(msg); setBad(field);
+      ref.current?.focus();
+      setTimeout(() => errRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 60);
+    };
+    if (!name) return fail(t('כתבו את השם'), 'name', nameRef);
+    if (!Number.isFinite(amount) || amount <= 0) return fail(t('כתבו סכום'), 'amount', amountRef);
+    if (amount > 1e9) return fail(t('הסכום גדול מדי'), 'amount', amountRef);
     const exact = personId || (people.find((p) => normName(p.name) === typed) || {}).id;
     if (!exact) {
       const near = similarPeople(name, nb);
@@ -217,7 +227,7 @@ function AddEntry({ initialDir }) {
   return (
     <form className="form" autoComplete="off" onSubmit={submit}>
       <label className="field"><span>{dir === 'iowe' ? t('למי?') : t('מי חייב לי?')}</span>
-        <input type="text" maxLength={30} autoFocus value={form.name} onChange={set('name')} /></label>
+        <input ref={nameRef} type="text" maxLength={30} autoFocus aria-invalid={bad === 'name'} className={bad === 'name' ? 'invalid' : undefined} value={form.name} onChange={set('name')} /></label>
       {chips.length > 0 && (
         <div className="nb-opts" role="group" aria-label={t('שמות מוכרים')}>
           {chips.map((p) => (
@@ -227,10 +237,10 @@ function AddEntry({ initialDir }) {
       )}
       <label className="field"><span>{t('כמה?')}</span>
         <span className="amt-field"><span className="amt-cur" aria-hidden="true">{currencySymbol(notebookCurrency())}</span>
-          <input type="text" inputMode="decimal" dir="ltr" placeholder="0" value={form.amount} onChange={set('amount')} /></span></label>
+          <input ref={amountRef} type="text" inputMode="decimal" dir="ltr" placeholder="0" aria-invalid={bad === 'amount'} className={bad === 'amount' ? 'invalid' : undefined} value={form.amount} onChange={set('amount')} /></span></label>
       <label className="field"><span>{t('על מה? (אפשר לדלג)')}</span>
         <input type="text" maxLength={60} value={form.note} onChange={set('note')} /></label>
-      {error && <p className="error" role="alert">{error}</p>}
+      {error && <p className="error" role="alert" ref={errRef}>{error}</p>}
       <button className="primary" type="submit">{t('רישום')}</button>
     </form>
   );
