@@ -23,6 +23,8 @@ export default function Setup({ current }) {
   const [locale, setLocale] = useState(() => { const c = deviceCountry(); return c ? localeFor(c) : null; });
   const [error, setError] = useState('');
   const [busy, run] = useBusy();
+  // "משפחת" (או המקבילה בשפה הנבחרת) קבוע בשדה; המשתמש מקליד רק את שם המשפחה עצמו.
+  const [famPre, famPost] = t('משפחת {name}', { name: '\uE000' }).split('\uE000');
   const set = (k) => (e) => setV((x) => ({ ...x, [k]: e.target.value }));
   const submit = (ev) => {
     ev.preventDefault();
@@ -31,8 +33,8 @@ export default function Setup({ current }) {
     if (!parseBirth(birthDate)) { setError(t('תאריך לידה לא תקין')); return; }
     if (!isAdult(birthDate)) { setError(t('קופה משפחתית נפתחת רק על ידי מי שמעל גיל 18')); return; }
     run(async () => {
-      const { email, ...rest } = v;
-      const err = await createFamily({ ...rest, birthDate, avatar, ...locale });
+      const { email, familyName, ...rest } = v;
+      const err = await createFamily({ ...rest, familyName: famPre + familyName.trim() + famPost, birthDate, avatar, ...locale });
       if (err) { setError(err); return; }
       setV((x) => ({ ...x, pin: '' }));
       // מייל לשחזור (לא חובה): שולחים קוד אימות ופותחים ישר את שלב ההקלדה.
@@ -54,7 +56,11 @@ export default function Setup({ current }) {
         <p className="hint">{t('להורים בלבד. מי שמקים הוא ההורה הראשון. אחר כך מקבלים קוד הצטרפות אחד לכל המשפחה, וקובעים לכל אחד/ת תפקיד: ילד/ה, נער/ה או הורה.')}</p>
         <form className="form" autoComplete="off" onSubmit={submit}>
           <label className="field"><span>{t('שם המשפחה')}</span>
-            <input type="text" maxLength={30} placeholder={t('למשל: משפחת כהן')} required value={v.familyName} onChange={set('familyName')} /></label>
+            <span className="affix-row">
+              {famPre && <span className="affix" aria-hidden="true">{famPre}</span>}
+              <input type="text" maxLength={30 - famPre.length - famPost.length} placeholder={t('כהן')} required value={v.familyName} onChange={set('familyName')} />
+              {famPost && <span className="affix" aria-hidden="true">{famPost}</span>}
+            </span></label>
           <label className="field"><span>{t('איך קוראים לך?')}</span>
             <input type="text" maxLength={20} required value={v.name} onChange={set('name')} /></label>
           <label className="field"><span>{t('תאריך לידה')}</span>
