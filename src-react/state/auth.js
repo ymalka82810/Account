@@ -5,6 +5,7 @@ import { DEMO_TOKEN } from '../lib/demo.js';
 import { PARENT_PIN_MAX } from '../lib/pin.js';
 import { BioError, bioLoginProof, bioRegister, bioSupported } from '../lib/biometric.js';
 import { t } from '../i18n/index.js';
+import { forgetMembershipByToken } from '../lib/memberships.js';
 
 // הלוגיקה של מסכי הכניסה. התצוגה שלהם ב-src-react/components/Auth.jsx.
 
@@ -59,6 +60,8 @@ export function endDemo(to) {
 }
 
 export function dropSession() {
+  // הטוקן שהשרת כבר לא מכיר (יציאה, פג תוקף) לא נשאר ברשימת המשפחות של המכשיר.
+  if (state.token) forgetMembershipByToken(state.token);
   state.token = '';
   localStorage.removeItem(TOKEN_KEY);
   state.pinFlow = null;
@@ -66,6 +69,23 @@ export function dropSession() {
   state.codeChecked = false;
   bumpAuth();
   restoreFamily().finally(() => { state.codeChecked = true; bumpAuth(); });
+}
+
+// מעבר בין המשפחות של הילד/ה במכשיר הזה. הטוקן של כל משפחה נשמר ברשימה, ולכן אין צורך בקוד סודי מחדש.
+export function switchFamily(token) {
+  if (!token || token === state.token) return;
+  setToken(token);
+}
+
+// הצטרפות למשפחה נוספת (למשל הורים גרושים): מרוקנים רק את הטוקן הפעיל, בלי להוציא את המשפחה הנוכחית.
+// המשפחה הנוכחית נשארת ברשימה ואפשר לחזור אליה. הרישום אצלה לא נמחק ולא משתנה.
+export function addAnotherFamily() {
+  state.token = '';
+  state.pinFlow = null;
+  state.fam = null;
+  state.view = 'welcome';
+  state.codeChecked = true;
+  bumpAuth();
 }
 
 // ---------- מסך פתיחה ----------

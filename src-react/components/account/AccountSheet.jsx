@@ -4,7 +4,8 @@ import LanguagePicker from '../shared/LanguagePicker.jsx';
 import { call } from '../../lib/api.js';
 import { state, CODE_KEY } from '../../state/state.js';
 import { toast, errMsg } from '../../lib/helpers.js';
-import { dropSession } from '../../state/auth.js';
+import { dropSession, switchFamily, addAnotherFamily } from '../../state/auth.js';
+import { otherMemberships } from '../../lib/memberships.js';
 import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../../lib/push.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
@@ -128,6 +129,20 @@ export function AccountSheet() {
         <button className="ghost" type="button" onClick={() => sheet.open('', <EmailSheet />)}>
           {me.email ? t('✉️ מייל לשחזור: {email}', { email: me.email }) : t('✉️ הוספת מייל לשחזור קוד')}
         </button>
+      )}
+
+      {(me.role === 'child' || me.role === 'teen') && (
+        <>
+          {otherMemberships(token).map((m) => (
+            <button key={m.personId} className="ghost" type="button"
+              onClick={() => { sheet.close(); switchFamily(m.token); }}>
+              {t('🏠 מעבר למשפחת {family}', { family: m.familyName })}
+            </button>
+          ))}
+          <button className="ghost" type="button" onClick={() => { sheet.close(); addAnotherFamily(); }}>
+            {t('➕ הצטרפות למשפחה נוספת')}
+          </button>
+        </>
       )}
 
       <AsyncButton className="ghost" onClick={async () => { sheet.close(); await logout(); }}>{t('יציאה')}</AsyncButton>
