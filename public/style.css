@@ -1090,7 +1090,7 @@ body[data-theme="teen"] .sum .lbl { font-size: .9rem; }
 body[data-theme="teen"] .sum .num { font-size: 1.6rem; text-shadow: 0 1px 0 rgba(255, 255, 255, .4); }
 body[data-theme="teen"] .gb-shine { display: inline; filter: blur(1.2px); animation: gb-shine 7s ease-in-out infinite; }
 body[data-theme="teen"] .gb-glow { display: inline; }
-@keyframes gb-shine { 0%, 40% { transform: translateX(0); } 100% { transform: translateX(340px); } }
+@keyframes gb-shine { 0%, 40% { transform: translateX(0); } 100% { transform: translateX(400px); } }
 @media (prefers-reduced-motion: reduce) { body[data-theme="teen"] .gb-shine { animation: none; } }
 
 /* סכום ארוך לא גולש: העמודות לא מתרחבות בגלל התוכן, והגופן קטן לפי אורך הטקסט (--len מ-SumNum) */
