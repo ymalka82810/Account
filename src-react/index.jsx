@@ -11,6 +11,7 @@ import UpdateBanner from './components/shared/UpdateBanner.jsx';
 import AppKeyboard from './components/shared/AppKeyboard.jsx';
 import App from './App.jsx';
 import { preloadImages } from './lib/preloadImages.js';
+import { initBarTapSound } from './lib/metalSound.js';
 
 // key={lang}: החלפת שפה בונה את העץ מחדש, כך שכל t() בכל מקום מתרנדר שוב בלי לחבר כל קומפוננטה.
 function Root() {
@@ -24,6 +25,8 @@ function Root() {
 Promise.all([setLang(initialLang(), { persist: false }).catch(() => {}), preloadImages()]).finally(() => {
   createRoot(document.getElementById('root')).render(<Root />);
 });
+
+initBarTapSound();
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
