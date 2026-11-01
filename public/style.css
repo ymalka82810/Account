@@ -1018,6 +1018,11 @@ body[data-theme="teen"] .confirm-box { background: #07070b; border: 2px solid va
 #screen-notebook .row.paid { opacity: .6; }
 #screen-notebook .nb-paid summary { cursor: pointer; padding: 8px 0; font-weight: 500; }
 #screen-notebook .empty { text-align: center; }
+#screen-notebook .nb-upgrade .primary { display: block; width: fit-content; max-width: 100%; margin: 12px auto 0; }
+#screen-notebook .nb-offset { display: grid; gap: 10px; }
+#screen-notebook .nb-offset h3, #screen-notebook .nb-offset p { margin: 0; }
+#screen-notebook .nb-offset-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+#screen-notebook .nb-offset-row .text { min-width: 0; }
 #screen-notebook .nb-section { display: grid; gap: 12px; }
 #screen-notebook .nb-section .ghost { width: 100%; text-align: start; }
 .nb-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 8px; }

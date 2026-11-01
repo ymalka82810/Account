@@ -7,7 +7,7 @@ import { money, fmtDate } from '../../lib/computations.js';
 import { CURRENCIES, currencyLabel, currencySymbol } from '../../lib/currencies.js';
 import {
   useNotebook, NB_SHARED_KEY, notebookCurrency, addEntry, setPaid, removeEntry, setSetting, setCurrencyChoice, clearPaid, clearAll,
-  knownPeople, similarPeople, renamePerson, normName,
+  knownPeople, similarPeople, renamePerson, normName, offsetCandidates, offsetPerson,
 } from '../../lib/notebook.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import Select from '../shared/Select.jsx';
@@ -88,6 +88,13 @@ function Home({ nb, onSettings, pulling, returned, family }) {
   const done = sorted(nb.entries.filter((e) => e.paid));
   const sum = (d) => open.filter((e) => e.dir === d).reduce((s, e) => s + e.amount, 0);
 
+  const offers = offsetCandidates(nb);
+  const offset = (c) => {
+    const amount = money(c.overlap, cur);
+    if (!window.confirm(t('לקזז {amount} מול {name}? החובות ייסגרו עד הסכום הזה, ויישאר רק ההפרש. הרישומים נשמרים ברשימת מה ששולם.', { amount, name: c.person.name }))) return;
+    offsetPerson(c.person.id);
+    toast(t('קוזזו {amount} מול {name} ✅', { amount, name: c.person.name }));
+  };
   const del = (e) => { if (window.confirm(t('למחוק את הרישום של {name}?', { name: e.name }))) removeEntry(e.id); };
   const row = (e) => (
     <div className={'row' + (e.paid ? ' paid' : '')} key={e.id}>
@@ -135,6 +142,22 @@ function Home({ nb, onSettings, pulling, returned, family }) {
       {open.length > 0
         ? <div className="list">{open.map(row)}</div>
         : <div className="empty"><div className="big-emoji" aria-hidden="true">{nb.entries.length ? '🎉' : '📝'}</div>{nb.entries.length ? t('אין כלום פתוח!') : t('עוד אין כלום ברשימה. לחצו על אחד הכפתורים כדי להתחיל.')}</div>}
+
+      {offers.length > 0 && (
+        <section className="card nb-offset">
+          <h3>{t('⚖️ קיזוז חובות')}</h3>
+          <p className="hint">{t('יש אנשים שאתם חייבים להם וגם הם חייבים לכם. קיזוז סוגר את החובות ההדדיים ומשאיר רק את ההפרש.')}</p>
+          {offers.map((c) => (
+            <div className="nb-offset-row" key={c.person.id}>
+              <div className="text">
+                <strong>{c.person.name}</strong>
+                <div className="meta">{t('אני חייב {a} • חייב/ת לי {b}', { a: money(c.iowe, cur), b: money(c.owed, cur) })}</div>
+              </div>
+              <button className="small" type="button" onClick={() => offset(c)}>{t('⚖️ קיזוז ({amount})', { amount: money(c.overlap, cur) })}</button>
+            </div>
+          ))}
+        </section>
+      )}
 
       {showPaid && done.length > 0 && (
         <details className="nb-paid">

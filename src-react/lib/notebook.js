@@ -110,6 +110,51 @@ export function declineMerge(key) {
   commit({ ...data, declinedMerges: [...(data.declinedMerges || []), key] });
 }
 export const isMergeDeclined = (key, nb = data) => (nb.declinedMerges || []).includes(key);
+// ---------- קיזוז ----------
+// אדם שאני חייב לו וגם הוא חייב לי (רישומים פתוחים משני הצדדים): אפשר לסגור את החובות ההדדיים עד הסכום הקטן,
+// ויישאר רק ההפרש. הקיזוז נעשה מהרישום הישן לחדש. רישום שמכוסה כולו מסומן כשולם, ורישום שמכוסה חלקית
+// מתפצל: חלק שולם (נשמר בהיסטוריה) והיתרה נשארת פתוחה.
+const openOf = (nb, personId, dir) => nb.entries.filter((e) => !e.paid && e.personId === personId && e.dir === dir);
+const total = (list) => list.reduce((s, e) => s + e.amount, 0);
+
+// כל מי שאפשר לקזז מולו: [{ person, iowe, owed, overlap }] (סכומים באגורות), מהסכום הגדול לקטן.
+export function offsetCandidates(nb = data) {
+  return nb.people
+    .map((person) => {
+      const iowe = total(openOf(nb, person.id, 'iowe'));
+      const owed = total(openOf(nb, person.id, 'owed'));
+      return { person, iowe, owed, overlap: Math.min(iowe, owed) };
+    })
+    .filter((c) => c.overlap > 0)
+    .sort((a, b) => b.overlap - a.overlap);
+}
+
+// מקזז מול אדם אחד. מחזיר את הסכום שקוזז (0 אם אין מה לקזז).
+export function offsetPerson(personId) {
+  const mine = openOf(data, personId, 'iowe');
+  const theirs = openOf(data, personId, 'owed');
+  const overlap = Math.min(total(mine), total(theirs));
+  if (overlap <= 0) return 0;
+  const covered = new Map(); // id -> כמה מהרישום קוזז
+  for (const list of [mine, theirs]) {
+    let left = overlap;
+    for (const e of [...list].reverse()) { // הרשימה מהחדש לישן, מקזזים מהישן
+      if (left <= 0) break;
+      const take = Math.min(left, e.amount);
+      covered.set(e.id, take);
+      left -= take;
+    }
+  }
+  const entries = data.entries.flatMap((e) => {
+    const take = covered.get(e.id);
+    if (!take) return [e];
+    if (take === e.amount) return [{ ...e, paid: true }];
+    return [{ ...e, amount: e.amount - take }, { ...e, id: newId(), amount: take, paid: true }];
+  });
+  commit({ ...data, entries });
+  return overlap;
+}
+
 export const setPaid = (id, paid) =>
   commit({ ...data, entries: data.entries.map((e) => (e.id === id ? { ...e, paid } : e)) });
 export const removeEntry = (id) => removeEntries([id]);
