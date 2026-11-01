@@ -1,7 +1,7 @@
 // אייקון האפליקציה לפי המטבע: ₪ בישראל, $ בארה"ב, € באירופה וכו'.
 // המטבע: של המשפחה (נקבע לפי המיקום שלה) אחרי כניסה; אחרת לפי המיקום של המכשיר (אזור הזמן, ואז השפה),
 // ואם המיקום לא ידוע - דולר.
-// באתר מתחלף ה-favicon. באפליקציה (APK) מתחלף האייקון במסך הבית דרך הפלאגין AppIcon,
+// באתר מתחלף ה-favicon (תמונת PNG מרונדרת). באפליקציה (APK) מתחלף האייקון במסך הבית דרך הפלאגין AppIcon,
 // ברגע שהאפליקציה יוצאת לרקע (ראו android-plugin/AppIconPlugin.java).
 import ICONS from '../../assets/currency-icons.json';
 import { deviceCountry, inList, localeFor } from './currencies.js';
@@ -45,8 +45,9 @@ export function applyAppIcon(currency) {
   // favicon של האתר (גם לשונית הדפדפן)
   let link = /** @type {HTMLLinkElement | null} */ (document.querySelector('link[rel="icon"]'));
   if (!link) { link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
-  link.type = 'image/svg+xml';
-  link.href = 'data:image/svg+xml,' + encodeURIComponent(iconSvg(key));
+  // אייקון תלת-ממדי מרונדר ב-Blender (public/icons/<KEY>.png, ראו scripts/blender)
+  link.type = 'image/png';
+  link.href = `${import.meta.env.BASE_URL}icons/${key}.png`;
   if (isNativeApp) {
     // גרסה ישנה בלי הפלאגין פשוט נשארת עם האייקון שלה
     window.Capacitor.nativePromise('AppIcon', 'setIcon', { name: key, all: KEYS }).catch(() => {});

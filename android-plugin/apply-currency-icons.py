@@ -11,7 +11,7 @@
 ה-intent-filter של LAUNCHER יורד מ-MainActivity, כך שבמסך הבית מופיע תמיד רק ה-alias הפעיל.
 ברירת המחדל (enabled) היא USD; AppIconPlugin.java מחליף ביניהם לפי המטבע.
 """
-import json, os, re, sys
+import json, os, re, shutil, sys
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 RES = os.path.join(ROOT, 'android/app/src/main/res')
@@ -86,18 +86,33 @@ def write(rel, text):
     with open(path, 'w', encoding='utf-8') as f:
         f.write(text)
 
+def copy(src, rel):
+    dst = os.path.join(RES, rel)
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    shutil.copyfile(src, dst)
+
 aliases = []
 for key, v in variants.items():
     name = 'ic_cur_' + key.lower()
     # חזית אדפטיבית: קנבס 108dp, המטבע (קוטר 300 מתוך 512 ≈ 63dp) בתוך האזור הבטוח של 66dp
-    write(f'drawable/{name}_fg.xml', vector(108, coin_paths(v['path'])))
+    fg_img = os.path.join(ROOT, 'assets/icons3d', f'{key}_fg.webp')
+    legacy_img = os.path.join(ROOT, 'assets/icons3d', f'{key}_legacy.webp')
+    have_3d = os.path.exists(fg_img) and os.path.exists(legacy_img)
+    if have_3d:
+        # מטבע תלת-ממדי מרונדר ב-Blender (scripts/blender); תמונה אחת מתאימה לכל הצפיפויות
+        copy(fg_img, f'drawable-nodpi/{name}_fg.webp')
+    else:
+        write(f'drawable/{name}_fg.xml', vector(108, coin_paths(v['path'])))
     write(f'mipmap-anydpi-v26/{name}.xml',
           '<?xml version="1.0" encoding="utf-8"?>\n'
           '<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n'
           f'    <background android:drawable="@drawable/ic_cur_bg"/>\n'
           f'    <foreground android:drawable="@drawable/{name}_fg"/>\n'
           '</adaptive-icon>\n')
-    write(f'mipmap-anydpi/{name}.xml', vector(48, legacy_body(v['path'])))
+    if have_3d:
+        copy(legacy_img, f'mipmap-nodpi/{name}.webp')
+    else:
+        write(f'mipmap-anydpi/{name}.xml', vector(48, legacy_body(v['path'])))
     aliases.append(
         f'        <activity-alias\n'
         f'            android:name=".Icon{key}"\n'
