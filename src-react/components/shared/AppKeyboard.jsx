@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { t, currentLang, LANGUAGES } from '../../i18n/index.js';
+import { playKeyClick } from '../../lib/keyClick.js';
 import {
   LAYOUTS, LAYOUT_LABEL, layoutOrder, hasCase, isKbTarget, kindOf, applyKey, wantsAutoShift, symbolRows,
   currentWord, suggest, applySuggestion, learnWord, personalWords,
@@ -240,7 +241,7 @@ export default function AppKeyboard() {
     return (
       <button key={id ?? k} type="button" tabIndex={-1} className={'kb-key ' + cls} style={grow ? { flexGrow: grow } : undefined}
         aria-label={aria || (typeof label === 'string' ? label : k)}
-        onPointerDown={onDown || down(k)} onPointerUp={stop} onPointerCancel={stop} onPointerLeave={stop} onMouseDown={keep} onClick={keep}>
+        onPointerDown={(e) => { playKeyClick(k === ' ' ? 'space' : k === 'del' ? 'del' : k === 'enter' ? 'enter' : 'letter'); (onDown || down(k))(e); }} onPointerUp={stop} onPointerCancel={stop} onPointerLeave={stop} onMouseDown={keep} onClick={keep}>
         {label ?? k}
       </button>
     );
@@ -285,7 +286,7 @@ export default function AppKeyboard() {
         {wantsSuggest && (
           <div className="kb-sugg" dir={letters === 'he' || letters === 'ar' ? 'rtl' : 'ltr'}>
             {sugg.map((w) => (
-              <button key={w} type="button" tabIndex={-1} className="kb-sug" onPointerDown={tap(() => pick(w))} onMouseDown={keep} onClick={keep}>{w}</button>
+              <button key={w} type="button" tabIndex={-1} className="kb-sug" onPointerDown={tap(() => { playKeyClick('letter'); pick(w); })} onMouseDown={keep} onClick={keep}>{w}</button>
             ))}
           </div>
         )}
