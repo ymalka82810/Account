@@ -154,6 +154,27 @@ export default function AppKeyboard() {
     return () => { clearTimeout(id); if (ro) ro.disconnect(); };
   }, [target]);
 
+  // מקלדת המערכת (כשעוברים אליה עם 🌐, או שדה עם data-native-kb): אין לנו גובה שלה, אז לוקחים אותו מה-visualViewport
+  // ומעלים את החלונות מעליה, כדי שכפתורי החלון לא יוסתרו.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return undefined;
+    const root = document.documentElement;
+    const sync = () => {
+      if (targetRef.current) return; // המקלדת שלנו פתוחה והיא קובעת את --kb-h בעצמה
+      const h = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+      const open = h > 120;
+      document.body.classList.toggle('kb-open', open);
+      if (open) root.style.setProperty('--kb-h', h + 'px'); else root.style.removeProperty('--kb-h');
+      if (open && isKbTarget(document.activeElement)) {
+        try { /** @type {any} */ (document.activeElement).scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch { /* */ }
+      }
+    };
+    vv.addEventListener('resize', sync);
+    vv.addEventListener('scroll', sync);
+    return () => { vv.removeEventListener('resize', sync); vv.removeEventListener('scroll', sync); };
+  }, []);
+
   const order = layoutOrder(lang, kind);
   const layout = order[Math.min(li, order.length - 1)];
   const letters = layout === 'sys' ? 'en' : layout;

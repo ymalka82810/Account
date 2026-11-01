@@ -1274,6 +1274,9 @@ body.kb-open { padding-bottom: calc(var(--kb-h, 0px) + env(safe-area-inset-botto
 body.kb-open .sheet-wrap { bottom: var(--kb-h, 0px); }
 body.kb-open .sheet { max-height: 100%; padding-bottom: 20px; }
 body.kb-open .toast { bottom: calc(var(--kb-h, 0px) + 12px); }
+/* חלון אישור (למשל מחיקת הקופה, עם שדה הקלדה): עולה מעל המקלדת, והתוכן נגלל בתוכו כדי שכפתור האישור לא יוסתר */
+body.kb-open .confirm-wrap { bottom: var(--kb-h, 0px); padding-top: 12px; padding-bottom: 12px; }
+body.kb-open .confirm-box { max-height: 100%; overflow-y: auto; overscroll-behavior: contain; }
 
 .kb {
   --kb-gap: 5px; --kb-key-h: 44px;
