@@ -4,6 +4,7 @@ import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
 import { useState } from 'react';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { useRun } from '../../lib/useRun.js';
+import { useConfirm } from '../shared/Confirm.jsx';
 import { FRIEND_MAX } from '../../state/state.js';
 import { useApp } from '../../state/appContext.js';
 import { isPending, pairOwes, openDebtsOf, debtLabel, namesFor, money, fmtDate } from '../../lib/computations.js';
@@ -20,6 +21,7 @@ export default function FriendsTab({ data, fdata, token }) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const run = useRun(token);
+  const confirm = useConfirm();
 
   if (!fdata || fdata.kind !== 'teen') return null;
 
@@ -59,8 +61,8 @@ export default function FriendsTab({ data, fdata, token }) {
       endpoint: 'friends:addEntry', maxEntry: FRIEND_MAX, doneToast: t('נשלח לחבר/ה לאישור ⏳'), returnTab: 'friends',
     });
   };
-  const removeFriendship = (f, p) => {
-    if (!confirm(t('להסיר את {name} מהחברים?', { name: p.name }))) return;
+  const removeFriendship = async (f, p) => {
+    if (!(await confirm({ icon: '👋', title: t('הסרה'), message: t('להסיר את {name} מהחברים?', { name: p.name }), okText: t('הסרה'), cancelText: t('חזרה'), danger: true }))) return;
     run('friends:removeFriend', { friendshipId: f.id }, t('החבר/ה הוסרו'));
   };
 
@@ -174,8 +176,9 @@ export default function FriendsTab({ data, fdata, token }) {
                 <div className="acts">
                   <button className="small okbtn" type="button"
                     onClick={() => run('friends:confirmEntry', { id: e.id }, t('אושר ✅'))}>{t('✅ נכון')}</button>
-                  <button className="small danger" type="button" onClick={() => {
-                    if (confirm(t('לדחות? הרישום יימחק.'))) run('friends:rejectEntry', { id: e.id }, t('הרישום נדחה'));
+                  <button className="small danger" type="button" onClick={async () => {
+                    if (!(await confirm({ icon: '🗑️', title: t('דחייה'), message: t('לדחות? הרישום יימחק.'), okText: t('דחייה'), cancelText: t('חזרה'), danger: true }))) return;
+                    run('friends:rejectEntry', { id: e.id }, t('הרישום נדחה'));
                   }}>{t('לא נכון')}</button>
                 </div>
               </div>

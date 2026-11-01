@@ -1,4 +1,5 @@
 import { t } from '../../i18n/index.js';
+import { useConfirm } from '../shared/Confirm.jsx';
 import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { isPending, debtStates, canDelete, namesFor, money, moneyWithValue, curOf, fmtDate } from '../../lib/computations.js';
@@ -7,13 +8,21 @@ import { isPending, debtStates, canDelete, namesFor, money, moneyWithValue, curO
 export default function EntriesList({
   list, emptyText, token, me, isParent, lookup, debtList, removeEndpoint, pendingLabel, display,
 }) {
+  const confirm = useConfirm();
   if (!list.length) return <div className="empty">{emptyText}</div>;
   const { owesLine, repaidLine } = namesFor(me, lookup);
   const debtMap = debtStates(debtList);
   const sorted = [...list].sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt);
 
   async function remove(e) {
-    if (!confirm(isParent ? t('למחוק את הרשומה הזאת?') : t('לבטל את מה שרשמת?'))) return;
+    if (!(await confirm({
+      icon: '🗑️',
+      title: isParent ? t('מחיקה') : t('ביטול'),
+      message: isParent ? t('למחוק את הרשומה הזאת?') : t('לבטל את מה שרשמת?'),
+      okText: isParent ? t('מחיקה') : t('אישור'),
+      cancelText: t('חזרה'),
+      danger: true,
+    }))) return;
     try { await call(/** @type {'entries:remove' | 'friends:removeEntry'} */ (removeEndpoint || 'entries:remove'), { token, id: e.id }); toast(t('הרשומה נמחקה')); }
     catch (err) { toast(errMsg(err)); }
   }

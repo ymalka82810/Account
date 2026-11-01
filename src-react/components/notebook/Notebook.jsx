@@ -10,6 +10,7 @@ import {
   knownPeople, similarPeople, renamePerson, normName, offsetCandidates, offsetPerson,
 } from '../../lib/notebook.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
+import { useConfirm } from '../shared/Confirm.jsx';
 import Select from '../shared/Select.jsx';
 import { state, CODE_KEY, TOKEN_KEY } from '../../state/state.js';
 import { closeNotebook, goView, upgradeFromNotebook } from '../../state/auth.js';
@@ -78,6 +79,7 @@ export default function Notebook({ current }) {
 // ---------- עמוד ראשי ----------
 function Home({ nb, onSettings, pulling, returned, family }) {
   const sheet = useSheet();
+  const confirm = useConfirm();
   const cur = notebookCurrency();
   const { sort, showPaid } = nb.settings;
   const sorted = (list) => [...list].sort((a, b) =>
@@ -89,13 +91,22 @@ function Home({ nb, onSettings, pulling, returned, family }) {
   const sum = (d) => open.filter((e) => e.dir === d).reduce((s, e) => s + e.amount, 0);
 
   const offers = offsetCandidates(nb);
-  const offset = (c) => {
+  const offset = async (c) => {
     const amount = money(c.overlap, cur);
-    if (!window.confirm(t('לקזז {amount} מול {name}? החובות ייסגרו עד הסכום הזה, ויישאר רק ההפרש. הרישומים נשמרים ברשימת מה ששולם.', { amount, name: c.person.name }))) return;
+    if (!(await confirm({
+      icon: '⚖️',
+      title: t('קיזוז חובות הדדיים'),
+      amount,
+      message: t('החובות בינך לבין {name} ייסגרו עד גובה הסכום הזה, ויישאר רק ההפרש. ההיסטוריה נשמרת.', { name: c.person.name }),
+      cancelText: t('חזרה'),
+    }))) return;
     offsetPerson(c.person.id);
     toast(t('קוזזו {amount} מול {name} ✅', { amount, name: c.person.name }));
   };
-  const del = (e) => { if (window.confirm(t('למחוק את הרישום של {name}?', { name: e.name }))) removeEntry(e.id); };
+  const del = async (e) => {
+    if (!(await confirm({ icon: '🗑️', title: t('מחיקה'), message: t('למחוק את הרישום של {name}?', { name: e.name }), okText: t('מחיקה'), cancelText: t('חזרה'), danger: true }))) return;
+    removeEntry(e.id);
+  };
   const row = (e) => (
     <div className={'row' + (e.paid ? ' paid' : '')} key={e.id}>
       <div className="text">
@@ -299,6 +310,7 @@ function listAsText(nb, cur) {
 }
 
 function Settings({ nb, onBack, closing }) {
+  const confirm = useConfirm();
   const s = nb.settings;
   const cur = notebookCurrency();
   const paidCount = nb.entries.filter((e) => e.paid).length;
@@ -307,13 +319,15 @@ function Settings({ nb, onBack, closing }) {
     try { await navigator.clipboard.writeText(listAsText(nb, cur)); toast(t('הרשימה הועתקה')); }
     catch (e) { toast(t('אי אפשר להעתיק במכשיר הזה')); }
   };
-  const wipePaid = () => {
+  const wipePaid = async () => {
     if (!paidCount) { toast(t('אין רשומות ששולמו')); return; }
-    if (window.confirm(t('למחוק {n} רשומות ששולמו?', { n: paidCount }))) { clearPaid(); toast(t('נמחק')); }
+    if (!(await confirm({ icon: '🧹', title: t('מחיקה'), message: t('למחוק {n} רשומות ששולמו?', { n: paidCount }), okText: t('מחיקה'), cancelText: t('חזרה'), danger: true }))) return;
+    clearPaid(); toast(t('נמחק'));
   };
-  const wipeAll = () => {
+  const wipeAll = async () => {
     if (!nb.entries.length) { toast(t('הפנקס כבר ריק')); return; }
-    if (window.confirm(t('למחוק את כל הרשומות בפנקס? אי אפשר לבטל.'))) { clearAll(); toast(t('הפנקס התרוקן')); }
+    if (!(await confirm({ icon: '⚠️', title: t('מחיקה'), message: t('למחוק את כל הרשומות בפנקס? אי אפשר לבטל.'), okText: t('מחיקה'), cancelText: t('חזרה'), danger: true }))) return;
+    clearAll(); toast(t('הפנקס התרוקן'));
   };
 
   return (

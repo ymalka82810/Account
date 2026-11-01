@@ -2,6 +2,7 @@ import { t } from '../../i18n/index.js';
 import { isPending, money, moneyWithValue, curOf, fmtDate, namesFor } from '../../lib/computations.js';
 import { useRun } from '../../lib/useRun.js';
 import { useSheet } from '../shared/Sheet.jsx';
+import { useConfirm } from '../shared/Confirm.jsx';
 import { FriendApproveSheet } from '../family/FriendApproveSheet.jsx';
 import { g } from '../../lib/gender.js';
 
@@ -10,6 +11,11 @@ import { g } from '../../lib/gender.js';
 export default function PendingCards({ data, token, parentView }) {
   const run = useRun(token);
   const sheet = useSheet();
+  const confirm = useConfirm();
+  const reject = async (e) => {
+    if (!(await confirm({ icon: '🗑️', title: t('דחייה'), message: t('לדחות? הרישום יימחק.'), okText: t('דחייה'), cancelText: t('חזרה'), danger: true }))) return;
+    run('entries:reject', { id: e.id }, t('הרישום נדחה'));
+  };
   const openFriendApprove = (p) => sheet.open(t('מצב חברים ל{name}', { name: p.name }), <FriendApproveSheet person={p} />);
   const list = data.entries.filter(isPending);
   const { nameOf, genderOf, owesLine, repaidLine } = namesFor(null, (id) => data.people.find((p) => p.id === id));
@@ -62,7 +68,7 @@ export default function PendingCards({ data, token, parentView }) {
                 <button className="small okbtn" type="button"
                   onClick={() => run('entries:approve', { id: e.id }, t('אושר ✅'))}>{t('✅ אישור')}</button>
                 <button className="small danger" type="button"
-                  onClick={() => { if (confirm(t('לדחות? הרישום יימחק.'))) run('entries:reject', { id: e.id }, t('הרישום נדחה')); }}>{t('דחייה')}</button>
+                  onClick={() => reject(e)}>{t('דחייה')}</button>
               </div>
             </div>
           ))}
