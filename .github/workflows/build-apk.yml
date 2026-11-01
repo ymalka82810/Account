@@ -57,6 +57,9 @@ jobs:
           grep -q "androidx.biometric:biometric" android/app/build.gradle
           MANIFEST=android/app/src/main/AndroidManifest.xml
           sed -i 's#<application#<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />\n    <application#' $MANIFEST
+          # רטט כשסכום משתנה (navigator.vibrate ב-WebView דורש את ההרשאה)
+          sed -i 's#<application#<uses-permission android:name="android.permission.VIBRATE" />\n    <application#' $MANIFEST
+          grep -q android.permission.VIBRATE $MANIFEST
           grep -q fileprovider $MANIFEST
           grep -q app_update android/app/src/main/res/xml/file_paths.xml || \
             sed -i 's#</paths>#    <external-files-path name="app_update" path="app-update/" />\n</paths>#' android/app/src/main/res/xml/file_paths.xml

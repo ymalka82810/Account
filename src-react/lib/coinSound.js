@@ -3,18 +3,39 @@
 /** @type {AudioContext | null} */
 let ctx = null;
 
+// רטט שמסונכרן עם הצליל: פעימה קצרה על כל "מטבע", באותם מרווחים (מטבעות שנופלים בסערה ומתיישבים).
+// כיבוי: localStorage['kupa-vibrate'] = '0'. במכשיר בלי רטט (או בדפדפן שחוסם) לא קורה כלום.
+function vibrateCoins(/** @type {number} */ hits, /** @type {number} */ delay, /** @type {number} */ span) {
+  try {
+    if (typeof navigator.vibrate !== 'function' || localStorage.getItem('kupa-vibrate') === '0') return;
+    const ON = 22;
+    const pattern = /** @type {number[]} */ ([]);
+    let last = 0;
+    for (let i = 0; i < hits; i++) {
+      const at = Math.round(span * 1000 * Math.pow(i / hits, 0.8));
+      const gap = Math.max(at - last, i ? ON + 25 : 0);
+      if (i) pattern.push(gap - ON);
+      pattern.push(ON);
+      last += gap;
+    }
+    setTimeout(() => { try { navigator.vibrate(pattern); } catch { /* */ } }, Math.round(delay * 1000));
+  } catch { /* אין רטט במכשיר: ממשיכים בלי */ }
+}
+
 /**
+ * צליל מטבעות ורטט: האות שסכום עלה או ירד.
  * @param {number} coins כמה מטבעות "נופלים" (קובע כמה קליקים)
  * @param {number} delay שניות עד הקליק הראשון
  * @param {number} span שניות שבהן הקליקים מתפזרים
  */
 export function playCoinSound(coins = 12, delay = 0.35, span = 1.1) {
+  const hits = Math.max(5, Math.min(coins, 18));
+  vibrateCoins(hits, delay, span);
   try {
     const AC = window.AudioContext || /** @type {any} */ (window).webkitAudioContext;
     if (!AC) return;
     ctx = ctx || new AC();
     if (ctx.state === 'suspended') ctx.resume();
-    const hits = Math.max(5, Math.min(coins, 18));
     const master = ctx.createGain();
     master.gain.value = 0.3;
     master.connect(ctx.destination);

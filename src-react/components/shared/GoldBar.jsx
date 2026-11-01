@@ -89,16 +89,23 @@ function useCountUp(/** @type {number} */ target) {
   return val;
 }
 
-// כשהסכום יורד (תשלום) נשמע צליל מטבעות, ולפי העיצוב:
+// כשהסכום משתנה נשמע צליל מטבעות ויש רטט, גם כשמתווסף חוב וגם כשהוא יורד. לא מצלצלים בעליית הנתונים הראשונה
+// (סכום שנטען מ-0 תוך רגעים מפתיחת המסך). בירידה (תשלום), לפי העיצוב:
 // ילדים/נוער - המטילים הקטנים שלהם (זהב/נחושת, כמו המטיל הגדול) עפים מלמטה אל המטיל הגדול, נכנסים לתוכו והוא קופץ קצת, ואז המספר רץ;
 // הורים - רק המספר רץ. מצויר ב-portal כדי לא להיחתך ב-overflow של המטיל.
 function useCoinBurst(/** @type {number} */ amount, /** @type {import('react').RefObject<HTMLElement | null>} */ ref) {
   const prev = useRef(amount);
+  const mountedAt = useRef(Date.now());
   const [burst, setBurst] = useState(/** @type {null | { id: number, x: number, y: number, src: string, items: { x0: number, y0: number, sway: number, delay: number, w: number, h: number, dur: number, rot: number }[] }} */ (null));
   useEffect(() => {
     const was = prev.current;
     prev.current = amount;
-    if (!(amount < was) || !ref.current) return;
+    if (amount === was || !ref.current) return;
+    if (amount > was) {
+      // עלייה: צליל ורטט בלי אנימציית מטילים (המספר רץ למעלה), אבל לא בטעינה ראשונית של הנתונים
+      if (!(was === 0 && Date.now() - mountedAt.current < 2500)) playCoinSound(Math.round(8 + Math.min(1, (amount - was) / Math.max(amount, 1)) * 8));
+      return;
+    }
     const share = was > 0 ? (was - amount) / was : 1;
     const n = Math.round(8 + share * 8);
     const fly = flies(true);
