@@ -33,6 +33,8 @@ export const get = query({
         // מייל מוסתר חלקית (למסך ההגדרות). מאומת = אפשר לשלוח אליו קודים.
         email: me.emailVerified && me.email ? maskEmail(me.email) : null,
         pendingEmail: me.pendingEmail ? maskEmail(me.pendingEmail) : null,
+        // ילד/ה שאישר/ה שההורים יראו את הפנקס האישי: המכשיר משלח עותק (notebook:sync).
+        notebookShared: me.role === "child" && !!me.notebookShared,
       },
       // קוד ההצטרפות לא נשלח כאן: הורה חושף אותו בטביעת אצבע / זיהוי פנים (family:revealCode).
       family: {
@@ -54,6 +56,8 @@ export const get = query({
         friendsEnabled: !!p.friendsEnabled,
         friendsRequested: me.role === "parent" ? !!p.friendsRequested : false,
         friendEmail: me.role === "parent" ? p.friendEmail ?? null : null,
+        // להורים בלבד: אפשר לצפות בפנקס האישי של הילד/ה (notebook:forChild).
+        notebookShared: me.role === "parent" && p.role === "child" && !!p.notebookShared,
       }))),
       // בקשות הצטרפות שממתינות לאישור. להורים בלבד.
       joinRequests: me.role === "parent"

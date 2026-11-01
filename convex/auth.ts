@@ -126,12 +126,15 @@ export const join = mutation({
     code: v.string(), name: v.string(), avatar: v.optional(v.string()),
     gender: v.optional(v.union(v.literal("male"), v.literal("female"))),
     pin: v.string(), device: v.optional(v.string()),
+    // אישור הילד/ה שההורים יראו את הפנקס האישי שלו/ה לצפייה בלבד. חובה כדי להצטרף.
+    shareNotebook: v.optional(v.boolean()),
   },
-  handler: async (ctx, { code, name, avatar, gender, pin, device }) => {
+  handler: async (ctx, { code, name, avatar, gender, pin, device, shareNotebook }) => {
     if (await codeThrottled(ctx, device)) return { ok: false as const, reason: "throttled" as const };
     const found = await findFamilyByCode(ctx, code);
     if (!found) return await failCode(ctx, device);
     if (!validPin(pin)) throw new ConvexError("הקוד הסודי צריך להיות 4 ספרות");
+    if (shareNotebook !== true) throw new ConvexError("כדי להצטרף צריך לאשר שההורים יראו את הפנקס האישי שלך לצפייה בלבד");
     const clean = cleanName(name);
     const familyId = found.family._id;
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
@@ -144,6 +147,7 @@ export const join = mutation({
     const pinSalt = randomHex(16);
     await ctx.db.insert("joinRequests", {
       familyId, name: clean, avatar: avatar?.slice(0, 8), device, pinSalt, pinHash: await hashPin(pin, pinSalt), createdAt: Date.now(),
+      shareNotebook: true,
     });
     // התראה להורים, כדי שלא יצטרכו לגלות את הבקשה בעצמם (רק למי שיש לו מכשיר רשום להתראות).
     await notify(ctx, members.filter((p) => p.role === "parent").map((p) => p._id), "בקשת הצטרפות 👋", `${clean} מבקש/ת להצטרף לקופה. צריך את האישור שלך.`);
@@ -163,7 +167,7 @@ export const approveJoin = mutation({
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     if (members.length >= MAX_FAMILY_SIZE) throw new ConvexError("המשפחה מלאה");
     if (members.some((p) => p.name === r.name)) throw new ConvexError("כבר יש מישהו בשם הזה. דחו את הבקשה");
-    const id = await ctx.db.insert("people", { familyId: r.familyId, name: r.name, role: "child", avatar: r.avatar });
+    const id = await ctx.db.insert("people", { familyId: r.familyId, name: r.name, role: "child", avatar: r.avatar, notebookShared: r.shareNotebook === true });
     const trustKey = await trustKeyOf(id, r.device);
     await ctx.db.patch(id, { pinSalt: r.pinSalt, pinHash: r.pinHash, trustedDevices: trustKey ? [trustKey] : [] });
     await ctx.db.delete(requestId);

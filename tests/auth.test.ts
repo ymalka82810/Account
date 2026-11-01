@@ -206,18 +206,18 @@ describe("הקמת משפחה והצטרפות", () => {
     expect(await login(dad, "123456", "d9")).toMatchObject({ ok: true });
     // ילד/ה: קוד ארוך נדחה, גם בשינוי קוד וגם בהצטרפות
     expect(await t.mutation(api.auth.changeMyPin, { token: A.tokens["דנה"], oldPin: "2222", newPin: "123456" })).toMatchObject({ ok: false, reason: "format" });
-    await expect(t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "123456" })).rejects.toThrow("4 ספרות");
+    await expect(t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "123456", shareNotebook: true })).rejects.toThrow("4 ספרות");
   });
 
   it("הצטרפות ממתינה לאישור הורה ולא יוצרת אדם לפני כן", async () => {
-    const r: any = await t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "5555", device: "new" });
+    const r: any = await t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "5555", device: "new", shareNotebook: true });
     expect(r).toMatchObject({ ok: true, pending: true });
     const people = await t.run((ctx) => ctx.db.query("people").collect());
     expect(people.some((p) => p.name === "נועה")).toBe(false);
   });
 
   it("רק הורה מהמשפחה מאשר בקשה, והמצטרף/ת נכנס/ת בתור ילד/ה עם הקוד שבחר/ה", async () => {
-    await t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "5555", device: "new" });
+    await t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "5555", device: "new", shareNotebook: true });
     const req = (await t.run((ctx) => ctx.db.query("joinRequests").collect()))[0];
     await expect(t.mutation(api.auth.approveJoin, { token: A.tokens["דנה"], requestId: req._id })).rejects.toThrow("רק הורים");
     await expect(t.mutation(api.auth.approveJoin, { token: B.tokens["אמא"], requestId: req._id })).rejects.toThrow("הבקשה לא קיימת");
@@ -230,9 +230,23 @@ describe("הקמת משפחה והצטרפות", () => {
     expect(await login(noa._id, "5555", "new")).toMatchObject({ ok: true });
   });
 
+  it("בלי אישור הילד/ה שההורים יראו את הפנקס האישי אי אפשר להצטרף", async () => {
+    await expect(t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "5555" })).rejects.toThrow("הפנקס האישי");
+    await expect(t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "5555", shareNotebook: false })).rejects.toThrow("הפנקס האישי");
+    expect(await t.run((ctx) => ctx.db.query("joinRequests").collect())).toHaveLength(0);
+  });
+
+  it("אחרי אישור הורה הילד/ה מסומן/ת כמשתף/ת את הפנקס", async () => {
+    await t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "5555", device: "new", shareNotebook: true });
+    const req = (await t.run((ctx) => ctx.db.query("joinRequests").collect()))[0];
+    await t.mutation(api.auth.approveJoin, { token: A.tokens["אבא"], requestId: req._id });
+    const noa = (await t.run((ctx) => ctx.db.query("people").collect())).find((p) => p.name === "נועה")!;
+    expect(noa.notebookShared).toBe(true);
+  });
+
   it("אי אפשר להצטרף בשם שכבר קיים או עם קוד משפחה שגוי", async () => {
-    await expect(t.mutation(api.auth.join, { code: CODE_A, name: "דנה", pin: "5555" })).rejects.toThrow("כבר יש מישהו בשם הזה");
-    expect(await t.mutation(api.auth.join, { code: "WRONGCODE1", name: "נועה", pin: "5555" })).toMatchObject({ ok: false, reason: "code" });
-    await expect(t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "55" })).rejects.toThrow("4 ספרות");
+    await expect(t.mutation(api.auth.join, { code: CODE_A, name: "דנה", pin: "5555", shareNotebook: true })).rejects.toThrow("כבר יש מישהו בשם הזה");
+    expect(await t.mutation(api.auth.join, { code: "WRONGCODE1", name: "נועה", pin: "5555", shareNotebook: true })).toMatchObject({ ok: false, reason: "code" });
+    await expect(t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "55", shareNotebook: true })).rejects.toThrow("4 ספרות");
   });
 });

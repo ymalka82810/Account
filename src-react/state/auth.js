@@ -106,7 +106,8 @@ export async function createFamily({ familyName, name, birthDate, avatar, gender
 // ---------- הצטרפות עם קוד ----------
 export async function joinFamily({ name, avatar, pin, gender }) {
   try {
-    const args = { code: state.fam.code, name, avatar, pin };
+    // ההצטרפות מותנית באישור הילד/ה שההורים יראו את הפנקס האישי שלו/ה לצפייה בלבד (Join.jsx).
+    const args = { code: state.fam.code, name, avatar, pin, shareNotebook: true };
     if (gender) args.gender = gender;
     const res = await call('auth:join', args);
     if (!res.ok) {

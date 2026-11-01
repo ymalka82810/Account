@@ -10,7 +10,7 @@ import { isDemo } from './lib/demo.js';
 import { isPending, setFx } from './lib/computations.js';
 import { applyAppIcon, deviceCurrency } from './lib/appIcon.js';
 import { AppCtx, useApp } from './state/appContext.js';
-import { useNotebook, TEXT_SCALE } from './lib/notebook.js';
+import { useNotebook, TEXT_SCALE, NB_SHARED_KEY } from './lib/notebook.js';
 import { useSheet } from './components/shared/Sheet.jsx';
 import { EntryFlow } from './components/entries/EntryFlow.jsx';
 import { AccountSheet } from './components/account/AccountSheet.jsx';
@@ -260,6 +260,20 @@ function Root() {
     : null), [screen, data, fdata, token, isParent, setTab, openEntryFlow, fx]);
 
   useEffect(() => { sheet.setAppCtx(ctx); }, [ctx]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ילד/ה שאישר/ה שההורים יראו את הפנקס האישי: עותק נשלח אחרי כל שינוי (בהשהיה קצרה), לצפייה בלבד.
+  const shareNb = screen === 'app' && !!data.me.notebookShared && !isDemo(token);
+  useEffect(() => {
+    if (screen !== 'app') return;
+    try { if (shareNb) localStorage.setItem(NB_SHARED_KEY, '1'); else localStorage.removeItem(NB_SHARED_KEY); } catch (e) { /* מצב פרטי */ }
+  }, [shareNb, screen]);
+  useEffect(() => {
+    if (!shareNb) return undefined;
+    const id = setTimeout(() => {
+      call('notebook:sync', { token, data: JSON.stringify({ entries: nb.entries, currency: nb.currency }) }).catch(() => {});
+    }, 1500);
+    return () => clearTimeout(id);
+  }, [shareNb, token, nb.entries, nb.currency]);
 
   return (
     <>

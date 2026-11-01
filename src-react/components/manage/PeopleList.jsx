@@ -7,6 +7,7 @@ import { BioError } from '../../lib/biometric.js';
 import { useSheet } from '../shared/Sheet.jsx';
 import { ResetPinSheet } from './ResetPinSheet.jsx';
 import { BindCodeSheet } from './BindCodeSheet.jsx';
+import ChildNotebook from './ChildNotebook.jsx';
 import { useRun } from '../../lib/useRun.js';
 import { call } from '../../lib/api.js';
 import { roleLabel } from '../../lib/computations.js';
@@ -127,6 +128,9 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
             </div>
           </div>
           <button className="small" type="button" onClick={() => sheet.open(t('קוד סודי ל{name}', { name: p.name }), <ResetPinSheet person={p} />)}>{t('קוד חדש')}</button>
+          {p.notebookShared && (
+            <button className="small" type="button" onClick={() => sheet.open(t('הפנקס האישי של {name}', { name: p.name }), <ChildNotebook token={token} person={p} />)}>{t('📒 הפנקס האישי')}</button>
+          )}
           {p.role === 'parent' && p.id !== me && (
             <button className="small" type="button" onClick={() => bindCode(p)}>{t('קוד קישור למכשיר')}</button>
           )}

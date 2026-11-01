@@ -11,6 +11,7 @@ export default function Join({ current }) {
   const [error, setError] = useState('');
   const [busy, run] = useBusy();
   const [sent, setSent] = useState(false);
+  const [shareNb, setShareNb] = useState(false);
   const [sentName, setSentName] = useState('');
   const set = (k) => (e) => setV((x) => ({ ...x, [k]: e.target.value }));
   const submit = (ev) => {
@@ -61,6 +62,8 @@ export default function Join({ current }) {
           <label className="field"><span>{t('קוד סודי משלך (4 ספרות)')}</span>
             <input type="password" inputMode="numeric" pattern="\d{4}" maxLength={4} required autoComplete="new-password"
               value={v.pin} onChange={set('pin')} /></label>
+          <label className="check"><input type="checkbox" required checked={shareNb} onChange={(e) => setShareNb(e.target.checked)} />
+            <span>{t('אני מאשר/ת שההורים במשפחה יראו את מה שרשמתי בפנקס האישי שלי. הם יכולים רק לצפות, לא לשנות או למחוק.')}</span></label>
           <label className="check"><input type="checkbox" required /><Terms extra={t('. ילדים מצטרפים בהסכמת הורה')} /></label>
           {error && <p className="error" role="alert">{error}</p>}
           <button className="primary" type="submit" disabled={busy} aria-busy={busy}>{busy ? t('⏳ רגע…') : t('הצטרפות')}</button>

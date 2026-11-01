@@ -7,6 +7,8 @@ import { normName, nameMatch } from './names.js';
 // יהיה לדעת אם מותר להקים קופה משפחתית. הקמה בפועל נבדקת שוב בשרת.
 export const NOTEBOOK_KEY = 'kupa-notebook-v1';
 export const ADULT_AGE = 18;
+// ילד/ה שאישר/ה שההורים יראו את הפנקס שלו/ה (לצפייה בלבד): הפנקס מראה על כך הודעה. נקבע לפי הנתונים מהשרת.
+export const NB_SHARED_KEY = 'kupa-notebook-shared';
 
 // הגדרות מראה ורשימה של הפנקס. look: kid = צבעוני, dark = כהה רגוע, neon = ניאון (עם palette).
 export const DEFAULT_SETTINGS = { look: 'kid', palette: 'blue', textSize: 'normal', sort: 'new', showPaid: true };

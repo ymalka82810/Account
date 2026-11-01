@@ -74,6 +74,8 @@ export default defineSchema({
     // ישן: בקשת ילד/ה לעבור לנוער (הפיצ'ר הוסר). נשאר בסכמה כי יש מסמכים קיימים עם השדה,
     // ובלעדיו Convex מסרב לפרוס. לא בשימוש, ומתנקה בשינוי תפקיד.
     teenRequested: v.optional(v.boolean()),
+    // הילד/ה אישר/ה שההורים יראו את הפנקס האישי שלו/ה (לצפייה בלבד). ראו notebook.ts.
+    notebookShared: v.optional(v.boolean()),
   })
     .index("by_family", ["familyId"])
     .index("by_friendEmail", ["friendEmail"]),
@@ -87,7 +89,18 @@ export default defineSchema({
     pinHash: v.string(),
     pinSalt: v.string(),
     createdAt: v.number(),
+    // הילד/ה אישר/ה בהצטרפות שההורים יראו את הפנקס האישי שלו/ה (לצפייה בלבד). עובר לאדם באישור ההורה.
+    shareNotebook: v.optional(v.boolean()),
   }).index("by_family", ["familyId"]),
+
+  // עותק של הפנקס האישי של ילד/ה שאישר/ה שההורים יראו אותו. הפנקס עצמו נשאר במכשיר,
+  // והעותק מתעדכן ממנו בכל שינוי. הורים קוראים בלבד. נמחק כשהילד/ה יוצא/ת מהמשפחה או משנה תפקיד.
+  notebooks: defineTable({
+    personId: v.id("people"),
+    familyId: v.id("families"),
+    data: v.string(), // JSON: { entries, people, currency }
+    updatedAt: v.number(),
+  }).index("by_person", ["personId"]),
 
   sessions: defineTable({
     personId: v.id("people"),

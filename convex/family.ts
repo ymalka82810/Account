@@ -2,6 +2,7 @@ import { internalMutation, mutation } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
+import { purgeNotebook } from "./notebook";
 import { proofValidator, purgeBiometric, requireBiometric } from "./biometric";
 import { cleanFamilyName, freshCode, issuePass, purgePasses, requireParent } from "./lib";
 import { COUNTRIES, isCurrency } from "./currency";
@@ -78,6 +79,7 @@ export const remove = mutation({
       }
       await purgeFriends(ctx, p._id);
       await purgeBiometric(ctx, p._id);
+      await purgeNotebook(ctx, p._id);
       await ctx.db.delete(p._id);
     }
     await purgePasses(ctx, familyId);

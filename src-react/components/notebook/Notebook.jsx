@@ -6,7 +6,7 @@ import { today, toast } from '../../lib/helpers.js';
 import { money, fmtDate } from '../../lib/computations.js';
 import { CURRENCIES, currencyLabel, currencySymbol } from '../../lib/currencies.js';
 import {
-  useNotebook, notebookCurrency, addEntry, setPaid, removeEntry, setSetting, setCurrencyChoice, clearPaid, clearAll,
+  useNotebook, NB_SHARED_KEY, notebookCurrency, addEntry, setPaid, removeEntry, setSetting, setCurrencyChoice, clearPaid, clearAll,
   knownPeople, similarPeople, renamePerson, normName,
 } from '../../lib/notebook.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
@@ -27,6 +27,8 @@ const hasFamily = () => {
   try { return !!(state.fam || state.token || localStorage.getItem(CODE_KEY) || localStorage.getItem(TOKEN_KEY)); }
   catch (e) { return !!state.fam; }
 };
+
+const sharedWithParents = () => { try { return localStorage.getItem(NB_SHARED_KEY) === '1'; } catch (e) { return false; } };
 
 export default function Notebook({ current }) {
   const nb = useNotebook();
@@ -112,6 +114,8 @@ function Home({ nb, onSettings, pulling, returned, family }) {
           <span className="nb-gear-ico">⚙️</span>
         </button>
       </div>
+
+      {sharedWithParents() && <p className="hint">{t('🔒 ההורים שלך יכולים לראות את הפנקס הזה, לצפייה בלבד.')}</p>}
 
       <div className="summary">
         <div className="sum owe"><GoldBarArt /><div className="lbl">{t('אני חייב')}</div><SumNum amount={sum('iowe')} cur={cur} /></div>

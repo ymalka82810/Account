@@ -3,6 +3,7 @@ import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
 import { proofValidator, purgeBiometric, requireBiometric } from "./biometric";
 import { notify } from "./notify";
+import { purgeNotebook } from "./notebook";
 import { MAX_FAMILY_SIZE, cleanName, hashPin, randomHex, requireParent, requirePerson, requireSameFamily, validPin, pinRuleMessage } from "./lib";
 
 export const add = mutation({
@@ -55,6 +56,7 @@ export const remove = mutation({
     }
     await purgeFriends(ctx, id);
     await purgeBiometric(ctx, id);
+    await purgeNotebook(ctx, id);
     const rec = await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     for (const r of rec) if (r.from === id || r.to === id) await ctx.db.delete(r._id);
     await ctx.db.delete(id);
@@ -81,6 +83,11 @@ export const setRole = mutation({
     await ctx.db.patch(id, role === "teen"
       ? { role, teenRequested: undefined }
       : { role, teenRequested: undefined, friendsEnabled: false, friendsRequested: false, friendEmail: undefined });
+    // הצפייה של ההורים בפנקס האישי היא של ילד/ה בלבד: מי שיצא/ה מ"ילד/ה" מפסיק/ה לשתף והעותק נמחק.
+    if (role !== "child") {
+      await ctx.db.patch(id, { notebookShared: false });
+      await purgeNotebook(ctx, id);
+    }
     // הורה שהפך לילד/ה או לנער/ה לא צריך את המכשירים הביומטריים שלו.
     if (p.role === "parent") await purgeBiometric(ctx, id);
     // מי שהפך להורה לא ממשיך עם הסשן הקיים: הוא נכנס מחדש וקושר מכשיר בקוד קישור (הורה לא קשור לא פועל כהורה).
