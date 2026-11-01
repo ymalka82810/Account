@@ -1058,7 +1058,6 @@ body[data-theme="child"] .sum::after, body:not([data-theme]) .sum::after {
   0%, 55%, 100% { opacity: .55; transform: translate(-30%, -30%) scale(.8) rotate(0deg); }
   70% { opacity: 1; transform: translate(-30%, -30%) scale(1.15) rotate(45deg); }
 }
-body[data-theme="child"] .sum .num, body:not([data-theme]) .sum .num { text-shadow: 0 1px 0 rgba(255, 255, 255, .55); }
 
 /* --- הורים ונוער: מטיל זהב אמיתי (חתך טרפזי) כאיור SVG מאחורי הטקסט, ראו GoldBar.jsx --- */
 .gb-art { display: none; }
@@ -1087,7 +1086,7 @@ body[data-theme="parent"] .summary { filter: drop-shadow(0 6px 5px rgba(0, 0, 0,
 body[data-theme="parent"] .sum.get { --g-hi: #f1dd9d; --g-1: #d9ba6b; --g-2: #b18f3b; --g-3: #7d5f1d; --g-ink: #241a04; }
 body[data-theme="parent"] .sum.owe { --g-hi: #ebcdb0; --g-1: #cfa482; --g-2: #a8744a; --g-3: #744626; --g-ink: #241206; }
 body[data-theme="parent"] .sum .lbl { font-size: .9rem; }
-body[data-theme="parent"] .sum .num { font-size: 1.35rem; text-shadow: 0 1px 0 rgba(255, 255, 255, .35); }
+body[data-theme="parent"] .sum .num { font-size: 1.35rem; }
 
 /* נוער: זהב חי, וברק בצבעי הניאון של הפלטה שנבחרה */
 body[data-theme="teen"] .summary {
@@ -1106,7 +1105,7 @@ body[data-theme="teen"] .summary {
 body[data-theme="teen"] .sum.get { --g-hi: #fffbd0; --g-1: #ffe94d; --g-2: #ffc400; --g-3: #ff9d00; --g-ink: #2b1a00; }
 body[data-theme="teen"] .sum.owe { --g-hi: #ffeadb; --g-1: #ffc9a3; --g-2: #ff9a5c; --g-3: #ff6a3d; --g-ink: #2a0d00; }
 body[data-theme="teen"] .sum .lbl { font-size: .9rem; }
-body[data-theme="teen"] .sum .num { font-size: 1.6rem; text-shadow: 0 1px 0 rgba(255, 255, 255, .4); }
+body[data-theme="teen"] .sum .num { font-size: 1.6rem; }
 body[data-theme="teen"] .gb-shine { display: inline; filter: blur(1.2px); animation: gb-shine 7s ease-in-out infinite; }
 body[data-theme="teen"] .gb-glow { display: inline; }
 @keyframes gb-shine { 0%, 40% { transform: translateX(0); } 100% { transform: translateX(400px); } }
@@ -1119,16 +1118,14 @@ body[data-theme="parent"] .summary .sum { --num-fs: 1.35rem; --num-room: 122cqi;
 body[data-theme="teen"] .summary .sum { --num-fs: 1.6rem; --num-room: 122cqi; }
 body .summary .sum .num { font-size: min(var(--num-fs), calc(var(--num-room) / var(--len, 6))); white-space: nowrap; }
 
-/* ===== הטבעה: הכתב על המטילים נראה כמו חתום/לחוץ לתוך המתכת =====
-   האור מגיע מלמעלה, אז בתוך אות לחוצה הקצה העליון כהה (צל פנימי) והקצה התחתון מקבל ברק בהיר.
-   הצבע כהה מעט מהמתכת עצמה ולא שחור מלא, כמו חריטה שקועה. לא משנים גודל או ריווח, כדי שהתאמת האורך תמשיך לעבוד. */
+/* ===== הכתב על המטילים: חד וקריא =====
+   צבע כהה ומלא (כמעט שחור-חום של המתכת) והדגשה דקה אחת בלבד מתחת לאות, בלי טשטוש ובלי צל עליון,
+   כדי שהאותיות והספרות לא ייראו כפולות או מטושטשות. לא משנים גודל או ריווח, כדי שהתאמת האורך תמשיך לעבוד. */
 body[data-theme] .sum .lbl, body:not([data-theme]) .sum .lbl,
 body[data-theme] .sum .num, body:not([data-theme]) .sum .num {
-  color: color-mix(in srgb, var(--g-ink) 78%, var(--g-3));
-  text-shadow:
-    0 1.5px 0 rgba(255, 255, 255, .62),
-    0 -1px 0 rgba(0, 0, 0, .5),
-    0 0 1.5px rgba(0, 0, 0, .28);
+  color: var(--g-ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .45);
+  -webkit-font-smoothing: antialiased;
 }
 body[data-theme] .sum .lbl, body:not([data-theme]) .sum .lbl { font-weight: 800; }
 
