@@ -10,6 +10,7 @@ import Toast from './components/shared/Toast.jsx';
 import UpdateBanner from './components/shared/UpdateBanner.jsx';
 import AppKeyboard from './components/shared/AppKeyboard.jsx';
 import App from './App.jsx';
+import { preloadImages } from './lib/preloadImages.js';
 
 // key={lang}: החלפת שפה בונה את העץ מחדש, כך שכל t() בכל מקום מתרנדר שוב בלי לחבר כל קומפוננטה.
 function Root() {
@@ -18,9 +19,9 @@ function Root() {
   return client ? <ConvexProvider client={client}>{tree}</ConvexProvider> : tree;
 }
 
-// טוענים את מילון השפה (שפה שמורה או שפת המכשיר) לפני הרינדור הראשון, כדי שלא יהבהב טקסט בשפה הלא נכונה.
-// אם ההורדה נכשלה (אין חיבור) נשארים באנגלית.
-setLang(initialLang(), { persist: false }).finally(() => {
+// טוענים את מילון השפה (שפה שמורה או שפת המכשיר) ואת תמונות המטילים לפני הרינדור הראשון, כדי שלא יהבהב טקסט
+// בשפה הלא נכונה ושלא יופיע מספר בלי המטיל שמאחוריו. אם ההורדה נכשלה (אין חיבור) נשארים באנגלית.
+Promise.all([setLang(initialLang(), { persist: false }).catch(() => {}), preloadImages()]).finally(() => {
   createRoot(document.getElementById('root')).render(<Root />);
 });
 
