@@ -80,8 +80,8 @@ describe("הקלדה ומחיקה", () => {
 });
 
 describe("פריסות", () => {
-  it("בעברית: עברית, אנגלית ואז מקלדת המערכת", () => {
-    expect(layoutOrder("he", "text")).toEqual(["he", "en", "sys"]);
+  it("בעברית: עברית ואנגלית חוזר חלילה, בלי מקלדת המערכת", () => {
+    expect(layoutOrder("he", "text")).toEqual(["he", "en"]);
   });
   it("בשפה בלי פריסה משלה: אנגלית ומקלדת המערכת", () => {
     expect(layoutOrder("fr", "text")).toEqual(["en", "sys"]);

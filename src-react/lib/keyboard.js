@@ -37,11 +37,12 @@ export const ACCENTS = {
   da: 'åæø',
 };
 
-/** סדר המקלדות שמקש הגלובוס עובר עליהן: פריסת השפה, אנגלית, ובסוף מקלדת המערכת ('sys'). */
+/** סדר המקלדות שמקש הגלובוס עובר עליהן: פריסת השפה ואנגלית, חוזר חלילה (עברית ← אנגלית ← עברית).
+ * רק לשפות בלי פריסה משלנו (צרפתית, סינית...) יש בסוף גם מקלדת המערכת ('sys'), כי רק בה אפשר לכתוב אותן. */
 export function layoutOrder(/** @type {string} */ lang, /** @type {string} */ kind) {
   if (kind === 'latin' || kind === 'email') return ['en'];
   const native = NATIVE[/** @type {keyof typeof NATIVE} */ (lang)];
-  return native ? [native, 'en', 'sys'] : ['en', 'sys'];
+  return native ? [native, 'en'] : ['en', 'sys'];
 }
 
 export const hasCase = (/** @type {string} */ layout) => layout !== 'he' && layout !== 'ar';
