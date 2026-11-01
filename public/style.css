@@ -1022,8 +1022,22 @@ body[data-theme="child"] .sum.get, body:not([data-theme]) .sum.get { border-imag
 body[data-theme="child"] .sum.owe, body:not([data-theme]) .sum.owe { border-image: url('bars/child-owe.webp') 100 fill / 18px stretch; }
 body[data-theme="child"] .summary, body:not([data-theme]) .summary { filter: drop-shadow(0 5px 6px rgba(120, 80, 0, .28)); }
 body[data-theme="child"] .sum::after, body:not([data-theme]) .sum::after {
-  content: "✦"; position: absolute; top: -8px; inset-inline-end: 0; z-index: 1;
-  font-size: .95rem; line-height: 1; color: #fff; opacity: .9; text-shadow: 0 0 6px rgba(255, 255, 255, .9);
+  /* נצנוץ אור על הפינה המבריקה של המטיל (במקום כוכב שטוח): ליבה בהירה עם הילה וקרניים דקות שמתעמעמות */
+  content: ""; position: absolute; z-index: 1; pointer-events: none;
+  top: -2px; left: 0; width: 26px; height: 26px; transform: translate(-30%, -30%);
+  background:
+    radial-gradient(circle, #fff 0 9%, rgba(255, 255, 255, .85) 16%, rgba(255, 244, 190, .35) 34%, transparent 62%),
+    linear-gradient(90deg, transparent 8%, rgba(255, 255, 255, .85) 50%, transparent 92%) center / 100% 1.5px no-repeat,
+    linear-gradient(0deg, transparent 8%, rgba(255, 255, 255, .85) 50%, transparent 92%) center / 1.5px 100% no-repeat;
+  mix-blend-mode: screen; opacity: .9;
+}
+@media (prefers-reduced-motion: no-preference) {
+  body[data-theme="child"] .sum::after, body:not([data-theme]) .sum::after { animation: sum-glint 4.2s ease-in-out infinite; }
+  body[data-theme="child"] .sum.owe::after, body:not([data-theme]) .sum.owe::after { animation-delay: 1.6s; }
+}
+@keyframes sum-glint {
+  0%, 55%, 100% { opacity: .55; transform: translate(-30%, -30%) scale(.8) rotate(0deg); }
+  70% { opacity: 1; transform: translate(-30%, -30%) scale(1.15) rotate(45deg); }
 }
 body[data-theme="child"] .sum .num, body:not([data-theme]) .sum .num { text-shadow: 0 1px 0 rgba(255, 255, 255, .55); }
 
