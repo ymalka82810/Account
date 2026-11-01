@@ -261,6 +261,7 @@ export default function AppKeyboard() {
 
   let body;
   if (kind === 'num' || kind === 'dec') {
+    const rtl = LANGUAGES[/** @type {keyof typeof LANGUAGES} */ (lang)]?.dir === 'rtl';
     const cell = (/** @type {string} */ k) => Key({ k, cls: 'kb-digit' });
     body = (
       <div className="kb-numpad">
@@ -268,7 +269,8 @@ export default function AppKeyboard() {
         {['4', '5', '6'].map(cell)}
         {Key({ k: 'enter', id: 'enter-tall', label: '✓', cls: 'kb-enter kb-enter-tall', aria: t('אישור') })}
         {['7', '8', '9'].map(cell)}
-        {kind === 'dec' ? cell('.') : <span />}{cell('0')}<span />
+        {/* בעברית וערבית הנקודה מימין לאפס, כמו שקוראים: האפס באמצע והנקודה אחריו */}
+        {rtl ? <span /> : (kind === 'dec' ? cell('.') : <span />)}{cell('0')}{rtl ? (kind === 'dec' ? cell('.') : <span />) : <span />}
       </div>
     );
   } else {
