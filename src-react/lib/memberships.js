@@ -6,7 +6,7 @@
 export const MEMBERSHIPS_KEY = 'kupa-memberships';
 const MAX_MEMBERSHIPS = 5;
 
-/** @typedef {{ personId: string, token: string, familyName: string, name: string, avatar: string, role: string, shared: boolean }} Membership */
+/** @typedef {{ personId: string, token: string, familyId: string, familyName: string, name: string, avatar: string, role: string, shared: boolean }} Membership */
 
 /** @returns {Membership[]} */
 export function getMemberships() {

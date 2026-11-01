@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { t } from '../../i18n/index.js';
 import { state, CODE_KEY, TOKEN_KEY } from '../../state/state.js';
 import { prettyCode } from '../../lib/helpers.js';
-import { submitFamilyCode, goView, startPin, openNotebook, startDemo, switchFamily } from '../../state/auth.js';
-import { getMemberships } from '../../lib/memberships.js';
+import { submitFamilyCode, goView, startPin, openNotebook, startDemo, goToFamily, otherFamilies } from '../../state/auth.js';
 import LanguagePicker from '../shared/LanguagePicker.jsx';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 
@@ -53,9 +52,10 @@ export default function Welcome({ current }) {
             <button className="primary" type="submit" disabled={busy} aria-busy={busy}>{busy ? t('⏳ רגע…') : t('כניסה')}</button>
           </form>
         </details>
-        {getMemberships().map((m) => (
-          <button key={m.personId} className="ghost" type="button" onClick={() => switchFamily(m.token)}>
-            {t('↩️ חזרה למשפחת {family}', { family: m.familyName })}
+        {otherFamilies().map((f) => (
+          <button key={f.familyId} className="ghost" type="button"
+            onClick={async () => { const err = await goToFamily(f); if (err) setError(err); }}>
+            {t('↩️ חזרה למשפחת {family}', { family: f.name })}
           </button>
         ))}
         {parents.length > 0 && (

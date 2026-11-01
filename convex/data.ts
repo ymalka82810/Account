@@ -38,6 +38,7 @@ export const get = query({
       },
       // קוד ההצטרפות לא נשלח כאן: הורה חושף אותו בטביעת אצבע / זיהוי פנים (family:revealCode).
       family: {
+        id: family._id,
         name: family.name,
         currency: family.currency ?? "ILS",
         country: family.country ?? (family.currency ? null : "IL"),

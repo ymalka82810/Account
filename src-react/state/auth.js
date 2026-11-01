@@ -5,7 +5,8 @@ import { DEMO_TOKEN } from '../lib/demo.js';
 import { PARENT_PIN_MAX } from '../lib/pin.js';
 import { BioError, bioLoginProof, bioRegister, bioSupported } from '../lib/biometric.js';
 import { t } from '../i18n/index.js';
-import { forgetMembershipByToken } from '../lib/memberships.js';
+import { forgetMembershipByToken, getMemberships } from '../lib/memberships.js';
+import { upsertCard, removeCard, getCards, savedFamilies } from '../lib/cards.js';
 
 // הלוגיקה של מסכי הכניסה. התצוגה שלהם ב-src-react/components/Auth.jsx.
 
@@ -17,7 +18,10 @@ export async function enterFamily(code, remember) {
   if (!res.ok) return res.reason;
   state.fam = { code, name: res.familyName, people: res.people };
   // שומרים במכשיר כרטיס כניסה (לא את קוד ההצטרפות), לכניסות הבאות.
-  if (remember && res.loginCode) localStorage.setItem(CODE_KEY, res.loginCode);
+  if (remember && res.loginCode) {
+    localStorage.setItem(CODE_KEY, res.loginCode);
+    if (res.familyId) upsertCard({ familyId: String(res.familyId), name: res.familyName, card: res.loginCode });
+  }
   return true;
 }
 
@@ -71,14 +75,26 @@ export function dropSession() {
   restoreFamily().finally(() => { state.codeChecked = true; bumpAuth(); });
 }
 
-// מעבר בין המשפחות של הילד/ה במכשיר הזה. הטוקן של כל משפחה נשמר ברשימה, ולכן אין צורך בקוד סודי מחדש.
-export function switchFamily(token) {
-  if (!token || token === state.token) return;
-  setToken(token);
+// המשפחות שהמכשיר מכיר, חוץ מהנוכחית (לפי כרטיס כניסה ו/או כניסה פעילה).
+export const otherFamilies = (exceptFamilyId) => savedFamilies(getMemberships(), exceptFamilyId);
+
+// מעבר למשפחה אחרת במכשיר הזה, בלי קוד משפחה. אם יש כניסה פעילה (token) עוברים אליה ישר.
+// אחרת נפתח מסך הבחירה במשפחה עם הכרטיס השמור, ונדרש רק הקוד הסודי של מי שנכנס.
+export async function goToFamily(f) {
+  if (f.token) { if (f.token !== state.token) setToken(f.token); return ''; }
+  if (!f.card) return t('צריך את קוד המשפחה כדי להיכנס אליה');
+  const prevToken = state.token;
+  try {
+    const r = await enterFamily(f.card, true);
+    if (r === true) { state.token = ''; state.pinFlow = null; state.view = 'welcome'; route(); return ''; }
+    if (r === 'throttled') return t('יותר מדי ניסיונות. נסו שוב עוד דקה.');
+    // הכרטיס בוטל (הורה הסיר את המכשיר או החליף את קוד המשפחה): מסירים אותו ומבקשים קוד חדש.
+    removeCard(f.card);
+    return t('המשפחה הזאת הסירה את המכשיר. כדי להיכנס שוב צריך את קוד המשפחה.');
+  } catch (e) { state.token = prevToken; return errMsg(e); }
 }
 
-// הצטרפות למשפחה נוספת (למשל הורים גרושים): מרוקנים רק את הטוקן הפעיל, בלי להוציא את המשפחה הנוכחית.
-// המשפחה הנוכחית נשארת ברשימה ואפשר לחזור אליה. הרישום אצלה לא נמחק ולא משתנה.
+// הצטרפות למשפחה נוספת: מרוקנים רק את הכניסה הפעילה, בלי להוציא את המשפחה הנוכחית ובלי למחוק את הכרטיס שלה.
 export function addAnotherFamily() {
   state.token = '';
   state.pinFlow = null;
@@ -86,6 +102,14 @@ export function addAnotherFamily() {
   state.view = 'welcome';
   state.codeChecked = true;
   bumpAuth();
+}
+
+// "משפחה אחרת" ממסך הבחירה: חוזרים למסך הפתיחה, והכרטיס של המשפחה נשאר במכשיר.
+export function leaveToWelcome() {
+  state.fam = null;
+  state.view = 'welcome';
+  state.pinFlow = null;
+  route();
 }
 
 // ---------- מסך פתיחה ----------
@@ -144,7 +168,7 @@ export async function joinFamily({ name, avatar, pin, gender }) {
 
 export function leaveFamily() {
   const saved = localStorage.getItem(CODE_KEY);
-  if (saved && saved.startsWith('dev_')) call('auth:forgetPass', { pass: saved }).catch(() => {});
+  if (saved && saved.startsWith('dev_')) { call('auth:forgetPass', { pass: saved }).catch(() => {}); removeCard(saved); }
   state.fam = null;
   state.view = 'welcome';
   state.pinFlow = null;

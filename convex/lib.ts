@@ -161,9 +161,10 @@ function randomCode(): string {
 // ---------- כרטיסי כניסה למכשיר ----------
 export const PASS_PREFIX = "dev_";
 export const isPass = (raw: string) => raw.startsWith(PASS_PREFIX);
-// כרטיס פג אחרי PASS_TTL_MS בלי שימוש. כל כניסה למסך המשפחה מחדשת אותו.
+// הכרטיס נשאר במכשיר עד שמוחקים את האפליקציה, או עד שהורה מסיר את המכשיר או מחליף את קוד המשפחה.
+// התוקף הארוך הוא רק רשת ביטחון, וכל כניסה למסך המשפחה מחדשת אותו. הכרטיס לא מחליף את הקוד הסודי של האדם.
 // כרטיסים ישנים בלי expiresAt נחשבים לפי createdAt.
-export const PASS_TTL_MS = 180 * 24 * 60 * 60 * 1000;
+export const PASS_TTL_MS = 10 * 365 * 24 * 60 * 60 * 1000;
 export const passExpiry = (p: Doc<"devicePasses">) => p.expiresAt ?? p.createdAt + PASS_TTL_MS;
 
 export async function issuePass(ctx: MutationCtx, familyId: Id<"families">, label?: string): Promise<string> {

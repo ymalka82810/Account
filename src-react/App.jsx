@@ -8,6 +8,7 @@ import { syncPush } from './lib/push.js';
 import { client } from './lib/client.js';
 import { isDemo } from './lib/demo.js';
 import { upsertMembership, forgetMembershipByToken, syncTargets } from './lib/memberships.js';
+import { getCards, upsertCard } from './lib/cards.js';
 import { isPending, setFx } from './lib/computations.js';
 import { applyAppIcon, deviceCurrency } from './lib/appIcon.js';
 import { AppCtx, useApp } from './state/appContext.js';
@@ -267,10 +268,19 @@ function Root() {
   useEffect(() => {
     if (screen !== 'app' || isDemo(token)) return;
     upsertMembership({
-      personId: data.me.id, token, familyName: data.family.name, name: data.me.name,
+      personId: data.me.id, token, familyId: data.family.id, familyName: data.family.name, name: data.me.name,
       avatar: data.me.avatar || '', role: data.me.role, shared: !!data.me.notebookShared,
     });
   }, [screen, token, data]); // eslint-disable-line react-hooks/exhaustive-deps
+  // כל משפחה שהמכשיר מחובר אליה מקבלת כרטיס כניסה שנשאר במכשיר, כדי שהמעבר אליה (גם אחרי יציאה) לא יבקש את קוד המשפחה.
+  const famId = screen === 'app' ? data.family.id : '';
+  const famName = screen === 'app' ? data.family.name : '';
+  useEffect(() => {
+    if (!famId || isDemo(token) || getCards().some((c) => c.familyId === famId)) return;
+    call('auth:deviceCard', { token }).then((r) => {
+      if (r && r.ok && r.loginCode) upsertCard({ familyId: String(r.familyId), name: r.familyName || famName, card: r.loginCode });
+    }).catch(() => {});
+  }, [famId, token]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (screen !== 'app') return;
     try { if (shareNb) localStorage.setItem(NB_SHARED_KEY, '1'); else localStorage.removeItem(NB_SHARED_KEY); } catch (e) { /* מצב פרטי */ }
