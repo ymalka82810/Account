@@ -53,7 +53,7 @@ export default function Notebook({ current }) {
     setPulling(true);
     setTimeout(() => { setPulling(false); location.hash = SETTINGS_HASH; setPage('settings'); }, 380);
   };
-  // סגירה הפוכה מהפתיחה: הגלגל מסתובב לכיוון ההפוך ודוחף את ההגדרות החוצה לצד שלו,
+  // סגירה: הגלגל מסתובב לכיוון ההפוך וההגדרות נדחפות החוצה ימינה (הפוך מהפתיחה),
   // והעמוד הראשי חוזר פנימה מהצד שאליו נדחף בפתיחה
   const [closing, setClosing] = useState(false);
   const [returned, setReturned] = useState(false);
@@ -334,8 +334,8 @@ function Settings({ nb, onBack, closing }) {
   return (
     <div className={'nb-page nb-settings' + (closing ? ' nb-pushed-out' : ' nb-pull-in')}>
       <div className="nb-head">
-        <button className="ghost nb-gear" type="button" aria-label={t('חזרה')} onClick={onBack}>→</button>
         <h1 className={closing ? 'nb-gear-spin-back' : undefined}><span className="nb-gear-ico">⚙️</span> {t('הגדרות')}</h1>
+        <button className="ghost nb-gear" type="button" aria-label={t('חזרה')} onClick={onBack}>→</button>
       </div>
 
       <section className="card nb-section">

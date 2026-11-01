@@ -1149,7 +1149,7 @@ body[data-theme] .sum .lbl, body:not([data-theme]) .sum .lbl { font-weight: 800;
 /* סגירה: הכיוון ההפוך של הפתיחה */
 @media (prefers-reduced-motion: no-preference) {
   #screen-notebook .nb-gear-spin-back .nb-gear-ico { animation: nb-gear-turn-back .38s cubic-bezier(.5, 0, .3, 1) forwards; }
-  #screen-notebook .nb-pushed-out { transition: transform .38s cubic-bezier(.5, 0, .3, 1), opacity .38s ease-in; transform: translateX(-70%); opacity: 0; }
+  #screen-notebook .nb-pushed-out { transition: transform .38s cubic-bezier(.5, 0, .3, 1), opacity .38s ease-in; transform: translateX(70%); opacity: 0; }
   #screen-notebook .nb-push-back { animation: nb-push-back .42s cubic-bezier(.2, .8, .25, 1) backwards; }
 }
 @keyframes nb-gear-turn-back { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
