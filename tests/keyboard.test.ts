@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyKey, kindOf, isKbTarget, layoutOrder, LAYOUTS, symbolRows, wantsAutoShift, hasCase } from "../src-react/lib/keyboard.js";
+import { applyKey, kindOf, isKbTarget, layoutOrder, LAYOUTS, symbolRows, wantsAutoShift, hasCase, shiftChar } from "../src-react/lib/keyboard.js";
 
 // אלמנט מזויף: מספיק ל-kindOf ול-isKbTarget (בלי DOM).
 const el = (attrs: Record<string, string> = {}, tag = "INPUT", extra: any = {}) => ({
@@ -83,9 +83,37 @@ describe("פריסות", () => {
   it("בעברית: עברית ואנגלית חוזר חלילה, בלי מקלדת המערכת", () => {
     expect(layoutOrder("he", "text")).toEqual(["he", "en"]);
   });
-  it("בשפה בלי פריסה משלה: אנגלית ומקלדת המערכת", () => {
-    expect(layoutOrder("fr", "text")).toEqual(["en", "sys"]);
+  it("לכל שפת ממשק (חוץ מסינית) יש פריסה משלה, והסבב הוא פריסת השפה ואנגלית", () => {
+    for (const l of ["fr", "de", "es", "it", "pt", "nl", "sv", "nb", "da", "pl", "hu", "cs", "tr", "ru", "uk", "el", "ar", "hi", "th", "ja"]) {
+      expect(layoutOrder(l, "text")).toEqual([l, "en"]);
+      expect(LAYOUTS[l as keyof typeof LAYOUTS].length).toBeGreaterThanOrEqual(3);
+    }
+  });
+  it("סינית ואנגלית: אנגלית ומקלדת המערכת (סינית דורשת מערכת קלט)", () => {
     expect(layoutOrder("zh", "text")).toEqual(["en", "sys"]);
+    expect(layoutOrder("en", "text")).toEqual(["en", "sys"]);
+  });
+  it("צרפתית היא AZERTY וגרמנית QWERTZ", () => {
+    expect(LAYOUTS.fr[0]).toBe("azertyuiop");
+    expect(LAYOUTS.de[0].startsWith("qwertz")).toBe(true);
+  });
+  it("בפריסה אין אותו תו פעמיים", () => {
+    for (const [name, rows] of Object.entries(LAYOUTS)) {
+      const all = [...rows.join("")];
+      expect(new Set(all).size, name).toBe(all.length);
+    }
+  });
+  it("shift: טורקית i ← İ, הינדי נשפה, יפנית קאנה קטנה, תאילנדית שכבה שנייה", () => {
+    expect(shiftChar("tr", "i")).toBe("İ");
+    expect(shiftChar("tr", "ı")).toBe("I");
+    expect(shiftChar("hi", "क")).toBe("ख");
+    expect(shiftChar("ja", "つ")).toBe("っ");
+    expect(shiftChar("th", "ๆ")).toBe("๐");
+    expect(shiftChar("he", "א")).toBe("א");
+  });
+  it("ניקוד יפני מתחבר לתו שלפניו", () => {
+    expect(applyKey(st("か"), "\u3099", "text")).toEqual({ value: "が", caret: 1 });
+    expect(applyKey(st("は"), "\u309A", "text")).toEqual({ value: "ぱ", caret: 1 });
   });
   it("מייל וקוד נשארים באנגלית בלבד", () => {
     expect(layoutOrder("he", "email")).toEqual(["en"]);

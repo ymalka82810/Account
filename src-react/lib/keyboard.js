@@ -11,14 +11,61 @@ export const LAYOUTS = {
   uk: ['йцукенгшщзхї', 'фівапролджє', 'ячсмитьбюґ'],
   ar: ['ضصثقفغعهخحجد', 'شسيبلاتنمكط', 'ئءؤرىةوزظذ'],
   el: ['ςερτυθιοπ', 'ασδφγηξκλ', 'ζχψωβνμ'],
+  // לטיניות: האותיות הנפוצות של השפה על המקשים, השאר בדף הסימנים (ACCENTS)
+  fr: ['azertyuiop', 'qsdfghjklm', 'wxcvbnéèç'],
+  de: ['qwertzuiopü', 'asdfghjklöä', 'yxcvbnmß'],
+  nl: ['qwertyuiop', 'asdfghjkl', 'zxcvbnmé'],
+  it: ['qwertyuiopè', 'asdfghjklòà', 'zxcvbnmùì'],
+  es: ['qwertyuiop', 'asdfghjklñ', 'zxcvbnm'],
+  pt: ['qwertyuiop', 'asdfghjklç', 'zxcvbnmãõ'],
+  sv: ['qwertyuiopå', 'asdfghjklöä', 'zxcvbnm'],
+  nb: ['qwertyuiopå', 'asdfghjkløæ', 'zxcvbnm'],
+  da: ['qwertyuiopå', 'asdfghjklæø', 'zxcvbnm'],
+  pl: ['qwertyuiopó', 'asdfghjklł', 'zxcvbnmąę'],
+  hu: ['qwertzuiopú', 'asdfghjkléá', 'yxcvbnmöü'],
+  cs: ['qwertzuiopú', 'asdfghjklůé', 'yxcvbnmíá'],
+  tr: ['qwertyuıopğ', 'asdfghjklşi', 'zxcvbnmöç'],
+  // הינדי: InScript, הפריסה הסטנדרטית באנדרואיד ובווינדוס (שכבת shift נותנת את האותיות הנשפות והתנועות הארוכות)
+  hi: ['ौैाीूबहगदजड', 'ोे्िुपरकतचट', 'ंमनवलसषय'],
+  // תאילנדית: Kedmanee
+  th: ['ๆไำพะัีรนยบล', 'ฟหกดเ้่าสวง', 'ผปแอิืทมใฝ'],
+  // יפנית: טבלת הקאנה (חמשת הקולות), בלי המרה לקאנג'י. ゛ ו-゜ משלימים את הצליל המוטעם, shift נותן קאנה קטנה
+  ja: ['あいうえおかきくけこ', 'さしすせそたちつてと', 'なにぬねのはひふへほ', 'まみむめもやゆよわん', 'らりるれろをー\u3099\u309A'],
 };
 
-// תווית הכפתור שמחזיר לדף האותיות מדף הסימנים
-export const LAYOUT_LABEL = { en: 'abc', he: 'אבג', ru: 'абв', uk: 'абв', ar: 'أبج', el: 'αβγ' };
+// שכבת shift לפריסות שאינן עם אותיות גדולות וקטנות
+export const SHIFT_MAP = {
+  hi: {
+    'ौ': 'औ', 'ै': 'ऐ', 'ा': 'आ', 'ी': 'ई', 'ू': 'ऊ', 'ब': 'भ', 'ह': 'ङ', 'ग': 'घ', 'द': 'ध', 'ज': 'झ', 'ड': 'ढ',
+    'ो': 'ओ', 'े': 'ए', '्': 'अ', 'ि': 'इ', 'ु': 'उ', 'प': 'फ', 'र': 'ऱ', 'क': 'ख', 'त': 'थ', 'च': 'छ', 'ट': 'ठ',
+    'ं': 'ँ', 'म': 'ण', 'न': 'ऩ', 'व': 'ऴ', 'ल': 'ळ', 'स': 'श', 'ष': 'क्ष', 'य': 'ज्ञ',
+  },
+  th: {
+    'ๆ': '๐', 'ไ': '"', 'ำ': 'ฎ', 'พ': 'ฑ', 'ะ': 'ธ', 'ั': 'ํ', 'ี': '๊', 'ร': 'ณ', 'น': 'ฯ', 'ย': 'ญ', 'บ': 'ฐ', 'ล': ',',
+    'ฟ': 'ฤ', 'ห': 'ฆ', 'ก': 'ฏ', 'ด': 'โ', 'เ': 'ฌ', '้': '็', '่': '๋', 'า': 'ษ', 'ส': 'ศ', 'ว': 'ซ', 'ง': '.',
+    'ผ': '(', 'ป': ')', 'แ': 'ฉ', 'อ': 'ฮ', 'ิ': 'ฺ', 'ื': '์', 'ท': '?', 'ม': 'ฒ', 'ใ': 'ฬ', 'ฝ': 'ฦ',
+  },
+  ja: { 'あ': 'ぁ', 'い': 'ぃ', 'う': 'ぅ', 'え': 'ぇ', 'お': 'ぉ', 'つ': 'っ', 'や': 'ゃ', 'ゆ': 'ゅ', 'よ': 'ょ', 'わ': 'ゎ' },
+};
+// פריסות עם אותיות גדולות וקטנות (אות גדולה אוטומטית בתחילת משפט רק בהן)
+const CASED = new Set(['en', 'fr', 'de', 'nl', 'it', 'es', 'pt', 'sv', 'nb', 'da', 'pl', 'hu', 'cs', 'tr', 'ru', 'uk', 'el']);
+// הצגת תווים משלימים (ניקוד יפני) על המקש
+export const KEY_LABEL = { '\u3099': '゛', '\u309A': '゜' };
 
-// לאילו שפות ממשק יש פריסה משלהן. כל השאר (צרפתית, גרמנית, סינית...) נכתבות על הפריסה הלטינית,
-// ובמקש הגלובוס אפשר לעבור למקלדת של המערכת (שם יש כל שפה ושיטת קלט).
-const NATIVE = { he: 'he', ru: 'ru', uk: 'uk', ar: 'ar', el: 'el' };
+/** התו אחרי shift: אות גדולה, או התו מהשכבה השנייה של הפריסה. */
+export function shiftChar(/** @type {string} */ layout, /** @type {string} */ c) {
+  const m = /** @type {Record<string, Record<string, string>>} */ (SHIFT_MAP)[layout];
+  if (m) return m[c] ?? c;
+  return CASED.has(layout) ? c.toLocaleUpperCase(layout === 'tr' ? 'tr' : undefined) : c;
+}
+export const autoShiftLayout = (/** @type {string} */ layout) => CASED.has(layout);
+
+// תווית הכפתור שמחזיר לדף האותיות מדף הסימנים
+export const LAYOUT_LABEL = { he: 'אבג', ru: 'абв', uk: 'абв', ar: 'أبج', el: 'αβγ', hi: 'अआइ', th: 'กขค', ja: 'あいう' };
+
+// לאילו שפות ממשק יש פריסה משלהן: כל השפות חוץ מאנגלית (שהיא הפריסה השנייה בסבב) וסינית, שכתיבתה דורשת מערכת קלט
+// עם המרה לאותיות סיניות. סינית נכתבת על הפריסה הלטינית, ובמקש הגלובוס אפשר לעבור למקלדת של המערכת.
+const NATIVE = Object.fromEntries(Object.keys(LAYOUTS).filter((l) => l !== 'en').map((l) => [l, l]));
 
 // אותיות עם סימנים לכל שפה לטינית, בדף הסימנים
 export const ACCENTS = {
@@ -38,14 +85,15 @@ export const ACCENTS = {
 };
 
 /** סדר המקלדות שמקש הגלובוס עובר עליהן: פריסת השפה ואנגלית, חוזר חלילה (עברית ← אנגלית ← עברית).
- * רק לשפות בלי פריסה משלנו (צרפתית, סינית...) יש בסוף גם מקלדת המערכת ('sys'), כי רק בה אפשר לכתוב אותן. */
+ * רק לשפות בלי פריסה משלנו (סינית, ואנגלית כשהיא שפת הממשק) יש בסוף גם מקלדת המערכת ('sys'). */
 export function layoutOrder(/** @type {string} */ lang, /** @type {string} */ kind) {
   if (kind === 'latin' || kind === 'email') return ['en'];
   const native = NATIVE[/** @type {keyof typeof NATIVE} */ (lang)];
   return native ? [native, 'en'] : ['en', 'sys'];
 }
 
-export const hasCase = (/** @type {string} */ layout) => layout !== 'he' && layout !== 'ar';
+/** האם יש בפריסה מקש shift (אותיות גדולות, או שכבה שנייה). */
+export const hasCase = (/** @type {string} */ layout) => CASED.has(layout) || layout in SHIFT_MAP;
 
 // ---------- סוג השדה ----------
 const NON_TEXT_TYPES = new Set(['checkbox', 'radio', 'button', 'submit', 'reset', 'file', 'image', 'range', 'color', 'date', 'datetime-local', 'month', 'time', 'week', 'hidden']);
@@ -99,6 +147,11 @@ export function applyKey(/** @type {{ value: string, start: number, end: number,
   }
   if ((kind === 'email' || kind === 'latin') && /\s/.test(key)) return null;
   if (value.length - (end - start) + key.length > s.max) return null;
+  // ניקוד יפני (゛ ゜) מתחבר לתו שלפניו: か + ゛ = が
+  if (key === '\u3099' || key === '\u309A') {
+    const before = (value.slice(0, start) + key).normalize('NFC');
+    return { value: before + value.slice(end), caret: before.length };
+  }
   return { value: value.slice(0, start) + key + value.slice(end), caret: start + key.length };
 }
 

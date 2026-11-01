@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import { t, currentLang, LANGUAGES } from '../../i18n/index.js';
 import { playKeyClick } from '../../lib/keyClick.js';
 import {
-  LAYOUTS, LAYOUT_LABEL, layoutOrder, hasCase, isKbTarget, kindOf, applyKey, wantsAutoShift, symbolRows,
+  LAYOUTS, LAYOUT_LABEL, KEY_LABEL, layoutOrder, hasCase, shiftChar, autoShiftLayout, isKbTarget, kindOf, applyKey, wantsAutoShift, symbolRows,
   currentWord, suggest, applySuggestion, learnWord, personalWords,
 } from '../../lib/keyboard.js';
 
@@ -79,7 +79,7 @@ export default function AppKeyboard() {
     targetRef.current = el;
     const k = kindOf(el);
     setTarget(el); setKind(k); setPage('abc'); setLi(0);
-    setShift(k === 'text' && wantsAutoShift(el.value.slice(0, el.selectionStart ?? el.value.length)) ? 1 : 0);
+    setShift(k === 'text' && autoShiftLayout(layoutOrder(currentLang(), k)[0]) && wantsAutoShift(el.value.slice(0, el.selectionStart ?? el.value.length)) ? 1 : 0);
   }, []);
 
   // האזנה גלובלית לפוקוס
@@ -178,8 +178,8 @@ export default function AppKeyboard() {
   const order = layoutOrder(lang, kind);
   const layout = order[Math.min(li, order.length - 1)];
   const letters = layout === 'sys' ? 'en' : layout;
-  // רשימת המילים: פריסה אנגלית בממשק של שפה לטינית אחרת (למשל צרפתית) משתמשת במילים של אותה שפה
-  const dictKey = letters === 'en' && WORD_LANGS.has(lang) && lang !== 'he' ? lang : letters;
+  // רשימת המילים לפי הפריסה שנבחרה
+  const dictKey = letters;
   const wantsSuggest = kind === 'text' && !!target && target.type !== 'password' && WORD_LANGS.has(dictKey);
 
   useEffect(() => {
@@ -196,8 +196,8 @@ export default function AppKeyboard() {
   }, [wantsSuggest, dictKey]);
 
   const afterKey = useCallback((/** @type {any} */ el) => {
-    setShift((s) => (s === 2 ? 2 : (kind === 'text' && wantsAutoShift(el.value.slice(0, el.selectionStart ?? el.value.length)) ? 1 : 0)));
-  }, [kind]);
+    setShift((s) => (s === 2 ? 2 : (kind === 'text' && autoShiftLayout(letters) && wantsAutoShift(el.value.slice(0, el.selectionStart ?? el.value.length)) ? 1 : 0)));
+  }, [kind, letters]);
 
   function press(/** @type {string} */ key) {
     const el = targetRef.current;
@@ -248,7 +248,7 @@ export default function AppKeyboard() {
       setTimeout(() => { el.focus(); switching.current = false; }, 60);
       return;
     }
-    setLi(nextIdx); setPage('abc');
+    setLi(nextIdx); setPage('abc'); setShift(0);
   }
 
   function stopRepeat() { clearTimeout(repeat.current.to); clearInterval(repeat.current.iv); }
@@ -283,7 +283,7 @@ export default function AppKeyboard() {
 
   if (!target) return null;
 
-  const upper = (/** @type {string} */ c) => (hasCase(letters) && shift ? c.toUpperCase() : c);
+  const upper = (/** @type {string} */ c) => (hasCase(letters) && shift ? shiftChar(letters, c) : c);
   const enterKey = Key({ k: 'enter', label: '✓', cls: 'kb-enter', aria: t('אישור'), grow: 1.6 });
   const delKey = Key({ k: 'del', label: '⌫', cls: 'kb-del', aria: t('מחיקה'), grow: 1.5 });
   const tap = (/** @type {() => void} */ fn) => (/** @type {any} */ e) => { e.preventDefault(); fn(); };
@@ -312,7 +312,7 @@ export default function AppKeyboard() {
     const rows = page === 'sym' ? symbolRows(lang, kind) : LAYOUTS[/** @type {keyof typeof LAYOUTS} */ (letters)].map((r) => [...r]);
     const last = rows.length - 1;
     const onSym = page === 'sym';
-    const toggleLabel = onSym ? LAYOUT_LABEL[/** @type {keyof typeof LAYOUT_LABEL} */ (letters)] : '?123';
+    const toggleLabel = onSym ? ((/** @type {Record<string, string>} */ (LAYOUT_LABEL))[letters] ?? 'abc') : '?123';
     const spaceLabel = (LANGUAGES[/** @type {keyof typeof LANGUAGES} */ (letters)] || LANGUAGES.en).name;
     const compact = kind === 'email' || kind === 'latin';
     body = (
@@ -328,7 +328,7 @@ export default function AppKeyboard() {
         {rows.map((r, i) => (
           <div className="kb-row" key={i}>
             {i === last && !onSym && hasCase(letters) && Key({ k: 'shift', label: shift === 2 ? '⇪' : '⇧', cls: 'kb-fn' + (shift ? ' on' : ''), aria: 'Shift', grow: 1.5, onDown: tap(() => setShift((s) => (s + 1) % 3)) })}
-            {r.map((c) => Key({ k: upper(c), id: c }))}
+            {r.map((c) => Key({ k: upper(c), id: c, label: (/** @type {Record<string, string>} */ (KEY_LABEL))[c] }))}
             {i === last && delKey}
           </div>
         ))}
