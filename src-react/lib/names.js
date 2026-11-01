@@ -31,3 +31,43 @@ export function nameMatch(a, b) {
   return null;
 }
 
+// ---------- הצעות שמות בטופס הרישום ----------
+// כמה רישומים (גם ששולמו) יש לכל אדם ידוע, וכמה חוב פתוח יש מולו.
+function usageStats(nb) {
+  const stats = new Map(nb.people.map((p) => [p.id, { count: 0, open: 0, last: Infinity }]));
+  nb.entries.forEach((e, i) => { // הרשימה כבר מהחדש לישן
+    const s = stats.get(e.personId);
+    if (!s) return;
+    s.count += 1;
+    if (!e.paid) s.open += 1;
+    if (i < s.last) s.last = i;
+  });
+  return stats;
+}
+
+// בלי הקלדה: שלושת השמות שהכי משתמשים בהם (שוויון: מי שנרשם אליו לאחרונה).
+export function topPeople(nb, limit = 3) {
+  const stats = usageStats(nb);
+  return nb.people
+    .filter((p) => stats.get(p.id).count > 0)
+    .sort((a, b) => stats.get(b.id).count - stats.get(a.id).count || stats.get(a.id).last - stats.get(b.id).last)
+    .slice(0, limit);
+}
+
+// בזמן הקלדה: כל מי שהשם שלו מכיל את מה שהוקלד. מי שיש איתו חוב פתוח למעלה,
+// אחריו לפי שימוש; שם שמתחיל במה שהוקלד קודם לשם שמכיל אותו באמצע.
+export function searchPeople(nb, query, limit = 8) {
+  const q = normName(query);
+  if (!q) return [];
+  const stats = usageStats(nb);
+  return nb.people
+    .filter((p) => normName(p.name).includes(q))
+    .sort((a, b) => {
+      const sa = stats.get(a.id), sb = stats.get(b.id);
+      return (sb.open > 0) - (sa.open > 0)
+        || (normName(b.name).startsWith(q)) - (normName(a.name).startsWith(q))
+        || sb.count - sa.count
+        || sa.last - sb.last;
+    })
+    .slice(0, limit);
+}

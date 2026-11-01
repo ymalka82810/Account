@@ -1028,6 +1028,7 @@ body[data-theme="teen"] .confirm-box { background: #07070b; border: 2px solid va
 #screen-notebook .nb-section .ghost { width: 100%; text-align: start; }
 .nb-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 8px; }
 .nb-opts.two { grid-template-columns: 1fr 1fr; }
+.nb-opts.nb-search, #screen-notebook .nb-opts.nb-search { grid-template-columns: 1fr; gap: 6px; }
 #screen-notebook .nb-opts .ghost, .sheet .nb-opts .ghost { text-align: center; width: 100%; }
 .ghost.danger { color: var(--owe); border-color: var(--owe); }
 

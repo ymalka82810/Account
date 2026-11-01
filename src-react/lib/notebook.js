@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { deviceCurrency } from './appIcon.js';
-import { normName, nameMatch } from './names.js';
+import { normName, nameMatch, topPeople, searchPeople } from './names.js';
 
 // הפנקס האישי: רשימת "אני חייב / חייבים לי" שנשמרת על המכשיר בלבד.
 // בלי משתמש, בלי שרת ובלי סיסמה. תאריך הלידה (אופציונלי) נשמר כאן רק כדי שאפשר
@@ -17,7 +17,7 @@ export const TEXT_SCALE = { small: 90, normal: 100, large: 115, xlarge: 130 };
 // ---------- שמות ידועים ----------
 // כל מי שנרשם בפנקס נשמר כאדם ידוע (people), וכל רישום מצביע עליו (personId).
 // כך אפשר לבחור אותו שוב כבעל חוב או כחייב, ושמות דומים אפשר לאחד.
-export { normName, nameMatch };
+export { normName, nameMatch, topPeople, searchPeople };
 
 const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
@@ -69,13 +69,6 @@ export function addEntry({ dir, name, amount, note, date, personId }) {
   if (!person) { person = { id: newId(), name }; people = [...people, person]; }
   const entry = { id: newId(), dir, name: person.name, personId: person.id, amount, note, date, paid: false };
   commit({ ...data, people, currency: data.currency || notebookCurrency(), entries: [entry, ...data.entries] });
-}
-
-// אנשים ידועים, מהאחרון שנרשם אליו (או ממנו) לראשון.
-export function knownPeople(nb = data) {
-  const last = new Map();
-  nb.entries.forEach((e, i) => { if (!last.has(e.personId)) last.set(e.personId, i); }); // הרשימה כבר מהחדש לישן
-  return [...nb.people].sort((a, b) => (last.has(a.id) ? last.get(a.id) : 1e9) - (last.has(b.id) ? last.get(b.id) : 1e9));
 }
 
 // אנשים ידועים בשם דומה (לא זהה) לשם שהוקלד.

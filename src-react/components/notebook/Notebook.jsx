@@ -7,7 +7,7 @@ import { money, fmtDate } from '../../lib/computations.js';
 import { CURRENCIES, currencyLabel, currencySymbol } from '../../lib/currencies.js';
 import {
   useNotebook, NB_SHARED_KEY, notebookCurrency, addEntry, setPaid, removeEntry, setSetting, setCurrencyChoice, clearPaid, clearAll,
-  knownPeople, similarPeople, renamePerson, normName, offsetCandidates, offsetPerson,
+  topPeople, searchPeople, similarPeople, renamePerson, normName, offsetCandidates, offsetPerson,
 } from '../../lib/notebook.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import { useConfirm } from '../shared/Confirm.jsx';
@@ -207,9 +207,10 @@ function AddEntry({ initialDir }) {
   useSheetTitle(dir === 'iowe' ? t('אני חייב כסף') : t('חייבים לי כסף'));
   const set = (k) => (e) => { setForm((f) => ({ ...f, [k]: e.target.value })); setError(''); setBad(''); if (k === 'name') setPersonId(null); };
 
-  const people = knownPeople(nb);
+  const people = nb.people;
   const typed = normName(form.name);
-  const chips = (typed ? people.filter((p) => normName(p.name).includes(typed)) : people).slice(0, 8);
+  // בלי הקלדה: שלושת השמות הכי בשימוש. בהקלדה: רשימת חיפוש, ומי שיש איתו חוב פתוח קודם.
+  const chips = typed ? searchPeople(nb, form.name) : topPeople(nb, 3);
   const pick = (p) => { setForm((f) => ({ ...f, name: p.name })); setPersonId(p.id); setError(''); };
 
   const save = (name, amount, id) => {
@@ -263,7 +264,7 @@ function AddEntry({ initialDir }) {
       <label className="field"><span>{dir === 'iowe' ? t('למי?') : t('מי חייב לי?')}</span>
         <input ref={nameRef} type="text" maxLength={30} autoFocus aria-invalid={bad === 'name'} className={bad === 'name' ? 'invalid' : undefined} value={form.name} onChange={set('name')} /></label>
       {chips.length > 0 && (
-        <div className="nb-opts" role="group" aria-label={t('שמות מוכרים')}>
+        <div className={'nb-opts' + (typed ? ' nb-search' : '')} role="group" aria-label={t('שמות מוכרים')}>
           {chips.map((p) => (
             <button key={p.id} type="button" className={'ghost' + (personId === p.id ? ' active' : '')} onClick={() => pick(p)}>{p.name}</button>
           ))}
