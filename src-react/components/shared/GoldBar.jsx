@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { money } from '../../lib/computations.js';
+import { playCoinSound } from '../../lib/coinSound.js';
 
 // מטיל הזהב עצמו (המתכת, הפאות והחותמת 999.9) הוא תמונה שרונדרה ב-Blender (public/bars/<theme>-<get|owe>.webp,
 // ראו scripts/blender/bar.py), ונקבעת ב-CSS לפי תפקיד וסוג (.sum::before). הגיאומטריה של התמונה זהה לקו המתאר
@@ -85,23 +86,31 @@ function useCountUp(/** @type {number} */ target) {
   return val;
 }
 
-// כשהסכום יורד (תשלום), מטבעות קטנים עולים מהמטיל כלפי מעלה. מצויר ב-portal כדי לא להיחתך ב-overflow של המטיל.
+// כשהסכום יורד (תשלום) נשמע צליל מטבעות, ולפי העיצוב עולים מהמטיל פריטים קטנים:
+// ילדים - מטבעות, נוער - מטילי נוער קטנים (באותו צבע של המטיל: זהב/נחושת), הורים - כלום (רק המספר רץ).
+// מצויר ב-portal כדי לא להיחתך ב-overflow של המטיל.
 function useCoinBurst(/** @type {number} */ amount, /** @type {import('react').RefObject<HTMLElement | null>} */ ref) {
   const prev = useRef(amount);
-  const [burst, setBurst] = useState(/** @type {null | { id: number, x: number, y: number, coins: { dx: number, rise: number, delay: number, size: number, dur: number, rot: number }[] }} */ (null));
+  const [burst, setBurst] = useState(/** @type {null | { id: number, x: number, y: number, src: string, bar: boolean, coins: { dx: number, rise: number, delay: number, size: number, dur: number, rot: number }[] }} */ (null));
   useEffect(() => {
     const was = prev.current;
     prev.current = amount;
-    if (!(amount < was) || reducedMotion() || !ref.current) return;
-    const r = ref.current.getBoundingClientRect();
+    if (!(amount < was) || !ref.current) return;
     const share = was > 0 ? (was - amount) / was : 1;
     const n = Math.round(10 + share * 12);
+    playCoinSound(n);
+    const theme = document.body.dataset.theme;
+    if (theme === 'parent' || reducedMotion()) return;
+    const bar = theme === 'teen';
+    const r = ref.current.getBoundingClientRect();
+    const owe = !!ref.current.closest('.sum')?.classList.contains('owe');
     const rnd = (/** @type {number} */ a, /** @type {number} */ b) => a + Math.random() * (b - a);
     const id = Date.now();
     setBurst({
-      id, x: r.left + r.width / 2, y: r.top + r.height / 2,
+      id, x: r.left + r.width / 2, y: r.top + r.height / 2, bar,
+      src: bar ? `bars/teen-${owe ? 'owe' : 'get'}.webp` : 'coin.webp',
       coins: Array.from({ length: n }, () => ({
-        dx: rnd(-70, 70), rise: rnd(110, 240), delay: rnd(300, 900), size: rnd(14, 26), dur: rnd(1100, 1700), rot: rnd(-300, 300),
+        dx: rnd(-70, 70), rise: rnd(110, 240), delay: rnd(300, 900), size: bar ? rnd(18, 30) : rnd(14, 26), dur: rnd(1100, 1700), rot: bar ? rnd(-60, 60) : rnd(-300, 300),
       })),
     });
     setTimeout(() => setBurst((b) => (b && b.id === id ? null : b)), 3000);
@@ -110,8 +119,8 @@ function useCoinBurst(/** @type {number} */ amount, /** @type {import('react').R
   return createPortal(
     <div className="coin-burst" aria-hidden="true" style={{ left: burst.x, top: burst.y }}>
       {burst.coins.map((c, i) => (
-        <img key={i} className="coin-burst__c" src="coin.webp" alt="" draggable="false"
-          style={/** @type {import('react').CSSProperties} */ ({ '--dx': c.dx + 'px', '--rise': c.rise + 'px', '--s': c.size + 'px', '--d': c.dur + 'ms', '--delay': c.delay + 'ms', '--rot': c.rot + 'deg' })} />
+        <img key={i} className={'coin-burst__c' + (burst.bar ? ' is-bar' : '')} src={burst.src} alt="" draggable="false"
+          style={/** @type {import('react').CSSProperties} */ ({ '--dx': c.dx + 'px', '--rise': c.rise + 'px', '--w': c.size * (burst.bar ? 1.63 : 1) + 'px', '--h': c.size + 'px', '--d': c.dur + 'ms', '--delay': c.delay + 'ms', '--rot': c.rot + 'deg' })} />
       ))}
     </div>,
     document.body,

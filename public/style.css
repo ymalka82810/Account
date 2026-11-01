@@ -1211,8 +1211,8 @@ body[data-theme="parent"] #screen-notebook .nb-h2, body[data-theme="teen"] #scre
 /* תשלום: מטבעות קטנים עולים מהמטיל ונמוגים (SumNum ב-GoldBar.jsx); המספר עצמו רץ ב-JS */
 .coin-burst { position: fixed; width: 0; height: 0; pointer-events: none; z-index: 10000; }
 .coin-burst__c {
-  position: absolute; left: 0; top: 0; width: var(--s); height: var(--s);
-  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  position: absolute; left: 0; top: 0; width: var(--w); height: var(--h);
+  margin: calc(var(--h) / -2) 0 0 calc(var(--w) / -2);
   opacity: 0; animation: coin-rise var(--d) cubic-bezier(.2, .7, .3, 1) var(--delay) both;
 }
 @keyframes coin-rise {
@@ -1222,3 +1222,5 @@ body[data-theme="parent"] #screen-notebook .nb-h2, body[data-theme="teen"] #scre
   100% { opacity: 0; transform: translate(var(--dx), calc(var(--rise) * -1)) scale(1) rotate(var(--rot)); }
 }
 @media (prefers-reduced-motion: reduce) { .coin-burst { display: none; } }
+/* נוער: מטילים קטנים עם הילה בצבעי הניאון */
+.coin-burst__c.is-bar { filter: drop-shadow(0 0 5px var(--neon-a, #b04dff)); }
