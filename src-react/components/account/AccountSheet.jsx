@@ -4,7 +4,7 @@ import LanguagePicker from '../shared/LanguagePicker.jsx';
 import { call } from '../../lib/api.js';
 import { state, CODE_KEY } from '../../state/state.js';
 import { toast, errMsg } from '../../lib/helpers.js';
-import { dropSession, goToFamily, otherFamilies, addAnotherFamily } from '../../state/auth.js';
+import { dropSession, goToFamily, otherFamilies, addAnotherFamily, startNewFamily } from '../../state/auth.js';
 import { getMemberships } from '../../lib/memberships.js';
 import { getCards, upsertCard } from '../../lib/cards.js';
 import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../../lib/push.js';
@@ -154,6 +154,11 @@ export function AccountSheet() {
       <button className="ghost" type="button" onClick={() => { sheet.close(); addAnotherFamily(); }}>
         {t('➕ הצטרפות למשפחה נוספת')}
       </button>
+      {me.role === 'parent' && (
+        <button className="ghost" type="button" onClick={() => { sheet.close(); startNewFamily(); }}>
+          {t('🏠 יצירת קופה משפחתית')}
+        </button>
+      )}
 
       <AsyncButton className="ghost" onClick={async () => { sheet.close(); await logout(); }}>{t('יציאה')}</AsyncButton>
 

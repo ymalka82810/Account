@@ -1,5 +1,5 @@
 import Arrow from '../shared/Arrow.jsx';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { state, PARENT_AVATARS } from '../../state/state.js';
 import { backFromFamily, createFamily } from '../../state/auth.js';
@@ -15,7 +15,18 @@ import { useNotebook, isAdult, parseBirth } from '../../lib/notebook.js';
 import FamilyNameField, { buildFamilyName } from '../shared/FamilyNameField.jsx';
 import DatePicker from '../shared/DatePicker.jsx';
 
+// הטופס נבנה מחדש בכל כניסה למסך (המסכים תמיד ב-DOM), כדי שלא יישארו בו פרטים מהקמה קודמת.
 export default function Setup({ current }) {
+  const [round, setRound] = useState(0);
+  const was = useRef(current);
+  useEffect(() => {
+    if (was.current === 'setup' && current !== 'setup') setRound((r) => r + 1);
+    was.current = current;
+  }, [current]);
+  return <SetupForm key={round} current={current} />;
+}
+
+function SetupForm({ current }) {
   const nb = useNotebook();
   const sheet = useSheet();
   const [v, setV] = useState({ familyName: '', name: '', pin: '', email: '' });

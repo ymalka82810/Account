@@ -3,7 +3,7 @@ import { state, LAST_ROLE_KEY, LAST_PALETTE_KEY, THEME_COLOR, tabLabels, subscri
 import { t } from './i18n/index.js';
 import { call, callAction, useQuery } from './lib/api.js';
 import { toast, errMsg } from './lib/helpers.js';
-import { restoreFamily, startPin, autoSkipPerson, dropSession, endDemo } from './state/auth.js';
+import { restoreFamily, startPin, autoSkipPerson, dropSession, endDemo, deviceHasFamily } from './state/auth.js';
 import { syncPush } from './lib/push.js';
 import { client } from './lib/client.js';
 import { isDemo } from './lib/demo.js';
@@ -451,7 +451,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
           <span>{t('👀 מצב דמו: נתוני דוגמה, שום דבר לא נשמר')}</span>
           <span className="demo-cta">
             <button type="button" className="primary" onClick={() => endDemo('notebook')}>{t('רשמו חוב משלכם בפנקס')}</button>
-            <button type="button" onClick={() => endDemo('setup')}>{t('הקימו קופה למשפחה')}</button>
+            {!deviceHasFamily() && <button type="button" onClick={() => endDemo('setup')}>{t('הקימו קופה למשפחה')}</button>}
             <button type="button" onClick={() => { state.exiting = true; dropSession(); }}>{t('יציאה מהדמו')}</button>
           </span>
         </div>

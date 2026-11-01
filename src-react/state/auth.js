@@ -94,6 +94,23 @@ export async function goToFamily(f) {
   } catch (e) { state.token = prevToken; return errMsg(e); }
 }
 
+// האם נפתחה/הצטרפו כבר למשפחה כלשהי במכשיר הזה. מי שכבר יש לו משפחה מקים את הבאה רק מאזור ההורה.
+export function deviceHasFamily() {
+  try { return !!(state.fam || state.token || localStorage.getItem(CODE_KEY) || localStorage.getItem(TOKEN_KEY) || otherFamilies().length); }
+  catch (e) { return !!state.fam; }
+}
+
+// הקמת משפחה נוספת מאזור ההורה: מרוקנים רק את הכניסה הפעילה (המשפחה הנוכחית והכרטיס שלה נשארים) ופותחים את מסך ההקמה.
+export function startNewFamily() {
+  state.token = '';
+  state.pinFlow = null;
+  state.fam = null;
+  state.fromNotebook = false;
+  state.view = 'setup';
+  state.codeChecked = true;
+  bumpAuth();
+}
+
 // הצטרפות למשפחה נוספת: מרוקנים רק את הכניסה הפעילה, בלי להוציא את המשפחה הנוכחית ובלי למחוק את הכרטיס שלה.
 export function addAnotherFamily() {
   state.token = '';

@@ -13,8 +13,7 @@ import {
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import { useConfirm } from '../shared/Confirm.jsx';
 import Select from '../shared/Select.jsx';
-import { state, CODE_KEY, TOKEN_KEY } from '../../state/state.js';
-import { closeNotebook, goView, upgradeFromNotebook } from '../../state/auth.js';
+import { closeNotebook, goView, upgradeFromNotebook, deviceHasFamily } from '../../state/auth.js';
 import { In } from '../auth/parts.jsx';
 
 // הפנקס האישי: כל אחד (גם ילד/ה) רושם לעצמו למי הוא חייב ומי חייב לו.
@@ -24,11 +23,6 @@ import { In } from '../auth/parts.jsx';
 // ההגדרות נפתחות עם #nb-settings בכתובת, כדי שכפתור "חזרה" של הטלפון יחזיר לעמוד הראשי.
 const SETTINGS_HASH = '#nb-settings';
 const pageFromHash = () => (location.hash === SETTINGS_HASH ? 'settings' : 'home');
-// האם באמת נפתחה/הצטרפו למשפחה במכשיר הזה (ולא רק עברו למסך הכניסה וחזרו)
-const hasFamily = () => {
-  try { return !!(state.fam || state.token || localStorage.getItem(CODE_KEY) || localStorage.getItem(TOKEN_KEY)); }
-  catch (e) { return !!state.fam; }
-};
 
 const sharedWithParents = () => { try { return localStorage.getItem(NB_SHARED_KEY) === '1'; } catch (e) { return false; } };
 
@@ -72,7 +66,7 @@ export default function Notebook({ current }) {
 
   return (
     <In screen="notebook" current={current}>
-      {page === 'home' ? <Home nb={nb} onSettings={openSettings} pulling={pulling} returned={returned} family={hasFamily()} /> : <Settings nb={nb} onBack={closeSettings} closing={closing} />}
+      {page === 'home' ? <Home nb={nb} onSettings={openSettings} pulling={pulling} returned={returned} family={deviceHasFamily()} /> : <Settings nb={nb} onBack={closeSettings} closing={closing} />}
     </In>
   );
 }
@@ -179,7 +173,7 @@ function Home({ nb, onSettings, pulling, returned, family }) {
       )}
 
       {/* שדרוג: מופיע רק אחרי שכבר יש ערך (רישום ראשון), ובלי לחסום כלום */}
-      {nb.entries.length > 0 && (
+      {!family && nb.entries.length > 0 && (
         <div className="card notice nb-upgrade">
           <p><strong>{t('רוצים שהחייבים יראו את זה?')}</strong> {t('צרו קופה משפחתית: כולם רואים את אותו חשבון, והחובות מתעדכנים לכולם.')}</p>
           <button className="primary" type="button" onClick={() => upgradeFromNotebook('setup')}>{t('🏠 יצירת קופה משפחתית')}</button>

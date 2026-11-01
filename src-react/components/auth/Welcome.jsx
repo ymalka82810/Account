@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { t } from '../../i18n/index.js';
 import { state, CODE_KEY, TOKEN_KEY } from '../../state/state.js';
 import { prettyCode } from '../../lib/helpers.js';
-import { submitFamilyCode, goView, startPin, openNotebook, startDemo, goToFamily, otherFamilies } from '../../state/auth.js';
+import { submitFamilyCode, goView, startPin, openNotebook, startDemo, goToFamily, otherFamilies, deviceHasFamily } from '../../state/auth.js';
 import LanguagePicker from '../shared/LanguagePicker.jsx';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 
@@ -67,7 +67,9 @@ export default function Welcome({ current }) {
             </div>
           </div>
         )}
-        <button className="ghost linkish" type="button" onClick={() => { state.fromNotebook = false; goView('setup'); }}>{t('👨‍👩‍👧 אני הורה ורוצה להקים קופה חדשה')}</button>
+        {!deviceHasFamily() && (
+          <button className="ghost linkish" type="button" onClick={() => { state.fromNotebook = false; goView('setup'); }}>{t('👨‍👩‍👧 אני הורה ורוצה להקים קופה חדשה')}</button>
+        )}
         <p className="legal"><a href="terms.html">{t('תנאי שימוש')}</a> · <a href="privacy.html">{t('מדיניות פרטיות')}</a></p>
         <LanguagePicker />
       </div>
