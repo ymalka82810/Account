@@ -324,6 +324,7 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
   font-size: 3.4rem; line-height: 1;
   animation: coin-drop-cycle 5s infinite;
 }
+.coin-drop__coin img { display: block; width: 56px; height: 56px; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .25)); }
 /* גג הקופה (::before) והחריץ הכהה שבתוכו (::after) */
 .coin-drop__floor {
   position: absolute; left: 50%; top: 92px; width: 100px; height: 24px; transform: translateX(-50%);

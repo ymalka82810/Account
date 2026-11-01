@@ -258,7 +258,7 @@ function Root() {
       <section id="screen-loading" className={'screen center' + (screen === 'loading' ? ' active' : '')}>
         <div className="coin-drop" aria-hidden="true">
           <div className="coin-drop__mask">
-            <div className="coin-drop__coin">🪙</div>
+            <div className="coin-drop__coin"><img src="coin.webp" alt="" width="56" height="56" draggable="false" /></div>
           </div>
           <div className="coin-drop__floor" />
         </div>

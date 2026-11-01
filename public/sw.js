@@ -1,4 +1,4 @@
-const CACHE = 'kupa-v26';
+const CACHE = 'kupa-v27';
 // מאז שהאתר עובר דרך Vite build, קובץ ה-JS הראשי יוצא עם hash בשם
 // (למשל assets/index-ABC123.js) שלא ידוע מראש. לכן לא מפרטים כאן כל
 // קובץ src/*.js בנפרד (כמו קודם) - caches.addAll() נכשל כולו אם קובץ
@@ -8,7 +8,7 @@ const CACHE = 'kupa-v26';
 // למטה, בפעם הראשונה שהם נטענים.
 const FILES = [
   './', 'index.html', 'terms.html', 'privacy.html', 'style.css', 'config.js',
-  'manifest.webmanifest', 'icon.svg',
+  'manifest.webmanifest', 'icon.svg', 'coin.webp',
 ];
 self.addEventListener('install', (e) => {
   // cache: 'reload' - לא לקחת את הקבצים מהמטמון של הדפדפן (GitHub Pages שומר אותם 10 דקות)
