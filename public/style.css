@@ -153,6 +153,20 @@ input[type=text], input[type=password], input[type=number], input[type=date], in
 .kind input:checked + span { background: var(--coin); border-color: var(--coin-deep); color: var(--on-coin, #1d2b4f); font-weight: 700; }
 .kind input:focus-visible + span { outline: 3px solid var(--coin-deep); outline-offset: 2px; }
 
+/* לוח שנה מעוצב (במקום חלון התאריך הסטנדרטי של המערכת) */
+.date-btn .date-ph { color: var(--ink-soft); }
+.cal { display: grid; gap: 12px; }
+.cal-head { display: flex; align-items: center; gap: 8px; }
+.cal-sel { flex: 1; min-width: 0; display: grid; grid-template-columns: 3fr 2fr; gap: 8px; }
+.cal-nav { flex: none; width: 42px; height: 42px; font: inherit; font-size: 1.5rem; line-height: 1; color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; }
+.cal-nav:disabled { opacity: .35; cursor: default; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-wd { text-align: center; font-size: .8rem; font-weight: 700; color: var(--ink-soft); padding: 4px 0; }
+.cal-day { font: inherit; font-weight: 500; aspect-ratio: 1; min-width: 0; color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; }
+.cal-day:disabled { opacity: .3; cursor: default; }
+.cal-day.on { background: var(--coin); border-color: var(--coin-deep); color: var(--on-coin, #1d2b4f); font-weight: 800; }
+body[data-theme="teen"] .cal-day.on { background: var(--neon-grad); color: var(--on-coin); }
+
 /* תפריט בחירה מעוצב (במקום <select> רגיל) */
 .dd { position: relative; width: 100%; }
 .dd-btn {

@@ -5,6 +5,10 @@ import { toast, errMsg } from '../../lib/helpers.js';
 import { dropSession } from '../../state/auth.js';
 import { useApp } from '../../state/appContext.js';
 import { useState } from 'react';
+import { useSheet } from '../shared/Sheet.jsx';
+import AsyncButton from '../shared/AsyncButton.jsx';
+import { Err } from '../shared/fields.jsx';
+import FamilyNameField, { buildFamilyName, bareFamilyName } from '../shared/FamilyNameField.jsx';
 import Select from '../shared/Select.jsx';
 import { COUNTRIES, CURRENCIES, currencyLabel, currencySymbol, countryName } from '../../lib/currencies.js';
 import { convert, curOf } from '../../lib/computations.js';
@@ -59,16 +63,31 @@ function LocaleSettings({ data }) {
   );
 }
 
+// חלון שינוי שם המשפחה: "משפחת" קבוע, מקלידים רק את השם עצמו.
+function RenameSheet({ current }) {
+  const { token } = useApp();
+  const sheet = useSheet();
+  const [name, setName] = useState(bareFamilyName(current));
+  const [err, setErr] = useState('');
+  async function save() {
+    if (!name.trim()) { setErr(t('איך לקרוא למשפחה?')); return; }
+    try { await call('family:rename', { token, name: buildFamilyName(name) }); sheet.close(); toast(t('השם עודכן ✅')); }
+    catch (e) { setErr(errMsg(e)); }
+  }
+  return (
+    <form className="form" autoComplete="off" onSubmit={(ev) => ev.preventDefault()}>
+      <label className="field"><span>{t('איך לקרוא למשפחה?')}</span>
+        <FamilyNameField autoFocus required={false} value={name} onChange={(x) => { setName(x); setErr(''); }} /></label>
+      {err && <Err>{err}</Err>}
+      <AsyncButton className="primary" type="submit" onClick={save}>{t('שמירה')}</AsyncButton>
+    </form>
+  );
+}
+
 // שינוי שם המשפחה (הורים).
 export default function FamilySettings({ data }) {
-  const { token } = useApp();
-
-  async function rename() {
-    const name = prompt(t('איך לקרוא למשפחה?'), data.family.name);
-    if (name === null || !name.trim()) return;
-    try { await call('family:rename', { token, name }); toast(t('השם עודכן ✅')); }
-    catch (e) { toast(errMsg(e)); }
-  }
+  const sheet = useSheet();
+  const rename = () => sheet.open(t('שינוי שם המשפחה'), <RenameSheet current={data.family.name} />);
 
   return (
     <>

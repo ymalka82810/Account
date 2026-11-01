@@ -11,6 +11,8 @@ import { useSheet } from '../shared/Sheet.jsx';
 import { EmailSheet } from '../account/AccountSheets.jsx';
 import { pinLabel, pinMax } from '../../lib/pin.js';
 import { useNotebook, isAdult, parseBirth } from '../../lib/notebook.js';
+import FamilyNameField, { buildFamilyName } from '../shared/FamilyNameField.jsx';
+import DatePicker from '../shared/DatePicker.jsx';
 
 export default function Setup({ current }) {
   const nb = useNotebook();
@@ -23,8 +25,6 @@ export default function Setup({ current }) {
   const [locale, setLocale] = useState(() => { const c = deviceCountry(); return c ? localeFor(c) : null; });
   const [error, setError] = useState('');
   const [busy, run] = useBusy();
-  // "משפחת" (או המקבילה בשפה הנבחרת) קבוע בשדה; המשתמש מקליד רק את שם המשפחה עצמו.
-  const [famPre, famPost] = t('משפחת {name}', { name: '\uE000' }).split('\uE000');
   const set = (k) => (e) => setV((x) => ({ ...x, [k]: e.target.value }));
   const submit = (ev) => {
     ev.preventDefault();
@@ -34,7 +34,7 @@ export default function Setup({ current }) {
     if (!isAdult(birthDate)) { setError(t('קופה משפחתית נפתחת רק על ידי מי שמעל גיל 18')); return; }
     run(async () => {
       const { email, familyName, ...rest } = v;
-      const err = await createFamily({ ...rest, familyName: famPre + familyName.trim() + famPost, birthDate, avatar, ...locale });
+      const err = await createFamily({ ...rest, familyName: buildFamilyName(familyName), birthDate, avatar, ...locale });
       if (err) { setError(err); return; }
       setV((x) => ({ ...x, pin: '' }));
       // מייל לשחזור (לא חובה): שולחים קוד אימות ופותחים ישר את שלב ההקלדה.
@@ -56,15 +56,11 @@ export default function Setup({ current }) {
         <p className="hint">{t('להורים בלבד. מי שמקים הוא ההורה הראשון. אחר כך מקבלים קוד הצטרפות אחד לכל המשפחה, וקובעים לכל אחד/ת תפקיד: ילד/ה, נער/ה או הורה.')}</p>
         <form className="form" autoComplete="off" onSubmit={submit}>
           <label className="field"><span>{t('שם המשפחה')}</span>
-            <span className="affix-row">
-              {famPre && <span className="affix" aria-hidden="true">{famPre}</span>}
-              <input type="text" maxLength={30 - famPre.length - famPost.length} placeholder={t('כהן')} required value={v.familyName} onChange={set('familyName')} />
-              {famPost && <span className="affix" aria-hidden="true">{famPost}</span>}
-            </span></label>
+            <FamilyNameField value={v.familyName} onChange={(x) => setV((o) => ({ ...o, familyName: x }))} /></label>
           <label className="field"><span>{t('איך קוראים לך?')}</span>
             <input type="text" maxLength={20} required value={v.name} onChange={set('name')} /></label>
           <label className="field"><span>{t('תאריך לידה')}</span>
-            <input type="date" required max={today()} value={birthDate} onChange={(e) => { setBirthDate(e.target.value); setError(''); }} />
+            <DatePicker title={t('תאריך לידה')} fallbackYearsAgo={30} max={today()} value={birthDate} onChange={(d) => { setBirthDate(d); setError(''); }} />
             <small className="hint">{t('רק כדי לוודא שמקימ/ת הקופה מעל גיל 18. לא מוצג לאף אחד.')}</small></label>
           <div className="field"><span>{t('איפה אתם גרים?')}</span><LocalePicker value={locale} onChange={setLocale} /></div>
           <label className="field"><span>{t('קוד סודי ({rule}; ארוך יותר = מוגן יותר)', { rule: pinLabel('parent') })}</span>
