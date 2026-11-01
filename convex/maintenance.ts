@@ -1,5 +1,6 @@
 import { internalMutation } from "./_generated/server";
 import { internal } from "./_generated/api";
+import { ACTIVITY_KEEP_MS } from "./activity";
 
 const BATCH = 500;
 // כל חלונות ההגבלה קצרים מזה, אז רשומה ישנה יותר מיממה כבר לא משפיעה על כלום.
@@ -53,7 +54,13 @@ export const cleanup = internalMutation({
       .take(BATCH);
     for (const p of passes) await ctx.db.delete(p._id);
 
-    if (sessions.length === BATCH || throttles.length === BATCH || codes.length === BATCH || passes.length === BATCH) {
+    const oldActivity = await ctx.db
+      .query("activity")
+      .withIndex("by_at", (q) => q.lt("at", now - ACTIVITY_KEEP_MS))
+      .take(BATCH);
+    for (const a of oldActivity) await ctx.db.delete(a._id);
+
+    if (oldActivity.length === BATCH || sessions.length === BATCH || throttles.length === BATCH || codes.length === BATCH || passes.length === BATCH) {
       await ctx.scheduler.runAfter(0, internal.maintenance.cleanup, {});
     }
   },

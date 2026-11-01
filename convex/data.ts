@@ -35,6 +35,9 @@ export const get = query({
         pendingEmail: me.pendingEmail ? maskEmail(me.pendingEmail) : null,
         // ילד/ה שאישר/ה שההורים יראו את הפנקס האישי: המכשיר משלח עותק (notebook:sync).
         notebookShared: me.role === "child" && !!me.notebookShared,
+        notebookPaused: me.role === "child" && !!me.notebookShared && !!me.notebookPaused,
+        // הצפייה בפנקס הסתיימה בגלל שינוי תפקיד: מציגים הודעה פעם אחת (notebook:ackEnded).
+        notebookShareEnded: !!me.notebookShareEnded,
       },
       // קוד ההצטרפות לא נשלח כאן: הורה חושף אותו בטביעת אצבע / זיהוי פנים (family:revealCode).
       family: {

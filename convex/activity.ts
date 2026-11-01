@@ -1,0 +1,34 @@
+import { query } from "./_generated/server";
+import type { MutationCtx } from "./_generated/server";
+import type { Doc } from "./_generated/dataModel";
+import { v } from "convex/values";
+import { requireParent } from "./lib";
+
+// יומן שינויים להורים: מי שינה מה ומתי. כל מי שמבצע/ת פעולה כותב/ת שורה (logActivity), והורים קוראים (list).
+export const ACTIVITY_KEEP_MS = 180 * 24 * 60 * 60 * 1000;
+const LIST_LIMIT = 100;
+
+export type ActivityKind =
+  | "debt_add" | "payment_add" | "entry_pending" | "entry_approved" | "entry_rejected" | "entry_removed"
+  | "person_add" | "person_remove" | "role_set" | "person_rename" | "join_approved" | "join_rejected"
+  | "family_rename" | "code_rotated" | "locale_set" | "device_revoked";
+
+export async function logActivity(
+  ctx: MutationCtx, actor: Doc<"people">, kind: ActivityKind,
+  extra: { from?: string; to?: string; subject?: string; amount?: number; currency?: string } = {},
+) {
+  if (!actor.familyId) return;
+  await ctx.db.insert("activity", { familyId: actor.familyId, actorId: actor._id, actorName: actor.name, kind, ...extra, at: Date.now() });
+}
+
+export const list = query({
+  args: { token: v.string() },
+  handler: async (ctx, { token }) => {
+    const me = await requireParent(ctx, token);
+    const rows = await ctx.db.query("activity").withIndex("by_family_at", (q) => q.eq("familyId", me.familyId)).order("desc").take(LIST_LIMIT);
+    return rows.map((r) => ({
+      id: r._id, kind: r.kind, actor: r.actorName, from: r.from ?? null, to: r.to ?? null,
+      subject: r.subject ?? null, amount: r.amount ?? null, currency: r.currency ?? null, at: r.at,
+    }));
+  },
+});

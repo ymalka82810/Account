@@ -1,11 +1,17 @@
+import { useEffect } from 'react';
 import { t } from '../../i18n/index.js';
-import { useQuery } from '../../lib/api.js';
+import { useQuery, call } from '../../lib/api.js';
 import { money, fmtDate } from '../../lib/computations.js';
 import { notebookCurrency } from '../../lib/notebook.js';
 
 // הפנקס האישי של ילד/ה שאישר/ה שההורים יראו אותו. לצפייה בלבד: אין כאן שום כפתור שמשנה משהו.
 export default function ChildNotebook({ token, person }) {
   const nb = useQuery('notebook:forChild', { token, personId: person.id });
+  // נרשם שההורה הזה פתח את הפנקס, כדי שהילד/ה יראה/תראה מי צפה (השרת לא רושם יותר מפעם ב-5 דקות).
+  const seen = !!nb;
+  useEffect(() => {
+    if (seen) call('notebook:markViewed', { token, personId: person.id }).catch(() => {});
+  }, [seen, token, person.id]);
   if (nb === undefined) return <p className="hint">{t('⏳ רגע…')}</p>;
   if (!nb) return <p className="hint">{t('{name} עוד לא רשם/ה כלום בפנקס האישי.', { name: person.name })}</p>;
   const cur = nb.currency || notebookCurrency();

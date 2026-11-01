@@ -1,3 +1,4 @@
+import { logActivity } from "./activity";
 import { internalMutation, mutation } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { v, ConvexError } from "convex/values";
@@ -13,7 +14,9 @@ export const rename = mutation({
   args: { token: v.string(), name: v.string() },
   handler: async (ctx, { token, name }) => {
     const me = await requireParent(ctx, token);
-    await ctx.db.patch(me.familyId, { name: cleanFamilyName(name) });
+    const clean = cleanFamilyName(name);
+    await ctx.db.patch(me.familyId, { name: clean });
+    await logActivity(ctx, me, "family_rename", { subject: clean });
   },
 });
 
@@ -26,6 +29,7 @@ export const setLocale = mutation({
     if (!isCurrency(currency)) throw new ConvexError("מטבע לא נתמך");
     if (country !== undefined && country !== "" && !(country in COUNTRIES)) throw new ConvexError("מדינה לא נתמכת");
     await ctx.db.patch(me.familyId, { currency, country: country || undefined });
+    await logActivity(ctx, me, "locale_set", { subject: currency });
   },
 });
 
@@ -51,6 +55,7 @@ export const rotateCode = mutation({
     const me = await requireParent(ctx, token);
     await ctx.db.patch(me.familyId, { childCode: await freshCode(ctx), parentCode: undefined });
     await purgePasses(ctx, me.familyId);
+    await logActivity(ctx, me, "code_rotated");
     return { loginCode: keepDevice ? await issuePass(ctx, me.familyId) : undefined };
   },
 });

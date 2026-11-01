@@ -1,5 +1,6 @@
 // נוצר אוטומטית ע"י scripts/typecheck.mjs. לא לערוך.
 import type { ApiFromModules, FilterApi, FunctionReference } from "convex/server";
+import type * as activity from "../activity.js";
 import type * as admin from "../admin.js";
 import type * as auth from "../auth.js";
 import type * as biometric from "../biometric.js";
@@ -27,6 +28,6 @@ import type * as pushSend from "../pushSend.js";
 import type * as recurring from "../recurring.js";
 import type * as reminders from "../reminders.js";
 import type * as schema from "../schema.js";
-declare const fullApi: ApiFromModules<{ admin: typeof admin; auth: typeof auth; biometric: typeof biometric; crons: typeof crons; currency: typeof currency; data: typeof data; der: typeof der; deviceMove: typeof deviceMove; email: typeof email; emailAuth: typeof emailAuth; emailCodes: typeof emailCodes; entries: typeof entries; family: typeof family; friends: typeof friends; fx: typeof fx; history: typeof history; ledger: typeof ledger; lib: typeof lib; maintenance: typeof maintenance; notebook: typeof notebook; notify: typeof notify; people: typeof people; push: typeof push; pushSend: typeof pushSend; recurring: typeof recurring; reminders: typeof reminders; schema: typeof schema }>;
+declare const fullApi: ApiFromModules<{ activity: typeof activity; admin: typeof admin; auth: typeof auth; biometric: typeof biometric; crons: typeof crons; currency: typeof currency; data: typeof data; der: typeof der; deviceMove: typeof deviceMove; email: typeof email; emailAuth: typeof emailAuth; emailCodes: typeof emailCodes; entries: typeof entries; family: typeof family; friends: typeof friends; fx: typeof fx; history: typeof history; ledger: typeof ledger; lib: typeof lib; maintenance: typeof maintenance; notebook: typeof notebook; notify: typeof notify; people: typeof people; push: typeof push; pushSend: typeof pushSend; recurring: typeof recurring; reminders: typeof reminders; schema: typeof schema }>;
 export declare const api: FilterApi<typeof fullApi, FunctionReference<any, "public">>;
 export declare const internal: FilterApi<typeof fullApi, FunctionReference<any, "internal">>;
