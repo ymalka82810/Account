@@ -126,9 +126,10 @@ h2 { font-size: 1.1rem; margin: 22px 0 10px; }
 .form.inline { margin-top: 10px; }
 .field { display: grid; gap: 6px; }
 .field > span { font-weight: 500; font-size: .95rem; }
-.affix-row { display: flex; align-items: center; gap: 8px; font-weight: 400; }
-.affix-row > input { flex: 1; min-width: 0; }
-.affix-row > .affix { white-space: pre; font-weight: 500; }
+.affix-row { display: flex; align-items: center; gap: 6px; font-weight: 400; background: var(--card); border: 1.5px solid var(--line); border-radius: 10px; padding: 0 12px; }
+.affix-row:focus-within { border-color: var(--coin-deep); }
+.affix-row > input[type=text] { flex: 1; min-width: 0; width: auto; border: 0; border-radius: 0; background: transparent; padding: 12px 0; outline: none; }
+.affix-row > .affix { white-space: pre; font-weight: 500; color: var(--ink); }
 input[type=text], input[type=password], input[type=number], input[type=date], input[type=email], select {
   font: inherit;
   color: var(--ink);
@@ -161,6 +162,7 @@ input[type=text], input[type=password], input[type=number], input[type=date], in
 .cal-nav { flex: none; width: 42px; height: 42px; font: inherit; font-size: 1.5rem; line-height: 1; color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; }
 .cal-nav:disabled { opacity: .35; cursor: default; }
 .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-pad { aspect-ratio: 1; }
 .cal-wd { text-align: center; font-size: .8rem; font-weight: 700; color: var(--ink-soft); padding: 4px 0; }
 .cal-day { font: inherit; font-weight: 500; aspect-ratio: 1; min-width: 0; color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; }
 .cal-day:disabled { opacity: .3; cursor: default; }

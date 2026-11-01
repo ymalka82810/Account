@@ -65,7 +65,9 @@ function Calendar({ value, max, fallbackYearsAgo, onPick }) {
 
   const lead = (new Date(view.y, view.m, 1).getDay() - first + 7) % 7;
   const days = new Date(view.y, view.m + 1, 0).getDate();
+  // תמיד 6 שורות (42 משבצות), כדי שגובה הלוח לא ישתנה בין חודשים.
   const cells = [...Array(lead).fill(null), ...Array.from({ length: days }, (_, i) => i + 1)];
+  while (cells.length < 42) cells.push(null);
   const num = new Intl.NumberFormat(loc, { useGrouping: false });
 
   // "הקודם" מצביע לכיוון שממנו קוראים: ימינה בעברית/ערבית, שמאלה בשאר השפות.
@@ -85,7 +87,7 @@ function Calendar({ value, max, fallbackYearsAgo, onPick }) {
       <div className="cal-grid" role="grid">
         {weekdays.map((w, i) => <span key={i} className="cal-wd" aria-hidden="true">{w}</span>)}
         {cells.map((d, i) => {
-          if (d === null) return <span key={'e' + i} />;
+          if (d === null) return <span key={'e' + i} className="cal-pad" aria-hidden="true" />;
           const future = view.y === lim.y && view.m === lim.m && d > lim.d;
           const on = sel && sel.y === view.y && sel.m === view.m && sel.d === d;
           return (
