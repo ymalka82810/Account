@@ -1,6 +1,7 @@
 import { mutation } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { MAX_AMOUNT, requireParent, requirePerson } from "./lib";
+import { logActivity } from "./activity";
 import { entryLine, entryTextFor, notify } from "./notify";
 import { internal } from "./_generated/api";
 import { LEGACY_CURRENCY, Rates, convert, curOf, fmtMoney, isCurrency, paidOnDebt } from "./currency";
@@ -104,6 +105,8 @@ export const add = mutation({
     });
 
     if (!pending && e.kind === "payment") await archivePair(ctx, e.from, e.to, rates);
+    await logActivity(ctx, me, pending ? "entry_pending" : e.kind === "payment" ? "payment_add" : "debt_add",
+      { from: from.name, to: to.name, amount: e.amount, currency });
 
     const names = { from: from.name, to: to.name, creator: me.name };
     const ec = { ...e, currency };
@@ -133,6 +136,7 @@ export const approve = mutation({
     const to = await ctx.db.get(e.to);
     const creator = e.createdBy ? await ctx.db.get(e.createdBy) : null;
     if (!from || !to) return;
+    await logActivity(ctx, me, "entry_approved", { from: from.name, to: to.name, amount: e.amount, currency: e.currency });
     const names = { from: from.name, to: to.name, creator: creator?.name ?? "מישהו" };
     if (creator && creator._id !== me._id) {
       await notify(ctx, [creator._id], "אושר ✅", entryLine(e, names));
@@ -153,6 +157,7 @@ export const reject = mutation({
     await ctx.db.delete(id);
     const from = await ctx.db.get(e.from);
     const to = await ctx.db.get(e.to);
+    if (from && to) await logActivity(ctx, me, "entry_rejected", { from: from.name, to: to.name, amount: e.amount, currency: e.currency });
     if (e.createdBy && e.createdBy !== me._id && from && to) {
       await notify(ctx, [e.createdBy], "לא אושר", entryLine(e, { from: from.name, to: to.name, creator: me.name }));
     }
@@ -176,6 +181,9 @@ export const remove = mutation({
       for (const x of linked) await ctx.db.patch(x._id, { debtId: undefined });
     }
     await ctx.db.delete(id);
+    const rf = await ctx.db.get(e.from);
+    const rt = await ctx.db.get(e.to);
+    if (rf && rt) await logActivity(ctx, me, "entry_removed", { from: rf.name, to: rt.name, amount: e.amount, currency: e.currency });
     if (e.archived) await archivePair(ctx, e.from, e.to, (await loadRates(ctx))?.rates ?? null);
   },
 });

@@ -6,6 +6,7 @@ import Recurring from './Recurring.jsx';
 import PersonForm from './PersonForm.jsx';
 import FamilySettings, { DangerZone } from './FamilyTools.jsx';
 import PeopleList from './PeopleList.jsx';
+import ActivityLog from './ActivityLog.jsx';
 import Collapsible from '../shared/Collapsible.jsx';
 
 // לשונית הניהול (הורים): אריח נפתח לכל הגדרה - בני משפחה, קודים, דמי כיס קבועים, הגדרות ואזור מסוכן.
@@ -16,6 +17,9 @@ export default function ManageTab({ data, token }) {
       <Legacy token={token} />
 
       <Collapsible name="manage-tiles" title={data.family?.name ? t('בני {name}', { name: data.family.name }) : t('בני המשפחה')} defaultOpen>
+        {data.people.filter((p) => p.role === 'parent').length === 1 && (
+          <p className="hint">{t('יש רק הורה אחד במשפחה. מומלץ להוסיף הורה נוסף ולאמת מייל, כדי שאפשר יהיה לשחזר גישה אם המכשיר יאבד.')}</p>
+        )}
         <PeopleList people={data.people} me={me} token={token} joinRequests={data.joinRequests} />
       </Collapsible>
 
@@ -30,6 +34,10 @@ export default function ManageTab({ data, token }) {
 
       <Collapsible name="manage-tiles" title={t('קודי הצטרפות')}>
         <Codes data={data} token={token} />
+      </Collapsible>
+
+      <Collapsible name="manage-tiles" title={t('📜 יומן שינויים')} subtitle={t('מי שינה מה ומתי, ב-6 החודשים האחרונים.')}>
+        <ActivityLog token={token} />
       </Collapsible>
 
       <Collapsible name="manage-tiles" title={t('אזור מסוכן')}>

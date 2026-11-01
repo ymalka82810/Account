@@ -12,6 +12,7 @@ import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import { ChangePinSheet, ChangePinEmailSheet, EmailSheet, AvatarSheet } from './AccountSheets.jsx';
 import { DeviceSheet } from './DeviceSheet.jsx';
+import NotebookSharing from './NotebookSharing.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
 import Select from '../shared/Select.jsx';
 import { GENDER_OPTIONS } from '../../lib/gender.js';
@@ -111,6 +112,12 @@ export function AccountSheet() {
       {me.role === 'teen' && (
         <button className="ghost" type="button" onClick={() => sheet.open(t('צבעי המסך'), <PaletteSheet />)}>
           {t('🎨 צבעי המסך')}
+        </button>
+      )}
+
+      {me.role === 'child' && me.notebookShared && (
+        <button className="ghost" type="button" onClick={() => sheet.open(t('👁️ מי רואה את הפנקס שלי'), <NotebookSharing />)}>
+          {t('👁️ מי רואה את הפנקס שלי')}
         </button>
       )}
 

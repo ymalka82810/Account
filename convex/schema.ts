@@ -76,6 +76,10 @@ export default defineSchema({
     teenRequested: v.optional(v.boolean()),
     // הילד/ה אישר/ה שההורים יראו את הפנקס האישי שלו/ה (לצפייה בלבד). ראו notebook.ts.
     notebookShared: v.optional(v.boolean()),
+    // הילד/ה השהה/תה את השיתוף: ההורים לא רואים כלום והעותק נמחק, עד שהוא/היא מחדש/ת. ראו notebook.ts.
+    notebookPaused: v.optional(v.boolean()),
+    // הצפייה של ההורים בפנקס הסתיימה כי התפקיד השתנה. מוצג פעם אחת לאדם, ואז מתנקה (notebook:ackEnded).
+    notebookShareEnded: v.optional(v.boolean()),
   })
     .index("by_family", ["familyId"])
     .index("by_friendEmail", ["friendEmail"]),
@@ -100,7 +104,27 @@ export default defineSchema({
     familyId: v.id("families"),
     data: v.string(), // JSON: { entries, people, currency }
     updatedAt: v.number(),
+    // אילו הורים צפו בפנקס ומתי (הורה אחד בכל שורה, עד 10), כדי שהילד/ה יראה/תראה מי רואה.
+    viewers: v.optional(v.array(v.object({ id: v.id("people"), at: v.number() }))),
   }).index("by_person", ["personId"]),
+
+  // יומן שינויים להורים: מי שינה מה ומתי. נשמרים רק עובדות (סוג, שמות, סכום), בלי הערות חופשיות.
+  // נמחק אחרי ACTIVITY_KEEP_MS (maintenance.cleanup).
+  activity: defineTable({
+    familyId: v.id("families"),
+    actorId: v.id("people"),
+    kind: v.string(),
+    // שמות כפי שהיו ברגע הפעולה (האדם יכול להימחק או להחליף שם אחר כך)
+    actorName: v.string(),
+    from: v.optional(v.string()),
+    to: v.optional(v.string()),
+    subject: v.optional(v.string()),
+    amount: v.optional(v.number()),
+    currency: v.optional(v.string()),
+    at: v.number(),
+  })
+    .index("by_family_at", ["familyId", "at"])
+    .index("by_at", ["at"]),
 
   sessions: defineTable({
     personId: v.id("people"),

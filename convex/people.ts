@@ -4,7 +4,18 @@ import { purgeFriends } from "./friends";
 import { proofValidator, purgeBiometric, requireBiometric } from "./biometric";
 import { notify } from "./notify";
 import { purgeNotebook } from "./notebook";
+import { logActivity } from "./activity";
+import type { MutationCtx } from "./_generated/server";
+import type { Id } from "./_generated/dataModel";
 import { MAX_FAMILY_SIZE, cleanName, hashPin, randomHex, requireParent, requirePerson, requireSameFamily, validPin, pinRuleMessage } from "./lib";
+
+// בכל משפחה חייב להישאר לפחות הורה אחד חוץ מהאדם הזה: בלי הורה אף אחד לא מאשר מצטרפים ולא מנהל את הקופה.
+// הקריאות שמגיעות ל-remove ול-setRole כבר חוסמות פעולה של הורה על עצמו, וזו הגנה נוספת בשרת.
+export async function requireAnotherParent(ctx: MutationCtx, familyId: Id<"families"> | undefined, exceptId: Id<"people">) {
+  if (!familyId) return;
+  const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
+  if (!members.some((p) => p.role === "parent" && p._id !== exceptId)) throw new ConvexError("חייב להישאר לפחות הורה אחד במשפחה");
+}
 
 export const add = mutation({
   args: {
@@ -31,6 +42,7 @@ export const add = mutation({
     const personAvatar = avatar?.slice(0, 8);
     if (personAvatar && members.some((p) => p.avatar === personAvatar)) throw new ConvexError("הדמות הזו כבר תפוסה על ידי מישהו אחר במשפחה");
     const id = await ctx.db.insert("people", { familyId: me.familyId, name: clean, role, avatar: personAvatar, gender });
+    await logActivity(ctx, me, "person_add", { subject: clean });
     if (pin) {
       const pinSalt = randomHex(16);
       await ctx.db.patch(id, { pinSalt, pinHash: await hashPin(pin, pinSalt), pinLength: pin.length });
@@ -44,7 +56,8 @@ export const remove = mutation({
   handler: async (ctx, { token, id }) => {
     const me = await requireParent(ctx, token);
     if (me._id === id) throw new ConvexError("אי אפשר להסיר את עצמך");
-    await requireSameFamily(ctx, me, id);
+    const target = await requireSameFamily(ctx, me, id);
+    if (target.role === "parent") await requireAnotherParent(ctx, me.familyId, id);
     const asFrom = await ctx.db.query("entries").withIndex("by_from", (q) => q.eq("from", id)).first();
     const asTo = await ctx.db.query("entries").withIndex("by_to", (q) => q.eq("to", id)).first();
     if (asFrom || asTo) throw new ConvexError("יש רשומות על שמו/ה. מחקו אותן קודם");
@@ -60,6 +73,7 @@ export const remove = mutation({
     const rec = await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     for (const r of rec) if (r.from === id || r.to === id) await ctx.db.delete(r._id);
     await ctx.db.delete(id);
+    await logActivity(ctx, me, "person_remove", { subject: target.name });
   },
 });
 
@@ -77,6 +91,7 @@ export const setRole = mutation({
     const p = await requireSameFamily(ctx, me, id);
     if (p._id === me._id) throw new ConvexError("אי אפשר לשנות את התפקיד של עצמך");
     if (p.role === role) return;
+    if (p.role === "parent") await requireAnotherParent(ctx, me.familyId, id);
     // הורה בלי קוד סודי היה נשאר פרופיל שאי אפשר להיכנס אליו (ואסור שילד יתפוס אותו).
     if (role === "parent" && !p.pinHash) throw new ConvexError(`קודם צריך לקבוע ל${p.name} קוד סודי`);
     await requireBiometric(ctx, me, `role:${id}:${role}`, proof);
@@ -85,9 +100,11 @@ export const setRole = mutation({
       : { role, teenRequested: undefined, friendsEnabled: false, friendsRequested: false, friendEmail: undefined });
     // הצפייה של ההורים בפנקס האישי היא של ילד/ה בלבד: מי שיצא/ה מ"ילד/ה" מפסיק/ה לשתף והעותק נמחק.
     if (role !== "child") {
-      await ctx.db.patch(id, { notebookShared: false });
+      // מי ששיתף/ה את הפנקס יקבל/תקבל הודעה פעם אחת שההורים כבר לא רואים אותו. הפנקס עצמו נשאר במכשיר שלו/ה.
+      await ctx.db.patch(id, { notebookShared: false, notebookPaused: undefined, ...(p.notebookShared ? { notebookShareEnded: true } : {}) });
       await purgeNotebook(ctx, id);
     }
+    await logActivity(ctx, me, "role_set", { subject: p.name, to: role });
     // הורה שהפך לילד/ה או לנער/ה לא צריך את המכשירים הביומטריים שלו.
     if (p.role === "parent") await purgeBiometric(ctx, id);
     // מי שהפך להורה לא ממשיך עם הסשן הקיים: הוא נכנס מחדש וקושר מכשיר בקוד קישור (הורה לא קשור לא פועל כהורה).
@@ -108,6 +125,7 @@ export const rename = mutation({
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     if (members.some((m) => m._id !== id && m.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה");
     await ctx.db.patch(id, { name: clean });
+    await logActivity(ctx, me, "person_rename", { from: p.name, subject: clean });
   },
 });
 

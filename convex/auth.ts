@@ -1,3 +1,4 @@
+import { logActivity } from "./activity";
 import { mutation, query, MutationCtx, QueryCtx } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { COUNTRIES, isCurrency } from "./currency";
@@ -172,6 +173,7 @@ export const approveJoin = mutation({
     const trustKey = await trustKeyOf(id, r.device);
     await ctx.db.patch(id, { pinSalt: r.pinSalt, pinHash: r.pinHash, trustedDevices: trustKey ? [trustKey] : [] });
     await ctx.db.delete(requestId);
+    await logActivity(ctx, me, "join_approved", { subject: r.name });
   },
 });
 
@@ -182,6 +184,7 @@ export const rejectJoin = mutation({
     const r = await ctx.db.get(requestId);
     if (!r || r.familyId !== me.familyId) return;
     await ctx.db.delete(requestId);
+    await logActivity(ctx, me, "join_rejected", { subject: r.name });
   },
 });
 
@@ -357,6 +360,7 @@ export const revokeDevice = mutation({
     const row = await ctx.db.get(deviceId);
     if (!row || row.familyId !== me.familyId) throw new ConvexError("מכשיר לא קיים");
     await ctx.db.delete(deviceId);
+    await logActivity(ctx, me, "device_revoked", { subject: row.label });
   },
 });
 

@@ -264,12 +264,26 @@ function Root() {
   useEffect(() => { sheet.setAppCtx(ctx); }, [ctx]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // המשפחה הנוכחית נרשמת ברשימת המשפחות של המכשיר (ילד/ה בהורים גרושים מחובר/ת לשתיים).
-  const shareNb = screen === 'app' && !!data.me.notebookShared && !isDemo(token);
+  const shareNb = screen === 'app' && !!data.me.notebookShared && !data.me.notebookPaused && !isDemo(token);
+  // חידוש שיתוף במשפחה אחרת (מסך "מי רואה את הפנקס שלי") מבקש שליחה מיידית של העותק.
+  const [resyncTick, setResyncTick] = useState(0);
+  useEffect(() => {
+    const on = () => setResyncTick((n) => n + 1);
+    window.addEventListener('kupa-nb-resync', on);
+    return () => window.removeEventListener('kupa-nb-resync', on);
+  }, []);
+  // הצפייה של ההורים בפנקס הסתיימה (שינוי תפקיד): הודעה אחת, והפנקס נשאר במכשיר.
+  const shareEnded = screen === 'app' && !!data.me.notebookShareEnded && !isDemo(token);
+  useEffect(() => {
+    if (!shareEnded) return;
+    toast(t('ההורים כבר לא רואים את הפנקס האישי שלך. הוא נשאר רק אצלך.'));
+    call('notebook:ackEnded', { token }).catch(() => {});
+  }, [shareEnded]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (screen !== 'app' || isDemo(token)) return;
     upsertMembership({
       personId: data.me.id, token, familyId: data.family.id, familyName: data.family.name, name: data.me.name,
-      avatar: data.me.avatar || '', role: data.me.role, shared: !!data.me.notebookShared,
+      avatar: data.me.avatar || '', role: data.me.role, shared: !!data.me.notebookShared && !data.me.notebookPaused,
     });
   }, [screen, token, data]); // eslint-disable-line react-hooks/exhaustive-deps
   // כל משפחה שהמכשיר מחובר אליה מקבלת כרטיס כניסה שנשאר במכשיר, כדי שהמעבר אליה (גם אחרי יציאה) לא יבקש את קוד המשפחה.
@@ -299,7 +313,7 @@ function Root() {
       }
     }, 1500);
     return () => clearTimeout(id);
-  }, [token, shareNb, nb.entries, nb.currency]);
+  }, [token, shareNb, nb.entries, nb.currency, resyncTick]);
 
   return (
     <>
