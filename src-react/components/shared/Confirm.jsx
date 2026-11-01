@@ -1,3 +1,4 @@
+import { withArrows } from './Arrow.jsx';
 import { t } from '../../i18n/index.js';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -63,10 +64,10 @@ export function ConfirmProvider({ children }) {
             )}
             {o.rows && o.rows.length > 0 && (
               <div className="confirm-rows">
-                {o.rowsTitle && <div className="confirm-rows-title">{o.rowsTitle}</div>}
+                {o.rowsTitle && <div className="confirm-rows-title">{withArrows(o.rowsTitle)}</div>}
                 {o.rows.map((r, i) => (
                   <div className={'confirm-row' + (r.strong ? ' strong' : '')} key={i}>
-                    <span>{r.label}</span><span className="confirm-row-val">{r.value}</span>
+                    <span>{r.label}</span><span className="confirm-row-val">{withArrows(r.value)}</span>
                   </div>
                 ))}
               </div>

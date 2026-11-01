@@ -1,3 +1,4 @@
+import Arrow from './Arrow.jsx';
 import { useState } from 'react';
 import Select from './Select.jsx';
 import { LANGUAGES, LANG_CODES, setLang, isInstalled } from '../../i18n/index.js';
@@ -25,7 +26,7 @@ export default function LanguagePicker() {
   return (
     <div className="field"><span>{t('שפה')}</span>
       <Select value={pending || lang} onChange={pick}
-        options={LANG_CODES.map((c) => ({ value: c, label: (isInstalled(c) ? '' : '⬇ ') + LANGUAGES[c].name }))} />
+        options={LANG_CODES.map((c) => ({ value: c, label: isInstalled(c) ? LANGUAGES[c].name : <><Arrow kind="download" /> {LANGUAGES[c].name}</> }))} />
       {busy && <span className="hint">⏳</span>}
     </div>
   );

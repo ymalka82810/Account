@@ -1,3 +1,4 @@
+import Arrow from './Arrow.jsx';
 import { useMemo, useState } from 'react';
 import { t, intlLocale, langDir, currentLang } from '../../i18n/index.js';
 import { useSheet } from './Sheet.jsx';
@@ -70,9 +71,9 @@ function Calendar({ value, max, fallbackYearsAgo, onPick }) {
   while (cells.length < 42) cells.push(null);
   const num = new Intl.NumberFormat(loc, { useGrouping: false });
 
-  // "הקודם" מצביע לכיוון שממנו קוראים: ימינה בעברית/ערבית, שמאלה בשאר השפות.
-  const prevArrow = rtl ? '›' : '‹';
-  const nextArrow = rtl ? '‹' : '›';
+  // "הקודם" מצביע לכיוון שממנו קוראים (החץ מתהפך לבד לפי כיוון השפה).
+  const prevArrow = <Arrow kind="chev-back" />;
+  const nextArrow = <Arrow kind="chev-next" />;
 
   return (
     <div className="cal">

@@ -1,3 +1,4 @@
+import Arrow from '../shared/Arrow.jsx';
 import { useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { state } from '../../state/state.js';
@@ -21,7 +22,7 @@ export default function Pin({ current }) {
   const keys = auto ? KEYS : KEYS.map((k) => (k === '' ? 'ok' : k));
   return (
     <In screen="pin" current={current}>
-      <button className="ghost back" type="button" onClick={pinBack}>{t('→ חזרה')}</button>
+      <button className="ghost back" type="button" onClick={pinBack}><Arrow kind="back" /> {t('חזרה')}</button>
       {f.person.avatar && <div className="avatar-xl" aria-hidden="true">{f.person.avatar}</div>}
       <h1>{f.person.name}</h1>
       <p className="hint">{title}</p>

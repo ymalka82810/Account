@@ -1,3 +1,4 @@
+import Arrow from '../shared/Arrow.jsx';
 import { useEffect, useState } from 'react';
 import { state } from '../../state/state.js';
 import { t } from '../../i18n/index.js';
@@ -167,7 +168,7 @@ export function EntryFlow({ opts }) {
         <button type="button" className="primary" onClick={next}>{t('המשך')}</button>
         {canPickOther && (
           <button type="button" className="ghost"
-            onClick={() => setFlow(afterPeople({ ...st, debtId: null, debtRemaining: null, debt: null }))}>{t('→ בחירת חוב אחר')}</button>
+            onClick={() => setFlow(afterPeople({ ...st, debtId: null, debtRemaining: null, debt: null }))}><Arrow kind="back" /> {t('בחירת חוב אחר')}</button>
         )}
       </div>
     );
@@ -254,7 +255,7 @@ export function EntryFlow({ opts }) {
         )}
         {err && <p className="error" role="alert">{err}</p>}
         <AsyncButton className="primary" onClick={save}>{isDebt ? t('✅ שמירת החוב') : t('✅ שמירת ההחזר')}</AsyncButton>
-        <button type="button" className="ghost" onClick={() => setFlow({ step: 'amount', st })}>{t('→ חזרה')}</button>
+        <button type="button" className="ghost" onClick={() => setFlow({ step: 'amount', st })}><Arrow kind="back" /> {t('חזרה')}</button>
       </div>
     );
   }

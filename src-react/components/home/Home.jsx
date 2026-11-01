@@ -1,3 +1,4 @@
+import Arrow from '../shared/Arrow.jsx';
 import { t } from '../../i18n/index.js';
 import { useApp } from '../../state/appContext.js';
 import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
@@ -36,7 +37,7 @@ export default function Home({ data, token }) {
           onClick={() => sheet.open('', <BalanceSheet otherId={p.id} />)}>
           <span className="who">{iOwe ? owesLine(me, p.id) : owesLine(p.id, me)}</span>
           <span className="amt">{money(amount)}</span>
-          <span className="debt-more">{t('לחצו לפירוט החישוב ‹')}</span>
+          <span className="debt-more">{t('לחצו לפירוט החישוב')} <Arrow kind="chev-next" /></span>
         </button>
         <DebtLines open={open} iOwe={iOwe} onPay={(x) => openEntryFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })} />
         {open.length === 0 && (

@@ -1,3 +1,4 @@
+import Arrow from '../shared/Arrow.jsx';
 import { useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { state } from '../../state/state.js';
@@ -47,7 +48,7 @@ export default function Join({ current }) {
   }
   return (
     <In screen="join" current={current}>
-      <button className="ghost back" type="button" onClick={() => goView('welcome')}>{t('→ חזרה')}</button>
+      <button className="ghost back" type="button" onClick={() => goView('welcome')}><Arrow kind="back" /> {t('חזרה')}</button>
       <div className="card-narrow">
         <div className="big-emoji" aria-hidden="true">👋</div>
         <h1>{t('מצטרפים לקופה')}</h1>

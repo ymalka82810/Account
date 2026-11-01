@@ -1,3 +1,4 @@
+import Arrow from '../shared/Arrow.jsx';
 import { useEffect, useRef, useState } from 'react';
 import { t, intlLocale } from '../../i18n/index.js';
 import LanguagePicker from '../shared/LanguagePicker.jsx';
@@ -115,7 +116,7 @@ function Home({ nb, onSettings, pulling, returned, family }) {
       </div>
       <strong>{money(e.amount, cur)}</strong>
       <div className="acts">
-        <button className="small" type="button" onClick={() => setPaid(e.id, !e.paid)}>{e.paid ? t('↩️ עוד לא') : t('✅ שולם')}</button>
+        <button className="small" type="button" onClick={() => setPaid(e.id, !e.paid)}>{e.paid ? <><Arrow kind="return" /> {t('עוד לא')}</> : t('✅ שולם')}</button>
         <button className="small" type="button" aria-label={t('מחיקה')} onClick={() => del(e)}>🗑️</button>
       </div>
     </div>
@@ -335,7 +336,7 @@ function Settings({ nb, onBack, closing }) {
     <div className={'nb-page nb-settings' + (closing ? ' nb-pushed-out' : ' nb-pull-in')}>
       <div className="nb-head">
         <h1 className={closing ? 'nb-gear-spin-back' : undefined}><span className="nb-gear-ico">⚙️</span> {t('הגדרות')}</h1>
-        <button className="ghost nb-gear" type="button" aria-label={t('חזרה')} onClick={onBack}>←</button>
+        <button className="ghost nb-gear" type="button" aria-label={t('חזרה')} onClick={onBack}><Arrow kind="left" /></button>
       </div>
 
       <section className="card nb-section">

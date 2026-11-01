@@ -1,3 +1,4 @@
+import Arrow from './Arrow.jsx';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { t, currentLang, LANGUAGES } from '../../i18n/index.js';
@@ -336,7 +337,7 @@ export default function AppKeyboard() {
     <div className={'kb ' + (kind === 'num' || kind === 'dec' ? 'kb-numeric' : 'kb-text')} ref={rootRef} dir="ltr" role="group" lang={lang}
       onMouseDown={keep}>
       <button type="button" tabIndex={-1} className="kb-close" aria-label={t('סגירה')}
-        onPointerDown={(e) => { e.preventDefault(); const el = targetRef.current; hide(); if (el) el.blur(); }} onMouseDown={keep} onClick={keep}>⌄</button>
+        onPointerDown={(e) => { e.preventDefault(); const el = targetRef.current; hide(); if (el) el.blur(); }} onMouseDown={keep} onClick={keep}><Arrow kind="down" /></button>
       {body}
     </div>,
     document.body,

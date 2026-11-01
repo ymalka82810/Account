@@ -1,3 +1,4 @@
+import Arrow from '../shared/Arrow.jsx';
 import { useState, useEffect } from 'react';
 import { t } from '../../i18n/index.js';
 import { state, CODE_KEY, TOKEN_KEY } from '../../state/state.js';
@@ -55,7 +56,7 @@ export default function Welcome({ current }) {
         {otherFamilies().map((f) => (
           <button key={f.familyId} className="ghost" type="button"
             onClick={async () => { const err = await goToFamily(f); if (err) setError(err); }}>
-            {t('↩️ חזרה למשפחת {family}', { family: f.name })}
+            <Arrow kind="return" /> {t('חזרה למשפחת {family}', { family: f.name })}
           </button>
         ))}
         {parents.length > 0 && (

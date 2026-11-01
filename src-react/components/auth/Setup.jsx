@@ -1,3 +1,4 @@
+import Arrow from '../shared/Arrow.jsx';
 import { useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { state, PARENT_AVATARS } from '../../state/state.js';
@@ -49,7 +50,7 @@ export default function Setup({ current }) {
   };
   return (
     <In screen="setup" current={current}>
-      <button className="ghost back" type="button" onClick={backFromFamily}>{t('→ חזרה')}</button>
+      <button className="ghost back" type="button" onClick={backFromFamily}><Arrow kind="back" /> {t('חזרה')}</button>
       <div className="card-narrow">
         <div className="big-emoji" aria-hidden="true">🏠</div>
         <h1>{t('הקמת קופה משפחתית')}</h1>

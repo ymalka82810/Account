@@ -1,4 +1,6 @@
 :root {
+  /* אייקוני חצים משלנו (SVG) לשימוש כמסכה: הצבע בא מ-background של האלמנט, כלומר מערכת הנושא */
+  --ico-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   color-scheme: light;
   --ink: #4a4468;
   --ink-soft: #8d84ab;
@@ -191,13 +193,27 @@ body[data-theme="teen"] .cal-day.on { background: var(--neon-grad); color: var(-
 .dd-val { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dd-arrow {
   flex: none;
-  width: 0;
-  height: 0;
-  border-inline: 5px solid transparent;
-  border-top: 6px solid var(--ink-soft);
+  width: 16px;
+  height: 16px;
+  background: var(--coin-deep);
+  -webkit-mask: var(--ico-down) center / contain no-repeat;
+  mask: var(--ico-down) center / contain no-repeat;
   transition: transform .15s ease;
 }
 .dd-btn[aria-expanded="true"] .dd-arrow { transform: rotate(180deg); }
+/* חצים בעיצוב שלנו (רכיב Arrow): מקו עגול וגמיש, בצבע הדגש של ערכת הנושא; הכיוון הלוגי מתהפך לפי כיוון השפה */
+.arrow {
+  width: 1.15em; height: 1.15em; flex: none; vertical-align: -.2em;
+  fill: none; stroke: var(--coin-deep); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform .15s ease;
+}
+html[dir="ltr"] .arrow.arrow-start, html[dir="rtl"] .arrow.arrow-end, .arrow.arrow-left { transform: scaleX(-1); }
+.back .arrow, .linkish .arrow { margin-inline-end: 2px; }
+.kb-close .arrow { stroke: currentColor; width: 1.4em; height: 1.4em; vertical-align: middle; }
+.cal-nav { display: flex; align-items: center; justify-content: center; }
+.cal-nav .arrow { width: 1.3rem; height: 1.3rem; vertical-align: middle; }
+.cal-nav:disabled .arrow { stroke: var(--ink-soft); }
+.debt-more .arrow { stroke: currentColor; width: 1em; height: 1em; }
 .dd-list {
   position: fixed;
   z-index: 50;
@@ -434,9 +450,12 @@ body[data-theme="teen"] #screen-loading p {
 .tile-section > summary::-webkit-details-marker { display: none; }
 .tile-section > summary::after {
   grid-area: marker;
-  content: '⌄';
-  font-size: 1.2rem;
-  color: var(--ink-soft);
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: var(--coin-deep);
+  -webkit-mask: var(--ico-down) center / contain no-repeat;
+  mask: var(--ico-down) center / contain no-repeat;
   transition: transform .15s ease;
   flex-shrink: 0;
 }

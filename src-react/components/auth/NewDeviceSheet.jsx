@@ -1,3 +1,4 @@
+import Arrow from '../shared/Arrow.jsx';
 import { useState } from 'react';
 import { t, intlLocale } from '../../i18n/index.js';
 import { state } from '../../state/state.js';
@@ -92,7 +93,7 @@ export function NewDeviceSheet() {
           if (failed(res)) { setPin(''); return; }
           await complete(res);
         })}>{t('קישור המכשיר הזה והכניסה')}</AsyncButton>
-        <button className="ghost linkish" type="button" onClick={() => { setStep('choose'); setErr(''); }}>{t('→ חזרה')}</button>
+        <button className="ghost linkish" type="button" onClick={() => { setStep('choose'); setErr(''); }}><Arrow kind="back" /> {t('חזרה')}</button>
       </div>
     );
   }
@@ -112,7 +113,7 @@ export function NewDeviceSheet() {
             setStep('recoveryCode');
           } catch (e) { setErr(errMsg(e)); }
         }}>{t('שליחת קוד למייל')}</AsyncButton>
-        <button className="ghost linkish" type="button" onClick={() => { setStep('choose'); setErr(''); }}>{t('→ חזרה')}</button>
+        <button className="ghost linkish" type="button" onClick={() => { setStep('choose'); setErr(''); }}><Arrow kind="back" /> {t('חזרה')}</button>
       </div>
     );
   }

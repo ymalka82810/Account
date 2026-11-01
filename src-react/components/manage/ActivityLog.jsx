@@ -1,3 +1,4 @@
+import Arrow from '../shared/Arrow.jsx';
 import { t } from '../../i18n/index.js';
 import { useQuery } from '../../lib/api.js';
 import { money, roleLabel } from '../../lib/computations.js';
@@ -14,9 +15,9 @@ const actions = () => ({
 });
 
 function detail(r) {
-  if (r.amount != null && r.from && r.to) return `${r.from} ← ${r.to}, ${money(r.amount, r.currency || undefined)}`;
-  if (r.kind === 'role_set') return `${r.subject} ← ${roleLabel(r.to)}`;
-  if (r.kind === 'person_rename') return `${r.from} ← ${r.subject}`;
+  if (r.amount != null && r.from && r.to) return <>{r.from} <Arrow kind="next" /> {r.to}, {money(r.amount, r.currency || undefined)}</>;
+  if (r.kind === 'role_set') return <>{r.subject} <Arrow kind="next" /> {roleLabel(r.to)}</>;
+  if (r.kind === 'person_rename') return <>{r.from} <Arrow kind="next" /> {r.subject}</>;
   return r.subject || '';
 }
 
