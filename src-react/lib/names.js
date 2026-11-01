@@ -64,8 +64,8 @@ export function searchPeople(nb, query, limit = 8) {
     .filter((p) => normName(p.name).includes(q))
     .sort((a, b) => {
       const sa = stats.get(a.id), sb = stats.get(b.id);
-      return (sb.open > 0) - (sa.open > 0)
-        || (normName(b.name).startsWith(q)) - (normName(a.name).startsWith(q))
+      return Number(sb.open > 0) - Number(sa.open > 0)
+        || Number(normName(b.name).startsWith(q)) - Number(normName(a.name).startsWith(q))
         || sb.count - sa.count
         || sa.last - sb.last;
     })
