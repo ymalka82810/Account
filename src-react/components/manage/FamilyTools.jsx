@@ -10,6 +10,7 @@ import AsyncButton from '../shared/AsyncButton.jsx';
 import { Err } from '../shared/fields.jsx';
 import FamilyNameField, { buildFamilyName, bareFamilyName } from '../shared/FamilyNameField.jsx';
 import Select from '../shared/Select.jsx';
+import { useConfirm } from '../shared/Confirm.jsx';
 import { COUNTRIES, CURRENCIES, currencyLabel, currencySymbol, countryName } from '../../lib/currencies.js';
 import { convert, curOf } from '../../lib/computations.js';
 
@@ -101,8 +102,17 @@ export default function FamilySettings({ data }) {
 
 // מחיקת הקופה כולה, מופרדת משאר ההגדרות.
 export function DangerZone({ data, token }) {
+  const confirm = useConfirm();
   async function deleteFamily() {
-    const typed = prompt(t('זה ימחק את כל הקופה: כל האנשים וכל הרשומות, ואי אפשר לבטל.\nכדי לאשר, כתבו את שם המשפחה: {name}', { name: data.family.name }));
+    const typed = await confirm({
+      icon: '⚠️',
+      title: t('מחיקת הקופה כולה'),
+      message: t('זה ימחק את כל הקופה: כל האנשים וכל הרשומות, ואי אפשר לבטל.\nכדי לאשר, כתבו את שם המשפחה: {name}', { name: data.family.name }),
+      input: {},
+      okText: t('מחיקה'),
+      cancelText: t('חזרה'),
+      danger: true,
+    });
     if (typed === null) return;
     try {
       await call('family:remove', { token, confirmName: typed });

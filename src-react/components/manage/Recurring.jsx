@@ -7,11 +7,13 @@ import { money, fmtDate, namesFor, baseCurrency } from '../../lib/computations.j
 import { currencySymbol } from '../../lib/currencies.js';
 import { g } from '../../lib/gender.js';
 import Select from '../shared/Select.jsx';
+import { useConfirm } from '../shared/Confirm.jsx';
 
 const recurringWhen = (r) => (r.frequency === 'weekly' ? t('כל יום {day}', { day: weekdayName(r.weekday) }) : t('ב-{day} בכל חודש', { day: r.monthDay }));
 
 // דמי כיס קבועים (הורים בלבד).
 export default function Recurring({ data, token }) {
+  const confirm = useConfirm();
   const me = data.me.id;
   const people = data.people;
   const { owesLine, nameOf } = namesFor(me, (id) => people.find((p) => p.id === id));
@@ -32,7 +34,7 @@ export default function Recurring({ data, token }) {
   const toVal = exists(to) ? to : defaultTo;
 
   async function remove(r) {
-    if (!confirm(t('להפסיק את הרישום הקבוע? מה שכבר נרשם נשאר.'))) return;
+    if (!(await confirm({ icon: '🔁', title: t('הפסקה'), message: t('להפסיק את הרישום הקבוע? מה שכבר נרשם נשאר.'), okText: t('הפסקה'), cancelText: t('חזרה'), danger: true }))) return;
     try { await call('recurring:remove', { token, id: r.id }); toast(t('הרישום הקבוע הופסק')); }
     catch (err) { toast(errMsg(err)); }
   }

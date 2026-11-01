@@ -3,22 +3,28 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 
 // חלון אישור מעוצב במקום confirm() של הדפדפן.
 // שימוש: const confirm = useConfirm(); if (!(await confirm({ title, message, amount, okText }))) return;
+// עם input: { placeholder } החלון כולל שדה טקסט (במקום prompt של הדפדפן) ומחזיר את הטקסט, או null בביטול.
 const ConfirmCtx = createContext(null);
 export const useConfirm = () => useContext(ConfirmCtx);
 
 export function ConfirmProvider({ children }) {
   const [req, setReq] = useState(null); // {opts, resolve}
   const okBtn = useRef(null);
+  const inputEl = useRef(null);
   const returnFocus = useRef(null);
+  const [typed, setTyped] = useState('');
+  const typedRef = useRef('');
 
   const confirm = useCallback((opts) => new Promise((resolve) => {
     returnFocus.current = document.activeElement;
+    typedRef.current = '';
+    setTyped('');
     setReq({ opts, resolve });
   }), []);
 
   const answer = useCallback((value) => {
     setReq((cur) => {
-      if (cur) cur.resolve(value);
+      if (cur) cur.resolve(cur.opts.input ? (value ? typedRef.current : null) : value);
       return null;
     });
     const f = returnFocus.current;
@@ -28,7 +34,7 @@ export function ConfirmProvider({ children }) {
 
   useEffect(() => {
     if (!req) return undefined;
-    if (okBtn.current) okBtn.current.focus();
+    if (req.opts.input) { if (inputEl.current) inputEl.current.focus(); } else if (okBtn.current) okBtn.current.focus();
     const onKey = (ev) => {
       if (ev.key === 'Escape') { ev.stopPropagation(); answer(false); }
     };
@@ -50,6 +56,11 @@ export function ConfirmProvider({ children }) {
             <h2 id="confirmTitle" className="confirm-title">{o.title}</h2>
             {o.amount && <div className="confirm-amount">{o.amount}</div>}
             <p id="confirmMsg" className="confirm-msg">{o.message}</p>
+            {o.input && (
+              <input ref={inputEl} type="text" className="confirm-input" value={typed} placeholder={o.input.placeholder || ''}
+                autoComplete="off" onChange={(ev) => { typedRef.current = ev.target.value; setTyped(ev.target.value); }}
+                onKeyDown={(ev) => { if (ev.key === 'Enter') { ev.preventDefault(); answer(true); } }} />
+            )}
             {o.rows && o.rows.length > 0 && (
               <div className="confirm-rows">
                 {o.rowsTitle && <div className="confirm-rows-title">{o.rowsTitle}</div>}

@@ -5,6 +5,7 @@ import { toast, errMsg, prettyCode } from '../../lib/helpers.js';
 import { CODE_KEY } from '../../state/state.js';
 import { useBioConfirm } from '../shared/BioConfirm.jsx';
 import { BioError } from '../../lib/biometric.js';
+import { useConfirm } from '../shared/Confirm.jsx';
 
 // כמה זמן הקוד נשאר גלוי אחרי האימות.
 const SHOW_MS = 30000;
@@ -18,6 +19,7 @@ const bioOpts = () => ({
 // ואז הורה קובע/ת את התפקיד ב"בני המשפחה" (ילד/ה, נער/ה או הורה), באישור ביומטרי.
 // הקוד מוסתר ונחשף רק אחרי טביעת אצבע / זיהוי פנים; השרת לא שולח אותו בלי האישור.
 export default function Codes({ data, token }) {
+  const confirm = useConfirm();
   const f = data.family;
   const bioConfirm = useBioConfirm();
   const [code, setCode] = useState(null);
@@ -77,7 +79,7 @@ export default function Codes({ data, token }) {
   }
 
   async function rotate() {
-    if (!confirm(t('להחליף את הקוד? מי שכבר בפנים נשאר, אבל הקוד הישן יפסיק לעבוד, ומכשירים אחרים ששמרו את המשפחה יצטרכו להזין את הקוד החדש.'))) return;
+    if (!(await confirm({ icon: '🔑', title: t('החלפת קוד'), message: t('להחליף את הקוד? מי שכבר בפנים נשאר, אבל הקוד הישן יפסיק לעבוד, ומכשירים אחרים ששמרו את המשפחה יצטרכו להזין את הקוד החדש.'), okText: t('החלפת קוד'), cancelText: t('חזרה') }))) return;
     try {
       const keepDevice = !!localStorage.getItem(CODE_KEY);
       const res = await call('family:rotateCode', { token, keepDevice });
@@ -91,7 +93,7 @@ export default function Codes({ data, token }) {
   const devices = useQuery('auth:listDevices', { token });
   const fmtDay = (ms) => new Date(ms).toLocaleDateString(intlLocale());
   async function revoke(id) {
-    if (!confirm(t('לנתק את המכשיר? הוא יצטרך להזין שוב את קוד ההצטרפות.'))) return;
+    if (!(await confirm({ icon: '📵', title: t('ניתוק'), message: t('לנתק את המכשיר? הוא יצטרך להזין שוב את קוד ההצטרפות.'), okText: t('ניתוק'), cancelText: t('חזרה'), danger: true }))) return;
     try { await call('auth:revokeDevice', { token, deviceId: id }); toast(t('המכשיר נותק ✅')); }
     catch (e) { toast(errMsg(e)); }
   }

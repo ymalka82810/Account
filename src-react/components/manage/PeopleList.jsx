@@ -135,14 +135,14 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
             <button className="small" type="button" onClick={() => bindCode(p)}>{t('קוד קישור למכשיר')}</button>
           )}
           {p.role === 'teen' && p.friendsEnabled && (
-            <button className="small danger" type="button" onClick={() => {
-              if (!confirm(t('לכבות את מצב החברים של {name}? אי אפשר יהיה להוסיף רישומים חדשים עם חברים.', { name: p.name }))) return;
+            <button className="small danger" type="button" onClick={async () => {
+              if (!(await confirm({ icon: '🤝', title: t('כיבוי חברים'), amount: p.name, message: t('לכבות את מצב החברים של {name}? אי אפשר יהיה להוסיף רישומים חדשים עם חברים.', { name: p.name }), okText: t('כיבוי חברים'), cancelText: t('חזרה'), danger: true }))) return;
               run('friends:disableAccess', { personId: p.id }, t('מצב חברים כובה'));
             }}>{t('כיבוי חברים')}</button>
           )}
           {p.id !== me && (
-            <button className="small danger" type="button" aria-label={t('הסרת {name}', { name: p.name })} onClick={() => {
-              if (!confirm(t('להסיר את {name} מהמשפחה?', { name: p.name }))) return;
+            <button className="small danger" type="button" aria-label={t('הסרת {name}', { name: p.name })} onClick={async () => {
+              if (!(await confirm({ icon: '👋', title: t('הסרה'), amount: p.name, message: t('להסיר את {name} מהמשפחה?', { name: p.name }), okText: t('הסרה'), cancelText: t('חזרה'), danger: true }))) return;
               run('people:remove', { id: p.id }, g(p.gender, '{name} הוסר', '{name} הוסרה', '{name} הוסר/ה', { name: p.name }));
             }}>{t('הסרה')}</button>
           )}
