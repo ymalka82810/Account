@@ -8,12 +8,13 @@ import { SheetProvider } from './components/shared/Sheet.jsx';
 import { ConfirmProvider } from './components/shared/Confirm.jsx';
 import Toast from './components/shared/Toast.jsx';
 import UpdateBanner from './components/shared/UpdateBanner.jsx';
+import AppKeyboard from './components/shared/AppKeyboard.jsx';
 import App from './App.jsx';
 
 // key={lang}: החלפת שפה בונה את העץ מחדש, כך שכל t() בכל מקום מתרנדר שוב בלי לחבר כל קומפוננטה.
 function Root() {
   const lang = useLang();
-  const tree = <ConfirmProvider key={lang}><SheetProvider><App /><UpdateBanner /><Toast /></SheetProvider></ConfirmProvider>;
+  const tree = <ConfirmProvider key={lang}><SheetProvider><App /><AppKeyboard /><UpdateBanner /><Toast /></SheetProvider></ConfirmProvider>;
   return client ? <ConvexProvider client={client}>{tree}</ConvexProvider> : tree;
 }
 

@@ -77,7 +77,7 @@ export default function Recurring({ data, token }) {
         <div className="field"><span>{t('למי')}</span>
           <Select value={toVal} onChange={setTo} options={personOptions} /></div>
         <label className="field"><span>{t('סכום ({cur})', { cur: currencySymbol(baseCurrency()) })}</span>
-          <input type="number" inputMode="decimal" min="0.01" max="10000" step="0.01" required
+          <input type="text" inputMode="decimal" dir="ltr" pattern="[0-9]*[.]?[0-9]+" maxLength={9} required
             value={amount} onChange={(e) => setAmount(e.target.value)} /></label>
         <label className="field"><span>{t('הערה')}</span>
           <input type="text" maxLength={80} value={note} onChange={(e) => setNote(e.target.value)} /></label>

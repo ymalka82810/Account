@@ -1240,3 +1240,76 @@ body[data-theme="teen"] .coin-burst__c { filter: drop-shadow(0 0 5px var(--neon-
   100% { opacity: 0; transform: translate(0, 0) scale(.35) rotate(0); }
 }
 @media (prefers-reduced-motion: reduce) { .coin-burst { display: none; } }
+
+/* ===== המקלדת של האפליקציה (AppKeyboard.jsx): נראית לפי התפקיד, כמו שאר המסך ===== */
+/* מקום למקלדת: הדף, החלונות הקופצים וההודעות עולים מעליה. --kb-h נקבע ב-JS לפי גובה המקלדת בפועל. */
+body.kb-open { padding-bottom: calc(var(--kb-h, 0px) + env(safe-area-inset-bottom, 0)); }
+body.kb-open .sheet-wrap { bottom: var(--kb-h, 0px); }
+body.kb-open .sheet { max-height: 100%; padding-bottom: 20px; }
+body.kb-open .toast { bottom: calc(var(--kb-h, 0px) + 12px); }
+
+.kb {
+  --kb-gap: 5px; --kb-key-h: 44px;
+  position: fixed; inset-inline: 0; bottom: 0; z-index: 70;
+  padding: 2px 6px calc(8px + env(safe-area-inset-bottom, 0));
+  user-select: none; -webkit-user-select: none; touch-action: manipulation; -webkit-touch-callout: none;
+  font-family: inherit; direction: ltr;
+  animation: kb-up .18s ease-out;
+  /* ילדים (וגם בלי תפקיד, כמו הפנקס האישי): צעצוע צבעוני, מקשים מעוגלים עם "קצה" כמו מטיל הצעצוע */
+  --kb-ink: #4a4468;
+  --kb-key: linear-gradient(180deg, #fffdf0, #ffeaa0); --kb-key-edge: #e0a640;
+  --kb-fn: linear-gradient(180deg, #ffeaf1, #ffc3d4); --kb-fn-edge: #e58aa6;
+  --kb-go: linear-gradient(180deg, #c4f5dc, #74c69d); --kb-go-edge: #3f9d73; --kb-go-ink: #0f3d28;
+  background: linear-gradient(180deg, #fff7db, #ffd6ec);
+  border-top: 3px solid #ffd97d;
+  box-shadow: 0 -6px 18px rgba(120, 80, 0, .18);
+}
+@keyframes kb-up { from { transform: translateY(100%); } to { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .kb { animation: none; } }
+@media (max-height: 520px) { .kb { --kb-key-h: 34px; --kb-gap: 4px; } }
+.kb-close { display: block; margin: 0 auto; width: 72px; height: 22px; padding: 0; border: 0; background: none; color: var(--kb-ink); opacity: .6; font: inherit; font-size: 1.15rem; line-height: 1; cursor: pointer; }
+.kb-letters, .kb-numpad { max-width: 620px; margin: 0 auto; }
+.kb-row { display: flex; gap: var(--kb-gap); margin-bottom: var(--kb-gap); }
+.kb-row:last-child { margin-bottom: 0; }
+.kb-key {
+  flex: 1 1 0; min-width: 0; height: var(--kb-key-h); padding: 0;
+  font: inherit; font-size: 1.2rem; font-weight: 700; line-height: 1; color: var(--kb-ink);
+  background: var(--kb-key); border: 0; border-bottom: 3px solid var(--kb-key-edge); border-radius: 14px;
+  cursor: pointer; touch-action: manipulation;
+}
+.kb-key.kb-fn, .kb-key.kb-del { background: var(--kb-fn); border-bottom-color: var(--kb-fn-edge); font-size: 1.1rem; white-space: nowrap; }
+.kb-key.kb-fn { font-size: .95rem; }
+.kb-key.kb-fn.on { filter: brightness(.9); box-shadow: inset 0 0 0 2px var(--kb-fn-edge); }
+.kb-key.kb-enter { background: var(--kb-go); border-bottom-color: var(--kb-go-edge); color: var(--kb-go-ink); font-size: 1.4rem; }
+.kb-key:active { transform: translateY(2px); border-bottom-width: 1px; filter: brightness(.95); }
+.kb-row-digits .kb-key { height: calc(var(--kb-key-h) * .78); font-size: 1rem; }
+.kb-space-name { font-size: .8rem; font-weight: 600; opacity: .65; }
+.kb-numpad { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--kb-gap); max-width: 420px; padding-top: 2px; }
+.kb-numpad .kb-key { height: calc(var(--kb-key-h) + 10px); font-size: 1.6rem; }
+.kb-numpad .kb-del { font-size: 1.3rem; }
+.kb-numpad .kb-enter-tall { grid-column: 4; grid-row: 2 / span 3; height: auto; }
+
+/* הורים: כהה ומאופק, פינות חדות ופס כחול בראש, כמו כותרת המסך שלהם */
+body[data-theme="parent"] .kb {
+  --kb-ink: var(--ink);
+  --kb-key: #171b21; --kb-key-edge: #262b33; --kb-fn: #0f1216; --kb-fn-edge: #262b33;
+  --kb-go: var(--coin); --kb-go-edge: var(--coin-deep); --kb-go-ink: var(--on-coin);
+  background: #0b0d10; border-top: 2px solid var(--coin); box-shadow: 0 -8px 24px rgba(0, 0, 0, .6);
+}
+body[data-theme="parent"] .kb-key { border: 1px solid #262b33; border-radius: 6px; font-weight: 600; }
+body[data-theme="parent"] .kb-key:active { transform: none; background: #232a33; border-color: var(--coin); filter: none; }
+body[data-theme="parent"] .kb-key.kb-enter:active { background: var(--coin-deep); }
+
+/* נוער: זכוכית שחורה וניאון בצבעי הפלטה שנבחרה */
+body[data-theme="teen"] .kb {
+  --kb-ink: var(--ink);
+  --kb-key: #0d0d12; --kb-fn: #08080c; --kb-key-edge: color-mix(in srgb, var(--neon-a) 45%, transparent);
+  --kb-fn-edge: color-mix(in srgb, var(--neon-b) 55%, transparent);
+  --kb-go: var(--neon-grad); --kb-go-ink: var(--neon-ink);
+  background: rgba(0, 0, 0, .88); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  border-top: 2px solid var(--neon-a); box-shadow: 0 -8px 28px var(--neon-glow);
+}
+body[data-theme="teen"] .kb-key { border: 1px solid var(--kb-key-edge); border-radius: 14px; }
+body[data-theme="teen"] .kb-key.kb-fn, body[data-theme="teen"] .kb-key.kb-del { border-color: var(--kb-fn-edge); }
+body[data-theme="teen"] .kb-key.kb-enter { border-color: transparent; }
+body[data-theme="teen"] .kb-key:active { transform: none; background: var(--neon-grad); color: var(--neon-ink); border-color: transparent; box-shadow: 0 0 14px var(--neon-glow); filter: none; }
