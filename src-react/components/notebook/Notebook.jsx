@@ -201,9 +201,9 @@ function AddEntry({ initialDir }) {
     };
     return (
       <div className="form">
-        <p><strong>{t('יש כבר \u201C{old}\u201D בפנקס.', { old: p.name })}</strong> {t('זה אותו אדם כמו \u201C{name}\u201D?', { name })}</p>
-        <button className="primary" type="button" onClick={() => pick1(p.name)}>{t('כן, אותו אדם. להשאיר \u201C{n}\u201D', { n: p.name })}</button>
-        <button className="primary" type="button" onClick={() => pick1(name)}>{t('כן, אותו אדם. לשנות הכול ל\u201C{n}\u201D', { n: name })}</button>
+        <p><strong>{t('יש כבר “{old}” בפנקס.', { old: p.name })}</strong> {t('זה אותו אדם כמו “{name}”?', { name })}</p>
+        <button className="primary" type="button" onClick={() => pick1(p.name)}>{t('כן, אותו אדם. להשאיר “{n}”', { n: p.name })}</button>
+        <button className="primary" type="button" onClick={() => pick1(name)}>{t('כן, אותו אדם. לשנות הכול ל“{n}”', { n: name })}</button>
         <button className="ghost" type="button" onClick={() => save(name, amount, undefined)}>{t('לא, זה אדם אחר')}</button>
         <button className="ghost" type="button" onClick={() => setSimilar(null)}>{t('חזרה')}</button>
       </div>
