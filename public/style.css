@@ -1043,7 +1043,7 @@ body[data-theme="child"] .sum .num, body:not([data-theme]) .sum .num { text-shad
 
 /* --- הורים ונוער: מטיל זהב אמיתי (חתך טרפזי) כאיור SVG מאחורי הטקסט, ראו GoldBar.jsx --- */
 .gb-art { display: none; }
-.gb-shine, .gb-side, .gb-glow, .gb-rim { display: none; }
+.gb-shine, .gb-glow, .gb-rim { display: none; }
 body[data-theme="parent"] .gb-art, body[data-theme="teen"] .gb-art {
   display: block; position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: visible;
 }
@@ -1090,14 +1090,8 @@ body[data-theme="teen"] .sum .lbl { font-size: .9rem; }
 body[data-theme="teen"] .sum .num { font-size: 1.6rem; text-shadow: 0 1px 0 rgba(255, 255, 255, .4); }
 body[data-theme="teen"] .gb-shine { display: inline; filter: blur(1.2px); animation: gb-shine 7s ease-in-out infinite; }
 body[data-theme="teen"] .gb-glow { display: inline; }
-body[data-theme="teen"] .gb-side { display: inline; filter: blur(.8px); opacity: 0; }
-body[data-theme="teen"] .gb-side-r { animation: gb-side-r 7s ease-in-out infinite; }
-body[data-theme="teen"] .gb-side-l { animation: gb-side-l 7s ease-in-out infinite; }
-/* הפס יורד לאורך השיפוע (ימין: למטה וימינה) וחוצה את כל הגובה עד הסוף, מיד אחרי שהברק מגיע לקצה מהחזית */
-@keyframes gb-side-r { 0%, 80% { transform: translate(0, -30px); opacity: 0; } 83% { opacity: 1; } 97% { opacity: 1; } 100% { transform: translate(40px, 160px); opacity: 0; } }
-@keyframes gb-side-l { 0%, 80% { transform: translate(0, -30px); opacity: 0; } 83% { opacity: 1; } 97% { opacity: 1; } 100% { transform: translate(-30px, 160px); opacity: 0; } }
 @keyframes gb-shine { 0%, 40% { transform: translateX(0); } 100% { transform: translateX(340px); } }
-@media (prefers-reduced-motion: reduce) { body[data-theme="teen"] .gb-shine, body[data-theme="teen"] .gb-side { animation: none; } }
+@media (prefers-reduced-motion: reduce) { body[data-theme="teen"] .gb-shine { animation: none; } }
 
 /* סכום ארוך לא גולש: העמודות לא מתרחבות בגלל התוכן, והגופן קטן לפי אורך הטקסט (--len מ-SumNum) */
 .summary { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
