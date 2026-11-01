@@ -20,3 +20,12 @@
 
 פרמטרים: קובץ פלט, רזולוציה, דגימות, סימן על המטבע, עוצמת הנטייה (0-1).
 `public/coin.webp` (מסך הטעינה) מרונדר עם "★"; `assets/coin-ils-512.webp` עם "₪".
+
+## מטילי "אני חייב" / "חייבים לי"
+
+    blender -b -P scripts/blender/bar.py -- --all /tmp/bars_raw
+    python3 scripts/blender/compose_bars.py /tmp/bars_raw
+
+מרנדר 6 מטילים (הורים/נוער/ילדים x זהב/נחושת) ל-`public/bars/*.webp`, שנקבעים ב-CSS (`.sum::before` להורים ולנוער,
+`border-image` לילדים). מטיל הורים/נוער בהטלה אלכסונית באותה גיאומטריה של ה-viewBox 202x124 של `GoldBarArt`
+(אחרת הטקסט לא יישב על החזית); צבעי המתכת הם משתני `--g-*` של כל תפקיד ב-style.css.
