@@ -31,6 +31,10 @@ export function GoldBarArt() {
           {stop(0, 'var(--neon-a, #b04dff)', 0)}{stop(0.3, 'var(--neon-a, #b04dff)', 0.75)}{stop(0.5, '#fff', 0.85)}
           {stop(0.7, 'var(--neon-b, #22d8ff)', 0.75)}{stop(1, 'var(--neon-b, #22d8ff)', 0)}
         </linearGradient>
+        <linearGradient id={n('v')} x1="0" y1="0" x2="0" y2="1">
+          {stop(0, 'var(--neon-a, #b04dff)', 0)}{stop(0.3, 'var(--neon-a, #b04dff)', 0.75)}{stop(0.5, '#fff', 0.85)}
+          {stop(0.7, 'var(--neon-b, #22d8ff)', 0.75)}{stop(1, 'var(--neon-b, #22d8ff)', 0)}
+        </linearGradient>
         <linearGradient id={n('g')} x1="0" y1="0" x2="1" y2="1">
           {stop(0, 'var(--neon-a, #b04dff)', 0.28)}{stop(0.5, 'var(--neon-a, #b04dff)', 0.04)}{stop(1, 'var(--neon-b, #22d8ff)', 0.34)}
         </linearGradient>
@@ -38,13 +42,21 @@ export function GoldBarArt() {
       <g clipPath={url('c')}>
         {/* נוער: בוהק ניאון קבוע ועדין, וברק שעובר על המטיל ונשבר בנפרד על כל משטח שלו */}
         <rect className="gb-glow" x="0" y="0" width="202" height="124" fill={url('g')} />
-        {Object.keys(FACES).map((k) => (
+        {/* חזית ומשטח עליון: פס אנכי מוטה שנע לרוחב */}
+        {['front', 'top'].map((k) => (
           <g key={k} clipPath={url(k)}>
-            <g className="gb-shine" style={{ opacity: SHINE[k].o }}>
+            <g className="gb-shine">
               <rect x={-60 - SHINE[k].w} y="0" width={SHINE[k].w} height="140" transform={`skewX(${SHINE[k].skew})`} fill={url('s')} />
             </g>
           </g>
         ))}
+        {/* צדדים משופעים: פס אלכסוני שיורד לאורך השיפוע מלמעלה עד למטה, ומתחיל כשהברק מהחזית מגיע לקצה */}
+        <g clipPath={url('right')}>
+          <g className="gb-side gb-side-r"><rect x="120" y="-13" width="130" height="26" transform="rotate(-28 185 0)" fill={url('v')} /></g>
+        </g>
+        <g clipPath={url('left')}>
+          <g className="gb-side gb-side-l"><rect x="-60" y="-13" width="130" height="26" transform="rotate(28 5 0)" fill={url('v')} /></g>
+        </g>
       </g>
       {/* נוער: קו מתאר ניאון דק לאורך המתאר המעוגל */}
       <path className="gb-rim" d={OUTLINE} fill="none" strokeWidth="1" vectorEffect="non-scaling-stroke" />
