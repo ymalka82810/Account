@@ -707,8 +707,6 @@
  "איחוד עם הפנקס": "Merge with the notebook",
  "בפנקס יש רישומים על “{name}”": "The notebook has entries for “{name}”",
  "בפנקס: “{a}”. בקופה: “{b}”.": "Notebook: “{a}”. Wallet: “{b}”.",
- "הוספת בני משפחה": "Add family members",
- "הקופה נפתחה! נוסיף עכשיו את בני המשפחה: ילדים, בני נוער והורה נוסף. אפשר גם אחר כך, מלשונית “ניהול”.": "The wallet is open! Let's add the family members now: children, teens and another parent. You can also do it later from the “Manage” tab.",
  "זה אותו אדם כמו “{name}”?": "Is this the same person as “{name}”?",
  "זה אותו אדם? אם כן, באיזה שם להשתמש?": "Is this the same person? If so, which name should be used?",
  "יש בפנקס האישי חובות על שמות של בני המשפחה": "The personal notebook has debts under names of family members",
@@ -858,5 +856,12 @@
  "יש אנשים שאתם חייבים להם וגם הם חייבים לכם. קיזוז סוגר את החובות ההדדיים ומשאיר רק את ההפרש.": "Some people owe you and you owe them. Offsetting closes the mutual debts and leaves only the difference.",
  "אני חייב {a} • חייב/ת לי {b}": "I owe {a} • owes me {b}",
  "⚖️ קיזוז ({amount})": "⚖️ Offset ({amount})",
- "קוזזו {amount} מול {name} ✅": "Offset {amount} with {name} ✅"
+ "קוזזו {amount} מול {name} ✅": "Offset {amount} with {name} ✅",
+ "הקופה נפתחה! כתבו את שמות הילדים. נער/ה או הורה נוסף אפשר להוסיף למטה, או אחר כך מלשונית “ניהול”.": "The wallet is open! Write your children’s names. You can add a teen or another parent below, or later from the “Manage” tab.",
+ "מי הילדים שלך?": "Who are your children?",
+ "הוספת ילד/ה": "Add a child",
+ "✅ כל הילדים נכנסים בינתיים עם אותו קוד סודי. אפשר להוסיף עוד ילדים.": "✅ All the children sign in with the same secret code for now. You can add more children.",
+ "קוד סודי אחד לכל הילדים ({rule})": "One secret code for all the children ({rule})",
+ "בינתיים כל הילדים יקבלו אותו קוד. כשתרצו לתת לכל ילד את המשתמש שלו, תאפסו לו את הקוד מלשונית “ניהול”, והוא יבחר קוד משלו.": "For now all the children get the same code. When you want to give each child their own user, reset their code from the “Manage” tab and they will choose their own.",
+ "להוסיף גם נער/ה או הורה נוסף": "Also add a teen or another parent"
 }

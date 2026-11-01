@@ -228,7 +228,7 @@ function Root() {
   useEffect(() => {
     if (!welcomeReady) return;
     state.justCreatedFamily = false;
-    sheet.open(t('הוספת בני משפחה'), <FamilyWelcome />);
+    sheet.open(t('מי הילדים שלך?'), <FamilyWelcome />);
   }, [welcomeReady]); // eslint-disable-line react-hooks/exhaustive-deps
   // אייקון לפי המטבע: של המשפחה אחרי כניסה, אם הוגדר לה מיקום (ונשמר לפעם הבאה). אחרת האחרון שנשמר,
   // או לפי המיקום של המכשיר, ואם גם הוא לא ידוע - דולר.
