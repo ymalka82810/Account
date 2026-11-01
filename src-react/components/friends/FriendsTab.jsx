@@ -127,8 +127,8 @@ export default function FriendsTab({ data, fdata, token }) {
   return (
     <>
       <div className="summary">
-        <div className="sum owe"><GoldBarArt /><div className="lbl">{g(data.me.gender, 'אני חייב לחברים', 'אני חייבת לחברים', 'אני חייב/ת לחברים')}</div><SumNum>{money(owe, 'ILS')}</SumNum></div>
-        <div className="sum get"><GoldBarArt /><div className="lbl">{t('חברים חייבים לי')}</div><SumNum>{money(get, 'ILS')}</SumNum></div>
+        <div className="sum owe"><GoldBarArt /><div className="lbl">{g(data.me.gender, 'אני חייב לחברים', 'אני חייבת לחברים', 'אני חייב/ת לחברים')}</div><SumNum amount={owe} cur="ILS" /></div>
+        <div className="sum get"><GoldBarArt /><div className="lbl">{t('חברים חייבים לי')}</div><SumNum amount={get} cur="ILS" /></div>
       </div>
       <div className="bigbtns">
         <button className="bigbtn owe" type="button" onClick={() => startFlow({ kind: 'debt', from: me })}>

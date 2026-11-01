@@ -1,4 +1,6 @@
-import { useId } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { money } from '../../lib/computations.js';
 
 // מטיל הזהב עצמו (המתכת, הפאות והחותמת 999.9) הוא תמונה שרונדרה ב-Blender (public/bars/<theme>-<get|owe>.webp,
 // ראו scripts/blender/bar.py), ונקבעת ב-CSS לפי תפקיד וסוג (.sum::before). הגיאומטריה של התמונה זהה לקו המתאר
@@ -56,8 +58,80 @@ export function GoldBarArt() {
   );
 }
 
-// סכום בתוך מטיל: הגופן קטן אוטומטית לפי אורך הטקסט כדי שלא יגלוש מהמטיל (ראו --len ב-CSS)
-export function SumNum({ children }) {
-  const text = String(children ?? '');
-  return <div className="num" style={{ '--len': Math.max(text.length, 5) }}>{text}</div>;
+const reducedMotion = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// המספר "רץ" מהערך שמוצג עכשיו אל הערך החדש (אגורות, כך שגם הספרות הקטנות רצות).
+// מתחיל אחרי רגע קצר, כדי שחלון התשלום יספיק להיסגר ולא יסתיר את האנימציה.
+function useCountUp(/** @type {number} */ target) {
+  const [val, setVal] = useState(target);
+  const cur = useRef(target);
+  useEffect(() => {
+    if (cur.current === target) return undefined;
+    if (reducedMotion()) { cur.current = target; setVal(target); return undefined; }
+    const from = cur.current;
+    const diff = target - from;
+    const dur = 1300;
+    const t0 = performance.now() + 350;
+    let raf = 0;
+    const step = (/** @type {number} */ now) => {
+      const p = Math.min(1, Math.max(0, (now - t0) / dur));
+      cur.current = p >= 1 ? target : from + diff * (1 - Math.pow(1 - p, 3));
+      setVal(cur.current);
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [target]);
+  return val;
+}
+
+// כשהסכום יורד (תשלום), מטבעות קטנים עולים מהמטיל כלפי מעלה. מצויר ב-portal כדי לא להיחתך ב-overflow של המטיל.
+function useCoinBurst(/** @type {number} */ amount, /** @type {import('react').RefObject<HTMLElement | null>} */ ref) {
+  const prev = useRef(amount);
+  const [burst, setBurst] = useState(/** @type {null | { id: number, x: number, y: number, coins: { dx: number, rise: number, delay: number, size: number, dur: number, rot: number }[] }} */ (null));
+  useEffect(() => {
+    const was = prev.current;
+    prev.current = amount;
+    if (!(amount < was) || reducedMotion() || !ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    const share = was > 0 ? (was - amount) / was : 1;
+    const n = Math.round(10 + share * 12);
+    const rnd = (/** @type {number} */ a, /** @type {number} */ b) => a + Math.random() * (b - a);
+    const id = Date.now();
+    setBurst({
+      id, x: r.left + r.width / 2, y: r.top + r.height / 2,
+      coins: Array.from({ length: n }, () => ({
+        dx: rnd(-70, 70), rise: rnd(110, 240), delay: rnd(300, 900), size: rnd(14, 26), dur: rnd(1100, 1700), rot: rnd(-300, 300),
+      })),
+    });
+    setTimeout(() => setBurst((b) => (b && b.id === id ? null : b)), 3000);
+  }, [amount, ref]);
+  if (!burst) return null;
+  return createPortal(
+    <div className="coin-burst" aria-hidden="true" style={{ left: burst.x, top: burst.y }}>
+      {burst.coins.map((c, i) => (
+        <img key={i} className="coin-burst__c" src="coin.webp" alt="" draggable="false"
+          style={/** @type {import('react').CSSProperties} */ ({ '--dx': c.dx + 'px', '--rise': c.rise + 'px', '--s': c.size + 'px', '--d': c.dur + 'ms', '--delay': c.delay + 'ms', '--rot': c.rot + 'deg' })} />
+      ))}
+    </div>,
+    document.body,
+  );
+}
+
+// סכום בתוך מטיל: הגופן קטן אוטומטית לפי אורך הטקסט כדי שלא יגלוש מהמטיל (ראו --len ב-CSS).
+// עם amount (באגורות) ו-cur: כשהסכום משתנה המספר רץ אל הערך החדש, ובירידה (תשלום) מטבעות קטנים עולים מהמטיל.
+export function SumNum({ children, amount, cur }) {
+  const animated = typeof amount === 'number';
+  const ref = useRef(null);
+  const shown = useCountUp(animated ? amount : 0);
+  const burst = useCoinBurst(animated ? amount : 0, ref);
+  const final = animated ? money(amount, cur) : String(children ?? '');
+  const text = animated ? money(Math.round(shown), cur) : final;
+  // האורך נקבע לפי הסכום הסופי, כדי שהגופן לא יקפץ בזמן הריצה
+  return (
+    <>
+      <div className="num" ref={ref} style={{ '--len': Math.max(final.length, 5) }}>{text}</div>
+      {burst}
+    </>
+  );
 }

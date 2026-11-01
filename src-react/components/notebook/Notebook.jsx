@@ -113,8 +113,8 @@ function Home({ nb, onSettings, pulling, returned, family }) {
       </div>
 
       <div className="summary">
-        <div className="sum owe"><GoldBarArt /><div className="lbl">{t('אני חייב')}</div><SumNum>{money(sum('iowe'), cur)}</SumNum></div>
-        <div className="sum get"><GoldBarArt /><div className="lbl">{t('חייבים לי')}</div><SumNum>{money(sum('owed'), cur)}</SumNum></div>
+        <div className="sum owe"><GoldBarArt /><div className="lbl">{t('אני חייב')}</div><SumNum amount={sum('iowe')} cur={cur} /></div>
+        <div className="sum get"><GoldBarArt /><div className="lbl">{t('חייבים לי')}</div><SumNum amount={sum('owed')} cur={cur} /></div>
       </div>
 
       <div className="bigbtns">

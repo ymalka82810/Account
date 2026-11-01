@@ -55,8 +55,8 @@ export default function Home({ data, token }) {
   return (
     <>
       <div className="summary">
-        <div className="sum owe"><GoldBarArt /><div className="lbl">{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')}</div><SumNum>{money(owe)}</SumNum></div>
-        <div className="sum get"><GoldBarArt /><div className="lbl">{t('חייבים לי')}</div><SumNum>{money(get)}</SumNum></div>
+        <div className="sum owe"><GoldBarArt /><div className="lbl">{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')}</div><SumNum amount={owe} /></div>
+        <div className="sum get"><GoldBarArt /><div className="lbl">{t('חייבים לי')}</div><SumNum amount={get} /></div>
       </div>
 
       <div className="bigbtns">
