@@ -1088,8 +1088,6 @@ body[data-theme="teen"] .sum.get { --g-hi: #fffbd0; --g-1: #ffe94d; --g-2: #ffc4
 body[data-theme="teen"] .sum.owe { --g-hi: #ffeadb; --g-1: #ffc9a3; --g-2: #ff9a5c; --g-3: #ff6a3d; --g-ink: #2a0d00; }
 body[data-theme="teen"] .sum .lbl { font-size: .9rem; }
 body[data-theme="teen"] .sum .num { font-size: 1.6rem; text-shadow: 0 1px 0 rgba(255, 255, 255, .4); }
-/* הברק מתמזג עם הגוון של המתכת שמתחתיו (screen), כך שהוא עוקב אחרי הנפח במקום להיות צבע שטוח מעליו */
-body[data-theme="teen"] .gb-art { mix-blend-mode: screen; }
 body[data-theme="teen"] .gb-shine { display: inline; filter: blur(1.2px); animation: gb-shine 7s ease-in-out infinite; }
 body[data-theme="teen"] .gb-glow { display: inline; }
 @keyframes gb-shine { 0%, 40% { transform: translateX(0); } 100% { transform: translateX(340px); } }
