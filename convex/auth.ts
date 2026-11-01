@@ -77,6 +77,7 @@ export const enter = mutation({
     const people = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", found.family._id)).collect();
     return {
       ok: true as const,
+      familyId: found.family._id,
       familyName: found.family.name,
       // מה שנשמר במכשיר לכניסות הבאות: כרטיס כניסה, אף פעם לא קוד ההצטרפות.
       loginCode: found.passId ? code : remember ? await issuePass(ctx, found.family._id, label) : undefined,
@@ -329,7 +330,8 @@ export const deviceCard = mutation({
   handler: async (ctx, { token }) => {
     const me = await getSessionPerson(ctx, token);
     if (!me || !me.familyId) return { ok: false as const };
-    return { ok: true as const, loginCode: await issuePass(ctx, me.familyId) };
+    const family = await ctx.db.get(me.familyId);
+    return { ok: true as const, loginCode: await issuePass(ctx, me.familyId), familyId: me.familyId, familyName: family?.name ?? "" };
   },
 });
 

@@ -2,11 +2,13 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import { state, LAST_ROLE_KEY, LAST_PALETTE_KEY, THEME_COLOR, tabLabels, subscribeAuth, authVersion, bumpAuth } from './state/state.js';
 import { t } from './i18n/index.js';
 import { call, callAction, useQuery } from './lib/api.js';
-import { toast } from './lib/helpers.js';
+import { toast, errMsg } from './lib/helpers.js';
 import { restoreFamily, startPin, autoSkipPerson, dropSession, endDemo } from './state/auth.js';
 import { syncPush } from './lib/push.js';
 import { client } from './lib/client.js';
 import { isDemo } from './lib/demo.js';
+import { upsertMembership, forgetMembershipByToken, syncTargets } from './lib/memberships.js';
+import { getCards, upsertCard } from './lib/cards.js';
 import { isPending, setFx } from './lib/computations.js';
 import { applyAppIcon, deviceCurrency } from './lib/appIcon.js';
 import { AppCtx, useApp } from './state/appContext.js';
@@ -261,19 +263,43 @@ function Root() {
 
   useEffect(() => { sheet.setAppCtx(ctx); }, [ctx]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ילד/ה שאישר/ה שההורים יראו את הפנקס האישי: עותק נשלח אחרי כל שינוי (בהשהיה קצרה), לצפייה בלבד.
+  // המשפחה הנוכחית נרשמת ברשימת המשפחות של המכשיר (ילד/ה בהורים גרושים מחובר/ת לשתיים).
   const shareNb = screen === 'app' && !!data.me.notebookShared && !isDemo(token);
+  useEffect(() => {
+    if (screen !== 'app' || isDemo(token)) return;
+    upsertMembership({
+      personId: data.me.id, token, familyId: data.family.id, familyName: data.family.name, name: data.me.name,
+      avatar: data.me.avatar || '', role: data.me.role, shared: !!data.me.notebookShared,
+    });
+  }, [screen, token, data]); // eslint-disable-line react-hooks/exhaustive-deps
+  // כל משפחה שהמכשיר מחובר אליה מקבלת כרטיס כניסה שנשאר במכשיר, כדי שהמעבר אליה (גם אחרי יציאה) לא יבקש את קוד המשפחה.
+  const famId = screen === 'app' ? data.family.id : '';
+  const famName = screen === 'app' ? data.family.name : '';
+  useEffect(() => {
+    if (!famId || isDemo(token) || getCards().some((c) => c.familyId === famId)) return;
+    call('auth:deviceCard', { token }).then((r) => {
+      if (r && r.ok && r.loginCode) upsertCard({ familyId: String(r.familyId), name: r.familyName || famName, card: r.loginCode });
+    }).catch(() => {});
+  }, [famId, token]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (screen !== 'app') return;
     try { if (shareNb) localStorage.setItem(NB_SHARED_KEY, '1'); else localStorage.removeItem(NB_SHARED_KEY); } catch (e) { /* מצב פרטי */ }
   }, [shareNb, screen]);
+  // צפייה חיה: אחרי כל שינוי בפנקס (בהשהיה קצרה) נשלח עותק לכל משפחה שהילד/ה אישר/ה בה, לצפייה בלבד.
+  // כל משפחה מקבלת עותק נפרד דרך הטוקן שלה, וגם כשהמכשיר מחובר כרגע רק לאחת מהן.
   useEffect(() => {
-    if (!shareNb) return undefined;
+    if (isDemo(token)) return undefined;
     const id = setTimeout(() => {
-      call('notebook:sync', { token, data: JSON.stringify({ entries: nb.entries, currency: nb.currency }) }).catch(() => {});
+      const payload = JSON.stringify({ entries: nb.entries, currency: nb.currency });
+      for (const m of syncTargets()) {
+        client.mutation(/** @type {any} */ ('notebook:sync'), { token: m.token, data: payload }).catch((e) => {
+          // הכניסה למשפחה הזאת פגה: מוותרים עליה עד שהילד/ה ייכנס/תיכנס אליה שוב.
+          if (errMsg(e).includes('צריך להיכנס מחדש')) forgetMembershipByToken(m.token);
+        });
+      }
     }, 1500);
     return () => clearTimeout(id);
-  }, [shareNb, token, nb.entries, nb.currency]);
+  }, [token, shareNb, nb.entries, nb.currency]);
 
   return (
     <>

@@ -4,7 +4,9 @@ import LanguagePicker from '../shared/LanguagePicker.jsx';
 import { call } from '../../lib/api.js';
 import { state, CODE_KEY } from '../../state/state.js';
 import { toast, errMsg } from '../../lib/helpers.js';
-import { dropSession } from '../../state/auth.js';
+import { dropSession, goToFamily, otherFamilies, addAnotherFamily } from '../../state/auth.js';
+import { getMemberships } from '../../lib/memberships.js';
+import { getCards, upsertCard } from '../../lib/cards.js';
 import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../../lib/push.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
@@ -51,12 +53,18 @@ function PaletteSheet() {
 
 export async function logout() {
   await releasePushDevice();
-  // אם המכשיר לא שמר את המשפחה (למשל הקמת משפחה חדשה), מקבלים כרטיס כניסה לפני היציאה,
-  // כדי שהיציאה תחזיר למסך הבחירה בין בני המשפחה ולא תזרוק מהמשפחה.
-  if (!localStorage.getItem(CODE_KEY)) {
+  // אחרי היציאה חוזרים למסך הבחירה במשפחה שיצאנו ממנה, לפי הכרטיס שלה שנשאר במכשיר.
+  // אם עוד אין כרטיס כזה (למשל הקמת משפחה חדשה), מקבלים אחד לפני היציאה.
+  const m = getMemberships().find((x) => x.token === state.token);
+  const saved = m && getCards().find((c) => c.familyId === m.familyId);
+  if (saved) localStorage.setItem(CODE_KEY, saved.card);
+  else if (!localStorage.getItem(CODE_KEY) || m) {
     try {
       const r = await call('auth:deviceCard', { token: state.token });
-      if (r && r.ok && r.loginCode) localStorage.setItem(CODE_KEY, r.loginCode);
+      if (r && r.ok && r.loginCode) {
+        localStorage.setItem(CODE_KEY, r.loginCode);
+        upsertCard({ familyId: String(r.familyId), name: r.familyName, card: r.loginCode });
+      }
     } catch (e) { /* ignore */ }
   }
   try { await call('auth:logout', { token: state.token }); } catch (e) { /* ignore */ }
@@ -129,6 +137,16 @@ export function AccountSheet() {
           {me.email ? t('✉️ מייל לשחזור: {email}', { email: me.email }) : t('✉️ הוספת מייל לשחזור קוד')}
         </button>
       )}
+
+      {otherFamilies(data.family.id).map((f) => (
+        <button key={f.familyId} className="ghost" type="button"
+          onClick={async () => { const err = await goToFamily(f); if (err) toast(err); else sheet.close(); }}>
+          {t('🏠 מעבר למשפחת {family}', { family: f.name })}
+        </button>
+      ))}
+      <button className="ghost" type="button" onClick={() => { sheet.close(); addAnotherFamily(); }}>
+        {t('➕ הצטרפות למשפחה נוספת')}
+      </button>
 
       <AsyncButton className="ghost" onClick={async () => { sheet.close(); await logout(); }}>{t('יציאה')}</AsyncButton>
 

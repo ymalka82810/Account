@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { state } from '../../state/state.js';
-import { goView, leaveFamily, startPin, openNotebook } from '../../state/auth.js';
+import { goView, leaveToWelcome, startPin, openNotebook } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 
 export default function Login({ current }) {
   const fam = state.fam;
   return (
     <In screen="login" current={current}>
-      <button className="ghost back" type="button" onClick={leaveFamily}>{t('→ משפחה אחרת')}</button>
+      <button className="ghost back" type="button" onClick={leaveToWelcome}>{t('→ משפחה אחרת')}</button>
       <div className="big-emoji" aria-hidden="true">🪙</div>
       <h1>{fam ? fam.name : t('הקופה המשפחתית')}</h1>
       <p className="hint">{t('מי נכנס/ת?')}</p>

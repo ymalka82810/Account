@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { t } from '../../i18n/index.js';
 import { state, CODE_KEY, TOKEN_KEY } from '../../state/state.js';
 import { prettyCode } from '../../lib/helpers.js';
-import { submitFamilyCode, goView, startPin, openNotebook, startDemo } from '../../state/auth.js';
+import { submitFamilyCode, goView, startPin, openNotebook, startDemo, goToFamily, otherFamilies } from '../../state/auth.js';
 import LanguagePicker from '../shared/LanguagePicker.jsx';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 
@@ -52,6 +52,12 @@ export default function Welcome({ current }) {
             <button className="primary" type="submit" disabled={busy} aria-busy={busy}>{busy ? t('⏳ רגע…') : t('כניסה')}</button>
           </form>
         </details>
+        {otherFamilies().map((f) => (
+          <button key={f.familyId} className="ghost" type="button"
+            onClick={async () => { const err = await goToFamily(f); if (err) setError(err); }}>
+            {t('↩️ חזרה למשפחת {family}', { family: f.name })}
+          </button>
+        ))}
         {parents.length > 0 && (
           <div className="card notice">
             <p><strong>{t('כבר משתמשים בקופה?')}</strong> {t('הורה נכנס כאן, ואז מקבלים קודים לשאר המשפחה.')}</p>
