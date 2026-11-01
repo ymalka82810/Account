@@ -19,7 +19,7 @@ export function FriendApproveSheet({ person: p }) {
     <div className="form">
       <p className="hint">{g(p.gender, '{name} יוכל להוסיף חברים לפי מייל ולרשום איתם חובות. כל רישום ממתין גם לאישור של החבר/ה, ואתם רואים אותם בסקירה. אפשר לכבות בכל רגע.', '{name} תוכל להוסיף חברים לפי מייל ולרשום איתם חובות. כל רישום ממתין גם לאישור של החבר/ה, ואתם רואים אותם בסקירה. אפשר לכבות בכל רגע.', '{name} יוכל/תוכל להוסיף חברים לפי מייל ולרשום איתם חובות. כל רישום ממתין גם לאישור של החבר/ה, ואתם רואים אותם בסקירה. אפשר לכבות בכל רגע.', { name: p.name })}</p>
       <Field label={t('המייל של {name}', { name: p.name })}>
-        <input type="email" dir="ltr" autoComplete="off" placeholder="name@example.com" maxLength={254} value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input type="text" inputMode="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" dir="ltr" autoComplete="off" placeholder="name@example.com" maxLength={254} value={email} onChange={(e) => setEmail(e.target.value)} />
       </Field>
       <p className="hint">{g(p.gender, 'חברים מוסיפים את הנער לפי המייל הזה. לא נשלח אליו שום דבר, הוא משמש רק לחיפוש.', 'חברים מוסיפים את הנערה לפי המייל הזה. לא נשלח אליו שום דבר, הוא משמש רק לחיפוש.', 'חברים מוסיפים את הנער/ה לפי המייל הזה. לא נשלח אליו שום דבר, הוא משמש רק לחיפוש.')}</p>
       {err && <Err>{err}</Err>}

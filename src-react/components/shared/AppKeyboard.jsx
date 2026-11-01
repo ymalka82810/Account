@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { t, currentLang, LANGUAGES } from '../../i18n/index.js';
 import {
   LAYOUTS, LAYOUT_LABEL, layoutOrder, hasCase, isKbTarget, kindOf, applyKey, wantsAutoShift, symbolRows,
+  currentWord, suggest, applySuggestion, learnWord, personalWords,
 } from '../../lib/keyboard.js';
 
 // המקלדת של האפליקציה. מחליפה את מקלדת המערכת בכל שדה טקסט, ונראית לפי התפקיד (ילד/נוער/הורה, ראו .kb ב-style.css).
@@ -10,6 +11,20 @@ import {
 // איך מסתירים את מקלדת המערכת: inputmode="none" על השדה (נשמר המקור ב-data-kb-im). שדה עם data-native-kb נשאר עם מקלדת המערכת.
 
 const DIGITS = [...'1234567890'];
+
+// רשימות המילים הנפוצות להשלמה (public/words/<שפה>.txt), נטענות פעם אחת לשפה כשצריך.
+const WORD_LANGS = new Set(['he', 'en', 'fr', 'nl', 'de', 'it', 'es', 'pt', 'el', 'ru', 'uk', 'sv', 'nb', 'da', 'pl', 'hu', 'cs', 'tr', 'ar']);
+const dicts = /** @type {Record<string, string[] | Promise<string[]>>} */ ({});
+function loadDict(/** @type {string} */ key) {
+  if (!dicts[key]) {
+    dicts[key] = fetch(new URL(`words/${key}.txt`, document.baseURI))
+      .then((r) => (r.ok ? r.text() : ''))
+      .then((txt) => { const a = txt.split('\n').filter(Boolean); dicts[key] = a; return a; })
+      .catch(() => { delete dicts[key]; return /** @type {string[]} */ ([]); });
+  }
+  return Promise.resolve(dicts[key]);
+}
+const caretOf = (/** @type {any} */ el) => { try { return el.selectionStart ?? el.value.length; } catch { return el.value.length; } };
 
 function arm(/** @type {any} */ el) {
   if (el.getAttribute('inputmode') === 'none') return;
@@ -48,6 +63,8 @@ export default function AppKeyboard() {
   const [page, setPage] = useState('abc'); // abc | sym
   const [li, setLi] = useState(0); // מקום בסדר הפריסות של הגלובוס
   const [shift, setShift] = useState(0); // 0 כבוי, 1 לאות אחת, 2 נעול
+  const [, setTick] = useState(0); // רינדור מחדש כשהטקסט או הסמן בשדה משתנים (להצעות)
+  const [dictVer, setDictVer] = useState(0);
   const rootRef = useRef(/** @type {HTMLDivElement | null} */ (null));
   const targetRef = useRef(/** @type {any} */ (null));
   const switching = useRef(false);
@@ -81,6 +98,20 @@ export default function AppKeyboard() {
         if (!isKbTarget(a) || /** @type {any} */ (a).dataset.kbSys) hide();
       }, 0);
     };
+    // מסתירים את מקלדת המערכת מראש בכל שדה, לא רק כשהוא מקבל פוקוס: שינוי inputmode אחרי שהמקלדת של הטלפון כבר עלתה
+    // לא תמיד מסתיר אותה. שדה שנוצר עם autoFocus מקבל את אותו טיפול דרך focus().
+    const scan = (/** @type {any} */ root) => {
+      if (isKbTarget(root) && !root.dataset.kbSys) arm(root);
+      root.querySelectorAll?.('input, textarea').forEach((/** @type {any} */ f) => { if (isKbTarget(f) && !f.dataset.kbSys) arm(f); });
+    };
+    scan(document.body);
+    const mo = new MutationObserver((muts) => muts.forEach((m) => m.addedNodes.forEach((n) => { if (n.nodeType === 1) scan(n); })));
+    mo.observe(document.body, { childList: true, subtree: true });
+    const origFocus = HTMLElement.prototype.focus;
+    HTMLElement.prototype.focus = function focus(...a) {
+      if (isKbTarget(this) && !(/** @type {any} */ (this)).dataset.kbSys) arm(this);
+      return origFocus.apply(this, a);
+    };
     document.addEventListener('pointerdown', onDown, true);
     document.addEventListener('focusin', onIn);
     document.addEventListener('focusout', onOut);
@@ -90,6 +121,8 @@ export default function AppKeyboard() {
       document.removeEventListener('pointerdown', onDown, true);
       document.removeEventListener('focusin', onIn);
       document.removeEventListener('focusout', onOut);
+      mo.disconnect();
+      HTMLElement.prototype.focus = origFocus;
     };
   }, [hide, show]);
 
@@ -110,6 +143,22 @@ export default function AppKeyboard() {
   const order = layoutOrder(lang, kind);
   const layout = order[Math.min(li, order.length - 1)];
   const letters = layout === 'sys' ? 'en' : layout;
+  // רשימת המילים: פריסה אנגלית בממשק של שפה לטינית אחרת (למשל צרפתית) משתמשת במילים של אותה שפה
+  const dictKey = letters === 'en' && WORD_LANGS.has(lang) && lang !== 'he' ? lang : letters;
+  const wantsSuggest = kind === 'text' && !!target && target.type !== 'password' && WORD_LANGS.has(dictKey);
+
+  useEffect(() => {
+    if (!target) return undefined;
+    const bump = () => setTick((n) => n + 1);
+    ['input', 'click', 'keyup'].forEach((ev) => target.addEventListener(ev, bump));
+    return () => ['input', 'click', 'keyup'].forEach((ev) => target.removeEventListener(ev, bump));
+  }, [target]);
+  useEffect(() => {
+    if (!wantsSuggest) return undefined;
+    let live = true;
+    loadDict(dictKey).then(() => { if (live) setDictVer((n) => n + 1); });
+    return () => { live = false; };
+  }, [wantsSuggest, dictKey]);
 
   const afterKey = useCallback((/** @type {any} */ el) => {
     setShift((s) => (s === 2 ? 2 : (kind === 'text' && wantsAutoShift(el.value.slice(0, el.selectionStart ?? el.value.length)) ? 1 : 0)));
@@ -121,8 +170,21 @@ export default function AppKeyboard() {
     if (key === 'enter') return enter(el);
     let ch = key;
     if (el.getAttribute('autocapitalize') === 'characters') ch = ch.toUpperCase();
-    const r = applyKey(readState(el), ch, kind);
+    const st = readState(el);
+    const r = applyKey(st, ch, kind);
     if (!r) return;
+    // מילה שנגמרה (רווח או פיסוק) נזכרת להצעות הבאות
+    if (kind === 'text' && el.type !== 'password' && /^[\s.,!?;:]$/.test(ch)) learnWord(currentWord(st.value.slice(0, st.start)));
+    commit(el, r);
+    afterKey(el);
+  }
+
+  function pick(/** @type {string} */ word) {
+    const el = targetRef.current;
+    if (!el || !el.isConnected) return;
+    const r = applySuggestion(readState(el), word);
+    if (!r) return;
+    learnWord(word);
     commit(el, r);
     afterKey(el);
   }
@@ -191,6 +253,12 @@ export default function AppKeyboard() {
   const delKey = Key({ k: 'del', label: '⌫', cls: 'kb-del', aria: t('מחיקה'), grow: 1.5 });
   const tap = (/** @type {() => void} */ fn) => (/** @type {any} */ e) => { e.preventDefault(); fn(); };
 
+  const sugg = wantsSuggest
+    ? suggest(currentWord((target.value || '').slice(0, caretOf(target))),
+      [personalWords(), /** @type {string[]} */ (Array.isArray(dicts[dictKey]) ? dicts[dictKey] : [])])
+    : [];
+  void dictVer;
+
   let body;
   if (kind === 'num' || kind === 'dec') {
     const cell = (/** @type {string} */ k) => Key({ k, cls: 'kb-digit' });
@@ -212,6 +280,13 @@ export default function AppKeyboard() {
     const compact = kind === 'email' || kind === 'latin';
     body = (
       <div className="kb-letters">
+        {wantsSuggest && (
+          <div className="kb-sugg" dir={letters === 'he' || letters === 'ar' ? 'rtl' : 'ltr'}>
+            {sugg.map((w) => (
+              <button key={w} type="button" tabIndex={-1} className="kb-sug" onPointerDown={tap(() => pick(w))} onMouseDown={keep} onClick={keep}>{w}</button>
+            ))}
+          </div>
+        )}
         {!onSym && <div className="kb-row kb-row-digits">{DIGITS.map((d) => Key({ k: d, cls: 'kb-digit' }))}</div>}
         {rows.map((r, i) => (
           <div className="kb-row" key={i}>

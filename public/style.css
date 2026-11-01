@@ -1313,3 +1313,16 @@ body[data-theme="teen"] .kb-key { border: 1px solid var(--kb-key-edge); border-r
 body[data-theme="teen"] .kb-key.kb-fn, body[data-theme="teen"] .kb-key.kb-del { border-color: var(--kb-fn-edge); }
 body[data-theme="teen"] .kb-key.kb-enter { border-color: transparent; }
 body[data-theme="teen"] .kb-key:active { transform: none; background: var(--neon-grad); color: var(--neon-ink); border-color: transparent; box-shadow: 0 0 14px var(--neon-glow); filter: none; }
+
+/* הצעות להשלמת מילים מעל המקשים: שלוש הצעות, הטובה ביותר בצד שבו מתחילים לקרוא (ימין בעברית וערבית) */
+.kb-sugg { display: flex; gap: var(--kb-gap); height: 34px; margin-bottom: var(--kb-gap); }
+.kb-sug {
+  flex: 1 1 0; max-width: calc((100% - 2 * var(--kb-gap)) / 3); min-width: 0; padding: 0 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font: inherit; font-size: 1.05rem; font-weight: 600; color: var(--kb-ink);
+  background: rgba(255, 255, 255, .55); border: 0; border-radius: 10px; cursor: pointer; touch-action: manipulation;
+}
+.kb-sug:active { background: rgba(255, 255, 255, .9); }
+body[data-theme="parent"] .kb-sug { background: #12151a; border: 1px solid #262b33; border-radius: 6px; }
+body[data-theme="parent"] .kb-sug:active { background: #232a33; border-color: var(--coin); }
+body[data-theme="teen"] .kb-sug { background: rgba(255, 255, 255, .06); border: 1px solid var(--kb-fn-edge); border-radius: 12px; }
+body[data-theme="teen"] .kb-sug:active { background: var(--neon-grad); color: var(--neon-ink); border-color: transparent; }

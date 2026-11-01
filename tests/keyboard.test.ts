@@ -111,3 +111,32 @@ describe("פריסות", () => {
     expect(symbolRows("en", "email").flat()).toContain("@");
   });
 });
+
+import { currentWord, suggest, applySuggestion } from "../src-react/lib/keyboard.js";
+
+describe("השלמת מילים", () => {
+  it("מזהה את המילה שלפני הסמן", () => {
+    expect(currentWord("שלום עול")).toBe("עול");
+    expect(currentWord("hello wor")).toBe("wor");
+    expect(currentWord("שלום ")).toBe("");
+    expect(currentWord("don't")).toBe("don't");
+  });
+  it("מציע מילים שמתחילות באותן אותיות, אישיות קודם", () => {
+    expect(suggest("גל", [["גלית"], ["גלידה", "גלריה", "גלגל", "גלים"]])).toEqual(["גלית", "גלידה", "גלריה"]);
+  });
+  it("לא מציע לפני שתי אותיות, ולא את המילה שכבר הוקלדה", () => {
+    expect(suggest("ג", [["גלידה"]])).toEqual([]);
+    expect(suggest("גלידה", [["גלידה"]])).toEqual([]);
+  });
+  it("שומר על אות ראשונה גדולה", () => {
+    expect(suggest("Ic", [["ice", "icy"]])).toEqual(["Ice", "Icy"]);
+  });
+  it("השלמה מחליפה את תחילת המילה ומוסיפה רווח", () => {
+    const s = { value: "קניתי גל", start: 8, end: 8, max: Infinity };
+    expect(applySuggestion(s, "גלידה")).toEqual({ value: "קניתי גלידה ", caret: 12 });
+  });
+  it("לא מכפילה רווח קיים ומכבדת אורך מרבי", () => {
+    expect(applySuggestion({ value: "גל אחר", start: 2, end: 2, max: Infinity }, "גלידה")).toEqual({ value: "גלידה אחר", caret: 5 });
+    expect(applySuggestion({ value: "גל", start: 2, end: 2, max: 4 }, "גלידה")).toBeNull();
+  });
+});

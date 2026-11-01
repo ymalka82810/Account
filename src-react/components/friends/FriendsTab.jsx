@@ -195,7 +195,7 @@ export default function FriendsTab({ data, fdata, token }) {
         <h3>{t('הוספת חבר/ה')}</h3>
         <p className="hint">{t('כתבו את המייל שהחבר/ה רשמו אצל ההורים שלהם באפליקציה. נשלחת להם בקשה, והם צריכים לאשר. זה עובד רק אם גם לחבר/ה יש מצב חברים.')}</p>
         <label className="field"><span>{t('המייל של החבר/ה')}</span>
-          <input type="email" dir="ltr" maxLength={254} autoComplete="off" placeholder="name@example.com" required
+          <input type="text" inputMode="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" dir="ltr" maxLength={254} autoComplete="off" placeholder="name@example.com" required
             value={email} onChange={(e) => setEmail(e.target.value)} /></label>
         {error && <p className="error" role="alert">{error}</p>}
         <button className="primary" type="submit" disabled={!!busy}>{busy === 'add' ? t('⏳ רגע…') : t('שליחת בקשה')}</button>

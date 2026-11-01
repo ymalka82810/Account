@@ -114,3 +114,73 @@ export function symbolRows(/** @type {string} */ lang, /** @type {string} */ kin
   if (acc) rows.push([...acc]);
   return rows;
 }
+
+// ---------- השלמת מילים ----------
+// המקלדת של המערכת לא חושפת את ההצעות שלה לאפליקציה, אז ההשלמה כאן עצמאית: המילים שהמשתמש כתב בעצמו
+// (נשמרות במכשיר בלבד) ואחריהן רשימת המילים הנפוצות של השפה (public/words/<שפה>.txt).
+
+const WORD_TAIL = /[\p{L}\p{M}][\p{L}\p{M}'’-]*$/u;
+/** המילה (או תחילת המילה) שמסתיימת בסמן. */
+export function currentWord(/** @type {string} */ before) {
+  const m = WORD_TAIL.exec(before);
+  return m ? m[0] : '';
+}
+
+/**
+ * עד limit מילים שמתחילות ב-prefix: קודם המילים האישיות, אחריהן הנפוצות. אות ראשונה גדולה ב-prefix נשמרת בהצעה.
+ * פחות משתי אותיות לא מציעים, ומילה שכבר הוקלדה במלואה לא מוצעת שוב.
+ */
+export function suggest(/** @type {string} */ prefix, /** @type {string[][]} */ lists, limit = 3) {
+  if ([...prefix].length < 2) return [];
+  const low = prefix.toLowerCase();
+  const cap = prefix[0] !== prefix[0].toLowerCase();
+  const out = /** @type {string[]} */ ([]);
+  for (const list of lists) {
+    for (const w of list) {
+      if (w.length <= low.length || !w.toLowerCase().startsWith(low)) continue;
+      const shown = cap ? w[0].toUpperCase() + w.slice(1) : w;
+      if (!out.includes(shown)) out.push(shown);
+      if (out.length >= limit) return out;
+    }
+  }
+  return out;
+}
+
+/** מחליף את תחילת המילה שלפני הסמן במילה המלאה ומוסיף רווח (אלא אם כבר יש רווח אחריה). null אם חורג מהאורך המרבי. */
+export function applySuggestion(/** @type {{ value: string, start: number, end: number, max: number }} */ s, /** @type {string} */ word) {
+  const start = Math.min(s.start, s.end);
+  const prefix = currentWord(s.value.slice(0, start));
+  const rest = s.value.slice(Math.max(s.start, s.end));
+  const tail = /^\s/.test(rest) ? '' : ' ';
+  const value = s.value.slice(0, start - prefix.length) + word + tail + rest;
+  if (value.length > s.max) return null;
+  return { value, caret: start - prefix.length + word.length + tail.length };
+}
+
+const WORDS_KEY = 'kupa-kb-words';
+const MAX_PERSONAL = 300;
+/** @type {Record<string, number> | null} */
+let personal = null;
+function loadPersonal() {
+  if (personal) return personal;
+  try { personal = JSON.parse(localStorage.getItem(WORDS_KEY) || '{}') || {}; } catch { personal = {}; }
+  return /** @type {Record<string, number>} */ (personal);
+}
+/** מילה שהמשתמש סיים להקליד נזכרת להצעות הבאות (במכשיר בלבד). */
+export function learnWord(/** @type {string} */ word) {
+  const w = word.replace(/^['’-]+|['’-]+$/g, '');
+  if ([...w].length < 2 || w.length > 20) return;
+  const map = loadPersonal();
+  const key = w.toLowerCase();
+  map[key] = (map[key] || 0) + 1;
+  const keys = Object.keys(map);
+  if (keys.length > MAX_PERSONAL) {
+    keys.sort((a, b) => map[a] - map[b]).slice(0, keys.length - MAX_PERSONAL).forEach((k) => { delete map[k]; });
+  }
+  try { localStorage.setItem(WORDS_KEY, JSON.stringify(map)); } catch { /* */ }
+}
+/** המילים האישיות, הנפוצות אצל המשתמש קודם. */
+export function personalWords() {
+  const map = loadPersonal();
+  return Object.keys(map).sort((a, b) => map[b] - map[a]);
+}

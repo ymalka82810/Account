@@ -69,7 +69,7 @@ export function EmailSheet({ sentTo = '' }) {
           : t('נשלח אליו קוד כשמשנים או מאפסים קוד סודי, וגם התראה כשהקוד של מישהו במשפחה ננעל.')}</p>
         {current && <Field label={t('קוד מהמייל הנוכחי')}><input {...codeProps} value={oldCode} onChange={(e) => setOldCode(e.target.value)} /></Field>}
         <Field label={current ? t('כתובת מייל חדשה') : t('כתובת מייל')}>
-          <input type="email" autoComplete="email" placeholder="name@example.com" dir="ltr" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input type="text" inputMode="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" autoComplete="email" placeholder="name@example.com" dir="ltr" value={email} onChange={(e) => setEmail(e.target.value)} />
         </Field>
         {err && <Err>{err}</Err>}
         <AsyncButton className="primary" onClick={async () => {

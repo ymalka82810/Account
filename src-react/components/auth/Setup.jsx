@@ -68,7 +68,7 @@ export default function Setup({ current }) {
               value={v.pin} onChange={set('pin')} />
             <small className="hint">{t('זה הקוד שתשתמשו בו בכל כניסה. כדאי לזכור אותו.')}</small></label>
           <label className="field"><span>{t('מייל לשחזור הקוד (לא חובה)')}</span>
-            <input type="email" autoComplete="email" dir="ltr" placeholder="name@example.com" value={v.email} onChange={set('email')} />
+            <input type="text" inputMode="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" autoComplete="email" dir="ltr" placeholder="name@example.com" value={v.email} onChange={set('email')} />
             <small className="hint">{t('אם תשכחו את הקוד, נשלח אליו קוד לאיפוס. בלי מייל, רק הורה אחר יוכל לעזור.')}</small></label>
           <label className="check"><input type="checkbox" required /><Terms /></label>
           {error && <p className="error" role="alert">{error}</p>}
