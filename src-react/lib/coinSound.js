@@ -3,8 +3,12 @@
 /** @type {AudioContext | null} */
 let ctx = null;
 
-/** @param {number} coins כמה מטבעות "נופלים" (קובע כמה קליקים) */
-export function playCoinSound(coins = 12) {
+/**
+ * @param {number} coins כמה מטבעות "נופלים" (קובע כמה קליקים)
+ * @param {number} delay שניות עד הקליק הראשון
+ * @param {number} span שניות שבהן הקליקים מתפזרים
+ */
+export function playCoinSound(coins = 12, delay = 0.35, span = 1.1) {
   try {
     const AC = window.AudioContext || /** @type {any} */ (window).webkitAudioContext;
     if (!AC) return;
@@ -14,10 +18,10 @@ export function playCoinSound(coins = 12) {
     const master = ctx.createGain();
     master.gain.value = 0.3;
     master.connect(ctx.destination);
-    const start = ctx.currentTime + 0.35;
+    const start = ctx.currentTime + delay;
     for (let i = 0; i < hits; i++) {
       // הפער בין הקליקים קטן ואז גדל: מטבעות שנופלים בסערה ומתיישבים
-      const at = start + 1.1 * Math.pow(i / hits, 0.8) + Math.random() * 0.04;
+      const at = start + span * Math.pow(i / hits, 0.8) + Math.random() * 0.04;
       const base = 2300 + Math.random() * 1900;
       const vol = 0.35 + Math.random() * 0.65;
       [[1, 1], [2.76, 0.55], [5.4, 0.3]].forEach(([ratio, amp]) => {

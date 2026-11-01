@@ -61,8 +61,11 @@ export function GoldBarArt() {
 
 const reducedMotion = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// אחרי כמה זמן המספר מתחיל לרוץ: כשמטילים עפים אל המטיל הגדול (ילדים/נוער, בירידה) הוא מחכה שהם ינחתו.
+const FLY_MS = 950;
+const flies = (/** @type {boolean} */ decreasing) => decreasing && document.body.dataset.theme !== 'parent' && !reducedMotion();
+
 // המספר "רץ" מהערך שמוצג עכשיו אל הערך החדש (אגורות, כך שגם הספרות הקטנות רצות).
-// מתחיל אחרי רגע קצר, כדי שחלון התשלום יספיק להיסגר ולא יסתיר את האנימציה.
 function useCountUp(/** @type {number} */ target) {
   const [val, setVal] = useState(target);
   const cur = useRef(target);
@@ -72,7 +75,7 @@ function useCountUp(/** @type {number} */ target) {
     const from = cur.current;
     const diff = target - from;
     const dur = 1300;
-    const t0 = performance.now() + 350;
+    const t0 = performance.now() + (flies(target < from) ? FLY_MS : 350);
     let raf = 0;
     const step = (/** @type {number} */ now) => {
       const p = Math.min(1, Math.max(0, (now - t0) / dur));
@@ -86,41 +89,49 @@ function useCountUp(/** @type {number} */ target) {
   return val;
 }
 
-// כשהסכום יורד (תשלום) נשמע צליל מטבעות, ולפי העיצוב עולים מהמטיל פריטים קטנים:
-// ילדים - מטבעות, נוער - מטילי נוער קטנים (באותו צבע של המטיל: זהב/נחושת), הורים - כלום (רק המספר רץ).
-// מצויר ב-portal כדי לא להיחתך ב-overflow של המטיל.
+// כשהסכום יורד (תשלום) נשמע צליל מטבעות, ולפי העיצוב:
+// ילדים/נוער - המטילים הקטנים שלהם (זהב/נחושת, כמו המטיל הגדול) עפים מלמטה אל המטיל הגדול, נכנסים לתוכו והוא קופץ קצת, ואז המספר רץ;
+// הורים - רק המספר רץ. מצויר ב-portal כדי לא להיחתך ב-overflow של המטיל.
 function useCoinBurst(/** @type {number} */ amount, /** @type {import('react').RefObject<HTMLElement | null>} */ ref) {
   const prev = useRef(amount);
-  const [burst, setBurst] = useState(/** @type {null | { id: number, x: number, y: number, src: string, bar: boolean, coins: { dx: number, rise: number, delay: number, size: number, dur: number, rot: number }[] }} */ (null));
+  const [burst, setBurst] = useState(/** @type {null | { id: number, x: number, y: number, src: string, items: { x0: number, y0: number, sway: number, delay: number, w: number, h: number, dur: number, rot: number }[] }} */ (null));
   useEffect(() => {
     const was = prev.current;
     prev.current = amount;
     if (!(amount < was) || !ref.current) return;
     const share = was > 0 ? (was - amount) / was : 1;
-    const n = Math.round(10 + share * 12);
-    playCoinSound(n);
-    const theme = document.body.dataset.theme;
-    if (theme === 'parent' || reducedMotion()) return;
-    const bar = theme === 'teen';
-    const r = ref.current.getBoundingClientRect();
-    const owe = !!ref.current.closest('.sum')?.classList.contains('owe');
+    const n = Math.round(8 + share * 8);
+    const fly = flies(true);
+    if (!fly) { playCoinSound(n); return; }
+    playCoinSound(n, 0.8, 0.8);
+    const teen = document.body.dataset.theme === 'teen';
+    const ratio = teen ? 640 / 393 : 570 / 313;
+    const el = ref.current;
+    const r = el.getBoundingClientRect();
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     const rnd = (/** @type {number} */ a, /** @type {number} */ b) => a + Math.random() * (b - a);
+    const owe = !!el.closest('.sum')?.classList.contains('owe');
     const id = Date.now();
-    setBurst({
-      id, x: r.left + r.width / 2, y: r.top + r.height / 2, bar,
-      src: bar ? `bars/teen-${owe ? 'owe' : 'get'}.webp` : 'coin.webp',
-      coins: Array.from({ length: n }, () => ({
-        dx: rnd(-70, 70), rise: rnd(110, 240), delay: rnd(300, 900), size: bar ? rnd(18, 30) : rnd(14, 26), dur: rnd(1100, 1700), rot: bar ? rnd(-60, 60) : rnd(-300, 300),
-      })),
+    const items = Array.from({ length: n }, () => {
+      const h = rnd(20, 32);
+      const sx = Math.min(innerWidth - 20, Math.max(20, cx + rnd(-150, 150)));
+      return { x0: sx - cx, y0: innerHeight + 30 - cy, sway: rnd(-40, 40), delay: rnd(250, 700), w: h * ratio, h, dur: rnd(600, 850), rot: rnd(-40, 40) };
     });
-    setTimeout(() => setBurst((b) => (b && b.id === id ? null : b)), 3000);
+    setBurst({ id, x: cx, y: cy, src: `bars/${teen ? 'teen' : 'child'}-${owe ? 'owe' : 'get'}.webp`, items });
+    setTimeout(() => setBurst((b) => (b && b.id === id ? null : b)), 2600);
+    // כל כמה מטילים שנכנסים, המטיל הגדול קופץ קצת, כמו איסוף במשחק
+    const box = el.closest('.sum');
+    items.forEach((it, i) => {
+      if (i % 3 !== 0 || !box) return;
+      setTimeout(() => box.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.06)' }, { transform: 'scale(1)' }], { duration: 240, easing: 'ease-out' }), it.delay + it.dur);
+    });
   }, [amount, ref]);
   if (!burst) return null;
   return createPortal(
     <div className="coin-burst" aria-hidden="true" style={{ left: burst.x, top: burst.y }}>
-      {burst.coins.map((c, i) => (
-        <img key={i} className={'coin-burst__c' + (burst.bar ? ' is-bar' : '')} src={burst.src} alt="" draggable="false"
-          style={/** @type {import('react').CSSProperties} */ ({ '--dx': c.dx + 'px', '--rise': c.rise + 'px', '--w': c.size * (burst.bar ? 1.63 : 1) + 'px', '--h': c.size + 'px', '--d': c.dur + 'ms', '--delay': c.delay + 'ms', '--rot': c.rot + 'deg' })} />
+      {burst.items.map((c, i) => (
+        <img key={i} className="coin-burst__c" src={burst.src} alt="" draggable="false"
+          style={/** @type {import('react').CSSProperties} */ ({ '--x0': c.x0 + 'px', '--y0': c.y0 + 'px', '--sway': c.sway + 'px', '--w': c.w + 'px', '--h': c.h + 'px', '--d': c.dur + 'ms', '--delay': c.delay + 'ms', '--rot': c.rot + 'deg' })} />
       ))}
     </div>,
     document.body,
