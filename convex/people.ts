@@ -90,6 +90,20 @@ export const setRole = mutation({
   },
 });
 
+// הורה משנה שם של בן/בת משפחה (למשל כשמאחדים אותו עם שם מהפנקס האישי). השם חייב להיות ייחודי במשפחה.
+export const rename = mutation({
+  args: { token: v.string(), id: v.id("people"), name: v.string() },
+  handler: async (ctx, { token, id, name }) => {
+    const me = await requireParent(ctx, token);
+    const p = await requireSameFamily(ctx, me, id);
+    const clean = cleanName(name);
+    if (p.name === clean) return;
+    const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
+    if (members.some((m) => m._id !== id && m.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה");
+    await ctx.db.patch(id, { name: clean });
+  },
+});
+
 // שינוי תפקיד הוא אך ורק ביוזמת הורה, דרך setRole למעלה. ילד/ה לא יכול/ה לבקש זאת -
 // כדי שלא יהיה אפשר "לשגע" הורה בבקשות חוזרות.
 

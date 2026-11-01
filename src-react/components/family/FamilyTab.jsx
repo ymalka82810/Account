@@ -5,6 +5,7 @@ import PendingCards from '../entries/PendingCards.jsx';
 import Balances from './Balances.jsx';
 import OpenDebts from './OpenDebts.jsx';
 import TeenOverview from './TeenOverview.jsx';
+import { NotebookMergeCard } from '../manage/NotebookMerge.jsx';
 
 // לשונית המשפחה (הורים): אישורים, יתרות, חובות פתוחים ומה שהנוער רושם. הגדרות וניהול נמצאים בלשונית "ניהול".
 export default function FamilyTab({ data, fdata, token }) {
@@ -16,6 +17,7 @@ export default function FamilyTab({ data, fdata, token }) {
   return (
     <>
       <PendingCards data={data} token={token} parentView />
+      <NotebookMergeCard />
 
       <h2>{t('יתרות')}</h2>
       <Balances people={data.people} debts={debts} />

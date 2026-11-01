@@ -21,6 +21,7 @@ import FamilyTab from './components/family/FamilyTab.jsx';
 import ManageTab from './components/manage/ManageTab.jsx';
 import HistoryTab from './components/history/HistoryTab.jsx';
 import LocaleSheet from './components/manage/LocaleSheet.jsx';
+import FamilyWelcome from './components/manage/FamilyWelcome.jsx';
 import DeviceGate from './components/account/DeviceGate.jsx';
 import PendingMoves from './components/account/PendingMoves.jsx';
 
@@ -220,6 +221,13 @@ function Root() {
     askedLocale.current = true;
     sheet.open(t('איפה אתם גרים?'), <LocaleSheet token={token} />);
   }, [needLocale]); // eslint-disable-line react-hooks/exhaustive-deps
+  // משפחה שנפתחה הרגע: מציעים מיד להוסיף בני משפחה (ולא משאירים להורה לחפש איפה עושים את זה)
+  const welcomeReady = screen === 'app' && data.me.role === 'parent' && data.family.localeSet && state.justCreatedFamily;
+  useEffect(() => {
+    if (!welcomeReady) return;
+    state.justCreatedFamily = false;
+    sheet.open(t('הוספת בני משפחה'), <FamilyWelcome />);
+  }, [welcomeReady]); // eslint-disable-line react-hooks/exhaustive-deps
   // אייקון לפי המטבע: של המשפחה אחרי כניסה, אם הוגדר לה מיקום (ונשמר לפעם הבאה). אחרת האחרון שנשמר,
   // או לפי המיקום של המכשיר, ואם גם הוא לא ידוע - דולר.
   const familyCurrency = screen === 'app' && data.family.localeSet ? data.family.currency : '';

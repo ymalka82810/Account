@@ -7,6 +7,7 @@ import { money, fmtDate } from '../../lib/computations.js';
 import { CURRENCIES, currencyLabel, currencySymbol } from '../../lib/currencies.js';
 import {
   useNotebook, notebookCurrency, addEntry, setPaid, removeEntry, setSetting, setCurrencyChoice, clearPaid, clearAll,
+  knownPeople, similarPeople, renamePerson, normName,
 } from '../../lib/notebook.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import Select from '../shared/Select.jsx';
@@ -151,13 +152,28 @@ function Home({ nb, onSettings, pulling, returned, family }) {
 }
 
 // ---------- רישום חדש (חלון קופץ) ----------
+// מי שנרשם פעם נשמר כשם ידוע: אפשר לבחור אותו שוב בלחיצה. שם חדש שדומה לשם ידוע (דני/דניאל)
+// לא נרשם בשקט: שואלים אם לאחד, ואם כן באיזה שם להשתמש.
 function AddEntry({ initialDir }) {
   const sheet = useSheet();
+  const nb = useNotebook();
   const dir = initialDir;
   const [form, setForm] = useState({ name: '', amount: '', note: '' });
+  const [personId, setPersonId] = useState(null); // נבחר מהרשימה הידועה
+  const [similar, setSimilar] = useState(null); // {name, amount, people} בזמן שאלת האיחוד
   const [error, setError] = useState('');
   useSheetTitle(dir === 'iowe' ? t('אני חייב כסף') : t('חייבים לי כסף'));
-  const set = (k) => (e) => { setForm((f) => ({ ...f, [k]: e.target.value })); setError(''); };
+  const set = (k) => (e) => { setForm((f) => ({ ...f, [k]: e.target.value })); setError(''); if (k === 'name') setPersonId(null); };
+
+  const people = knownPeople(nb);
+  const typed = normName(form.name);
+  const chips = (typed ? people.filter((p) => normName(p.name).includes(typed)) : people).slice(0, 8);
+  const pick = (p) => { setForm((f) => ({ ...f, name: p.name })); setPersonId(p.id); setError(''); };
+
+  const save = (name, amount, id) => {
+    addEntry({ dir, name: name.slice(0, 30), amount, note: form.note.trim().slice(0, 60), date: today(), personId: id });
+    sheet.close();
+  };
 
   const submit = (ev) => {
     ev.preventDefault();
@@ -166,14 +182,45 @@ function AddEntry({ initialDir }) {
     if (!name) { setError(t('כתבו את השם')); return; }
     if (!Number.isFinite(amount) || amount <= 0) { setError(t('כתבו סכום')); return; }
     if (amount > 1e9) { setError(t('הסכום גדול מדי')); return; }
-    addEntry({ dir, name: name.slice(0, 30), amount, note: form.note.trim().slice(0, 60), date: today() });
-    sheet.close();
+    const exact = personId || (people.find((p) => normName(p.name) === typed) || {}).id;
+    if (!exact) {
+      const near = similarPeople(name, nb);
+      if (near.length) { setSimilar({ name, amount, people: near }); return; }
+    }
+    save(name, amount, exact);
   };
+
+  // שאלת האיחוד: שם דומה לאדם ידוע
+  if (similar) {
+    const { name, amount, people: near } = similar;
+    const p = near[0];
+    const pick1 = (keepName) => {
+      // אותו אדם: הרישום החדש נרשם על האדם הידוע, והשם הסופי הוא מה שנבחר (גם בכל הרישומים הקודמים)
+      if (keepName !== p.name) renamePerson(p.id, keepName.slice(0, 30));
+      save(keepName, amount, p.id);
+    };
+    return (
+      <div className="form">
+        <p><strong>{t('יש כבר \u201C{old}\u201D בפנקס.', { old: p.name })}</strong> {t('זה אותו אדם כמו \u201C{name}\u201D?', { name })}</p>
+        <button className="primary" type="button" onClick={() => pick1(p.name)}>{t('כן, אותו אדם. להשאיר \u201C{n}\u201D', { n: p.name })}</button>
+        <button className="primary" type="button" onClick={() => pick1(name)}>{t('כן, אותו אדם. לשנות הכול ל\u201C{n}\u201D', { n: name })}</button>
+        <button className="ghost" type="button" onClick={() => save(name, amount, undefined)}>{t('לא, זה אדם אחר')}</button>
+        <button className="ghost" type="button" onClick={() => setSimilar(null)}>{t('חזרה')}</button>
+      </div>
+    );
+  }
 
   return (
     <form className="form" autoComplete="off" onSubmit={submit}>
       <label className="field"><span>{dir === 'iowe' ? t('למי?') : t('מי חייב לי?')}</span>
         <input type="text" maxLength={30} autoFocus value={form.name} onChange={set('name')} /></label>
+      {chips.length > 0 && (
+        <div className="nb-opts" role="group" aria-label={t('שמות מוכרים')}>
+          {chips.map((p) => (
+            <button key={p.id} type="button" className={'ghost' + (personId === p.id ? ' active' : '')} onClick={() => pick(p)}>{p.name}</button>
+          ))}
+        </div>
+      )}
       <label className="field"><span>{t('כמה?')}</span>
         <span className="amt-field"><span className="amt-cur" aria-hidden="true">{currencySymbol(notebookCurrency())}</span>
           <input type="text" inputMode="decimal" dir="ltr" placeholder="0" value={form.amount} onChange={set('amount')} /></span></label>

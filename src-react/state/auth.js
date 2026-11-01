@@ -97,6 +97,7 @@ export async function createFamily({ familyName, name, birthDate, avatar, gender
     // מסך "קישור המכשיר" בתוך האפליקציה לא יניח להמשיך בלי זה.
     try { if (await bioSupported()) await bioRegister(/** @type {any} */ (res).token, pin); } catch (e) { /* המסך בתוך האפליקציה ימשיך משם */ }
     state.view = 'welcome';
+    state.justCreatedFamily = true; // App פותח מיד חלון להוספת בני משפחה
     setToken(/** @type {any} */ (res).token); // join מחזיר היום רק pending, לא טוקן
     return '';
   } catch (e) { return errMsg(e); }
