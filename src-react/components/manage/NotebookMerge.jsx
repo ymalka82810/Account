@@ -6,6 +6,7 @@ import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { money } from '../../lib/computations.js';
 import { useNotebook, nameMatch, isMergeDeclined, declineMerge, removeEntries, notebookCurrency } from '../../lib/notebook.js';
+import { withIcons } from '../shared/UiIcon.jsx';
 
 // התאמות בין אנשים בפנקס האישי (עם רישומים פתוחים) לבני המשפחה בקופה.
 // level: 'same' = אותו שם, 'similar' = שם דומה (צריך לבחור באיזה שם להשתמש).
@@ -39,7 +40,7 @@ export function NotebookMergeCard() {
   return (
     <div className="card notice">
       <p><strong>{t('יש בפנקס האישי חובות על שמות של בני המשפחה')}</strong> ({names}). {t('רוצים לאחד אותם לקופה המשפחתית?')}</p>
-      <button className="primary" type="button" onClick={() => sheet.open(t('איחוד עם הפנקס'), <NotebookMergeSheet />)}>{t('📒 איחוד חובות מהפנקס')}</button>
+      <button className="primary" type="button" onClick={() => sheet.open(t('איחוד עם הפנקס'), <NotebookMergeSheet />)}>{withIcons(t('📒 איחוד חובות מהפנקס'))}</button>
     </div>
   );
 }

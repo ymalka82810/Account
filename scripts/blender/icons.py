@@ -4,7 +4,8 @@
     blender -b -P scripts/blender/icons.py -- fly-money out.png 384 64      (אייקון בודד)
     python3 scripts/blender/compose_ui_icons.py /tmp/ui_raw
 
-אייקונים: fly-money (שטר עם כנפיים, "אני חייב"), handshake (לחיצת יד, "חייבים לי").
+אייקונים: fly-money ("אני חייב"), handshake ("חייבים לי"/חברים), money-bag (הכסף שלי), scroll (מה היה),
+notebook (הפנקס), family (המשפחה).
 """
 import bpy, math, sys, os
 
@@ -179,9 +180,86 @@ def build_handshake():
     parts.append(ball(0.17, (-0.45, -0.46, 0.62), skin_a, scale=(2.0, 1.0, 1.0), rot=(0, math.radians(-30), 0)))
     return pivot_of(parts, (math.radians(-10), math.radians(8), math.radians(-6)))
 
+# ---------------------------------------------------------------- שק כסף
+def build_money_bag():
+    sack = mat('sack', '#c8955a', 0.0, 0.55)
+    sack_d = mat('sack_d', '#a87440', 0.0, 0.6)
+    gold = mat('gold', (1.0, 0.72, 0.16, 1), 1.0, 0.22)
+    rope = mat('rope', '#6b4423', 0.0, 0.6)
+    parts = [ball(1.15, (0, 0, -0.35), sack, scale=(1, 0.85, 0.95))]
+    bpy.ops.mesh.primitive_cone_add(vertices=64, radius1=0.62, radius2=0.3, depth=0.75, location=(0, 0, 0.75))
+    neck = bpy.context.object
+    neck.data.materials.append(sack)
+    bpy.ops.object.shade_smooth()
+    parts.append(neck)
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.38, minor_radius=0.09, major_segments=48, minor_segments=16, location=(0, 0, 0.72))
+    tie = bpy.context.object
+    tie.data.materials.append(rope)
+    bpy.ops.object.shade_smooth()
+    parts.append(tie)
+    for sx in (-1, 1):  # שולי הפתח
+        parts.append(ball(0.3, (sx * 0.3, 0, 1.2), sack_d, scale=(1.1, 0.8, 0.8), rot=(0, sx * 0.5, 0)))
+    parts.append(cyl(0.55, 0.12, (0, -1.0, -0.35), gold, rot=(math.pi / 2, 0, 0)))
+    return pivot_of(parts, (math.radians(-8), math.radians(-14), math.radians(4)))
 
-BUILDERS = {'fly-money': build_fly_money, 'handshake': build_handshake}
-DIST = {'fly-money': 13.5, 'handshake': 13.5}  # מרחק מצלמה: שהכנפיים והשרוולים ייכנסו בקנבס
+
+# ---------------------------------------------------------------- מגילה
+def build_scroll():
+    paper = mat('paper', '#fbefd0', 0.0, 0.6)
+    roll = mat('roll', '#e9cf98', 0.0, 0.5)
+    cap = mat('cap', '#b3501f', 0.0, 0.4, 0.2)
+    ink = mat('ink', '#6a4a2a', 0.0, 0.7)
+    parts = [box((1.7, 0.06, 2.0), (0, 0, 0), paper, bev=0.02)]
+    for sz in (-1, 1):
+        parts.append(cyl(0.3, 2.0, (0, 0, sz * 1.05), roll, rot=(0, math.pi / 2, 0)))
+        for sx in (-1, 1):
+            parts.append(cyl(0.2, 0.12, (sx * 1.05, 0, sz * 1.05), cap, rot=(0, math.pi / 2, 0)))
+    for i in range(5):
+        parts.append(box((1.1 - (0.3 if i == 4 else 0), 0.02, 0.07), (0.0 if i < 4 else -0.15, -0.04, 0.55 - i * 0.27), ink, bev=0.01))
+    return pivot_of(parts, (math.radians(-6), math.radians(-14), math.radians(8)))
+
+
+# ---------------------------------------------------------------- פנקס
+def build_notebook():
+    cover = mat('cover', '#3b6fd8', 0.0, 0.4, 0.3)
+    pages = mat('pages', '#fffaf0', 0.0, 0.7)
+    ring = mat('ring', '#c9ced6', 1.0, 0.25)
+    label = mat('label', '#fff3c2', 0.0, 0.6)
+    gold = mat('gold', (1.0, 0.72, 0.16, 1), 1.0, 0.22)
+    parts = [box((1.9, 0.5, 2.5), (0, 0, 0), cover, bev=0.12),
+             box((1.7, 0.38, 2.3), (0.06, -0.06, 0), pages, bev=0.04),
+             box((1.8, 0.1, 2.4), (0.1, -0.27, 0), cover, bev=0.1),
+             box((1.15, 0.03, 0.7), (0.12, -0.34, 0.45), label, bev=0.015),
+             cyl(0.2, 0.04, (0.12, -0.36, -0.5), gold, rot=(math.pi / 2, 0, 0))]
+    for i in range(6):
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.16, minor_radius=0.045, major_segments=32, minor_segments=12,
+                                         location=(-0.85, -0.28, 0.95 - i * 0.38), rotation=(0, 0, 0))
+        r = bpy.context.object
+        r.data.materials.append(ring)
+        bpy.ops.object.shade_smooth()
+        parts.append(r)
+    return pivot_of(parts, (math.radians(-6), math.radians(-18), math.radians(6)))
+
+
+# ---------------------------------------------------------------- משפחה
+def build_family():
+    skin_a = mat('skin_a', '#f2c08a', 0.0, 0.5)
+    skin_b = mat('skin_b', '#c98f5b', 0.0, 0.5)
+    skin_c = mat('skin_c', '#e0a874', 0.0, 0.5)
+    blue = mat('blue', '#3b6fd8', 0.0, 0.45, 0.2)
+    green = mat('green', '#2f8f6b', 0.0, 0.45, 0.2)
+    orange = mat('orange', '#f08a24', 0.0, 0.45, 0.2)
+    parts = []
+    for x, h, skin, cloth in ((-1.1, 1.0, skin_a, blue), (1.1, 0.95, skin_b, green), (0, 0.65, skin_c, orange)):
+        r = 0.62 * h
+        parts.append(ball(r, (x, 0, -0.55 * h + 0.1), cloth, scale=(1, 0.85, 1.15)))
+        parts.append(ball(0.5 * h, (x, -0.05, 0.5 * h + 0.12), skin))
+    return pivot_of(parts, (math.radians(-6), math.radians(-8), 0))
+
+
+BUILDERS = {'fly-money': build_fly_money, 'handshake': build_handshake, 'money-bag': build_money_bag,
+            'scroll': build_scroll, 'notebook': build_notebook, 'family': build_family}
+DIST = {'fly-money': 13.5, 'handshake': 13.5, 'money-bag': 8.5, 'scroll': 9.5, 'notebook': 9, 'family': 8.5}
 
 
 def render(name, out, res, samples):

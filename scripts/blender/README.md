@@ -36,5 +36,6 @@
     python3 scripts/blender/compose_ui_icons.py /tmp/ui_raw
 
 מרנדר ל-`public/ui/*.webp` (חיתוך לריבוע, 256px), ומוצגים דרך `src-react/components/shared/UiIcon.jsx`:
-`fly-money` (שטר עם כנפיים, "אני חייב") ו-`handshake` (לחיצת יד, "חייבים לי"). אייקון חדש: מוסיפים פונקציית בנייה
+`fly-money` ("אני חייב"), `handshake` ("חייבים לי" וחברים), `money-bag` (הכסף שלי), `scroll` (מה היה), `notebook` (הפנקס)
+ו-`family` (המשפחה). `withIcons(text)` ב-`UiIcon.jsx` מחליף את האימוג'י התואם בתוך טקסט מתורגם (תוויות ניווט וכפתורי הפנקס), בלי לגעת בקבצי התרגום. אייקון חדש: מוסיפים פונקציית בנייה
 ב-`BUILDERS` (ומרחק מצלמה ב-`DIST`) ב-`icons.py`, ומרנדרים מחדש. אל תשכחו להוסיף אותו גם ל-`public/sw.js` ול-`preloadImages.js`.

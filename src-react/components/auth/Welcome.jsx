@@ -6,6 +6,7 @@ import { prettyCode } from '../../lib/helpers.js';
 import { submitFamilyCode, goView, startPin, openNotebook, startDemo, goToFamily, otherFamilies, deviceHasFamily } from '../../state/auth.js';
 import LanguagePicker from '../shared/LanguagePicker.jsx';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
+import { withIcons } from '../shared/UiIcon.jsx';
 
 // קוד בכתובת (?code=...) או כרטיס/טוקן שמורים במכשיר: מי שמגיע עם קוד לא צריך לחפש איפה מקלידים אותו.
 const urlCode = () => { try { return new URLSearchParams(location.search).get('code') || ''; } catch (e) { return ''; } };
@@ -37,7 +38,7 @@ export default function Welcome({ current }) {
         <h1>{t('הקופה המשפחתית')}</h1>
         {!invite && (
           <div className="welcome-actions">
-            <button className="primary" type="button" onClick={openNotebook}>{t('📒 הפנקס שלי')}</button>
+            <button className="primary" type="button" onClick={openNotebook}>{withIcons(t('📒 הפנקס שלי'))}</button>
             <button className="ghost" type="button" onClick={startDemo}>{t('👀 דמו של 10 שניות')}</button>
           </div>
         )}

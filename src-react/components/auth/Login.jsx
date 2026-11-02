@@ -4,6 +4,7 @@ import { t } from '../../i18n/index.js';
 import { state } from '../../state/state.js';
 import { goView, leaveToWelcome, startPin, openNotebook, otherFamilies } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
+import UiIcon from '../shared/UiIcon.jsx';
 
 export default function Login({ current }) {
   const fam = state.fam;
@@ -12,7 +13,7 @@ export default function Login({ current }) {
   return (
     <In screen="login" current={current}>
       {hasOther && <button className="ghost back" type="button" onClick={leaveToWelcome}><Arrow kind="back" /> {t('משפחה אחרת')}</button>}
-      <button className="ghost back end" type="button" onClick={openNotebook}>📒 {t('הפנקס שלי')}</button>
+      <button className="ghost back end" type="button" onClick={openNotebook}><UiIcon name="notebook" inline /> {t('הפנקס שלי')}</button>
       <img className="big-coin" src="coin.webp" alt="" width="68" height="68" draggable="false" />
       <h1>{fam ? fam.name : t('הקופה המשפחתית')}</h1>
       <p className="hint">{t('מי נכנס/ת?')}</p>

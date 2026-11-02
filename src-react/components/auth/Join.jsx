@@ -4,6 +4,7 @@ import { t } from '../../i18n/index.js';
 import { state } from '../../state/state.js';
 import { goView, joinFamily, openNotebook } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
+import { withIcons } from '../shared/UiIcon.jsx';
 
 export default function Join({ current }) {
   const fam = state.fam;
@@ -40,7 +41,7 @@ export default function Join({ current }) {
           <p className="hint">{fam ? t('ממתינים לאישור הורה ב{name}. אחרי שהורה יאשר, בוחרים את השם שלך במסך הכניסה ומקלידים את הקוד הסודי שבחרת.', { name: fam.name }) : t('ממתינים לאישור הורה. אחרי שהורה יאשר, בוחרים את השם שלך במסך הכניסה ומקלידים את הקוד הסודי שבחרת.')}</p>
           <button className="primary" type="button" onClick={askParent}>{t('💬 שלחו להורה בוואטסאפ')}</button>
           <p className="hint">{t('בינתיים אפשר לרשום בפנקס האישי, שנשמר במכשיר שלך.')}</p>
-          <button className="ghost" type="button" onClick={openNotebook}>{t('📒 בינתיים, לפנקס האישי')}</button>
+          <button className="ghost" type="button" onClick={openNotebook}>{withIcons(t('📒 בינתיים, לפנקס האישי'))}</button>
           <button className="ghost linkish" type="button" onClick={() => goView('welcome')}>{t('הבנתי')}</button>
         </div>
       </In>

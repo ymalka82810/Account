@@ -632,6 +632,7 @@ body[data-theme="teen"] #screen-loading p {
 }
 .bigbtn .ui-icon { width: 2.6rem; height: 2.6rem; }
 .ui-icon { display: block; object-fit: contain; }
+.ui-icon.inline { display: inline-block; width: 1.3em; height: 1.3em; vertical-align: -.28em; margin-inline: .1em; }
 .big-coin { display: block; width: 4.2rem; height: 4.2rem; margin: 0 auto 6px; object-fit: contain; }
 .bigbtn.owe { background: var(--owe-bg); border-color: var(--owe); color: var(--owe); }
 .bigbtn.get { background: var(--get-bg); border-color: var(--get); color: var(--get); }

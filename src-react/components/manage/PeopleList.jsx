@@ -13,6 +13,7 @@ import { call } from '../../lib/api.js';
 import { roleLabel } from '../../lib/computations.js';
 import Select from '../shared/Select.jsx';
 import { g, GENDER_OPTIONS } from '../../lib/gender.js';
+import { withIcons } from '../shared/UiIcon.jsx';
 
 // כאן זו קביעה ראשונית וחד-פעמית (לא ניתנת לשינוי אחר כך), אז בלי אפשרות "ללא ציון".
 const GENDER_SET_OPTIONS = GENDER_OPTIONS.filter((o) => o.value);
@@ -129,7 +130,7 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
           </div>
           <button className="small" type="button" onClick={() => sheet.open(t('קוד סודי ל{name}', { name: p.name }), <ResetPinSheet person={p} />)}>{t('קוד חדש')}</button>
           {p.notebookShared && (
-            <button className="small" type="button" onClick={() => sheet.open(t('הפנקס האישי של {name}', { name: p.name }), <ChildNotebook token={token} person={p} />)}>{t('📒 הפנקס האישי')}</button>
+            <button className="small" type="button" onClick={() => sheet.open(t('הפנקס האישי של {name}', { name: p.name }), <ChildNotebook token={token} person={p} />)}>{withIcons(t('📒 הפנקס האישי'))}</button>
           )}
           {p.role === 'parent' && p.id !== me && (
             <button className="small" type="button" onClick={() => bindCode(p)}>{t('קוד קישור למכשיר')}</button>

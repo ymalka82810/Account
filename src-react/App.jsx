@@ -26,6 +26,7 @@ import LocaleSheet from './components/manage/LocaleSheet.jsx';
 import FamilyWelcome from './components/manage/FamilyWelcome.jsx';
 import DeviceGate from './components/account/DeviceGate.jsx';
 import PendingMoves from './components/account/PendingMoves.jsx';
+import { withIcons } from './components/shared/UiIcon.jsx';
 
 const ICON_CURRENCY_KEY = 'app-icon-currency';
 
@@ -474,7 +475,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
       <nav className="tabs" role="tablist" aria-label={t('תפריט ראשי')}>
         {tabs.map((id) => (
           <button key={id} id={'tabbtn-' + id} role="tab" aria-controls={'tab-' + id} data-tab={id} className={'tab' + (tab === id ? ' active' : '')} aria-selected={tab === id} onClick={() => setTab(id)}>
-            {labels[id] || fallbackLabels[id]}
+            {withIcons(labels[id] || fallbackLabels[id])}
             {badge[id] ? <span className="badge">{badge[id]}</span> : null}
           </button>
         ))}
