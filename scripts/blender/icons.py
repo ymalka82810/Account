@@ -383,10 +383,11 @@ def build_fly_money():
         wing = [wing_layer(1.0, tip, 0.0, 5),          # נוצות ראשיות, בגוון תכלת
                 wing_layer(0.7, white, -0.07, 4),       # שכבת כיסוי
                 wing_layer(0.42, white, -0.14, 2, 0.16)]  # כתף
-        g = group(wing, (sx * 1.25, 0.3, 0.35))
-        g.scale = (sx * 0.95, 0.95, 0.95)
+        g = group(wing, (sx * 1.35, 0.3, 0.5))
+        g.scale = (sx * 0.72, 0.72, 0.72)
+        g.rotation_euler = (0, -sx * math.radians(18), 0)  # כנפיים זקופות: האייקון כמעט ריבועי
         parts.append(g)
-    return group(parts, rot=(math.radians(-6), math.radians(-14), math.radians(-4)))
+    return group(parts, rot=(math.radians(-6), math.radians(-24), math.radians(-6)))
 
 
 # ================================================================== שק כסף
