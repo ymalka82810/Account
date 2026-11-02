@@ -12,6 +12,7 @@ import { g } from '../../lib/gender.js';
 import EntriesList from '../entries/EntriesList.jsx';
 import DebtLines from '../entries/DebtLines.jsx';
 import WhatsAppRemind from '../entries/WhatsAppRemind.jsx';
+import UiIcon from '../shared/UiIcon.jsx';
 
 // מצב חברים לבני נוער.
 export default function FriendsTab({ data, fdata, token }) {
@@ -134,10 +135,10 @@ export default function FriendsTab({ data, fdata, token }) {
       </div>
       <div className="bigbtns">
         <button className="bigbtn owe" type="button" onClick={() => startFlow({ kind: 'debt', from: me })}>
-          <span aria-hidden="true">💸</span>{g(data.me.gender, 'אני חייב לחבר/ה', 'אני חייבת לחבר/ה', 'אני חייב/ת לחבר/ה')}
+          <UiIcon name="fly-money" />{g(data.me.gender, 'אני חייב לחבר/ה', 'אני חייבת לחבר/ה', 'אני חייב/ת לחבר/ה')}
         </button>
         <button className="bigbtn get" type="button" onClick={() => startFlow({ kind: 'debt', to: me })}>
-          <span aria-hidden="true">🤝</span>{t('חבר/ה חייב/ת לי')}
+          <UiIcon name="handshake" />{t('חבר/ה חייב/ת לי')}
         </button>
       </div>
 

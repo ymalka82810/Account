@@ -5,6 +5,7 @@ const IMAGES = [
   'bars/teen-get.webp', 'bars/teen-owe.webp',
   'bars/child-get.webp', 'bars/child-owe.webp',
   'coin.webp',
+  'ui/fly-money.webp', 'ui/handshake.webp',
 ];
 // אם אין חיבור או שתמונה תקועה, לא חוסמים את האפליקציה יותר מזה.
 const TIMEOUT_MS = 5000;

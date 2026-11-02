@@ -630,7 +630,9 @@ body[data-theme="teen"] #screen-loading p {
   padding: 16px 8px; min-height: 96px; cursor: pointer;
   display: grid; gap: 6px; justify-items: center; align-content: center;
 }
-.bigbtn span { font-size: 2rem; line-height: 1; }
+.bigbtn .ui-icon { width: 2.6rem; height: 2.6rem; }
+.ui-icon { display: block; object-fit: contain; }
+.big-coin { display: block; width: 4.2rem; height: 4.2rem; margin: 0 auto 6px; object-fit: contain; }
 .bigbtn.owe { background: var(--owe-bg); border-color: var(--owe); color: var(--owe); }
 .bigbtn.get { background: var(--get-bg); border-color: var(--get); color: var(--get); }
 .bigbtn.owe:hover, .bigbtn.owe:focus-visible, .bigbtn.owe:active { border-color: var(--owe); filter: brightness(.97); }

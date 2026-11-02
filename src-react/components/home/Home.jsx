@@ -1,4 +1,5 @@
 import Arrow from '../shared/Arrow.jsx';
+import UiIcon from '../shared/UiIcon.jsx';
 import { t } from '../../i18n/index.js';
 import { useApp } from '../../state/appContext.js';
 import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
@@ -62,10 +63,10 @@ export default function Home({ data, token }) {
 
       <div className="bigbtns">
         <button className="bigbtn owe" type="button" onClick={() => openEntryFlow({ kind: 'debt', from: me })}>
-          <span aria-hidden="true">💸</span>{g(data.me.gender, 'אני חייב כסף', 'אני חייבת כסף', 'אני חייב/ת כסף')}
+          <UiIcon name="fly-money" />{g(data.me.gender, 'אני חייב כסף', 'אני חייבת כסף', 'אני חייב/ת כסף')}
         </button>
         <button className="bigbtn get" type="button" onClick={() => openEntryFlow({ kind: 'debt', to: me })}>
-          <span aria-hidden="true">🤝</span>{t('חייבים לי כסף')}
+          <UiIcon name="handshake" />{t('חייבים לי כסף')}
         </button>
       </div>
 

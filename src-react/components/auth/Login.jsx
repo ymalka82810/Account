@@ -13,7 +13,7 @@ export default function Login({ current }) {
     <In screen="login" current={current}>
       {hasOther && <button className="ghost back" type="button" onClick={leaveToWelcome}><Arrow kind="back" /> {t('משפחה אחרת')}</button>}
       <button className="ghost back end" type="button" onClick={openNotebook}>📒 {t('הפנקס שלי')}</button>
-      <div className="big-emoji" aria-hidden="true">🪙</div>
+      <img className="big-coin" src="coin.webp" alt="" width="68" height="68" draggable="false" />
       <h1>{fam ? fam.name : t('הקופה המשפחתית')}</h1>
       <p className="hint">{t('מי נכנס/ת?')}</p>
       <div className="tiles">

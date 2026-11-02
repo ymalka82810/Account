@@ -29,3 +29,12 @@
 מרנדר 6 מטילים (הורים/נוער/ילדים x זהב/נחושת) ל-`public/bars/*.webp`, שנקבעים ב-CSS (`.sum::before` להורים ולנוער,
 `border-image` לילדים). מטיל הורים/נוער בהטלה אלכסונית באותה גיאומטריה של ה-viewBox 202x124 של `GoldBarArt`
 (אחרת הטקסט לא יישב על החזית); צבעי המתכת הם משתני `--g-*` של כל תפקיד ב-style.css.
+
+## אייקוני ממשק (במקום אימוג'י)
+
+    blender -b -P scripts/blender/icons.py -- --all /tmp/ui_raw 512 64
+    python3 scripts/blender/compose_ui_icons.py /tmp/ui_raw
+
+מרנדר ל-`public/ui/*.webp` (חיתוך לריבוע, 256px), ומוצגים דרך `src-react/components/shared/UiIcon.jsx`:
+`fly-money` (שטר עם כנפיים, "אני חייב") ו-`handshake` (לחיצת יד, "חייבים לי"). אייקון חדש: מוסיפים פונקציית בנייה
+ב-`BUILDERS` (ומרחק מצלמה ב-`DIST`) ב-`icons.py`, ומרנדרים מחדש. אל תשכחו להוסיף אותו גם ל-`public/sw.js` ול-`preloadImages.js`.

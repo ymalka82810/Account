@@ -15,6 +15,7 @@ import { useConfirm } from '../shared/Confirm.jsx';
 import Select from '../shared/Select.jsx';
 import { closeNotebook, goView, upgradeFromNotebook, deviceHasFamily } from '../../state/auth.js';
 import { In } from '../auth/parts.jsx';
+import UiIcon from '../shared/UiIcon.jsx';
 
 // הפנקס האישי: כל אחד (גם ילד/ה) רושם לעצמו למי הוא חייב ומי חייב לו.
 // הכול נשמר במכשיר, בלי כניסה. זה מסך הפתיחה של מכשיר חדש. המשפחה היא שדרוג: אחרי הרישום הראשון
@@ -137,10 +138,10 @@ function Home({ nb, onSettings, pulling, returned, family }) {
 
       <div className="bigbtns">
         <button className="bigbtn owe" type="button" onClick={() => sheet.open('', <AddEntry initialDir="iowe" />)}>
-          <span aria-hidden="true">💸</span>{t('אני חייב כסף')}
+          <UiIcon name="fly-money" />{t('אני חייב כסף')}
         </button>
         <button className="bigbtn get" type="button" onClick={() => sheet.open('', <AddEntry initialDir="owed" />)}>
-          <span aria-hidden="true">🤝</span>{t('חייבים לי כסף')}
+          <UiIcon name="handshake" />{t('חייבים לי כסף')}
         </button>
       </div>
 

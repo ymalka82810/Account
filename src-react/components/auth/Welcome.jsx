@@ -33,7 +33,7 @@ export default function Welcome({ current }) {
   return (
     <In screen="welcome" current={current}>
       <div className="card-narrow">
-        <div className="big-emoji" aria-hidden="true">🪙</div>
+        <img className="big-coin" src="coin.webp" alt="" width="68" height="68" draggable="false" />
         <h1>{t('הקופה המשפחתית')}</h1>
         {!invite && (
           <div className="welcome-actions">
