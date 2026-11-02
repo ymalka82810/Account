@@ -124,7 +124,7 @@ function useCoinBurst(/** @type {number} */ amount, /** @type {import('react').R
       const sx = Math.min(innerWidth - 20, Math.max(20, cx + rnd(-150, 150)));
       return { x0: sx - cx, y0: innerHeight + 30 - cy, sway: rnd(-40, 40), delay: rnd(250, 700), w: h * ratio, h, dur: rnd(600, 850), rot: rnd(-40, 40) };
     });
-    setBurst({ id, x: cx, y: cy, src: `bars/${teen ? 'teen-' + (document.body.dataset.palette || 'blue') : 'child'}-${owe ? 'owe' : 'get'}.webp`, items });
+    setBurst({ id, x: cx, y: cy, src: `bars/${teen ? 'teen' : 'child'}-${owe ? 'owe' : 'get'}.webp`, items });
     setTimeout(() => setBurst((b) => (b && b.id === id ? null : b)), 2600);
     // כל כמה מטילים שנכנסים, המטיל הגדול קופץ קצת, כמו איסוף במשחק
     const box = el.closest('.sum');

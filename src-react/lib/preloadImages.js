@@ -3,8 +3,7 @@ import { UI_ICON_NAMES, uiIconUrl } from './uiIcons.js';
 // בלי זה המספר מופיע "באוויר" והמטיל מאחוריו נטען רק אחר כך.
 const IMAGES = [
   'bars/parent-get.webp', 'bars/parent-owe.webp',
-  'bars/teen-blue-get.webp', 'bars/teen-blue-owe.webp', 'bars/teen-green-get.webp',
-  'bars/teen-green-owe.webp', 'bars/teen-orange-get.webp', 'bars/teen-orange-owe.webp',
+  'bars/teen-get.webp', 'bars/teen-owe.webp',
   'bars/child-get.webp', 'bars/child-owe.webp',
   'coin.webp',
   ...UI_ICON_NAMES.map(uiIconUrl),
