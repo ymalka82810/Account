@@ -15,7 +15,7 @@ import { useConfirm } from '../shared/Confirm.jsx';
 import Select from '../shared/Select.jsx';
 import { closeNotebook, goView, upgradeFromNotebook, deviceHasFamily } from '../../state/auth.js';
 import { In } from '../auth/parts.jsx';
-import UiIcon from '../shared/UiIcon.jsx';
+import UiIcon, { withIcons } from '../shared/UiIcon.jsx';
 
 // הפנקס האישי: כל אחד (גם ילד/ה) רושם לעצמו למי הוא חייב ומי חייב לו.
 // הכול נשמר במכשיר, בלי כניסה. זה מסך הפתיחה של מכשיר חדש. המשפחה היא שדרוג: אחרי הרישום הראשון
@@ -123,7 +123,7 @@ function Home({ nb, onSettings, pulling, returned, family }) {
         {family
           ? <button className="ghost nb-fam-btn" type="button" onClick={closeNotebook}>{t('חזרה למשפחה')}</button>
           : <button className="ghost nb-fam-btn" type="button" onClick={() => upgradeFromNotebook('setup')}>{t('🏠 צור משפחה')}</button>}
-        <h1>{t('📒 הפנקס שלי')}</h1>
+        <h1>{withIcons(t('📒 הפנקס שלי'))}</h1>
         <button className={'ghost nb-gear' + (pulling ? ' nb-gear-spin' : '')} type="button" aria-label={t('הגדרות')} onClick={onSettings}>
           <span className="nb-gear-ico">⚙️</span>
         </button>

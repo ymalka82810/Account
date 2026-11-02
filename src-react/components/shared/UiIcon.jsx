@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import { uiIconUrl } from '../../lib/uiIcons.js';
 
 // אייקונים תלת-ממדיים שרונדרו ב-Blender (scripts/blender/icons.py -> public/ui/<name>.webp), במקום אימוג'י.
 /** @typedef {'fly-money' | 'handshake' | 'money-bag' | 'scroll' | 'notebook' | 'family'} UiIconName */
@@ -9,7 +10,7 @@ const EMOJI_RE = new RegExp(`(${Object.keys(BY_EMOJI).join('|')})`, 'u');
 
 /** @param {{ name: UiIconName, inline?: boolean }} props */
 export default function UiIcon({ name, inline = false }) {
-  return <img className={inline ? 'ui-icon inline' : 'ui-icon'} src={`ui/${name}.webp`} alt="" width="48" height="48" draggable="false" aria-hidden="true" />;
+  return <img className={inline ? 'ui-icon inline' : 'ui-icon'} src={uiIconUrl(name)} alt="" width="48" height="48" draggable="false" aria-hidden="true" />;
 }
 
 /**

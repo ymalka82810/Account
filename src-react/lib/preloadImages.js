@@ -1,3 +1,4 @@
+import { UI_ICON_NAMES, uiIconUrl } from './uiIcons.js';
 // טעינה מוקדמת של כל תמונות המטילים והמטבע (וגם פענוח שלהן), כדי שהמסך הראשון לא יוצג לפני שהתמונות מוכנות:
 // בלי זה המספר מופיע "באוויר" והמטיל מאחוריו נטען רק אחר כך.
 const IMAGES = [
@@ -5,7 +6,7 @@ const IMAGES = [
   'bars/teen-get.webp', 'bars/teen-owe.webp',
   'bars/child-get.webp', 'bars/child-owe.webp',
   'coin.webp',
-  'ui/fly-money.webp', 'ui/handshake.webp', 'ui/money-bag.webp', 'ui/scroll.webp', 'ui/notebook.webp', 'ui/family.webp',
+  ...UI_ICON_NAMES.map(uiIconUrl),
 ];
 // אם אין חיבור או שתמונה תקועה, לא חוסמים את האפליקציה יותר מזה.
 const TIMEOUT_MS = 5000;
