@@ -24,8 +24,10 @@ jobs:
           echo "::notice title=EMAIL_FROM::[${from}]"
           key=$(npx convex env get RESEND_API_KEY 2>/dev/null || true)
           echo "::notice title=RESEND_KEY::len=${#key} prefix=${key:0:3}"
+          npx convex run email:sendCode '{"to":"ymalka82810@gmail.com","code":"123456","purpose":"verify"}' || true
+          sleep 15
           timeout 40 npx convex logs --history 300 > logs.txt 2>&1 || true
-          grep -iE "email|resend|מייל|sendCode" logs.txt | tail -15 | sed -E 's/[0-9]{6}/######/g' | while IFS= read -r line; do
+          grep -iE "email|resend|מייל|sendCode" logs.txt | tail -15 | cat | while IFS= read -r line; do
             echo "::notice title=log::${line:0:400}"
           done
           echo "::notice title=log-lines::$(wc -l < logs.txt)"
