@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 
 // הפנקס שומר ב-localStorage ומודולים שהוא מייבא נוגעים ב-window; בסביבת הבדיקה אין דפדפן, אז מדמים את המינימום.
 (globalThis as any).window = globalThis;
+// ב-Node 20 (ה-CI) אין navigator גלובלי; ב-Node 22 יש. מדמים רק אם חסר, כדי שהבדיקה תרוץ זהה בשניהם.
+if (!(globalThis as any).navigator) (globalThis as any).navigator = { languages: ["he-IL"], language: "he-IL", onLine: true };
 const store = new Map<string, string>();
 (globalThis as any).localStorage = {
   getItem: (k: string) => store.get(k) ?? null,
