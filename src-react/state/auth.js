@@ -16,7 +16,7 @@ export async function enterFamily(code, remember) {
   const label = remember ? (navigator.userAgentData?.platform || navigator.platform || t('מכשיר')).slice(0, 40) : undefined;
   const res = await call('auth:enter', { code, remember: !!remember, label });
   if (!res.ok) return res.reason;
-  state.fam = { code, name: res.familyName, people: res.people };
+  state.fam = { code, familyId: res.familyId ? String(res.familyId) : '', name: res.familyName, people: res.people };
   // שומרים במכשיר כרטיס כניסה (לא את קוד ההצטרפות), לכניסות הבאות.
   if (remember && res.loginCode) {
     localStorage.setItem(CODE_KEY, res.loginCode);

@@ -596,6 +596,7 @@ body[data-theme="teen"] #screen-loading p {
 @media (prefers-reduced-motion: reduce) { .shake { animation: none; } }
 #pinError { min-height: 1.5em; margin: 2px 0 8px; }
 .back { align-self: flex-start; position: absolute; top: calc(14px + env(safe-area-inset-top, 0)); inset-inline-start: 14px; }
+.back.end { inset-inline-start: auto; inset-inline-end: 14px; }
 
 .pad { display: grid; grid-template-columns: repeat(3, 76px); gap: 12px; direction: ltr; justify-content: center; }
 .pad.compact { grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 320px; margin: 10px auto; }
