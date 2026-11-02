@@ -1,4 +1,4 @@
-const CACHE = 'kupa-v40';
+const CACHE = 'kupa-v41';
 // מאז שהאתר עובר דרך Vite build, קובץ ה-JS הראשי יוצא עם hash בשם
 // (למשל assets/index-ABC123.js) שלא ידוע מראש. לכן לא מפרטים כאן כל
 // קובץ src/*.js בנפרד (כמו קודם) - caches.addAll() נכשל כולו אם קובץ
@@ -9,7 +9,7 @@ const CACHE = 'kupa-v40';
 const FILES = [
   './', 'index.html', 'terms.html', 'privacy.html', 'style.css', 'config.js',
   'manifest.webmanifest', 'icon.svg',
-  'bars/parent-get.webp', 'bars/parent-owe.webp', 'bars/teen-get.webp', 'bars/teen-owe.webp',
+  'bars/parent-get.webp', 'bars/parent-owe.webp', 'bars/teen-blue-get.webp', 'bars/teen-blue-owe.webp', 'bars/teen-green-get.webp', 'bars/teen-green-owe.webp', 'bars/teen-orange-get.webp', 'bars/teen-orange-owe.webp',
   'bars/child-get.webp', 'bars/child-owe.webp', 'coin.webp',
   // ?v= זהה ל-UI_ICON_VERSION ב-src-react/lib/uiIcons.js
   ...['fly-money', 'handshake', 'money-bag', 'scroll', 'notebook', 'family'].map((n) => `ui/${n}.webp?v=4`),
