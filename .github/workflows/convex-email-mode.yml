@@ -8,9 +8,9 @@ on:
       mode:
         description: "dev או off"
         required: true
-        default: dev
+        default: "dev"
         type: choice
-        options: [dev, off]
+        options: ["dev", "off"]
 
 jobs:
   set-mode:
