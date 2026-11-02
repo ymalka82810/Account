@@ -1,0 +1,33 @@
+name: Convex diagnose (זמני)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: |
+          names=$(npx convex env list | sed -E 's/=.*//' | tr '\n' ' ')
+          echo "::notice title=env-names::$names"
+          mode=$(npx convex env get EMAIL_MODE 2>/dev/null || true)
+          echo "::notice title=EMAIL_MODE::[${mode}]"
+          from=$(npx convex env get EMAIL_FROM 2>/dev/null || true)
+          echo "::notice title=EMAIL_FROM::[${from}]"
+          key=$(npx convex env get RESEND_API_KEY 2>/dev/null || true)
+          echo "::notice title=RESEND_KEY::len=${#key} prefix=${key:0:3}"
+          timeout 40 npx convex logs --history 300 > logs.txt 2>&1 || true
+          grep -iE "email|resend|מייל|sendCode" logs.txt | tail -15 | sed -E 's/[0-9]{6}/######/g' | while IFS= read -r line; do
+            echo "::notice title=log::${line:0:400}"
+          done
+          echo "::notice title=log-lines::$(wc -l < logs.txt)"
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
