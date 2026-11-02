@@ -25,7 +25,7 @@ export function deviceId() {
   } catch (e) { return undefined; }
 }
 
-const AUTH_CALLS = ['auth:enter', 'auth:join', 'auth:createFamily', 'auth:login', 'auth:claimProfile', 'emailAuth:requestResetCode', 'emailAuth:resetWithCode',
+const AUTH_CALLS = ['auth:enter', 'auth:join', 'auth:createFamily', 'auth:login', 'auth:claimProfile', 'auth:enterFree', 'emailAuth:requestResetCode', 'emailAuth:resetWithCode',
   'biometric:loginChallenge', 'deviceMove:moveStart', 'deviceMove:recoveryRequest', 'deviceMove:recoveryConfirm', 'deviceMove:recoveryFinish'];
 
 /**

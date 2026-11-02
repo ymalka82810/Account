@@ -146,16 +146,17 @@ export function ChangePinSheet() {
   const [oldPin, setOldPin] = useState('');
   const [newPin, setNewPin] = useState('');
   const [err, setErr] = useState('');
-  useSheetTitle(t('שינוי הקוד הסודי'));
+  const first = !data.me.hasPin; // נכנס/ת בלי קוד: קובעים קוד בפעם הראשונה, בלי קוד נוכחי
+  useSheetTitle(first ? t('קביעת קוד סודי') : t('שינוי הקוד הסודי'));
   return (
     <div className="form">
-      <Field label={t('הקוד הנוכחי')}><input {...pinProps('current-password')} value={oldPin} onChange={(e) => setOldPin(e.target.value)} /></Field>
+      {!first && <Field label={t('הקוד הנוכחי')}><input {...pinProps('current-password')} value={oldPin} onChange={(e) => setOldPin(e.target.value)} /></Field>}
       <Field label={t('קוד חדש ({rule})', { rule: pinLabel(data.me.role) })}><input {...pinProps('new-password', pinMax(data.me.role))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
         if (!pinOk(newPin, data.me.role)) { setErr(t('הקוד החדש צריך להיות {rule}.', { rule: pinLabel(data.me.role) })); return; }
         try {
-          const res = await call('auth:changeMyPin', { token: state.token, oldPin, newPin });
+          const res = first ? await call('auth:setFirstPin', { token: state.token, newPin }) : await call('auth:changeMyPin', { token: state.token, oldPin, newPin });
           if (res.ok) { sheet.close(); toast(t('הקוד שונה ✅')); }
           else if (res.reason === 'wrong') setErr(t('הקוד הנוכחי לא נכון.'));
           else if (res.reason === 'locked') setErr(t('יותר מדי ניסיונות. נסו שוב עוד דקה.'));

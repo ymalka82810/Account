@@ -41,7 +41,8 @@ export const add = mutation({
     if (pin !== undefined && !validPin(pin, role)) throw new ConvexError(pinRuleMessage(role));
     const personAvatar = avatar?.slice(0, 8);
     if (personAvatar && members.some((p) => p.avatar === personAvatar)) throw new ConvexError("הדמות הזו כבר תפוסה על ידי מישהו אחר במשפחה");
-    const id = await ctx.db.insert("people", { familyId: me.familyId, name: clean, role, avatar: personAvatar, gender });
+    // ילד/ה או נער/ה שנוספו בלי קוד נכנסים בלי קוד, ויכולים לקבוע קוד בעצמם מתי שרוצים (auth:setFirstPin).
+    const id = await ctx.db.insert("people", { familyId: me.familyId, name: clean, role, avatar: personAvatar, gender, ...(!pin && role !== "parent" ? { freeEntry: true } : {}) });
     await logActivity(ctx, me, "person_add", { subject: clean });
     if (pin) {
       const pinSalt = randomHex(16);

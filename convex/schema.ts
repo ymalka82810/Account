@@ -52,6 +52,8 @@ export default defineSchema({
     pinSalt: v.optional(v.string()),
     // אורך הקוד (מספר ספרות), כדי שמסך הכניסה ידע מתי לשלוח. חסר = 4.
     pinLength: v.optional(v.number()),
+    // נוסף בלי קוד סודי (ילד/ה או נער/ה): נכנס/ת בלי קוד, ויכול/ה לקבוע קוד מתי שרוצה. נמחק כשנקבע קוד.
+    freeEntry: v.optional(v.boolean()),
     // הוצא משימוש: כבר לא נכתב. נשאר רק עד שמריצים maintenance:clearPinPlain, ואז מסירים.
     pinPlain: v.optional(v.string()),
     failedAttempts: v.optional(v.number()),

@@ -26,6 +26,7 @@ function ChildrenForm({ token, people }) {
   const usedAvatars = useRef(new Set());
   // הקוד המשותף נקבע עם הילד הראשון שנוסף כאן; אחריו השדה נעלם ושאר הילדים מקבלים אותו קוד.
   const [shared, setShared] = useState(false);
+  const [sharedPin, setSharedPin] = useState(false);
 
   const freeAvatar = () => {
     const taken = new Set([...people.map((p) => p.avatar), ...usedAvatars.current]);
@@ -37,14 +38,14 @@ function ChildrenForm({ token, people }) {
     ev.preventDefault();
     const clean = name.trim().replace(/\s+/g, ' ');
     if (!clean || busy) return;
-    if (!pinOk(pin, 'child')) { toast(t('הקוד צריך להיות {rule}', { rule: pinLabel('child') })); return; }
+    if (pin && !pinOk(pin, 'child')) { toast(t('הקוד צריך להיות {rule}', { rule: pinLabel('child') })); return; }
     setBusy(true);
     try {
       const avatar = freeAvatar();
-      await call('people:add', { token: state.token || token, name: clean, role: 'child', avatar, gender: gender || undefined, pin });
+      await call('people:add', { token: state.token || token, name: clean, role: 'child', avatar, gender: gender || undefined, pin: pin || undefined });
       if (avatar) usedAvatars.current.add(avatar);
       toast(g(gender, '{name} נוסף למשפחה ✅', '{name} נוספה למשפחה ✅', '{name} נוסף/ה למשפחה ✅', { name: clean }));
-      setName(''); setGender(''); setShared(true);
+      setName(''); setGender(''); setShared(true); setSharedPin(!!pin);
     } catch (e) { toast(errMsg(e)); }
     finally { setBusy(false); }
   }
@@ -57,12 +58,12 @@ function ChildrenForm({ token, people }) {
       <div className="field"><span>{t('צורת פנייה')}</span>
         <Select value={gender} onChange={setGender} options={GENDER_OPTIONS} /></div>
       {shared
-        ? <p className="hint">{t('✅ כל הילדים נכנסים בינתיים עם אותו קוד סודי. אפשר להוסיף עוד ילדים.')}</p>
+        ? <p className="hint">{sharedPin ? t('✅ כל הילדים נכנסים בינתיים עם אותו קוד סודי. אפשר להוסיף עוד ילדים.') : t('✅ כל הילדים נכנסים בינתיים בלי קוד סודי. אפשר להוסיף עוד ילדים.')}</p>
         : (
           <>
-            <label className="field"><span>{t('קוד סודי אחד לכל הילדים ({rule})', { rule: pinLabel('child') })}</span>
+            <label className="field"><span>{t('קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק', { rule: pinLabel('child') })}</span>
               <input {...pinProps('new-password')} pattern="\d{4}" value={pin} onChange={(e) => setPin(e.target.value)} /></label>
-            <p className="hint">{t('בינתיים כל הילדים יקבלו אותו קוד. כשתרצו לתת לכל ילד את המשתמש שלו, תאפסו לו את הקוד מלשונית “ניהול”, והוא יבחר קוד משלו.')}</p>
+            <p className="hint">{t('בלי קוד, הילדים נכנסים בלחיצה, וכל ילד יכול לקבוע קוד משלו מתי שירצה. עם קוד, כל הילדים מקבלים אותו קוד, וכשתרצו לתת לכל ילד את המשתמש שלו תאפסו לו את הקוד מלשונית “ניהול”, והוא יבחר קוד משלו.')}</p>
           </>
         )}
       <button className="primary" type="submit" disabled={busy}>{busy ? t('⏳ רגע…') : t('הוספה')}</button>

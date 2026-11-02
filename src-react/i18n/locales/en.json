@@ -621,9 +621,6 @@
  "קוד משפחה": "Family code",
  "קוד סודי ({rule}; ארוך יותר = מוגן יותר)": "Secret code ({rule}; longer = more secure)",
  "קוד סודי (חובה להורה, {rule})": "Secret code (required for a parent, {rule})",
- "קוד סודי (לא חובה — אפשר שהילד יבחר לבד)": "Secret code (optional — the child can choose it later)",
- "קוד סודי (לא חובה — אפשר שהילד/ה יבחר/תבחר לבד)": "Secret code (optional — the child can choose it later)",
- "קוד סודי (לא חובה — אפשר שהילדה תבחר לבד)": "Secret code (optional — the child can choose it later)",
  "קוד סודי חדש": "New secret code",
  "קוד סודי ל{name}": "Secret code for {name}",
  "קוד סודי משלך (4 ספרות)": "Your own secret code (4 digits)",
@@ -861,7 +858,13 @@
  "מי הילדים שלך?": "Who are your children?",
  "הוספת ילד/ה": "Add a child",
  "✅ כל הילדים נכנסים בינתיים עם אותו קוד סודי. אפשר להוסיף עוד ילדים.": "✅ All the children sign in with the same secret code for now. You can add more children.",
- "קוד סודי אחד לכל הילדים ({rule})": "One secret code for all the children ({rule})",
- "בינתיים כל הילדים יקבלו אותו קוד. כשתרצו לתת לכל ילד את המשתמש שלו, תאפסו לו את הקוד מלשונית “ניהול”, והוא יבחר קוד משלו.": "For now all the children get the same code. When you want to give each child their own user, reset their code from the “Manage” tab and they will choose their own.",
- "להוסיף גם נער/ה או הורה נוסף": "Also add a teen or another parent"
+ "להוסיף גם נער/ה או הורה נוסף": "Also add a teen or another parent",
+ "✅ כל הילדים נכנסים בינתיים בלי קוד סודי. אפשר להוסיף עוד ילדים.": "✅ All the children sign in without a secret code for now. You can add more children.",
+ "🔑 קביעת קוד סודי": "🔑 Set a secret code",
+ "אין קוד סודי. אפשר לקבוע קוד בהמשך, ב\"החשבון שלי\".": "No secret code. You can set one later in \"My account\".",
+ "בלי קוד, הילדים נכנסים בלחיצה, וכל ילד יכול לקבוע קוד משלו מתי שירצה. עם קוד, כל הילדים מקבלים אותו קוד, וכשתרצו לתת לכל ילד את המשתמש שלו תאפסו לו את הקוד מלשונית “ניהול”, והוא יבחר קוד משלו.": "Without a code, children just tap to sign in, and each child can set their own code whenever they like. With a code, all the children get the same one, and when you want to give each child their own user, reset their code from the “Manage” tab and they'll choose their own.",
+ "נכנס בלי קוד": "Signs in without a code",
+ "קביעת קוד סודי": "Set a secret code",
+ "קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)": "Secret code (optional — without one, they sign in with a tap and can set a code later)",
+ "קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק": "One secret code for all the children ({rule}). You can leave it empty"
 }

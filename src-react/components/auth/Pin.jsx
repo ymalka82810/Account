@@ -2,7 +2,7 @@ import Arrow from '../shared/Arrow.jsx';
 import { useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { state } from '../../state/state.js';
-import { pinBack, pinPadSpec, pressKey } from '../../state/auth.js';
+import { enterFree, pinBack, pinPadSpec, pressKey } from '../../state/auth.js';
 import { useSheet } from '../shared/Sheet.jsx';
 import { ForgotPinSheet } from './ForgotPinSheet.jsx';
 import { NewDeviceSheet } from './NewDeviceSheet.jsx';
@@ -14,6 +14,18 @@ export default function Pin({ current }) {
   const sheet = useSheet();
   const f = state.pinFlow;
   if (!f) return <In screen="pin" current={current} />;
+  if (f.mode === 'free') {
+    return (
+      <In screen="pin" current={current}>
+        <button className="ghost back" type="button" onClick={pinBack}><Arrow kind="back" /> {t('חזרה')}</button>
+        {f.person.avatar && <div className="avatar-xl" aria-hidden="true">{f.person.avatar}</div>}
+        <h1>{f.person.name}</h1>
+        <p className="hint">{t('אין קוד סודי. אפשר לקבוע קוד בהמשך, ב"החשבון שלי".')}</p>
+        <p className="error" role="alert" aria-live="assertive">{f.busy ? t('בודקים…') : f.error}</p>
+        <button className="primary" type="button" disabled={f.busy} onClick={enterFree}>{t('כניסה')}</button>
+      </In>
+    );
+  }
   const { max, auto } = pinPadSpec(f);
   const title = f.mode === 'login'
     ? t('כתבו את הקוד הסודי')

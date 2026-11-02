@@ -29,6 +29,7 @@ export const get = query({
       legacy: false as const,
       me: {
         id: me._id, name: me.name, role: me.role, avatar: avatarOf(me), gender: me.gender ?? null,
+        hasPin: !!me.pinHash,
         palette: me.palette ?? "blue",
         // מייל מוסתר חלקית (למסך ההגדרות). מאומת = אפשר לשלוח אליו קודים.
         email: me.emailVerified && me.email ? maskEmail(me.email) : null,
@@ -49,7 +50,7 @@ export const get = query({
         localeSet: !!(family.country || family.currency),
       },
       people: await Promise.all(people.map(async (p) => ({
-        id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash, pinLength: p.pinLength ?? 4,
+        id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash, pinLength: p.pinLength ?? 4, freeEntry: !!p.freeEntry && !p.pinHash && p.role !== "parent",
         // הורה שקשור למכשיר (ראו biometric.ts). להורים בלבד, כדי שיראו מי עוד צריך קוד קישור.
         deviceBound: me.role === "parent" && p.role === "parent" ? await isBound(ctx, p._id) : false,
         // התראה להורים בלבד: הקוד של האדם ננעל בגלל ניסיונות כושלים בשבוע האחרון.

@@ -35,6 +35,7 @@ export async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: stri
     pinHash: await hashPin(pin, pinSalt),
     pinLength: pin.length,
     pinPlain: undefined,
+    freeEntry: undefined,
     failedAttempts: 0,
     lockedUntil: undefined,
     lockLevel: 0,
@@ -43,9 +44,12 @@ export async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: stri
   });
 }
 
+// כניסה בלי קוד: רק ילד/ה או נער/ה שנוספו בלי קוד ועוד לא קבעו אחד.
+const isFreeEntry = (p: Doc<"people">) => !!p.freeEntry && !p.pinHash && p.role !== "parent";
+
 // deviceBound: הורה שקשור למכשיר. מסך הכניסה משתמש בזה כדי לדעת שצריך גם חתימה מהמכשיר.
 const publicPerson = (p: Doc<"people">, bound = false) => ({
-  id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash, pinLength: p.pinLength ?? 4,
+  id: p._id, name: p.name, role: p.role, avatar: avatarOf(p), gender: p.gender ?? null, hasPin: !!p.pinHash, pinLength: p.pinLength ?? 4, freeEntry: isFreeEntry(p),
   deviceBound: bound,
 });
 const boundParentIds = async (ctx: QueryCtx, people: Doc<"people">[]) => {
@@ -277,6 +281,34 @@ export const login = mutation({
     await upgradePinHash(ctx, p, pin);
     if (!p.familyId) await adoptLegacy(ctx);
     return { ok: true as const, token: await openSession(ctx, personId), needBind };
+  },
+});
+
+// כניסה בלי קוד סודי: לילד/ה או נער/ה שנוספו בלי קוד. עדיין צריך את קוד המשפחה (שמור במכשיר).
+export const enterFree = mutation({
+  args: { code: v.string(), personId: v.id("people"), device: v.optional(v.string()) },
+  handler: async (ctx, { code, personId, device }) => {
+    const p = await ctx.db.get(personId);
+    if (!p || !p.familyId || !isFreeEntry(p)) return { ok: false as const, reason: "pin" as const };
+    if (await codeThrottled(ctx, device)) return { ok: false as const, reason: "throttled" as const };
+    const found = await findFamilyByCode(ctx, code);
+    if (!found || found.family._id !== p.familyId) return await failCode(ctx, device);
+    return { ok: true as const, token: await openSession(ctx, personId) };
+  },
+});
+
+// מי שנכנס/ת בלי קוד קובע/ת קוד סודי מתי שרוצה (מתוך "החשבון שלי").
+export const setFirstPin = mutation({
+  args: { token: v.string(), newPin: v.string() },
+  handler: async (ctx, { token, newPin }) => {
+    const hash = await hashToken(token);
+    const session = await ctx.db.query("sessions").withIndex("by_token", (q) => q.eq("tokenHash", hash)).first();
+    if (!session || session.expiresAt < Date.now()) return { ok: false as const, reason: "session" as const };
+    const p = await ctx.db.get(session.personId);
+    if (!p || !isFreeEntry(p)) return { ok: false as const, reason: "session" as const };
+    if (!validPin(newPin, p.role)) return { ok: false as const, reason: "format" as const };
+    await setPin(ctx, p._id, newPin);
+    return { ok: true as const };
   },
 });
 

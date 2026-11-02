@@ -61,7 +61,7 @@ export default function PersonForm({ token }) {
       </div>
       <label className="field"><span>{role === 'parent'
         ? t('קוד סודי (חובה להורה, {rule})', { rule: pinLabel('parent') })
-        : g(gender, 'קוד סודי (לא חובה — אפשר שהילד יבחר לבד)', 'קוד סודי (לא חובה — אפשר שהילדה תבחר לבד)', 'קוד סודי (לא חובה — אפשר שהילד/ה יבחר/תבחר לבד)')}</span>
+        : t('קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)')}</span>
         <input type="password" inputMode="numeric" pattern={role === 'parent' ? '\\d{4,8}' : '\\d{4}'} maxLength={pinMax(role)} autoComplete="new-password"
           value={pin} onChange={(e) => setPin(e.target.value)} /></label>
       {role !== 'child' && <p className="hint">{t('🔒 הוספה בתור {role} מאושרת בטביעת אצבע או בזיהוי פנים.', { role: role === 'parent' ? t('הורה') : g(gender, 'נער', 'נערה', 'נער/ה') })}</p>}

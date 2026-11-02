@@ -196,7 +196,7 @@ export function leaveFamily() {
 
 // ---------- קוד סודי ----------
 export function startPin(p, legacy) {
-  state.pinFlow = { person: p, legacy: !!legacy, mode: p.hasPin ? 'login' : 'new', first: null, entered: '', busy: false, error: '', shakes: 0 };
+  state.pinFlow = { person: p, legacy: !!legacy, mode: p.hasPin ? 'login' : (p.freeEntry && !legacy ? 'free' : 'new'), first: null, entered: '', busy: false, error: '', shakes: 0 };
   if (!legacy) localStorage.setItem(LAST_PERSON_KEY, p.id);
   route();
 }
@@ -249,6 +249,26 @@ export async function pressKey(k) {
   else if (f.entered.length < max) f.entered += k;
   renderPin();
   if (auto && f.entered.length === max) await submitPin();
+}
+
+// כניסה בלי קוד סודי (ילד/ה או נער/ה שנוספו בלי קוד): לחיצה אחת, בלי הקשת קוד.
+export async function enterFree() {
+  const f = state.pinFlow;
+  if (!f || f.busy || !state.fam) return;
+  f.busy = true;
+  renderPin();
+  try {
+    const res = await call('auth:enterFree', { code: state.fam.code, personId: f.person.id });
+    if (res.ok) { state.pinFlow = null; setToken(res.token); return; }
+    if (res.reason === 'code') { codeGone(); return; }
+    if (res.reason === 'throttled') renderPin(t('יותר מדי ניסיונות. נסו שוב עוד דקה.'));
+    else { f.mode = 'new'; renderPin(); } // ההורה הגדיר קוד בינתיים
+  } catch (e) {
+    renderPin(errMsg(e));
+  } finally {
+    f.busy = false;
+    bumpAuth();
+  }
 }
 
 // קוד משפחה שהפסיק להיות תקף באמצע הכניסה (ההורים החליפו אותו).

@@ -129,8 +129,8 @@ export function AccountSheet() {
       )}
 
       <button className="ghost" type="button"
-        onClick={() => sheet.open(t('שינוי הקוד הסודי'), me.email ? <ChangePinEmailSheet /> : <ChangePinSheet />)}>
-        {t('🔑 שינוי הקוד הסודי')}
+        onClick={() => sheet.open(me.hasPin ? t('שינוי הקוד הסודי') : t('קביעת קוד סודי'), me.email ? <ChangePinEmailSheet /> : <ChangePinSheet />)}>
+        {me.hasPin ? t('🔑 שינוי הקוד הסודי') : t('🔑 קביעת קוד סודי')}
       </button>
 
       {me.role === 'parent' && (

@@ -51,6 +51,27 @@ describe("כניסה", () => {
     expect(await login(p, "1234", "d")).toMatchObject({ ok: false, reason: "nopin" });
   });
 
+  it("ילד שנוסף בלי קוד נכנס בלי קוד, ויכול לקבוע קוד אחר כך", async () => {
+    const parent: any = await login(A.ids["אבא"], "1111", "p");
+    const id: any = await t.mutation(api.people.add, { token: parent.token, name: "נועם", role: "child" });
+    // לא נכנס בכניסה רגילה, אבל נכנס בכניסה בלי קוד (עם קוד המשפחה)
+    expect(await login(id, "1234", "d")).toMatchObject({ ok: false, reason: "nopin" });
+    expect(await t.mutation(api.auth.enterFree, { code: "ZZZZZZZZZZ", personId: id, device: "d" })).toMatchObject({ ok: false, reason: "code" });
+    const free: any = await t.mutation(api.auth.enterFree, { code: CODE_A, personId: id, device: "d" });
+    expect(free.ok).toBe(true);
+    expect((await t.query(api.data.get, { token: free.token }))!.me).toMatchObject({ hasPin: false });
+    // קובע קוד: מרגע זה כניסה בלי קוד נחסמת והקוד נדרש
+    expect(await t.mutation(api.auth.setFirstPin, { token: free.token, newPin: "12" })).toMatchObject({ ok: false, reason: "format" });
+    expect(await t.mutation(api.auth.setFirstPin, { token: free.token, newPin: "4321" })).toMatchObject({ ok: true });
+    expect(await t.mutation(api.auth.enterFree, { code: CODE_A, personId: id, device: "d" })).toMatchObject({ ok: false, reason: "pin" });
+    expect(await login(id, "4321", "d")).toMatchObject({ ok: true });
+  });
+
+  it("הורה וילד שנוסף עם קוד לא נכנסים בכניסה בלי קוד", async () => {
+    expect(await t.mutation(api.auth.enterFree, { code: CODE_A, personId: A.ids["אבא"], device: "d" })).toMatchObject({ ok: false, reason: "pin" });
+    expect(await t.mutation(api.auth.enterFree, { code: CODE_A, personId: A.ids["דנה"], device: "d" })).toMatchObject({ ok: false, reason: "pin" });
+  });
+
   it("ניחושי קוד משפחה שגויים מוגבלים לפי מכשיר ולא חוסמים מכשיר אחר", async () => {
     for (let i = 0; i < 30; i++) await login(A.ids["דנה"], "2222", "attacker", "WRONGCODE1");
     expect(await login(A.ids["דנה"], "2222", "attacker")).toMatchObject({ ok: false, reason: "throttled" });

@@ -95,7 +95,7 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
           <div className="text">
             {p.name}{' '}
             <span className="meta">
-              {roleLabel(p.role, p.gender) + (p.hasPin ? '' : ' • ' + g(p.gender, 'עוד לא בחר קוד', 'עוד לא בחרה קוד', 'עוד לא בחר/ה קוד')) + (p.role === 'parent' && !p.deviceBound ? ' • ' + t('⏳ עוד לא קשור/ה למכשיר') : '')}
+              {roleLabel(p.role, p.gender) + (p.hasPin ? '' : p.freeEntry ? ' • ' + t('נכנס בלי קוד') : ' • ' + g(p.gender, 'עוד לא בחר קוד', 'עוד לא בחרה קוד', 'עוד לא בחר/ה קוד')) + (p.role === 'parent' && !p.deviceBound ? ' • ' + t('⏳ עוד לא קשור/ה למכשיר') : '')}
             </span>
             {p.lockAlert && (
               <div className="meta" style={{ color: '#b45309' }}>
