@@ -53,16 +53,39 @@ export const tabLabels = () => ({
   teen: { home: t('💰 הכסף שלי'), friends: t('🤝 חברים'), history: t('📜 היסטוריה') },
 });
 
+// המסך הפעיל (פנקס, הקמה, הצטרפות) נשמר ב-sessionStorage, כדי שרענון הדף ישאיר אותך באותו מסך
+// ולא יחזיר למסך הפתיחה או הכניסה. נמחק עם סגירת הלשונית.
+const VIEW_KEY = 'kupa-view';
+const NB_BACK_KEY = 'kupa-nb-back';
+const PERSIST_VIEWS = ['setup', 'join', 'notebook'];
+function savedView() {
+  try { const v = sessionStorage.getItem(VIEW_KEY); return v && PERSIST_VIEWS.includes(v) ? v : ''; } catch (e) { return ''; }
+}
+function saveSession(key, value) {
+  try { if (value) sessionStorage.setItem(key, value); else sessionStorage.removeItem(key); } catch (e) { /* */ }
+}
+
 export const state = {
   token: localStorage.getItem(TOKEN_KEY) || '',
   legacyPeople: null, // null = עוד לא נטען. הורים מהגרסה הישנה (בלי קוד משפחה)
   codeChecked: false, // האם בדקנו קוד שמור במכשיר
   fam: null,         // {code, name, people} אחרי שהוזן קוד משפחה תקין
   // מכשיר בלי כניסה שמורה ובלי משפחה שמורה נפתח ישר בפנקס האישי.
-  view: (localStorage.getItem(TOKEN_KEY) || localStorage.getItem(CODE_KEY)) ? 'welcome' : 'notebook', // welcome | setup | join | notebook
+  view: savedView() || ((localStorage.getItem(TOKEN_KEY) || localStorage.getItem(CODE_KEY)) ? 'welcome' : 'notebook'), // welcome | setup | join | notebook
   pinFlow: null,     // {person, legacy, mode:'login'|'new', first, entered, busy, error, shakes}
   pushSyncedFor: '',
+  notebookBack: (() => { try { return sessionStorage.getItem(NB_BACK_KEY) === '1'; } catch (e) { return false; } })(), // יש כפתור חזרה מהפנקס
 };
+
+// כל שינוי של view או notebookBack (בכל מקום בקוד) נשמר לרענון הבא.
+for (const [prop, key, enc] of /** @type {const} */ ([['view', VIEW_KEY, (/** @type {string} */ v) => (PERSIST_VIEWS.includes(v) ? v : '')], ['notebookBack', NB_BACK_KEY, (/** @type {boolean} */ v) => (v ? '1' : '')]])) {
+  let cur = /** @type {any} */ (state)[prop];
+  Object.defineProperty(state, prop, {
+    enumerable: true,
+    get: () => cur,
+    set: (/** @type {any} */ v) => { cur = v; saveSession(key, /** @type {any} */ (enc)(v)); },
+  });
+}
 
 // ---------- הודעה לקומפוננטות על שינוי ב-state ----------
 // מסכי הכניסה ב-React נרשמים כאן. bumpAuth() נקרא בכל שינוי (route, setToken, ...).
