@@ -36,12 +36,14 @@
     blender -b -P scripts/blender/icons.py -- --all /tmp/ui_raw 512 128
     python3 scripts/blender/compose_ui_icons.py /tmp/ui_raw
 
-`icons.py` בונה כל אייקון מצורות רכות (bevel + subdivision), עם תאורת סטודיו של שלוש נקודות ומצלמה
-אורתוגרפית שממסגרת אוטומטית. השטר, המגילה וכריכת הפנקס מקבלים טקסטורות שמצוירות ב-`make_textures.py`
-(Pillow). המטבע עם הכוכב משותף לכולם, כמו במסך הטעינה. הפלט: `public/ui/*.webp` (256px), שמוצגים דרך
-`src-react/components/shared/UiIcon.jsx`: `fly-money` ("אני חייב"), `handshake` ("חייבים לי" וחברים),
-`money-bag` (הכסף שלי), `scroll` (מה היה), `notebook` (הפנקס), `family` (המשפחה). `withIcons(text)` מחליף
-את האימוג'י התואם בתוך טקסט מתורגם, בלי לגעת בקבצי התרגום.
+הסגנון הוא מתכת כמו מטבע האפליקציה (`coin.py`): אותם חומרי זהב, אותה סביבה ואותה תאורה. השק, השטר, המגילה
+והפנקס הם חפצים מזהב (כנפי השטר מכסף, החותמת והסימנייה מנחושת). הטקסטורות מ-`make_textures.py` משמשות
+כחריטה: הבהיר בולט ומבריק, הכהה שקוע ומט. לחיצת היד והמשפחה הן מדליונים עם תבליט, כמו הסמל על המטבע, מצורות
+הגופן Noto Emoji (`fonts/`, רישיון OFL, משקל 700, רק התווים שבשימוש). הפלט: `public/ui/*.webp` (256px), שמוצגים
+דרך `src-react/components/shared/UiIcon.jsx`: `fly-money` ("אני חייב"), `handshake` ("חייבים לי" וחברים),
+`money-bag` (הכסף שלי), `scroll` (מה היה), `notebook` (הפנקס), `family` (המשפחה). `withIcons(text)` מחליף את
+האימוג'י התואם בתוך טקסט מתורגם, בלי לגעת בקבצי התרגום. אחרי רינדור מחדש מעלים את `UI_ICON_VERSION`
+ב-`src-react/lib/uiIcons.js` ואת `?v=` ב-`public/sw.js`.
 
 אייקון חדש: פונקציית בנייה ב-`BUILDERS` ב-`icons.py`, ואז להוסיף אותו גם ל-`public/sw.js` ול-`preloadImages.js`.
 רינדור על מעבד אחד: כ-20-90 שניות לאייקון ב-512/128.
