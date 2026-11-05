@@ -216,7 +216,9 @@ export const challenge = mutation({
   args: { token: v.string(), action: v.string(), credentialId: v.string() },
   handler: async (ctx, { token, action, credentialId }) => {
     const me = await requireParent(ctx, token);
-    if (action.length > 200 || action === "register" || action === "login") throw new ConvexError("פעולה לא תקינה");
+    // "pin:" שמור למסלול הקוד הסודי (pinConfirm). בלי החסימה הזו מי שמחזיק סשן של הורה היה מנפיק לעצמו
+    // אתגר "pin:role:..." ועוקף גם את טביעת האצבע וגם את הקוד הסודי.
+    if (action.length > 200 || action === "register" || action === "login" || action.startsWith(PIN_ACTION_PREFIX)) throw new ConvexError("פעולה לא תקינה");
     const keys = await ctx.db.query("bioKeys").withIndex("by_person", (q) => q.eq("personId", me._id)).collect();
     if (!keys.some((k) => k.credentialId === credentialId)) return { ok: false as const, reason: "unknownKey" as const };
     return { ok: true as const, challenge: await newChallenge(ctx, me._id, action) };
