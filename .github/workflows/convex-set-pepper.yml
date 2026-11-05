@@ -1,0 +1,32 @@
+name: Set Convex PIN_PEPPER (once)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  set-pepper:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # מייצר pepper אקראי ושומר אותו רק ב-Convex. הערך לא מודפס ולא נשמר בגיט.
+      # אם כבר קיים pepper, לא נוגעים בו: החלפה תשבור את כל הקודים שכבר גובבו איתו.
+      - name: Set PIN_PEPPER if missing
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+        run: |
+          if npx convex env list 2>/dev/null | grep -q '^PIN_PEPPER='; then
+            echo "::warning title=SKIPPED::PIN_PEPPER already set, not changed"
+            exit 0
+          fi
+          PEP=$(openssl rand -hex 32)
+          echo "::add-mask::$PEP"
+          npx convex env set PIN_PEPPER "$PEP" > /dev/null
+          unset PEP
+          echo "::notice title=DONE::PIN_PEPPER set"
