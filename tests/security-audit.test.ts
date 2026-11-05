@@ -355,3 +355,30 @@ describe("fx:ensure מוגבל בקצב", () => {
     expect(spy).toHaveBeenCalledTimes(2);
   });
 });
+
+describe("push:subscribe מקבל רק שרתי Push מוכרים", () => {
+  const sub = (endpoint: string) => t.mutation(api.push.subscribe, { token: A.tokens["דנה"], endpoint, p256dh: "k", auth: "a" });
+  const good = [
+    "https://fcm.googleapis.com/fcm/send/abc:APA91b",
+    "https://updates.push.services.mozilla.com/wpush/v2/gAAAA",
+    "https://updates-autopush.stage.mozaws.net.push.services.mozilla.com/wpush/v2/x",
+    "https://web.push.apple.com/QGxyz",
+    "https://wns2-par02p.notify.windows.com/w/?token=abc",
+  ];
+  const bad = [
+    "http://fcm.googleapis.com/fcm/send/x", "https://attacker.example.com/x", "https://fcm.googleapis.com.evil.com/x",
+    "https://evilfcm.googleapis.com/x", "https://fcm.googleapis.com@evil.com/x", "https://user:pw@fcm.googleapis.com/x",
+    "https://fcm.googleapis.com:8443/x", "https://127.0.0.1/x", "https://169.254.169.254/latest", "https://notify.windows.com.evil.io/x",
+    "not a url", "https://" + "a".repeat(1000) + ".notify.windows.com/x",
+  ];
+
+  it("כתובות של Chrome, Firefox, Safari ו-Edge נרשמות", async () => {
+    for (const e of good) await sub(e);
+    expect(await t.run((ctx) => ctx.db.query("pushSubs").collect())).toHaveLength(good.length);
+  });
+
+  it("כתובות אחרות (כולל הטעיות של שם מארח, פורט, הרשאות ו-IP פנימי) נדחות", async () => {
+    for (const e of bad) await expect(sub(e)).rejects.toThrow("מנוי התראות לא תקין");
+    expect(await t.run((ctx) => ctx.db.query("pushSubs").collect())).toHaveLength(0);
+  });
+});
