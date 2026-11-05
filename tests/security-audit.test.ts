@@ -92,3 +92,20 @@ describe("החלפת מכשיר שאבד: קוד המייל של ההמתנה ל
       .toMatchObject({ ok: false, reason: "wait" });
   });
 });
+
+describe("admin:importData לא יוצר הורים חדשים", () => {
+  it("אדם חדש שמסומן בקובץ כהורה נוצר כילד/ה, בלי לעקוף את האישור הביומטרי", async () => {
+    const res: any = await t.mutation(api.admin.importData, {
+      token: dad(),
+      people: [{ id: "p1", name: "הורה חדש", role: "parent" }, { id: "p2", name: "אמא", role: "parent" }, { id: "p3", name: "ילד חדש", role: "child" }],
+      entries: [{ kind: "debt", from: "p1", to: "p2", amount: 1000, date: "2025-05-01" }],
+    });
+    expect(res).toEqual({ added: 1 });
+    const people = await t.run((ctx) => ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", A.familyId)).collect());
+    const byName = Object.fromEntries(people.map((p) => [p.name, p]));
+    expect(byName["הורה חדש"].role).toBe("child");
+    expect(byName["ילד חדש"].role).toBe("child");
+    expect(byName["אמא"].role).toBe("parent"); // אדם קיים לא משתנה
+    expect(people.filter((p) => p.role === "parent").map((p) => p.name).sort()).toEqual(["אבא", "אמא"]);
+  });
+});
