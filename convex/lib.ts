@@ -184,6 +184,22 @@ export async function issuePass(ctx: MutationCtx, familyId: Id<"families">, labe
   return pass;
 }
 
+// הגבלת הנפקת כרטיסים: מי שמחזיק קוד משפחה (או כל חבר מחובר) לא יכול להציף את הטבלה.
+// לפי מכשיר/אדם בשעה, ובסך הכול למשפחה. חריגה = לא מונפק כרטיס (המכשיר עובד, רק לא זוכר את המשפחה).
+export const PASS_ISSUE_LIMIT = 10;
+export const PASS_ISSUE_WINDOW_MS = 60 * 60 * 1000;
+export const MAX_PASSES_PER_FAMILY = 50;
+
+export async function issuePassLimited(ctx: MutationCtx, familyId: Id<"families">, who: string, label?: string): Promise<string | null> {
+  const key = "pass-issue:" + who;
+  if (await isThrottled(ctx, key, PASS_ISSUE_LIMIT, PASS_ISSUE_WINDOW_MS)) return null;
+  const now = Date.now();
+  const rows = await ctx.db.query("devicePasses").withIndex("by_family", (q) => q.eq("familyId", familyId)).take(MAX_PASSES_PER_FAMILY * 4);
+  if (rows.filter((r) => passExpiry(r) >= now).length >= MAX_PASSES_PER_FAMILY) return null;
+  await noteHit(ctx, key, PASS_ISSUE_WINDOW_MS);
+  return await issuePass(ctx, familyId, label);
+}
+
 export async function purgePasses(ctx: MutationCtx, familyId: Id<"families">) {
   for (const p of await ctx.db.query("devicePasses").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()) {
     await ctx.db.delete(p._id);

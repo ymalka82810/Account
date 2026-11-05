@@ -285,3 +285,55 @@ describe("emailAuth:requestVerify: חיבור מייל ראשון דורש את 
     expect(await verify("1111")).toMatchObject({ ok: false, reason: "oldCode" });
   });
 });
+
+describe("הגבלות קצב: כרטיסי מכשיר ובקשות הצטרפות", () => {
+  const passes = () => t.run((ctx) => ctx.db.query("devicePasses").withIndex("by_family", (q) => q.eq("familyId", A.familyId)).collect());
+
+  it("auth:enter עם remember מנפיק כרטיס, אבל אחרי 10 בשעה ממכשיר אחד לא מנפיק עוד (והכניסה עצמה עובדת)", async () => {
+    for (let i = 0; i < 10; i++) expect(((await t.mutation(api.auth.enter, { code: CODE, device: "flood", remember: true })) as any).loginCode).toBeTruthy();
+    const r: any = await t.mutation(api.auth.enter, { code: CODE, device: "flood", remember: true });
+    expect(r.ok).toBe(true);
+    expect(r.loginCode).toBeUndefined();
+    expect(await passes()).toHaveLength(10);
+    // מכשיר אחר לא מושפע
+    expect(((await t.mutation(api.auth.enter, { code: CODE, device: "other", remember: true })) as any).loginCode).toBeTruthy();
+  });
+
+  it("תקרה למשפחה: לא מונפקים כרטיסים מעבר ל-50 גם ממכשירים שונים", async () => {
+    for (let i = 0; i < 50; i++) await t.mutation(api.auth.enter, { code: CODE, device: "d" + i, remember: true });
+    expect(await passes()).toHaveLength(50);
+    expect(((await t.mutation(api.auth.enter, { code: CODE, device: "d99", remember: true })) as any).loginCode).toBeUndefined();
+    expect(await t.mutation(api.auth.deviceCard, { token: A.tokens["דנה"] })).toEqual({ ok: false });
+    expect(await passes()).toHaveLength(50);
+  });
+
+  it("auth:deviceCard מוגבל לאדם בשעה, והכרטיס נושא את שם מי שביקש", async () => {
+    const first: any = await t.mutation(api.auth.deviceCard, { token: A.tokens["דנה"] });
+    expect(first.ok).toBe(true);
+    expect((await passes())[0].label).toBe("דנה");
+    for (let i = 1; i < 10; i++) expect(((await t.mutation(api.auth.deviceCard, { token: A.tokens["דנה"] })) as any).ok).toBe(true);
+    expect(await t.mutation(api.auth.deviceCard, { token: A.tokens["דנה"] })).toEqual({ ok: false });
+    expect(((await t.mutation(api.auth.deviceCard, { token: A.tokens["אבא"] })) as any).ok).toBe(true);
+    // אחרי שעה אפשר שוב
+    vi.advanceTimersByTime(61 * 60 * 1000);
+    await t.run(async (ctx) => { for (const x of await ctx.db.query("sessions").collect()) await ctx.db.patch(x._id, { expiresAt: Date.now() + 3_600_000 }); });
+    expect(((await t.mutation(api.auth.deviceCard, { token: A.tokens["דנה"] })) as any).ok).toBe(true);
+  });
+
+  it("auth:join: 3 בקשות בשעה ממכשיר אחד, ואז throttled בלי ליצור בקשה", async () => {
+    for (let i = 0; i < 3; i++) expect(await t.mutation(api.auth.join, { code: CODE, name: "נ" + i, pin: "5555", device: "j", shareNotebook: true })).toMatchObject({ ok: true });
+    expect(await t.mutation(api.auth.join, { code: CODE, name: "נ9", pin: "5555", device: "j", shareNotebook: true })).toMatchObject({ ok: false, reason: "throttled" });
+    expect(await t.run((ctx) => ctx.db.query("joinRequests").collect())).toHaveLength(3);
+    expect(await t.mutation(api.auth.join, { code: CODE, name: "נ9", pin: "5555", device: "k", shareNotebook: true })).toMatchObject({ ok: true });
+  });
+
+  it("auth:join: תקרה של 15 בקשות בשעה לכל משפחה, גם ממכשירים שונים", async () => {
+    for (let i = 0; i < 15; i++) {
+      // ההורים מטפלים בבקשות, כדי שתקרת 10 הממתינות לא תסתיר את הבדיקה
+      const r: any = await t.mutation(api.auth.join, { code: CODE, name: "ש" + i, pin: "5555", device: "x" + i, shareNotebook: true });
+      expect(r.ok).toBe(true);
+      for (const j of await t.run((ctx) => ctx.db.query("joinRequests").collect())) await t.mutation(api.auth.rejectJoin, { token: dad(), requestId: j._id });
+    }
+    expect(await t.mutation(api.auth.join, { code: CODE, name: "אחרון", pin: "5555", device: "zz", shareNotebook: true })).toMatchObject({ ok: false, reason: "throttled" });
+  });
+});

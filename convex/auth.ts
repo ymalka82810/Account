@@ -9,7 +9,7 @@ import { notify } from "./notify";
 import { checkBiometric, familyHasBoundParent, isBound, proofValidator } from "./biometric";
 import {
   codeThrottled, failCode, CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS, MAX_FAMILY_SIZE, SESSION_MS,
-  adoptLegacy, avatarOf, cleanFamilyName, cleanName, createFamilyDoc, deviceKey, findFamilyByCode, getSessionPerson, hashPin, isPass, issuePass, passExpiry, PASS_TTL_MS,
+  adoptLegacy, avatarOf, cleanFamilyName, cleanName, createFamilyDoc, deviceKey, findFamilyByCode, getSessionPerson, hashPin, isPass, issuePassLimited, passExpiry, PASS_TTL_MS,
   hashToken, isThrottled, legacyPeople, noteHit, randomHex, registerPinFail, requireAdultBirthDate, requireSameFamily, requireParent, validPin, pinRuleMessage,
   upgradePinHash, verifyPin, trustKeyOf, cleanDeviceId, hitCount, guessKeys, MAX_TRUSTED_DEVICES,
   GUESS_DEVICE_LIMIT, GUESS_DEVICE_WINDOW_MS, GUESS_PERSON_LIMIT, GUESS_PERSON_WINDOW_MS,
@@ -85,7 +85,7 @@ export const enter = mutation({
       familyId: found.family._id,
       familyName: found.family.name,
       // מה שנשמר במכשיר לכניסות הבאות: כרטיס כניסה, אף פעם לא קוד ההצטרפות.
-      loginCode: found.passId ? code : remember ? await issuePass(ctx, found.family._id, label) : undefined,
+      loginCode: found.passId ? code : remember ? (await issuePassLimited(ctx, found.family._id, "dev:" + (cleanDeviceId(device) || "anon"), label)) ?? undefined : undefined,
       people: await (async () => {
         const bound = await boundParentIds(ctx, people);
         return people.map((p) => publicPerson(p, bound.has(p._id)));
@@ -149,6 +149,13 @@ export const join = mutation({
     if (requests.length >= MAX_JOIN_REQUESTS) throw new ConvexError("יש יותר מדי בקשות הצטרפות ממתינות. בקשו מההורים לטפל בהן");
     if (members.some((p) => p.name === clean) || requests.some((r) => r.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה. בחרו אותו ברשימה, או שנו את השם");
     void gender; // נשאר בחתימה בשביל גרסאות ישנות של האפליקציה, ולא נשמר.
+    // הגבלת קצב: בקשות הצטרפות (וההתראות להורים עליהן) לפי מכשיר ובסך הכול לפי משפחה.
+    const devKey = "join-dev:" + (cleanDeviceId(device) || "anon"), famKey = "join-fam:" + familyId;
+    if (await isThrottled(ctx, devKey, JOIN_DEVICE_LIMIT, JOIN_WINDOW_MS) || await isThrottled(ctx, famKey, JOIN_FAMILY_LIMIT, JOIN_WINDOW_MS)) {
+      return { ok: false as const, reason: "throttled" as const };
+    }
+    await noteHit(ctx, devKey, JOIN_WINDOW_MS);
+    await noteHit(ctx, famKey, JOIN_WINDOW_MS);
     // לא נכנסים מיד: הבקשה ממתינה עד שהורה מאשר (auth:approveJoin).
     const pinSalt = randomHex(16);
     await ctx.db.insert("joinRequests", {
@@ -162,6 +169,9 @@ export const join = mutation({
 });
 
 const MAX_JOIN_REQUESTS = 10;
+const JOIN_WINDOW_MS = 60 * 60 * 1000;
+const JOIN_DEVICE_LIMIT = 3; // בקשות הצטרפות בשעה ממכשיר אחד
+const JOIN_FAMILY_LIMIT = 15; // ובסך הכול לכל משפחה
 
 // הורה מאשר בקשת הצטרפות: נוצר ילד/ה עם הקוד הסודי שהמצטרף/ת בחר/ה, ואז נכנסים כרגיל.
 export const approveJoin = mutation({
@@ -366,7 +376,10 @@ export const deviceCard = mutation({
     const me = await getSessionPerson(ctx, token);
     if (!me || !me.familyId) return { ok: false as const };
     const family = await ctx.db.get(me.familyId);
-    return { ok: true as const, loginCode: await issuePass(ctx, me.familyId), familyId: me.familyId, familyName: family?.name ?? "" };
+    // התווית היא שם מי שביקש את הכרטיס, כדי שהורה יזהה ברשימת המכשירים מאיפה הוא.
+    const loginCode = await issuePassLimited(ctx, me.familyId, "person:" + me._id, me.name);
+    if (!loginCode) return { ok: false as const };
+    return { ok: true as const, loginCode, familyId: me.familyId, familyName: family?.name ?? "" };
   },
 });
 
