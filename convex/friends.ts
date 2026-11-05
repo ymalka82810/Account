@@ -243,14 +243,19 @@ export const confirmEntry = mutation({
 });
 
 export const rejectEntry = mutation({
-  args: { token: v.string(), id: v.id("friendEntries") },
-  handler: async (ctx, { token, id }) => {
+  args: { token: v.string(), id: v.id("friendEntries"), reason: v.optional(v.string()) },
+  handler: async (ctx, { token, id, reason }) => {
+    const why = (reason ?? "").trim();
+    if (why.length > 80) throw new ConvexError("ההערה ארוכה מדי");
     const hit = await pendingForMe(ctx, token, id);
     if (!hit) return;
     await ctx.db.delete(id);
     const from = await ctx.db.get(hit.e.from);
     const to = await ctx.db.get(hit.e.to);
-    if (from && to) await notify(ctx, [hit.e.createdBy], "לא אושר", entryLine(hit.e, { from: from.name, to: to.name, creator: hit.me.name }));
+    if (from && to) {
+      const line = entryLine(hit.e, { from: from.name, to: to.name, creator: hit.me.name });
+      await notify(ctx, [hit.e.createdBy], "לא אושר", why ? `${line}\nסיבה: ${why}` : line);
+    }
   },
 });
 

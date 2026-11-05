@@ -7,5 +7,13 @@
   "display": "standalone",
   "background_color": "#fbf3f7",
   "theme_color": "#fbf3f7",
-  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }],
+  "shortcuts": [
+    {
+      "name": "רשום חוב",
+      "short_name": "רשום חוב",
+      "url": "./?add=debt",
+      "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    }
+  ]
 }

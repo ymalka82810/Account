@@ -228,14 +228,19 @@ export function EntryFlow({ opts }) {
       if (foreignCase && !(await confirmForeign())) return;
       try {
         // entries:add ו-friends:addEntry מקבלות ארגומנטים קצת שונים (המטבע רק בקופה המשפחתית), לכן הארגומנטים כאן דינמיים.
-        await call(/** @type {'entries:add'} */ (opts.endpoint || 'entries:add'), /** @type {any} */ ({
+        const newId = await call(/** @type {'entries:add'} */ (opts.endpoint || 'entries:add'), /** @type {any} */ ({
           token: state.token, kind: opts.kind, from: st.from, to: st.to, amount: st.agorot,
           note: isDebt ? st.note.trim() : (st.note.trim() || t('החזר')), date: today(),
           ...(st.debtId ? { debtId: st.debtId } : {}),
           ...(canPickCurrency ? { currency: st.cur } : {}),
         }));
         sheet.close();
-        toast(opts.doneToast || (!isParent ? t('נשלח להורה לאישור ⏳') : isDebt ? t('החוב נשמר ✅') : t('ההחזר נשמר ✅')));
+        const removeEndpoint = /** @type {'entries:remove' | 'friends:removeEntry'} */ (opts.endpoint === 'friends:addEntry' ? 'friends:removeEntry' : 'entries:remove');
+        const undo = async () => {
+          try { await call(removeEndpoint, /** @type {any} */ ({ token: state.token, id: newId })); toast(t('הרשומה נמחקה')); }
+          catch (e) { toast(errMsg(e)); }
+        };
+        toast(opts.doneToast || (!isParent ? t('נשלח להורה לאישור ⏳') : isDebt ? t('החוב נשמר ✅') : t('ההחזר נשמר ✅')), { label: t('ביטול'), onClick: undo });
         setTab(opts.returnTab || 'home');
       } catch (e) { setErr(errMsg(e)); }
     };

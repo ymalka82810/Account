@@ -15,692 +15,897 @@
 14|{from} is mij geld schuldig
 15|{from} is {to} geld schuldig
 16|{from} is mij geld schuldig
-17|{name} goedgekeurd ✅
-18|{name} verwijderd
-19|{name} verwijderd
-20|{name} verwijderd
-21|{name} is mij geld schuldig
-22|{name} is mij geld schuldig
-23|{name} is mij geld schuldig
-24|{name} kiest bij de volgende keer inloggen een nieuwe code
-25|{name} kiest bij de volgende keer inloggen een nieuwe code
-26|{name} kan vrienden toevoegen via e-mail en schulden met hen registreren. Elke registratie wacht ook op goedkeuring van de vriend, en jullie zien ze in het overzicht. Je kunt dit op elk moment uitschakelen.
-27|{name} kan vrienden toevoegen via e-mail en schulden met hen registreren. Elke registratie wacht ook op goedkeuring van de vriend, en jullie zien ze in het overzicht. Je kunt dit op elk moment uitschakelen.
-28|{name} staat niet in de landenlijst, dus de valuta wordt de Amerikaanse dollar.
-29|{name} wil schulden met vrienden registreren
-30|{name} wil schulden met vrienden registreren
-31|{name} wil schulden met vrienden registreren
-32|{name} is aan het gezin toegevoegd ✅
-33|{name} is aan het gezin toegevoegd ✅
-34|{name} is aan het gezin toegevoegd ✅
-35|{name} is nu {role} ✅
-36|{name} wil je toevoegen
-37|{name} kiest bij de volgende keer inloggen een nieuwe code
-38|{name} kan vrienden toevoegen via e-mail en schulden met hen registreren. Elke registratie wacht ook op goedkeuring van de vriend, en jullie zien ze in het overzicht. Je kunt dit op elk moment uitschakelen.
-39|{who} heeft geregistreerd: {line}
-40|{who} heeft geregistreerd: {line}
-41|{who} heeft geregistreerd: {line}
-42|→ Andere schuld kiezen
-43|→ Terug
-44|→ Ander gezin
-45|↩️ Nog niet
-46|⏳ {n} registraties wachten op goedkeuring van een ouder. Je ziet ze onder "Geschiedenis".
-47|⏳ Verifiëren…
-48|⏳ Vraagt om mee te doen
-49|⏳ Wacht op goedkeuring
-50|⏳ Wacht op goedkeuring ({n})
-51|⏳ Wacht op goedkeuring van de ouders
-52|⏳ Wacht op jouw goedkeuring
-53|⏳ Wacht op jouw goedkeuring ({n})
-54|⏳ Wacht op de vriend
-55|⏳ Wacht tot het verzoek wordt goedgekeurd
-56|⏳ Even geduld…
-57|⏳ Eén registratie wacht op goedkeuring van een ouder. Je ziet hem onder "Geschiedenis".
-58|{"one":"⚠️ De code van {name} is één keer geblokkeerd na foute pogingen.","other":"⚠️ De code van {name} is {n} keer geblokkeerd na foute pogingen."}
-59|⚡ Neon
-60|✅ Goedkeuren
-61|✅ Klopt
-62|✅ Betaald
-63|✅ Terugbetaling opslaan
-64|✅ Schuld opslaan
-65|✉️ Herstel-e-mail toevoegen
-66|✉️ Herstel-e-mail: {email}
-67|🌈 Kleurrijk
-68|🌙 Donker
-69|🍕 Eten
-70|🍦 IJs
-71|🍬 Snoep
-72|🎨 Schermkleuren
-73|🎮 Spel
-74|🏠 Een gezinskas aanmaken
-75|👀 Demo van 10 seconden
-76|👀 Demomodus: voorbeeldgegevens, er wordt niets opgeslagen
-77|👨‍👩‍👧 Ik ben ouder en wil een nieuwe gezinskas openen
-78|👨‍👩‍👧 Gezin
-79|💬 WhatsApp-herinnering
-80|💰 Mijn geld
-81|💰 Ik heb ontvangen
-82|💰 Ik heb betaald
-83|📋 Open lijst kopiëren
-84|📎 Uitnodigingslink
-85|📒 Mijn notitieboekje
-86|📜 Geschiedenis
-87|📜 Geschiedenis
-88|🔑 Geheime code wijzigen
-89|🔒 Toevoegen als {role} wordt goedgekeurd met een vingerafdruk of gezichtsherkenning.
-90|🔔 Meldingen inschakelen
-91|🔕 Meldingen uitschakelen
-92|🗑️ Heel het notitieboekje wissen
-93|🤝 Vriendschapsverzoeken ({n})
-94|🤝 Verzoeken voor vriendenmodus ({n})
-95|🤝 Vrienden
-96|🤝 Vriendenmodus staat aan
-97|🧹 Betaalde wissen
-98|🙂 Avatar kiezen
-99|4 cijfers
-100|4 tot {max} cijfers
-101|4 tot 8 cijfers
-102|6 cijfers
-103|Papa
-104|Een persoon kan zichzelf geen geld schuldig zijn
-105|Persoon bestaat niet
-106|Goedgekeurd ✅
-107|Gevarenzone
-108|Je kunt niet meer terugbetalen dan er van de schuld over is
-109|Je kunt niet meer terugbetalen dan er van de schuld over is ({amount})
-110|Je kunt jezelf niet verwijderen
-111|Kopiëren kan niet op dit apparaat
-112|Je kunt je eigen rol niet wijzigen
-113|Hoe moet het gezin heten?
-114|Hoe heet je?
-115|Mama
-116|Verifiëren
-117|E-mail verifiëren
-118|Geen
-119|Geen internetverbinding. Probeer het opnieuw als je online bent.
-120|Niets openstaand
-121|Niets openstaand!
-122|Je hebt geen geheime code. Stel er een in bij "Mijn account" en probeer het opnieuw.
-123|Geen geverifieerde e-mail
-124|Geen geverifieerde e-mail om te vervangen
-125|Geen betaalde registraties
-126|Geen wisselkoers voor de valuta van de schuld
-127|Nu geen koers beschikbaar
-128|Waar woon je?
-129|Goedkeuren
-130|Bevestiging per e-mail
-131|Vriendenmodus goedkeuren
-132|Rolwijziging bevestigen
-133|Als deze ouder een geverifieerd e-mailadres heeft, sturen we daar een verificatiecode naartoe. Is er geen e-mail ingesteld, dan kan een andere ouder een nieuwe code voor je instellen.
-134|Als hij dit niet is, stel dan best een nieuwe code in.
-135|Als hij/zij dit niet is, stel dan best een nieuwe code in.
-136|Als zij dit niet is, stel dan best een nieuwe code in.
-137|Als de vriend de vriendenmodus heeft, is er een verzoek naar hem verstuurd 🤝
-138|Ik ben nieuw
-139|Ik ben schuldig
-140|Ik ben geld schuldig
-141|Ik ben {name} geld schuldig
-142|Ik ben {to} geld schuldig
-143|Ik ben een vriend geld schuldig
-144|Ik ben vrienden geld schuldig
-145|Ik ben schuldig
-146|Ik ben geld schuldig
-147|Ik ben {name} geld schuldig
-148|Ik ben {to} geld schuldig
-149|Ik ben een vriend(in) geld schuldig
-150|Ik ben vrienden geld schuldig
-151|Ik ben schuldig
-152|Ik ben geld schuldig
-153|Ik ben {name} geld schuldig
-154|Ik ben {to} geld schuldig
-155|Ik ben een vriendin geld schuldig
-156|Ik ben vrienden geld schuldig
-157|Niemand is iets schuldig!
-158|Niemand is iets schuldig.
-159|Annuleren kan alleen in de eerste 10 minuten, of vraag het aan een ouder
-160|Annuleren kan alleen in de eerste 10 minuten. Registreer een terugbetaling om het te corrigeren
-161|Je kunt maximaal {max} terugbetalen.
-162|Alleen een terugbetaling kan aan een schuld worden gekoppeld
-163|Je kunt alleen schulden registreren die jou aangaan
-164|Je kunt alleen registreren met goedgekeurde vrienden
-165|Op dag {day} van elke maand
-166|Welke dag
-167|Welke dag van de maand (1 tot 28)
-168|We kijken wie het is…
-169|Controleren…
-170|Kies een land
-171|Kies een avatar
-172|Kies waar je woont
-173|Kies een nieuwe geheime code ({rule})
-174|Annuleren
-175|Ouderrechten intrekken
-176|Vriendenmodus uitschakelen
-177|Tussen vrienden kun je maximaal {max} per keer registreren.
-178|Leden van {name}
-179|Gezinsleden
-180|In totaal is {name} mij geld schuldig
-181|In totaal is {name} mij geld schuldig
-182|In totaal is {name} mij geld schuldig
-183|In totaal ben ik {name} geld schuldig
-184|In totaal ben ik {name} geld schuldig
-185|In totaal ben ik {name} geld schuldig
-186|Toestemming van ouders vragen
-187|Groot
-188|Tekstgrootte
-189|Naar rechts scrollen
-190|Naar links scrollen
-191|Er is een nieuwe versie beschikbaar ({version})
-192|Weigeren
-193|Avatar
-194|Avatar {avatar}
-195|Zakgeld
-196|Vast zakgeld
-197|een minuut
-198|{"one":"{n} minuut","other":"{n} minuten"}
-199|Verificatie geannuleerd
-200|Verificatie met vingerafdruk / gezichtsherkenning mislukt
-201|Verificatie mislukt. Probeer het opnieuw.
-202|Verificatie mislukt (onbekend adres).
-203|Verificatie mislukt. Probeer het opnieuw.
-204|De mensen die je toevoegt kiezen een geheime code bij hun eerste keer inloggen.
-205|De app is nog niet met de server verbonden
-206|Begrepen
-207|Het verzoek bestaat niet meer
-208|Het verzoek is geweigerd
-209|Het verzoek is verstuurd
-210|Het verzoek is naar je ouders gestuurd ⏳
-211|Het verzoek is naar je ouders gestuurd. We laten het je weten zodra ze het goedkeuren.
-212|Instellingen
-213|Gezinsinstellingen
-214|Deze avatar is al in gebruik door iemand anders in het gezin
-215|Deze browser is te oud voor biometrische verificatie. Werk hem bij en probeer het opnieuw.
-216|Het downloaden is mislukt. Controleer je internetverbinding en probeer het opnieuw
-217|De terugbetaling past niet bij deze schuld
-218|Terugbetaling opgeslagen ✅
-219|De notitie is te lang
-220|Meldingen ingeschakeld 🔔
-221|Meldingen zijn geblokkeerd. Je kunt ze toestaan in de browserinstellingen.
-222|Meldingen uitgeschakeld
-223|Hij verliest de ouderrechten. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
-224|Hij verliest de vriendenmodus. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
-225|Hij krijgt volledige ouderrechten: alles zien, goedkeuren, verwijderen en het gezin beheren. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
-226|Toevoegen
-227|Gezinslid toevoegen
-228|Vriend(in) toevoegen
-229|{n} registraties overgezet
-230|Gekopieerd ✅
-231|Ouder
-232|Een andere ouder moet een geheime code voor je instellen
-233|Een ouder logt hier in en krijgt dan codes voor de rest van het gezin.
-234|Een ouder moet het Convex-adres instellen in het bestand
-235|Een ouder moet eerst inloggen.
-236|Vriend(in) verwijderd
-237|Mijn vrienden
-238|De schuld is in {debtCur}. Je betaalt in {payCur} tegen de koers van vandaag.
-239|Deze schuld is al betaald
-240|De schuld wordt volledig afgesloten ✅
-241|Schuld niet gevonden
-242|Schuld opgeslagen ✅
-243|De schulden tussen jou en {name} worden afgesloten tot dit bedrag, en alleen het verschil blijft over. De geschiedenis blijft bewaard.
-244|Openstaande schulden per valuta
-245|Schulden verrekend ✅
-246|Terugbetaling
-247|Ik heb {to} terugbetaald
-248|E-mail wijzigen
-249|Code vervangen
-250|Rekening met {name}
-251|Mijn account
-252|Zij verliest de ouderrechten. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
-253|Zij verliest de vriendenmodus. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
-254|Zij krijgt volledige ouderrechten: alles zien, goedkeuren, verwijderen en het gezin beheren. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
-255|Hoi {name}, een kleine herinnering: er moet nog {amount} worden terugbetaald. Bedankt! 🙏
-256|Hoi {name}, een kleine herinnering: er moet nog {amount} worden terugbetaald voor {note}. Bedankt! 🙏
-257|Geschiedenis
-258|Geschiedenis met vrienden
-259|Alles: {amount}
-260|Alles in orde
-261|Alles in orde ✅
-262|Alles wordt alleen op dit apparaat bewaard.
-263|Nieuwste eerst
-264|Mijn geld
-265|Mijn land staat er niet bij ($)
-266|Valuta van het gezin
-267|De valuta van het gezin is {base}, en deze schuld blijft in {cur} bewaard. In de saldi wordt hij getoond tegen de koers van die dag, en bij betaling wordt het bedrag omgerekend tegen de koers van de betaaldag.
-268|Valuta: {cur}
-269|E-mail geverifieerd ✅
-270|Dit e-mailadres wordt al door iemand anders gebruikt
-271|Huidige e-mail: {email}. Om te vervangen sturen we daar een bevestigingscode naartoe.
-272|E-mail van {name}
-273|E-mail van de vriend(in)
-274|Jouw e-mail voor vrienden:
-275|Locatie en valuta opgeslagen ✅
-276|Locatie en valuta bijgewerkt ✅
-277|Dit apparaat is niet geregistreerd voor verificatie. Registreer het opnieuw.
-278|Het apparaat wordt niet ondersteund
-279|Apparaat losgekoppeld ✅
-280|Doorgaan
-281|Gezin niet gevonden
-282|Het gezin is vol
-283|Vergrendeling opgeheven ✅
-284|Deze tiener verliest de vriendenmodus. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
-285|Mijn gegevens
-286|Het bedrag is te groot
-287|Het bedrag is te groot.
-288|Grootste bedrag eerst
-289|Bedragen in het notitieboekje
-290|Verwijderen
-291|{name} verwijderen
-292|Verbergen
-293|Overzetten naar de server
-294|Ouderrechten geven
-295|Notitie
-296|Het notitieboekje is leeggemaakt
-297|Het notitieboekje is al leeg
-298|Mijn notitieboekje
-299|Stoppen
-300|Biometrische verificatie inschakelen
-301|Code tonen 🔒
-302|Toetredingscode tonen
-303|Meedoen
-304|Het bestand is te groot
-305|Het gedownloade bestand is geen nieuwe versie van de app
-306|Het gedownloade bestand is ongeldig. Probeer het opnieuw
-307|Code vervangen ✅ Je kunt hem tonen met een vingerafdruk of gezichtsherkenning
-308|De nieuwe code moet {rule} zijn.
-309|Huidige code
-310|De huidige code is onjuist.
-311|De geheime code moet 4 cijfers zijn
-312|De geheime code is onjuist.
-313|De geheime code die je hebt ingetypt is onjuist.
-314|Je geheime code, ter bevestiging
-315|De code is niet meer geldig. Vraag je ouders om een nieuwe code.
-316|De code is onjuist. Controleer opnieuw, of vraag het aan je ouders.
-317|De code is onjuist. Je hebt nog {left} pogingen.
-318|De code uit de e-mail
-319|De code uit de huidige e-mail is onjuist of verlopen.
-320|De code is verborgen
-321|De code blijft verborgen en wordt alleen getoond met een vingerafdruk of gezichtsherkenning.
-322|De code moet {rule} zijn
-323|De code moet {rule} zijn.
-324|De code moet 4 cijfers zijn
-325|De code moet minstens 4 cijfers zijn, tot maximaal {max}
-326|De code is onjuist of verlopen.
-327|De code is gewijzigd ✅
-328|De code van {name} is bijgewerkt
-329|De codes waren niet gelijk. We beginnen opnieuw.
-330|De Gezinskas
-331|De kas is verwijderd
-332|De verrekening is ter goedkeuring naar een ouder gestuurd ⏳
-333|De verrekening sluit schulden aan beide kanten af tot {amount}. Het verschil blijft zoals het is en de geschiedenis blijft bewaard.
-334|Maak een gezinskas aan
-335|Typ je geheime code.
-336|Kas aanmaken
-337|Een gezinskas aanmaken
-338|Volgende registratie: {date}
-339|De vaste registratie is gestopt
-340|De vaste registratie is toegevoegd ✅
-341|De registratie is geweigerd
-342|De registratie is verwijderd
-343|Lijst
-344|De lijst is gekopieerd
-345|De naam is bijgewerkt ✅
-346|Koersen bijgewerkt {when}
-347|Aanpassingen (terugbetalingen zonder specifieke schuld)
-348|De betaling in {base} wordt omgerekend tegen de koers van vandaag en afgetrokken van de schuld in de eigen valuta. Na het opslaan wordt deze koers bewaard en verandert niet meer.
-349|Dit is een demo, dus er kan niets worden gewijzigd. Maak je eigen kas aan!
-350|Dit is jouw e-mail
-351|Dit verwijdert de hele kas: alle mensen en alle registraties, en kan niet ongedaan worden gemaakt.\nTyp ter bevestiging de naam van het gezin: {name}
-352|Gezichtsherkenning of vingerafdruk
-353|Mannelijk
-354|Een vriend(in) is mij geld schuldig
-355|Vriend(in) toegevoegd ✅
-356|Vrienden zijn mij geld schuldig
-357|Vrienden voegen de tiener toe via dit e-mailadres. Er wordt niets naartoe gestuurd, het wordt alleen gebruikt om te zoeken.
-358|Vrienden voegen de tiener toe via dit e-mailadres. Er wordt niets naartoe gestuurd, het wordt alleen gebruikt om te zoeken.
-359|Vrienden voegen de tiener toe via dit e-mailadres. Er wordt niets naartoe gestuurd, het wordt alleen gebruikt om te zoeken.
-360|Vrienden worden toegevoegd via e-mailadres. Je ziet alles wat wordt geregistreerd in het overzicht.
-361|Vrienden: {names}
-362|Schuld
-363|Schuld in {cur}
-364|Terug
-365|is schuldig
-366|is schuldig
-367|is mij schuldig
-368|Zij zijn mij schuldig
-369|Zij zijn mij geld schuldig
-370|is schuldig
-371|Laden…
-372|Nog niet vastgelegd door de ouder
-373|Ze verliezen de ouderrechten. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
-374|{day}
-375|Ongeldige dag van de maand (1 tot 28)
-376|Ongeldige dag
-377|Veilig uitloggen…
-378|Te veel codeverzoeken. Probeer het over een paar minuten opnieuw
-379|Te veel verzoeken. Probeer het later opnieuw
-380|Te veel geregistreerde apparaten
-381|Op dit moment te veel nieuwe gezinnen. Probeer het over een paar minuten opnieuw
-382|Te veel pogingen. Probeer het over een minuut opnieuw.
-383|Te veel pogingen. Probeer het over een paar minuten opnieuw.
-384|Te veel registraties. Probeer het later opnieuw
-385|Er blijft {left} van de schuld over.
-386|Kind
-387|Kind
-388|Kind
-389|Uitloggen
-390|De demo verlaten
-391|Ze krijgen volledige ouderrechten: alles zien, goedkeuren, verwijderen en het gezin beheren. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
-392|Groen
-393|Groen + geel
-394|Er zijn te veel openstaande toetredingsverzoeken. Vraag de ouders ze te behandelen
-395|Er staan te veel schulden open tussen de twee. Sluit schulden af voordat je er meer toevoegt.
-396|Er zijn te veel actieve registraties tussen de twee. Sluit schulden af voordat je er meer toevoegt.
-397|Er staat een saldo open tussen jullie. Sluit dat eerst af
-398|Hier zitten schulden in een andere valuta: ze worden verrekend tegen de koers van vandaag, en die koers wordt bewaard.
-399|Er staan al veel vrienden in de lijst
-400|Er zijn al veel vaste registraties
-401|Ik heb een gezinscode
-402|Heb je een gezinscode? Ga naar de kas
-403|Heb je een gezinscode? Typ hem hier in. Vraag je ouders om de toetredingscode van het gezin.
-404|Er staan registraties op deze naam. Verwijder ze eerst
-405|Saldi
-406|Hier registreer je schulden met vrienden: wie voor wie iets kocht en wie moet terugbetalen. Je vriend(in) heeft ook de app nodig, en je ouders moeten het goedkeuren.
-407|Er is al iemand met deze naam
-408|Er is al iemand met deze naam. Kies die persoon in de lijst, of wijzig de naam
-409|Er is al iemand met deze naam. Weiger het verzoek
-410|Dit profiel heeft al een code
-411|Bijna klaar…
-412|Gebruik je de kas al?
-413|Om {need} is een apparaat met een ingestelde vingerafdruk of gezichtsherkenning nodig.
-414|Om een nieuwe code voor {name} in te stellen, sturen we een verificatiecode naar {email}.
-415|Blauw + paars
-416|Vrienden uitschakelen
-417|Alle openstaande schulden
-418|Heel het gezin
-419|Alle bedragen worden in deze valuta getoond. Je kunt een schuld in een andere valuta registreren (bijvoorbeeld 100 dollar), en bij betaling wordt hij omgerekend tegen de koers van die dag.
-420|Elke maand
-421|Elke {day}
-422|Hoe vaak
-423|Elke week
-424|Hoeveel heeft {from} aan {to} terugbetaald?
-425|Hoeveel heeft {from} aan {to} terugbetaald?
-426|Hoeveel heeft {from} aan {to} terugbetaald?
-427|Hoeveel is {name} mij schuldig?
-428|Hoeveel is {name} mij schuldig?
-429|Hoeveel is {name} mij schuldig?
-430|Hoeveel heeft {name} mij betaald?
-431|Hoeveel heeft {name} mij betaald?
-432|Hoeveel heeft {name} mij betaald?
-433|Hoeveel ben ik {to} schuldig?
-434|Hoeveel ben ik {to} schuldig?
-435|Hoeveel ben ik {to} schuldig?
-436|Hoeveel heb ik {to} betaald?
-437|Hoeveel?
-438|Ja
-439|Ja, doorgaan
-440|Ja, verrekenen
-441|Ja, schuld opslaan
-442|Ja, betaling opslaan
-443|Inloggen
-444|Typ het e-mailadres dat je vriend(in) in de app bij zijn/haar ouders heeft opgegeven. Er wordt een verzoek gestuurd dat goedgekeurd moet worden. Dit werkt alleen als je vriend(in) ook de vriendenmodus heeft.
-445|Typ de geheime code
-446|Typ de code nog een keer, ter bevestiging
-447|Typ de naam
-448|Typ een bedrag
-449|Typ een bedrag groter dan nul.
-450|Een ander adres
-451|Het e-mailadres is ongeldig
-452|E-mailadres
-453|Nieuw e-mailadres
-454|Ongeldig e-mailadres
-455|Oranje
-456|Oranje + roze
-457|Nee
-458|We konden de meldingen op dit apparaat niet inschakelen
-459|We konden het apparaat niet registreren. Probeer het opnieuw.
-460|Onbekend
-461|Onjuist
-462|Er is geen installatieprogramma op de telefoon gevonden. Je kunt het bestand rechtstreeks van GitHub downloaden
-463|Voor welke schuld is de terugbetaling?
-464|Ter bevestiging sturen we een verificatiecode naar {email}.
-465|Om gevoelige acties in de kas te bevestigen
-466|Resetten, en laten kiezen bij de volgende keer inloggen
-467|Annuleren wat je hebt geregistreerd?
-468|Weigeren? De registratie wordt verwijderd.
-469|Een nieuwe ouder heeft een geheime code nodig
-470|Voor een ouder moet een code worden ingesteld (je kunt hem niet resetten zodat hij zelf kiest)
-471|Alleen voor ouders. Wie de kas aanmaakt, is de eerste ouder. Daarna krijg je één toetredingscode voor het hele gezin en bepaal je ieders rol: kind, tiener of ouder.
-472|De code vervangen? Wie er al in zit blijft, maar de oude code werkt niet meer, en andere apparaten die het gezin hebben bewaard moeten de nieuwe code invoeren.
-473|{name} uit de vrienden verwijderen?
-474|{name} uit het gezin verwijderen?
-475|De vaste registratie stoppen? Wat al is geregistreerd blijft.
-476|Toon op de hoofdpagina ook wat betaald is
-477|Tik voor de details van de berekening ›
-478|De vriendenmodus van {name} uitschakelen? Nieuwe registraties met vrienden zijn dan niet meer mogelijk.
-479|Niet opgegeven
-480|{n} betaalde registraties verwijderen?
-481|De registratie van {name} verwijderen?
-482|Deze registratie verwijderen?
-483|Alle registraties in het notitieboekje verwijderen? Dit kan niet ongedaan worden gemaakt.
-484|Aan wie
-485|Wie ben ik geld schuldig?
-486|Wie ben ik geld schuldig?
-487|Wie ben ik geld schuldig?
-488|Aan wie?
-489|Bijvoorbeeld: ijsje, bioscoopkaartje
-490|Bijvoorbeeld: Familie Jansen
-491|Het apparaat loskoppelen? Het moet dan opnieuw de toetredingscode invoeren.
-492|De valuta van het gezin wordt door het land bepaald. Je kunt hem later wijzigen op het tabblad Beheer.
-493|Per valuta
-494|Op naam (A-Z)
-495|Alleen lezen. Elke registratie met een vriend(in) wacht ook op zijn/haar goedkeuring.
-496|de toetredingscode te zien
-497|een rol te wijzigen
-498|In evenwicht: niemand is iets schuldig
-499|Verifiëren…
-500|krijgt nog
-501|krijgt nog
-502|krijgt nog
-503|Land wordt niet ondersteund
-504|het privacybeleid
-505|Privacybeleid
-506|Land van verblijf
-507|Wat tieners met vrienden registreren
-508|Wat openstaat
-509|Update downloaden...
-510|Update downloaden... {percent}%
-511|Verwijderen
-512|Heel de kas verwijderen
-513|Valuta
-514|Valuta wordt niet ondersteund
-515|Wie is mij geld schuldig?
-516|Wie is wie schuldig
-517|Wie is schuldig (de betaler)
-518|Wie is mij geld schuldig?
-519|Wie logt er in?
-520|E-mail voor coderecovery
-521|E-mail is alleen voor ouders
-522|Locatie en valuta
-523|Iemand
-524|Apparaat
-525|Apparaat bestaat niet
-526|Verbonden apparaten
-527|Apparaten die het gezin hebben bewaard. Een kaart die 180 dagen niet gebruikt wordt, verloopt vanzelf.
-528|Wacht op goedkeuring van een ouder in {name}. Nadat een ouder het heeft goedgekeurd, kies je je naam op het inlogscherm en typ je de geheime code die je hebt gekozen.
-529|Wacht op goedkeuring van een ouder. Nadat een ouder het heeft goedgekeurd, kies je je naam op het inlogscherm en typ je de geheime code die je hebt gekozen.
-530|Ongeldig meldingsabonnement
-531|Ongeldige sleutel
-532|Vriendenmodus
-533|Vriendenmodus goedgekeurd ✅
-534|De vriendenmodus is alleen voor tieners
-535|Vriendenmodus uitgeschakeld
-536|Vriendenmodus voor {name}
-537|De vriendenmodus is nog niet door de ouders goedgekeurd
-538|Meedoen met de kas
-539|Je doet mee met de kas van {name}. Een ouder in het gezin moet het goedkeuren en bepaalt of je kind, tiener of ouder bent.
-540|Uiterlijk
-541|Er is iets misgegaan. Probeer het opnieuw.
-542|Beheer
-543|Je hebt het te vaak geprobeerd. Probeer het over {wait} opnieuw.
-544|Loskoppelen
-545|Verwijderd
-546|Op dit apparaat zijn gegevens van de vorige versie gevonden: {people} personen en {entries} registraties. Overzetten naar de server?
-547|Opnieuw proberen
-548|Tiener
-549|Tiener
-550|Tiener
-551|Vrouwelijk
-552|Het lijkt erop dat dit apparaat zich in {name} bevindt. Woon je in {name}?
-553|Nog {left} van {total}
-554|Er is nog {left} over van deze schuld.
-555|Er wordt een code verstuurd wanneer een geheime code wordt gewijzigd of gereset, en ook een melding wanneer de code van iemand in het gezin geblokkeerd raakt.
-556|Ter goedkeuring naar een ouder gestuurd ⏳
-557|Ter goedkeuring naar de vriend(in) gestuurd ⏳
-558|Paars en turquoise
-559|Sluiten
-560|Volgorde van registraties
-561|Totaal
-562|Totaal in {cur} tegen de koers van vandaag
-563|Bedrag ({cur})
-564|Ongeldig bedrag
-565|Ongeldig bedrag. Tussen vrienden kun je maximaal 500 sjekel per keer registreren
-566|Gezinsoverzicht
-567|Er is nog niets geregistreerd.
-568|Er wordt al een update uitgevoerd
-569|Bijwerken
-570|Meer
-571|Er is nog niemand anders in het gezin. Een ouder moet ze toevoegen.
-572|Nog geen goedgekeurde vrienden
-573|Nog geen goedgekeurde vrienden. Voeg een vriend(in) toe via zijn/haar e-mail.
-574|Nog geen vrienden. Voeg een vriend(in) toe via zijn/haar e-mail.
-575|De lijst is nog leeg. Tik op een van de knoppen om te beginnen.
-576|Nog geen vaste registraties.
-577|Meer avatars
-578|Heeft nog geen code gekozen
-579|Heeft nog geen code gekozen
-580|Heeft nog geen code gekozen
-581|Er is nog niets met vrienden geregistreerd.
-582|Er is nog niets geregistreerd.
-583|Uiterlijk
-584|Voor {debt} (= {covers} tegen de koers van vandaag).
-585|Voor {debt}.
-586|Waarvoor? (mag je overslaan)
-587|Waarvoor? (optioneel)
-588|Voor: {debt}
-589|Met wie?
-590|Extra groot
-591|De verificatie is verlopen. Probeer het opnieuw.
-592|Details van de berekening
-593|Ongeldige actie
-594|Schermkleuren
-595|Neonkleuren
-596|De aanspreekvorm is al vastgelegd en kan niet worden gewijzigd
-597|Aanspreekvorm
-598|Aanspreekvorm:
-599|Maak een gezinskas aan: iedereen ziet dezelfde rekening en de schulden worden voor iedereen bijgewerkt.
-600|Bevestiging met een vingerafdruk of gezichtsherkenning is nodig
-601|De app moet updates mogen installeren: zet in de instellingen die verschijnen "Toestaan vanuit deze bron" aan en tik opnieuw op "Bijwerken"
-602|Je moet opnieuw inloggen
-603|Je moet opnieuw inloggen met de gezinscode
-604|Je moet deze telefoon één keer registreren.
-605|Je moet het apparaat registreren
-606|Je moet dit apparaat en deze browser één keer registreren.
-607|Je moet het apparaat opnieuw registreren
-608|Je moet het apparaat opnieuw registreren om ook gezichtsherkenning toe te staan
-609|Code instellen
-610|Code instellen en inloggen
-611|Aanspreekvorm instellen…
-612|Eén code voor iedereen. Wie ermee meedoet, komt binnen als kind. Daarna kun je in "Gezinsleden" wijzigen naar tiener of ouder, met goedkeuring via vingerafdruk of gezichtsherkenning.
-613|Code uit de e-mail
-614|De code uit de e-mail is onjuist of verlopen.
-615|De verificatiecode is onjuist of verlopen.
-616|Toetredingscode voor de kas van {name}: {code}
-617|Toetredingscode van het gezin
-618|De toetredingscode van het gezin wordt alleen getoond met een vingerafdruk of gezichtsherkenning.
-619|De gezinscode is gewijzigd. Vraag je ouders om een nieuwe code.
-620|Nieuwe code
-621|Nieuwe code ({rule})
-622|Code uit de huidige e-mail
-623|Gezinscode
-624|Geheime code ({rule}; langer = veiliger)
-625|Geheime code (verplicht voor een ouder, {rule})
-626|Geheime code (optioneel — het kind kan hem later zelf kiezen)
-627|Geheime code (optioneel — het kind kan hem later zelf kiezen)
-628|Geheime code (optioneel — het kind kan hem later zelf kiezen)
-629|Nieuwe geheime code
-630|Geheime code voor {name}
-631|Je eigen geheime code (4 cijfers)
-632|Toetredingscodes
-633|Eerst moet een geheime code voor {name} worden ingesteld
-634|Een gezinskas kan alleen worden aangemaakt door iemand ouder dan 18
-635|Klein
-636|Ik heb ontvangen
-637|Ik heb het verschil ontvangen ({amount})
-638|Ik heb geld ontvangen
-639|Wederzijdse verrekening
-640|Wederzijdse schulden verrekenen
-641|Wederzijdse schulden verrekenen ({amount})
-642|De uitnodigingslink voegt iedereen die hem opent toe als kind. Deel hem alleen met je gezin.
-643|Ik heb {terms} en {privacy} gelezen en ga ermee akkoord
-644|Ik heb {terms} en {privacy} gelezen en ga ermee akkoord
-645|Ik heb {terms} en {privacy} gelezen en ga ermee akkoord
-646|Normaal
-647|Even geduld, we loggen in…
-648|Even geduld, we loggen uit…
-649|Wil je dat degenen die jou geld schuldig zijn dit zien?
-650|Registreren
-651|Een terugbetaling registreren
-652|Gezichtsherkenning / vingerafdruk registreren
-653|Registreert automatisch een schuld, wekelijks of maandelijks, zonder dat je het elke keer hoeft te typen.
-654|Vingerafdruk / gezichtsherkenning registreren
-655|Nieuwe vaste registratie
-656|Alleen ouders kunnen dit doen
-657|Alleen ouders kunnen de aanspreekvorm instellen
-658|Noteer je eigen schuld in het schriftje
-659|Volledig betaald ✅
-660|Betaald ({n})
-661|Alles wordt opgeslagen…
-662|Vergrendeling opheffen
-663|Ik heb betaald
-664|Ik heb het verschil betaald ({amount})
-665|Wijzigen
-666|Een andere valuta wijzigt alleen het symbool. De bedragen zelf worden niet omgerekend.
-667|Geheime code wijzigen
-668|Gezin hernoemen
-669|Het wijzigen van een rol in het gezin (kind, tiener, ouder) wordt goedgekeurd met een vingerafdruk of gezichtsherkenning.
-670|Delen
-671|Ik ben de code vergeten
-672|We hebben een code naar {email} gestuurd. Typ hem in, samen met het nieuwe adres. Het vervangt het huidige pas na verificatie.
-673|We hebben een code van 6 cijfers naar {email} gestuurd. Hij is 10 minuten geldig.
-674|Van mij
-675|Verzoek versturen
-676|Verificatiecode versturen
-677|Code per e-mail versturen
-678|Een code naar de huidige e-mail versturen
-679|Naam
-680|Naam van het gezin
-681|De naam van het gezin komt niet overeen
-682|De naam van het gezin is ongeldig
-683|Ongeldige naam
-684|Opslaan
-685|een uur
-686|{"one":"{n} uur","other":"{n} uur"}
-687|De wisselkoersen zijn nog niet geladen. Probeer het zo meteen opnieuw.
-688|2 uur
-689|Taal
-690|Ongeldige datum
-691|Geboortedatum (alleen iemand ouder dan 18 kan een kas aanmaken)
-692|Ongeldige geboortedatum
-693|de gebruiksvoorwaarden
-694|Gebruiksvoorwaarden
-695|Rol
-696|Rol:
-697|Hoofdmenu
-698|Betaling voor een schuld in een andere valuta
-699|💬 Stuur naar een ouder via WhatsApp
-700|Ondertussen kun je in het persoonlijke notitieboekje schrijven, dat op je apparaat wordt bewaard.
-701|📒 Voorlopig naar het persoonlijke notitieboekje
-702|Hoi, {name} wil zich aansluiten bij de gezinskas. Je kunt inloggen en goedkeuren: {url}
-703|→ Terug naar het gezin
-704|Terug naar het gezin
-705|🏠 Gezin aanmaken
+17|{n} מתוך {goal}
+18|{n} registraties verplaatst naar de kas ✅
+19|{n} registraties verplaatst. De rest kon niet worden verplaatst: {err}
+20|{n} openstaande registraties, samen {sum}
+21|{name} goedgekeurd ✅
+22|{name} verwijderd
+23|{name} verwijderd
+24|{name} verwijderd
+25|{name} is mij geld schuldig
+26|{name} is mij geld schuldig
+27|{name} is mij geld schuldig
+28|{name} kiest bij de volgende keer inloggen een nieuwe code
+29|{name} kiest bij de volgende keer inloggen een nieuwe code
+30|{name} kan vrienden toevoegen via e-mail en schulden met hen registreren. Elke registratie wacht ook op goedkeuring van de vriend, en jullie zien ze in het overzicht. Je kunt dit op elk moment uitschakelen.
+31|{name} kan vrienden toevoegen via e-mail en schulden met hen registreren. Elke registratie wacht ook op goedkeuring van de vriend, en jullie zien ze in het overzicht. Je kunt dit op elk moment uitschakelen.
+32|{name} staat niet in de landenlijst, dus de valuta wordt de Amerikaanse dollar.
+33|{name} wil schulden met vrienden registreren
+34|{name} wil schulden met vrienden registreren
+35|{name} wil schulden met vrienden registreren
+36|{name} is aan het gezin toegevoegd ✅
+37|{name} is aan het gezin toegevoegd ✅
+38|{name} is aan het gezin toegevoegd ✅
+39|{name} kan alleen vanaf het eigen apparaat als ouder inloggen. Hoe wissel je?
+40|{name} heeft nog niets in het persoonlijke schrift geschreven.
+41|{name} is nu {role} ✅
+42|{name} wil je toevoegen
+43|{name} kiest bij de volgende keer inloggen een nieuwe code
+44|{name} kan vrienden toevoegen via e-mail en schulden met hen registreren. Elke registratie wacht ook op goedkeuring van de vriend, en jullie zien ze in het overzicht. Je kunt dit op elk moment uitschakelen.
+45|{saved} מתוך {target} ({pct}%)
+46|{who} heeft geregistreerd: {line}
+47|{who} heeft geregistreerd: {line}
+48|{who} heeft geregistreerd: {line}
+49|⏳ {n} registraties wachten op goedkeuring van een ouder. Je ziet ze onder "Geschiedenis".
+50|⏳ Verifiëren…
+51|⏳ Vraagt om mee te doen
+52|⏳ Wacht op goedkeuring
+53|⏳ Wacht op goedkeuring ({n})
+54|⏳ Wacht op goedkeuring van de ouders
+55|⏳ Wacht op jouw goedkeuring
+56|⏳ Wacht op jouw goedkeuring ({n})
+57|⏳ Wacht op de vriend
+58|⏳ Wacht tot het verzoek wordt goedgekeurd
+59|⏳ Nog niet gekoppeld aan een apparaat
+60|⏳ Even geduld…
+61|⏳ Eén registratie wacht op goedkeuring van een ouder. Je ziet hem onder "Geschiedenis".
+62|⏸️ Delen pauzeren
+63|▶️ Delen hervatten
+64|⚖️ Verrekenen ({amount})
+65|⚖️ Schulden verrekenen
+66|⚠️ Er is een verzoek gedaan om het apparaat van {name} te wisselen (kan op {when}). Weet je hier niets van, annuleer het dan.
+67|⚠️ Er is een verzoek gedaan om je apparaat te wisselen. De wissel kan op {when}. Als jij dit niet was, annuleer het dan.
+68|{"one":"⚠️ De code van {name} is één keer geblokkeerd na foute pogingen.","other":"⚠️ De code van {name} is {n} keer geblokkeerd na foute pogingen."}
+69|⚡ Neon
+70|✅ Goedkeuren
+71|✅ Deze ouder is gekoppeld aan dit apparaat. Inloggen als ouder kan alleen hier, met de geheime code en een vingerafdruk of gezichtsherkenning.
+72|✅ כל הילדים נכנסים בינתיים בלי קוד סודי. אפשר להוסיף עוד ילדים.
+73|✅ כל הילדים נכנסים בינתיים עם אותו קוד סודי. אפשר להוסיף עוד ילדים.
+74|✅ Klopt
+75|✅ Er is een code naar je e-mail gestuurd. Voer die in op de nieuwe telefoon.
+76|✅ Betaald
+77|✅ Terugbetaling opslaan
+78|✅ Schuld opslaan
+79|✉️ Herstel-e-mail toevoegen
+80|✉️ Herstel-e-mail: {email}
+81|➕ Bij een ander gezin aansluiten
+82|🌈 Kleurrijk
+83|🌙 Donker
+84|🍕 Eten
+85|🍦 IJs
+86|🍬 Snoep
+87|🎨 Schermkleuren
+88|🎮 Spel
+89|🏠 Een gezinskas aanmaken
+90|🏠 Overstappen naar gezin {family}
+91|🏠 Gezin aanmaken
+92|👀 Demo van 10 seconden
+93|👀 Demomodus: voorbeeldgegevens, er wordt niets opgeslagen
+94|👁️ Wie ziet mijn schrift
+95|👨‍👩‍👧 Ik ben ouder en wil een nieuwe gezinskas openen
+96|👨‍👩‍👧 Gezin
+97|💬 Stuur naar een ouder via WhatsApp
+98|💬 WhatsApp-herinnering
+99|💰 Mijn geld
+100|💰 Ik heb ontvangen
+101|💰 Ik heb betaald
+102|📋 Open lijst kopiëren
+103|📎 Uitnodigingslink
+104|📒 Schulden uit het notitieboekje samenvoegen
+105|📒 Voorlopig naar het persoonlijke notitieboekje
+106|📒 Persoonlijk schrift
+107|📒 Mijn notitieboekje
+108|📜 Geschiedenis
+109|📜 Wijzigingslogboek
+110|📜 Geschiedenis
+111|📧 Ik heb het oude apparaat nog (code per e-mail)
+112|📱 Mijn apparaat
+113|🔑 Ik heb een koppelcode van een andere ouder
+114|🔑 קביעת קוד סודי
+115|🔑 Geheime code wijzigen
+116|🔒 Je ouders kunnen dit schrift zien, alleen om te bekijken.
+117|🔒 Toevoegen als {role} wordt goedgekeurd met een vingerafdruk of gezichtsherkenning.
+118|🔔 Meldingen inschakelen
+119|🔕 Meldingen uitschakelen
+120|🗑️ Heel het notitieboekje wissen
+121|🤝 Vriendschapsverzoeken ({n})
+122|🤝 Verzoeken voor vriendenmodus ({n})
+123|🤝 Vrienden
+124|🤝 Vriendenmodus staat aan
+125|🧹 Betaalde wissen
+126|🙂 Avatar kiezen
+127|3 שבועות ברצף
+128|4 cijfers
+129|4 tot {max} cijfers
+130|4 tot 8 cijfers
+131|6 cijfers
+132|8 שבועות ברצף
+133|Papa
+134|Een persoon kan zichzelf geen geld schuldig zijn
+135|Persoon bestaat niet
+136|Ik voeg ze later toe
+137|Goedgekeurd ✅
+138|Gevarenzone
+139|Je kunt niet meer terugbetalen dan er van de schuld over is
+140|Je kunt niet meer terugbetalen dan er van de schuld over is ({amount})
+141|Je kunt jezelf niet verwijderen
+142|Kopiëren kan niet op dit apparaat
+143|Een apparaat kan zo niet worden gekoppeld
+144|Zo koppelen kan niet. Een apparaatwissel is nodig.
+145|Je kunt je eigen rol niet wijzigen
+146|Samenvoegen met het notitieboekje
+147|Hoe moet het gezin heten?
+148|Hoe heet je?
+149|Mama
+150|Verifiëren
+151|E-mail verifiëren
+152|Geen
+153|Er is geen actief verzoek, of het is geannuleerd. Je kunt een nieuw verzoek indienen.
+154|Geen internetverbinding. Probeer het opnieuw als je online bent.
+155|Niets openstaand
+156|Niets openstaand!
+157|Deze ouder heeft geen geverifieerd e-mailadres, dus deze weg kan niet. Een andere ouder kan een koppelcode uitgeven.
+158|Deze ouder heeft nog geen geheime code.
+159|Je hebt geen geheime code. Stel er een in bij "Mijn account" en probeer het opnieuw.
+160|Geen geverifieerde e-mail
+161|Geen geverifieerde e-mail om te vervangen
+162|אין קוד סודי. אפשר לקבוע קוד בהמשך, ב"החשבון שלי".
+163|Geen betaalde registraties
+164|Geen wisselkoers voor de valuta van de schuld
+165|Nu geen koers beschikbaar
+166|Waar woon je?
+167|Goedkeuren
+168|Bevestiging per e-mail
+169|Bevestigen met geheime code
+170|Verzoek bevestigen
+171|Goedkeuring door een ouder
+172|Apparaatwissel bevestigen
+173|Vriendenmodus goedkeuren
+174|Rolwijziging bevestigen
+175|Goedgekeurd
+176|Heeft een aanmelding goedgekeurd
+177|Als deze ouder een geverifieerd e-mailadres heeft, sturen we daar een verificatiecode naartoe. Is er geen e-mail ingesteld, dan kan een andere ouder een nieuwe code voor je instellen.
+178|Als hij dit niet is, stel dan best een nieuwe code in.
+179|Als hij/zij dit niet is, stel dan best een nieuwe code in.
+180|Als zij dit niet is, stel dan best een nieuwe code in.
+181|Als de vriend de vriendenmodus heeft, is er een verzoek naar hem verstuurd 🤝
+182|Als je de code vergeet, sturen we een resetcode daarheen. Zonder e-mail kan alleen een andere ouder helpen.
+183|Ik ben nieuw
+184|Ik ben schuldig
+185|Ik ben {a} schuldig • is mij {b} schuldig
+186|Ik ben geld schuldig
+187|Ik ben {name} geld schuldig
+188|Ik ben {to} geld schuldig
+189|Ik ben een vriend geld schuldig
+190|Ik ben vrienden geld schuldig
+191|Ik ben schuldig
+192|Ik ben geld schuldig
+193|Ik ben {name} geld schuldig
+194|Ik ben {to} geld schuldig
+195|Ik ben een vriend(in) geld schuldig
+196|Ik ben vrienden geld schuldig
+197|Ik ben schuldig
+198|Ik ben geld schuldig
+199|Ik ben {name} geld schuldig
+200|Ik ben {to} geld schuldig
+201|Ik ben een vriendin geld schuldig
+202|Ik ben vrienden geld schuldig
+203|Ik ga ermee akkoord dat de ouders in mijn gezin kunnen zien wat ik in mijn persoonlijke schrift heb geschreven. Ze kunnen het alleen bekijken, niet wijzigen of verwijderen.
+204|Niemand is iets schuldig!
+205|Niemand is iets schuldig.
+206|Annuleren kan alleen in de eerste 10 minuten, of vraag het aan een ouder
+207|Annuleren kan alleen in de eerste 10 minuten. Registreer een terugbetaling om het te corrigeren
+208|Je kunt maximaal {max} terugbetalen.
+209|Je kunt de wissel afronden. Typ de geheime code en koppel dit apparaat.
+210|Alleen een terugbetaling kan aan een schuld worden gekoppeld
+211|Je kunt alleen schulden registreren die jou aangaan
+212|Je kunt alleen registreren met goedgekeurde vrienden
+213|Op dag {day} van elke maand
+214|Welke dag
+215|Welke dag van de maand (1 tot 28)
+216|We kijken wie het is…
+217|Controleren…
+218|Andere schuld kiezen
+219|Kies een land
+220|Kies een datum
+221|Kies een avatar
+222|Kies waar je woont
+223|Kies een nieuwe geheime code ({rule})
+224|Annuleren
+225|Verzoek annuleren
+226|Verzoek op dit apparaat annuleren
+227|Ouderrechten intrekken
+228|Vriendenmodus uitschakelen
+229|Tussen vrienden kun je maximaal {max} per keer registreren.
+230|Ondertussen kun je in het persoonlijke notitieboekje schrijven, dat op je apparaat wordt bewaard.
+231|Heeft om goedkeuring gevraagd
+232|בלי קוד, הילדים נכנסים בלחיצה, וכל ילד יכול לקבוע קוד משלו מתי שירצה. עם קוד, כל הילדים מקבלים אותו קוד, וכשתרצו לתת לכל ילד את המשתמש שלו תאפסו לו את הקוד מלשונית “ניהול”, והוא יבחר קוד משלו.
+233|Dit apparaat heeft geen vingerafdruk of gezichtsherkenning, dus bevestig met je geheime code.
+234|Op het oude apparaat: “Mijn account” > “Mijn apparaat” > Apparaat wisselen. De code komt per e-mail.
+235|In het gezin is al een ouder aan een apparaat gekoppeld, dus om dit apparaat te koppelen heb je een koppelcode van die ouder nodig. Log uit en tik op het inlogscherm op “Nieuw apparaat / Apparaat wisselen”.
+236|Leden van {name}
+237|Gezinsleden
+238|In totaal is {name} mij geld schuldig
+239|In totaal is {name} mij geld schuldig
+240|In totaal is {name} mij geld schuldig
+241|In totaal ben ik {name} geld schuldig
+242|In totaal ben ik {name} geld schuldig
+243|In totaal ben ik {name} geld schuldig
+244|In het notitieboekje staan registraties voor “{name}”
+245|Notitieboekje: “{a}”. Kas: “{b}”.
+246|Toestemming van ouders vragen
+247|ברוכים הבאים לקופה 🪙
+248|Groot
+249|Tekstgrootte
+250|Naar rechts scrollen
+251|Naar links scrollen
+252|Er is een nieuwe versie beschikbaar ({version})
+253|Grafiek van schulden en terugbetalingen per maand
+254|Afgewezen
+255|Heeft een aanmelding afgewezen
+256|Weigeren
+257|Avatar
+258|Avatar {avatar}
+259|Zakgeld
+260|Vast zakgeld
+261|een minuut
+262|{"one":"{n} minuut","other":"{n} minuten"}
+263|Verificatie geannuleerd
+264|Verificatie met vingerafdruk / gezichtsherkenning mislukt
+265|Verificatie mislukt. Probeer het opnieuw.
+266|Verificatie mislukt (onbekend adres).
+267|Verificatie mislukt. Probeer het opnieuw.
+268|De mensen die je toevoegt kiezen een geheime code bij hun eerste keer inloggen.
+269|De app is nog niet met de server verbonden
+270|Begrepen
+271|Het verzoek is geannuleerd
+272|Het verzoek is ontvangen. De wissel kan op {when}. Tot die tijd werkt de oude telefoon, als die wordt gevonden, nog en kunnen de ouders het verzoek annuleren.
+273|Het verzoek bestaat niet meer
+274|Het verzoek is geweigerd
+275|Het verzoek is verstuurd
+276|הבקשה נשלחה להורה
+277|Het verzoek is naar je ouders gestuurd ⏳
+278|Het verzoek is naar je ouders gestuurd. We laten het je weten zodra ze het goedkeuren.
+279|Instellingen
+280|Gezinsinstellingen
+281|הגשמת יעד
+282|Deze avatar is al in gebruik door iemand anders in het gezin
+283|Deze browser is te oud voor biometrische verificatie. Werk hem bij en probeer het opnieuw.
+284|Het downloaden is mislukt. Controleer je internetverbinding en probeer het opnieuw
+285|Deze ouder is al aan een ander apparaat gekoppeld, of de sleutel is van dit apparaat verwijderd. Om vanaf hier verder te gaan moet je van apparaat wisselen: log uit en tik op het inlogscherm op “Nieuw apparaat / Apparaat wisselen”.
+286|Deze ouder logt alleen in vanaf het eigen apparaat.
+287|Deze ouder logt alleen in vanaf het eigen apparaat. Als je van apparaat gewisseld bent, tik dan op “Nieuw apparaat / Apparaat wisselen”.
+288|De ouder is al aan een apparaat gekoppeld. Voor een apparaatwissel is er een apart proces.
+289|Je ouders zien je persoonlijke schrift niet meer. Het blijft alleen bij jou.
+290|De ouders van elk gezin zien een kopie van je schrift, alleen om te bekijken. Je kunt het delen altijd pauzeren.
+291|De terugbetaling past niet bij deze schuld
+292|Terugbetaling opgeslagen ✅
+293|Verder op het apparaat van {name}: open de kas, kies {name}, tik op “Nieuw apparaat / Apparaat wisselen” en typ de geheime code van {name} en deze code. Vanaf dat moment logt {name} alleen vanaf dit apparaat in als ouder.
+294|De notitie is te lang
+295|ההפקדה נוספה 🐷
+296|Meldingen ingeschakeld 🔔
+297|Meldingen zijn geblokkeerd. Je kunt ze toestaan in de browserinstellingen.
+298|Meldingen uitgeschakeld
+299|Hij verliest de ouderrechten. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
+300|Hij verliest de vriendenmodus. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
+301|Hij krijgt volledige ouderrechten: alles zien, goedkeuren, verwijderen en het gezin beheren. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
+302|Terugbetaald
+303|Heeft een gezinslid toegevoegd
+304|Toevoegen
+305|Gezinslid toevoegen
+306|Vriend(in) toevoegen
+307|הוספת ילד/ה
+308|{n} registraties overgezet
+309|Gekopieerd ✅
+310|Ouder
+311|Een andere ouder opent onder “Beheer” de “Koppelcode” naast je naam en geeft je een code.
+312|Een andere ouder moet een geheime code voor je instellen
+313|Een ouder logt hier in en krijgt dan codes voor de rest van het gezin.
+314|Een ouder logt alleen in vanaf het eigen apparaat, en handelingen als ouder worden bevestigd met een vingerafdruk of gezichtsherkenning.
+315|Een ouder moet het Convex-adres instellen in het bestand
+316|Een ouder moet eerst inloggen.
+317|הושג ✅
+318|Vriend(in) verwijderd
+319|Mijn vrienden
+320|De schuld is in {debtCur}. Je betaalt in {payCur} tegen de koers van vandaag.
+321|De schuld is gegroeid met
+322|Deze schuld is al betaald
+323|De schuld wordt volledig afgesloten ✅
+324|Schuld niet gevonden
+325|Schuld opgeslagen ✅
+326|De schuld is gekrompen met
+327|De schulden tussen jou en {name} worden afgesloten tot dit bedrag, en alleen het verschil blijft over. De geschiedenis blijft bewaard.
+328|Openstaande schulden per valuta
+329|Schulden verrekend ✅
+330|Terugbetaling
+331|החזרה ראשונה
+332|Terugbetalingen
+333|החזרת הכול 3 שבועות ברצף
+334|החזרת הכול 8 שבועות ברצף
+335|החזרת חוב בפעם הראשונה
+336|Ik heb {to} terugbetaald
+337|Heeft de gezinscode gewijzigd
+338|E-mail wijzigen
+339|Apparaat wisselen (code per e-mail versturen)
+340|Code vervangen
+341|Rekening met {name}
+342|Mijn account
+343|Telefoon kapot of kwijt? Een andere ouder kan onder “Beheer” een koppelcode voor je uitgeven. Is er geen andere ouder, vraag dan op het inlogscherm een wissel aan: die kan na 24 uur en je krijgt daarover een e-mail.
+344|Zij verliest de ouderrechten. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
+345|Zij verliest de vriendenmodus. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
+346|Zij krijgt volledige ouderrechten: alles zien, goedkeuren, verwijderen en het gezin beheren. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
+347|Hoi {name}, een kleine herinnering: er moet nog {amount} worden terugbetaald. Bedankt! 🙏
+348|Hoi {name}, een kleine herinnering: er moet nog {amount} worden terugbetaald voor {note}. Bedankt! 🙏
+349|Hoi, {name} wil zich aansluiten bij de gezinskas. Je kunt inloggen en goedkeuren: {url}
+350|Geschiedenis
+351|Geschiedenis met vrienden
+352|היעד לא קיים
+353|היעד נוסף 🎯
+354|הישגים
+355|הישגים: {name}
+356|Alles: {amount}
+357|Alles in orde
+358|Alles in orde ✅
+359|Alles wordt alleen op dit apparaat bewaard.
+360|Nieuwste eerst
+361|Mijn geld
+362|Mijn land staat er niet bij ($)
+363|Valuta van het gezin
+364|De valuta van het gezin is {base}, en deze schuld blijft in {cur} bewaard. In de saldi wordt hij getoond tegen de koers van die dag, en bij betaling wordt het bedrag omgerekend tegen de koers van de betaaldag.
+365|Valuta: {cur}
+366|E-mail geverifieerd ✅
+367|Dit e-mailadres wordt al door iemand anders gebruikt
+368|Huidige e-mail: {email}. Om te vervangen sturen we daar een bevestigingscode naartoe.
+369|E-mail van {name}
+370|E-mail van de vriend(in)
+371|Jouw e-mail voor vrienden:
+372|Locatie en valuta opgeslagen ✅
+373|Locatie en valuta bijgewerkt ✅
+374|Dit apparaat is niet meer aan een ouder gekoppeld
+375|Dit apparaat is niet meer aan een ouder gekoppeld. Om in te loggen moet je van apparaat wisselen.
+376|Dit apparaat is niet geregistreerd voor verificatie. Registreer het opnieuw.
+377|Dit apparaat is nog niet aan een ouder gekoppeld.
+378|Het apparaat wordt niet ondersteund
+379|Apparaat losgekoppeld ✅
+380|Mijn apparaat
+381|Doorgaan
+382|Verder naar verificatie
+383|Dit gezin heeft het apparaat verwijderd. Om opnieuw binnen te komen heb je de gezinscode nodig.
+384|Gezin niet gevonden
+385|Het gezin is vol
+386|Vergrendeling opgeheven ✅
+387|Deze tiener verliest de vriendenmodus. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
+388|Mijn gegevens
+389|Heeft een gezinslid verwijderd
+390|Heeft een apparaat verwijderd
+391|Het bedrag is te groot
+392|Het bedrag is te groot.
+393|Grootste bedrag eerst
+394|Bedragen in het notitieboekje
+395|Verwijderen
+396|{name} verwijderen
+397|Verbergen
+398|Overzetten naar de server
+399|Ouderrechten geven
+400|Notitie
+401|Het schrift is te groot om te delen
+402|Persoonlijk schrift van {name}
+403|Het notitieboekje is leeggemaakt
+404|Het notitieboekje is al leeg
+405|Het schrift wordt niet met je ouders gedeeld
+406|Het schrift is ongeldig
+407|Mijn notitieboekje
+408|Stoppen
+409|Deze handeling wordt alleen bevestigd met een vingerafdruk of gezichtsherkenning
+410|Biometrische verificatie inschakelen
+411|הפקדה
+412|הפקדתי
+413|Code tonen 🔒
+414|Toetredingscode tonen
+415|Meedoen
+416|Het bestand is te groot
+417|Het gedownloade bestand is geen nieuwe versie van de app
+418|Het gedownloade bestand is ongeldig. Probeer het opnieuw
+419|Code vervangen ✅ Je kunt hem tonen met een vingerafdruk of gezichtsherkenning
+420|De nieuwe code moet {rule} zijn.
+421|Huidige code
+422|De huidige code is onjuist.
+423|De geheime code moet 4 cijfers zijn
+424|De geheime code is onjuist.
+425|De geheime code die je hebt ingetypt is onjuist.
+426|Je geheime code
+427|Je geheime code, ter bevestiging
+428|De code is niet meer geldig. Vraag je ouders om een nieuwe code.
+429|De code is onjuist. Controleer opnieuw, of vraag het aan je ouders.
+430|De code is onjuist. Je hebt nog {left} pogingen.
+431|De code uit de e-mail
+432|De code uit de huidige e-mail is onjuist of verlopen.
+433|De code is verborgen
+434|De code blijft verborgen en wordt alleen getoond met een vingerafdruk of gezichtsherkenning.
+435|De code is bijgewerkt. Log in met de nieuwe code vanaf je apparaat.
+436|De code moet {rule} zijn
+437|De code moet {rule} zijn.
+438|De code moet 4 cijfers zijn
+439|De code moet minstens 4 cijfers zijn, tot maximaal {max}
+440|De code is onjuist of verlopen.
+441|De code is gewijzigd ✅
+442|De code van {name} is bijgewerkt
+443|De codes waren niet gelijk. We beginnen opnieuw.
+444|De Gezinskas
+445|De kas is verwijderd
+446|הקופה נפתחה! כתבו את שמות הילדים. נער/ה או הורה נוסף אפשר להוסיף למטה, או אחר כך מלשונית “ניהול”.
+447|De verrekening is ter goedkeuring naar een ouder gestuurd ⏳
+448|De verrekening sluit schulden aan beide kanten af tot {amount}. Het verschil blijft zoals het is en de geschiedenis blijft bewaard.
+449|Maak een gezinskas aan
+450|Typ je geheime code.
+451|Kas aanmaken
+452|Een gezinskas aanmaken
+453|Volgende registratie: {date}
+454|De vaste registratie is gestopt
+455|De vaste registratie is toegevoegd ✅
+456|הרישום יימחק. אפשר לכתוב למי שרשם למה זה לא נכון.
+457|De registratie is geweigerd
+458|De registratie is verwijderd
+459|Lijst
+460|De lijst is gekopieerd
+461|Delen is gepauzeerd. Je ouders zien niets.
+462|Wissel afronden en inloggen
+463|De naam is bijgewerkt ✅
+464|Koersen bijgewerkt {when}
+465|Aanpassingen (terugbetalingen zonder specifieke schuld)
+466|De betaling in {base} wordt omgerekend tegen de koers van vandaag en afgetrokken van de schuld in de eigen valuta. Na het opslaan wordt deze koers bewaard en verandert niet meer.
+467|Is dit dezelfde persoon als “{name}”?
+468|Is dit dezelfde persoon? Zo ja, welke naam gebruiken we?
+469|Dit is een demo, dus er kan niets worden gewijzigd. Maak je eigen kas aan!
+470|Dit is jouw e-mail
+471|Dit is de code die je bij elke aanmelding gebruikt. Onthoud hem goed.
+472|Dit verwijdert de hele kas: alle mensen en alle registraties, en kan niet ongedaan worden gemaakt.\nTyp ter bevestiging de naam van het gezin: {name}
+473|Gezichtsherkenning of vingerafdruk
+474|Mannelijk
+475|Een vriend(in) is mij geld schuldig
+476|Vriend(in) toegevoegd ✅
+477|Vrienden zijn mij geld schuldig
+478|Vrienden voegen de tiener toe via dit e-mailadres. Er wordt niets naartoe gestuurd, het wordt alleen gebruikt om te zoeken.
+479|Vrienden voegen de tiener toe via dit e-mailadres. Er wordt niets naartoe gestuurd, het wordt alleen gebruikt om te zoeken.
+480|Vrienden voegen de tiener toe via dit e-mailadres. Er wordt niets naartoe gestuurd, het wordt alleen gebruikt om te zoeken.
+481|Vrienden worden toegevoegd via e-mailadres. Je ziet alles wat wordt geregistreerd in het overzicht.
+482|Vrienden: {names}
+483|Schuld
+484|Schuld in {cur}
+485|Schulden
+486|Nieuwe schulden ten opzichte van vorige maand: {diff}
+487|Volgende maand
+488|Vorige maand
+489|Terug
+490|Terug naar het gezin
+491|Terug naar gezin {family}
+492|is schuldig
+493|Er moet minstens één ouder in het gezin blijven
+494|is schuldig
+495|is mij schuldig
+496|Zij zijn mij schuldig
+497|Zij zijn mij geld schuldig
+498|is schuldig
+499|חסכת עד שהגעת ליעד
+500|Laden…
+501|Nog niet vastgelegd door de ouder
+502|Ze verliezen de ouderrechten. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
+503|{day}
+504|Ongeldige dag van de maand (1 tot 28)
+505|Ongeldige dag
+506|Veilig uitloggen…
+507|Te veel codeverzoeken. Probeer het over een paar minuten opnieuw
+508|Te veel verzoeken. Probeer het later opnieuw
+509|Op dit moment te veel nieuwe gezinnen. Probeer het over een paar minuten opnieuw
+510|Te veel pogingen. Probeer het over een minuut opnieuw.
+511|Te veel pogingen. Probeer het over een paar minuten opnieuw.
+512|Te veel registraties. Probeer het later opnieuw
+513|Er blijft {left} van de schuld over.
+514|Kind
+515|Kind
+516|Kind
+517|יעד חדש
+518|יעדי חיסכון
+519|יעדי חיסכון הם לילדים ולנוער
+520|Uitloggen
+521|De demo verlaten
+522|Ze krijgen volledige ouderrechten: alles zien, goedkeuren, verwijderen en het gezin beheren. Daarna is verificatie met gezichtsherkenning of een vingerafdruk nodig.
+523|Groen
+524|Groen + geel
+525|Sommige mensen zijn jou geld schuldig en jij hen ook. Verrekenen sluit de wederzijdse schulden af en laat alleen het verschil over.
+526|In het persoonlijke notitieboekje staan schulden op namen van gezinsleden
+527|Er zijn te veel openstaande toetredingsverzoeken. Vraag de ouders ze te behandelen
+528|Er staan te veel schulden open tussen de twee. Sluit schulden af voordat je er meer toevoegt.
+529|Er zijn te veel actieve registraties tussen de twee. Sluit schulden af voordat je er meer toevoegt.
+530|Er staat een saldo open tussen jullie. Sluit dat eerst af
+531|Hier zitten schulden in een andere valuta: ze worden verrekend tegen de koers van vandaag, en die koers wordt bewaard.
+532|“{old}” staat al in het notitieboekje.
+533|Er staan al veel vrienden in de lijst
+534|יש כבר הרבה יעדים
+535|Er zijn al veel vaste registraties
+536|Ik heb een gezinscode
+537|Heb je een gezinscode? Ga naar de kas
+538|Heb je een gezinscode? Typ hem hier in. Vraag je ouders om de toetredingscode van het gezin.
+539|Er is maar één ouder in het gezin. We raden aan een tweede ouder toe te voegen en een e-mailadres te verifiëren, zodat je toegang kunt herstellen als het apparaat kwijtraakt.
+540|Er staan registraties op deze naam. Verwijder ze eerst
+541|Saldi
+542|Hier registreer je schulden met vrienden: wie voor wie iets kocht en wie moet terugbetalen. Je vriend(in) heeft ook de app nodig, en je ouders moeten het goedkeuren.
+543|כאן רושמים מי חייב למי. לוחצים על אחד הכפתורים הגדולים, בוחרים אדם וסכום, וזהו.
+544|{"one":"Al 1 dag","other":"Al {n} dagen"}
+545|Er is al iemand met deze naam
+546|Er is al iemand met deze naam. Kies die persoon in de lijst, of wijzig de naam
+547|Er is al iemand met deze naam. Weiger het verzoek
+548|Dit profiel heeft al een code
+549|Bijna klaar…
+550|Gebruik je de kas al?
+551|Om {need} is een apparaat met een ingestelde vingerafdruk of gezichtsherkenning nodig.
+552|Om vanaf deze telefoon van apparaat te wisselen heb je een geverifieerd e-mailadres nodig. Voeg een e-mailadres toe bij “Mijn account”.
+553|Om als ouder in te loggen moet je dit apparaat koppelen met een koppelcode van een andere ouder. Tik op “Nieuw apparaat / Apparaat wisselen”.
+554|Om mee te doen moet je ermee akkoord gaan dat je ouders je persoonlijke schrift kunnen bekijken, alleen lezen
+555|Om een nieuwe code voor {name} in te stellen, sturen we een verificatiecode naar {email}.
+556|Om een apparaat te koppelen moet daarop een vingerafdruk of gezichtsherkenning zijn ingesteld.
+557|Zodat een kind zichzelf niet tot ouder kan maken, wordt toevoegen als tiener of ouder door een ouder goedgekeurd. Er opent nu een verificatieverzoek van het apparaat.
+558|Zodat een kind zichzelf niet tot ouder kan maken, wordt een rolwijziging door een ouder goedgekeurd. Er opent nu een verificatieverzoek van het apparaat.
+559|Jansen
+560|Blauw + paars
+561|Vrienden uitschakelen
+562|Alle openstaande schulden
+563|Heel het gezin
+564|Alle bedragen worden in deze valuta getoond. Je kunt een schuld in een andere valuta registreren (bijvoorbeeld 100 dollar), en bij betaling wordt hij omgerekend tegen de koers van die dag.
+565|Elke maand
+566|Elke {day}
+567|Hoe vaak
+568|כל רישום שלכם מחכה לאישור של הורה, ורק אחרי זה הוא נכנס לחשבון. אם טעיתם, אפשר לבטל תוך 10 דקות.
+569|Elke week
+570|Hoeveel heeft {from} aan {to} terugbetaald?
+571|Hoeveel heeft {from} aan {to} terugbetaald?
+572|Hoeveel heeft {from} aan {to} terugbetaald?
+573|Hoeveel is {name} mij schuldig?
+574|Hoeveel is {name} mij schuldig?
+575|Hoeveel is {name} mij schuldig?
+576|Hoeveel heeft {name} mij betaald?
+577|Hoeveel heeft {name} mij betaald?
+578|Hoeveel heeft {name} mij betaald?
+579|Hoeveel ben ik {to} schuldig?
+580|Hoeveel ben ik {to} schuldig?
+581|Hoeveel ben ik {to} schuldig?
+582|כמה צריך? ({cur})
+583|Hoeveel heb ik {to} betaald?
+584|Hoeveel?
+585|Ja
+586|Ja, dezelfde persoon. “{n}” behouden
+587|Ja, dezelfde persoon. Alles wijzigen in “{n}”
+588|Ja, samenvoegen onder “{n}” (naam in het notitieboekje)
+589|Ja, samenvoegen onder “{n}” (naam in de kas)
+590|Ja, doorgaan
+591|Ja, naar de kas verplaatsen
+592|Ja, verrekenen
+593|Ja, schuld opslaan
+594|Ja, betaling opslaan
+595|Inloggen
+596|Inloggen als ouder
+597|Typ het e-mailadres dat je vriend(in) in de app bij zijn/haar ouders heeft opgegeven. Er wordt een verzoek gestuurd dat goedgekeurd moet worden. Dit werkt alleen als je vriend(in) ook de vriendenmodus heeft.
+598|Typ de geheime code
+599|Typ de code nog een keer, ter bevestiging
+600|Typ de naam
+601|Typ een bedrag
+602|Typ een bedrag groter dan nul.
+603|Een ander adres
+604|Het e-mailadres is ongeldig
+605|E-mailadres
+606|Nieuw e-mailadres
+607|Ongeldig e-mailadres
+608|Oranje
+609|Oranje + roze
+610|Nee
+611|We konden de meldingen op dit apparaat niet inschakelen
+612|We konden het apparaat niet koppelen. Probeer het opnieuw.
+613|Onbekend
+614|Onjuist
+615|Er is geen installatieprogramma op de telefoon gevonden. Je kunt het bestand rechtstreeks van GitHub downloaden
+616|Er is deze maand niets vastgelegd.
+617|Nee, dit zijn twee verschillende personen
+618|Nee, dit is een andere persoon
+619|Nee, in het notitieboekje laten
+620|Voor welke schuld is de terugbetaling?
+621|Ter bevestiging sturen we een verificatiecode naar {email}.
+622|Resetten, en laten kiezen bij de volgende keer inloggen
+623|Annuleren wat je hebt geregistreerd?
+624|לדחות את הרישום?
+625|Weigeren? De registratie wordt verwijderd.
+626|להוסיף גם נער/ה או הורה נוסף
+627|Een nieuwe ouder heeft een geheime code nodig
+628|Voor een ouder moet een code worden ingesteld (je kunt hem niet resetten zodat hij zelf kiest)
+629|Alleen voor ouders. Wie de kas aanmaakt, is de eerste ouder. Daarna krijg je één toetredingscode voor het hele gezin en bepaal je ieders rol: kind, tiener of ouder.
+630|De code vervangen? Wie er al in zit blijft, maar de oude code werkt niet meer, en andere apparaten die het gezin hebben bewaard moeten de nieuwe code invoeren.
+631|Apparaat wisselen
+632|Het wisselen van je eigen apparaat gaat via een ander proces
+633|Koppelcode uitgeven
+634|{name} uit de vrienden verwijderen?
+635|{name} uit het gezin verwijderen?
+636|Naar de gezinskas verplaatsen bij {name}?
+637|De vaste registratie stoppen? Wat al is geregistreerd blijft.
+638|Toon op de hoofdpagina ook wat betaald is
+639|Tik voor de details van de berekening
+640|De vriendenmodus van {name} uitschakelen? Nieuwe registraties met vrienden zijn dan niet meer mogelijk.
+641|Niet opgegeven
+642|למה? (לא חובה)
+643|{n} betaalde registraties verwijderen?
+644|למחוק את היעד "{name}"?
+645|De registratie van {name} verwijderen?
+646|Deze registratie verwijderen?
+647|Alle registraties in het notitieboekje verwijderen? Dit kan niet ongedaan worden gemaakt.
+648|Aan wie
+649|Wie ben ik geld schuldig?
+650|Wie ben ik geld schuldig?
+651|Wie ben ik geld schuldig?
+652|Aan wie?
+653|למשל: אופניים
+654|Bijvoorbeeld: ijsje, bioscoopkaartje
+655|Het apparaat loskoppelen? Het moet dan opnieuw de toetredingscode invoeren.
+656|De valuta van het gezin wordt door het land bepaald. Je kunt hem later wijzigen op het tabblad Beheer.
+657|Per valuta
+658|Op naam (A-Z)
+659|Alleen bekijken. Het schrift blijft bij {name} en kan hier niet worden gewijzigd.
+660|Alleen lezen. Elke registratie met een vriend(in) wacht ook op zijn/haar goedkeuring.
+661|de toetredingscode te zien
+662|een rol te wijzigen
+663|In evenwicht: niemand is iets schuldig
+664|Verifiëren…
+665|krijgt nog
+666|krijgt nog
+667|krijgt nog
+668|Land wordt niet ondersteund
+669|het privacybeleid
+670|Privacybeleid
+671|Land van verblijf
+672|Wat tieners met vrienden registreren
+673|Wat openstaat
+674|Vanaf vandaag
+675|Update downloaden...
+676|Update downloaden... {percent}%
+677|Verwijderen
+678|Heel de kas verwijderen
+679|Nieuwe telefoon? Tik hier, bevestig met een vingerafdruk en er wordt een code naar je e-mail gestuurd. Open daarna de kas op de nieuwe telefoon, kies je naam en tik op “Nieuw apparaat / Apparaat wisselen”. De oude telefoon wordt uitgelogd.
+680|Verwijderd
+681|Valuta
+682|Valuta wordt niet ondersteund
+683|מי הילדים שלך?
+684|Wie het meeste schuldig is
+685|Wie is mij geld schuldig?
+686|Wie is wie schuldig
+687|Wie is schuldig (de betaler)
+688|Wie is mij geld schuldig?
+689|Wie logt er in?
+690|Wie wat wanneer heeft gewijzigd, over de laatste 6 maanden.
+691|E-mail voor coderecovery
+692|E-mailadres voor code-herstel (niet verplicht)
+693|E-mail is alleen voor ouders
+694|Locatie en valuta
+695|Iemand
+696|Apparaat
+697|Nieuw apparaat / Apparaat wisselen
+698|Apparaat bestaat niet
+699|Verbonden apparaten
+700|Apparaten die het gezin hebben bewaard. Een kaart die 180 dagen niet gebruikt wordt, verloopt vanzelf.
+701|ממתין לאישור: {amount}
+702|Wacht op goedkeuring van een ouder in {name}. Nadat een ouder het heeft goedgekeurd, kies je je naam op het inlogscherm en typ je de geheime code die je hebt gekozen.
+703|Wacht op goedkeuring van een ouder. Nadat een ouder het heeft goedgekeurd, kies je je naam op het inlogscherm en typ je de geheime code die je hebt gekozen.
+704|Ongeldig meldingsabonnement
+705|Geef de code persoonlijk aan {name}, niet in een bericht. Hij is 30 minuten geldig en werkt één keer.
+706|Ongeldige sleutel
+707|Vriendenmodus
+708|Vriendenmodus goedgekeurd ✅
+709|De vriendenmodus is alleen voor tieners
+710|Vriendenmodus uitgeschakeld
+711|Vriendenmodus voor {name}
+712|De vriendenmodus is nog niet door de ouders goedgekeurd
+713|Meedoen met de kas
+714|Je doet mee met de kas van {name}. Een ouder in het gezin moet het goedkeuren en bepaalt of je kind, tiener of ouder bent.
+715|Uiterlijk
+716|Er is iets misgegaan. Probeer het opnieuw.
+717|Ander gezin
+718|Familie {name}
+719|Beheer
+720|Je hebt het te vaak geprobeerd. Probeer het over {wait} opnieuw.
+721|Loskoppelen
+722|נכנס בלי קוד
+723|Verwijderd
+724|Op dit apparaat zijn gegevens van de vorige versie gevonden: {people} personen en {entries} registraties. Overzetten naar de server?
+725|Opnieuw proberen
+726|Tiener
+727|Tiener
+728|Tiener
+729|Vrouwelijk
+730|Het lijkt erop dat dit apparaat zich in {name} bevindt. Woon je in {name}?
+731|Vastgelegde schulden
+732|Nog {left} van {total}
+733|Er is nog {left} over van deze schuld.
+734|Er wordt een code verstuurd wanneer een geheime code wordt gewijzigd of gereset, en ook een melding wanneer de code van iemand in het gezin geblokkeerd raakt.
+735|Ter goedkeuring naar een ouder gestuurd ⏳
+736|Ter goedkeuring naar de vriend(in) gestuurd ⏳
+737|Er is een code naar je geverifieerde e-mailadres gestuurd. Na bevestiging kan de wissel pas over 24 uur, en intussen krijgen jij en de andere ouders een melding en kunnen jullie annuleren.
+738|Paars en turquoise
+739|Sluiten
+740|Volgorde van registraties
+741|Totaal
+742|Totaal in {cur} tegen de koers van vandaag
+743|Klaar
+744|Maandoverzicht
+745|Bedrag ({cur})
+746|Ongeldig bedrag
+747|Ongeldig bedrag. Tussen vrienden kun je maximaal 500 sjekel per keer registreren
+748|Gezinsoverzicht
+749|Er is nog niets geregistreerd.
+750|Er wordt al een update uitgevoerd
+751|Bijwerken
+752|Meer
+753|Er is nog niemand anders in het gezin. Een ouder moet ze toevoegen.
+754|Nog geen goedgekeurde vrienden
+755|Nog geen goedgekeurde vrienden. Voeg een vriend(in) toe via zijn/haar e-mail.
+756|Nog geen vrienden. Voeg een vriend(in) toe via zijn/haar e-mail.
+757|עוד אין יעדי חיסכון.
+758|De lijst is nog leeg. Tik op een van de knoppen om te beginnen.
+759|Nog geen vaste registraties.
+760|Nog geen wijzigingen in het logboek.
+761|Nog geen ouder heeft het schrift geopend
+762|Meer avatars
+763|Nog niet
+764|Heeft nog geen code gekozen
+765|Heeft nog geen code gekozen
+766|Heeft nog geen code gekozen
+767|Er is nog niets met vrienden geregistreerd.
+768|Er is nog niets geregistreerd.
+769|Er is nog geen kopie verstuurd
+770|Er zijn nog geen 24 uur verstreken sinds het verzoek.
+771|Laatst bijgewerkt: {when}
+772|Uiterlijk
+773|Voor {debt} (= {covers} tegen de koers van vandaag).
+774|Voor {debt}.
+775|על מה חוסכים?
+776|Waarvoor? (mag je overslaan)
+777|Waarvoor? (optioneel)
+778|Voor: {debt}
+779|Met wie?
+780|Extra groot
+781|De verificatie is verlopen. Probeer het opnieuw.
+782|Details van de berekening
+783|Ongeldige actie
+784|Schermkleuren
+785|Neonkleuren
+786|De aanspreekvorm is al vastgelegd en kan niet worden gewijzigd
+787|Aanspreekvorm
+788|Aanspreekvorm:
+789|Hebben het schrift bekeken:
+790|Maak een gezinskas aan: iedereen ziet dezelfde rekening en de schulden worden voor iedereen bijgewerkt.
+791|Bevestiging met een vingerafdruk of gezichtsherkenning is nodig
+792|Je hebt de gezinscode nodig om bij dit gezin binnen te komen.
+793|De app moet updates mogen installeren: zet in de instellingen die verschijnen "Toestaan vanuit deze bron" aan en tik opnieuw op "Bijwerken"
+794|Je moet opnieuw inloggen
+795|Je moet opnieuw inloggen met de gezinscode
+796|Het apparaat moet opnieuw worden gekoppeld
+797|Je moet deze telefoon één keer koppelen.
+798|Het apparaat moet worden gekoppeld
+799|Je moet dit apparaat en deze browser één keer koppelen.
+800|Een geverifieerd e-mailadres is nodig om van apparaat te wisselen
+801|Code instellen
+802|Code instellen en inloggen
+803|Aanspreekvorm instellen…
+804|קביעת קוד סודי
+805|Eén code voor iedereen. Wie ermee meedoet, komt binnen als kind. Daarna kun je in "Gezinsleden" wijzigen naar tiener of ouder, met goedkeuring via vingerafdruk of gezichtsherkenning.
+806|Code uit de e-mail
+807|De code uit de e-mail is onjuist of verlopen.
+808|De verificatiecode is onjuist of verlopen.
+809|Toetredingscode voor de kas van {name}: {code}
+810|Toetredingscode van het gezin
+811|De toetredingscode van het gezin wordt alleen getoond met een vingerafdruk of gezichtsherkenning.
+812|De gezinscode is gewijzigd. Vraag je ouders om een nieuwe code.
+813|De koppelcode
+814|Nieuwe code
+815|Nieuwe code ({rule})
+816|Code uit de huidige e-mail
+817|Gezinscode
+818|Geheime code ({rule}; langer = veiliger)
+819|Geheime code (verplicht voor een ouder, {rule})
+820|קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)
+821|קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק
+822|Nieuwe geheime code
+823|Geheime code voor {name}
+824|Je eigen geheime code (4 cijfers)
+825|Koppelcode
+826|Een koppelcode is alleen voor ouders
+827|Koppelcode voor {name}
+828|Koppelcode voor een apparaat
+829|Toetredingscodes
+830|Eerst moet een geheime code voor {name} worden ingesteld
+831|{amount} verrekend met {name} ✅
+832|Een gezinskas kan alleen worden aangemaakt door iemand ouder dan 18
+833|Klein
+834|Ik heb ontvangen
+835|Ik heb het verschil ontvangen ({amount})
+836|Ik heb geld ontvangen
+837|Wederzijdse verrekening
+838|Wederzijdse schulden verrekenen
+839|Wederzijdse schulden verrekenen ({amount})
+840|De uitnodigingslink voegt iedereen die hem opent toe als kind. Deel hem alleen met je gezin.
+841|Apparaat koppelen
+842|Dit apparaat koppelen en inloggen
+843|Het apparaat aan een ouder koppelen
+844|Ik heb {terms} en {privacy} gelezen en ga ermee akkoord
+845|Ik heb {terms} en {privacy} gelezen en ga ermee akkoord
+846|Ik heb {terms} en {privacy} gelezen en ga ermee akkoord
+847|Normaal
+848|Even geduld, we loggen in…
+849|Even geduld, we loggen uit…
+850|Wil je ze samenvoegen in de gezinskas?
+851|Wil je dat degenen die jou geld schuldig zijn dit zien?
+852|Registreren
+853|Een terugbetaling registreren
+854|Registreert automatisch een schuld, wekelijks of maandelijks, zonder dat je het elke keer hoeft te typen.
+855|Nieuwe vaste registratie
+856|Alleen ouders kunnen dit doen
+857|רק הורים יכולים לפתוח יעד למישהו אחר
+858|Alleen ouders kunnen de aanspreekvorm instellen
+859|Alleen om te controleren dat wie de kas aanmaakt ouder is dan 18. Wordt aan niemand getoond.
+860|Heeft een terugbetaling vastgelegd
+861|Heeft een schuld vastgelegd
+862|Noteer je eigen schuld in het schriftje
+863|שבוע נקי
+864|שבוע שלם בלי חובות פתוחים
+865|Volledig betaald ✅
+866|Betaald ({n})
+867|Alles wordt opgeslagen…
+868|Vergrendeling opheffen
+869|Ik heb betaald
+870|Ik heb het verschil betaald ({amount})
+871|Heeft het gezin hernoemd
+872|Heeft land en valuta gewijzigd
+873|Heeft een naam gewijzigd
+874|Heeft een rol gewijzigd
+875|Wijzigen
+876|Een andere valuta wijzigt alleen het symbool. De bedragen zelf worden niet omgerekend.
+877|Geheime code wijzigen
+878|Gezin hernoemen
+879|Delen
+880|Ik ben de code vergeten
+881|We hebben een code naar {email} gestuurd. Typ hem in, samen met het nieuwe adres. Het vervangt het huidige pas na verificatie.
+882|We hebben een code van 6 cijfers naar {email} gestuurd. Hij is 10 minuten geldig.
+883|Van mij
+884|Verzoek versturen
+885|Verificatiecode versturen
+886|Code per e-mail versturen
+887|Een code naar de huidige e-mail versturen
+888|Naam
+889|שם היעד חייב להיות עד 40 תווים
+890|Naam van het gezin
+891|De naam van het gezin komt niet overeen
+892|De naam van het gezin is ongeldig
+893|Ongeldige naam
+894|Bekende namen
+895|Opslaan
+896|een uur
+897|{"one":"{n} uur","other":"{n} uur"}
+898|De wisselkoersen zijn nog niet geladen. Probeer het zo meteen opnieuw.
+899|2 uur
+900|Taal
+901|Ongeldige datum
+902|Geboortedatum
+903|Ongeldige geboortedatum
+904|de gebruiksvoorwaarden
+905|Gebruiksvoorwaarden
+906|Rol
+907|Rol:
+908|Hoofdmenu
+909|Betaling voor een schuld in een andere valuta
+910|🆘 Het oude apparaat is kwijt of kapot

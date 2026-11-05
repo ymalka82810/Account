@@ -174,6 +174,15 @@ describe("רישום חובות בין חברים", () => {
     expect((await view(gal)).entries).toHaveLength(0);
   });
 
+  it("דחייה עם סיבה: נמחק, וסיבה ארוכה מדי נדחית", async () => {
+    await befriend();
+    const id = await addDebt(yuval, yuvalId, galId, 1500);
+    await expect(t.mutation(api.friends.rejectEntry, { token: gal, id, reason: "א".repeat(81) })).rejects.toThrow("ההערה ארוכה מדי");
+    expect((await view(gal)).entries).toHaveLength(1);
+    await t.mutation(api.friends.rejectEntry, { token: gal, id, reason: "לא קניתי כלום" });
+    expect((await view(gal)).entries).toHaveLength(0);
+  });
+
   it("ולידציות: סכום, תאריך, הערה, עצמי, צד שלישי", async () => {
     await befriend();
     await expect(addDebt(yuval, yuvalId, galId, 0)).rejects.toThrow("סכום לא תקין");

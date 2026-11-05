@@ -3,16 +3,18 @@ import { t, tn } from '../i18n/index.js';
 import { translateServer } from '../i18n/serverMessages.js';
 
 let toastTimer;
-let toastMsg = '';
+let toastState = { msg: '', action: null };
 const toastListeners = new Set();
 export const subscribeToast = (fn) => { toastListeners.add(fn); return () => toastListeners.delete(fn); };
-export const toastMessage = () => toastMsg;
-function setToast(m) { toastMsg = m; toastListeners.forEach((fn) => fn()); }
-export function toast(msg) {
-  setToast(msg);
+export const toastSnapshot = () => toastState;
+function setToast(msg, action = null) { toastState = { msg, action }; toastListeners.forEach((fn) => fn()); }
+// action = { label, onClick } מוסיף כפתור להודעה (למשל "בטל") ומאריך את זמן ההצגה.
+export function toast(msg, action) {
+  setToast(msg, action || null);
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => setToast(''), 2800);
+  toastTimer = setTimeout(() => setToast(''), action ? 8000 : 2800);
 }
+export function dismissToast() { clearTimeout(toastTimer); setToast(''); }
 
 export const today = () => {
   const d = new Date();

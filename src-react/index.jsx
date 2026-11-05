@@ -1,5 +1,10 @@
 // נקודת הכניסה של האתר: כל המסכים הם קומפוננטות React תחת <App />.
 import { createRoot } from 'react-dom/client';
+// הפונט נארז באפליקציה (בלי גוגל): פרטיות, ועובד גם בלי אינטרנט
+import '@fontsource/rubik/400.css';
+import '@fontsource/rubik/500.css';
+import '@fontsource/rubik/700.css';
+import '@fontsource/rubik/800.css';
 import { ConvexProvider } from 'convex/react';
 import { client } from './lib/client.js';
 import { initialLang, setLang } from './i18n/index.js';

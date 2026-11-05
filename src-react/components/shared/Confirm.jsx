@@ -23,6 +23,7 @@ export function ConfirmProvider({ children }) {
     setReq({ opts, resolve });
   }), []);
 
+  // עם opts.input: אישור מחזיר את הטקסט שנכתב (אולי ריק), וביטול מחזיר false.
   const answer = useCallback((value) => {
     setReq((cur) => {
       if (cur) cur.resolve(cur.opts.input ? (value ? typedRef.current : null) : value);

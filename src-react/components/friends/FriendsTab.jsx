@@ -178,8 +178,12 @@ export default function FriendsTab({ data, fdata, token }) {
                   <button className="small okbtn" type="button"
                     onClick={() => run('friends:confirmEntry', { id: e.id }, t('אושר ✅'))}>{t('✅ נכון')}</button>
                   <button className="small danger" type="button" onClick={async () => {
-                    if (!(await confirm({ icon: '🗑️', title: t('דחייה'), message: t('לדחות? הרישום יימחק.'), okText: t('דחייה'), cancelText: t('חזרה'), danger: true }))) return;
-                    run('friends:rejectEntry', { id: e.id }, t('הרישום נדחה'));
+                    const reason = await confirm({
+                      icon: '🙅', title: t('לדחות את הרישום?'), message: t('הרישום יימחק. אפשר לכתוב למי שרשם למה זה לא נכון.'),
+                      input: { placeholder: t('למה? (לא חובה)') }, okText: t('דחייה'), cancelText: t('חזרה'), danger: true,
+                    });
+                    if (reason === null) return;
+                    run('friends:rejectEntry', { id: e.id, ...(reason ? { reason } : {}) }, t('הרישום נדחה'));
                   }}>{t('לא נכון')}</button>
                 </div>
               </div>

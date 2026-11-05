@@ -36,6 +36,7 @@ export function demoData() {
       entry('demo-p1', 'payment', NOA, DANA, 5000, 'החזר ראשון', 5, { debtId: 'demo-d1' }),
       entry('demo-d2', 'debt', YOAV, DANA, 3000, 'כרטיס לסרט', 3),
     ],
+    goals: [],
     recurring: [],
   };
 }

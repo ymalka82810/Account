@@ -322,6 +322,17 @@ input.invalid { border-color: var(--owe); box-shadow: 0 0 0 2px var(--owe); }
   text-align: center;
   box-shadow: 0 6px 20px rgba(0,0,0,.25);
 }
+.toast-action {
+  margin-inline-start: 14px;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .toast { animation: pop .2s ease-out; }
@@ -1365,3 +1376,35 @@ body[data-theme="parent"] .kb-sug { background: #12151a; border: 1px solid #262b
 body[data-theme="parent"] .kb-sug:active { background: #232a33; border-color: var(--coin); }
 body[data-theme="teen"] .kb-sug { background: rgba(255, 255, 255, .06); border: 1px solid var(--kb-fn-edge); border-radius: 12px; }
 body[data-theme="teen"] .kb-sug:active { background: var(--neon-grad); color: var(--neon-ink); border-color: transparent; }
+
+/* סיכום חודשי וגרפים (לשונית המשפחה) */
+.sum-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.sum-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
+.sum-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; }
+.sum-card .what { font-size: .85rem; color: var(--ink-soft); }
+.sum-card .num { font-size: 1.15rem; font-weight: 800; margin-top: 4px; }
+.sum-chart { display: flex; gap: 8px; align-items: flex-end; height: 140px; margin-top: 14px; padding: 8px 10px 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
+.sum-col { flex: 1; display: flex; flex-direction: column; height: 100%; min-width: 0; }
+.sum-bars { flex: 1; display: flex; gap: 3px; align-items: flex-end; }
+.sum-bar { flex: 1; min-height: 2px; border-radius: 4px 4px 0 0; }
+.sum-bar.debt, .dot.debt { background: var(--owe); }
+.sum-bar.paid, .dot.paid { background: var(--get); }
+.sum-lbl { text-align: center; font-size: .75rem; color: var(--ink-soft); padding: 4px 0; }
+.sum-legend { font-size: .85rem; color: var(--ink-soft); margin-top: 6px; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-inline-start: 10px; }
+.sum-fill { background: var(--owe); }
+
+/* יעדי חיסכון */
+.goal { margin-bottom: 10px; }
+.goal-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.goal-bar { height: 12px; border-radius: 99px; background: var(--line); margin: 8px 0 4px; overflow: hidden; }
+.goal-fill { height: 100%; border-radius: 99px; background: var(--get); transition: width .4s; }
+.goal-dep { display: flex; gap: 8px; margin-top: 8px; }
+.goal-dep input { flex: 1; min-width: 0; }
+
+/* הישגים */
+.ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+.ach { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; text-align: center; opacity: .55; filter: grayscale(1); }
+.ach.on { opacity: 1; filter: none; border-color: var(--coin-deep); }
+.ach-icon { font-size: 1.8rem; }
+.ach-name { font-weight: 700; }

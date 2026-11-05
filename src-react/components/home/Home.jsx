@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import Arrow from '../shared/Arrow.jsx';
 import UiIcon from '../shared/UiIcon.jsx';
 import { t } from '../../i18n/index.js';
 import { useApp } from '../../state/appContext.js';
 import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
 import { useSheet } from '../shared/Sheet.jsx';
+import Goals from '../goals/Goals.jsx';
+import Achievements from '../goals/Achievements.jsx';
 import BalanceSheet from './BalanceSheet.jsx';
 import PendingCards from '../entries/PendingCards.jsx';
 import DebtLines from '../entries/DebtLines.jsx';
@@ -17,6 +20,16 @@ export default function Home({ data, token }) {
   const { openEntryFlow } = useApp();
   const sheet = useSheet();
   const me = data.me.id;
+  // הסבר קצר שמוצג פעם אחת לילד/ה בכניסה הראשונה, ונזכר לפי אדם (לא לפי מכשיר בלבד).
+  const introKey = 'introSeen:' + me;
+  const [showIntro, setShowIntro] = useState(() => {
+    if (data.me.role === 'parent') return false;
+    try { return !localStorage.getItem(introKey); } catch (e) { return false; }
+  });
+  const closeIntro = () => {
+    setShowIntro(false);
+    try { localStorage.setItem(introKey, '1'); } catch (e) { /* */ }
+  };
   const { owesLine } = namesFor(me, (id) => data.people.find((p) => p.id === id));
   let owe = 0, get = 0;
   const cards = [];
@@ -56,6 +69,15 @@ export default function Home({ data, token }) {
 
   return (
     <>
+      {showIntro && (
+        <div className="card notice intro">
+          <h3>{t('ברוכים הבאים לקופה 🪙')}</h3>
+          <p>{t('כאן רושמים מי חייב למי. לוחצים על אחד הכפתורים הגדולים, בוחרים אדם וסכום, וזהו.')}</p>
+          <p>{t('כל רישום שלכם מחכה לאישור של הורה, ורק אחרי זה הוא נכנס לחשבון. אם טעיתם, אפשר לבטל תוך 10 דקות.')}</p>
+          <button className="small okbtn" type="button" onClick={closeIntro}>{t('הבנתי')}</button>
+        </div>
+      )}
+
       <div className="summary">
         <div className="sum owe"><GoldBarArt /><div className="lbl">{g(data.me.gender, 'אני חייב', 'אני חייבת', 'אני חייב/ת')}</div><SumNum amount={owe} /></div>
         <div className="sum get"><GoldBarArt /><div className="lbl">{t('חייבים לי')}</div><SumNum amount={get} /></div>
@@ -82,6 +104,9 @@ export default function Home({ data, token }) {
           <div className="empty"><div className="big-emoji" aria-hidden="true">🎉</div>{t('אף אחד לא חייב כלום!')}</div>
         ) : cards}
       </div>
+
+      {data.me.role !== 'parent' && <Goals data={data} token={token} />}
+      {data.me.role !== 'parent' && <Achievements title={t('הישגים')} personId={me} entries={data.entries} goals={data.goals} />}
     </>
   );
 }

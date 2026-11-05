@@ -119,10 +119,18 @@ function Root() {
   const roster = useQuery('auth:legacyRoster', {});
   // שערי חליפין (לחובות במטבע אחר). אם אין או שהם ישנים, מבקשים מהשרת לעדכן.
   const fx = useQuery('fx:rates', token ? {} : 'skip');
+  // אם העדכון נכשל (אין חיבור, או הספק למטה) מודיעים למשתמש ומנסים שוב כל חצי דקה, עד שזה מצליח.
+  const [fxRetry, setFxRetry] = useState(0);
   useEffect(() => {
     if (fx === undefined) return;
-    if (!fx || Date.now() - fx.fetchedAt > 6 * 60 * 60 * 1000) callAction('fx:ensure', {}).catch(() => {});
-  }, [fx]);
+    if (fx && Date.now() - fx.fetchedAt <= 6 * 60 * 60 * 1000) return;
+    let timer;
+    callAction('fx:ensure', {}).catch((e) => {
+      toast(errMsg(e));
+      timer = setTimeout(() => setFxRetry((n) => n + 1), 30000);
+    });
+    return () => clearTimeout(timer);
+  }, [fx, fxRetry]);
   const [tabSel, setTabSel] = useState(tabFromHash);
   const migrating = useRef(false);
   const firstToken = useRef(true);
@@ -315,6 +323,18 @@ function Root() {
     }, 1500);
     return () => clearTimeout(id);
   }, [token, shareNb, nb.entries, nb.currency, resyncTick]);
+  // קיצור "רשום חוב" ממסך הבית של הטלפון (shortcuts ב-manifest.webmanifest): ?add=debt.
+  // ממתינים עד שהמשתמש/ת בתוך האפליקציה (אחרי קוד סודי), פותחים את אשף החוב פעם אחת ומנקים את הכתובת.
+  useEffect(() => {
+    if (screen !== 'app') return;
+    const params = new URLSearchParams(location.search);
+    if (params.get('add') !== 'debt') return;
+    params.delete('add');
+    const qs = params.toString();
+    history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
+    setTabSel('home');
+    openEntryFlow({ kind: 'debt', from: data.me.id });
+  }, [screen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
