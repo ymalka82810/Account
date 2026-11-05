@@ -3,6 +3,13 @@ import { addEntry, confirmBox, expectSum, freshDevice, openRows, savedNotebook }
 
 test.beforeEach(async ({ page }) => { await freshDevice(page); });
 
+// המחיקה בתפריט "⋯" של השורה (לא צמודה ל"שולם")
+const deleteFirst = async (page) => {
+  const row = openRows(page).first();
+  await row.getByRole('button', { name: 'עוד פעולות' }).click();
+  await row.getByRole('menuitem', { name: /מחיקה/ }).click();
+};
+
 test.describe('מסך הפתיחה של מכשיר חדש', () => {
   test('נפתח ישר לפנקס, בלי שאלה על משפחה ובלי כניסה', async ({ page }) => {
     await expect(page.getByText('עוד אין כלום ברשימה')).toBeVisible();
@@ -60,8 +67,9 @@ test.describe('רישום חוב', () => {
     });
   }
 
-  test('אחרי רישום ראשון מוצעת קופה משפחתית', async ({ page }) => {
+  test('אחרי רישום ראשון קופה משפחתית מוצעת בחלון של "צור משפחה"', async ({ page }) => {
     await addEntry(page, 'iowe', 'דני', '10');
+    await page.getByRole('button', { name: /צור משפחה/ }).click();
     await expect(page.getByRole('button', { name: /יצירת קופה משפחתית/ })).toBeVisible();
   });
 });
@@ -98,7 +106,7 @@ test.describe('תשלום ומחיקה', () => {
 
   test('מחיקה פותחת חלון אישור מעוצב; "חזרה" לא מוחק', async ({ page }) => {
     await addEntry(page, 'iowe', 'דני', '10');
-    await openRows(page).first().getByRole('button', { name: 'מחיקה' }).click();
+    await deleteFirst(page);
     await expect(confirmBox(page)).toBeVisible();
     await expect(confirmBox(page)).toContainText('למחוק את הרישום של דני?');
     await confirmBox(page).getByRole('button', { name: 'חזרה' }).click();
@@ -107,7 +115,7 @@ test.describe('תשלום ומחיקה', () => {
 
   test('אישור המחיקה מוחק', async ({ page }) => {
     await addEntry(page, 'iowe', 'דני', '10');
-    await openRows(page).first().getByRole('button', { name: 'מחיקה' }).click();
+    await deleteFirst(page);
     await confirmBox(page).getByRole('button', { name: 'מחיקה' }).click();
     await expect(confirmBox(page)).toHaveCount(0);
     await expect(page.getByText('עוד אין כלום ברשימה')).toBeVisible();

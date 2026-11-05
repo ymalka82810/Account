@@ -150,7 +150,23 @@ export function offsetPerson(personId) {
 
 export const setPaid = (id, paid) =>
   commit({ ...data, entries: data.entries.map((e) => (e.id === id ? { ...e, paid } : e)) });
-export const removeEntry = (id) => removeEntries([id]);
+// מחזיר את הרישום שנמחק ואת מקומו ברשימה (לביטול מחיקה), או null אם אין רישום כזה.
+export function removeEntry(id) {
+  const index = data.entries.findIndex((e) => e.id === id);
+  if (index < 0) return null;
+  const entry = data.entries[index];
+  removeEntries([id]);
+  return { entry, index };
+}
+// ביטול מחיקה: מחזיר את הרישום בדיוק כמו שהיה (אותו מזהה, תאריך ושדות) למקום שבו היה ברשימה. index הוא המקום שלו לפני המחיקה.
+// אם הרישום כבר קיים לא עושים כלום, ואם האדם שלו כבר לא ברשימת השמות הידועים הוא נוסף מחדש.
+export function restoreEntry(entry, index) {
+  if (data.entries.some((e) => e.id === entry.id)) return;
+  const people = data.people.some((p) => p.id === entry.personId) ? data.people : [...data.people, { id: entry.personId, name: entry.name }];
+  const entries = [...data.entries];
+  entries.splice(Math.max(0, Math.min(index, entries.length)), 0, entry);
+  commit({ ...data, people, entries });
+}
 export const setBirthDate = (birthDate) => commit({ ...data, birthDate });
 export const setSetting = (key, value) => commit({ ...data, settings: { ...data.settings, [key]: value } });
 export const setCurrencyChoice = (currency) => commit({ ...data, currency });

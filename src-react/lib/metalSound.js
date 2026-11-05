@@ -1,6 +1,7 @@
 // צליל מתכתי לנקישה על מטיל: "טינג" של מתכת כבדה, מסונתז ב-WebAudio (בלי קובץ שמע).
 // פגיעה קצרה ורועשת (רעש מסונן) ואחריה כמה גלים סינוסיים לא הרמוניים שדועכים לאט, כמו מטיל זהב שנקשים עליו.
-// כיבוי: localStorage['kupa-bar-sound'] = '0'.
+// כיבוי: מתג "צליל" ב"החשבון שלי" (lib/feel.js), או localStorage['kupa-bar-sound'] = '0'.
+import { soundOn } from './feel.js';
 /** @type {AudioContext | null} */
 let ctx = null;
 
@@ -9,7 +10,7 @@ const PARTIALS = [[1, 1, 0.9], [2.32, 0.65, 0.6], [4.19, 0.45, 0.4], [6.7, 0.25,
 
 export function playMetalClink() {
   try {
-    if (localStorage.getItem('kupa-bar-sound') === '0') return;
+    if (!soundOn() || localStorage.getItem('kupa-bar-sound') === '0') return;
     const AC = window.AudioContext || /** @type {any} */ (window).webkitAudioContext;
     if (!AC) return;
     ctx = ctx || new AC();

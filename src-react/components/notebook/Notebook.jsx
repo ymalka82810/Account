@@ -2,12 +2,14 @@ import Arrow from '../shared/Arrow.jsx';
 import { useEffect, useRef, useState } from 'react';
 import { t, intlLocale } from '../../i18n/index.js';
 import LanguagePicker from '../shared/LanguagePicker.jsx';
+import LocalePicker from '../shared/LocalePicker.jsx';
+import PalettePicker from '../shared/PalettePicker.jsx';
 import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
 import { today, toast } from '../../lib/helpers.js';
 import { money, fmtDate } from '../../lib/computations.js';
-import { CURRENCIES, currencyLabel, currencySymbol } from '../../lib/currencies.js';
+import { currencySymbol } from '../../lib/currencies.js';
 import {
-  useNotebook, NB_SHARED_KEY, notebookCurrency, addEntry, setPaid, removeEntry, setSetting, setCurrencyChoice, clearPaid, clearAll,
+  useNotebook, NB_SHARED_KEY, notebookCurrency, addEntry, setPaid, removeEntry, restoreEntry, setSetting, setCurrencyChoice, clearPaid, clearAll,
   topPeople, searchPeople, similarPeople, renamePerson, normName, offsetCandidates, offsetPerson,
 } from '../../lib/notebook.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
@@ -16,6 +18,8 @@ import Select from '../shared/Select.jsx';
 import { closeNotebook, goView, upgradeFromNotebook, deviceHasFamily } from '../../state/auth.js';
 import { In } from '../auth/parts.jsx';
 import UiIcon, { withIcons } from '../shared/UiIcon.jsx';
+import { NB_DRAFT_KEY, loadDraft, saveDraft, clearDraft } from '../../lib/draft.js';
+import { reducedMotion } from '../../lib/feel.js';
 
 // הפנקס האישי: כל אחד (גם ילד/ה) רושם לעצמו למי הוא חייב ומי חייב לו.
 // הכול נשמר במכשיר, בלי כניסה. זה מסך הפתיחה של מכשיר חדש. המשפחה היא שדרוג: אחרי הרישום הראשון
@@ -25,11 +29,29 @@ import UiIcon, { withIcons } from '../shared/UiIcon.jsx';
 const SETTINGS_HASH = '#nb-settings';
 const pageFromHash = () => (location.hash === SETTINGS_HASH ? 'settings' : 'home');
 
+// מעל כמה רישומים מופיע חיפוש בעמוד הראשי
+const SEARCH_MIN = 8;
+
 const sharedWithParents = () => { try { return localStorage.getItem(NB_SHARED_KEY) === '1'; } catch (e) { return false; } };
+
+// טיוטה של רישום שלא נשמר (רענון או סגירת האפליקציה באמצע): פותחים אותה שוב, פעם אחת בכל טעינה של הדף.
+let draftChecked = false;
 
 export default function Notebook({ current }) {
   const nb = useNotebook();
+  const sheet = useSheet();
   const [page, setPage] = useState(pageFromHash);
+
+  useEffect(() => {
+    if (current !== 'notebook' || page !== 'home' || draftChecked) return undefined;
+    // בטיימר: ב-App יש אפקט שסוגר חלונות בטעינה הראשונה, והוא רץ אחרי האפקטים של הילדים
+    const id = setTimeout(() => {
+      draftChecked = true;
+      const dir = ['iowe', 'owed'].find((d) => loadDraft(NB_DRAFT_KEY + '-' + d));
+      if (dir) sheet.open('', <AddEntry initialDir={dir} />);
+    }, 0);
+    return () => clearTimeout(id);
+  }, [current, page, sheet]);
 
   useEffect(() => {
     const sync = () => setPage(pageFromHash());
@@ -43,11 +65,11 @@ export default function Notebook({ current }) {
   const [pulling, setPulling] = useState(false);
   const openSettings = () => {
     if (pulling) return;
-    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduce = reducedMotion();
     if (reduce) { location.hash = SETTINGS_HASH; setPage('settings'); return; }
     setReturned(false);
     setPulling(true);
-    setTimeout(() => { setPulling(false); location.hash = SETTINGS_HASH; setPage('settings'); }, 380);
+    setTimeout(() => { setPulling(false); location.hash = SETTINGS_HASH; setPage('settings'); }, 250);
   };
   // סגירה: הגלגל מסתובב לכיוון ההפוך, וכל התנועה ימינה כמו גלילה של הדף:
   // ההגדרות יוצאות ימינה והעמוד הראשי נכנס משמאל
@@ -59,10 +81,10 @@ export default function Notebook({ current }) {
   };
   const closeSettings = () => {
     if (closing) return;
-    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduce = reducedMotion();
     if (reduce) { leaveSettings(); return; }
     setClosing(true);
-    setTimeout(() => { setClosing(false); setReturned(true); leaveSettings(); }, 380);
+    setTimeout(() => { setClosing(false); setReturned(true); leaveSettings(); }, 250);
   };
 
   return (
@@ -84,6 +106,20 @@ function Home({ nb, onSettings, pulling, returned, family }) {
         : 0); // 'new': הרשימה כבר מהחדש לישן
   const open = sorted(nb.entries.filter((e) => !e.paid));
   const done = sorted(nb.entries.filter((e) => e.paid));
+  // חיפוש מופיע רק כשהרשימה ארוכה (מעל SEARCH_MIN רישומים בסך הכול), כדי לא להכביד על המסך כשהיא קצרה.
+  // הסיכומים למעלה תמיד מכל הרישומים הפתוחים, גם כשהחיפוש מסנן את הרשימה.
+  const [q, setQ] = useState('');
+  const showSearch = nb.entries.length > SEARCH_MIN;
+  const query = showSearch ? q.trim() : '';
+  const matches = (e) => {
+    const needle = query.toLowerCase();
+    const amt = (e.amount / 100).toFixed(2);
+    return e.name.toLowerCase().includes(needle) || (e.note || '').toLowerCase().includes(needle)
+      || amt.includes(needle.replace(',', '.')) || money(e.amount, cur).includes(query);
+  };
+  const shownOpen = query ? open.filter(matches) : open;
+  const shownDone = query ? done.filter(matches) : done;
+  const nothingFound = !!query && !shownOpen.length && !(showPaid && shownDone.length);
   const sum = (d) => open.filter((e) => e.dir === d).reduce((s, e) => s + e.amount, 0);
 
   const offers = offsetCandidates(nb);
@@ -101,7 +137,15 @@ function Home({ nb, onSettings, pulling, returned, family }) {
   };
   const del = async (e) => {
     if (!(await confirm({ icon: '🗑️', title: t('מחיקה'), message: t('למחוק את הרישום של {name}?', { name: e.name }), okText: t('מחיקה'), cancelText: t('חזרה'), danger: true }))) return;
-    removeEntry(e.id);
+    const gone = removeEntry(e.id);
+    // "בטל" מחזיר את הרישום בדיוק כמו שהיה: אותו מזהה, תאריך ומקום ברשימה
+    toast(t('נמחק'), gone ? { label: t('בטל'), onClick: () => restoreEntry(gone.entry, gone.index) } : undefined);
+  };
+  // "שולם" / "עוד לא": משוב מיידי עם ביטול, כמו במחיקה
+  const pay = (e) => {
+    const was = e.paid;
+    setPaid(e.id, !was);
+    toast(was ? t('חזר לרשימה הפתוחה') : t('סומן כשולם'), { label: t('בטל'), onClick: () => setPaid(e.id, was) });
   };
   const row = (e) => (
     <div className={'row' + (e.paid ? ' paid' : '')} key={e.id}>
@@ -111,8 +155,8 @@ function Home({ nb, onSettings, pulling, returned, family }) {
       </div>
       <strong>{money(e.amount, cur)}</strong>
       <div className="acts">
-        <button className="small" type="button" onClick={() => setPaid(e.id, !e.paid)}>{e.paid ? <><Arrow kind="return" /> {t('עוד לא')}</> : t('✅ שולם')}</button>
-        <button className="small" type="button" aria-label={t('מחיקה')} onClick={() => del(e)}>🗑️</button>
+        <button className="small" type="button" onClick={() => pay(e)}>{e.paid ? <><Arrow kind="return" /> {t('עוד לא')}</> : t('✅ שולם')}</button>
+        <RowMenu onDelete={() => del(e)} />
       </div>
     </div>
   );
@@ -122,7 +166,7 @@ function Home({ nb, onSettings, pulling, returned, family }) {
       <div className="nb-head">
         {family
           ? <button className="ghost nb-fam-btn" type="button" onClick={closeNotebook}>{t('חזרה למשפחה')}</button>
-          : <button className="ghost nb-fam-btn" type="button" onClick={() => upgradeFromNotebook('setup')}>{t('🏠 צור משפחה')}</button>}
+          : <button className="ghost nb-fam-btn" type="button" onClick={() => sheet.open(t('🏠 צור משפחה'), <FamilyEntry />)}>{t('🏠 צור משפחה')}</button>}
         <h1>{withIcons(t('📒 הפנקס שלי'))}</h1>
         <button className={'ghost nb-gear' + (pulling ? ' nb-gear-spin' : '')} type="button" aria-label={t('הגדרות')} onClick={onSettings}>
           <span className="nb-gear-ico">⚙️</span>
@@ -146,9 +190,23 @@ function Home({ nb, onSettings, pulling, returned, family }) {
       </div>
 
       <h2 className="nb-h2">{t('מה פתוח')}</h2>
-      {open.length > 0
-        ? <div className="list">{open.map(row)}</div>
-        : <div className="empty"><div className="big-emoji" aria-hidden="true">{nb.entries.length ? '🎉' : '📝'}</div>{nb.entries.length ? t('אין כלום פתוח!') : t('עוד אין כלום ברשימה. לחצו על אחד הכפתורים כדי להתחיל.')}</div>}
+      {showSearch && (
+        <div className="nb-find" role="search">
+          <input type="text" maxLength={60} autoComplete="off" value={q} placeholder={t('חיפוש לפי שם, הערה או סכום')} aria-label={t('חיפוש לפי שם, הערה או סכום')}
+            onChange={(ev) => setQ(ev.target.value)} />
+          {q && <button className="ghost nb-find-clear" type="button" aria-label={t('ניקוי החיפוש')} onClick={() => setQ('')}>✕</button>}
+        </div>
+      )}
+      {nothingFound
+        ? (
+          <div className="empty" role="status">
+            <div className="big-emoji" aria-hidden="true">🔎</div>{t('לא נמצא כלום עבור “{q}”', { q: query })}
+            <button className="ghost" type="button" onClick={() => setQ('')}>{t('ניקוי החיפוש')}</button>
+          </div>
+        )
+        : open.length > 0
+          ? (shownOpen.length > 0 && <div className="list">{shownOpen.map(row)}</div>)
+          : <div className="empty"><div className="big-emoji" aria-hidden="true">{nb.entries.length ? '🎉' : '📝'}</div>{nb.entries.length ? t('אין כלום פתוח!') : t('עוד אין כלום ברשימה. לחצו על אחד הכפתורים כדי להתחיל.')}</div>}
 
       {offers.length > 0 && (
         <section className="card nb-offset">
@@ -166,21 +224,49 @@ function Home({ nb, onSettings, pulling, returned, family }) {
         </section>
       )}
 
-      {showPaid && done.length > 0 && (
-        <details className="nb-paid">
-          <summary>{t('שולמו ({n})', { n: done.length })}</summary>
-          <div className="list">{done.map(row)}</div>
+      {showPaid && shownDone.length > 0 && (
+        <details className="nb-paid" open={query ? true : undefined}>
+          <summary>{t('שולמו ({n})', { n: shownDone.length })}</summary>
+          <div className="list">{shownDone.map(row)}</div>
         </details>
       )}
 
-      {/* שדרוג: מופיע רק אחרי שכבר יש ערך (רישום ראשון), ובלי לחסום כלום */}
-      {!family && nb.entries.length > 0 && (
-        <div className="card notice nb-upgrade">
-          <p><strong>{t('רוצים שהחייבים יראו את זה?')}</strong> {t('צרו קופה משפחתית: כולם רואים את אותו חשבון, והחובות מתעדכנים לכולם.')}</p>
-          <button className="primary" type="button" onClick={() => upgradeFromNotebook('setup')}>{t('🏠 יצירת קופה משפחתית')}</button>
+    </div>
+  );
+}
+
+// תפריט "⋯" בשורה: פעולות משניות (מחיקה) רחוקות מ"שולם", כדי שלא ילחצו עליהן בטעות. נסגר בלחיצה בחוץ או ב-Escape.
+function RowMenu({ onDelete }) {
+  const [open, setOpen] = useState(false);
+  const box = useRef(null);
+  useEffect(() => {
+    if (!open) return undefined;
+    const away = (ev) => { if (box.current && !box.current.contains(ev.target)) setOpen(false); };
+    const onKey = (ev) => { if (ev.key === 'Escape') setOpen(false); };
+    document.addEventListener('pointerdown', away);
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('pointerdown', away); document.removeEventListener('keydown', onKey); };
+  }, [open]);
+  return (
+    <div className="row-menu" ref={box}>
+      <button className="small" type="button" aria-label={t('עוד פעולות')} aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(!open)}>⋯</button>
+      {open && (
+        <div className="row-menu-list" role="menu">
+          <button className="small danger" type="button" role="menuitem" onClick={() => { setOpen(false); onDelete(); }}>{t('🗑️ מחיקה')}</button>
         </div>
       )}
-      <button className="ghost linkish" type="button" onClick={() => goView('welcome')}>{t('יש לכם קוד משפחה? כניסה לקופה')}</button>
+    </div>
+  );
+}
+
+// נקודת הכניסה היחידה למשפחה מהפנקס: להקים קופה חדשה או להיכנס עם קוד משפחה.
+function FamilyEntry() {
+  const sheet = useSheet();
+  return (
+    <div className="form">
+      <p><strong>{t('רוצים שהחייבים יראו את זה?')}</strong> {t('צרו קופה משפחתית: כולם רואים את אותו חשבון, והחובות מתעדכנים לכולם.')}</p>
+      <button className="primary" type="button" onClick={() => { sheet.close(); upgradeFromNotebook('setup'); }}>{t('🏠 יצירת קופה משפחתית')}</button>
+      <button className="ghost" type="button" onClick={() => { sheet.close(); goView('welcome'); }}>{t('יש לכם קוד משפחה? כניסה לקופה')}</button>
     </div>
   );
 }
@@ -192,7 +278,14 @@ function AddEntry({ initialDir }) {
   const sheet = useSheet();
   const nb = useNotebook();
   const dir = initialDir;
-  const [form, setForm] = useState({ name: '', amount: '', note: '' });
+  // טיוטה: מה שהוקלד נשמר במכשיר עד השמירה או הסגירה של הטופס (ראו lib/draft.js)
+  const draftKey = NB_DRAFT_KEY + '-' + dir;
+  const [form, setForm] = useState(() => {
+    const d = loadDraft(draftKey) || {};
+    return { name: String(d.name || '').slice(0, 30), amount: String(d.amount || '').slice(0, 14), note: String(d.note || '').slice(0, 60) };
+  });
+  useEffect(() => { saveDraft(draftKey, form); }, [draftKey, form]);
+  useEffect(() => () => clearDraft(draftKey), [draftKey]);
   const [personId, setPersonId] = useState(null); // נבחר מהרשימה הידועה
   const [similar, setSimilar] = useState(null); // {name, amount, people} בזמן שאלת האיחוד
   const [error, setError] = useState('');
@@ -280,14 +373,12 @@ function AddEntry({ initialDir }) {
 // ---------- הגדרות ----------
 // פונקציות ולא קבועים: התרגום נקרא בזמן הרינדור, בשפה הנוכחית.
 const looks = () => [['kid', t('🌈 צבעוני')], ['dark', t('🌙 כהה')], ['neon', t('⚡ ניאון')]];
-const palettes = () => [['blue', t('סגול ותכלת')], ['green', t('ירוק')], ['orange', t('כתום')]];
 const sizes = () => [['small', t('קטן')], ['normal', t('רגיל')], ['large', t('גדול')], ['xlarge', t('ענק')]];
 const sorts = () => [
   { value: 'new', label: t('הכי חדש קודם') },
   { value: 'amount', label: t('הסכום הגדול קודם') },
   { value: 'name', label: t('לפי שם (א-ב)') },
 ];
-const currencyOptions = () => CURRENCIES.map((c) => ({ value: c, label: currencyLabel(c) }));
 
 function Opts({ value, options, onPick, label }) {
   return (
@@ -341,14 +432,7 @@ function Settings({ nb, onBack, closing }) {
           <Opts value={s.look} options={looks()} label={t('עיצוב')} onPick={(v) => setSetting('look', v)} /></div>
         {s.look === 'neon' && (
           <div className="field"><span>{t('צבעי הניאון')}</span>
-            <div className="palette-picks" role="radiogroup" aria-label={t('צבעי הניאון')}>
-              {palettes().map(([id, text]) => (
-                <button key={id} type="button" role="radio" aria-checked={s.palette === id}
-                  className={'palette-pick' + (s.palette === id ? ' sel' : '')} data-pal={id} onClick={() => setSetting('palette', id)}>
-                  <span className="palette-swatch" aria-hidden="true" />{text}
-                </button>
-              ))}
-            </div>
+            <PalettePicker value={s.palette} onPick={(v) => setSetting('palette', v)} label={t('צבעי הניאון')} />
           </div>
         )}
         <div className="field"><span>{t('גודל הכתב')}</span>
@@ -358,7 +442,7 @@ function Settings({ nb, onBack, closing }) {
       <section className="card nb-section">
         <h3>{t('מטבע')}</h3>
         <div className="field"><span>{t('הסכומים בפנקס')}</span>
-          <Select value={cur} onChange={setCurrencyChoice} options={currencyOptions()} /></div>
+          <LocalePicker currencyOnly value={{ country: '', currency: cur }} onChange={(l) => setCurrencyChoice(l.currency)} /></div>
         <p className="hint">{t('שינוי המטבע משנה רק את הסימן. הסכומים עצמם לא מומרים.')}</p>
       </section>
 

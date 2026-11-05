@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Select from './Select.jsx';
 import { t } from '../../i18n/index.js';
-import { COUNTRIES, currencyLabel, currencySymbol, countryName, deviceCountry, inList, localeFor } from '../../lib/currencies.js';
+import { COUNTRIES, CURRENCIES, currencyLabel, currencySymbol, countryName, deviceCountry, inList, localeFor } from '../../lib/currencies.js';
 
 const OTHER = 'OTHER';
 
@@ -9,12 +9,20 @@ const OTHER = 'OTHER';
 // המכשיר מזהה איפה הוא נמצא ושואל "אתם גרים ב...?". כן - המדינה הזו ומטבע שלה (מדינה שלא ברשימה - דולר).
 // לא (למשל הותקן בחו"ל) או שהמיקום לא זוהה - בוחרים מהרשימה, ומי שהמדינה שלו לא בה מקבל דולר.
 // onChange מקבל {country, currency}; country ריק = לא ברשימה.
-export default function LocalePicker({ value, onChange }) {
+// currencyOnly: רק בחירת מטבע מרשימת כל המטבעות (הפנקס האישי: שינוי הסימן בלבד, בלי מדינה).
+export default function LocalePicker({ value, onChange, currencyOnly = false }) {
   const [detected] = useState(() => deviceCountry());
   const [mode, setMode] = useState(detected ? 'ask' : 'list');
   const [pick, setPick] = useState('');
 
   const choose = (code) => onChange(localeFor(code));
+
+  if (currencyOnly) {
+    return (
+      <Select value={value ? value.currency : ''} onChange={(c) => onChange({ country: '', currency: c })}
+        options={CURRENCIES.map((c) => ({ value: c, label: currencyLabel(c) }))} />
+    );
+  }
 
   if (value && mode !== 'list') {
     const name = value.country ? countryName(value.country) : countryName(detected);

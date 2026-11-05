@@ -1,6 +1,7 @@
 // נקישה רכה למקשי המקלדת, מסונתזת ב-WebAudio (בלי קובץ שמע): "טפיפה" קצרה ועמוקה, גל סינוס שיורד מהר בגובה הצליל
 // ועובר מסנן שמעמעם את הגבוהים, כך שהיא נשמעת כמו נגיעה ולא כמו טיק חד. עוצמה נמוכה וגובה משתנה מעט בכל הקשה.
-// כיבוי: localStorage['kupa-kb-sound'] = '0'.
+// כיבוי: מתג "צליל" ב"החשבון שלי" (lib/feel.js), או localStorage['kupa-kb-sound'] = '0'.
+import { soundOn } from './feel.js';
 /** @type {AudioContext | null} */
 let ctx = null;
 
@@ -8,7 +9,7 @@ const PITCH = { letter: 430, space: 300, del: 360, enter: 520 };
 
 export function playKeyClick(/** @type {'letter' | 'space' | 'del' | 'enter'} */ kind = 'letter') {
   try {
-    if (localStorage.getItem('kupa-kb-sound') === '0') return;
+    if (!soundOn() || localStorage.getItem('kupa-kb-sound') === '0') return;
     const AC = window.AudioContext || /** @type {any} */ (window).webkitAudioContext;
     if (!AC) return;
     ctx = ctx || new AC();

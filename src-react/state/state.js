@@ -48,7 +48,7 @@ export const weekdayName = (i) => new Date(Date.UTC(2023, 0, 1 + Number(i))).toL
 export const THEME_COLOR = { parent: '#000000', child: '#fbf3f7', teen: '#000000' };
 // פונקציה ולא קבוע: התרגום נקרא בזמן הרינדור, בשפה הנוכחית.
 export const tabLabels = () => ({
-  parent: { family: t('סקירה משפחתית'), home: t('הכסף שלי'), history: t('היסטוריה'), manage: t('ניהול') },
+  parent: { family: t('משפחה'), home: t('הכסף שלי'), history: t('היסטוריה'), manage: t('ניהול') },
   child: { home: t('💰 הכסף שלי'), history: t('📜 מה היה') },
   teen: { home: t('💰 הכסף שלי'), friends: t('🤝 חברים'), history: t('📜 היסטוריה') },
 });
@@ -74,6 +74,7 @@ export const state = {
   view: savedView() || ((localStorage.getItem(TOKEN_KEY) || localStorage.getItem(CODE_KEY)) ? 'welcome' : 'notebook'), // welcome | setup | join | notebook
   pinFlow: null,     // {person, legacy, mode:'login'|'new', first, entered, busy, error, shakes}
   pushSyncedFor: '',
+  offlineNotebook: false, // הפנקס נפתח ממסך "אין חיבור" למי שיש לו כניסה שמורה (App.jsx: currentScreen)
   notebookBack: (() => { try { return sessionStorage.getItem(NB_BACK_KEY) === '1'; } catch (e) { return false; } })(), // יש כפתור חזרה מהפנקס
 };
 

@@ -47,6 +47,7 @@ export function demoQuery(name) {
     case 'data:get': return demoData();
     case 'fx:rates': return { rates: null, fetchedAt: Date.now() };
     case 'auth:listDevices': return [];
+    case 'activity:list': return []; // בלעדיו לשונית הניהול בדמו קורסת (null.length)
     default: return null;
   }
 }

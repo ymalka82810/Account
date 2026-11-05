@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { money } from '../../lib/computations.js';
 import { playCoinSound } from '../../lib/coinSound.js';
+import { reducedMotion } from '../../lib/feel.js';
 
 // מטיל הזהב עצמו (המתכת, הפאות והחותמת 999.9) הוא תמונה שרונדרה ב-Blender (public/bars/<theme>-<get|owe>.webp,
 // ראו scripts/blender/bar.py), ונקבעת ב-CSS לפי תפקיד וסוג (.sum::before). הגיאומטריה של התמונה זהה לקו המתאר
@@ -59,40 +60,28 @@ export function GoldBarArt() {
   );
 }
 
-const reducedMotion = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-// אחרי כמה זמן המספר מתחיל לרוץ: כשמטילים עפים אל המטיל הגדול (ילדים/נוער, בירידה) הוא מחכה שהם ינחתו.
+// אחרי כמה זמן המספר מתעדכן: כשמטילים עפים אל המטיל הגדול (ילדים/נוער, בירידה) הוא מחכה שהם ינחתו.
 const FLY_MS = 950;
 const flies = (/** @type {boolean} */ decreasing) => decreasing && document.body.dataset.theme !== 'parent' && !reducedMotion();
 
-// המספר "רץ" מהערך שמוצג עכשיו אל הערך החדש (אגורות, כך שגם הספרות הקטנות רצות).
+// המספר לא "רץ" דרך ערכים בדרך: ריצה של שנייה ויותר הציגה סכומים שגויים (כמו 43.02 לפני 0.00) ונראתה כטעות בחשבון.
+// הסכום החדש מוצג מיד. החריג היחיד: בירידה אצל ילדים/נוער המספר הקודם נשאר עד שהמטילים נוחתים, ואז קופץ ישר לערך הנכון.
+// לא מוצג אף ערך שאינו הקודם או החדש, וב-prefers-reduced-motion העדכון תמיד מיידי.
 function useCountUp(/** @type {number} */ target) {
   const [val, setVal] = useState(target);
-  const cur = useRef(target);
   useEffect(() => {
-    if (cur.current === target) return undefined;
-    if (reducedMotion()) { cur.current = target; setVal(target); return undefined; }
-    const from = cur.current;
-    const diff = target - from;
-    const dur = 1300;
-    const t0 = performance.now() + (flies(target < from) ? FLY_MS : 350);
-    let raf = 0;
-    const step = (/** @type {number} */ now) => {
-      const p = Math.min(1, Math.max(0, (now - t0) / dur));
-      cur.current = p >= 1 ? target : from + diff * (1 - Math.pow(1 - p, 3));
-      setVal(cur.current);
-      if (p < 1) raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [target]);
+    if (val === target) return undefined;
+    if (!flies(target < val)) { setVal(target); return undefined; }
+    const id = setTimeout(() => setVal(target), FLY_MS);
+    return () => clearTimeout(id);
+  }, [target, val]);
   return val;
 }
 
 // כשהסכום משתנה נשמע צליל מטבעות ויש רטט, גם כשמתווסף חוב וגם כשהוא יורד. לא מצלצלים בעליית הנתונים הראשונה
 // (סכום שנטען מ-0 תוך רגעים מפתיחת המסך). בירידה (תשלום), לפי העיצוב:
-// ילדים/נוער - המטילים הקטנים שלהם (זהב/נחושת, כמו המטיל הגדול) עפים מלמטה אל המטיל הגדול, נכנסים לתוכו והוא קופץ קצת, ואז המספר רץ;
-// הורים - רק המספר רץ. מצויר ב-portal כדי לא להיחתך ב-overflow של המטיל.
+// ילדים/נוער - המטילים הקטנים שלהם (זהב/נחושת, כמו המטיל הגדול) עפים מלמטה אל המטיל הגדול, נכנסים לתוכו והוא קופץ קצת, ואז המספר מתעדכן;
+// הורים - רק המספר מתעדכן. מצויר ב-portal כדי לא להיחתך ב-overflow של המטיל.
 function useCoinBurst(/** @type {number} */ amount, /** @type {import('react').RefObject<HTMLElement | null>} */ ref) {
   const prev = useRef(amount);
   const mountedAt = useRef(Date.now());
@@ -102,7 +91,7 @@ function useCoinBurst(/** @type {number} */ amount, /** @type {import('react').R
     prev.current = amount;
     if (amount === was || !ref.current) return;
     if (amount > was) {
-      // עלייה: צליל ורטט בלי אנימציית מטילים (המספר רץ למעלה), אבל לא בטעינה ראשונית של הנתונים
+      // עלייה: צליל ורטט בלי אנימציית מטילים (המספר מתעדכן מיד), אבל לא בטעינה ראשונית של הנתונים
       if (!(was === 0 && Date.now() - mountedAt.current < 2500)) playCoinSound(Math.round(8 + Math.min(1, (amount - was) / Math.max(amount, 1)) * 8));
       return;
     }
@@ -146,7 +135,7 @@ function useCoinBurst(/** @type {number} */ amount, /** @type {import('react').R
 }
 
 // סכום בתוך מטיל: הגופן קטן אוטומטית לפי אורך הטקסט כדי שלא יגלוש מהמטיל (ראו --len ב-CSS).
-// עם amount (באגורות) ו-cur: כשהסכום משתנה המספר רץ אל הערך החדש, ובירידה (תשלום) מטבעות קטנים עולים מהמטיל.
+// עם amount (באגורות) ו-cur: כשהסכום משתנה המספר מתעדכן, ובירידה (תשלום) מטבעות קטנים עולים מהמטיל.
 export function SumNum({ children, amount, cur }) {
   const animated = typeof amount === 'number';
   const ref = useRef(null);

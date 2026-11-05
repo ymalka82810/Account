@@ -1,10 +1,12 @@
 import Arrow from '../shared/Arrow.jsx';
 import { useState, useEffect } from 'react';
-import { t } from '../../i18n/index.js';
+import { t, LANGUAGES } from '../../i18n/index.js';
 import { state, CODE_KEY, TOKEN_KEY } from '../../state/state.js';
 import { prettyCode } from '../../lib/helpers.js';
 import { submitFamilyCode, goView, startPin, openNotebook, startDemo, goToFamily, otherFamilies, deviceHasFamily } from '../../state/auth.js';
 import LanguagePicker from '../shared/LanguagePicker.jsx';
+import { useSheet } from '../shared/Sheet.jsx';
+import { useLang } from '../../i18n/useLang.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 import { withIcons } from '../shared/UiIcon.jsx';
 
@@ -22,6 +24,8 @@ export default function Welcome({ current }) {
   }, [invite]);
   const [error, setError] = useState('');
   const [busy, run] = useBusy();
+  const sheet = useSheet();
+  const lang = useLang();
   const parents = state.legacyPeople || [];
   const submit = (ev) => {
     ev.preventDefault();
@@ -72,7 +76,8 @@ export default function Welcome({ current }) {
           <button className="ghost linkish" type="button" onClick={() => { state.fromNotebook = false; goView('setup'); }}>{t('👨‍👩‍👧 אני הורה ורוצה להקים קופה חדשה')}</button>
         )}
         <p className="legal"><a href="terms.html">{t('תנאי שימוש')}</a> · <a href="privacy.html">{t('מדיניות פרטיות')}</a></p>
-        <LanguagePicker />
+        {/* אותו רכיב שפה כמו ב"החשבון שלי" ובהגדרות הפנקס, כקישור קטן במקום בורר קבוע במסך */}
+        <button className="ghost small" type="button" onClick={() => sheet.open(t('שפה'), <div className="form"><LanguagePicker /></div>)}>{t('שפה')}: {LANGUAGES[lang].name}</button>
       </div>
     </In>
   );

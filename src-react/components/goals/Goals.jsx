@@ -6,6 +6,7 @@ import { money } from '../../lib/computations.js';
 import { currencySymbol } from '../../lib/currencies.js';
 import AsyncButton from '../shared/AsyncButton.jsx';
 import Select from '../shared/Select.jsx';
+import { useConfirm } from '../shared/Confirm.jsx';
 
 const toMinor = (s) => Math.round(parseFloat(s) * 100);
 
@@ -18,6 +19,7 @@ export default function Goals({ data, token }) {
   const [name, setName] = useState('');
   const [target, setTarget] = useState('');
   const [dep, setDep] = useState({}); // goalId -> טקסט הסכום
+  const confirm = useConfirm();
   const [error, setError] = useState('');
   const who = (id) => data.people.find((p) => p.id === id);
   if (isParent && kids.length === 0) return null;
@@ -45,12 +47,12 @@ export default function Goals({ data, token }) {
   }
 
   const decide = (id, approve) => async () => {
-    try { await call('goals:decide', { token, depositId: id, approve }); } catch (e) { toast(errMsg(e)); }
+    try { await call('goals:decide', { token, depositId: id, approve }); toast(approve ? t('ההפקדה אושרה ✅') : t('ההפקדה נדחתה')); } catch (e) { toast(errMsg(e)); }
   };
 
   async function remove(goal) {
-    if (!confirm(t('למחוק את היעד "{name}"?', { name: goal.name }))) return;
-    try { await call('goals:remove', { token, goalId: goal.id }); } catch (e) { toast(errMsg(e)); }
+    if (!(await confirm({ icon: '🗑️', title: t('מחיקה'), message: t('למחוק את היעד "{name}"?', { name: goal.name }), okText: t('מחיקה'), cancelText: t('חזרה'), danger: true }))) return;
+    try { await call('goals:remove', { token, goalId: goal.id }); toast(t('נמחק')); } catch (e) { toast(errMsg(e)); }
   }
 
   return (

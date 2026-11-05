@@ -21,7 +21,7 @@ export default function DatePicker({ value, onChange, max, title, fallbackYearsA
   const cur = parse(value);
   const label = cur ? new Intl.DateTimeFormat(intlLocale(), { dateStyle: 'long' }).format(new Date(cur.y, cur.m, cur.d)) : '';
   const open = () => sheet.open(title || t('בחירת תאריך'),
-    <Calendar value={value} max={max} fallbackYearsAgo={fallbackYearsAgo} onPick={(v) => { onChange(v); sheet.close(); }} />);
+    <Calendar value={value} max={max} fallbackYearsAgo={fallbackYearsAgo} onPick={(v) => { onChange(v); sheet.back(); }} />);
   return (
     <button type="button" id={id} className="dd-btn date-btn" aria-haspopup="dialog" onClick={open}>
       <span className="dd-val">{label || <span className="date-ph">{t('בחירת תאריך')}</span>}</span>
