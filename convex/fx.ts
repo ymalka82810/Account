@@ -2,6 +2,7 @@ import { action, internalAction, internalMutation, internalQuery, query, QueryCt
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
 import { CURRENCIES, Rates } from "./currency";
+import { isThrottled, noteHit } from "./lib";
 
 // שערי חליפין: מסמך אחד בטבלה fxRates, מתעדכן מספק חינמי כל כמה שעות (crons.ts).
 // בסיס: דולר (rates[X] = כמה X שווה דולר אחד).
@@ -21,6 +22,18 @@ export const rates = query({
 export const latest = internalQuery({
   args: {},
   handler: async (ctx) => loadRates(ctx),
+});
+
+// ensure הוא פעולה ציבורית: בלי הגבלה, כשהשערים ישנים כל קריאה הייתה מפעילה משיכה מספק חיצוני.
+// נותנים לניסיון אחד כל 5 דקות (גם אם הוא נכשל), לכולם יחד.
+const REFRESH_TRY_MS = 5 * 60 * 1000;
+export const claimRefresh = internalMutation({
+  args: {},
+  handler: async (ctx): Promise<boolean> => {
+    if (await isThrottled(ctx, "fx-refresh", 1, REFRESH_TRY_MS)) return false;
+    await noteHit(ctx, "fx-refresh", REFRESH_TRY_MS);
+    return true;
+  },
 });
 
 export const store = internalMutation({
@@ -69,6 +82,7 @@ export const ensure = action({
   handler: async (ctx): Promise<void> => {
     const cur = await ctx.runQuery(internal.fx.latest, {});
     if (cur && Date.now() - cur.fetchedAt < FRESH_MS) return;
+    if (!(await ctx.runMutation(internal.fx.claimRefresh, {}))) return;
     await ctx.runAction(internal.fx.refresh, {});
   },
 });

@@ -344,601 +344,609 @@
 343|החזרת חוב בפעם הראשונה
 344|Devolví a {to}
 345|Cambió el código de la familia
-346|Cambiar correo
-347|Cambiar de dispositivo (enviar un código por correo)
-348|Cambiar código
-349|Cuenta con {name}
-350|Mi cuenta
-351|¿Teléfono roto o perdido? Otro progenitor puede emitirte un código de vinculación en «Administrar». Si no hay otro progenitor, solicita el cambio en la pantalla de acceso: podrá hacerse tras 24 horas y recibirás un correo.
-352|Perderá los permisos de madre. Después se pedirá verificación con reconocimiento facial o huella digital.
-353|Perderá el modo amigos. Después se pedirá verificación con reconocimiento facial o huella digital.
-354|Recibirá todos los permisos de madre: ver todo, aprobar, borrar y administrar la familia. Después se pedirá verificación con reconocimiento facial o huella digital.
-355|Hola {name}, un pequeño recordatorio: aún quedan {amount} por devolver. ¡Gracias! 🙏
-356|Hola {name}, un pequeño recordatorio: aún quedan {amount} por devolver de {note}. ¡Gracias! 🙏
-357|Hola, {name} ha pedido unirse a la hucha familiar. Puedes entrar y aprobar: {url}
-358|Historial
-359|Historial con amigos
-360|היעד לא קיים
-361|היעד נוסף 🎯
-362|הישגים
-363|הישגים: {name}
-364|Todo: {amount}
-365|Todo saldado
-366|Todo saldado ✅
-367|Todo se guarda solo en este dispositivo.
-368|Más recientes primero
-369|Mi dinero
-370|Mi país no está en la lista ($)
-371|Moneda de la familia
-372|La moneda de la familia es {base} y esta deuda se conservará en {cur}. En los saldos se muestra al cambio de ese día, y al pagarla el monto se convierte al cambio del día del pago.
-373|Moneda: {cur}
-374|Correo verificado ✅
-375|Este correo ya lo usa otra persona
-376|Correo actual: {email}. Para cambiarlo le enviaremos un código de confirmación.
-377|Correo de {name}
-378|Correo del amigo / la amiga
-379|Tu correo para los amigos:
-380|Ubicación y moneda guardadas ✅
-381|Ubicación y moneda actualizadas ✅
-382|Este dispositivo ya no está vinculado a un progenitor
-383|Este dispositivo ya no está vinculado a un progenitor. Para entrar hay que cambiar de dispositivo.
-384|Este dispositivo no está registrado para la verificación. Regístralo de nuevo.
-385|Este dispositivo aún no está vinculado a un progenitor.
-386|El dispositivo no es compatible
-387|Dispositivo desconectado ✅
-388|Mi dispositivo
-389|Esta pantalla ha tenido un problema. El resto de la aplicación sigue funcionando, así que puedes cambiar a otra pestaña.
-390|Continuar
-391|Continuar a la verificación
-392|Esta familia quitó el dispositivo. Para volver a entrar necesitas el código de familia.
-393|Familia no encontrada
-394|La familia está completa
-395|Bloqueo liberado ✅
-396|Este adolescente perderá el modo amigos. Después se pedirá verificación con reconocimiento facial o huella digital.
-397|Mis datos
-398|Quitó a un miembro de la familia
-399|Quitó un dispositivo
-400|El monto es demasiado grande
-401|El monto es demasiado grande.
-402|Primero el monto más grande
-403|Montos en el cuaderno
-404|Eliminar
-405|Eliminar a {name}
-406|Ocultar
-407|Transferir al servidor
-408|Otorgar permisos de padre o madre
-409|Nota
-410|Reducir movimiento
-411|La libreta es demasiado grande para compartirla
-412|Libreta personal de {name}
-413|El cuaderno se vació
-414|El cuaderno ya está vacío
-415|El cuaderno no se comparte con tus padres
-416|La libreta no es válida
-417|Mi cuaderno
-418|Detener
-419|Esta acción solo se confirma con huella digital o reconocimiento facial
-420|Activar la verificación biométrica
-421|הפקדה
-422|הפקדתי
-423|Mostrar el código 🔒
-424|Mostrar el código de unión
-425|Unirse
-426|El archivo es demasiado grande
-427|El archivo descargado no es una versión nueva de la aplicación
-428|El archivo descargado no es válido. Inténtalo de nuevo
-429|Código reemplazado ✅ Puedes mostrarlo con huella digital o reconocimiento facial
-430|El código nuevo debe tener {rule}.
-431|Código actual
-432|El código actual no es correcto.
-433|El código secreto no es válido ({rule})
-434|El código secreto debe tener 4 dígitos
-435|El código secreto es incorrecto.
-436|El código secreto que escribiste es incorrecto.
-437|Tu código secreto
-438|Tu código secreto, para confirmar
-439|El código ya no es válido. Pide un código nuevo a tus padres.
-440|El código no es correcto. Revísalo de nuevo o pregunta a tus padres.
-441|El código no es correcto. Te quedan {left} intentos.
-442|El código del correo
-443|El código del correo actual es incorrecto o venció.
-444|El código está oculto
-445|El código está oculto y solo se muestra con huella digital o reconocimiento facial.
-446|El código se actualizó. Inicia sesión con el código nuevo desde tu dispositivo.
-447|El código debe tener {rule}
-448|El código debe tener {rule}.
-449|El código debe tener 4 dígitos
-450|El código debe tener al menos 4 dígitos y hasta {max}
-451|El código es incorrecto o venció.
-452|Se cambió el código ✅
-453|Se actualizó el código de {name}
-454|Los códigos no coincidían. Empecemos de nuevo.
-455|La Hucha Familiar
-456|Se eliminó la hucha
-457|הקופה נפתחה! כתבו את שמות הילדים. נער/ה או הורה נוסף אפשר להוסיף למטה, או אחר כך מלשונית “ניהול”.
-458|La compensación se envió a un padre o madre para su aprobación ⏳
-459|La compensación cierra deudas de ambos lados hasta {amount}. La diferencia se queda como está y el historial se conserva.
-460|Crea una hucha familiar
-461|Escribe tu código secreto.
-462|Crear la hucha
-463|Crear una hucha familiar
-464|Próximo registro: {date}
-465|Se detuvo el registro periódico
-466|Se añadió el registro periódico ✅
-467|הרישום יימחק. אפשר לכתוב למי שרשם למה זה לא נכון.
-468|Se rechazó el registro
-469|Se eliminó el registro
-470|Lista
-471|Se copió la lista
-472|El uso compartido está en pausa. Tus padres no ven nada.
-473|Completar el cambio y entrar
-474|Se actualizó el nombre ✅
-475|Tipos de cambio actualizados {when}
-476|Ajustes (devoluciones registradas sin una deuda concreta)
-477|El pago en {base} se convertirá al cambio de hoy y se descontará de la deuda en su propia moneda. Tras guardar, este tipo de cambio se conserva y no cambiará.
-478|¿Es la misma persona que “{name}”?
-479|¿Es la misma persona? Si es así, ¿qué nombre usar?
-480|Esto es una demo, así que no se puede cambiar nada. ¡Crea tu propia hucha!
-481|Este es tu correo
-482|Este es el código que usarás en cada acceso. Conviene recordarlo.
-483|Esto borrará toda la hucha: todas las personas y todos los registros, y no se puede deshacer.\nPara confirmar, escribe el nombre de la familia: {name}
-484|Reconocimiento facial o huella digital
-485|Masculino
-486|Un amigo / una amiga me debe dinero
-487|Amigo/a añadido/a ✅
-488|Los amigos me deben dinero
-489|Los amigos añaden al adolescente con este correo. No se le envía nada; solo sirve para buscar.
-490|Los amigos añaden al adolescente con este correo. No se le envía nada; solo sirve para buscar.
+346|Cambiar el código desconecta todos los dispositivos que guardaron la familia, así que un padre o madre debe aprobarlo. Ahora se abrirá una solicitud de verificación del dispositivo.
+347|Cambiar correo
+348|Cambiar de dispositivo (enviar un código por correo)
+349|Cambiar código
+350|Cuenta con {name}
+351|Mi cuenta
+352|¿Teléfono roto o perdido? Otro progenitor puede emitirte un código de vinculación en «Administrar». Si no hay otro progenitor, solicita el cambio en la pantalla de acceso: podrá hacerse tras 24 horas y recibirás un correo.
+353|Perderá los permisos de madre. Después se pedirá verificación con reconocimiento facial o huella digital.
+354|Perderá el modo amigos. Después se pedirá verificación con reconocimiento facial o huella digital.
+355|Recibirá todos los permisos de madre: ver todo, aprobar, borrar y administrar la familia. Después se pedirá verificación con reconocimiento facial o huella digital.
+356|Hola {name}, un pequeño recordatorio: aún quedan {amount} por devolver. ¡Gracias! 🙏
+357|Hola {name}, un pequeño recordatorio: aún quedan {amount} por devolver de {note}. ¡Gracias! 🙏
+358|Hola, {name} ha pedido unirse a la hucha familiar. Puedes entrar y aprobar: {url}
+359|Historial
+360|Historial con amigos
+361|היעד לא קיים
+362|היעד נוסף 🎯
+363|הישגים
+364|הישגים: {name}
+365|Todo: {amount}
+366|Todo saldado
+367|Todo saldado ✅
+368|Todo se guarda solo en este dispositivo.
+369|Más recientes primero
+370|Mi dinero
+371|Mi país no está en la lista ($)
+372|Moneda de la familia
+373|La moneda de la familia es {base} y esta deuda se conservará en {cur}. En los saldos se muestra al cambio de ese día, y al pagarla el monto se convierte al cambio del día del pago.
+374|Moneda: {cur}
+375|Correo verificado ✅
+376|Este correo ya lo usa otra persona
+377|Correo actual: {email}. Para cambiarlo le enviaremos un código de confirmación.
+378|Correo de {name}
+379|Correo del amigo / la amiga
+380|Tu correo para los amigos:
+381|Ubicación y moneda guardadas ✅
+382|Ubicación y moneda actualizadas ✅
+383|Este dispositivo ya no está vinculado a un progenitor
+384|Este dispositivo ya no está vinculado a un progenitor. Para entrar hay que cambiar de dispositivo.
+385|Este dispositivo no está registrado para la verificación. Regístralo de nuevo.
+386|Este dispositivo aún no está vinculado a un progenitor.
+387|El dispositivo no es compatible
+388|Dispositivo desconectado ✅
+389|Mi dispositivo
+390|Esta pantalla ha tenido un problema. El resto de la aplicación sigue funcionando, así que puedes cambiar a otra pestaña.
+391|Continuar
+392|Continuar a la verificación
+393|Esta familia quitó el dispositivo. Para volver a entrar necesitas el código de familia.
+394|Familia no encontrada
+395|La familia está completa
+396|Bloqueo liberado ✅
+397|Este adolescente perderá el modo amigos. Después se pedirá verificación con reconocimiento facial o huella digital.
+398|Mis datos
+399|Quitó a un miembro de la familia
+400|Quitó un dispositivo
+401|El monto es demasiado grande
+402|El monto es demasiado grande.
+403|Primero el monto más grande
+404|Montos en el cuaderno
+405|Eliminar
+406|Eliminar a {name}
+407|Quitar a un padre o madre debe aprobarlo un padre o madre. Ahora se abrirá una solicitud de verificación del dispositivo.
+408|Ocultar
+409|Transferir al servidor
+410|Otorgar permisos de padre o madre
+411|Nota
+412|Reducir movimiento
+413|La libreta es demasiado grande para compartirla
+414|Libreta personal de {name}
+415|El cuaderno se vació
+416|El cuaderno ya está vacío
+417|El cuaderno no se comparte con tus padres
+418|La libreta no es válida
+419|Mi cuaderno
+420|Detener
+421|Esta acción solo se confirma con huella digital o reconocimiento facial
+422|Activar la verificación biométrica
+423|הפקדה
+424|הפקדתי
+425|Mostrar el código 🔒
+426|Mostrar el código de unión
+427|Unirse
+428|El archivo es demasiado grande
+429|El archivo descargado no es una versión nueva de la aplicación
+430|El archivo descargado no es válido. Inténtalo de nuevo
+431|Código reemplazado ✅ Puedes mostrarlo con huella digital o reconocimiento facial
+432|El código nuevo debe tener {rule}.
+433|Código actual
+434|El código actual no es correcto.
+435|El código secreto no es válido ({rule})
+436|El código secreto debe tener 4 dígitos
+437|El código secreto es incorrecto.
+438|El código secreto que escribiste es incorrecto.
+439|Tu código secreto
+440|Tu código secreto, para confirmar
+441|El código ya no es válido. Pide un código nuevo a tus padres.
+442|El código no es correcto. Revísalo de nuevo o pregunta a tus padres.
+443|El código no es correcto. Te quedan {left} intentos.
+444|El código del correo
+445|El código del correo actual es incorrecto o venció.
+446|El código está oculto
+447|El código está oculto y solo se muestra con huella digital o reconocimiento facial.
+448|El código se actualizó. Inicia sesión con el código nuevo desde tu dispositivo.
+449|El código debe tener {rule}
+450|El código debe tener {rule}.
+451|El código debe tener 4 dígitos
+452|El código debe tener al menos 4 dígitos y hasta {max}
+453|El código es incorrecto o venció.
+454|Se cambió el código ✅
+455|Se actualizó el código de {name}
+456|Los códigos no coincidían. Empecemos de nuevo.
+457|La Hucha Familiar
+458|Se eliminó la hucha
+459|הקופה נפתחה! כתבו את שמות הילדים. נער/ה או הורה נוסף אפשר להוסיף למטה, או אחר כך מלשונית “ניהול”.
+460|La compensación se envió a un padre o madre para su aprobación ⏳
+461|La compensación cierra deudas de ambos lados hasta {amount}. La diferencia se queda como está y el historial se conserva.
+462|Crea una hucha familiar
+463|Escribe tu código secreto.
+464|Crear la hucha
+465|Crear una hucha familiar
+466|Próximo registro: {date}
+467|Se detuvo el registro periódico
+468|Se añadió el registro periódico ✅
+469|הרישום יימחק. אפשר לכתוב למי שרשם למה זה לא נכון.
+470|Se rechazó el registro
+471|Se eliminó el registro
+472|Lista
+473|Se copió la lista
+474|El uso compartido está en pausa. Tus padres no ven nada.
+475|Completar el cambio y entrar
+476|Se actualizó el nombre ✅
+477|Tipos de cambio actualizados {when}
+478|Ajustes (devoluciones registradas sin una deuda concreta)
+479|El pago en {base} se convertirá al cambio de hoy y se descontará de la deuda en su propia moneda. Tras guardar, este tipo de cambio se conserva y no cambiará.
+480|¿Es la misma persona que “{name}”?
+481|¿Es la misma persona? Si es así, ¿qué nombre usar?
+482|Esto es una demo, así que no se puede cambiar nada. ¡Crea tu propia hucha!
+483|Este es tu correo
+484|Este es el código que usarás en cada acceso. Conviene recordarlo.
+485|Esto borrará toda la hucha: todas las personas y todos los registros, y no se puede deshacer.\nPara confirmar, escribe el nombre de la familia: {name}
+486|Reconocimiento facial o huella digital
+487|Masculino
+488|Un amigo / una amiga me debe dinero
+489|Amigo/a añadido/a ✅
+490|Los amigos me deben dinero
 491|Los amigos añaden al adolescente con este correo. No se le envía nada; solo sirve para buscar.
-492|Los amigos se añaden por dirección de correo. Verás todo lo que se registre en el resumen.
-493|Amigos: {names}
-494|Deuda
-495|Deuda en {cur}
-496|Deudas
-497|Deudas nuevas respecto al mes anterior: {diff}
-498|Mes siguiente
-499|Mes anterior
-500|De vuelta en la lista abierta
-501|Volver
-502|Volver a la familia
-503|Volver a la familia {family}
-504|debe
-505|Debe quedar al menos un padre o madre en la familia
+492|Los amigos añaden al adolescente con este correo. No se le envía nada; solo sirve para buscar.
+493|Los amigos añaden al adolescente con este correo. No se le envía nada; solo sirve para buscar.
+494|Los amigos se añaden por dirección de correo. Verás todo lo que se registre en el resumen.
+495|Amigos: {names}
+496|Deuda
+497|Deuda en {cur}
+498|Deudas
+499|Deudas nuevas respecto al mes anterior: {diff}
+500|Mes siguiente
+501|Mes anterior
+502|De vuelta en la lista abierta
+503|Volver
+504|Volver a la familia
+505|Volver a la familia {family}
 506|debe
-507|me debe
-508|Me deben
-509|Me deben dinero
-510|debe
-511|Buscar por nombre, nota o importe
-512|חסכת עד שהגעת ליעד
-513|Cargando…
-514|Aún no definida por el padre o la madre
-515|Perderán los permisos de padre o madre. Después se pedirá verificación con reconocimiento facial o huella digital.
-516|{day}
-517|Día del mes no válido (de 1 a 28)
-518|Día no válido
-519|Cerrando sesión con seguridad…
-520|Demasiadas solicitudes de código. Inténtalo de nuevo en unos minutos
-521|Demasiadas solicitudes. Inténtalo más tarde
-522|Demasiadas familias nuevas ahora mismo. Inténtalo de nuevo en unos minutos
-523|Demasiados intentos. Inténtalo de nuevo en un minuto.
-524|Demasiados intentos. Inténtalo de nuevo en unos minutos.
-525|Demasiados registros. Inténtalo más tarde
-526|De la deuda quedarán {left}.
-527|Niño/a
-528|Niño/a
-529|Niña
-530|יעד חדש
-531|יעדי חיסכון
-532|יעדי חיסכון הם לילדים ולנוער
-533|Cerrar sesión
-534|Salir de la demo
-535|Recibirán todos los permisos de padre o madre: ver todo, aprobar, borrar y administrar la familia. Después se pedirá verificación con reconocimiento facial o huella digital.
-536|Verde + amarillo
-537|Hay personas que te deben dinero y a las que tú también les debes. Compensar cierra las deudas mutuas y deja solo la diferencia.
-538|El cuaderno personal tiene deudas con nombres de miembros de la familia
-539|Hay demasiadas solicitudes de unión pendientes. Pide a los padres que se ocupen de ellas
-540|Hay demasiadas deudas abiertas entre los dos. Cierra deudas antes de añadir más.
-541|Hay demasiados registros activos entre los dos. Cierra deudas antes de añadir más.
-542|Hay un saldo abierto entre ustedes. Ciérralo primero
-543|Aquí hay deudas en otra moneda: se compensarán al cambio de hoy y ese cambio se guardará.
-544|“{old}” ya está en el cuaderno.
-545|Ya hay muchos amigos en la lista
-546|יש כבר הרבה יעדים
-547|Ya hay muchos registros periódicos
-548|Tengo un código de familia
-549|¿Tienes un código de familia? Entra en la hucha
-550|¿Tienes un código de familia? Escríbelo aquí. Pide a tus padres el código de unión de la familia.
-551|Solo hay un padre o madre en la familia. Recomendamos añadir a otro y verificar un correo, para poder recuperar el acceso si se pierde el dispositivo.
-552|Hay registros a su nombre. Bórralos primero
-553|Saldos
-554|Aquí se registran deudas con amigos: quién compró para quién y quién debe devolver. Tu amigo/a también necesita la aplicación, y tus padres deben aprobar.
-555|כאן רושמים מי חייב למי. לוחצים על אחד הכפתורים הגדולים, בוחרים אדם וסכום, וזהו.
-556|Desactivado
-557|{"one":"Ya 1 día","other":"Ya {n} días"}
-558|Ya hay alguien con este nombre
-559|Ya hay alguien con este nombre. Elígelo en la lista o cambia el nombre
-560|Ya hay alguien con este nombre. Rechaza la solicitud
-561|Este perfil ya tiene un código
-562|Casi listo…
-563|¿Ya usan la hucha?
-564|Para {need} se necesita un dispositivo con huella digital o reconocimiento facial configurados.
-565|Para cambiar de dispositivo desde este teléfono hace falta un correo verificado. Añade un correo en «Mi cuenta».
-566|Para iniciar sesión como progenitor hay que vincular este dispositivo con un código de vinculación de otro progenitor. Pulsa «Dispositivo nuevo / Cambiar de dispositivo».
-567|Para unirte, tienes que aceptar que tus padres vean tu libreta personal, solo para consultarla
-568|Para definir un código nuevo a {name}, enviaremos un código de verificación a {email}.
-569|Para vincular un dispositivo, este debe tener huella digital o reconocimiento facial configurados.
-570|Para que un niño no pueda convertirse en progenitor, añadir a alguien como adolescente o progenitor lo aprueba un progenitor. Ahora se abrirá una solicitud de verificación del dispositivo.
-571|Para que un niño no pueda convertirse en progenitor, un cambio de rol lo aprueba un progenitor. Ahora se abrirá una solicitud de verificación del dispositivo.
-572|García
-573|Azul + morado
-574|Desactivar amigos
-575|Todas las deudas abiertas
-576|Toda la familia
-577|Todos los montos se muestran en esta moneda. Puedes registrar una deuda en otra moneda (por ejemplo 100 dólares) y al pagarla se convierte al cambio de ese día.
-578|Cada mes
-579|Cada {day}
-580|Cada cuánto
-581|כל רישום שלכם מחכה לאישור של הורה, ורק אחרי זה הוא נכנס לחשבון. אם טעיתם, אפשר לבטל תוך 10 דקות.
-582|Cada semana
-583|¿Cuánto devolvió {from} a {to}?
-584|¿Cuánto devolvió {from} a {to}?
+507|Debe quedar al menos un padre o madre en la familia
+508|debe
+509|me debe
+510|Me deben
+511|Me deben dinero
+512|debe
+513|Buscar por nombre, nota o importe
+514|חסכת עד שהגעת ליעד
+515|Cargando…
+516|Aún no definida por el padre o la madre
+517|Perderán los permisos de padre o madre. Después se pedirá verificación con reconocimiento facial o huella digital.
+518|{day}
+519|Día del mes no válido (de 1 a 28)
+520|Día no válido
+521|Cerrando sesión con seguridad…
+522|Demasiadas solicitudes de código. Inténtalo de nuevo en unos minutos
+523|Demasiadas solicitudes. Inténtalo más tarde
+524|Demasiadas familias nuevas ahora mismo. Inténtalo de nuevo en unos minutos
+525|Demasiados intentos. Inténtalo de nuevo en un minuto.
+526|Demasiados intentos. Inténtalo de nuevo en unos minutos.
+527|Demasiados registros. Inténtalo más tarde
+528|De la deuda quedarán {left}.
+529|Niño/a
+530|Niño/a
+531|Niña
+532|יעד חדש
+533|יעדי חיסכון
+534|יעדי חיסכון הם לילדים ולנוער
+535|Cerrar sesión
+536|Salir de la demo
+537|Recibirán todos los permisos de padre o madre: ver todo, aprobar, borrar y administrar la familia. Después se pedirá verificación con reconocimiento facial o huella digital.
+538|Verde + amarillo
+539|Hay personas que te deben dinero y a las que tú también les debes. Compensar cierra las deudas mutuas y deja solo la diferencia.
+540|El cuaderno personal tiene deudas con nombres de miembros de la familia
+541|Hay demasiadas solicitudes de unión pendientes. Pide a los padres que se ocupen de ellas
+542|Hay demasiadas deudas abiertas entre los dos. Cierra deudas antes de añadir más.
+543|Hay demasiados registros activos entre los dos. Cierra deudas antes de añadir más.
+544|Hay un saldo abierto entre ustedes. Ciérralo primero
+545|Aquí hay deudas en otra moneda: se compensarán al cambio de hoy y ese cambio se guardará.
+546|“{old}” ya está en el cuaderno.
+547|Ya hay muchos amigos en la lista
+548|יש כבר הרבה יעדים
+549|Ya hay muchos registros periódicos
+550|Tengo un código de familia
+551|¿Tienes un código de familia? Entra en la hucha
+552|¿Tienes un código de familia? Escríbelo aquí. Pide a tus padres el código de unión de la familia.
+553|Solo hay un padre o madre en la familia. Recomendamos añadir a otro y verificar un correo, para poder recuperar el acceso si se pierde el dispositivo.
+554|Hay registros a su nombre. Bórralos primero
+555|Saldos
+556|Aquí se registran deudas con amigos: quién compró para quién y quién debe devolver. Tu amigo/a también necesita la aplicación, y tus padres deben aprobar.
+557|כאן רושמים מי חייב למי. לוחצים על אחד הכפתורים הגדולים, בוחרים אדם וסכום, וזהו.
+558|Desactivado
+559|{"one":"Ya 1 día","other":"Ya {n} días"}
+560|Ya hay alguien con este nombre
+561|Ya hay alguien con este nombre. Elígelo en la lista o cambia el nombre
+562|Ya hay alguien con este nombre. Rechaza la solicitud
+563|Este perfil ya tiene un código
+564|Casi listo…
+565|¿Ya usan la hucha?
+566|Para {need} se necesita un dispositivo con huella digital o reconocimiento facial configurados.
+567|Para cambiar de dispositivo desde este teléfono hace falta un correo verificado. Añade un correo en «Mi cuenta».
+568|Para iniciar sesión como progenitor hay que vincular este dispositivo con un código de vinculación de otro progenitor. Pulsa «Dispositivo nuevo / Cambiar de dispositivo».
+569|Para unirte, tienes que aceptar que tus padres vean tu libreta personal, solo para consultarla
+570|Para definir un código nuevo a {name}, enviaremos un código de verificación a {email}.
+571|Para vincular un dispositivo, este debe tener huella digital o reconocimiento facial configurados.
+572|Para que un niño no pueda convertirse en progenitor, añadir a alguien como adolescente o progenitor lo aprueba un progenitor. Ahora se abrirá una solicitud de verificación del dispositivo.
+573|Para que un niño no pueda convertirse en progenitor, un cambio de rol lo aprueba un progenitor. Ahora se abrirá una solicitud de verificación del dispositivo.
+574|García
+575|Azul + morado
+576|Desactivar amigos
+577|Todas las deudas abiertas
+578|Toda la familia
+579|Todos los montos se muestran en esta moneda. Puedes registrar una deuda en otra moneda (por ejemplo 100 dólares) y al pagarla se convierte al cambio de ese día.
+580|Cada mes
+581|Cada {day}
+582|Cada cuánto
+583|כל רישום שלכם מחכה לאישור של הורה, ורק אחרי זה הוא נכנס לחשבון. אם טעיתם, אפשר לבטל תוך 10 דקות.
+584|Cada semana
 585|¿Cuánto devolvió {from} a {to}?
-586|¿Cuánto me debe {name}?
-587|¿Cuánto me debe {name}?
+586|¿Cuánto devolvió {from} a {to}?
+587|¿Cuánto devolvió {from} a {to}?
 588|¿Cuánto me debe {name}?
-589|¿Cuánto me pagó {name}?
-590|¿Cuánto me pagó {name}?
+589|¿Cuánto me debe {name}?
+590|¿Cuánto me debe {name}?
 591|¿Cuánto me pagó {name}?
-592|¿Cuánto debo a {to}?
-593|¿Cuánto debo a {to}?
+592|¿Cuánto me pagó {name}?
+593|¿Cuánto me pagó {name}?
 594|¿Cuánto debo a {to}?
-595|כמה צריך? ({cur})
-596|¿Cuánto pagué a {to}?
-597|¿Cuánto?
-598|Sí
-599|Sí, la misma persona. Mantener “{n}”
-600|Sí, la misma persona. Cambiar todo a “{n}”
-601|Sí, unir bajo “{n}” (nombre del cuaderno)
-602|Sí, unir bajo “{n}” (nombre de la hucha)
-603|Sí, continuar
-604|Sí, mover a la hucha
-605|Sí, compensar
-606|Sí, guardar la deuda
-607|Sí, guardar el pago
-608|Entrar
-609|Acceso de progenitor
-610|Escribe tu nombre
-611|Escribe el correo que tu amigo/a registró con sus padres en la aplicación. Se le envía una solicitud y debe aprobarla. Solo funciona si tu amigo/a también tiene el modo amigos.
-612|Escribe el código secreto
-613|Escribe el código otra vez, para confirmar
-614|Escribe el nombre
-615|Escribe el apellido de la familia
-616|Escribe un monto
-617|Escribe un monto mayor que cero.
-618|Otra dirección
-619|El correo electrónico no parece válido
-620|La dirección de correo no es válida
-621|Dirección de correo
-622|Nueva dirección de correo
-623|Dirección de correo no válida
-624|Naranja + rosa
-625|No
-626|No pudimos activar las notificaciones en este dispositivo
-627|No hemos podido conectar ahora mismo. Esta pantalla desaparecerá sola cuando vuelva la conexión y, mientras tanto, el cuaderno personal funciona sin conexión.
-628|No pudimos vincular el dispositivo. Inténtalo de nuevo.
-629|Desconocido
-630|Incorrecto
-631|No se encontró nada para «{q}»
-632|No se encontró un instalador en el teléfono. Puedes descargar el archivo directamente desde GitHub
-633|No se registró nada este mes.
-634|No, son dos personas distintas
-635|No, es otra persona
-636|No, dejar en el cuaderno
-637|¿A qué deuda corresponde la devolución?
-638|Para confirmar, enviaremos un código de verificación a {email}.
-639|Restablecer y que elija por sí mismo en el próximo inicio de sesión
-640|¿Cancelar lo que registraste?
-641|לדחות את הרישום?
-642|¿Rechazar? Se eliminará el registro.
-643|להוסיף גם נער/ה או הורה נוסף
-644|Un nuevo padre o madre necesita un código secreto
-645|A un padre o madre hay que definirle un código (no se puede restablecer para que elija solo)
-646|Solo para padres. Quien crea la hucha es el primer padre o madre. Después recibes un código de unión para toda la familia y defines el rol de cada persona: niño, adolescente o padre/madre.
-647|¿Reemplazar el código? Quienes ya están dentro se quedan, pero el código anterior dejará de funcionar y otros dispositivos que guardaron la familia deberán introducir el código nuevo.
-648|Cambiar de dispositivo
-649|Cambiar tu propio dispositivo es otro proceso
-650|Emitir un código de vinculación
-651|¿Quitar a {name} de los amigos?
-652|¿Quitar a {name} de la familia?
-653|¿Moverlos a la hucha familiar a nombre de {name}?
-654|¿Detener el registro periódico? Lo ya registrado se queda.
-655|Mostrar también lo pagado en la página principal
-656|Toca para ver el detalle del cálculo
-657|¿Desactivar el modo amigos de {name}? Ya no se podrán añadir registros nuevos con amigos.
-658|Sin especificar
-659|למה? (לא חובה)
-660|¿Borrar {n} registros pagados?
-661|למחוק את היעד "{name}"?
-662|¿Borrar el registro de {name}?
-663|¿Borrar este registro?
-664|¿Borrar todos los registros del cuaderno? No se puede deshacer.
-665|A quién
-666|¿A quién debo dinero?
-667|¿A quién debo dinero?
-668|¿A quién debo dinero?
-669|¿A quién?
-670|למשל: אופניים
-671|Por ejemplo: helado, entrada de cine
-672|¿Desconectar el dispositivo? Tendrá que introducir de nuevo el código de unión.
-673|La moneda de la familia la determina el país. Puedes cambiarla después en la pestaña Administrar.
-674|Según el dispositivo
-675|Por moneda
-676|Por nombre (A-Z)
-677|Solo lectura. La libreta se queda con {name} y no se puede cambiar desde aquí.
-678|Solo lectura. Cada registro con un amigo/a también espera su aprobación.
-679|ver el código de unión
-680|cambiar un rol
-681|Equilibrado: nadie debe nada
-682|Verificando…
-683|le deben
-684|le deben
-685|le deben
-686|País no compatible
-687|la política de privacidad
-688|Política de privacidad
-689|País de residencia
-690|Lo que los adolescentes registran con amigos
-691|Lo que está abierto
-692|Desde hoy
-693|Activado
-694|Descargando actualización...
-695|Descargando actualización... {percent} %
-696|Borrar
-697|Borrar toda la hucha
-698|¿Cambias de teléfono? Pulsa aquí, confirma con huella digital y se enviará un código a tu correo. Luego abre la hucha en el teléfono nuevo, elige tu nombre y pulsa «Dispositivo nuevo / Cambiar de dispositivo». El teléfono antiguo se desconectará.
-699|Eliminado
-700|Moneda
-701|Moneda no compatible
-702|מי הילדים שלך?
-703|Quién debe más
-704|¿Quién me debe dinero?
-705|Quién debe a quién
-706|Quién debe (quien paga)
-707|¿Quién me debe dinero?
-708|¿Quién entra?
-709|Quién cambió qué y cuándo, en los últimos 6 meses.
-710|Correo para recuperar el código
-711|Correo para recuperar el código (opcional)
-712|El correo es solo para padres
-713|Ubicación y moneda
-714|Alguien
-715|Dispositivo
-716|Dispositivo nuevo / Cambiar de dispositivo
-717|El dispositivo no existe
-718|Dispositivos conectados
-719|Dispositivos que guardaron la familia. Una tarjeta sin uso durante 180 días caduca sola.
-720|ממתין לאישור: {amount}
-721|Esperando la aprobación de un padre o madre en {name}. Cuando lo apruebe, elige tu nombre en la pantalla de inicio de sesión y escribe el código secreto que elegiste.
-722|Esperando la aprobación de un padre o madre. Cuando lo apruebe, elige tu nombre en la pantalla de inicio de sesión y escribe el código secreto que elegiste.
-723|Suscripción de notificaciones no válida
-724|Entrega el código a {name} en persona, no por mensaje. Es válido 30 minutos y una sola vez.
-725|Clave no válida
-726|Modo amigos
-727|Modo amigos aprobado ✅
-728|El modo amigos es solo para adolescentes
-729|Modo amigos desactivado
-730|Modo amigos para {name}
-731|Los padres aún no han aprobado el modo amigos
-732|Unirse a la hucha
-733|Te unes a la hucha de {name}. Un padre o madre de la familia debe aprobar la unión y definirá si eres niño, adolescente o padre/madre.
-734|Apariencia
-735|Algo salió mal
-736|Algo salió mal. Inténtalo de nuevo.
-737|Familia
-738|Otra familia
-739|Más familias
-740|Familia {name}
-741|Administrar
-742|Reintentar
-743|Lo intentaste demasiadas veces. Inténtalo de nuevo en {wait}.
-744|Borrar búsqueda
-745|Desconectar
-746|נכנס בלי קוד
-747|Eliminado
-748|Se encontraron en este dispositivo datos de la versión anterior: {people} personas y {entries} registros. ¿Transferirlos al servidor?
+595|¿Cuánto debo a {to}?
+596|¿Cuánto debo a {to}?
+597|כמה צריך? ({cur})
+598|¿Cuánto pagué a {to}?
+599|¿Cuánto?
+600|Sí
+601|Sí, la misma persona. Mantener “{n}”
+602|Sí, la misma persona. Cambiar todo a “{n}”
+603|Sí, unir bajo “{n}” (nombre del cuaderno)
+604|Sí, unir bajo “{n}” (nombre de la hucha)
+605|Sí, continuar
+606|Sí, mover a la hucha
+607|Sí, compensar
+608|Sí, guardar la deuda
+609|Sí, guardar el pago
+610|Entrar
+611|Acceso de progenitor
+612|Escribe tu nombre
+613|Escribe el correo que tu amigo/a registró con sus padres en la aplicación. Se le envía una solicitud y debe aprobarla. Solo funciona si tu amigo/a también tiene el modo amigos.
+614|Escribe el código secreto
+615|Escribe el código otra vez, para confirmar
+616|Escribe el nombre
+617|Escribe el apellido de la familia
+618|Escribe un monto
+619|Escribe un monto mayor que cero.
+620|Otra dirección
+621|El correo electrónico no parece válido
+622|La dirección de correo no es válida
+623|Dirección de correo
+624|Nueva dirección de correo
+625|Dirección de correo no válida
+626|Naranja + rosa
+627|No
+628|No pudimos activar las notificaciones en este dispositivo
+629|No hemos podido conectar ahora mismo. Esta pantalla desaparecerá sola cuando vuelva la conexión y, mientras tanto, el cuaderno personal funciona sin conexión.
+630|No pudimos conectar el correo. Puedes volver a intentarlo en "Mi cuenta".
+631|No pudimos vincular el dispositivo. Inténtalo de nuevo.
+632|Desconocido
+633|Incorrecto
+634|No se encontró nada para «{q}»
+635|No se encontró un instalador en el teléfono. Puedes descargar el archivo directamente desde GitHub
+636|No se registró nada este mes.
+637|No, son dos personas distintas
+638|No, es otra persona
+639|No, dejar en el cuaderno
+640|¿A qué deuda corresponde la devolución?
+641|Para confirmar, enviaremos un código de verificación a {email}.
+642|Restablecer y que elija por sí mismo en el próximo inicio de sesión
+643|¿Cancelar lo que registraste?
+644|לדחות את הרישום?
+645|¿Rechazar? Se eliminará el registro.
+646|להוסיף גם נער/ה או הורה נוסף
+647|Un nuevo padre o madre necesita un código secreto
+648|A un padre o madre hay que definirle un código (no se puede restablecer para que elija solo)
+649|Solo para padres. Quien crea la hucha es el primer padre o madre. Después recibes un código de unión para toda la familia y defines el rol de cada persona: niño, adolescente o padre/madre.
+650|Cambiar el código
+651|¿Reemplazar el código? Quienes ya están dentro se quedan, pero el código anterior dejará de funcionar y otros dispositivos que guardaron la familia deberán introducir el código nuevo.
+652|Cambiar de dispositivo
+653|Cambiar tu propio dispositivo es otro proceso
+654|Emitir un código de vinculación
+655|¿Quitar a {name} de los amigos?
+656|¿Quitar a {name} de la familia?
+657|Quitar a un padre o madre
+658|¿Moverlos a la hucha familiar a nombre de {name}?
+659|¿Detener el registro periódico? Lo ya registrado se queda.
+660|Mostrar también lo pagado en la página principal
+661|Toca para ver el detalle del cálculo
+662|¿Desactivar el modo amigos de {name}? Ya no se podrán añadir registros nuevos con amigos.
+663|Sin especificar
+664|למה? (לא חובה)
+665|¿Borrar {n} registros pagados?
+666|למחוק את היעד "{name}"?
+667|Eliminar la hucha
+668|¿Borrar el registro de {name}?
+669|¿Borrar este registro?
+670|¿Borrar todos los registros del cuaderno? No se puede deshacer.
+671|A quién
+672|¿A quién debo dinero?
+673|¿A quién debo dinero?
+674|¿A quién debo dinero?
+675|¿A quién?
+676|למשל: אופניים
+677|Por ejemplo: helado, entrada de cine
+678|¿Desconectar el dispositivo? Tendrá que introducir de nuevo el código de unión.
+679|La moneda de la familia la determina el país. Puedes cambiarla después en la pestaña Administrar.
+680|Según el dispositivo
+681|Por moneda
+682|Por nombre (A-Z)
+683|Solo lectura. La libreta se queda con {name} y no se puede cambiar desde aquí.
+684|Solo lectura. Cada registro con un amigo/a también espera su aprobación.
+685|ver el código de unión
+686|cambiar un rol
+687|Equilibrado: nadie debe nada
+688|Verificando…
+689|le deben
+690|le deben
+691|le deben
+692|País no compatible
+693|la política de privacidad
+694|Política de privacidad
+695|País de residencia
+696|Lo que los adolescentes registran con amigos
+697|Lo que está abierto
+698|Desde hoy
+699|Activado
+700|Descargando actualización...
+701|Descargando actualización... {percent} %
+702|Borrar
+703|Eliminar la hucha no se puede deshacer, así que un padre o madre debe aprobarlo. Ahora se abrirá una solicitud de verificación del dispositivo.
+704|Borrar toda la hucha
+705|¿Cambias de teléfono? Pulsa aquí, confirma con huella digital y se enviará un código a tu correo. Luego abre la hucha en el teléfono nuevo, elige tu nombre y pulsa «Dispositivo nuevo / Cambiar de dispositivo». El teléfono antiguo se desconectará.
+706|Eliminado
+707|Moneda
+708|Moneda no compatible
+709|מי הילדים שלך?
+710|Quién debe más
+711|¿Quién me debe dinero?
+712|Quién debe a quién
+713|Quién debe (quien paga)
+714|¿Quién me debe dinero?
+715|¿Quién entra?
+716|Quién cambió qué y cuándo, en los últimos 6 meses.
+717|Correo para recuperar el código
+718|Correo para recuperar el código (opcional)
+719|El correo es solo para padres
+720|Ubicación y moneda
+721|Alguien
+722|Dispositivo
+723|Dispositivo nuevo / Cambiar de dispositivo
+724|El dispositivo no existe
+725|Dispositivos conectados
+726|Dispositivos que guardaron la familia. Una tarjeta sin uso durante 180 días caduca sola.
+727|ממתין לאישור: {amount}
+728|Esperando la aprobación de un padre o madre en {name}. Cuando lo apruebe, elige tu nombre en la pantalla de inicio de sesión y escribe el código secreto que elegiste.
+729|Esperando la aprobación de un padre o madre. Cuando lo apruebe, elige tu nombre en la pantalla de inicio de sesión y escribe el código secreto que elegiste.
+730|Suscripción de notificaciones no válida
+731|Entrega el código a {name} en persona, no por mensaje. Es válido 30 minutos y una sola vez.
+732|Clave no válida
+733|Modo amigos
+734|Modo amigos aprobado ✅
+735|El modo amigos es solo para adolescentes
+736|Modo amigos desactivado
+737|Modo amigos para {name}
+738|Los padres aún no han aprobado el modo amigos
+739|Unirse a la hucha
+740|Te unes a la hucha de {name}. Un padre o madre de la familia debe aprobar la unión y definirá si eres niño, adolescente o padre/madre.
+741|Apariencia
+742|Algo salió mal
+743|Algo salió mal. Inténtalo de nuevo.
+744|Familia
+745|Otra familia
+746|Más familias
+747|Familia {name}
+748|Administrar
 749|Reintentar
-750|Inténtalo de nuevo
-751|Adolescente
-752|Adolescente
-753|Adolescente
-754|Femenino
-755|Parece que el dispositivo está en {name}. ¿Viven en {name}?
-756|Deudas registradas
-757|Quedan {left} de {total}
-758|Quedan {left} de esta deuda.
-759|Se envía un código cuando se cambia o restablece un código secreto, y también un aviso cuando se bloquea el código de alguien de la familia.
-760|Enviado a un padre o madre para su aprobación ⏳
-761|Enviado al amigo/a para su aprobación ⏳
-762|Se envió un código a tu correo verificado. Tras confirmarlo, el cambio solo podrá hacerse en 24 horas; mientras tanto, tú y los demás progenitores recibiréis una notificación y podréis cancelar.
-763|Cerrar
-764|Orden de los registros
-765|Total
-766|Total en {cur} al cambio de hoy
-767|Marcado como pagado
-768|Listo
-769|Resumen mensual
-770|Monto ({cur})
-771|Monto no válido
-772|Monto no válido. Entre amigos puedes registrar hasta 500 séqueles cada vez
-773|Todavía no se ha registrado nada.
-774|Ya hay una actualización en curso
-775|Actualizar
-776|Más
-777|Todavía no hay nadie más en la familia. Un padre o madre debe añadirlos.
-778|Todavía no hay amigos aprobados
-779|Todavía no hay amigos aprobados. Añade un amigo/a con su correo.
-780|Todavía no hay amigos. Añade un amigo/a con su correo.
-781|עוד אין יעדי חיסכון.
-782|La lista aún está vacía. Toca uno de los botones para empezar.
-783|Todavía no hay registros periódicos.
-784|Aún no hay cambios en el registro.
-785|Ningún padre o madre ha abierto aún el cuaderno
-786|Más avatares
-787|Todavía no
-788|Aún no eligió código
-789|Aún no eligió código
-790|Aún no eligió código
-791|Todavía no se ha registrado nada con amigos.
-792|Todavía no se ha registrado nada.
-793|Todavía no se ha enviado ninguna copia
-794|Aún no han pasado 24 horas desde la solicitud.
-795|Más acciones
-796|Última actualización: {when}
-797|Aspecto
-798|Por {debt} (= {covers} al cambio de hoy).
-799|Por {debt}.
-800|על מה חוסכים?
-801|¿Por qué? (se puede omitir)
-802|¿Por qué? (opcional)
-803|Por: {debt}
-804|¿Con quién?
-805|Enorme
-806|La verificación venció. Inténtalo de nuevo.
-807|Detalle del cálculo
-808|Acción no válida
-809|Perfil
-810|Colores de la pantalla
-811|Colores de neón
-812|El trato ya está definido y no se puede cambiar
-813|Forma de trato guardada ✅
-814|Trato
-815|Trato:
-816|Sonido
-817|Vieron el cuaderno:
-818|Crea una hucha familiar: todos ven la misma cuenta y las deudas se actualizan para todos.
-819|Se necesita confirmación con huella digital o reconocimiento facial
-820|Necesitas el código de familia para entrar en esta familia.
-821|La aplicación necesita permiso para instalar actualizaciones: en los ajustes que aparecen, activa «Permitir desde esta fuente» y vuelve a tocar «Actualizar»
-822|Debes aceptar las condiciones de uso y la política de privacidad
-823|Debes iniciar sesión de nuevo
-824|Debes iniciar sesión de nuevo con el código de la familia
-825|Hay que volver a vincular el dispositivo
-826|Debes vincular este teléfono una vez.
-827|Hay que vincular el dispositivo
-828|Debes vincular este dispositivo y este navegador una vez.
-829|Hace falta un correo verificado para cambiar de dispositivo
-830|Definir el código
-831|Definir el código y entrar
-832|Definir el trato…
-833|קביעת קוד סודי
-834|Un código para todos. Quien se une con él entra como niño. Después se puede cambiar en «Miembros de la familia» a adolescente o padre/madre, con aprobación por huella digital o reconocimiento facial.
-835|Código del correo
-836|El código del correo es incorrecto o venció.
-837|El código de verificación es incorrecto o venció.
-838|Código de unión a la hucha de {name}: {code}
-839|Código de unión de la familia
-840|El código de unión de la familia solo se muestra con huella digital o reconocimiento facial.
-841|El código de la familia cambió. Pide un código nuevo a tus padres.
-842|El código de vinculación
-843|Código nuevo
-844|Código nuevo ({rule})
-845|Código del correo actual
-846|Código de familia
-847|Código secreto ({rule}; más largo = más seguro)
-848|Código secreto (obligatorio para padres, {rule})
-849|קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)
-850|קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק
-851|Código secreto nuevo
-852|Código secreto para {name}
-853|Tu propio código secreto (4 dígitos)
-854|Código de vinculación
-855|El código de vinculación es solo para progenitores
-856|Código de vinculación para {name}
-857|Código de vinculación para un dispositivo
-858|Códigos de unión
-859|Primero hay que definir un código secreto a {name}
-860|{amount} compensados con {name} ✅
-861|Una hucha familiar solo la puede crear alguien mayor de 18 años
-862|Pequeño
-863|Recibí
-864|Recibí la diferencia ({amount})
-865|Recibí dinero
-866|Compensación mutua
-867|Compensar deudas mutuas
-868|Compensar deudas mutuas ({amount})
-869|El enlace de invitación añade como hijo/a a cualquiera que lo abra. Compártelo solo con tu familia.
-870|Vinculación del dispositivo
-871|Vincular este dispositivo y entrar
-872|Vincular el dispositivo a un progenitor
-873|Ir a la sección
-874|He leído y acepto {terms} y {privacy}
-875|He leído y acepto {terms} y {privacy}
-876|He leído y acepto {terms} y {privacy}
-877|Normal
-878|Un momento, iniciando sesión…
-879|Un momento, cerrando sesión…
-880|¿Quieres unirlos en la hucha familiar?
-881|¿Quieres que los deudores vean esto?
-882|Vibración
-883|Registrar
-884|Registrar una devolución
-885|Registra una deuda automáticamente, cada semana o cada mes, sin escribirla cada vez.
-886|Nuevo registro periódico
-887|Actualizar la aplicación
-888|Solo los padres pueden hacer esto
-889|רק הורים יכולים לפתוח יעד למישהו אחר
-890|Solo los padres pueden definir el trato
-891|Solo para comprobar que quien crea la hucha es mayor de 18 años. No se muestra a nadie.
-892|Registró un pago
-893|Registró una deuda
-894|Anota una deuda tuya en el cuaderno
-895|שבוע נקי
-896|שבוע שלם בלי חובות פתוחים
-897|Pagado por completo ✅
-898|Pagados ({n})
-899|Guardando todo…
-900|Liberar el bloqueo
-901|Pagué
-902|Pagué la diferencia ({amount})
-903|Cambió el nombre de la familia
-904|Cambió el país y la moneda
-905|Cambió un nombre
-906|Cambió un rol
-907|Cambiar
-908|Cambiar la moneda solo cambia el símbolo. Los montos no se convierten.
-909|Cambiar el código secreto
-910|Cambiar el nombre de la familia
-911|Compartir
-912|Olvidé el código
-913|Enviamos un código a {email}. Escríbelo, junto con la nueva dirección. Reemplazará a la actual solo después de verificarla.
-914|Enviamos un código de 6 dígitos a {email}. Es válido durante 10 minutos.
-915|Míos
-916|Enviar solicitud
-917|Enviar código de verificación
-918|Enviar el código por correo
-919|Enviar un código al correo actual
-920|Nombre
-921|שם היעד חייב להיות עד 40 תווים
-922|Nombre de la familia
-923|El nombre de la familia no coincide
-924|El nombre de la familia no es válido
-925|Nombre no válido
-926|Nombres conocidos
-927|Guardar
-928|una hora
-929|{"one":"{n} hora","other":"{n} horas"}
-930|Los tipos de cambio aún no se han cargado. Inténtalo de nuevo en un momento.
-931|2 horas
-932|Idioma
-933|Fecha no válida
-934|Fecha de nacimiento
-935|Fecha de nacimiento no válida
-936|Sensación
-937|los términos de uso
-938|Términos de uso
-939|Rol
-940|Rol:
-941|Menú principal
-942|Pago de una deuda en otra moneda
-943|🆘 El dispositivo antiguo se perdió o se rompió
+750|Lo intentaste demasiadas veces. Inténtalo de nuevo en {wait}.
+751|Borrar búsqueda
+752|Desconectar
+753|נכנס בלי קוד
+754|Eliminado
+755|Se encontraron en este dispositivo datos de la versión anterior: {people} personas y {entries} registros. ¿Transferirlos al servidor?
+756|Reintentar
+757|Inténtalo de nuevo
+758|Adolescente
+759|Adolescente
+760|Adolescente
+761|Femenino
+762|Parece que el dispositivo está en {name}. ¿Viven en {name}?
+763|Deudas registradas
+764|Quedan {left} de {total}
+765|Quedan {left} de esta deuda.
+766|Se envía un código cuando se cambia o restablece un código secreto, y también un aviso cuando se bloquea el código de alguien de la familia.
+767|Enviado a un padre o madre para su aprobación ⏳
+768|Enviado al amigo/a para su aprobación ⏳
+769|Se envió un código a tu correo verificado. Tras confirmarlo, el cambio solo podrá hacerse en 24 horas; mientras tanto, tú y los demás progenitores recibiréis una notificación y podréis cancelar.
+770|Cerrar
+771|Orden de los registros
+772|Total
+773|Total en {cur} al cambio de hoy
+774|Marcado como pagado
+775|Listo
+776|Resumen mensual
+777|Monto ({cur})
+778|Monto no válido
+779|Monto no válido. Entre amigos puedes registrar hasta 500 séqueles cada vez
+780|Todavía no se ha registrado nada.
+781|Ya hay una actualización en curso
+782|Actualizar
+783|Más
+784|Todavía no hay nadie más en la familia. Un padre o madre debe añadirlos.
+785|Todavía no hay amigos aprobados
+786|Todavía no hay amigos aprobados. Añade un amigo/a con su correo.
+787|Todavía no hay amigos. Añade un amigo/a con su correo.
+788|עוד אין יעדי חיסכון.
+789|La lista aún está vacía. Toca uno de los botones para empezar.
+790|Todavía no hay registros periódicos.
+791|Aún no hay cambios en el registro.
+792|Ningún padre o madre ha abierto aún el cuaderno
+793|Más avatares
+794|Todavía no
+795|Aún no eligió código
+796|Aún no eligió código
+797|Aún no eligió código
+798|Todavía no se ha registrado nada con amigos.
+799|Todavía no se ha registrado nada.
+800|Todavía no se ha enviado ninguna copia
+801|Aún no han pasado 24 horas desde la solicitud.
+802|Más acciones
+803|Última actualización: {when}
+804|Aspecto
+805|Por {debt} (= {covers} al cambio de hoy).
+806|Por {debt}.
+807|על מה חוסכים?
+808|¿Por qué? (se puede omitir)
+809|¿Por qué? (opcional)
+810|Por: {debt}
+811|¿Con quién?
+812|Enorme
+813|La verificación venció. Inténtalo de nuevo.
+814|Detalle del cálculo
+815|Acción no válida
+816|Perfil
+817|Colores de la pantalla
+818|Colores de neón
+819|El trato ya está definido y no se puede cambiar
+820|Forma de trato guardada ✅
+821|Trato
+822|Trato:
+823|Sonido
+824|Vieron el cuaderno:
+825|Crea una hucha familiar: todos ven la misma cuenta y las deudas se actualizan para todos.
+826|Se necesita confirmación con huella digital o reconocimiento facial
+827|Necesitas el código de familia para entrar en esta familia.
+828|La aplicación necesita permiso para instalar actualizaciones: en los ajustes que aparecen, activa «Permitir desde esta fuente» y vuelve a tocar «Actualizar»
+829|Debes aceptar las condiciones de uso y la política de privacidad
+830|Debes iniciar sesión de nuevo
+831|Debes iniciar sesión de nuevo con el código de la familia
+832|Hay que volver a vincular el dispositivo
+833|Debes vincular este teléfono una vez.
+834|Hay que vincular el dispositivo
+835|Este dispositivo debe vincularse a un padre o madre. Inicia sesión de nuevo y vincúlalo con un código de vinculación de otro padre o madre
+836|Debes vincular este dispositivo y este navegador una vez.
+837|Hace falta un correo verificado para cambiar de dispositivo
+838|Definir el código
+839|Definir el código y entrar
+840|Definir el trato…
+841|קביעת קוד סודי
+842|Un código para todos. Quien se une con él entra como niño. Después se puede cambiar en «Miembros de la familia» a adolescente o padre/madre, con aprobación por huella digital o reconocimiento facial.
+843|Código del correo
+844|El código del correo es incorrecto o venció.
+845|El código de verificación es incorrecto o venció.
+846|Código de unión a la hucha de {name}: {code}
+847|Código de unión de la familia
+848|El código de unión de la familia solo se muestra con huella digital o reconocimiento facial.
+849|El código de la familia cambió. Pide un código nuevo a tus padres.
+850|El código de vinculación
+851|Código nuevo
+852|Código nuevo ({rule})
+853|Código del correo actual
+854|Código de familia
+855|Código secreto ({rule}; más largo = más seguro)
+856|Código secreto (obligatorio para padres, {rule})
+857|קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)
+858|קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק
+859|Código secreto nuevo
+860|Código secreto para {name}
+861|Tu propio código secreto (4 dígitos)
+862|Código de vinculación
+863|El código de vinculación es solo para progenitores
+864|Código de vinculación para {name}
+865|Código de vinculación para un dispositivo
+866|Códigos de unión
+867|Primero hay que definir un código secreto a {name}
+868|{amount} compensados con {name} ✅
+869|Una hucha familiar solo la puede crear alguien mayor de 18 años
+870|Pequeño
+871|Recibí
+872|Recibí la diferencia ({amount})
+873|Recibí dinero
+874|Compensación mutua
+875|Compensar deudas mutuas
+876|Compensar deudas mutuas ({amount})
+877|El enlace de invitación añade como hijo/a a cualquiera que lo abra. Compártelo solo con tu familia.
+878|Vinculación del dispositivo
+879|Vincular este dispositivo y entrar
+880|Vincular el dispositivo a un progenitor
+881|Ir a la sección
+882|He leído y acepto {terms} y {privacy}
+883|He leído y acepto {terms} y {privacy}
+884|He leído y acepto {terms} y {privacy}
+885|Normal
+886|Un momento, iniciando sesión…
+887|Un momento, cerrando sesión…
+888|¿Quieres unirlos en la hucha familiar?
+889|¿Quieres que los deudores vean esto?
+890|Vibración
+891|Registrar
+892|Registrar una devolución
+893|Registra una deuda automáticamente, cada semana o cada mes, sin escribirla cada vez.
+894|Nuevo registro periódico
+895|Actualizar la aplicación
+896|Solo los padres pueden hacer esto
+897|רק הורים יכולים לפתוח יעד למישהו אחר
+898|Solo los padres pueden definir el trato
+899|Solo para comprobar que quien crea la hucha es mayor de 18 años. No se muestra a nadie.
+900|Registró un pago
+901|Registró una deuda
+902|Anota una deuda tuya en el cuaderno
+903|שבוע נקי
+904|שבוע שלם בלי חובות פתוחים
+905|Pagado por completo ✅
+906|Pagados ({n})
+907|Guardando todo…
+908|Liberar el bloqueo
+909|Pagué
+910|Pagué la diferencia ({amount})
+911|Cambió el nombre de la familia
+912|Cambió el país y la moneda
+913|Cambió un nombre
+914|Cambió un rol
+915|Cambiar
+916|Cambiar la moneda solo cambia el símbolo. Los montos no se convierten.
+917|Cambiar el código secreto
+918|Cambiar el nombre de la familia
+919|Compartir
+920|Olvidé el código
+921|Enviamos un código a {email}. Escríbelo, junto con la nueva dirección. Reemplazará a la actual solo después de verificarla.
+922|Enviamos un código de 6 dígitos a {email}. Es válido durante 10 minutos.
+923|Míos
+924|Enviar solicitud
+925|Enviar código de verificación
+926|Enviar el código por correo
+927|Enviar un código al correo actual
+928|Nombre
+929|שם היעד חייב להיות עד 40 תווים
+930|Nombre de la familia
+931|El nombre de la familia no coincide
+932|El nombre de la familia no es válido
+933|Nombre no válido
+934|Nombres conocidos
+935|Guardar
+936|una hora
+937|{"one":"{n} hora","other":"{n} horas"}
+938|Los tipos de cambio aún no se han cargado. Inténtalo de nuevo en un momento.
+939|2 horas
+940|Idioma
+941|Fecha no válida
+942|Fecha de nacimiento
+943|Fecha de nacimiento no válida
+944|Sensación
+945|los términos de uso
+946|Términos de uso
+947|Rol
+948|Rol:
+949|Menú principal
+950|Pago de una deuda en otra moneda
+951|🆘 El dispositivo antiguo se perdió o se rompió

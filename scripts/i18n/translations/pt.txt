@@ -344,601 +344,609 @@
 343|החזרת חוב בפעם הראשונה
 344|Devolvi a {to}
 345|Alterou o código da família
-346|Alterar e-mail
-347|Trocar de dispositivo (enviar um código por e-mail)
-348|Alterar código
-349|Conta com {name}
-350|A minha conta
-351|Telemóvel partido ou perdido? Outro progenitor pode emitir-te um código de associação em «Gestão». Se não houver outro progenitor, pede a troca no ecrã de entrada: será possível após 24 horas e receberás um e-mail.
-352|Vai perder as permissões de mãe. Depois será exigida verificação com reconhecimento facial ou impressão digital.
-353|Vai perder o modo amigos. Depois será exigida verificação com reconhecimento facial ou impressão digital.
-354|Vai receber todas as permissões de mãe: ver tudo, aprovar, apagar e gerir a família. Depois será exigida verificação com reconhecimento facial ou impressão digital.
-355|Olá {name}, um pequeno lembrete: ainda faltam {amount} para devolver. Obrigado! 🙏
-356|Olá {name}, um pequeno lembrete: ainda faltam {amount} para devolver de {note}. Obrigado! 🙏
-357|Olá, {name} pediu para entrar no cofre familiar. Podes entrar e aprovar: {url}
-358|Histórico
-359|Histórico com amigos
-360|היעד לא קיים
-361|היעד נוסף 🎯
-362|הישגים
-363|הישגים: {name}
-364|Tudo: {amount}
-365|Tudo regularizado
-366|Tudo regularizado ✅
-367|Tudo é guardado apenas neste dispositivo.
-368|Mais recentes primeiro
-369|O meu dinheiro
-370|O meu país não está na lista ($)
-371|Moeda da família
-372|A moeda da família é {base} e esta dívida será mantida em {cur}. Nos saldos é mostrada à taxa desse dia e, quando for paga, o valor é convertido à taxa do dia do pagamento.
-373|Moeda: {cur}
-374|E-mail verificado ✅
-375|Este e-mail já é usado por outra pessoa
-376|E-mail atual: {email}. Para o substituir, enviamos-lhe um código de confirmação.
-377|E-mail de {name}
-378|E-mail do(a) amigo(a)
-379|O teu e-mail para os amigos:
-380|Localização e moeda guardadas ✅
-381|Localização e moeda atualizadas ✅
-382|Este dispositivo já não está associado a um progenitor
-383|Este dispositivo já não está associado a um progenitor. Para entrar é preciso trocar de dispositivo.
-384|Este dispositivo não está registado para verificação. Regista-o novamente.
-385|Este dispositivo ainda não está associado a um progenitor.
-386|O dispositivo não é suportado
-387|Dispositivo desligado ✅
-388|O meu dispositivo
-389|Este ecrã encontrou um problema. O resto da aplicação continua a funcionar, pode mudar para outro separador.
-390|Continuar
-391|Continuar para a verificação
-392|Esta família removeu o dispositivo. Para voltar a entrar precisas do código de família.
-393|Família não encontrada
-394|A família está cheia
-395|Bloqueio libertado ✅
-396|Este(a) adolescente vai perder o modo amigos. Depois será exigida verificação com reconhecimento facial ou impressão digital.
-397|Os meus dados
-398|Removeu um membro da família
-399|Removeu um dispositivo
-400|O valor é demasiado grande
-401|O valor é demasiado grande.
-402|Primeiro o valor maior
-403|Valores no caderno
-404|Remover
-405|Remover {name}
-406|Ocultar
-407|Transferir para o servidor
-408|Conceder permissões de pai/mãe
-409|Nota
-410|Reduzir movimento
-411|O caderno é demasiado grande para ser partilhado
-412|Caderno pessoal de {name}
-413|O caderno foi esvaziado
-414|O caderno já está vazio
-415|O caderno não é partilhado com os teus pais
-416|O caderno não é válido
-417|O meu caderno
-418|Parar
-419|Esta ação só é confirmada com impressão digital ou reconhecimento facial
-420|Ativar a verificação biométrica
-421|הפקדה
-422|הפקדתי
-423|Mostrar o código 🔒
-424|Mostrar o código de adesão
-425|Entrar
-426|O ficheiro é demasiado grande
-427|O ficheiro transferido não é uma nova versão da aplicação
-428|O ficheiro transferido é inválido. Tenta novamente
-429|Código substituído ✅ Podes mostrá-lo com impressão digital ou reconhecimento facial
-430|O novo código tem de ter {rule}.
-431|Código atual
-432|O código atual não está correto.
-433|O código secreto não é válido ({rule})
-434|O código secreto tem de ter 4 dígitos
-435|O código secreto está incorreto.
-436|O código secreto que escreveste está incorreto.
-437|O teu código secreto
-438|O teu código secreto, para confirmar
-439|O código já não é válido. Pede um novo código aos teus pais.
-440|O código não está correto. Verifica novamente ou pergunta aos teus pais.
-441|O código não está correto. Restam {left} tentativas.
-442|O código do e-mail
-443|O código do e-mail atual está errado ou expirou.
-444|O código está oculto
-445|O código fica oculto e só é mostrado com impressão digital ou reconhecimento facial.
-446|O código foi atualizado. Entra com o novo código a partir do teu dispositivo.
-447|O código tem de ter {rule}
-448|O código tem de ter {rule}.
-449|O código tem de ter 4 dígitos
-450|O código tem de ter pelo menos 4 dígitos, até {max}
-451|O código está errado ou expirou.
-452|O código foi alterado ✅
-453|O código de {name} foi atualizado
-454|Os códigos não coincidiam. Vamos recomeçar.
-455|O Cofre Familiar
-456|O cofre foi apagado
-457|הקופה נפתחה! כתבו את שמות הילדים. נער/ה או הורה נוסף אפשר להוסיף למטה, או אחר כך מלשונית “ניהול”.
-458|A compensação foi enviada a um dos pais para aprovação ⏳
-459|A compensação liquida dívidas dos dois lados até {amount}. A diferença fica como está e o histórico é mantido.
-460|Cria um cofre familiar
-461|Escreve o teu código secreto.
-462|Criar o cofre
-463|Criar um cofre familiar
-464|Próximo registo: {date}
-465|O registo periódico foi parado
-466|O registo periódico foi adicionado ✅
-467|הרישום יימחק. אפשר לכתוב למי שרשם למה זה לא נכון.
-468|O registo foi recusado
-469|O registo foi apagado
-470|Lista
-471|A lista foi copiada
-472|A partilha está em pausa. Os teus pais não veem nada.
-473|Concluir a troca e entrar
-474|O nome foi atualizado ✅
-475|Taxas atualizadas {when}
-476|Ajustes (devoluções registadas sem uma dívida específica)
-477|O pagamento em {base} será convertido à taxa de hoje e deduzido da dívida na sua própria moeda. Depois de guardar, esta taxa fica registada e não muda.
-478|É a mesma pessoa que “{name}”?
-479|É a mesma pessoa? Se sim, que nome usar?
-480|Isto é uma demonstração, por isso não se pode alterar nada. Cria o teu próprio cofre!
-481|Este é o teu e-mail
-482|Este é o código que vais usar em cada entrada. Convém memorizá-lo.
-483|Isto apagará todo o cofre: todas as pessoas e todos os registos, e não pode ser desfeito.\nPara confirmar, escreve o nome da família: {name}
-484|Reconhecimento facial ou impressão digital
-485|Masculino
-486|Um(a) amigo(a) deve-me dinheiro
-487|Amigo(a) adicionado(a) ✅
-488|Os amigos devem-me dinheiro
-489|Os amigos adicionam o(a) adolescente com este e-mail. Não lhe é enviado nada, serve apenas para pesquisa.
-490|Os amigos adicionam o(a) adolescente com este e-mail. Não lhe é enviado nada, serve apenas para pesquisa.
+346|Alterar o código desconecta todos os dispositivos que guardaram a família, por isso um dos pais precisa aprovar. Agora será aberto um pedido de verificação do dispositivo.
+347|Alterar e-mail
+348|Trocar de dispositivo (enviar um código por e-mail)
+349|Alterar código
+350|Conta com {name}
+351|A minha conta
+352|Telemóvel partido ou perdido? Outro progenitor pode emitir-te um código de associação em «Gestão». Se não houver outro progenitor, pede a troca no ecrã de entrada: será possível após 24 horas e receberás um e-mail.
+353|Vai perder as permissões de mãe. Depois será exigida verificação com reconhecimento facial ou impressão digital.
+354|Vai perder o modo amigos. Depois será exigida verificação com reconhecimento facial ou impressão digital.
+355|Vai receber todas as permissões de mãe: ver tudo, aprovar, apagar e gerir a família. Depois será exigida verificação com reconhecimento facial ou impressão digital.
+356|Olá {name}, um pequeno lembrete: ainda faltam {amount} para devolver. Obrigado! 🙏
+357|Olá {name}, um pequeno lembrete: ainda faltam {amount} para devolver de {note}. Obrigado! 🙏
+358|Olá, {name} pediu para entrar no cofre familiar. Podes entrar e aprovar: {url}
+359|Histórico
+360|Histórico com amigos
+361|היעד לא קיים
+362|היעד נוסף 🎯
+363|הישגים
+364|הישגים: {name}
+365|Tudo: {amount}
+366|Tudo regularizado
+367|Tudo regularizado ✅
+368|Tudo é guardado apenas neste dispositivo.
+369|Mais recentes primeiro
+370|O meu dinheiro
+371|O meu país não está na lista ($)
+372|Moeda da família
+373|A moeda da família é {base} e esta dívida será mantida em {cur}. Nos saldos é mostrada à taxa desse dia e, quando for paga, o valor é convertido à taxa do dia do pagamento.
+374|Moeda: {cur}
+375|E-mail verificado ✅
+376|Este e-mail já é usado por outra pessoa
+377|E-mail atual: {email}. Para o substituir, enviamos-lhe um código de confirmação.
+378|E-mail de {name}
+379|E-mail do(a) amigo(a)
+380|O teu e-mail para os amigos:
+381|Localização e moeda guardadas ✅
+382|Localização e moeda atualizadas ✅
+383|Este dispositivo já não está associado a um progenitor
+384|Este dispositivo já não está associado a um progenitor. Para entrar é preciso trocar de dispositivo.
+385|Este dispositivo não está registado para verificação. Regista-o novamente.
+386|Este dispositivo ainda não está associado a um progenitor.
+387|O dispositivo não é suportado
+388|Dispositivo desligado ✅
+389|O meu dispositivo
+390|Este ecrã encontrou um problema. O resto da aplicação continua a funcionar, pode mudar para outro separador.
+391|Continuar
+392|Continuar para a verificação
+393|Esta família removeu o dispositivo. Para voltar a entrar precisas do código de família.
+394|Família não encontrada
+395|A família está cheia
+396|Bloqueio libertado ✅
+397|Este(a) adolescente vai perder o modo amigos. Depois será exigida verificação com reconhecimento facial ou impressão digital.
+398|Os meus dados
+399|Removeu um membro da família
+400|Removeu um dispositivo
+401|O valor é demasiado grande
+402|O valor é demasiado grande.
+403|Primeiro o valor maior
+404|Valores no caderno
+405|Remover
+406|Remover {name}
+407|A remoção de um dos pais precisa ser aprovada por um dos pais. Agora será aberto um pedido de verificação do dispositivo.
+408|Ocultar
+409|Transferir para o servidor
+410|Conceder permissões de pai/mãe
+411|Nota
+412|Reduzir movimento
+413|O caderno é demasiado grande para ser partilhado
+414|Caderno pessoal de {name}
+415|O caderno foi esvaziado
+416|O caderno já está vazio
+417|O caderno não é partilhado com os teus pais
+418|O caderno não é válido
+419|O meu caderno
+420|Parar
+421|Esta ação só é confirmada com impressão digital ou reconhecimento facial
+422|Ativar a verificação biométrica
+423|הפקדה
+424|הפקדתי
+425|Mostrar o código 🔒
+426|Mostrar o código de adesão
+427|Entrar
+428|O ficheiro é demasiado grande
+429|O ficheiro transferido não é uma nova versão da aplicação
+430|O ficheiro transferido é inválido. Tenta novamente
+431|Código substituído ✅ Podes mostrá-lo com impressão digital ou reconhecimento facial
+432|O novo código tem de ter {rule}.
+433|Código atual
+434|O código atual não está correto.
+435|O código secreto não é válido ({rule})
+436|O código secreto tem de ter 4 dígitos
+437|O código secreto está incorreto.
+438|O código secreto que escreveste está incorreto.
+439|O teu código secreto
+440|O teu código secreto, para confirmar
+441|O código já não é válido. Pede um novo código aos teus pais.
+442|O código não está correto. Verifica novamente ou pergunta aos teus pais.
+443|O código não está correto. Restam {left} tentativas.
+444|O código do e-mail
+445|O código do e-mail atual está errado ou expirou.
+446|O código está oculto
+447|O código fica oculto e só é mostrado com impressão digital ou reconhecimento facial.
+448|O código foi atualizado. Entra com o novo código a partir do teu dispositivo.
+449|O código tem de ter {rule}
+450|O código tem de ter {rule}.
+451|O código tem de ter 4 dígitos
+452|O código tem de ter pelo menos 4 dígitos, até {max}
+453|O código está errado ou expirou.
+454|O código foi alterado ✅
+455|O código de {name} foi atualizado
+456|Os códigos não coincidiam. Vamos recomeçar.
+457|O Cofre Familiar
+458|O cofre foi apagado
+459|הקופה נפתחה! כתבו את שמות הילדים. נער/ה או הורה נוסף אפשר להוסיף למטה, או אחר כך מלשונית “ניהול”.
+460|A compensação foi enviada a um dos pais para aprovação ⏳
+461|A compensação liquida dívidas dos dois lados até {amount}. A diferença fica como está e o histórico é mantido.
+462|Cria um cofre familiar
+463|Escreve o teu código secreto.
+464|Criar o cofre
+465|Criar um cofre familiar
+466|Próximo registo: {date}
+467|O registo periódico foi parado
+468|O registo periódico foi adicionado ✅
+469|הרישום יימחק. אפשר לכתוב למי שרשם למה זה לא נכון.
+470|O registo foi recusado
+471|O registo foi apagado
+472|Lista
+473|A lista foi copiada
+474|A partilha está em pausa. Os teus pais não veem nada.
+475|Concluir a troca e entrar
+476|O nome foi atualizado ✅
+477|Taxas atualizadas {when}
+478|Ajustes (devoluções registadas sem uma dívida específica)
+479|O pagamento em {base} será convertido à taxa de hoje e deduzido da dívida na sua própria moeda. Depois de guardar, esta taxa fica registada e não muda.
+480|É a mesma pessoa que “{name}”?
+481|É a mesma pessoa? Se sim, que nome usar?
+482|Isto é uma demonstração, por isso não se pode alterar nada. Cria o teu próprio cofre!
+483|Este é o teu e-mail
+484|Este é o código que vais usar em cada entrada. Convém memorizá-lo.
+485|Isto apagará todo o cofre: todas as pessoas e todos os registos, e não pode ser desfeito.\nPara confirmar, escreve o nome da família: {name}
+486|Reconhecimento facial ou impressão digital
+487|Masculino
+488|Um(a) amigo(a) deve-me dinheiro
+489|Amigo(a) adicionado(a) ✅
+490|Os amigos devem-me dinheiro
 491|Os amigos adicionam o(a) adolescente com este e-mail. Não lhe é enviado nada, serve apenas para pesquisa.
-492|Os amigos são adicionados por endereço de e-mail. Verás tudo o que for registado no resumo.
-493|Amigos: {names}
-494|Dívida
-495|Dívida em {cur}
-496|Dívidas
-497|Novas dívidas face ao mês anterior: {diff}
-498|Mês seguinte
-499|Mês anterior
-500|De volta na lista em aberto
-501|Voltar
-502|Voltar à família
-503|Voltar à família {family}
-504|deve
-505|Tem de ficar pelo menos um pai ou mãe na família
+492|Os amigos adicionam o(a) adolescente com este e-mail. Não lhe é enviado nada, serve apenas para pesquisa.
+493|Os amigos adicionam o(a) adolescente com este e-mail. Não lhe é enviado nada, serve apenas para pesquisa.
+494|Os amigos são adicionados por endereço de e-mail. Verás tudo o que for registado no resumo.
+495|Amigos: {names}
+496|Dívida
+497|Dívida em {cur}
+498|Dívidas
+499|Novas dívidas face ao mês anterior: {diff}
+500|Mês seguinte
+501|Mês anterior
+502|De volta na lista em aberto
+503|Voltar
+504|Voltar à família
+505|Voltar à família {family}
 506|deve
-507|deve-me
-508|Devem-me
-509|Devem-me dinheiro
-510|deve
-511|Pesquisar por nome, nota ou valor
-512|חסכת עד שהגעת ליעד
-513|A carregar…
-514|Ainda não definida pelo pai/mãe
-515|Vão perder as permissões de pai/mãe. Depois será exigida verificação com reconhecimento facial ou impressão digital.
-516|{day}
-517|Dia do mês inválido (1 a 28)
-518|Dia inválido
-519|A sair em segurança…
-520|Demasiados pedidos de código. Tenta novamente dentro de alguns minutos
-521|Demasiados pedidos. Tenta novamente mais tarde
-522|Demasiadas famílias novas neste momento. Tenta novamente dentro de alguns minutos
-523|Demasiadas tentativas. Tenta novamente dentro de um minuto.
-524|Demasiadas tentativas. Tenta novamente dentro de alguns minutos.
-525|Demasiados registos. Tenta novamente mais tarde
-526|Da dívida restarão {left}.
-527|Criança
-528|Criança
+507|Tem de ficar pelo menos um pai ou mãe na família
+508|deve
+509|deve-me
+510|Devem-me
+511|Devem-me dinheiro
+512|deve
+513|Pesquisar por nome, nota ou valor
+514|חסכת עד שהגעת ליעד
+515|A carregar…
+516|Ainda não definida pelo pai/mãe
+517|Vão perder as permissões de pai/mãe. Depois será exigida verificação com reconhecimento facial ou impressão digital.
+518|{day}
+519|Dia do mês inválido (1 a 28)
+520|Dia inválido
+521|A sair em segurança…
+522|Demasiados pedidos de código. Tenta novamente dentro de alguns minutos
+523|Demasiados pedidos. Tenta novamente mais tarde
+524|Demasiadas famílias novas neste momento. Tenta novamente dentro de alguns minutos
+525|Demasiadas tentativas. Tenta novamente dentro de um minuto.
+526|Demasiadas tentativas. Tenta novamente dentro de alguns minutos.
+527|Demasiados registos. Tenta novamente mais tarde
+528|Da dívida restarão {left}.
 529|Criança
-530|יעד חדש
-531|יעדי חיסכון
-532|יעדי חיסכון הם לילדים ולנוער
-533|Terminar sessão
-534|Sair da demonstração
-535|Vão receber todas as permissões de pai/mãe: ver tudo, aprovar, apagar e gerir a família. Depois será exigida verificação com reconhecimento facial ou impressão digital.
-536|Verde + amarelo
-537|Há pessoas que te devem dinheiro e a quem também deves. Compensar fecha as dívidas mútuas e deixa só a diferença.
-538|O caderno pessoal tem dívidas com nomes de familiares
-539|Há demasiados pedidos de adesão pendentes. Pede aos pais que tratem deles
-540|Há demasiadas dívidas em aberto entre os dois. Liquida dívidas antes de adicionar mais.
-541|Há demasiados registos ativos entre os dois. Liquida dívidas antes de adicionar mais.
-542|Há um saldo em aberto entre vocês. Liquida-o primeiro
-543|Há aqui dívidas noutra moeda: serão compensadas à taxa de hoje e essa taxa será guardada.
-544|“{old}” já está no caderno.
-545|Já há muitos amigos na lista
-546|יש כבר הרבה יעדים
-547|Já há muitos registos periódicos
-548|Tenho um código de família
-549|Tens um código de família? Entra no cofre
-550|Tens um código de família? Escreve-o aqui. Pede aos teus pais o código de adesão da família.
-551|Só há um pai ou mãe na família. Recomendamos adicionar outro e verificar um e-mail, para poder recuperar o acesso se o dispositivo se perder.
-552|Existem registos em nome desta pessoa. Apaga-os primeiro
-553|Saldos
-554|Aqui registam-se dívidas com amigos: quem comprou para quem e quem deve devolver. O(a) teu(tua) amigo(a) também precisa da aplicação e os teus pais têm de aprovar.
-555|כאן רושמים מי חייב למי. לוחצים על אחד הכפתורים הגדולים, בוחרים אדם וסכום, וזהו.
-556|Desativado
-557|{"one":"Já 1 dia","other":"Já {n} dias"}
-558|Já existe alguém com este nome
-559|Já existe alguém com este nome. Escolhe-o na lista ou altera o nome
-560|Já existe alguém com este nome. Recusa o pedido
-561|Este perfil já tem um código
-562|Quase lá…
-563|Já usam o cofre?
-564|Para {need}, é preciso um dispositivo com impressão digital ou reconhecimento facial configurados.
-565|Para trocar de dispositivo a partir deste telemóvel é preciso um e-mail verificado. Adiciona um e-mail em «A minha conta».
-566|Para entrar como progenitor é preciso associar este dispositivo com um código de associação de outro progenitor. Toca em «Dispositivo novo / Trocar de dispositivo».
-567|Para entrar, tem de aceitar que os seus pais vejam o seu caderno pessoal, apenas para consulta
-568|Para definir um novo código a {name}, enviamos um código de verificação para {email}.
-569|Para associar um dispositivo, este tem de ter impressão digital ou reconhecimento facial configurados.
-570|Para que uma criança não se torne progenitor, adicionar alguém como adolescente ou progenitor é aprovado por um progenitor. Vai abrir-se agora um pedido de verificação do dispositivo.
-571|Para que uma criança não se torne progenitor, a mudança de função é aprovada por um progenitor. Vai abrir-se agora um pedido de verificação do dispositivo.
-572|Silva
-573|Azul + roxo
-574|Desativar amigos
-575|Todas as dívidas em aberto
-576|Toda a família
-577|Todos os valores são mostrados nesta moeda. Podes registar uma dívida noutra moeda (por exemplo, 100 dólares) e, quando for paga, é convertida à taxa desse dia.
-578|Todos os meses
-579|Cada {day}
-580|Com que frequência
-581|כל רישום שלכם מחכה לאישור של הורה, ורק אחרי זה הוא נכנס לחשבון. אם טעיתם, אפשר לבטל תוך 10 דקות.
-582|Todas as semanas
-583|Quanto devolveu {from} a {to}?
-584|Quanto devolveu {from} a {to}?
+530|Criança
+531|Criança
+532|יעד חדש
+533|יעדי חיסכון
+534|יעדי חיסכון הם לילדים ולנוער
+535|Terminar sessão
+536|Sair da demonstração
+537|Vão receber todas as permissões de pai/mãe: ver tudo, aprovar, apagar e gerir a família. Depois será exigida verificação com reconhecimento facial ou impressão digital.
+538|Verde + amarelo
+539|Há pessoas que te devem dinheiro e a quem também deves. Compensar fecha as dívidas mútuas e deixa só a diferença.
+540|O caderno pessoal tem dívidas com nomes de familiares
+541|Há demasiados pedidos de adesão pendentes. Pede aos pais que tratem deles
+542|Há demasiadas dívidas em aberto entre os dois. Liquida dívidas antes de adicionar mais.
+543|Há demasiados registos ativos entre os dois. Liquida dívidas antes de adicionar mais.
+544|Há um saldo em aberto entre vocês. Liquida-o primeiro
+545|Há aqui dívidas noutra moeda: serão compensadas à taxa de hoje e essa taxa será guardada.
+546|“{old}” já está no caderno.
+547|Já há muitos amigos na lista
+548|יש כבר הרבה יעדים
+549|Já há muitos registos periódicos
+550|Tenho um código de família
+551|Tens um código de família? Entra no cofre
+552|Tens um código de família? Escreve-o aqui. Pede aos teus pais o código de adesão da família.
+553|Só há um pai ou mãe na família. Recomendamos adicionar outro e verificar um e-mail, para poder recuperar o acesso se o dispositivo se perder.
+554|Existem registos em nome desta pessoa. Apaga-os primeiro
+555|Saldos
+556|Aqui registam-se dívidas com amigos: quem comprou para quem e quem deve devolver. O(a) teu(tua) amigo(a) também precisa da aplicação e os teus pais têm de aprovar.
+557|כאן רושמים מי חייב למי. לוחצים על אחד הכפתורים הגדולים, בוחרים אדם וסכום, וזהו.
+558|Desativado
+559|{"one":"Já 1 dia","other":"Já {n} dias"}
+560|Já existe alguém com este nome
+561|Já existe alguém com este nome. Escolhe-o na lista ou altera o nome
+562|Já existe alguém com este nome. Recusa o pedido
+563|Este perfil já tem um código
+564|Quase lá…
+565|Já usam o cofre?
+566|Para {need}, é preciso um dispositivo com impressão digital ou reconhecimento facial configurados.
+567|Para trocar de dispositivo a partir deste telemóvel é preciso um e-mail verificado. Adiciona um e-mail em «A minha conta».
+568|Para entrar como progenitor é preciso associar este dispositivo com um código de associação de outro progenitor. Toca em «Dispositivo novo / Trocar de dispositivo».
+569|Para entrar, tem de aceitar que os seus pais vejam o seu caderno pessoal, apenas para consulta
+570|Para definir um novo código a {name}, enviamos um código de verificação para {email}.
+571|Para associar um dispositivo, este tem de ter impressão digital ou reconhecimento facial configurados.
+572|Para que uma criança não se torne progenitor, adicionar alguém como adolescente ou progenitor é aprovado por um progenitor. Vai abrir-se agora um pedido de verificação do dispositivo.
+573|Para que uma criança não se torne progenitor, a mudança de função é aprovada por um progenitor. Vai abrir-se agora um pedido de verificação do dispositivo.
+574|Silva
+575|Azul + roxo
+576|Desativar amigos
+577|Todas as dívidas em aberto
+578|Toda a família
+579|Todos os valores são mostrados nesta moeda. Podes registar uma dívida noutra moeda (por exemplo, 100 dólares) e, quando for paga, é convertida à taxa desse dia.
+580|Todos os meses
+581|Cada {day}
+582|Com que frequência
+583|כל רישום שלכם מחכה לאישור של הורה, ורק אחרי זה הוא נכנס לחשבון. אם טעיתם, אפשר לבטל תוך 10 דקות.
+584|Todas as semanas
 585|Quanto devolveu {from} a {to}?
-586|Quanto me deve {name}?
-587|Quanto me deve {name}?
+586|Quanto devolveu {from} a {to}?
+587|Quanto devolveu {from} a {to}?
 588|Quanto me deve {name}?
-589|Quanto me pagou {name}?
-590|Quanto me pagou {name}?
+589|Quanto me deve {name}?
+590|Quanto me deve {name}?
 591|Quanto me pagou {name}?
-592|Quanto devo a {to}?
-593|Quanto devo a {to}?
+592|Quanto me pagou {name}?
+593|Quanto me pagou {name}?
 594|Quanto devo a {to}?
-595|כמה צריך? ({cur})
-596|Quanto paguei a {to}?
-597|Quanto?
-598|Sim
-599|Sim, a mesma pessoa. Manter “{n}”
-600|Sim, a mesma pessoa. Mudar tudo para “{n}”
-601|Sim, juntar sob “{n}” (nome no caderno)
-602|Sim, juntar sob “{n}” (nome no cofre)
-603|Sim, continuar
-604|Sim, mover para o cofre
-605|Sim, compensar
-606|Sim, guardar a dívida
-607|Sim, guardar o pagamento
-608|Entrar
-609|Entrada de progenitor
-610|Escreva o seu nome
-611|Escreve o e-mail que o(a) teu(tua) amigo(a) registou com os pais na aplicação. É-lhe enviado um pedido e tem de aprovar. Só funciona se o(a) teu(tua) amigo(a) também tiver o modo amigos.
-612|Escreve o código secreto
-613|Escreve o código outra vez, para confirmar
-614|Escreve o nome
-615|Escreva o apelido da família
-616|Escreve um valor
-617|Escreve um valor maior que zero.
-618|Outro endereço
-619|O e-mail não parece válido
-620|O endereço de e-mail não é válido
-621|Endereço de e-mail
-622|Novo endereço de e-mail
-623|Endereço de e-mail inválido
-624|Laranja + rosa
-625|Não
-626|Não conseguimos ativar as notificações neste dispositivo
-627|Não foi possível ligar agora. Este ecrã desaparece sozinho quando a ligação voltar e, entretanto, o caderno pessoal funciona sem ligação.
-628|Não foi possível associar o dispositivo. Tenta novamente.
-629|Desconhecido
-630|Incorreto
-631|Nada encontrado para “{q}”
-632|Não foi encontrado um instalador no telemóvel. Podes transferir o ficheiro diretamente do GitHub
-633|Não foi registado nada este mês.
-634|Não, são duas pessoas diferentes
-635|Não, é outra pessoa
-636|Não, deixar no caderno
-637|Para que dívida é a devolução?
-638|Para confirmar, enviamos um código de verificação para {email}.
-639|Repor e deixar que escolha no próximo acesso
-640|Cancelar o que registaste?
-641|לדחות את הרישום?
-642|Recusar? O registo será apagado.
-643|להוסיף גם נער/ה או הורה נוסף
-644|Um novo pai/mãe precisa de um código secreto
-645|Para um pai/mãe tem de ser definido um código (não se pode repor para que escolha sozinho)
-646|Só para pais. Quem cria o cofre é o primeiro pai/mãe. Depois recebes um código de adesão para toda a família e defines o papel de cada pessoa: criança, adolescente ou pai/mãe.
-647|Substituir o código? Quem já está dentro fica, mas o código antigo deixa de funcionar, e os outros dispositivos que guardaram a família terão de introduzir o novo código.
-648|Trocar de dispositivo
-649|A troca do próprio dispositivo tem outro processo
-650|Emitir um código de associação
-651|Remover {name} dos amigos?
-652|Remover {name} da família?
-653|Movê-los para o cofre familiar em nome de {name}?
-654|Parar o registo periódico? O que já foi registado fica.
-655|Mostrar também o que está pago na página principal
-656|Toca para ver o detalhe do cálculo
-657|Desativar o modo amigos de {name}? Deixará de ser possível adicionar novos registos com amigos.
-658|Não especificado
-659|למה? (לא חובה)
-660|Apagar {n} registos pagos?
-661|למחוק את היעד "{name}"?
-662|Apagar o registo de {name}?
-663|Apagar este registo?
-664|Apagar todos os registos do caderno? Não pode ser desfeito.
-665|A quem
-666|A quem devo dinheiro?
-667|A quem devo dinheiro?
-668|A quem devo dinheiro?
-669|A quem?
-670|למשל: אופניים
-671|Por exemplo: gelado, bilhete de cinema
-672|Desligar o dispositivo? Terá de introduzir novamente o código de adesão.
-673|A moeda da família é definida pelo país. Podes alterá-la depois no separador Gestão.
-674|Como o dispositivo
-675|Por moeda
-676|Por nome (A-Z)
-677|Apenas para consulta. O caderno fica com {name} e não pode ser alterado a partir daqui.
-678|Só leitura. Cada registo com um(a) amigo(a) também aguarda a aprovação dele(a).
-679|ver o código de adesão
-680|alterar um papel
-681|Equilibrado: ninguém deve nada
-682|A verificar…
-683|tem a receber
-684|tem a receber
-685|tem a receber
-686|País não suportado
-687|a política de privacidade
-688|Política de privacidade
-689|País de residência
-690|O que os adolescentes registam com amigos
-691|O que está em aberto
-692|Desde hoje
-693|Ativado
-694|A transferir atualização...
-695|A transferir atualização... {percent}%
-696|Apagar
-697|Apagar todo o cofre
-698|Vais mudar de telemóvel? Toca aqui, confirma com a impressão digital e será enviado um código para o teu e-mail. Depois abre o cofre no telemóvel novo, escolhe o teu nome e toca em «Dispositivo novo / Trocar de dispositivo». O telemóvel antigo ficará sem sessão.
-699|Eliminado
-700|Moeda
-701|Moeda não suportada
-702|מי הילדים שלך?
-703|Quem deve mais
-704|Quem me deve dinheiro?
-705|Quem deve a quem
-706|Quem deve (quem paga)
-707|Quem me deve dinheiro?
-708|Quem está a entrar?
-709|Quem alterou o quê e quando, nos últimos 6 meses.
-710|E-mail para recuperação do código
-711|E-mail para recuperar o código (opcional)
-712|O e-mail é só para pais
-713|Localização e moeda
-714|Alguém
-715|Dispositivo
-716|Dispositivo novo / Trocar de dispositivo
-717|O dispositivo não existe
-718|Dispositivos ligados
-719|Dispositivos que guardaram a família. Um cartão sem utilização durante 180 dias expira sozinho.
-720|ממתין לאישור: {amount}
-721|À espera da aprovação de um dos pais em {name}. Depois de aprovarem, escolhe o teu nome no ecrã de entrada e escreve o código secreto que escolheste.
-722|À espera da aprovação de um dos pais. Depois de aprovarem, escolhe o teu nome no ecrã de entrada e escreve o código secreto que escolheste.
-723|Subscrição de notificações inválida
-724|Entrega o código a {name} em mão, não por mensagem. É válido 30 minutos e uma só vez.
-725|Chave inválida
-726|Modo amigos
-727|Modo amigos aprovado ✅
-728|O modo amigos é só para adolescentes
-729|Modo amigos desativado
-730|Modo amigos para {name}
-731|O modo amigos ainda não foi aprovado pelos pais
-732|Entrar no cofre
-733|Estás a entrar no cofre de {name}. Um pai/mãe da família tem de aprovar a adesão e define se és criança, adolescente ou pai/mãe.
-734|Aspeto
-735|Algo correu mal
-736|Algo correu mal. Tenta novamente.
-737|Família
-738|Outra família
-739|Mais famílias
-740|Família {name}
-741|Gestão
-742|Tentar novamente
-743|Tentaste demasiadas vezes. Tenta novamente dentro de {wait}.
-744|Limpar pesquisa
-745|Desligar
-746|נכנס בלי קוד
-747|Apagado
-748|Foram encontrados neste dispositivo dados da versão anterior: {people} pessoas e {entries} registos. Transferi-los para o servidor?
+595|Quanto devo a {to}?
+596|Quanto devo a {to}?
+597|כמה צריך? ({cur})
+598|Quanto paguei a {to}?
+599|Quanto?
+600|Sim
+601|Sim, a mesma pessoa. Manter “{n}”
+602|Sim, a mesma pessoa. Mudar tudo para “{n}”
+603|Sim, juntar sob “{n}” (nome no caderno)
+604|Sim, juntar sob “{n}” (nome no cofre)
+605|Sim, continuar
+606|Sim, mover para o cofre
+607|Sim, compensar
+608|Sim, guardar a dívida
+609|Sim, guardar o pagamento
+610|Entrar
+611|Entrada de progenitor
+612|Escreva o seu nome
+613|Escreve o e-mail que o(a) teu(tua) amigo(a) registou com os pais na aplicação. É-lhe enviado um pedido e tem de aprovar. Só funciona se o(a) teu(tua) amigo(a) também tiver o modo amigos.
+614|Escreve o código secreto
+615|Escreve o código outra vez, para confirmar
+616|Escreve o nome
+617|Escreva o apelido da família
+618|Escreve um valor
+619|Escreve um valor maior que zero.
+620|Outro endereço
+621|O e-mail não parece válido
+622|O endereço de e-mail não é válido
+623|Endereço de e-mail
+624|Novo endereço de e-mail
+625|Endereço de e-mail inválido
+626|Laranja + rosa
+627|Não
+628|Não conseguimos ativar as notificações neste dispositivo
+629|Não foi possível ligar agora. Este ecrã desaparece sozinho quando a ligação voltar e, entretanto, o caderno pessoal funciona sem ligação.
+630|Não conseguimos conectar o e-mail. Você pode tentar novamente em "Minha conta".
+631|Não foi possível associar o dispositivo. Tenta novamente.
+632|Desconhecido
+633|Incorreto
+634|Nada encontrado para “{q}”
+635|Não foi encontrado um instalador no telemóvel. Podes transferir o ficheiro diretamente do GitHub
+636|Não foi registado nada este mês.
+637|Não, são duas pessoas diferentes
+638|Não, é outra pessoa
+639|Não, deixar no caderno
+640|Para que dívida é a devolução?
+641|Para confirmar, enviamos um código de verificação para {email}.
+642|Repor e deixar que escolha no próximo acesso
+643|Cancelar o que registaste?
+644|לדחות את הרישום?
+645|Recusar? O registo será apagado.
+646|להוסיף גם נער/ה או הורה נוסף
+647|Um novo pai/mãe precisa de um código secreto
+648|Para um pai/mãe tem de ser definido um código (não se pode repor para que escolha sozinho)
+649|Só para pais. Quem cria o cofre é o primeiro pai/mãe. Depois recebes um código de adesão para toda a família e defines o papel de cada pessoa: criança, adolescente ou pai/mãe.
+650|Alterar o código
+651|Substituir o código? Quem já está dentro fica, mas o código antigo deixa de funcionar, e os outros dispositivos que guardaram a família terão de introduzir o novo código.
+652|Trocar de dispositivo
+653|A troca do próprio dispositivo tem outro processo
+654|Emitir um código de associação
+655|Remover {name} dos amigos?
+656|Remover {name} da família?
+657|Remover um dos pais
+658|Movê-los para o cofre familiar em nome de {name}?
+659|Parar o registo periódico? O que já foi registado fica.
+660|Mostrar também o que está pago na página principal
+661|Toca para ver o detalhe do cálculo
+662|Desativar o modo amigos de {name}? Deixará de ser possível adicionar novos registos com amigos.
+663|Não especificado
+664|למה? (לא חובה)
+665|Apagar {n} registos pagos?
+666|למחוק את היעד "{name}"?
+667|Excluir o cofrinho
+668|Apagar o registo de {name}?
+669|Apagar este registo?
+670|Apagar todos os registos do caderno? Não pode ser desfeito.
+671|A quem
+672|A quem devo dinheiro?
+673|A quem devo dinheiro?
+674|A quem devo dinheiro?
+675|A quem?
+676|למשל: אופניים
+677|Por exemplo: gelado, bilhete de cinema
+678|Desligar o dispositivo? Terá de introduzir novamente o código de adesão.
+679|A moeda da família é definida pelo país. Podes alterá-la depois no separador Gestão.
+680|Como o dispositivo
+681|Por moeda
+682|Por nome (A-Z)
+683|Apenas para consulta. O caderno fica com {name} e não pode ser alterado a partir daqui.
+684|Só leitura. Cada registo com um(a) amigo(a) também aguarda a aprovação dele(a).
+685|ver o código de adesão
+686|alterar um papel
+687|Equilibrado: ninguém deve nada
+688|A verificar…
+689|tem a receber
+690|tem a receber
+691|tem a receber
+692|País não suportado
+693|a política de privacidade
+694|Política de privacidade
+695|País de residência
+696|O que os adolescentes registam com amigos
+697|O que está em aberto
+698|Desde hoje
+699|Ativado
+700|A transferir atualização...
+701|A transferir atualização... {percent}%
+702|Apagar
+703|A exclusão do cofrinho não pode ser desfeita, por isso um dos pais precisa aprovar. Agora será aberto um pedido de verificação do dispositivo.
+704|Apagar todo o cofre
+705|Vais mudar de telemóvel? Toca aqui, confirma com a impressão digital e será enviado um código para o teu e-mail. Depois abre o cofre no telemóvel novo, escolhe o teu nome e toca em «Dispositivo novo / Trocar de dispositivo». O telemóvel antigo ficará sem sessão.
+706|Eliminado
+707|Moeda
+708|Moeda não suportada
+709|מי הילדים שלך?
+710|Quem deve mais
+711|Quem me deve dinheiro?
+712|Quem deve a quem
+713|Quem deve (quem paga)
+714|Quem me deve dinheiro?
+715|Quem está a entrar?
+716|Quem alterou o quê e quando, nos últimos 6 meses.
+717|E-mail para recuperação do código
+718|E-mail para recuperar o código (opcional)
+719|O e-mail é só para pais
+720|Localização e moeda
+721|Alguém
+722|Dispositivo
+723|Dispositivo novo / Trocar de dispositivo
+724|O dispositivo não existe
+725|Dispositivos ligados
+726|Dispositivos que guardaram a família. Um cartão sem utilização durante 180 dias expira sozinho.
+727|ממתין לאישור: {amount}
+728|À espera da aprovação de um dos pais em {name}. Depois de aprovarem, escolhe o teu nome no ecrã de entrada e escreve o código secreto que escolheste.
+729|À espera da aprovação de um dos pais. Depois de aprovarem, escolhe o teu nome no ecrã de entrada e escreve o código secreto que escolheste.
+730|Subscrição de notificações inválida
+731|Entrega o código a {name} em mão, não por mensagem. É válido 30 minutos e uma só vez.
+732|Chave inválida
+733|Modo amigos
+734|Modo amigos aprovado ✅
+735|O modo amigos é só para adolescentes
+736|Modo amigos desativado
+737|Modo amigos para {name}
+738|O modo amigos ainda não foi aprovado pelos pais
+739|Entrar no cofre
+740|Estás a entrar no cofre de {name}. Um pai/mãe da família tem de aprovar a adesão e define se és criança, adolescente ou pai/mãe.
+741|Aspeto
+742|Algo correu mal
+743|Algo correu mal. Tenta novamente.
+744|Família
+745|Outra família
+746|Mais famílias
+747|Família {name}
+748|Gestão
 749|Tentar novamente
-750|Tente novamente
-751|Adolescente
-752|Adolescente
-753|Adolescente
-754|Feminino
-755|Parece que o dispositivo está em {name}. Moram em {name}?
-756|Dívidas registadas
-757|Restam {left} de {total}
-758|Desta dívida restam {left}.
-759|É enviado um código quando um código secreto é alterado ou reposto, e também um alerta quando o código de alguém da família fica bloqueado.
-760|Enviado a um dos pais para aprovação ⏳
-761|Enviado ao(à) amigo(a) para aprovação ⏳
-762|Foi enviado um código para o teu e-mail verificado. Depois de o confirmares, a troca só será possível daqui a 24 horas; entretanto, tu e os outros progenitores recebem uma notificação e podem cancelar.
-763|Fechar
-764|Ordem dos registos
-765|Total
-766|Total em {cur} à taxa de hoje
-767|Marcado como pago
-768|Concluído
-769|Resumo mensal
-770|Valor ({cur})
-771|Valor inválido
-772|Valor inválido. Entre amigos podes registar até 500 xéqueis de cada vez
-773|Ainda não foi registado nada.
-774|Já está em curso uma atualização
-775|Atualizar
-776|Mais
-777|Ainda não há mais ninguém na família. Um pai/mãe tem de os adicionar.
-778|Ainda não há amigos aprovados
-779|Ainda não há amigos aprovados. Adiciona um(a) amigo(a) pelo e-mail.
-780|Ainda não há amigos. Adiciona um(a) amigo(a) pelo e-mail.
-781|עוד אין יעדי חיסכון.
-782|A lista ainda está vazia. Toca num dos botões para começar.
-783|Ainda não há registos periódicos.
-784|Ainda não há alterações no registo.
-785|Nenhum pai ou mãe abriu ainda o caderno
-786|Mais avatares
-787|Ainda não
-788|Ainda não escolheu código
-789|Ainda não escolheu código
-790|Ainda não escolheu código
-791|Ainda não foi registado nada com amigos.
-792|Ainda não foi registado nada.
-793|Ainda não foi enviada nenhuma cópia
-794|Ainda não passaram 24 horas desde o pedido.
-795|Mais ações
-796|Última atualização: {when}
-797|Aspeto
-798|Por {debt} (= {covers} à taxa de hoje).
-799|Por {debt}.
-800|על מה חוסכים?
-801|Para quê? (podes saltar)
-802|Para quê? (opcional)
-803|Para: {debt}
-804|Com quem?
-805|Enorme
-806|A verificação expirou. Tenta novamente.
-807|Detalhe do cálculo
-808|Ação inválida
-809|Perfil
-810|Cores do ecrã
-811|Cores néon
-812|O tratamento já está definido e não pode ser alterado
-813|Forma de tratamento guardada ✅
-814|Tratamento
-815|Tratamento:
-816|Som
-817|Viram o caderno:
-818|Cria um cofre familiar: todos veem a mesma conta e as dívidas atualizam-se para todos.
-819|É necessária confirmação com impressão digital ou reconhecimento facial
-820|Precisas do código de família para entrar nesta família.
-821|A aplicação precisa de permissão para instalar atualizações: nas definições que aparecerem, ativa «Permitir desta origem» e toca novamente em «Atualizar»
-822|É preciso aceitar os termos de utilização e a política de privacidade
-823|Tens de entrar novamente
-824|Tens de entrar novamente com o código da família
-825|É preciso associar o dispositivo de novo
-826|Tens de associar este telemóvel uma vez.
-827|É preciso associar o dispositivo
-828|Tens de associar este dispositivo e este navegador uma vez.
-829|É preciso um e-mail verificado para trocar de dispositivo
-830|Definir o código
-831|Definir o código e entrar
-832|Definir o tratamento…
-833|קביעת קוד סודי
-834|Um código para todos. Quem entra com ele entra como criança. Depois pode mudar-se em «Membros da família» para adolescente ou pai/mãe, com aprovação por impressão digital ou reconhecimento facial.
-835|Código do e-mail
-836|O código do e-mail está errado ou expirou.
-837|O código de verificação está errado ou expirou.
-838|Código de adesão ao cofre de {name}: {code}
-839|Código de adesão da família
-840|O código de adesão da família só é mostrado com impressão digital ou reconhecimento facial.
-841|O código da família mudou. Pede um novo código aos teus pais.
-842|O código de associação
-843|Novo código
-844|Novo código ({rule})
-845|Código do e-mail atual
-846|Código da família
-847|Código secreto ({rule}; mais longo = mais seguro)
-848|Código secreto (obrigatório para pais, {rule})
-849|קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)
-850|קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק
-851|Novo código secreto
-852|Código secreto para {name}
-853|O teu próprio código secreto (4 dígitos)
-854|Código de associação
-855|O código de associação é só para progenitores
-856|Código de associação para {name}
-857|Código de associação para um dispositivo
-858|Códigos de adesão
-859|Primeiro é preciso definir um código secreto a {name}
-860|{amount} compensados com {name} ✅
-861|Um cofre familiar só pode ser criado por quem tem mais de 18 anos
-862|Pequeno
-863|Recebi
-864|Recebi a diferença ({amount})
-865|Recebi dinheiro
-866|Compensação mútua
-867|Compensar dívidas mútuas
-868|Compensar dívidas mútuas ({amount})
-869|O link de convite adiciona como filho(a) quem o abrir. Partilha-o só com a tua família.
-870|Associação do dispositivo
-871|Associar este dispositivo e entrar
-872|Associar o dispositivo a um progenitor
-873|Ir para a seção
-874|Li e aceito {terms} e {privacy}
-875|Li e aceito {terms} e {privacy}
-876|Li e aceito {terms} e {privacy}
-877|Normal
-878|Só um momento, a entrar…
-879|Só um momento, a sair…
-880|Queres juntá-los no cofre familiar?
-881|Queres que os devedores vejam isto?
-882|Vibração
-883|Registar
-884|Registar uma devolução
-885|Regista uma dívida automaticamente, semanal ou mensalmente, sem a escreveres de cada vez.
-886|Novo registo periódico
-887|Atualizar a aplicação
-888|Só os pais podem fazer isto
-889|רק הורים יכולים לפתוח יעד למישהו אחר
-890|Só os pais podem definir o tratamento
-891|Apenas para confirmar que quem cria o cofre tem mais de 18 anos. Não é mostrado a ninguém.
-892|Registou um reembolso
-893|Registou uma dívida
-894|Regista uma dívida tua no caderno
-895|שבוע נקי
-896|שבוע שלם בלי חובות פתוחים
-897|Pago na totalidade ✅
-898|Pagos ({n})
-899|A guardar tudo…
-900|Libertar o bloqueio
-901|Paguei
-902|Paguei a diferença ({amount})
-903|Mudou o nome da família
-904|Alterou o país e a moeda
-905|Alterou um nome
-906|Alterou uma função
-907|Alterar
-908|Alterar a moeda só muda o símbolo. Os valores em si não são convertidos.
-909|Alterar o código secreto
-910|Mudar o nome da família
-911|Partilhar
-912|Esqueci-me do código
-913|Enviámos um código para {email}. Escreve-o, juntamente com o novo endereço. Só substituirá o atual depois de verificado.
-914|Enviámos um código de 6 dígitos para {email}. É válido durante 10 minutos.
-915|Meus
-916|Enviar pedido
-917|Enviar código de verificação
-918|Enviar o código por e-mail
-919|Enviar um código para o e-mail atual
-920|Nome
-921|שם היעד חייב להיות עד 40 תווים
-922|Nome da família
-923|O nome da família não corresponde
-924|O nome da família é inválido
-925|Nome inválido
-926|Nomes conhecidos
-927|Guardar
-928|uma hora
-929|{"one":"{n} hora","other":"{n} horas"}
-930|As taxas de câmbio ainda não foram carregadas. Tenta novamente daqui a pouco.
-931|2 horas
-932|Idioma
-933|Data inválida
-934|Data de nascimento
-935|Data de nascimento inválida
-936|Sensação
-937|os termos de utilização
-938|Termos de utilização
-939|Papel
-940|Papel:
-941|Menu principal
-942|Pagamento de uma dívida noutra moeda
-943|🆘 O dispositivo antigo perdeu-se ou avariou
+750|Tentaste demasiadas vezes. Tenta novamente dentro de {wait}.
+751|Limpar pesquisa
+752|Desligar
+753|נכנס בלי קוד
+754|Apagado
+755|Foram encontrados neste dispositivo dados da versão anterior: {people} pessoas e {entries} registos. Transferi-los para o servidor?
+756|Tentar novamente
+757|Tente novamente
+758|Adolescente
+759|Adolescente
+760|Adolescente
+761|Feminino
+762|Parece que o dispositivo está em {name}. Moram em {name}?
+763|Dívidas registadas
+764|Restam {left} de {total}
+765|Desta dívida restam {left}.
+766|É enviado um código quando um código secreto é alterado ou reposto, e também um alerta quando o código de alguém da família fica bloqueado.
+767|Enviado a um dos pais para aprovação ⏳
+768|Enviado ao(à) amigo(a) para aprovação ⏳
+769|Foi enviado um código para o teu e-mail verificado. Depois de o confirmares, a troca só será possível daqui a 24 horas; entretanto, tu e os outros progenitores recebem uma notificação e podem cancelar.
+770|Fechar
+771|Ordem dos registos
+772|Total
+773|Total em {cur} à taxa de hoje
+774|Marcado como pago
+775|Concluído
+776|Resumo mensal
+777|Valor ({cur})
+778|Valor inválido
+779|Valor inválido. Entre amigos podes registar até 500 xéqueis de cada vez
+780|Ainda não foi registado nada.
+781|Já está em curso uma atualização
+782|Atualizar
+783|Mais
+784|Ainda não há mais ninguém na família. Um pai/mãe tem de os adicionar.
+785|Ainda não há amigos aprovados
+786|Ainda não há amigos aprovados. Adiciona um(a) amigo(a) pelo e-mail.
+787|Ainda não há amigos. Adiciona um(a) amigo(a) pelo e-mail.
+788|עוד אין יעדי חיסכון.
+789|A lista ainda está vazia. Toca num dos botões para começar.
+790|Ainda não há registos periódicos.
+791|Ainda não há alterações no registo.
+792|Nenhum pai ou mãe abriu ainda o caderno
+793|Mais avatares
+794|Ainda não
+795|Ainda não escolheu código
+796|Ainda não escolheu código
+797|Ainda não escolheu código
+798|Ainda não foi registado nada com amigos.
+799|Ainda não foi registado nada.
+800|Ainda não foi enviada nenhuma cópia
+801|Ainda não passaram 24 horas desde o pedido.
+802|Mais ações
+803|Última atualização: {when}
+804|Aspeto
+805|Por {debt} (= {covers} à taxa de hoje).
+806|Por {debt}.
+807|על מה חוסכים?
+808|Para quê? (podes saltar)
+809|Para quê? (opcional)
+810|Para: {debt}
+811|Com quem?
+812|Enorme
+813|A verificação expirou. Tenta novamente.
+814|Detalhe do cálculo
+815|Ação inválida
+816|Perfil
+817|Cores do ecrã
+818|Cores néon
+819|O tratamento já está definido e não pode ser alterado
+820|Forma de tratamento guardada ✅
+821|Tratamento
+822|Tratamento:
+823|Som
+824|Viram o caderno:
+825|Cria um cofre familiar: todos veem a mesma conta e as dívidas atualizam-se para todos.
+826|É necessária confirmação com impressão digital ou reconhecimento facial
+827|Precisas do código de família para entrar nesta família.
+828|A aplicação precisa de permissão para instalar atualizações: nas definições que aparecerem, ativa «Permitir desta origem» e toca novamente em «Atualizar»
+829|É preciso aceitar os termos de utilização e a política de privacidade
+830|Tens de entrar novamente
+831|Tens de entrar novamente com o código da família
+832|É preciso associar o dispositivo de novo
+833|Tens de associar este telemóvel uma vez.
+834|É preciso associar o dispositivo
+835|Este dispositivo precisa ser vinculado a um dos pais. Entre novamente e vincule-o com um código de vínculo de outro dos pais
+836|Tens de associar este dispositivo e este navegador uma vez.
+837|É preciso um e-mail verificado para trocar de dispositivo
+838|Definir o código
+839|Definir o código e entrar
+840|Definir o tratamento…
+841|קביעת קוד סודי
+842|Um código para todos. Quem entra com ele entra como criança. Depois pode mudar-se em «Membros da família» para adolescente ou pai/mãe, com aprovação por impressão digital ou reconhecimento facial.
+843|Código do e-mail
+844|O código do e-mail está errado ou expirou.
+845|O código de verificação está errado ou expirou.
+846|Código de adesão ao cofre de {name}: {code}
+847|Código de adesão da família
+848|O código de adesão da família só é mostrado com impressão digital ou reconhecimento facial.
+849|O código da família mudou. Pede um novo código aos teus pais.
+850|O código de associação
+851|Novo código
+852|Novo código ({rule})
+853|Código do e-mail atual
+854|Código da família
+855|Código secreto ({rule}; mais longo = mais seguro)
+856|Código secreto (obrigatório para pais, {rule})
+857|קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)
+858|קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק
+859|Novo código secreto
+860|Código secreto para {name}
+861|O teu próprio código secreto (4 dígitos)
+862|Código de associação
+863|O código de associação é só para progenitores
+864|Código de associação para {name}
+865|Código de associação para um dispositivo
+866|Códigos de adesão
+867|Primeiro é preciso definir um código secreto a {name}
+868|{amount} compensados com {name} ✅
+869|Um cofre familiar só pode ser criado por quem tem mais de 18 anos
+870|Pequeno
+871|Recebi
+872|Recebi a diferença ({amount})
+873|Recebi dinheiro
+874|Compensação mútua
+875|Compensar dívidas mútuas
+876|Compensar dívidas mútuas ({amount})
+877|O link de convite adiciona como filho(a) quem o abrir. Partilha-o só com a tua família.
+878|Associação do dispositivo
+879|Associar este dispositivo e entrar
+880|Associar o dispositivo a um progenitor
+881|Ir para a seção
+882|Li e aceito {terms} e {privacy}
+883|Li e aceito {terms} e {privacy}
+884|Li e aceito {terms} e {privacy}
+885|Normal
+886|Só um momento, a entrar…
+887|Só um momento, a sair…
+888|Queres juntá-los no cofre familiar?
+889|Queres que os devedores vejam isto?
+890|Vibração
+891|Registar
+892|Registar uma devolução
+893|Regista uma dívida automaticamente, semanal ou mensalmente, sem a escreveres de cada vez.
+894|Novo registo periódico
+895|Atualizar a aplicação
+896|Só os pais podem fazer isto
+897|רק הורים יכולים לפתוח יעד למישהו אחר
+898|Só os pais podem definir o tratamento
+899|Apenas para confirmar que quem cria o cofre tem mais de 18 anos. Não é mostrado a ninguém.
+900|Registou um reembolso
+901|Registou uma dívida
+902|Regista uma dívida tua no caderno
+903|שבוע נקי
+904|שבוע שלם בלי חובות פתוחים
+905|Pago na totalidade ✅
+906|Pagos ({n})
+907|A guardar tudo…
+908|Libertar o bloqueio
+909|Paguei
+910|Paguei a diferença ({amount})
+911|Mudou o nome da família
+912|Alterou o país e a moeda
+913|Alterou um nome
+914|Alterou uma função
+915|Alterar
+916|Alterar a moeda só muda o símbolo. Os valores em si não são convertidos.
+917|Alterar o código secreto
+918|Mudar o nome da família
+919|Partilhar
+920|Esqueci-me do código
+921|Enviámos um código para {email}. Escreve-o, juntamente com o novo endereço. Só substituirá o atual depois de verificado.
+922|Enviámos um código de 6 dígitos para {email}. É válido durante 10 minutos.
+923|Meus
+924|Enviar pedido
+925|Enviar código de verificação
+926|Enviar o código por e-mail
+927|Enviar um código para o e-mail atual
+928|Nome
+929|שם היעד חייב להיות עד 40 תווים
+930|Nome da família
+931|O nome da família não corresponde
+932|O nome da família é inválido
+933|Nome inválido
+934|Nomes conhecidos
+935|Guardar
+936|uma hora
+937|{"one":"{n} hora","other":"{n} horas"}
+938|As taxas de câmbio ainda não foram carregadas. Tenta novamente daqui a pouco.
+939|2 horas
+940|Idioma
+941|Data inválida
+942|Data de nascimento
+943|Data de nascimento inválida
+944|Sensação
+945|os termos de utilização
+946|Termos de utilização
+947|Papel
+948|Papel:
+949|Menu principal
+950|Pagamento de uma dívida noutra moeda
+951|🆘 O dispositivo antigo perdeu-se ou avariou

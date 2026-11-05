@@ -43,6 +43,7 @@ export function EmailSheet({ sentTo = '' }) {
   const [addr, setAddr] = useState(sentTo);
   const [email, setEmail] = useState('');
   const [oldCode, setOldCode] = useState('');
+  const [myPin, setMyPin] = useState('');
   const [code, setCode] = useState('');
   const [err, setErr] = useState('');
   useSheetTitle(step === 'start' ? t('החלפת מייל') : step === 'email' ? t('מייל לשחזור הקוד') : t('אימות המייל'));
@@ -68,6 +69,7 @@ export function EmailSheet({ sentTo = '' }) {
           ? t('שלחנו קוד אל {email}. כתבו אותו, ואת הכתובת החדשה. היא תחליף את הנוכחית רק אחרי אימות.', { email: current })
           : t('נשלח אליו קוד כשמשנים או מאפסים קוד סודי, וגם התראה כשהקוד של מישהו במשפחה ננעל.')}</p>
         {current && <Field label={t('קוד מהמייל הנוכחי')}><input {...codeProps} value={oldCode} onChange={(e) => setOldCode(e.target.value)} /></Field>}
+        {!current && <Field label={t('הקוד הסודי שלכם, לאישור')}><input {...pinProps('current-password', pinMax('parent'))} value={myPin} onChange={(e) => setMyPin(e.target.value)} /></Field>}
         <Field label={current ? t('כתובת מייל חדשה') : t('כתובת מייל')}>
           <input type="text" inputMode="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" autoComplete="email" placeholder="name@example.com" dir="ltr" value={email} onChange={(e) => setEmail(e.target.value)} />
         </Field>
@@ -75,8 +77,10 @@ export function EmailSheet({ sentTo = '' }) {
         <AsyncButton className="primary" onClick={async () => {
           setErr('');
           try {
-            const res = await call('emailAuth:requestVerify', { token: state.token, email, oldCode: current ? oldCode : undefined });
+            const res = await call('emailAuth:requestVerify', { token: state.token, email, oldCode: current ? oldCode : undefined, myPin: current ? undefined : myPin });
             if (res.ok) { setAddr(email.trim().toLowerCase()); go('code'); }
+            else if (res.reason === 'myPin') setErr(t('הקוד הסודי שגוי.'));
+            else if (res.reason === 'locked') setErr(t('יותר מדי ניסיונות. נסו שוב עוד כמה דקות.'));
             else setErr(t('הקוד מהמייל הנוכחי שגוי או שפג תוקפו.'));
           } catch (e) { setErr(errMsg(e)); }
         }}>{t('שליחת קוד אימות')}</AsyncButton>

@@ -79,7 +79,7 @@ export const requestMoveCode = mutation({
 export const requestFirstCode = mutation({
   args: { token: v.string() },
   handler: async (ctx, { token }) => {
-    const me = await requireParent(ctx, token);
+    const me = await requireParent(ctx, token, { allowUnbound: true });
     if (await isBound(ctx, me._id) || await familyHasBoundParent(ctx, me.familyId)) throw new ConvexError("אי אפשר לקשור מכשיר ככה");
     await issueCode(ctx, me, needVerifiedEmail(me), "deviceMove");
     return { ok: true as const };
@@ -143,7 +143,8 @@ export const recoveryRequest = mutation({
     const g = await gate(ctx, { code, personId, pin, device });
     if (!g.ok) return asFail(g);
     if (!g.person.emailVerified || !g.person.email) return { ok: false as const, reason: "noEmail" as const };
-    await issueCode(ctx, g.person, g.person.email, "deviceMove");
+    // מטרה נפרדת מ-deviceMove: קוד שנשלח כאן לא פותח את moveStart (שמדלג על ההמתנה של 24 שעות).
+    await issueCode(ctx, g.person, g.person.email, "deviceRecovery");
     return { ok: true as const };
   },
 });
@@ -154,7 +155,7 @@ export const recoveryConfirm = mutation({
   handler: async (ctx, { code, personId, pin, emailCode, device }) => {
     const g = await gate(ctx, { code, personId, pin, device });
     if (!g.ok) return asFail(g);
-    if (!(await verifyCode(ctx, personId, "deviceMove", emailCode))) return { ok: false as const, reason: "secretCode" as const };
+    if (!(await verifyCode(ctx, personId, "deviceRecovery", emailCode))) return { ok: false as const, reason: "secretCode" as const };
     for (const r of await ctx.db.query("deviceRecoveries").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) await ctx.db.delete(r._id);
     const secret = randomHex(32);
     const now = Date.now();

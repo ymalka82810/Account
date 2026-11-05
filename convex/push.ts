@@ -4,12 +4,26 @@ import { requirePerson } from "./lib";
 
 const MAX_DEVICES_PER_PERSON = 10;
 
+// שרתי ה-Push של הדפדפנים. השרת שולח בקשה לכתובת המנוי, ולכן מקבלים רק כתובות של שירותי Push מוכרים
+// (אחרת מי שנרשם יכול היה להפנות את השרת לכתובת https כלשהי): Chrome / Edge / Samsung / Opera (FCM),
+// Firefox (autopush), Safari ו-iOS (Apple), Edge ב-Windows (WNS).
+const PUSH_HOSTS = new Set(["fcm.googleapis.com", "android.googleapis.com", "updates.push.services.mozilla.com", "web.push.apple.com"]);
+const PUSH_HOST_SUFFIXES = [".push.services.mozilla.com", ".notify.windows.com", ".push.apple.com"];
+export function pushEndpointOk(endpoint: string): boolean {
+  if (endpoint.length > 1000) return false;
+  let u: URL;
+  try { u = new URL(endpoint); } catch { return false; }
+  if (u.protocol !== "https:" || u.username || u.password || (u.port && u.port !== "443")) return false;
+  const h = u.hostname.toLowerCase();
+  return PUSH_HOSTS.has(h) || PUSH_HOST_SUFFIXES.some((s) => h.endsWith(s));
+}
+
 // רישום המכשיר הזה להתראות. אם המכשיר כבר רשום (גם על שם אדם אחר) הוא עובר לאדם המחובר עכשיו.
 export const subscribe = mutation({
   args: { token: v.string(), endpoint: v.string(), p256dh: v.string(), auth: v.string() },
   handler: async (ctx, { token, endpoint, p256dh, auth }) => {
     const me = await requirePerson(ctx, token);
-    if (!/^https:\/\//.test(endpoint) || endpoint.length > 1000 || p256dh.length > 200 || auth.length > 100) {
+    if (!pushEndpointOk(endpoint) || p256dh.length > 200 || auth.length > 100) {
       throw new ConvexError("מנוי התראות לא תקין");
     }
     for (const s of await ctx.db.query("pushSubs").withIndex("by_endpoint", (q) => q.eq("endpoint", endpoint)).collect()) {

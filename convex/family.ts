@@ -6,7 +6,7 @@ import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
 import { purgeNotebook } from "./notebook";
 import { proofValidator, purgeBiometric, requireBiometric } from "./biometric";
-import { cleanFamilyName, freshCode, issuePass, purgePasses, requireParent } from "./lib";
+import { cleanFamilyName, freshCode, issuePass, purgeAuthRows, purgePasses, requireParent } from "./lib";
 import { COUNTRIES, isCurrency } from "./currency";
 
 const PURGE_BATCH = 500;
@@ -51,9 +51,11 @@ export const revealCode = mutation({
 // כל כרטיסי הכניסה של המכשירים נמחקים (אולי מישהו זר שמר את המשפחה עם הקוד הישן).
 // keepDevice: המכשיר של ההורה שמחליף שומר את המשפחה, אז הוא מקבל כרטיס חדש.
 export const rotateCode = mutation({
-  args: { token: v.string(), keepDevice: v.optional(v.boolean()) },
-  handler: async (ctx, { token, keepDevice }) => {
+  args: { token: v.string(), keepDevice: v.optional(v.boolean()), proof: v.optional(proofValidator) },
+  handler: async (ctx, { token, keepDevice, proof }) => {
     const me = await requireParent(ctx, token);
+    // החלפת הקוד מנתקת את כל המכשירים ששמרו את המשפחה, ולכן דורשת אישור (ביומטרי, או קוד סודי כשאין ביומטריה).
+    await requireBiometric(ctx, me, "family-rotate", proof);
     await ctx.db.patch(me.familyId, { childCode: await freshCode(ctx), parentCode: undefined });
     await purgePasses(ctx, me.familyId);
     await logActivity(ctx, me, "code_rotated");
@@ -63,12 +65,14 @@ export const rotateCode = mutation({
 
 // מחיקת הקופה כולה: אנשים, רשומות וכניסות. אי אפשר לבטל.
 export const remove = mutation({
-  args: { token: v.string(), confirmName: v.string() },
-  handler: async (ctx, { token, confirmName }) => {
+  args: { token: v.string(), confirmName: v.string(), proof: v.optional(proofValidator) },
+  handler: async (ctx, { token, confirmName, proof }) => {
     const me = await requireParent(ctx, token);
     const family = await ctx.db.get(me.familyId);
     if (!family) return;
     if (confirmName.trim() !== family.name) throw new ConvexError("שם המשפחה לא תואם");
+    // פעולה שאי אפשר לבטל: שם המשפחה לא מספיק למי שרק מחזיק סשן פתוח.
+    await requireBiometric(ctx, me, "family-remove", proof);
     const familyId = me.familyId;
     for (const r of await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()) {
       await ctx.db.delete(r._id);
@@ -86,6 +90,7 @@ export const remove = mutation({
       }
       await purgeFriends(ctx, p._id);
       await purgeBiometric(ctx, p._id);
+      await purgeAuthRows(ctx, p._id);
       await purgeNotebook(ctx, p._id);
       await ctx.db.delete(p._id);
     }
@@ -101,6 +106,9 @@ export const purgeEntries = internalMutation({
   handler: async (ctx, { familyId }): Promise<void> => {
     const batch = await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", familyId)).take(PURGE_BATCH);
     for (const e of batch) await ctx.db.delete(e._id);
-    if (batch.length === PURGE_BATCH) await ctx.scheduler.runAfter(0, internal.family.purgeEntries, { familyId });
+    // יומן השינויים מכיל שמות וסכומים של המשפחה, ולכן נמחק איתה ולא ממתין לניקוי היומי.
+    const log = await ctx.db.query("activity").withIndex("by_family_at", (q) => q.eq("familyId", familyId)).take(PURGE_BATCH);
+    for (const a of log) await ctx.db.delete(a._id);
+    if (batch.length === PURGE_BATCH || log.length === PURGE_BATCH) await ctx.scheduler.runAfter(0, internal.family.purgeEntries, { familyId });
   },
 });

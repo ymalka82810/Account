@@ -4,7 +4,7 @@ import { Id } from "./_generated/dataModel";
 import { MAX_AMOUNT, MAX_FAMILY_SIZE, cleanName, requireParent } from "./lib";
 
 // ייבוא נתונים מהמכשיר הישן / מקובץ גיבוי. מוסיף בלבד, לא מוחק כלום.
-// אנשים חדשים נוצרים בלי קוד, וכל אחד יבחר קוד בכניסה הראשונה.
+// אנשים חדשים נוצרים בלי קוד כילדים, וכל אחד יבחר קוד בכניסה הראשונה.
 export const importData = mutation({
   args: {
     token: v.string(),
@@ -33,9 +33,9 @@ export const importData = mutation({
       const found = existing.find((x) => x.name === name);
       if (found) { idMap.set(p.id, found._id); continue; }
       if (existing.length >= MAX_FAMILY_SIZE) throw new ConvexError("המשפחה מלאה");
-      const id = await ctx.db.insert("people", {
-        familyId: me.familyId, name, role: p.role, avatar: p.role === "parent" ? undefined : "🧒",
-      });
+      // תמיד ילד/ה: יצירת הורה חדש דורשת אישור ביומטרי (people:add / people:setRole), ולכן הייבוא לא יוצר הורים.
+      // התפקיד שבקובץ משמש רק להתאמה לאדם קיים לפי שם. הורה מקבל תפקיד אחר כך בשינוי תפקיד רגיל.
+      const id = await ctx.db.insert("people", { familyId: me.familyId, name, role: "child", avatar: "🧒" });
       existing.push((await ctx.db.get(id))!);
       idMap.set(p.id, id);
     }

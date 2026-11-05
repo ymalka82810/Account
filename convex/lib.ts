@@ -158,6 +158,13 @@ function randomCode(): string {
   return [...bytes].map((b) => CODE_ALPHABET[b & 31]).join("");
 }
 
+// שאריות כניסה של אדם שנמחק: קודי מייל (כולל כתובת המייל), כרטיסי קישור מכשיר ובקשות החלפת מכשיר.
+export async function purgeAuthRows(ctx: MutationCtx, personId: Id<"people">) {
+  for (const r of await ctx.db.query("emailCodes").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) await ctx.db.delete(r._id);
+  for (const r of await ctx.db.query("deviceTickets").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) await ctx.db.delete(r._id);
+  for (const r of await ctx.db.query("deviceRecoveries").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) await ctx.db.delete(r._id);
+}
+
 // ---------- כרטיסי כניסה למכשיר ----------
 export const PASS_PREFIX = "dev_";
 export const isPass = (raw: string) => raw.startsWith(PASS_PREFIX);
@@ -175,6 +182,22 @@ export async function issuePass(ctx: MutationCtx, familyId: Id<"families">, labe
     label: label?.trim().slice(0, 40) || undefined,
   });
   return pass;
+}
+
+// הגבלת הנפקת כרטיסים: מי שמחזיק קוד משפחה (או כל חבר מחובר) לא יכול להציף את הטבלה.
+// לפי מכשיר/אדם בשעה, ובסך הכול למשפחה. חריגה = לא מונפק כרטיס (המכשיר עובד, רק לא זוכר את המשפחה).
+export const PASS_ISSUE_LIMIT = 10;
+export const PASS_ISSUE_WINDOW_MS = 60 * 60 * 1000;
+export const MAX_PASSES_PER_FAMILY = 50;
+
+export async function issuePassLimited(ctx: MutationCtx, familyId: Id<"families">, who: string, label?: string): Promise<string | null> {
+  const key = "pass-issue:" + who;
+  if (await isThrottled(ctx, key, PASS_ISSUE_LIMIT, PASS_ISSUE_WINDOW_MS)) return null;
+  const now = Date.now();
+  const rows = await ctx.db.query("devicePasses").withIndex("by_family", (q) => q.eq("familyId", familyId)).take(MAX_PASSES_PER_FAMILY * 4);
+  if (rows.filter((r) => passExpiry(r) >= now).length >= MAX_PASSES_PER_FAMILY) return null;
+  await noteHit(ctx, key, PASS_ISSUE_WINDOW_MS);
+  return await issuePass(ctx, familyId, label);
 }
 
 export async function purgePasses(ctx: MutationCtx, familyId: Id<"families">) {
@@ -306,9 +329,24 @@ export async function requirePerson(ctx: QueryCtx, token: string): Promise<Membe
   return me as Member;
 }
 
-export async function requireParent(ctx: QueryCtx, token: string): Promise<Member> {
+const hasBioKey = async (ctx: QueryCtx, personId: Id<"people">) =>
+  (await ctx.db.query("bioKeys").withIndex("by_person", (q) => q.eq("personId", personId)).first()) !== null;
+
+// allowUnbound: רק לזרימות הקישור עצמן (הקמה, קישור ראשון, מסך הקישור), שבהן ההורה עוד לא קשור.
+// בכל מקום אחר הורה שלא קשור למכשיר לא פועל כהורה כשיש במשפחה הורה קשור: הקשירה נאכפת בשרת
+// ולא רק בכניסה ובמסך (סשן שנוצר לפני הקשירה, או אחרי איפוס קוד במייל, לא עוקף אותה).
+// כשאין במשפחה אף הורה קשור (הקמה, או משפחה מהגרסה הקודמת) הורה פועל כרגיל ומתבקש לקשור.
+export async function requireParent(ctx: QueryCtx, token: string, opts?: { allowUnbound?: boolean }): Promise<Member> {
   const me = await requirePerson(ctx, token);
   if (me.role !== "parent") throw new ConvexError("רק הורים יכולים לעשות את זה");
+  if (!opts?.allowUnbound && !(await hasBioKey(ctx, me._id))) {
+    const people = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
+    for (const p of people) {
+      if (p.role === "parent" && p._id !== me._id && (await hasBioKey(ctx, p._id))) {
+        throw new ConvexError("צריך לקשר את המכשיר הזה להורה. היכנסו מחדש וקשרו אותו עם קוד קישור מהורה אחר");
+      }
+    }
+  }
   return me;
 }
 
