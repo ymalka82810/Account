@@ -256,3 +256,32 @@ describe("פעולות הרסניות של הורה דורשות אישור (ב�
     await expect(t.mutation(api.biometric.pinConfirm, { token: dad(), action: "family-removeX", myPin: "1111" })).rejects.toThrow();
   });
 });
+
+describe("emailAuth:requestVerify: חיבור מייל ראשון דורש את הקוד הסודי", () => {
+  const verify = (myPin?: string, token = dad()) => t.mutation(api.emailAuth.requestVerify, { token, email: "Dad@Example.com", myPin });
+  const pendingOf = async () => ((await t.run((ctx) => ctx.db.get(A.ids["אבא"]))) as any).pendingEmail;
+
+  it("בלי קוד סודי או עם קוד שגוי המייל לא מחובר ולא נשלח קוד", async () => {
+    expect(await verify()).toMatchObject({ ok: false, reason: "myPin" });
+    expect(await verify("9999")).toMatchObject({ ok: false, reason: "myPin" });
+    expect(await pendingOf()).toBeUndefined();
+    expect(await t.run((ctx) => ctx.db.query("emailCodes").collect())).toHaveLength(0);
+    expect(((await t.run((ctx) => ctx.db.get(A.ids["אבא"]))) as any).failedAttempts).toBe(1);
+  });
+
+  it("ניחושים חוזרים של הקוד הסודי נועלים", async () => {
+    for (let i = 0; i < 5; i++) await verify("9999");
+    expect(await verify("1111")).toMatchObject({ ok: false, reason: "locked" });
+  });
+
+  it("עם הקוד הסודי הנכון נשלח קוד אימות לכתובת", async () => {
+    expect(await verify("1111")).toMatchObject({ ok: true });
+    expect(await pendingOf()).toBe("dad@example.com");
+    expect((await t.run((ctx) => ctx.db.query("emailCodes").collect())).map((c) => c.purpose)).toEqual(["verify"]);
+  });
+
+  it("הורה עם מייל מאומת עדיין מחליף מייל רק עם קוד מהמייל הישן (הקוד הסודי לא מספיק)", async () => {
+    await t.run(async (ctx) => { await ctx.db.patch(A.ids["אבא"], { email: "old@example.com", emailVerified: true }); });
+    expect(await verify("1111")).toMatchObject({ ok: false, reason: "oldCode" });
+  });
+});
