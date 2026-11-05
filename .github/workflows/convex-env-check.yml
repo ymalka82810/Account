@@ -27,8 +27,8 @@ jobs:
                           if (m := re.match(r'^([A-Z_][A-Z0-9_]*)=', line))})
           required = ['PIN_PEPPER','RESEND_API_KEY','EMAIL_FROM','EMAIL_MODE',
                       'VAPID_PUBLIC_KEY','VAPID_PRIVATE_KEY','VAPID_SUBJECT']
-          print('Defined:', ', '.join(names) or '(none)')
+          print('::notice title=Defined::' + (', '.join(names) or '(none)'))
           for r in required:
-              print(('OK      ' if r in names else 'MISSING ') + r)
+              print(('::notice title=OK::' if r in names else '::warning title=MISSING::') + r)
           PY
           rm -f /tmp/env.txt
