@@ -132,3 +132,16 @@ describe("auth:changeMyPin מנתק את שאר המכשירים", () => {
     expect(await t.query(api.data.get, { token: "other-device" })).not.toBeNull();
   });
 });
+
+describe("auth:join שומר מזהה מכשיר מנוקה ומוגבל באורך", () => {
+  it("מחרוזת device ארוכה או עם תווים מיוחדים לא נשמרת כמו שהיא, והמכשיר עדיין הופך למהימן באישור", async () => {
+    const huge = "ab-" + "x".repeat(5000) + "<script>";
+    await t.mutation(api.auth.join, { code: CODE, name: "נועה", pin: "5555", device: huge, shareNotebook: true });
+    const req: any = (await t.run((ctx) => ctx.db.query("joinRequests").collect()))[0];
+    expect(req.device).toBe("ab" + "x".repeat(38));
+    expect(req.device.length).toBeLessThanOrEqual(40);
+    await t.mutation(api.auth.approveJoin, { token: dad(), requestId: req._id });
+    const noa: any = (await t.run((ctx) => ctx.db.query("people").collect())).find((p: any) => p.name === "נועה");
+    expect(noa.trustedDevices).toHaveLength(1);
+  });
+});

@@ -11,7 +11,7 @@ import {
   codeThrottled, failCode, CREATE_FAMILY_LIMIT, CREATE_FAMILY_WINDOW_MS, MAX_FAMILY_SIZE, SESSION_MS,
   adoptLegacy, avatarOf, cleanFamilyName, cleanName, createFamilyDoc, deviceKey, findFamilyByCode, getSessionPerson, hashPin, isPass, issuePass, passExpiry, PASS_TTL_MS,
   hashToken, isThrottled, legacyPeople, noteHit, randomHex, registerPinFail, requireAdultBirthDate, requireSameFamily, requireParent, validPin, pinRuleMessage,
-  upgradePinHash, verifyPin, trustKeyOf, hitCount, guessKeys, MAX_TRUSTED_DEVICES,
+  upgradePinHash, verifyPin, trustKeyOf, cleanDeviceId, hitCount, guessKeys, MAX_TRUSTED_DEVICES,
   GUESS_DEVICE_LIMIT, GUESS_DEVICE_WINDOW_MS, GUESS_PERSON_LIMIT, GUESS_PERSON_WINDOW_MS,
 } from "./lib";
 
@@ -152,7 +152,7 @@ export const join = mutation({
     // לא נכנסים מיד: הבקשה ממתינה עד שהורה מאשר (auth:approveJoin).
     const pinSalt = randomHex(16);
     await ctx.db.insert("joinRequests", {
-      familyId, name: clean, avatar: avatar?.slice(0, 8), device, pinSalt, pinHash: await hashPin(pin, pinSalt), createdAt: Date.now(),
+      familyId, name: clean, avatar: avatar?.slice(0, 8), device: cleanDeviceId(device) || undefined, pinSalt, pinHash: await hashPin(pin, pinSalt), createdAt: Date.now(),
       shareNotebook: true,
     });
     // התראה להורים, כדי שלא יצטרכו לגלות את הבקשה בעצמם (רק למי שיש לו מכשיר רשום להתראות).
