@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../convex/_generated/api";
 import { hashPin, hashToken, RECOVERY_WAIT_MS } from "../convex/lib";
-import { familyCode, newDb, seedFamily, T } from "./helpers/seed";
+import { familyCode, newDb, pinProof, seedFamily, T } from "./helpers/seed";
 
 // בדיקות שנוספו בביקורת האבטחה (feature/security-audit): כל בדיקה מכסה תיקון אחד.
 
@@ -172,7 +172,7 @@ describe("מחיקת אדם או קופה מנקה גם שאריות כניסה 
     await t.mutation(api.entries.add, { token: dad(), kind: "debt", from: A.ids["דנה"], to: A.ids["אבא"], amount: 100, note: "", date: "2026-01-15" });
     expect((await t.run((ctx) => ctx.db.query("activity").withIndex("by_family_at", (q) => q.eq("familyId", A.familyId)).collect())).length).toBeGreaterThan(0);
 
-    await t.mutation(api.family.remove, { token: dad(), confirmName: "A" });
+    await t.mutation(api.family.remove, { token: dad(), confirmName: "A", proof: await pinProof(t, A.ids["אבא"], "family-remove") });
     await t.finishAllScheduledFunctions(vi.runAllTimers);
 
     expect(await t.run((ctx) => ctx.db.query("activity").withIndex("by_family_at", (q) => q.eq("familyId", A.familyId)).collect())).toHaveLength(0);
@@ -213,5 +213,46 @@ describe("requireParent: הורה לא קשור לא פועל כהורה כשי�
     const res: any = await t.mutation(api.emailAuth.resetWithCode, { code: CODE, personId: A.ids["אמא"], emailCode: "123456", newPin: "5555", device: "m" });
     expect(res.ok).toBe(true);
     await expect(t.mutation(api.family.rename, { token: res.token, name: "x" })).rejects.toThrow("לקשר את המכשיר");
+  });
+});
+
+describe("פעולות הרסניות של הורה דורשות אישור (ביומטרי או קוד סודי)", () => {
+  const dadId = () => A.ids["אבא"];
+
+  it("family:remove לא עובד עם שם משפחה בלבד, ולא עם אישור של פעולה אחרת", async () => {
+    await expect(t.mutation(api.family.remove, { token: dad(), confirmName: "A" })).rejects.toThrow();
+    await expect(t.mutation(api.family.remove, { token: dad(), confirmName: "A", proof: await pinProof(t, dadId(), "family-rotate") })).rejects.toThrow();
+    expect(await t.run((ctx) => ctx.db.get(A.familyId))).not.toBeNull();
+  });
+
+  it("family:rotateCode דורש אישור, והקוד לא מוחלף בלעדיו", async () => {
+    const before: any = await t.run((ctx) => ctx.db.get(A.familyId));
+    await expect(t.mutation(api.family.rotateCode, { token: dad() })).rejects.toThrow();
+    expect(((await t.run((ctx) => ctx.db.get(A.familyId))) as any).childCode).toBe(before.childCode);
+    await t.mutation(api.family.rotateCode, { token: dad(), proof: await pinProof(t, dadId(), "family-rotate") });
+    expect(((await t.run((ctx) => ctx.db.get(A.familyId))) as any).childCode).not.toBe(before.childCode);
+  });
+
+  it("הסרת הורה דורשת אישור שקשור להורה הזה בדיוק; הסרת ילד/ה לא דורשת", async () => {
+    await expect(t.mutation(api.people.remove, { token: dad(), id: A.ids["אמא"] })).rejects.toThrow();
+    await expect(t.mutation(api.people.remove, { token: dad(), id: A.ids["אמא"], proof: await pinProof(t, dadId(), `person-remove:${A.ids["דנה"]}`) })).rejects.toThrow();
+    expect(await t.run((ctx) => ctx.db.get(A.ids["אמא"]))).not.toBeNull();
+    await t.mutation(api.people.remove, { token: dad(), id: A.ids["דנה"] });
+    await t.mutation(api.people.remove, { token: dad(), id: A.ids["אמא"], proof: await pinProof(t, dadId(), `person-remove:${A.ids["אמא"]}`) });
+    expect(await t.run((ctx) => ctx.db.get(A.ids["אמא"]))).toBeNull();
+  });
+
+  it("אישור קוד סודי הוא חד-פעמי", async () => {
+    const proof = await pinProof(t, dadId(), "family-rotate");
+    await t.mutation(api.family.rotateCode, { token: dad(), proof });
+    await expect(t.mutation(api.family.rotateCode, { token: dad(), proof })).rejects.toThrow();
+  });
+
+  it("biometric:pinConfirm מנפיק אתגר לפעולות החדשות, ולא לפעולות אחרות", async () => {
+    for (const action of ["family-remove", "family-rotate", `person-remove:${A.ids["אמא"]}`]) {
+      expect(await t.mutation(api.biometric.pinConfirm, { token: dad(), action, myPin: "1111" })).toMatchObject({ ok: true });
+    }
+    await expect(t.mutation(api.biometric.pinConfirm, { token: dad(), action: "reveal-code", myPin: "1111" })).rejects.toThrow();
+    await expect(t.mutation(api.biometric.pinConfirm, { token: dad(), action: "family-removeX", myPin: "1111" })).rejects.toThrow();
   });
 });

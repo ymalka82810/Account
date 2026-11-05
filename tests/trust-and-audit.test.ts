@@ -53,7 +53,7 @@ describe("יומן שינויים להורים", () => {
     const id = await t.mutation(api.people.add, { token: dad(), name: "נועם", role: "child" });
     await t.mutation(api.people.rename, { token: dad(), id, name: "נועם ב" });
     await t.mutation(api.people.remove, { token: dad(), id });
-    await t.mutation(api.family.rotateCode, { token: dad() });
+    await t.mutation(api.family.rotateCode, { token: dad(), proof: await pinProof(A.ids["אבא"], "family-rotate") });
     const kinds = (await log()).map((r) => r.kind).sort();
     expect(kinds).toEqual(["code_rotated", "person_add", "person_remove", "person_rename"]);
   });
@@ -131,7 +131,7 @@ describe("תמיד נשאר הורה במשפחה", () => {
   });
 
   it("אחרי שהורה אחד הוסר נשאר הורה יחיד, ואי אפשר להסיר גם אותו", async () => {
-    await t.mutation(api.people.remove, { token: dad(), id: A.ids["אמא"] });
+    await t.mutation(api.people.remove, { token: dad(), id: A.ids["אמא"], proof: await pinProof(A.ids["אבא"], `person-remove:${A.ids["אמא"]}`) });
     const parents = (await t.run((ctx) => ctx.db.query("people").collect())).filter((p) => String(p.familyId) === String(A.familyId) && p.role === "parent");
     expect(parents).toHaveLength(1);
     await expect(t.mutation(api.people.remove, { token: dad(), id: A.ids["אבא"] })).rejects.toThrow();

@@ -53,12 +53,16 @@ export const add = mutation({
 });
 
 export const remove = mutation({
-  args: { token: v.string(), id: v.id("people") },
-  handler: async (ctx, { token, id }) => {
+  args: { token: v.string(), id: v.id("people"), proof: v.optional(proofValidator) },
+  handler: async (ctx, { token, id, proof }) => {
     const me = await requireParent(ctx, token);
     if (me._id === id) throw new ConvexError("אי אפשר להסיר את עצמך");
     const target = await requireSameFamily(ctx, me, id);
-    if (target.role === "parent") await requireAnotherParent(ctx, me.familyId, id);
+    if (target.role === "parent") {
+      await requireAnotherParent(ctx, me.familyId, id);
+      // הסרת הורה היא כמו שינוי תפקיד שלו: דורשת אישור ביומטרי (או קוד סודי כשאין ביומטריה).
+      await requireBiometric(ctx, me, `person-remove:${id}`, proof);
+    }
     const asFrom = await ctx.db.query("entries").withIndex("by_from", (q) => q.eq("from", id)).first();
     const asTo = await ctx.db.query("entries").withIndex("by_to", (q) => q.eq("to", id)).first();
     if (asFrom || asTo) throw new ConvexError("יש רשומות על שמו/ה. מחקו אותן קודם");

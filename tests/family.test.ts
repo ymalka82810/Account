@@ -1,7 +1,7 @@
 // @vitest-environment edge-runtime
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../convex/_generated/api";
-import { familyCode, newDb, seedFamily, T } from "./helpers/seed";
+import { familyCode, newDb, pinProof, seedFamily, T } from "./helpers/seed";
 
 let t: T;
 let A: Awaited<ReturnType<typeof seedFamily>>;
@@ -57,7 +57,7 @@ describe("פעולות משפחה משפיעות רק על המשפחה של ה�
 describe("החלפת קוד הצטרפות", () => {
   it("הקוד משתנה, הקוד הישן לא פותח כלום, ומי שכבר בפנים נשאר בפנים", async () => {
     const old = familyCode("A");
-    const r: any = await t.mutation(api.family.rotateCode, { token: A.tokens["אבא"] });
+    const r: any = await t.mutation(api.family.rotateCode, { token: A.tokens["אבא"], proof: await pinProof(t, A.ids["אבא"], "family-rotate") });
     expect(r.loginCode).toBeUndefined();
     const fresh = (await family(A.familyId))!.childCode;
     expect(fresh).not.toBe(old);
@@ -73,7 +73,7 @@ describe("החלפת קוד הצטרפות", () => {
     expect(oldPass).toMatch(/^dev_/);
     expect(await t.mutation(api.auth.enter, { code: oldPass, device: "d" })).toMatchObject({ ok: true });
 
-    const r: any = await t.mutation(api.family.rotateCode, { token: A.tokens["אבא"], keepDevice: true });
+    const r: any = await t.mutation(api.family.rotateCode, { token: A.tokens["אבא"], keepDevice: true, proof: await pinProof(t, A.ids["אבא"], "family-rotate") });
     expect(r.loginCode).toMatch(/^dev_/);
     expect(await t.mutation(api.auth.enter, { code: oldPass, device: "d" })).toMatchObject({ ok: false });
     expect(await t.mutation(api.auth.enter, { code: r.loginCode, device: "d" })).toMatchObject({ ok: true });
@@ -81,7 +81,7 @@ describe("החלפת קוד הצטרפות", () => {
 
   it("החלפת קוד אצל משפחה אחת לא נוגעת במשפחה אחרת", async () => {
     const e: any = await t.mutation(api.auth.enter, { code: familyCode("B"), device: "d", remember: true });
-    await t.mutation(api.family.rotateCode, { token: A.tokens["אבא"] });
+    await t.mutation(api.family.rotateCode, { token: A.tokens["אבא"], proof: await pinProof(t, A.ids["אבא"], "family-rotate") });
     expect((await family(B.familyId))!.childCode).toBe(familyCode("B"));
     expect(await t.mutation(api.auth.enter, { code: e.loginCode, device: "d" })).toMatchObject({ ok: true, familyName: "B" });
   });
@@ -119,7 +119,8 @@ describe("מחיקת קופה", () => {
     await t.mutation(api.entries.add, { token: A.tokens["אבא"], kind: "debt", from: A.ids["דנה"], to: A.ids["אבא"], amount: 500, note: "", date: "2026-01-01" });
     await t.mutation(api.entries.add, { token: B.tokens["אמא"], kind: "debt", from: B.ids["נועם"], to: B.ids["אמא"], amount: 700, note: "", date: "2026-01-01" });
     await expect(t.mutation(api.family.remove, { token: A.tokens["אבא"], confirmName: "אחר" })).rejects.toThrow("שם המשפחה לא תואם");
-    await t.mutation(api.family.remove, { token: A.tokens["אבא"], confirmName: " A " });
+    await expect(t.mutation(api.family.remove, { token: A.tokens["אבא"], confirmName: " A " })).rejects.toThrow(); // בלי אישור
+    await t.mutation(api.family.remove, { token: A.tokens["אבא"], confirmName: " A ", proof: await pinProof(t, A.ids["אבא"], "family-remove") });
     await t.finishAllScheduledFunctions(vi.runAllTimers);
 
     expect(await family(A.familyId)).toBeNull();

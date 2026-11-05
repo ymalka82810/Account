@@ -50,9 +50,11 @@ export const revealCode = mutation({
 // כל כרטיסי הכניסה של המכשירים נמחקים (אולי מישהו זר שמר את המשפחה עם הקוד הישן).
 // keepDevice: המכשיר של ההורה שמחליף שומר את המשפחה, אז הוא מקבל כרטיס חדש.
 export const rotateCode = mutation({
-  args: { token: v.string(), keepDevice: v.optional(v.boolean()) },
-  handler: async (ctx, { token, keepDevice }) => {
+  args: { token: v.string(), keepDevice: v.optional(v.boolean()), proof: v.optional(proofValidator) },
+  handler: async (ctx, { token, keepDevice, proof }) => {
     const me = await requireParent(ctx, token);
+    // החלפת הקוד מנתקת את כל המכשירים ששמרו את המשפחה, ולכן דורשת אישור (ביומטרי, או קוד סודי כשאין ביומטריה).
+    await requireBiometric(ctx, me, "family-rotate", proof);
     await ctx.db.patch(me.familyId, { childCode: await freshCode(ctx), parentCode: undefined });
     await purgePasses(ctx, me.familyId);
     await logActivity(ctx, me, "code_rotated");
@@ -62,12 +64,14 @@ export const rotateCode = mutation({
 
 // מחיקת הקופה כולה: אנשים, רשומות וכניסות. אי אפשר לבטל.
 export const remove = mutation({
-  args: { token: v.string(), confirmName: v.string() },
-  handler: async (ctx, { token, confirmName }) => {
+  args: { token: v.string(), confirmName: v.string(), proof: v.optional(proofValidator) },
+  handler: async (ctx, { token, confirmName, proof }) => {
     const me = await requireParent(ctx, token);
     const family = await ctx.db.get(me.familyId);
     if (!family) return;
     if (confirmName.trim() !== family.name) throw new ConvexError("שם המשפחה לא תואם");
+    // פעולה שאי אפשר לבטל: שם המשפחה לא מספיק למי שרק מחזיק סשן פתוח.
+    await requireBiometric(ctx, me, "family-remove", proof);
     const familyId = me.familyId;
     for (const r of await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()) {
       await ctx.db.delete(r._id);

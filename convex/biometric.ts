@@ -301,7 +301,7 @@ export type BioProof = {
 
 // פעולות שמותר לאשר בקוד סודי כשאין טביעת אצבע / זיהוי פנים במכשיר. שאר הפעולות (קוד משפחה,
 // קוד קישור, החלפת מכשיר) נשארות ביומטריות בלבד.
-const PIN_FALLBACK_ACTIONS = /^(add|role):/;
+const PIN_FALLBACK_ACTIONS = /^(add|role|person-remove|family-remove|family-rotate)(:|$)/;
 const PIN_ACTION_PREFIX = "pin:";
 
 // מסלול חלופי למכשיר בלי ביומטריה: ההורה מקליד את הקוד הסודי שלו ומקבל אתגר חד־פעמי לפעולה הזו.

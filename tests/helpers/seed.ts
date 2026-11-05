@@ -40,3 +40,11 @@ export async function seedFamily(t: T, name: string, members: { name: string; ro
 
 export const setRates = (t: T, rates: Record<string, number>) =>
   t.run(async (ctx) => { await ctx.db.insert("fxRates", { rates, source: "test", fetchedAt: Date.now() }); });
+
+// אישור קוד סודי לפעולה (כמו biometric:pinConfirm), בלי ביומטרי אמיתי. מתאים לפעולות add/role/person-remove/family-*.
+let pinProofSeq = 0;
+export async function pinProof(t: T, personId: any, action: string) {
+  const challenge = `pc-${++pinProofSeq}-${action}`;
+  await t.run((ctx) => ctx.db.insert("bioChallenges", { personId, action: "pin:" + action, challenge, expiresAt: Date.now() + 60_000 }));
+  return { pinChallenge: challenge } as any;
+}
