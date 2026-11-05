@@ -337,3 +337,21 @@ describe("הגבלות קצב: כרטיסי מכשיר ובקשות הצטרפו
     expect(await t.mutation(api.auth.join, { code: CODE, name: "אחרון", pin: "5555", device: "zz", shareNotebook: true })).toMatchObject({ ok: false, reason: "throttled" });
   });
 });
+
+describe("fx:ensure מוגבל בקצב", () => {
+  afterEach(() => { vi.unstubAllGlobals(); });
+  const okFetch = () => vi.fn(async () => new Response(JSON.stringify({ result: "success", rates: { ILS: 3.7, EUR: 0.9, GBP: 0.8 } })));
+
+  it("שערים ישנים: קריאות חוזרות לא מציפות את הספק, אחת כל 5 דקות", async () => {
+    const spy = okFetch();
+    vi.stubGlobal("fetch", spy);
+    for (let i = 0; i < 5; i++) await t.action(api.fx.ensure, {});
+    expect(spy).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(4 * 60 * 1000);
+    await t.action(api.fx.ensure, {});
+    expect(spy).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(3 * 60 * 60 * 1000); // עברו גם 5 דקות וגם הטריות
+    await t.action(api.fx.ensure, {});
+    expect(spy).toHaveBeenCalledTimes(2);
+  });
+});
