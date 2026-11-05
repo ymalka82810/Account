@@ -52,3 +52,43 @@ describe("biometric:challenge לא מנפיק אתגרים של מסלול הק�
     expect(kid.role).toBe("child");
   });
 });
+
+describe("החלפת מכשיר שאבד: קוד המייל של ההמתנה לא עוקף אותה", () => {
+  beforeEach(async () => {
+    await bindKey(A.ids["אבא"]);
+    await t.run(async (ctx) => { await ctx.db.patch(A.ids["אבא"], { email: "p@example.com", emailVerified: true }); });
+  });
+
+  const plant = (purpose: "deviceMove" | "deviceRecovery", code: string) => t.run(async (ctx) => {
+    for (const old of await ctx.db.query("emailCodes").withIndex("by_person", (q) => q.eq("personId", A.ids["אבא"])).collect()) {
+      if (old.purpose === purpose) await ctx.db.delete(old._id);
+    }
+    await ctx.db.insert("emailCodes", { personId: A.ids["אבא"], email: "", purpose, codeHash: await hashPin(code, "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
+  });
+
+  it("recoveryRequest שולח קוד במטרה deviceRecovery ולא deviceMove", async () => {
+    const r: any = await t.mutation(api.deviceMove.recoveryRequest, { code: CODE, personId: A.ids["אבא"], pin: "1111", device: "n" });
+    expect(r.ok).toBe(true);
+    const rows = await t.run((ctx) => ctx.db.query("emailCodes").collect());
+    expect(rows.map((x) => x.purpose)).toEqual(["deviceRecovery"]);
+  });
+
+  it("קוד המייל של בקשת ההחלפה לא מתקבל ב-moveStart (בלי לחכות 24 שעות)", async () => {
+    await plant("deviceRecovery", "777777");
+    const res: any = await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "email", secretCode: "777777", device: "n" });
+    expect(res).toMatchObject({ ok: false, reason: "secretCode" });
+    expect(await t.run((ctx) => ctx.db.query("deviceTickets").collect())).toHaveLength(0);
+  });
+
+  it("קוד deviceMove לא מתקבל ב-recoveryConfirm, וקוד deviceRecovery כן ופותח המתנה של 24 שעות", async () => {
+    await plant("deviceMove", "424242");
+    expect(await t.mutation(api.deviceMove.recoveryConfirm, { code: CODE, personId: A.ids["אבא"], pin: "1111", emailCode: "424242", device: "n" }))
+      .toMatchObject({ ok: false, reason: "secretCode" });
+    await plant("deviceRecovery", "777777");
+    const c: any = await t.mutation(api.deviceMove.recoveryConfirm, { code: CODE, personId: A.ids["אבא"], pin: "1111", emailCode: "777777", device: "n" });
+    expect(c.ok).toBe(true);
+    expect(c.readyAt - Date.now()).toBeGreaterThan(RECOVERY_WAIT_MS - 5000);
+    expect(await t.mutation(api.deviceMove.recoveryFinish, { code: CODE, personId: A.ids["אבא"], pin: "1111", secret: c.secret, device: "n" }))
+      .toMatchObject({ ok: false, reason: "wait" });
+  });
+});
