@@ -7,7 +7,7 @@ import { purgeNotebook } from "./notebook";
 import { logActivity } from "./activity";
 import type { MutationCtx } from "./_generated/server";
 import type { Id } from "./_generated/dataModel";
-import { MAX_FAMILY_SIZE, cleanName, hashPin, randomHex, requireParent, requirePerson, requireSameFamily, validPin, pinRuleMessage } from "./lib";
+import { MAX_FAMILY_SIZE, cleanName, hashPin, purgeAuthRows, randomHex, requireParent, requirePerson, requireSameFamily, validPin, pinRuleMessage } from "./lib";
 
 // בכל משפחה חייב להישאר לפחות הורה אחד חוץ מהאדם הזה: בלי הורה אף אחד לא מאשר מצטרפים ולא מנהל את הקופה.
 // הקריאות שמגיעות ל-remove ול-setRole כבר חוסמות פעולה של הורה על עצמו, וזו הגנה נוספת בשרת.
@@ -70,6 +70,7 @@ export const remove = mutation({
     }
     await purgeFriends(ctx, id);
     await purgeBiometric(ctx, id);
+    await purgeAuthRows(ctx, id);
     await purgeNotebook(ctx, id);
     const rec = await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     for (const r of rec) if (r.from === id || r.to === id) await ctx.db.delete(r._id);

@@ -145,3 +145,38 @@ describe("auth:join שומר מזהה מכשיר מנוקה ומוגבל באו�
     expect(noa.trustedDevices).toHaveLength(1);
   });
 });
+
+describe("מחיקת אדם או קופה מנקה גם שאריות כניסה ויומן", () => {
+  const plantAuthRows = (personId: any) => t.run(async (ctx) => {
+    await ctx.db.insert("emailCodes", { personId, email: "p@example.com", purpose: "pinReset", codeHash: "h", salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
+    await ctx.db.insert("deviceTickets", { personId, ticketHash: "t" + personId, expiresAt: Date.now() + 600_000 });
+    await ctx.db.insert("deviceRecoveries", { personId, secretHash: "s", requestedAt: Date.now(), readyAt: Date.now(), expiresAt: Date.now() + 600_000 });
+  });
+  const authRowsOf = (personId: any) => t.run(async (ctx) => [
+    ...(await ctx.db.query("emailCodes").withIndex("by_person", (q) => q.eq("personId", personId)).collect()),
+    ...(await ctx.db.query("deviceTickets").withIndex("by_person", (q) => q.eq("personId", personId)).collect()),
+    ...(await ctx.db.query("deviceRecoveries").withIndex("by_person", (q) => q.eq("personId", personId)).collect()),
+  ]);
+
+  it("people:remove מוחק קודי מייל, כרטיסי קישור ובקשות שחזור של האדם בלבד", async () => {
+    await plantAuthRows(A.ids["דנה"]);
+    await plantAuthRows(A.ids["אמא"]);
+    await t.mutation(api.people.remove, { token: dad(), id: A.ids["דנה"] });
+    expect(await authRowsOf(A.ids["דנה"])).toHaveLength(0);
+    expect(await authRowsOf(A.ids["אמא"])).toHaveLength(3);
+  });
+
+  it("family:remove מוחק את כל השאריות והיומן של הקופה, ולא נוגע בקופה אחרת", async () => {
+    const B = await seedFamily(t, "B", [{ name: "סבתא", role: "parent", pin: "1111" }]);
+    for (const id of [A.ids["אבא"], A.ids["אמא"], A.ids["דנה"], B.ids["סבתא"]]) await plantAuthRows(id);
+    await t.mutation(api.entries.add, { token: dad(), kind: "debt", from: A.ids["דנה"], to: A.ids["אבא"], amount: 100, note: "", date: "2026-01-15" });
+    expect((await t.run((ctx) => ctx.db.query("activity").withIndex("by_family_at", (q) => q.eq("familyId", A.familyId)).collect())).length).toBeGreaterThan(0);
+
+    await t.mutation(api.family.remove, { token: dad(), confirmName: "A" });
+    await t.finishAllScheduledFunctions(vi.runAllTimers);
+
+    expect(await t.run((ctx) => ctx.db.query("activity").withIndex("by_family_at", (q) => q.eq("familyId", A.familyId)).collect())).toHaveLength(0);
+    for (const id of [A.ids["אבא"], A.ids["אמא"], A.ids["דנה"]]) expect(await authRowsOf(id)).toHaveLength(0);
+    expect(await authRowsOf(B.ids["סבתא"])).toHaveLength(3);
+  });
+});

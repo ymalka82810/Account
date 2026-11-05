@@ -5,7 +5,7 @@ import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
 import { purgeNotebook } from "./notebook";
 import { proofValidator, purgeBiometric, requireBiometric } from "./biometric";
-import { cleanFamilyName, freshCode, issuePass, purgePasses, requireParent } from "./lib";
+import { cleanFamilyName, freshCode, issuePass, purgeAuthRows, purgePasses, requireParent } from "./lib";
 import { COUNTRIES, isCurrency } from "./currency";
 
 const PURGE_BATCH = 500;
@@ -84,6 +84,7 @@ export const remove = mutation({
       }
       await purgeFriends(ctx, p._id);
       await purgeBiometric(ctx, p._id);
+      await purgeAuthRows(ctx, p._id);
       await purgeNotebook(ctx, p._id);
       await ctx.db.delete(p._id);
     }
@@ -99,6 +100,9 @@ export const purgeEntries = internalMutation({
   handler: async (ctx, { familyId }): Promise<void> => {
     const batch = await ctx.db.query("entries").withIndex("by_family", (q) => q.eq("familyId", familyId)).take(PURGE_BATCH);
     for (const e of batch) await ctx.db.delete(e._id);
-    if (batch.length === PURGE_BATCH) await ctx.scheduler.runAfter(0, internal.family.purgeEntries, { familyId });
+    // יומן השינויים מכיל שמות וסכומים של המשפחה, ולכן נמחק איתה ולא ממתין לניקוי היומי.
+    const log = await ctx.db.query("activity").withIndex("by_family_at", (q) => q.eq("familyId", familyId)).take(PURGE_BATCH);
+    for (const a of log) await ctx.db.delete(a._id);
+    if (batch.length === PURGE_BATCH || log.length === PURGE_BATCH) await ctx.scheduler.runAfter(0, internal.family.purgeEntries, { familyId });
   },
 });

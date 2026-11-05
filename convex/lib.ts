@@ -158,6 +158,13 @@ function randomCode(): string {
   return [...bytes].map((b) => CODE_ALPHABET[b & 31]).join("");
 }
 
+// שאריות כניסה של אדם שנמחק: קודי מייל (כולל כתובת המייל), כרטיסי קישור מכשיר ובקשות החלפת מכשיר.
+export async function purgeAuthRows(ctx: MutationCtx, personId: Id<"people">) {
+  for (const r of await ctx.db.query("emailCodes").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) await ctx.db.delete(r._id);
+  for (const r of await ctx.db.query("deviceTickets").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) await ctx.db.delete(r._id);
+  for (const r of await ctx.db.query("deviceRecoveries").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) await ctx.db.delete(r._id);
+}
+
 // ---------- כרטיסי כניסה למכשיר ----------
 export const PASS_PREFIX = "dev_";
 export const isPass = (raw: string) => raw.startsWith(PASS_PREFIX);
