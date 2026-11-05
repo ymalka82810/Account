@@ -21,7 +21,8 @@ const convexGeneratedStub = {
 // בפיתוח מקומי (npm run dev) זה נשאר '/'.
 export default defineConfig(({ command }) => ({
   plugins: [convexGeneratedStub],
-  test: { server: { deps: { inline: ['convex-test'] } } },
+  // vitest מריץ רק את tests/. בדיקות הדפדפן ב-e2e/ רצות ב-Playwright (npm run e2e).
+  test: { include: ['tests/**/*.test.ts'], server: { deps: { inline: ['convex-test'] } } },
   // JSX runtime שעוטף כל אימוג'י ב-<span class="emo"> בשביל אפקט הנפח (src-react/lib/emojiJsx.js)
   oxc: { jsx: { importSource: 'emoji-jsx' } },
   resolve: {
