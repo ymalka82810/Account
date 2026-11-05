@@ -1,0 +1,34 @@
+name: Check Convex env (names only)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # הריפו ציבורי ולכן גם הלוגים: מדפיסים רק שמות משתנים, אף פעם לא ערכים
+      - name: List env names
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+        run: |
+          npx convex env list > /tmp/env.txt 2>/dev/null || { echo "convex env list failed"; exit 1; }
+          python3 - <<'PY'
+          import re
+          names = sorted({m.group(1) for line in open('/tmp/env.txt')
+                          if (m := re.match(r'^([A-Z_][A-Z0-9_]*)=', line))})
+          required = ['PIN_PEPPER','RESEND_API_KEY','EMAIL_FROM','EMAIL_MODE',
+                      'VAPID_PUBLIC_KEY','VAPID_PRIVATE_KEY','VAPID_SUBJECT']
+          print('Defined:', ', '.join(names) or '(none)')
+          for r in required:
+              print(('OK      ' if r in names else 'MISSING ') + r)
+          PY
+          rm -f /tmp/env.txt
