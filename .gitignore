@@ -3,7 +3,9 @@ node_modules/
 .env
 dist/
 
-.claude/
+.claude/*
+!.claude/agents/
+!.claude/README.md
 android/
 
 .VSCodeCounter/
