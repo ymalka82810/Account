@@ -1,6 +1,7 @@
 import { mutation } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
-import { hashToken, normalizeEmail, requirePerson, validEmail, validPin, pinRuleMessage, findFamilyByCode } from "./lib";
+import { internal } from "./_generated/api";
+import { hashToken, normalizeEmail, registerPinFail, requirePerson, validEmail, validPin, pinRuleMessage, findFamilyByCode, verifyPin } from "./lib";
 import { issueCode, verifyCode } from "./emailCodes";
 import { codeThrottled, failCode, openSession, setPin } from "./auth";
 import { isBound } from "./biometric";
@@ -19,8 +20,8 @@ export const requestEmailChangeCode = mutation({
 });
 
 export const requestVerify = mutation({
-  args: { token: v.string(), email: v.string(), oldCode: v.optional(v.string()) },
-  handler: async (ctx, { token, email, oldCode }) => {
+  args: { token: v.string(), email: v.string(), oldCode: v.optional(v.string()), myPin: v.optional(v.string()) },
+  handler: async (ctx, { token, email, oldCode, myPin }) => {
     const me = await requirePerson(ctx, token);
     if (me.role !== "parent") throw new ConvexError("מייל רק להורים");
     const clean = normalizeEmail(email);
@@ -28,6 +29,16 @@ export const requestVerify = mutation({
     if (me.emailVerified) {
       if (!oldCode || !(await verifyCode(ctx, me._id, "emailChange", oldCode))) {
         return { ok: false as const, reason: "oldCode" as const };
+      }
+    } else {
+      // חיבור מייל ראשון: המייל פותח שינוי קוד סודי ואיפוס, ולכן מי שרק מחזיק סשן פתוח לא יכול לחבר מייל משלו.
+      // נדרש הקוד הסודי של ההורה עצמו. התשובה היא ערך (לא שגיאה), כדי שספירת הניסיונות תישמר.
+      if (!me.pinHash || !me.pinSalt || !myPin) return { ok: false as const, reason: "myPin" as const };
+      if (me.lockedUntil && me.lockedUntil > Date.now()) return { ok: false as const, reason: "locked" as const };
+      if (!(await verifyPin(myPin, me.pinSalt, me.pinHash))) {
+        const r = await registerPinFail(ctx, me);
+        if (r.locked) await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: me._id });
+        return { ok: false as const, reason: "myPin" as const };
       }
     }
     await ctx.db.patch(me._id, { pendingEmail: clean });

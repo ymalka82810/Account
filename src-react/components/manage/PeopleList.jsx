@@ -144,7 +144,16 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
           {p.id !== me && (
             <button className="small danger" type="button" aria-label={t('הסרת {name}', { name: p.name })} onClick={async () => {
               if (!(await confirm({ icon: '👋', title: t('הסרה'), amount: p.name, message: t('להסיר את {name} מהמשפחה?', { name: p.name }), okText: t('הסרה'), cancelText: t('חזרה'), danger: true }))) return;
-              run('people:remove', { id: p.id }, g(p.gender, '{name} הוסר', '{name} הוסרה', '{name} הוסר/ה', { name: p.name }));
+              try {
+                // הסרת הורה מאושרת בטביעת אצבע / זיהוי פנים, כמו שינוי תפקיד שלו.
+                const proof = p.role === 'parent'
+                  ? await bioConfirm(`person-remove:${p.id}`, { why: t('הסרת הורה מאושרת על ידי הורה. תיפתח עכשיו בקשת אימות מהמכשיר.'), need: t('להסיר הורה') })
+                  : undefined;
+                await call('people:remove', { token, id: p.id, proof });
+                toast(g(p.gender, '{name} הוסר', '{name} הוסרה', '{name} הוסר/ה', { name: p.name }));
+              } catch (e) {
+                if (!(e instanceof BioError && e.code === 'cancel')) toast(e instanceof BioError ? e.message : errMsg(e));
+              }
             }}>{t('הסרה')}</button>
           )}
         </div>

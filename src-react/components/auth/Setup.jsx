@@ -46,6 +46,7 @@ function SetupForm({ current }) {
     if (!isAdult(birthDate)) { setError(t('קופה משפחתית נפתחת רק על ידי מי שמעל גיל 18')); return; }
     run(async () => {
       const { email, familyName, ...rest } = v;
+      const myPin = rest.pin;
       const err = await createFamily({ ...rest, familyName: buildFamilyName(familyName), birthDate, avatar, ...locale });
       if (err) { setError(err); return; }
       setV((x) => ({ ...x, pin: '' }));
@@ -53,7 +54,8 @@ function SetupForm({ current }) {
       const addr = email.trim();
       if (addr) {
         try {
-          await call('emailAuth:requestVerify', { token: state.token, email: addr });
+          const res = await call('emailAuth:requestVerify', { token: state.token, email: addr, myPin });
+          if (!res.ok) { toast(t('לא הצלחנו לחבר את המייל. אפשר לנסות שוב ב"החשבון שלי".')); return; }
           sheet.open(t('אימות המייל'), <EmailSheet sentTo={addr.toLowerCase()} />);
         } catch (e) { toast(errMsg(e)); }
       }

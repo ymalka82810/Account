@@ -33,6 +33,7 @@ const SUBJECTS: Record<string, string> = {
   childReset: "קוד לאישור קוד סודי חדש לילד/ה בקופה",
   emailChange: "קוד לאישור החלפת המייל בקופה",
   deviceMove: "קוד לאישור החלפת מכשיר בקופה",
+  deviceRecovery: "קוד לאישור החלפת מכשיר שאבד בקופה",
 };
 
 export const sendCode = internalAction({

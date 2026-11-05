@@ -82,12 +82,15 @@ export default function Codes({ data, token }) {
     if (!(await confirm({ icon: '🔑', title: t('החלפת קוד'), message: t('להחליף את הקוד? מי שכבר בפנים נשאר, אבל הקוד הישן יפסיק לעבוד, ומכשירים אחרים ששמרו את המשפחה יצטרכו להזין את הקוד החדש.'), okText: t('החלפת קוד'), cancelText: t('חזרה') }))) return;
     try {
       const keepDevice = !!localStorage.getItem(CODE_KEY);
-      const res = await call('family:rotateCode', { token, keepDevice });
+      const proof = await bioConfirm('family-rotate', { why: t('החלפת הקוד מנתקת את כל המכשירים ששמרו את המשפחה, ולכן היא מאושרת על ידי הורה. תיפתח עכשיו בקשת אימות מהמכשיר.'), need: t('להחליף את הקוד') });
+      const res = await call('family:rotateCode', { token, keepDevice, proof });
       hide();
       // כל המכשירים ששמרו את המשפחה צריכים להזין את הקוד החדש. המכשיר הזה מקבל כרטיס חדש.
       if (res?.loginCode) localStorage.setItem(CODE_KEY, res.loginCode);
       toast(t('הקוד הוחלף ✅ אפשר להציג אותו בטביעת אצבע או זיהוי פנים'));
-    } catch (e) { toast(errMsg(e)); }
+    } catch (e) {
+      if (!(e instanceof BioError && e.code === 'cancel')) toast(e instanceof BioError ? e.message : errMsg(e));
+    }
   }
 
   const devices = useQuery('auth:listDevices', { token });

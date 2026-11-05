@@ -57,7 +57,7 @@ const login = (personId: any, pin: string, proof?: any, device = "dev-x") =>
   t.mutation(api.auth.login, { code: CODE, personId, pin, device, proof });
 
 // קוד שנשלח למייל, בלי לקרוא מייל: שותלים קוד ידוע במקום שהשרת היה שומר.
-async function plantCode(personId: any, purpose: "deviceMove" | "deviceBind", code: string) {
+async function plantCode(personId: any, purpose: "deviceMove" | "deviceBind" | "deviceRecovery", code: string) {
   await t.run(async (ctx) => {
     // מוחקים קוד אמיתי שהשרת כבר הנפיק, כדי שהקוד הידוע יהיה היחיד.
     for (const old of await ctx.db.query("emailCodes").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) {
@@ -259,7 +259,7 @@ describe("מכשיר שאבד: בקשה עם המתנה של 24 שעות", () =>
   async function request(device = "n") {
     const r: any = await t.mutation(api.deviceMove.recoveryRequest, { code: CODE, personId: A.ids["אבא"], pin: "1111", device });
     expect(r.ok).toBe(true);
-    await plantCode(A.ids["אבא"], "deviceMove", "777777");
+    await plantCode(A.ids["אבא"], "deviceRecovery", "777777");
     return await t.mutation(api.deviceMove.recoveryConfirm, { code: CODE, personId: A.ids["אבא"], pin: "1111", emailCode: "777777", device });
   }
 

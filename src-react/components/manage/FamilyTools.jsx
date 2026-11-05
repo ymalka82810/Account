@@ -11,6 +11,8 @@ import { Err } from '../shared/fields.jsx';
 import FamilyNameField, { buildFamilyName, bareFamilyName } from '../shared/FamilyNameField.jsx';
 import Select from '../shared/Select.jsx';
 import { useConfirm } from '../shared/Confirm.jsx';
+import { useBioConfirm } from '../shared/BioConfirm.jsx';
+import { BioError } from '../../lib/biometric.js';
 import { COUNTRIES, CURRENCIES, currencyLabel, currencySymbol, countryName } from '../../lib/currencies.js';
 import { convert, curOf } from '../../lib/computations.js';
 
@@ -103,6 +105,7 @@ export default function FamilySettings({ data }) {
 // מחיקת הקופה כולה, מופרדת משאר ההגדרות.
 export function DangerZone({ data, token }) {
   const confirm = useConfirm();
+  const bioConfirm = useBioConfirm();
   async function deleteFamily() {
     const typed = await confirm({
       icon: '⚠️',
@@ -115,12 +118,15 @@ export function DangerZone({ data, token }) {
     });
     if (typed === null) return;
     try {
-      await call('family:remove', { token, confirmName: typed });
+      const proof = await bioConfirm('family-remove', { why: t('מחיקת הקופה אי אפשר לבטל, ולכן היא מאושרת על ידי הורה. תיפתח עכשיו בקשת אימות מהמכשיר.'), need: t('למחוק את הקופה') });
+      await call('family:remove', { token, confirmName: typed, proof });
       localStorage.removeItem(CODE_KEY);
       state.fam = null;
       toast(t('הקופה נמחקה'));
       dropSession();
-    } catch (e) { toast(errMsg(e)); }
+    } catch (e) {
+      if (!(e instanceof BioError && e.code === 'cancel')) toast(e instanceof BioError ? e.message : errMsg(e));
+    }
   }
 
   return (

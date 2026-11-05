@@ -81,7 +81,7 @@ function PinFallbackSheet({ onDone, action, why }) {
 }
 
 // פעולות שמותר לאשר בקוד סודי כשאין ביומטריה (חייב להתאים ל-PIN_FALLBACK_ACTIONS ב-convex/biometric.ts).
-const pinFallbackOk = (action) => /^(add|role):/.test(action);
+const pinFallbackOk = (action) => /^(add|role|person-remove|family-remove|family-rotate)(:|$)/.test(action);
 
 // מחזיר confirm(action, opts) שמחזיר proof לשרת, או זורק BioError (code: unsupported/cancel/failed).
 // opts (לא חובה): { reason } - הסבר בחלון הרישום, { need } - מה צריך מכשיר ביומטרי בשבילו,

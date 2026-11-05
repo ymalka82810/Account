@@ -175,7 +175,7 @@ export const startRegistration = (ctx: MutationCtx, personId: Id<"people">) => n
 export const registerStart = mutation({
   args: { token: v.string(), myPin: v.string(), emailCode: v.optional(v.string()) },
   handler: async (ctx, { token, myPin, emailCode }) => {
-    const me = await requireParent(ctx, token);
+    const me = await requireParent(ctx, token, { allowUnbound: true });
     if (await isBound(ctx, me._id)) return { ok: false as const, reason: "bound" as const };
     if (await familyHasBoundParent(ctx, me.familyId)) return { ok: false as const, reason: "needBindCode" as const };
     if (!me.pinHash || !me.pinSalt) return { ok: false as const, reason: "nopin" as const };
@@ -202,7 +202,7 @@ export const registerStart = mutation({
 export const registerFinish = mutation({
   args: { token: v.string(), ...keyArgs },
   handler: async (ctx, { token, ...a }) => {
-    const me = await requireParent(ctx, token);
+    const me = await requireParent(ctx, token, { allowUnbound: true });
     // אסור שמפתח חדש יחליף קיים כאן: החלפת מכשיר עוברת רק דרך deviceMove.
     if (await isBound(ctx, me._id)) throw new ConvexError("ההורה כבר קשור למכשיר. להחלפת מכשיר יש תהליך נפרד.");
     await acceptKey(ctx, me._id, a);
@@ -216,7 +216,9 @@ export const challenge = mutation({
   args: { token: v.string(), action: v.string(), credentialId: v.string() },
   handler: async (ctx, { token, action, credentialId }) => {
     const me = await requireParent(ctx, token);
-    if (action.length > 200 || action === "register" || action === "login") throw new ConvexError("פעולה לא תקינה");
+    // "pin:" שמור למסלול הקוד הסודי (pinConfirm). בלי החסימה הזו מי שמחזיק סשן של הורה היה מנפיק לעצמו
+    // אתגר "pin:role:..." ועוקף גם את טביעת האצבע וגם את הקוד הסודי.
+    if (action.length > 200 || action === "register" || action === "login" || action.startsWith(PIN_ACTION_PREFIX)) throw new ConvexError("פעולה לא תקינה");
     const keys = await ctx.db.query("bioKeys").withIndex("by_person", (q) => q.eq("personId", me._id)).collect();
     if (!keys.some((k) => k.credentialId === credentialId)) return { ok: false as const, reason: "unknownKey" as const };
     return { ok: true as const, challenge: await newChallenge(ctx, me._id, action) };
@@ -266,7 +268,7 @@ export const loginChallenge = mutation({
 export const deviceStatus = query({
   args: { token: v.string() },
   handler: async (ctx, { token }) => {
-    const me = await requireParent(ctx, token);
+    const me = await requireParent(ctx, token, { allowUnbound: true });
     const bound = await isBound(ctx, me._id);
     const keys = bound ? await boundKeys(ctx, me._id) : [];
     return {
@@ -299,7 +301,7 @@ export type BioProof = {
 
 // פעולות שמותר לאשר בקוד סודי כשאין טביעת אצבע / זיהוי פנים במכשיר. שאר הפעולות (קוד משפחה,
 // קוד קישור, החלפת מכשיר) נשארות ביומטריות בלבד.
-const PIN_FALLBACK_ACTIONS = /^(add|role):/;
+const PIN_FALLBACK_ACTIONS = /^(add|role|person-remove|family-remove|family-rotate)(:|$)/;
 const PIN_ACTION_PREFIX = "pin:";
 
 // מסלול חלופי למכשיר בלי ביומטריה: ההורה מקליד את הקוד הסודי שלו ומקבל אתגר חד־פעמי לפעולה הזו.
