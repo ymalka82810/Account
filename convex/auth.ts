@@ -435,6 +435,11 @@ export const changeMyPin = mutation({
       return { ok: false as const, reason: "wrong" as const };
     }
     await setPin(ctx, p._id, newPin);
+    // כמו בשינוי קוד באישור מייל: מנתקים את שאר המכשירים ומשאירים את הנוכחי. מי שהחליף קוד כי חשש
+    // שמישהו אחר נכנס לא רוצה שהסשן של המישהו הזה ימשיך לעבוד.
+    for (const s of await ctx.db.query("sessions").withIndex("by_person", (q) => q.eq("personId", p._id)).collect()) {
+      if (s._id !== session._id) await ctx.db.delete(s._id);
+    }
     return { ok: true as const };
   },
 });

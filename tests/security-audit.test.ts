@@ -1,7 +1,7 @@
 // @vitest-environment edge-runtime
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../convex/_generated/api";
-import { hashPin, RECOVERY_WAIT_MS } from "../convex/lib";
+import { hashPin, hashToken, RECOVERY_WAIT_MS } from "../convex/lib";
 import { familyCode, newDb, seedFamily, T } from "./helpers/seed";
 
 // בדיקות שנוספו בביקורת האבטחה (feature/security-audit): כל בדיקה מכסה תיקון אחד.
@@ -107,5 +107,28 @@ describe("admin:importData לא יוצר הורים חדשים", () => {
     expect(byName["ילד חדש"].role).toBe("child");
     expect(byName["אמא"].role).toBe("parent"); // אדם קיים לא משתנה
     expect(people.filter((p) => p.role === "parent").map((p) => p.name).sort()).toEqual(["אבא", "אמא"]);
+  });
+});
+
+describe("auth:changeMyPin מנתק את שאר המכשירים", () => {
+  it("אחרי שינוי קוד הסשן הנוכחי נשאר והסשנים האחרים של אותו אדם נמחקים", async () => {
+    const other = await t.run(async (ctx) => {
+      await ctx.db.insert("sessions", { personId: A.ids["דנה"], tokenHash: await hashToken("other-device"), expiresAt: Date.now() + 3_600_000 });
+      await ctx.db.insert("sessions", { personId: A.ids["אמא"], tokenHash: await hashToken("mom-other"), expiresAt: Date.now() + 3_600_000 });
+      return "other-device";
+    });
+    expect(await t.query(api.data.get, { token: other })).not.toBeNull();
+    const res = await t.mutation(api.auth.changeMyPin, { token: A.tokens["דנה"], oldPin: "2222", newPin: "4321" });
+    expect(res).toMatchObject({ ok: true });
+    expect(await t.query(api.data.get, { token: A.tokens["דנה"] })).not.toBeNull();
+    expect(await t.query(api.data.get, { token: other })).toBeNull();
+    // סשן של אדם אחר לא נפגע
+    expect(await t.query(api.data.get, { token: "mom-other" })).not.toBeNull();
+  });
+
+  it("קוד ישן שגוי לא מנתק אף אחד", async () => {
+    await t.run(async (ctx) => { await ctx.db.insert("sessions", { personId: A.ids["דנה"], tokenHash: await hashToken("other-device"), expiresAt: Date.now() + 3_600_000 }); });
+    expect(await t.mutation(api.auth.changeMyPin, { token: A.tokens["דנה"], oldPin: "0000", newPin: "4321" })).toMatchObject({ ok: false, reason: "wrong" });
+    expect(await t.query(api.data.get, { token: "other-device" })).not.toBeNull();
   });
 });
