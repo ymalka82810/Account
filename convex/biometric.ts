@@ -175,7 +175,7 @@ export const startRegistration = (ctx: MutationCtx, personId: Id<"people">) => n
 export const registerStart = mutation({
   args: { token: v.string(), myPin: v.string(), emailCode: v.optional(v.string()) },
   handler: async (ctx, { token, myPin, emailCode }) => {
-    const me = await requireParent(ctx, token);
+    const me = await requireParent(ctx, token, { allowUnbound: true });
     if (await isBound(ctx, me._id)) return { ok: false as const, reason: "bound" as const };
     if (await familyHasBoundParent(ctx, me.familyId)) return { ok: false as const, reason: "needBindCode" as const };
     if (!me.pinHash || !me.pinSalt) return { ok: false as const, reason: "nopin" as const };
@@ -202,7 +202,7 @@ export const registerStart = mutation({
 export const registerFinish = mutation({
   args: { token: v.string(), ...keyArgs },
   handler: async (ctx, { token, ...a }) => {
-    const me = await requireParent(ctx, token);
+    const me = await requireParent(ctx, token, { allowUnbound: true });
     // אסור שמפתח חדש יחליף קיים כאן: החלפת מכשיר עוברת רק דרך deviceMove.
     if (await isBound(ctx, me._id)) throw new ConvexError("ההורה כבר קשור למכשיר. להחלפת מכשיר יש תהליך נפרד.");
     await acceptKey(ctx, me._id, a);
@@ -268,7 +268,7 @@ export const loginChallenge = mutation({
 export const deviceStatus = query({
   args: { token: v.string() },
   handler: async (ctx, { token }) => {
-    const me = await requireParent(ctx, token);
+    const me = await requireParent(ctx, token, { allowUnbound: true });
     const bound = await isBound(ctx, me._id);
     const keys = bound ? await boundKeys(ctx, me._id) : [];
     return {

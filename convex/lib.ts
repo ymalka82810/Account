@@ -313,9 +313,24 @@ export async function requirePerson(ctx: QueryCtx, token: string): Promise<Membe
   return me as Member;
 }
 
-export async function requireParent(ctx: QueryCtx, token: string): Promise<Member> {
+const hasBioKey = async (ctx: QueryCtx, personId: Id<"people">) =>
+  (await ctx.db.query("bioKeys").withIndex("by_person", (q) => q.eq("personId", personId)).first()) !== null;
+
+// allowUnbound: רק לזרימות הקישור עצמן (הקמה, קישור ראשון, מסך הקישור), שבהן ההורה עוד לא קשור.
+// בכל מקום אחר הורה שלא קשור למכשיר לא פועל כהורה כשיש במשפחה הורה קשור: הקשירה נאכפת בשרת
+// ולא רק בכניסה ובמסך (סשן שנוצר לפני הקשירה, או אחרי איפוס קוד במייל, לא עוקף אותה).
+// כשאין במשפחה אף הורה קשור (הקמה, או משפחה מהגרסה הקודמת) הורה פועל כרגיל ומתבקש לקשור.
+export async function requireParent(ctx: QueryCtx, token: string, opts?: { allowUnbound?: boolean }): Promise<Member> {
   const me = await requirePerson(ctx, token);
   if (me.role !== "parent") throw new ConvexError("רק הורים יכולים לעשות את זה");
+  if (!opts?.allowUnbound && !(await hasBioKey(ctx, me._id))) {
+    const people = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
+    for (const p of people) {
+      if (p.role === "parent" && p._id !== me._id && (await hasBioKey(ctx, p._id))) {
+        throw new ConvexError("צריך לקשר את המכשיר הזה להורה. היכנסו מחדש וקשרו אותו עם קוד קישור מהורה אחר");
+      }
+    }
+  }
   return me;
 }
 

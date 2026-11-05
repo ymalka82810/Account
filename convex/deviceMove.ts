@@ -79,7 +79,7 @@ export const requestMoveCode = mutation({
 export const requestFirstCode = mutation({
   args: { token: v.string() },
   handler: async (ctx, { token }) => {
-    const me = await requireParent(ctx, token);
+    const me = await requireParent(ctx, token, { allowUnbound: true });
     if (await isBound(ctx, me._id) || await familyHasBoundParent(ctx, me.familyId)) throw new ConvexError("אי אפשר לקשור מכשיר ככה");
     await issueCode(ctx, me, needVerifiedEmail(me), "deviceMove");
     return { ok: true as const };

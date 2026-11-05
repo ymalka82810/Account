@@ -180,3 +180,38 @@ describe("מחיקת אדם או קופה מנקה גם שאריות כניסה 
     expect(await authRowsOf(B.ids["סבתא"])).toHaveLength(3);
   });
 });
+
+describe("requireParent: הורה לא קשור לא פועל כהורה כשיש במשפחה הורה קשור", () => {
+  const mom = () => A.tokens["אמא"];
+
+  it("כשאין הורה קשור במשפחה, הורה לא קשור פועל כרגיל (הקמה, משפחה ישנה)", async () => {
+    await t.mutation(api.family.rename, { token: mom(), name: "שם חדש" });
+    expect(await t.query(api.biometric.deviceStatus, { token: mom() })).toMatchObject({ bound: false, canBindSelf: true });
+  });
+
+  it("כשיש הורה קשור: פעולות הורה נדחות להורה הלא קשור, וההורה הקשור ממשיך כרגיל", async () => {
+    await bindKey(A.ids["אבא"]);
+    await expect(t.mutation(api.family.rename, { token: mom(), name: "x" })).rejects.toThrow("לקשר את המכשיר");
+    await expect(t.mutation(api.people.add, { token: mom(), name: "חדש", role: "child" })).rejects.toThrow("לקשר את המכשיר");
+    await expect(t.query(api.activity.list, { token: mom() })).rejects.toThrow("לקשר את המכשיר");
+    await t.mutation(api.family.rename, { token: dad(), name: "בית" });
+  });
+
+  it("זרימות הקישור עצמן עובדות להורה לא קשור, והנתונים הבסיסיים נטענים", async () => {
+    await bindKey(A.ids["אבא"]);
+    expect(await t.query(api.biometric.deviceStatus, { token: mom() })).toMatchObject({ bound: false, canBindSelf: false });
+    expect(await t.mutation(api.biometric.registerStart, { token: mom(), myPin: "3333" })).toMatchObject({ ok: false, reason: "needBindCode" });
+    expect(await t.query(api.data.get, { token: mom() })).not.toBeNull();
+  });
+
+  it("סשן שנפתח באיפוס קוד במייל להורה לא קשור לא נותן הרשאות הורה כשיש הורה קשור", async () => {
+    await bindKey(A.ids["אבא"]);
+    await t.run(async (ctx) => {
+      await ctx.db.patch(A.ids["אמא"], { email: "m@example.com", emailVerified: true });
+      await ctx.db.insert("emailCodes", { personId: A.ids["אמא"], email: "m@example.com", purpose: "pinReset", codeHash: await hashPin("123456", "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
+    });
+    const res: any = await t.mutation(api.emailAuth.resetWithCode, { code: CODE, personId: A.ids["אמא"], emailCode: "123456", newPin: "5555", device: "m" });
+    expect(res.ok).toBe(true);
+    await expect(t.mutation(api.family.rename, { token: res.token, name: "x" })).rejects.toThrow("לקשר את המכשיר");
+  });
+});
