@@ -62,7 +62,8 @@ function textFields(/** @type {any} */ from) {
 // מגלל את הדף כך שהשדה הפעיל (עם התווית שלו) יישאר גלוי מעל המקלדת שלנו. אם יש בטופס כפתור שליחה, מנסים להשאיר גם אותו גלוי,
 // אבל רק אם שניהם נכנסים יחד מעל המקלדת, ואף פעם לא על חשבון השדה עצמו. (scrollIntoView מרכז ביחס לכל המסך, ולכן השדה היה נקבר מתחת למקלדת.)
 function revealAboveKeyboard(/** @type {any} */ field, /** @type {any} */ kbEl) {
-  const limit = (kbEl ? kbEl.getBoundingClientRect().top : window.innerHeight) - 8;
+  // גובה המקלדת מהפריסה ולא מ-getBoundingClientRect: בזמן אנימציית הכניסה (kb-up) ה-rect כולל את ה-transform, והגבול יוצא נמוך מדי.
+  const limit = (kbEl ? window.innerHeight - kbEl.offsetHeight : window.innerHeight) - 8;
   const top = 12;
   const f = field.getBoundingClientRect();
   const box = (field.closest('label, .field') || field).getBoundingClientRect();
@@ -73,7 +74,8 @@ function revealAboveKeyboard(/** @type {any} */ field, /** @type {any} */ kbEl) 
     if (sb > limit && sb - limit <= box.top - top) d = Math.max(d, sb - limit);
   }
   if (d === 0 && box.top < top) d = box.top - top;
-  if (d) window.scrollBy({ top: d, behavior: 'smooth' });
+  // גלילה מיידית: בלי אנימציה, והיא לא תלויה בקצב הפריימים (גלילה חלקה לא התקדמה ב-Chromium 131 ב-CI, והשדה נשאר מתחת למקלדת)
+  if (d) window.scrollBy({ top: d, behavior: 'auto' });
 }
 
 export default function AppKeyboard() {

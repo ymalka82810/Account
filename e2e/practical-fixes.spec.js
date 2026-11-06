@@ -120,10 +120,34 @@ test.describe('הקמת קופה: המקלדת הפנימית לא מסתירה'
     await openSetup(page);
     const kbTop = () => page.evaluate(() => document.querySelector('.kb').getBoundingClientRect().top);
     const bottom = (sel) => page.locator(sel).evaluate((e) => e.getBoundingClientRect().bottom);
+    const state = () => page.evaluate(() => JSON.stringify({ scrollY: Math.round(scrollY), innerHeight, docHeight: document.documentElement.scrollHeight, kbHeight: document.querySelector('.kb').offsetHeight }));
     for (const f of ['name', 'pin', 'email']) {
       await page.locator(`#screen-setup [data-f="${f}"] input`).focus();
       await page.waitForTimeout(1200);
-      expect(await bottom(`#screen-setup [data-f="${f}"] input`)).toBeLessThanOrEqual(await kbTop());
+      expect(await bottom(`#screen-setup [data-f="${f}"] input`), `${f} ${await state()}`).toBeLessThanOrEqual(await kbTop());
+    }
+    expect(await bottom('#screen-setup button[type=submit]')).toBeLessThanOrEqual(await kbTop());
+  });
+
+  test('המקלדת עולה באנימציה (בלי הפחתת תנועה): השדות והכפתור נשארים מעל המקלדת', async ({ page }) => {
+    // בלי הפחתת תנועה המקלדת עולה ב-kb-up (180ms). מאריכים אותה, כדי שהגלילה תיחשב בזמן שהיא עוד בתנועה, כמו במכשיר איטי או ב-CI.
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.addInitScript(() => {
+      document.addEventListener('DOMContentLoaded', () => {
+        const s = document.createElement('style');
+        s.textContent = '.kb { animation-duration: .6s !important; }';
+        document.head.appendChild(s);
+      });
+    });
+    await page.setViewportSize({ width: 390, height: 640 });
+    await openSetup(page);
+    const kbTop = () => page.evaluate(() => document.querySelector('.kb').getBoundingClientRect().top);
+    const bottom = (sel) => page.locator(sel).evaluate((e) => e.getBoundingClientRect().bottom);
+    const state = () => page.evaluate(() => JSON.stringify({ scrollY: Math.round(scrollY), innerHeight, docHeight: document.documentElement.scrollHeight, kbHeight: document.querySelector('.kb').offsetHeight }));
+    for (const f of ['name', 'pin', 'email']) {
+      await page.locator(`#screen-setup [data-f="${f}"] input`).focus();
+      await page.waitForTimeout(1600);
+      expect(await bottom(`#screen-setup [data-f="${f}"] input`), `${f} ${await state()}`).toBeLessThanOrEqual(await kbTop());
     }
     expect(await bottom('#screen-setup button[type=submit]')).toBeLessThanOrEqual(await kbTop());
   });

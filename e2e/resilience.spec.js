@@ -146,6 +146,7 @@ test.describe('פתיחת "החשבון שלי"', () => {
   });
 
   test('בהפחתת תנועה (הגדרת המכשיר) החלון מיידי', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' }); // במפורש: ב-CI ההגדרה הגלובלית ב-playwright.config.js לא חלה על ההקשר
     await freshDevice(page);
     await enterDemo(page);
     const r = await timeToOpen(page);
