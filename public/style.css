@@ -14,6 +14,8 @@
   --get: #74c69d;
   --get-bg: #e2f6ec;
   --radius: 16px;
+  /* מטרת מגע מינימלית (44px): כל כפתור וקישור לחיץ מקבל min-height / min-width לפי המשתנה הזה */
+  --tap: 44px;
   font-family: "Rubik", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
 }
 
@@ -41,7 +43,6 @@ body {
 .tabs {
   display: flex;
   gap: 4px;
-  overflow-x: auto;
   padding: 10px 12px 0;
   position: sticky;
   top: 0;
@@ -49,20 +50,35 @@ body {
   z-index: 5;
   border-bottom: 1px solid var(--line);
 }
+/* הלשוניות חולקות את הרוחב שווה בשווה ולא גולשות (גם 4 להורה ב-390px): אייקון מעל תווית קצרה שיכולה לרדת שורה */
 .tab {
-  flex: 1 0 auto;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: var(--tap);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   font: inherit;
+  font-size: .85rem;
   font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
   color: var(--ink-soft);
   background: none;
   border: 0;
   border-bottom: 3px solid transparent;
-  padding: 10px 14px;
+  padding: 6px 4px;
   cursor: pointer;
 }
+.tab .ui-icon.inline { width: 1.7em; height: 1.7em; margin: 0; vertical-align: baseline; }
+.tab .badge { position: absolute; top: 2px; inset-inline-end: 2px; margin: 0; }
 .tab.active { color: var(--ink); font-weight: 700; border-bottom-color: var(--coin-deep); }
 button:focus:not(:focus-visible), a:focus:not(:focus-visible), [role="button"]:focus:not(:focus-visible) { outline: none; }
-.tab:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, .filebtn:focus-within, .dd-btn:focus-visible, .dd-opt:focus-visible {
+.tab:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, .dd-btn:focus-visible, .dd-opt:focus-visible {
   outline: 3px solid var(--coin-deep);
   outline-offset: 2px;
 }
@@ -161,7 +177,7 @@ input[type=text], input[type=password], input[type=number], input[type=date], in
 .cal { display: grid; gap: 12px; }
 .cal-head { display: flex; align-items: center; gap: 8px; }
 .cal-sel { flex: 1; min-width: 0; display: grid; grid-template-columns: 3fr 2fr; gap: 8px; }
-.cal-nav { flex: none; width: 42px; height: 42px; font: inherit; font-size: 1.5rem; line-height: 1; color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; }
+.cal-nav { flex: none; width: var(--tap); height: var(--tap); font: inherit; font-size: 1.5rem; line-height: 1; color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; }
 .cal-nav:disabled { opacity: .35; cursor: default; }
 .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
 .cal-pad { aspect-ratio: 1; }
@@ -174,6 +190,7 @@ body[data-theme="teen"] .cal-day.on { background: var(--neon-grad); color: var(-
 /* תפריט בחירה מעוצב (במקום <select> רגיל) */
 .dd { position: relative; width: 100%; }
 .dd-btn {
+  min-height: var(--tap);
   font: inherit;
   color: var(--ink);
   background: var(--card);
@@ -227,7 +244,7 @@ html[dir="ltr"] .arrow.arrow-start, html[dir="rtl"] .arrow.arrow-end, .arrow.arr
   max-height: 280px;
   overflow-y: auto;
   transform-origin: top;
-  animation: dd-open .32s cubic-bezier(.2, 1.3, .3, 1) both;
+  animation: dd-open .22s cubic-bezier(.2, 1.2, .3, 1) both;
 }
 .dd-list.dd-list-up { transform-origin: bottom; }
 @keyframes dd-open {
@@ -272,6 +289,8 @@ button.primary:active { transform: translateY(1px); }
   border: 1.5px solid var(--line);
   border-radius: 10px;
   padding: 8px 12px;
+  min-height: var(--tap);
+  min-width: var(--tap);
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(16, 24, 40, .08);
 }
@@ -288,7 +307,7 @@ input.invalid { border-color: var(--owe); box-shadow: 0 0 0 2px var(--owe); }
   padding: 10px 0;
   border-bottom: 1px solid var(--line);
 }
-.row .text { flex: 1; }
+.row .text { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .row .meta { font-size: .85rem; color: var(--ink-soft); }
 .tag { font-size: .8rem; padding: 2px 8px; border-radius: 99px; }
 .tag.tag-debt { background: var(--owe-bg); color: var(--owe); }
@@ -321,6 +340,19 @@ input.invalid { border-color: var(--owe); box-shadow: 0 0 0 2px var(--owe); }
   border-radius: 12px;
   text-align: center;
   box-shadow: 0 6px 20px rgba(0,0,0,.25);
+}
+.toast-action {
+  margin-inline-start: 14px;
+  background: none;
+  border: 0;
+  padding: 12px 10px;
+  margin-block: -12px;
+  min-height: 44px;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -526,7 +558,7 @@ body[data-theme="teen"] #screen-loading p {
 .avatars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
 .av {
   position: relative; z-index: 0;
-  font-size: 1.7rem; background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 6px 0; cursor: pointer;
+  font-size: 1.7rem; background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 6px 0; min-height: var(--tap); cursor: pointer;
   transition: transform .18s cubic-bezier(.34, 1.56, .64, 1), box-shadow .18s ease, filter .12s ease;
 }
 .av:active { transform: scale(.95); filter: none; }
@@ -578,7 +610,7 @@ body[data-theme="teen"] #screen-loading p {
 .row-edge.right { right: 0; justify-content: flex-end; border-radius: 0 12px 12px 0;
   background: linear-gradient(to left, rgba(0, 0, 0, .66) 0, rgba(0, 0, 0, .58) 40%, rgba(0, 0, 0, .28) 70%, rgba(0, 0, 0, 0) 100%); }
 .row-edge button {
-  display: grid; place-items: center; width: 26px; height: 100%; padding: 0; margin: 0;
+  display: grid; place-items: center; width: var(--tap); min-width: var(--tap); height: 100%; padding: 0; margin: 0;
   background: none; border: 0; color: #fff; cursor: pointer; pointer-events: none;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .6)); touch-action: manipulation;
 }
@@ -591,7 +623,7 @@ body[data-theme="teen"] #screen-loading p {
 .dots { display: flex; gap: 14px; margin: 14px 0 4px; }
 .dot { width: 20px; height: 20px; border-radius: 50%; border: 2.5px solid var(--ink); }
 .dot.on { background: var(--ink); }
-.shake { animation: shake .35s; }
+.shake { animation: shake .28s; }
 @keyframes shake { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
 @media (prefers-reduced-motion: reduce) { .shake { animation: none; } }
 #pinError { min-height: 1.5em; margin: 2px 0 8px; }
@@ -644,7 +676,7 @@ body[data-theme="teen"] #screen-loading p {
 .debt.owe { border-inline-start: 6px solid var(--owe); }
 .debt.get { border-inline-start: 6px solid var(--get); }
 button.strongbtn { background: var(--coin); border-color: var(--coin-deep); color: var(--on-coin, #1d2b4f); font-weight: 700; padding: 12px 14px; }
-button.small { min-height: 40px; }
+button.small { min-height: var(--tap); }
 .linkish { margin-top: 26px; width: 100%; }
 .welcome-actions { display: grid; gap: 10px; margin-top: 18px; }
 .family-code { margin-top: 18px; }
@@ -657,50 +689,54 @@ button.small { min-height: 40px; }
   position: fixed; z-index: 21; transform: translate(-50%, -50%);
   background: var(--card); border: 2px solid var(--line); border-radius: 50%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, .35); overflow: visible; pointer-events: none; opacity: 1;
-  transition: left .45s cubic-bezier(.3, .6, .3, 1), top .45s cubic-bezier(.3, .6, .3, 1),
-    width .9s cubic-bezier(.22, .8, .2, 1), height .9s cubic-bezier(.22, .8, .2, 1);
+  transition: left .14s cubic-bezier(.3, .6, .3, 1), top .14s cubic-bezier(.3, .6, .3, 1),
+    width .14s cubic-bezier(.22, .8, .2, 1), height .14s cubic-bezier(.22, .8, .2, 1);
 }
-.gear-launch.sinking { transition: width .35s ease-in, height .35s ease-in, opacity .35s ease-in; }
+.gear-launch.sinking { transition: width .12s ease-in, height .12s ease-in, opacity .12s ease-in; }
 /* הסיבוב רץ בדיב נפרד כדי שתמיד יתבצע כאנימציית keyframes אמיתית (מעבר transition בין rotate(0) ל-rotate(360) לא זז בפועל) */
 .gear-launch-spin { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 /* סיבוב שמתחיל מהר (500°/שנ') ומאט בהדרגה עד עצירה מלאה
-   (האטה ריבועית: 225° ב-0.9 שנ'). בשקיעה הגלגל מתגלגל
+   (האטה ריבועית: 225° ב-0.14 שנ'). בשקיעה הגלגל מתגלגל
    אחורה מאותה זווית, ומאיץ עד הרבה מעבר למהירות ההתחלתית. */
-.gear-launch-spin.flying { animation: gear-spin-slow .9s cubic-bezier(.33, .67, .67, 1) forwards; }
-.gear-launch-spin.sinking { animation: gear-spin-back .35s cubic-bezier(.5, 0, .9, .6) forwards; }
+.gear-launch-spin.flying { animation: gear-spin-slow .14s cubic-bezier(.33, .67, .67, 1) forwards; }
+.gear-launch-spin.sinking { animation: gear-spin-back .12s cubic-bezier(.5, 0, .9, .6) forwards; }
 @keyframes gear-spin-slow { from { transform: rotate(0deg); } to { transform: rotate(225deg); } }
 @keyframes gear-spin-back { from { transform: rotate(225deg); } to { transform: rotate(-45deg); } }
-.gear-launch-icon { font-size: 1.3rem; transition: font-size .9s cubic-bezier(.22, .8, .2, 1); }
-.gear-launch-spin.flying .gear-launch-icon { font-size: 5.7rem; }
-.gear-launch-spin.sinking .gear-launch-icon { transition: font-size .35s ease-in; font-size: 0; }
+.gear-launch-icon { display: block; width: 1.5rem; height: 1.5rem; transition: width .14s cubic-bezier(.22, .8, .2, 1), height .14s cubic-bezier(.22, .8, .2, 1); }
+.gear-launch-icon .ui-icon { width: 100%; height: 100%; }
+.gear-launch-spin.flying .gear-launch-icon { width: 5.7rem; height: 5.7rem; }
+.gear-launch-spin.sinking .gear-launch-icon { transition: width .12s ease-in, height .12s ease-in; width: 0; height: 0; }
 .gear-sparks { position: fixed; left: 50%; top: 50%; width: 0; height: 0; z-index: 22; pointer-events: none; }
 .gear-sparks .spark {
   position: absolute; left: -3px; top: -14px; width: 6px; height: 28px; border-radius: 3px;
   background: linear-gradient(#fffbe6, #ffd54a 45%, #ff8a00);
   box-shadow: 0 0 6px 2px rgba(255, 200, 60, .9), 0 0 14px 4px rgba(255, 140, 0, .55);
   opacity: 0; transform: rotate(var(--ang)) translateY(-60px) scaleY(.5);
-  animation: spark-burst 2.4s cubic-bezier(.25, .45, .5, .95) forwards;
+  animation: spark-burst .22s cubic-bezier(.25, .45, .5, .95) forwards;
 }
 .gear-sparks .spark--short { width: 5px; height: 18px; left: -2.5px; top: -9px; }
 @keyframes spark-burst {
   0%   { opacity: 1; transform: rotate(var(--ang)) translateY(-60px)  scaleY(.5); }
   55%  { opacity: 1; }
-  100% { opacity: 0; transform: rotate(var(--ang)) translateY(-110vmax) scaleY(1.2); }
+  100% { opacity: 0; transform: rotate(var(--ang)) translateY(-70vmax) scaleY(1.2); }
 }
 
 /* חלון קופץ */
 .sheet-wrap { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end; justify-content: center; }
-.sheet-bg { position: absolute; inset: 0; background: rgba(10, 16, 40, .55); }
-.sheet-bg-reveal { opacity: 0; animation: sheet-bg-fade 1.5s ease forwards; }
+.sheet-bg { position: absolute; inset: 0; background: rgba(10, 16, 40, .55); animation: sheet-bg-in .18s ease-out; }
+@keyframes sheet-bg-in { from { opacity: 0; } to { opacity: 1; } }
+.sheet-bg-reveal { opacity: 0; animation: sheet-bg-fade .18s ease forwards; }
 @keyframes sheet-bg-fade { to { opacity: 1; } }
 .sheet {
   position: relative; width: 100%; max-width: 560px; max-height: 94vh; max-height: 94dvh; overflow-y: auto;
   background: var(--bg); border-radius: 24px 24px 0 0;
   padding: 16px 18px calc(20px + env(safe-area-inset-bottom, 0));
   box-shadow: 0 -8px 30px rgba(0, 0, 0, .3);
+  animation: sheet-rise .18s ease-out; /* ברירת מחדל לכולם: עלייה קלה. ילד ונוער עם הגלגל: sheet-reveal */
 }
-.sheet-reveal-pending { opacity: 0; transform: scale(.02); }
-.sheet-reveal { animation: sheet-grow 1.5s cubic-bezier(.22, .8, .2, 1); }
+@keyframes sheet-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.sheet-reveal-pending { opacity: 0; transform: scale(.02); animation: none; }
+.sheet-reveal { animation: sheet-grow .18s cubic-bezier(.22, .8, .2, 1); }
 @keyframes sheet-grow { from { opacity: 0; transform: scale(.02); } to { opacity: 1; transform: scale(1); } }
 @media (min-width: 640px) { .sheet-wrap { align-items: center; } .sheet { border-radius: 24px; } }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
@@ -729,7 +765,8 @@ button.small { min-height: 40px; }
 .check { display: flex; gap: 10px; align-items: flex-start; font-size: .92rem; text-align: start; }
 .check input { width: 22px; height: 22px; flex: none; margin-top: 2px; accent-color: var(--coin-deep); }
 .legal { text-align: center; font-size: .88rem; color: var(--ink-soft); margin: 18px 0 0; }
-.legal a, .check a { color: inherit; }
+/* קישורי תנאים ופרטיות: אזור מגע של 44px גם בלי להגדיל את גובה השורה (padding בלבד על אלמנט inline) */
+.legal a, .check a { color: inherit; padding-block: 14px; }
 .doc-main { max-width: 680px; margin: 0 auto; padding: calc(20px + env(safe-area-inset-top, 0)) 20px 48px; }
 .doc-main h1 { font-size: 1.7rem; margin: 8px 0 12px; }
 .doc-main h2 { margin: 26px 0 8px; }
@@ -890,7 +927,7 @@ body[data-theme="teen"] .top h1 {
 body[data-theme="teen"] .sub { color: var(--ink-soft); }
 body[data-theme="teen"] .ghost.light { color: var(--ink); border-color: var(--neon-a); background: transparent; }
 body[data-theme="teen"] .tabs { gap: 8px; padding: 12px 12px 10px; border-bottom: 0; }
-body[data-theme="teen"] .tab { border: 0; border-radius: 99px; padding: 9px 16px; background: var(--card); color: var(--ink-soft); }
+body[data-theme="teen"] .tab { border: 0; border-radius: 18px; padding: 6px 4px; background: var(--card); color: var(--ink-soft); }
 body[data-theme="teen"] .tab.active { background: var(--neon-grad); color: var(--on-coin); box-shadow: 0 0 16px var(--neon-glow); }
 body[data-theme="teen"] .sum { border-radius: 20px; }
 body[data-theme="teen"] .sum .num { font-size: 1.9rem; letter-spacing: -.01em; }
@@ -932,7 +969,6 @@ body[data-theme="teen"] .dd-opt.sel.active { background: var(--neon-grad); filte
 .palette-pick.sel { border-color: var(--neon-a); box-shadow: 0 0 0 1px var(--neon-a), 0 0 16px color-mix(in srgb, var(--neon-a) 35%, transparent); }
 .palette-pick:focus-visible { outline: 2px solid var(--neon-b); outline-offset: 2px; }
 .person { flex-wrap: wrap; } .person .text { min-width: 8em; }
-.person { flex-wrap: wrap; } .person .text { min-width: 8em; }
 
 /* החזר לחוב מסוים */
 .debt-picks { display: grid; gap: 10px; margin: 8px 0 4px; }
@@ -972,6 +1008,24 @@ button.busy { animation: busy-pulse 1s ease-in-out infinite; }
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,.25);
 }
+/* אין חיבור לשרת (OfflineBanner): נראה כמו באנר העדכון, ויורד מתחתיו אם שניהם מוצגים. הצבעים קבועים וזהים בשלוש הערכות, כמו ההודעה (toast). */
+.offline-banner {
+  position: fixed;
+  inset-inline: 16px;
+  top: calc(12px + env(safe-area-inset-top, 0));
+  z-index: 29;
+  max-width: 420px;
+  margin-inline: auto;
+  background: #5a3a12;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: .9rem;
+  line-height: 1.35;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+}
+.update-banner ~ .offline-banner { top: calc(76px + env(safe-area-inset-top, 0)); }
 .update-banner button { border: 0; border-radius: 8px; padding: 6px 14px; font: inherit; font-weight: 700; background: #fff; color: #1d2b4f; }
 
 /* פירוט חישוב יתרה מול אדם */
@@ -1002,6 +1056,7 @@ button.charcoalbtn:active { background: #353b45; }
   box-shadow: 0 12px 40px rgba(0, 0, 0, .4); animation: confirm-pop .2s cubic-bezier(.22, .8, .2, 1);
 }
 .confirm-icon { font-size: 2rem; line-height: 1; margin-bottom: 6px; }
+.confirm-icon .ui-icon { width: 2.6rem; height: 2.6rem; margin-inline: auto; }
 .confirm-title { margin: 0 0 6px; font-size: 1.2rem; }
 .confirm-amount { font-size: 2.2rem; font-weight: 800; padding: 4px 0 2px; }
 .confirm-msg { margin: 6px 0 16px; font-size: .95rem; line-height: 1.5; opacity: .85; white-space: pre-line; }
@@ -1049,6 +1104,14 @@ body[data-theme="teen"] .confirm-box { background: #07070b; border: 2px solid va
 #screen-notebook .row.paid { opacity: .6; }
 #screen-notebook .nb-paid summary { cursor: pointer; padding: 8px 0; font-weight: 500; }
 #screen-notebook .empty { text-align: center; }
+#screen-notebook .empty .ghost { margin-top: 12px; min-height: 44px; }
+/* שמות ארוכים (גם ישנים, שנשמרו לפני הגבלת האורך) נשברים בשורה (ראו .row .text), והסכום והכפתורים נשארים במקומם */
+#screen-notebook .row > strong { flex: none; white-space: nowrap; }
+#screen-notebook .row .acts button.small { min-height: 44px; min-width: 44px; }
+/* חיפוש בפנקס: מופיע רק ברשימה ארוכה. הצבעים מהמשתנים, ולכן מתאים לשלוש הערכות (ילד, נוער, הורה). */
+.nb-find { position: relative; }
+.nb-find input { width: 100%; min-height: 48px; padding-inline-end: 52px; }
+.nb-find-clear { position: absolute; inset-inline-end: 4px; top: 50%; transform: translateY(-50%); min-width: 44px; min-height: 44px; padding: 0; border-radius: 12px; }
 #screen-notebook .nb-upgrade .primary { display: block; width: fit-content; max-width: 100%; margin: 12px auto 0; }
 #screen-notebook .nb-offset { display: grid; gap: 10px; }
 #screen-notebook .nb-offset h3, #screen-notebook .nb-offset p { margin: 0; }
@@ -1171,16 +1234,16 @@ body[data-theme] .sum .lbl, body:not([data-theme]) .sum .lbl { font-weight: 800;
 #screen-notebook { overflow-x: clip; }
 #screen-notebook .nb-gear-ico { display: inline-block; }
 @media (prefers-reduced-motion: no-preference) {
-  #screen-notebook .nb-gear-spin .nb-gear-ico { animation: nb-gear-turn .38s cubic-bezier(.5, 0, .3, 1) forwards; }
-  #screen-notebook .nb-page.nb-pulled { transition: transform .38s cubic-bezier(.5, 0, .3, 1), opacity .38s ease-in; }
+  #screen-notebook .nb-gear-spin .nb-gear-ico { animation: nb-gear-turn .24s cubic-bezier(.5, 0, .3, 1) forwards; }
+  #screen-notebook .nb-page.nb-pulled { transition: transform .24s cubic-bezier(.5, 0, .3, 1), opacity .24s ease-in; }
   #screen-notebook .nb-page.nb-pulled { transform: translateX(26%); opacity: .35; }
-  #screen-notebook .nb-pull-in { animation: nb-pull-in .42s cubic-bezier(.2, .8, .25, 1) backwards; }
+  #screen-notebook .nb-pull-in { animation: nb-pull-in .26s cubic-bezier(.2, .8, .25, 1) backwards; }
 }
 /* סגירה: הכיוון ההפוך של הפתיחה */
 @media (prefers-reduced-motion: no-preference) {
-  #screen-notebook .nb-gear-spin-back .nb-gear-ico { animation: nb-gear-turn-back .38s cubic-bezier(.5, 0, .3, 1) forwards; }
-  #screen-notebook .nb-pushed-out { transition: transform .38s cubic-bezier(.5, 0, .3, 1), opacity .38s ease-in; transform: translateX(70%); opacity: 0; }
-  #screen-notebook .nb-push-back { animation: nb-push-back .42s cubic-bezier(.2, .8, .25, 1) backwards; }
+  #screen-notebook .nb-gear-spin-back .nb-gear-ico { animation: nb-gear-turn-back .24s cubic-bezier(.5, 0, .3, 1) forwards; }
+  #screen-notebook .nb-pushed-out { transition: transform .24s cubic-bezier(.5, 0, .3, 1), opacity .24s ease-in; transform: translateX(70%); opacity: 0; }
+  #screen-notebook .nb-push-back { animation: nb-push-back .26s cubic-bezier(.2, .8, .25, 1) backwards; }
 }
 @keyframes nb-gear-turn-back { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
 @keyframes nb-push-back { from { transform: translateX(-26%); opacity: .35; } to { transform: translateX(0); opacity: 1; } }
@@ -1225,6 +1288,7 @@ body:not([data-theme="parent"]):not([data-theme="teen"]) #screen-notebook .empty
 /* חלון הרישום: פס גלילה דק, סימן מטבע בשדה הסכום וכפתור רישום בולט */
 .sheet { scrollbar-width: thin; scrollbar-color: rgba(127, 127, 127, .45) transparent; }
 .amt-field { position: relative; display: block; }
+/* שדה הסכום תמיד dir="ltr" (ספרות), לכן הסימן והריווח פיזיים בכוונה: שמאל בכל שפה, גם בעברית ובערבית */
 .amt-field input { padding-left: 40px; }
 .amt-field .amt-cur { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-weight: 700; color: var(--ink-soft); pointer-events: none; }
 body:not([data-theme="parent"]):not([data-theme="teen"]) .sheet form button.primary {
@@ -1249,7 +1313,7 @@ body[data-theme="parent"] #screen-notebook .nb-h2, body[data-theme="teen"] #scre
 .demo-banner { flex-wrap: wrap; }
 .demo-cta { display: flex; flex-wrap: wrap; gap: .4em; }
 .demo-cta .primary { background: #5a4300; color: #fff3c4; border-color: #5a4300; font-weight: 700; }
-.demo-banner button { background: none; border: 1px solid currentColor; border-radius: 999px; padding: .15em .8em; color: inherit; font: inherit; cursor: pointer; }
+.demo-banner button { background: none; border: 1px solid currentColor; border-radius: 999px; min-height: var(--tap); padding: .15em .8em; color: inherit; font: inherit; cursor: pointer; }
 
 /* עמוד הפנקס הראשי: שורה אחת: כפתור משפחה (חזרה / יצירה) בצד ימין, הכותרת באמצע, הגלגל בשמאל */
 #screen-notebook .nb-page:not(.nb-settings) .nb-head {
@@ -1365,3 +1429,120 @@ body[data-theme="parent"] .kb-sug { background: #12151a; border: 1px solid #262b
 body[data-theme="parent"] .kb-sug:active { background: #232a33; border-color: var(--coin); }
 body[data-theme="teen"] .kb-sug { background: rgba(255, 255, 255, .06); border: 1px solid var(--kb-fn-edge); border-radius: 12px; }
 body[data-theme="teen"] .kb-sug:active { background: var(--neon-grad); color: var(--neon-ink); border-color: transparent; }
+
+/* סיכום חודשי וגרפים (לשונית המשפחה) */
+.sum-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.sum-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
+.sum-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; }
+.sum-card .what { font-size: .85rem; color: var(--ink-soft); }
+.sum-card .num { font-size: 1.15rem; font-weight: 800; margin-top: 4px; }
+.sum-chart { display: flex; gap: 8px; align-items: flex-end; height: 140px; margin-top: 14px; padding: 8px 10px 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
+.sum-col { flex: 1; display: flex; flex-direction: column; height: 100%; min-width: 0; }
+.sum-bars { flex: 1; display: flex; gap: 3px; align-items: flex-end; }
+.sum-bar { flex: 1; min-height: 2px; border-radius: 4px 4px 0 0; }
+.sum-bar.debt, .dot.debt { background: var(--owe); }
+.sum-bar.paid, .dot.paid { background: var(--get); }
+.sum-lbl { text-align: center; font-size: .75rem; color: var(--ink-soft); padding: 4px 0; }
+.sum-legend { font-size: .85rem; color: var(--ink-soft); margin-top: 6px; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-inline-start: 10px; }
+.sum-fill { background: var(--owe); }
+
+/* יעדי חיסכון */
+.goal { margin-bottom: 10px; }
+.goal-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.goal-bar { height: 12px; border-radius: 99px; background: var(--line); margin: 8px 0 4px; overflow: hidden; }
+.goal-fill { height: 100%; border-radius: 99px; background: var(--get); transition: width .4s; }
+.goal-dep { display: flex; gap: 8px; margin-top: 8px; }
+.goal-dep input { flex: 1; min-width: 0; }
+
+/* הישגים */
+.ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+.ach { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; text-align: center; opacity: .55; filter: grayscale(1); }
+.ach.on { opacity: 1; filter: none; border-color: var(--coin-deep); }
+.ach-icon { font-size: 1.8rem; }
+.ach-name { font-weight: 700; }
+
+/* ===== הפחתת תנועה: לפי המכשיר או לפי המתג "הפחתת תנועה" ב"החשבון שלי" (lib/feel.js: reducedMotion) ===== */
+/* data-motion על ה-body: "off" = בלי תנועה (הפחתה מופעלת), "on" = תנועה מלאה גם כשהמכשיר מבקש הפחתה, בלי מאפיין = לפי המכשיר.
+   אנימציות ומעברים מתקצרים ל-0.01ms (ולא נמחקים), כדי שמצב הסיום יתקבל ואירועי animationend / transitionend ימשיכו להתרחש. */
+body[data-motion="off"] *, body[data-motion="off"] *::before, body[data-motion="off"] *::after {
+  animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important;
+  transition-duration: .01ms !important; transition-delay: 0s !important; scroll-behavior: auto !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  body:not([data-motion="on"]) *, body:not([data-motion="on"]) *::before, body:not([data-motion="on"]) *::after {
+    animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important; transition-delay: 0s !important; scroll-behavior: auto !important;
+  }
+}
+
+/* ===== חלונות מוערמים (Sheet.jsx): חץ חזרה בכותרת של החלון השני ומעלה ===== */
+.sheet-head { gap: 8px; }
+.sheet-head h2 { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.sheet-back { flex: none; display: inline-flex; align-items: center; justify-content: center; }
+.sheet-back .arrow { margin: 0; }
+
+/* ===== "החשבון שלי": קבוצות עם כותרות, שורות, מתגים ו"יציאה" בנפרד ===== */
+.acct { gap: 18px; }
+.acct-group { display: grid; gap: 8px; }
+.acct-h { margin: 0; font-size: .8rem; font-weight: 700; letter-spacing: .06em; color: var(--ink-soft); }
+.acct-row {
+  font: inherit; color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 12px;
+  width: 100%; min-height: var(--tap); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  text-align: start; cursor: pointer;
+}
+.acct-row:hover, .acct-row:active, .acct-row:focus-visible { border-color: var(--coin); }
+.acct-row .arrow { flex: none; }
+.acct-state { display: inline-flex; align-items: center; gap: 8px; flex: none; font-size: .85rem; font-weight: 600; color: var(--ink-soft); }
+.switch-knob { position: relative; flex: none; width: 40px; height: 24px; border-radius: 99px; background: color-mix(in srgb, var(--ink-soft) 55%, transparent); transition: background .15s ease; }
+.switch-knob::after { content: ''; position: absolute; top: 3px; inset-inline-start: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .35); transition: inset-inline-start .15s ease; }
+.acct-switch[aria-checked="true"] .switch-knob { background: var(--coin-deep); }
+.acct-switch[aria-checked="true"] .switch-knob::after { inset-inline-start: 19px; }
+.acct-switch[aria-checked="true"] .acct-state { color: var(--ink); }
+.acct-motion { gap: 8px; }
+.acct-more { display: grid; gap: 8px; }
+.acct-more > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: var(--tap);
+  padding: 10px 14px; border: 1.5px dashed var(--line); border-radius: 12px; font-weight: 600; color: var(--ink-soft);
+}
+.acct-more > summary::-webkit-details-marker { display: none; }
+.acct-more[open] > summary { margin-bottom: 8px; }
+.acct-more[open] > summary .arrow { transform: rotate(90deg); }
+html[dir="rtl"] .acct-more[open] > summary .arrow { transform: scaleX(-1) rotate(90deg); }
+/* יציאה: שורה נפרדת, בולטת ושונה משאר השורות (צבע ה"חוב" של הערכה) */
+.acct-exit {
+  font: inherit; font-weight: 700; width: 100%; min-height: 52px; padding: 12px 14px; cursor: pointer;
+  color: var(--owe); background: var(--owe-bg); border: 2px solid var(--owe); border-radius: 14px;
+}
+.acct-exit:active { transform: translateY(1px); }
+body[data-theme="teen"] .acct-row, body[data-theme="teen"] .acct-more > summary { border-radius: 16px; }
+body[data-theme="parent"] .acct-row, body[data-theme="parent"] .acct-more > summary, body[data-theme="parent"] .acct-exit { border-radius: 8px; }
+
+/* ===== פנקס: "שולם" הפעולה הראשית, ושאר הפעולות בתפריט "⋯" ===== */
+#screen-notebook .row .acts > button.small:first-child { background: var(--coin); border-color: var(--coin-deep); color: var(--on-coin, #1d2b4f); font-weight: 700; }
+.row-menu { position: relative; }
+.row-menu-list {
+  position: absolute; z-index: 6; inset-inline-end: 0; top: calc(100% + 4px); min-width: max-content; padding: 6px;
+  background: var(--card); border: 1.5px solid var(--line); border-radius: 12px; box-shadow: 0 10px 30px rgba(16, 24, 40, .18);
+}
+.row-menu-list .small { width: 100%; white-space: nowrap; }
+body[data-theme="parent"] .row-menu-list { border-radius: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, .5); }
+body[data-theme="teen"] .row-menu-list { border-radius: 16px; box-shadow: 0 10px 30px var(--neon-glow); }
+
+/* ===== לשונית המשפחה: קפיצות עוגן דביקות מתחת ללשוניות (--tabs-h נקבע ב-App.jsx) ===== */
+.sec-jump { position: sticky; top: var(--tabs-h, 56px); z-index: 4; display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 0; background: var(--bg); }
+.sec-h { scroll-margin-top: calc(var(--tabs-h, 56px) + 64px); }
+
+/* ===== ErrorBoundary (shared/ErrorBoundary.jsx) ו"אין חיבור" (shared/NoConnection.jsx) ===== */
+/* הצבעים מגיעים ממשתני הערכה, ולכן אותו כרטיס נראה נכון בילד, בנוער ובהורה (כולל כהה). */
+.err-box {
+  display: grid; justify-items: center; gap: 10px; text-align: center; max-width: 460px;
+  margin: 24px auto; padding: 22px 18px; background: var(--card); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius);
+}
+.err-box h2 { margin: 0; }
+.err-box .hint { margin: 0; }
+.err-box--root { margin-block: max(24px, 20vh); }
+.err-actions { display: grid; gap: 8px; width: 100%; margin-top: 6px; }
+.err-actions button { min-height: var(--tap); width: 100%; }
+body[data-theme="teen"] .err-box { background: #07070b; border-color: var(--neon-a); box-shadow: 0 0 24px var(--neon-glow); }

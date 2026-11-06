@@ -68,7 +68,7 @@ export default function AvatarPicker({ value, onChange, options = AVATARS, taken
   function openFull() {
     sheet.open(t('דמות'), (
       <div className="form">
-        <AvatarPicker value={value} onChange={(a) => { onChange(a); sheet.close(); }} options={options} taken={taken} />
+        <AvatarPicker value={value} onChange={(a) => { onChange(a); sheet.back(); }} options={options} taken={taken} />
       </div>
     ));
   }

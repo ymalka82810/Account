@@ -75,7 +75,7 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
   }
 
   function changeGender(p, gender) {
-    run('people:setGender', { id: p.id, gender });
+    run('people:setGender', { id: p.id, gender }, t('צורת הפנייה נשמרה ✅'));
   }
 
   return (

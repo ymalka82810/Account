@@ -241,6 +241,30 @@ export default defineSchema({
     .index("by_family", ["familyId"])
     .index("by_nextDate", ["nextDate"]),
 
+  // יעד חיסכון של ילד/ה או נער/ה (למשל "אופניים"). הסכום שנחסך = סך ההפקדות המאושרות.
+  goals: defineTable({
+    familyId: v.id("families"),
+    personId: v.id("people"),
+    name: v.string(),
+    target: v.number(), // במאיות של מטבע המשפחה
+    currency: v.optional(v.string()), // חסר = שקלים
+    createdAt: v.number(),
+  })
+    .index("by_family", ["familyId"])
+    .index("by_person", ["personId"]),
+
+  // הפקדות ליעד חיסכון. הפקדה של ילד/ה ממתינה לאישור הורה (status = pending) ועד אז לא נספרת.
+  goalDeposits: defineTable({
+    goalId: v.id("goals"),
+    familyId: v.id("families"),
+    amount: v.number(),
+    createdBy: v.id("people"),
+    createdAt: v.number(),
+    status: v.optional(v.literal("pending")),
+  })
+    .index("by_goal", ["goalId"])
+    .index("by_family", ["familyId"]),
+
   // מכשירים שהורה רשם לאימות ביומטרי (WebAuthn באתר, Android Keystore באפליקציה).
   bioKeys: defineTable({
     personId: v.id("people"),

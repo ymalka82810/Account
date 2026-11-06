@@ -1,4 +1,5 @@
 import { mutation } from "./_generated/server";
+import { purgeGoals } from "./goals";
 import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
 import { proofValidator, purgeBiometric, requireBiometric } from "./biometric";
@@ -76,6 +77,7 @@ export const remove = mutation({
     await purgeBiometric(ctx, id);
     await purgeAuthRows(ctx, id);
     await purgeNotebook(ctx, id);
+    await purgeGoals(ctx, me.familyId, id);
     const rec = await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     for (const r of rec) if (r.from === id || r.to === id) await ctx.db.delete(r._id);
     await ctx.db.delete(id);

@@ -1,13 +1,15 @@
 // צליל מטבעות שנופלים זה על זה, מסונתז ב-WebAudio (בלי קובץ שמע, כך שהאפליקציה נשארת קלה).
 // כל "קליק" הוא כמה גלים סינוסיים לא הרמוניים שדועכים מהר, וצפיפות הקליקים גדלה ואז נרגעת כמו מטבעות שנערמים.
+// כיבוי: מתגי "צליל" ו"רטט" ב"החשבון שלי" (lib/feel.js).
+import { soundOn, vibrateOn } from './feel.js';
 /** @type {AudioContext | null} */
 let ctx = null;
 
 // רטט שמסונכרן עם הצליל: פעימה קצרה על כל "מטבע", באותם מרווחים (מטבעות שנופלים בסערה ומתיישבים).
-// כיבוי: localStorage['kupa-vibrate'] = '0'. במכשיר בלי רטט (או בדפדפן שחוסם) לא קורה כלום.
+// במכשיר בלי רטט (או בדפדפן שחוסם) לא קורה כלום.
 function vibrateCoins(/** @type {number} */ hits, /** @type {number} */ delay, /** @type {number} */ span) {
   try {
-    if (typeof navigator.vibrate !== 'function' || localStorage.getItem('kupa-vibrate') === '0') return;
+    if (typeof navigator.vibrate !== 'function' || !vibrateOn()) return;
     const ON = 22;
     const pattern = /** @type {number[]} */ ([]);
     let last = 0;
@@ -32,6 +34,7 @@ export function playCoinSound(coins = 12, delay = 0.35, span = 1.1) {
   const hits = Math.max(5, Math.min(coins, 18));
   vibrateCoins(hits, delay, span);
   try {
+    if (!soundOn()) return;
     const AC = window.AudioContext || /** @type {any} */ (window).webkitAudioContext;
     if (!AC) return;
     ctx = ctx || new AC();

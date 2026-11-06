@@ -15,692 +15,948 @@
 14|{from} bana borçlu
 15|{from}, {to} kişisine borçlu
 16|{from} bana borçlu
-17|{name} onaylandı ✅
-18|{name} kaldırıldı
-19|{name} kaldırıldı
-20|{name} kaldırıldı
-21|{name} bana borçlu
-22|{name} bana borçlu
-23|{name} bana borçlu
-24|{name} bir sonraki girişte yeni bir kod seçecek
-25|{name} bir sonraki girişte yeni bir kod seçecek
-26|{name} e-posta ile arkadaş ekleyip onlarla borç kaydedebilecek. Her kayıt ayrıca arkadaşın onayını bekler ve siz bunları özet ekranında görürsünüz. İstediğin zaman kapatabilirsin.
-27|{name} e-posta ile arkadaş ekleyip onlarla borç kaydedebilecek. Her kayıt ayrıca arkadaşın onayını bekler ve siz bunları özet ekranında görürsünüz. İstediğin zaman kapatabilirsin.
-28|{name} ülke listesinde yok, bu yüzden para birimi ABD doları olacak.
-29|{name} arkadaşlarla borç kaydetmek istiyor
-30|{name} arkadaşlarla borç kaydetmek istiyor
-31|{name} arkadaşlarla borç kaydetmek istiyor
-32|{name} aileye eklendi ✅
-33|{name} aileye eklendi ✅
-34|{name} aileye eklendi ✅
-35|{name} artık {role} ✅
-36|{name} seni eklemek istiyor
-37|{name} bir sonraki girişte yeni bir kod seçecek
-38|{name} e-posta ile arkadaş ekleyip onlarla borç kaydedebilecek. Her kayıt ayrıca arkadaşın onayını bekler ve siz bunları özet ekranında görürsünüz. İstediğin zaman kapatabilirsin.
-39|{who} şunu kaydetti: {line}
-40|{who} şunu kaydetti: {line}
-41|{who} şunu kaydetti: {line}
-42|→ Başka bir borç seç
-43|→ Geri
-44|→ Başka bir aile
-45|↩️ Henüz değil
-46|⏳ {n} kayıt bir ebeveynin onayını bekliyor. Bunları "Geçmiş" bölümünde görebilirsin.
-47|⏳ Doğrulanıyor…
-48|⏳ Katılmak istiyor
-49|⏳ Onay bekliyor
-50|⏳ Onay bekliyor ({n})
-51|⏳ Ebeveynlerinin onayı bekleniyor
-52|⏳ Senin onayın bekleniyor
-53|⏳ Senin onayın bekleniyor ({n})
-54|⏳ Arkadaş bekleniyor
-55|⏳ İsteği onaylamaları bekleniyor
-56|⏳ Bir saniye…
-57|⏳ Bir kayıt bir ebeveynin onayını bekliyor. Bunu "Geçmiş" bölümünde görebilirsin.
-58|{"one":"⚠️ {name} kişisinin kodu yanlış denemelerden sonra bir kez kilitlendi.","other":"⚠️ {name} kişisinin kodu yanlış denemelerden sonra {n} kez kilitlendi."}
-59|⚡ Neon
-60|✅ Onayla
-61|✅ Doğru
-62|✅ Ödendi
-63|✅ Geri ödemeyi kaydet
-64|✅ Borcu kaydet
-65|✉️ Kurtarma e-postası ekle
-66|✉️ Kurtarma e-postası: {email}
-67|🌈 Renkli
-68|🌙 Koyu
-69|🍕 Yemek
-70|🍦 Dondurma
-71|🍬 Şeker
-72|🎨 Ekran renkleri
-73|🎮 Oyun
-74|🏠 Aile kasası oluştur
-75|👀 10 saniyelik demo
-76|👀 Demo modu: örnek veriler, hiçbir şey kaydedilmez
-77|👨‍👩‍👧 Ebeveynim ve yeni bir aile kasası kurmak istiyorum
-78|👨‍👩‍👧 Aile
-79|💬 WhatsApp hatırlatması
-80|💰 Param
-81|💰 Aldım
-82|💰 Ödedim
-83|📋 Açık listeyi kopyala
-84|📎 Davet bağlantısı
-85|📒 Defterim
-86|📜 Geçmiş
-87|📜 Geçmiş
-88|🔑 Gizli kodu değiştir
-89|🔒 {role} olarak ekleme, parmak izi veya yüz tanıma ile onaylanır.
-90|🔔 Bildirimleri aç
-91|🔕 Bildirimleri kapat
-92|🗑️ Tüm defteri sil
-93|🤝 Arkadaşlık istekleri ({n})
-94|🤝 Arkadaş modu istekleri ({n})
-95|🤝 Arkadaşlar
-96|🤝 Arkadaş modu açık
-97|🧹 Ödenenleri sil
-98|🙂 Karakter seç
-99|4 haneli
-100|4 ile {max} arası hane
-101|4 ile 8 arası hane
-102|6 haneli
-103|Baba
-104|Kimse kendine borçlu olamaz
-105|Kişi mevcut değil
-106|Onaylandı ✅
-107|Tehlikeli bölge
-108|Borçtan kalandan fazlasını geri ödeyemezsin
-109|Borçtan kalandan fazlasını geri ödeyemezsin ({amount})
-110|Kendini kaldıramazsın
-111|Bu cihazda kopyalanamıyor
-112|Kendi rolünü değiştiremezsin
-113|Aileye ne ad verelim?
-114|Adın ne?
-115|Anne
-116|Doğrula
-117|E-postayı doğrula
-118|Yok
-119|İnternet bağlantısı yok. Çevrimiçi olunca tekrar dene.
-120|Açık bir şey yok
-121|Açık bir şey yok!
-122|Gizli kodun yok. "Hesabım" bölümünden bir kod belirle ve tekrar dene.
-123|Doğrulanmış e-posta yok
-124|Değiştirilecek doğrulanmış e-posta yok
-125|Ödenmiş kayıt yok
-126|Borcun para birimi için döviz kuru yok
-127|Şu an kur yok
-128|Nerede yaşıyorsun?
-129|Onayla
-130|E-posta ile onay
-131|Arkadaş modunu onayla
-132|Rol değişikliğini onayla
-133|Bu ebeveynin doğrulanmış bir e-postası varsa oraya bir doğrulama kodu göndeririz. E-posta tanımlı değilse başka bir ebeveyn senin için yeni bir kod belirleyebilir.
-134|Bu o değilse yeni bir kod belirlemen iyi olur.
-135|Bu o değilse yeni bir kod belirlemen iyi olur.
-136|Bu o değilse yeni bir kod belirlemen iyi olur.
-137|Arkadaşın arkadaş modu varsa ona bir istek gönderildi 🤝
-138|Yeniyim
-139|Borçluyum
-140|Borçluyum
-141|{name} kişisine borcum var
-142|{to} kişisine borcum var
-143|Bir arkadaşa borcum var
-144|Arkadaşlara borcum var
-145|Borçluyum
-146|Borçluyum
-147|{name} kişisine borcum var
-148|{to} kişisine borcum var
-149|Bir arkadaşa borcum var
-150|Arkadaşlara borcum var
-151|Borçluyum
-152|Borçluyum
-153|{name} kişisine borcum var
-154|{to} kişisine borcum var
-155|Bir arkadaşa borcum var
-156|Arkadaşlara borcum var
-157|Kimsenin borcu yok!
-158|Kimsenin borcu yok.
-159|Yalnızca ilk 10 dakika içinde iptal edebilirsin, ya da bir ebeveynden isteyebilirsin
-160|Yalnızca ilk 10 dakika içinde iptal edebilirsin. Düzeltmek için bir geri ödeme kaydet
-161|En fazla {max} geri ödeyebilirsin.
-162|Bir borca yalnızca geri ödeme bağlanabilir
-163|Yalnızca seninle ilgili borçları kaydedebilirsin
-164|Yalnızca onaylı arkadaşlarla kayıt yapabilirsin
-165|Her ayın {day}. günü
-166|Hangi gün
-167|Ayın hangi günü (1 ile 28 arası)
-168|Kim olduğu kontrol ediliyor…
-169|Kontrol ediliyor…
-170|Ülke seç
-171|Karakter seç
-172|Nerede yaşadığını seç
-173|Yeni bir gizli kod seç ({rule})
-174|İptal
-175|Ebeveyn yetkilerini kaldır
-176|Arkadaş modunu kapat
-177|Arkadaşlar arasında her seferinde en fazla {max} kaydedebilirsin.
-178|{name} ailesinin üyeleri
-179|Aile üyeleri
-180|Toplamda {name} bana borçlu
-181|Toplamda {name} bana borçlu
-182|Toplamda {name} bana borçlu
-183|Toplamda {name} kişisine borcum var
-184|Toplamda {name} kişisine borcum var
-185|Toplamda {name} kişisine borcum var
-186|Ebeveynlerden onay iste
-187|Büyük
-188|Yazı boyutu
-189|Sağa kaydır
-190|Sola kaydır
-191|Yeni bir sürüm mevcut ({version})
-192|Reddet
-193|Karakter
-194|Karakter {avatar}
-195|Harçlık
-196|Düzenli harçlık
-197|bir dakika
-198|{"one":"{n} dakika","other":"{n} dakika"}
-199|Doğrulama iptal edildi
-200|Parmak izi / yüz tanıma doğrulaması başarısız oldu
-201|Doğrulama başarısız oldu. Tekrar dene.
-202|Doğrulama başarısız oldu (bilinmeyen adres).
-203|Doğrulama başarısız oldu. Tekrar dene.
-204|Eklediğin kişiler ilk girişlerinde bir gizli kod seçecek.
-205|Uygulama henüz sunucuya bağlı değil
-206|Anladım
-207|İstek artık mevcut değil
-208|İstek reddedildi
-209|İstek gönderildi
-210|İstek ebeveynlerine gönderildi ⏳
-211|İstek ebeveynlerine gönderildi. Onayladıklarında sana haber vereceğiz.
-212|Ayarlar
-213|Aile ayarları
-214|Bu karakter ailede başka biri tarafından zaten kullanılıyor
-215|Bu tarayıcı biyometrik doğrulama için çok eski. Güncelle ve tekrar dene.
-216|İndirme başarısız oldu. İnternet bağlantını kontrol et ve tekrar dene
-217|Geri ödeme bu borca uymuyor
-218|Geri ödeme kaydedildi ✅
-219|Not çok uzun
-220|Bildirimler açıldı 🔔
-221|Bildirimler engellenmiş. Tarayıcı ayarlarından izin verebilirsin.
-222|Bildirimler kapatıldı
-223|Ebeveyn yetkilerini kaybedecek. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
-224|Arkadaş modunu kaybedecek. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
-225|Tam ebeveyn yetkilerini alacak: her şeyi görme, onaylama, silme ve aileyi yönetme. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
-226|Ekle
-227|Aile üyesi ekle
-228|Arkadaş ekle
-229|{n} kayıt aktarıldı
-230|Kopyalandı ✅
-231|Ebeveyn
-232|Başka bir ebeveynin senin için gizli bir kod belirlemesi gerekiyor
-233|Bir ebeveyn buradan giriş yapar, sonra ailenin geri kalanı için kodlar alır.
-234|Bir ebeveynin Convex adresini dosyada tanımlaması gerekiyor
-235|Önce bir ebeveynin giriş yapması gerekiyor.
-236|Arkadaş kaldırıldı
-237|Arkadaşlarım
-238|Borç {debtCur} cinsinden. {payCur} ile bugünkü kurdan ödersin.
-239|Bu borç zaten ödendi
-240|Borç tamamen kapanacak ✅
-241|Borç bulunamadı
-242|Borç kaydedildi ✅
-243|Seninle {name} arasındaki borçlar bu tutara kadar kapatılacak ve yalnızca fark kalacak. Geçmiş korunur.
-244|Para birimine göre açık borçlar
-245|Borçlar mahsup edildi ✅
-246|Geri ödeme
-247|{to} kişisine geri ödedim
-248|E-postayı değiştir
-249|Kodu değiştir
-250|{name} ile hesap
-251|Hesabım
-252|Ebeveyn yetkilerini kaybedecek. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
-253|Arkadaş modunu kaybedecek. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
-254|Tam ebeveyn yetkilerini alacak: her şeyi görme, onaylama, silme ve aileyi yönetme. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
-255|Merhaba {name}, küçük bir hatırlatma: geri ödenecek {amount} kaldı. Teşekkürler! 🙏
-256|Merhaba {name}, küçük bir hatırlatma: {note} için geri ödenecek {amount} kaldı. Teşekkürler! 🙏
-257|Geçmiş
-258|Arkadaşlarla geçmiş
-259|Hepsi {amount}
-260|Her şey denk
-261|Her şey denk ✅
-262|Her şey yalnızca bu cihazda saklanır.
-263|Önce en yeni
-264|Param
-265|Ülkem listede yok ($)
-266|Ailenin para birimi
-267|Ailenin para birimi {base}, bu borç ise {cur} cinsinden saklanacak. Bakiyelerde o günün kuruyla gösterilir, ödendiğinde tutar ödeme günündeki kurla çevrilir.
-268|Para birimi: {cur}
-269|E-posta doğrulandı ✅
-270|Bu e-posta başka biri tarafından zaten kullanılıyor
-271|Mevcut e-posta: {email}. Değiştirmek için oraya bir onay kodu göndeririz.
-272|{name} kişisinin e-postası
-273|Arkadaşın e-postası
-274|Arkadaşlar için e-postan:
-275|Konum ve para birimi kaydedildi ✅
-276|Konum ve para birimi güncellendi ✅
-277|Bu cihaz doğrulama için kayıtlı değil. Yeniden kaydet.
-278|Cihaz desteklenmiyor
-279|Cihazın bağlantısı kesildi ✅
-280|Devam
-281|Aile bulunamadı
-282|Aile dolu
-283|Kilit açıldı ✅
-284|Genç, arkadaş modunu kaybedecek. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
-285|Verilerim
-286|Tutar çok büyük
-287|Tutar çok büyük.
-288|Önce en büyük tutar
-289|Defterdeki tutarlar
-290|Kaldır
-291|{name} kişisini kaldır
-292|Gizle
-293|Sunucuya aktar
-294|Ebeveyn yetkisi ver
-295|Not
-296|Defter boşaltıldı
-297|Defter zaten boş
-298|Defterim
-299|Dur
-300|Biyometrik doğrulamayı aç
-301|Kodu göster 🔒
-302|Katılım kodunu göster
-303|Katıl
-304|Dosya çok büyük
-305|İndirilen dosya uygulamanın yeni bir sürümü değil
-306|İndirilen dosya geçersiz. Tekrar dene
-307|Kod değiştirildi ✅ Parmak izi veya yüz tanıma ile gösterebilirsin
-308|Yeni kod {rule} olmalı.
-309|Mevcut kod
-310|Mevcut kod yanlış.
-311|Gizli kod 4 haneli olmalı
-312|Gizli kod yanlış.
-313|Yazdığın gizli kod yanlış.
-314|Gizli kodun, onaylamak için
-315|Kod artık geçerli değil. Ebeveynlerinden yeni bir kod iste.
-316|Kod yanlış. Tekrar kontrol et ya da ebeveynlerine sor.
-317|Kod yanlış. {left} deneme hakkın kaldı.
-318|E-postadaki kod
-319|Mevcut e-postadaki kod yanlış ya da süresi dolmuş.
-320|Kod gizli
-321|Kod gizli kalır ve yalnızca parmak izi veya yüz tanıma ile gösterilir.
-322|Kod {rule} olmalı
-323|Kod {rule} olmalı.
-324|Kod 4 haneli olmalı
-325|Kod en az 4, en fazla {max} haneli olmalı
-326|Kod yanlış ya da süresi dolmuş.
-327|Kod değiştirildi ✅
-328|{name} kişisinin kodu güncellendi
-329|Kodlar aynı değildi. Baştan başlayalım.
-330|Aile Kasası
-331|Kasa silindi
-332|Mahsup işlemi onay için bir ebeveyne gönderildi ⏳
-333|Mahsup, iki taraftaki borçları {amount} tutarına kadar kapatır. Fark olduğu gibi kalır ve geçmiş korunur.
-334|Aile kasası oluştur
-335|Gizli kodunu yaz.
-336|Kasayı kur
-337|Aile kasası kur
-338|Sonraki kayıt: {date}
-339|Düzenli kayıt durduruldu
-340|Düzenli kayıt eklendi ✅
-341|Kayıt reddedildi
-342|Kayıt silindi
-343|Liste
-344|Liste kopyalandı
-345|Ad güncellendi ✅
-346|Kurlar {when} güncellendi
-347|Düzeltmeler (belirli bir borç olmadan kaydedilen geri ödemeler)
-348|{base} ile yapılan ödeme bugünkü kurla çevrilir ve borçtan kendi para biriminde düşülür. Kaydettikten sonra bu kur saklanır ve değişmez.
-349|Bu bir demo, bu yüzden hiçbir şey değiştirilemez. Kendi kasanı oluştur!
-350|Bu senin e-postan
-351|Bu işlem tüm kasayı siler: tüm kişileri ve tüm kayıtları, ve geri alınamaz.\nOnaylamak için ailenin adını yaz: {name}
-352|Yüz tanıma veya parmak izi
-353|Erkek
-354|Bir arkadaş bana borçlu
-355|Arkadaş eklendi ✅
-356|Arkadaşlar bana borçlu
-357|Arkadaşlar genci bu e-postayla ekler. Buraya hiçbir şey gönderilmez, yalnızca arama için kullanılır.
-358|Arkadaşlar genci bu e-postayla ekler. Buraya hiçbir şey gönderilmez, yalnızca arama için kullanılır.
-359|Arkadaşlar genci bu e-postayla ekler. Buraya hiçbir şey gönderilmez, yalnızca arama için kullanılır.
-360|Arkadaşlar e-posta adresiyle eklenir. Kaydedilen her şeyi özet ekranında görürsün.
-361|Arkadaşlar: {names}
-362|Borç
-363|{cur} cinsinden borç
-364|Geri
-365|borçlu
-366|borçlu
-367|bana borçlu
-368|Bana borçlular
-369|Bana borçlu olanlar
-370|borçlu
-371|Yükleniyor…
-372|Ebeveyn henüz belirlemedi
-373|Ebeveyn yetkilerini kaybedecek. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
-374|{day}. gün
-375|Ayın günü geçersiz (1 ile 28 arası)
-376|Geçersiz gün
-377|Güvenle çıkış yapılıyor…
-378|Çok fazla kod isteği. Birkaç dakika sonra tekrar dene
-379|Çok fazla istek. Daha sonra tekrar dene
-380|Çok fazla kayıtlı cihaz
-381|Şu anda çok fazla yeni aile var. Birkaç dakika sonra tekrar dene
-382|Çok fazla deneme. Bir dakika sonra tekrar dene.
-383|Çok fazla deneme. Birkaç dakika sonra tekrar dene.
-384|Çok fazla kayıt. Daha sonra tekrar dene
-385|Borçtan {left} kaldı.
-386|Çocuk
-387|Çocuk
-388|Çocuk
-389|Çıkış yap
-390|Demodan çık
-391|Tam ebeveyn yetkilerini alacak: her şeyi görme, onaylama, silme ve aileyi yönetme. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
-392|Yeşil
-393|Yeşil + sarı
-394|Bekleyen çok fazla katılma isteği var. Bir ebeveynden bunlarla ilgilenmesini iste
-395|İki kişi arasında çok fazla açık borç var. Daha fazla eklemeden önce borçları kapat.
-396|İki kişi arasında çok fazla etkin kayıt var. Daha fazla eklemeden önce borçları kapat.
-397|Aranızda açık bir bakiye var. Önce onu kapatın
-398|Buradaki bazı borçlar başka bir para biriminde: bugünkü kurla mahsup edilecek ve bu kur saklanacak.
-399|Listede zaten çok fazla arkadaş var
-400|Zaten çok fazla düzenli kayıt var
-401|Aile kodum var
-402|Aile kodun var mı? Kasaya giriş yap
-403|Aile kodun var mı? Buraya yaz. Ebeveynlerinden ailenin katılım kodunu iste.
-404|Bu ad altında kayıtlar var. Önce onları sil
-405|Bakiyeler
-406|Burada arkadaşlarla borçları kaydedersin: kim kimin için aldı, kim geri ödeyecek. Arkadaşının da uygulamaya ihtiyacı var ve ebeveynlerinin onaylaması gerekiyor.
-407|Bu adla zaten biri var
-408|Bu adla zaten biri var. Kişiyi listeden seç ya da adı değiştir
-409|Bu adla zaten biri var. İsteği reddet
-410|Bu profilin zaten bir kodu var
-411|Neredeyse bitti…
-412|Aile kasasını zaten kullanıyor musun?
-413|{need} için parmak izi veya yüz tanıma ayarlanmış bir cihaz gerekir.
-414|{name} için yeni bir kod belirlemek üzere {email} adresine bir doğrulama kodu göndereceğiz.
-415|Mavi + mor
-416|Arkadaşları kapat
-417|Tüm açık borçlar
-418|Tüm aile
-419|Tüm tutarlar bu para biriminde gösterilir. Başka bir para biriminde borç kaydedebilirsin (örneğin 100 dolar) ve ödendiğinde o günün kuruyla çevrilir.
-420|Her ay
-421|Her {day}
-422|Ne sıklıkla
-423|Her hafta
-424|{from}, {to} kişisine ne kadar geri ödedi?
-425|{from}, {to} kişisine ne kadar geri ödedi?
-426|{from}, {to} kişisine ne kadar geri ödedi?
-427|{name} bana ne kadar borçlu?
-428|{name} bana ne kadar borçlu?
-429|{name} bana ne kadar borçlu?
-430|{name} bana ne kadar ödedi?
-431|{name} bana ne kadar ödedi?
-432|{name} bana ne kadar ödedi?
-433|{to} kişisine ne kadar borcum var?
-434|{to} kişisine ne kadar borcum var?
-435|{to} kişisine ne kadar borcum var?
-436|{to} kişisine ne kadar ödedim?
-437|Ne kadar?
-438|Evet
-439|Evet, devam et
-440|Evet, mahsup et
-441|Evet, borcu kaydet
-442|Evet, ödemeyi kaydet
-443|Giriş yap
-444|Arkadaşının uygulamada ebeveynleri yanında kaydettiği e-postayı yaz. Onlara bir istek gönderilir ve onaylamaları gerekir. Bu yalnızca arkadaşının da arkadaş modu varsa çalışır.
-445|Gizli kodu yaz
-446|Onaylamak için kodu tekrar yaz
-447|Adı yaz
-448|Bir tutar yaz
-449|Sıfırdan büyük bir tutar yaz.
-450|Başka bir adres
-451|E-posta adresi geçersiz
-452|E-posta adresi
-453|Yeni e-posta adresi
-454|Geçersiz e-posta adresi
-455|Turuncu
-456|Turuncu + pembe
-457|Hayır
-458|Bu cihazda bildirimler açılamadı
-459|Cihaz kaydedilemedi. Tekrar dene.
-460|Bilinmiyor
-461|Yanlış
-462|Telefonda yükleme uygulaması bulunamadı. Dosyayı doğrudan GitHub'dan indirebilirsin
-463|Geri ödeme hangi borç için?
-464|Onaylamak için {email} adresine bir doğrulama kodu göndereceğiz.
-465|Kasadaki hassas işlemleri onaylamak için
-466|Sıfırla, bir sonraki girişte kendileri seçsin
-467|Kaydettiğini iptal edelim mi?
-468|Reddedilsin mi? Kayıt silinecek.
-469|Yeni bir ebeveyn için gizli bir kod belirlenmeli
-470|Bir ebeveyn için kod belirlenmeli (kendisinin seçmesi için sıfırlanamaz)
-471|Yalnızca ebeveynler için. Kuran kişi ilk ebeveyn olur. Sonra tüm aile için tek bir katılım kodu alırsın ve herkesin rolünü belirlersin: çocuk, genç ya da ebeveyn.
-472|Kod değiştirilsin mi? İçeride olanlar kalır ama eski kod çalışmaz olur ve aileyi kaydetmiş diğer cihazların yeni kodu girmesi gerekir.
-473|{name} arkadaşlardan kaldırılsın mı?
-474|{name} aileden kaldırılsın mı?
-475|Düzenli kayıt durdurulsun mu? Daha önce kaydedilenler kalır.
-476|Ana sayfada ödenenleri de göster
-477|Hesaplama ayrıntıları için dokun ›
-478|{name} için arkadaş modu kapatılsın mı? Arkadaşlarla yeni kayıt eklenemeyecek.
-479|Belirtilmemiş
-480|Ödenmiş {n} kayıt silinsin mi?
-481|{name} için kayıt silinsin mi?
-482|Bu kayıt silinsin mi?
-483|Defterdeki tüm kayıtlar silinsin mi? Bu geri alınamaz.
-484|Kime
-485|Kime borcum var?
-486|Kime borcum var?
-487|Kime borcum var?
-488|Kime?
-489|Örneğin: dondurma, sinema bileti
-490|Örneğin: Yılmaz Ailesi
-491|Cihazın bağlantısı kesilsin mi? Katılım kodunu yeniden girmesi gerekecek.
-492|Ailenin para birimi ülkeye göre belirlenir. Daha sonra Yönet sekmesinden değiştirebilirsin.
-493|Para birimine göre
-494|Ada göre (A-Z)
-495|Salt okunur. Arkadaşla yapılan her kayıt ayrıca onların onayını bekler.
-496|katılım kodunu görmek
-497|rol değiştirmek
-498|Dengede: kimsenin borcu yok
-499|Doğrulanıyor…
-500|alacaklı
-501|alacaklı
-502|alacaklı
-503|Ülke desteklenmiyor
-504|Gizlilik Politikası
-505|Gizlilik Politikası
-506|Yaşanılan ülke
-507|Gençlerin arkadaşlarla kaydettikleri
-508|Neler açık
-509|Güncelleme indiriliyor...
-510|Güncelleme indiriliyor... %{percent}
-511|Sil
-512|Tüm kasayı sil
-513|Para birimi
-514|Para birimi desteklenmiyor
-515|Kim bana borçlu?
-516|Kim kime borçlu
-517|Kim borçlu (ödeyen)
-518|Kim bana borçlu?
-519|Kim giriş yapıyor?
-520|Kod kurtarma için e-posta
-521|E-posta yalnızca ebeveynler için
-522|Konum ve para birimi
-523|Biri
-524|Cihaz
-525|Cihaz mevcut değil
-526|Bağlı cihazlar
-527|Aileyi kaydetmiş cihazlar. 180 gün kullanılmayan bir kart kendiliğinden sona erer.
-528|{name} ailesindeki bir ebeveynin onaylaması bekleniyor. Bir ebeveyn onayladıktan sonra giriş ekranında adını seç ve seçtiğin gizli kodu yaz.
-529|Bir ebeveynin onaylaması bekleniyor. Bir ebeveyn onayladıktan sonra giriş ekranında adını seç ve seçtiğin gizli kodu yaz.
-530|Geçersiz bildirim aboneliği
-531|Geçersiz anahtar
-532|Arkadaş modu
-533|Arkadaş modu onaylandı ✅
-534|Arkadaş modu yalnızca gençler için
-535|Arkadaş modu kapatıldı
-536|{name} için arkadaş modu
-537|Arkadaş modu henüz ebeveynler tarafından onaylanmadı
-538|Kasaya katıl
-539|{name} ailesinin kasasına katılıyorsun. Ailedeki bir ebeveynin onaylaması ve senin çocuk, genç ya da ebeveyn olduğunu belirlemesi gerekir.
-540|Görünüm
-541|Bir şeyler ters gitti. Tekrar dene.
-542|Yönet
-543|Çok fazla denedin. {wait} sonra tekrar dene.
-544|Bağlantıyı kes
-545|Silindi
-546|Bu cihazda önceki sürümden veriler bulundu: {people} kişi ve {entries} kayıt. Sunucuya aktarılsın mı?
-547|Tekrar dene
-548|Genç
-549|Genç
-550|Genç
-551|Kadın
-552|Cihaz {name} içinde görünüyor. {name} içinde mi yaşıyorsun?
-553|{total} içinden {left} kaldı
-554|Bu borçtan {left} kaldı.
-555|Gizli kod değiştirildiğinde veya sıfırlandığında oraya bir kod gönderilir, ayrıca ailede birinin kodu kilitlendiğinde bir uyarı gelir.
-556|Onay için bir ebeveyne gönderildi ⏳
-557|Onay için arkadaşa gönderildi ⏳
-558|Mor ve turkuaz
-559|Kapat
-560|Kayıtların sırası
-561|Toplam
-562|Bugünkü kurla {cur} cinsinden toplam
-563|Tutar ({cur})
-564|Geçersiz tutar
-565|Geçersiz tutar. Arkadaşlar arasında her seferinde en fazla 500 şekel kaydedebilirsin
-566|Aile özeti
-567|Henüz hiçbir şey kaydedilmedi.
-568|Bir güncelleme zaten sürüyor
-569|Güncelle
-570|Daha fazla
-571|Ailede henüz başka kimse yok. Bir ebeveynin onları eklemesi gerekiyor.
-572|Henüz onaylı arkadaş yok
-573|Henüz onaylı arkadaş yok. E-postasıyla bir arkadaş ekle.
-574|Henüz arkadaş yok. E-postasıyla bir arkadaş ekle.
-575|Liste henüz boş. Başlamak için düğmelerden birine dokun.
-576|Henüz düzenli kayıt yok.
-577|Daha fazla karakter
-578|Henüz kod seçmedi
-579|Henüz kod seçmedi
-580|Henüz kod seçmedi
-581|Arkadaşlarla henüz hiçbir şey kaydedilmedi.
-582|Henüz hiçbir şey kaydedilmedi.
-583|Görünüm
-584|{debt} için (= bugünkü kurla {covers}).
-585|{debt} için.
-586|Ne için? (atlayabilirsin)
-587|Ne için? (isteğe bağlı)
-588|Şunun için: {debt}
-589|Kiminle?
-590|Çok büyük
-591|Doğrulamanın süresi doldu. Tekrar dene.
-592|Hesaplama ayrıntıları
-593|Geçersiz işlem
-594|Ekran renkleri
-595|Neon renkler
-596|Hitap şekli zaten belirlendi ve değiştirilemez
-597|Hitap şekli
-598|Hitap şekli:
-599|Bir aile kasası oluştur: herkes aynı hesabı görür ve borçlar herkes için güncellenir.
-600|Parmak izi veya yüz tanıma ile onay gerekli
-601|Uygulamanın güncelleme yüklemesine izin vermesi gerekiyor: açılan ayarlarda "Bu kaynaktan izin ver" seçeneğini aç ve tekrar "Güncelle"ye dokun
-602|Yeniden giriş yapman gerekiyor
-603|Aile koduyla yeniden giriş yapman gerekiyor
-604|Bu telefonu bir kez kaydetmen gerekiyor.
-605|Cihazı kaydetmen gerekiyor
-606|Bu cihazı ve tarayıcıyı bir kez kaydetmen gerekiyor.
-607|Cihazı yeniden kaydetmen gerekiyor
-608|Yüz tanımaya da izin vermek için cihazı yeniden kaydetmen gerekiyor
-609|Kodu belirle
-610|Kodu belirle ve giriş yap
-611|Hitap şeklini belirle…
-612|Herkes için tek kod. Bununla katılan çocuk olarak girer. Sonra "Aile üyeleri" bölümünden genç veya ebeveyn olarak değiştirebilirsin; parmak izi veya yüz tanıma onayı gerekir.
-613|E-postadaki kod
-614|E-postadaki doğrulama kodu yanlış ya da süresi dolmuş.
-615|Doğrulama kodu yanlış ya da süresi dolmuş.
-616|{name} ailesinin kasası için katılım kodu: {code}
-617|Ailenin katılım kodu
-618|Ailenin katılım kodu yalnızca parmak izi veya yüz tanıma ile gösterilir.
-619|Aile kodu değişti. Ebeveynlerinden yeni bir kod iste.
-620|Yeni kod
-621|Yeni kod ({rule})
-622|Mevcut e-postadaki kod
-623|Aile kodu
-624|Gizli kod ({rule}; ne kadar uzunsa o kadar güvenli)
-625|Gizli kod (ebeveyn için zorunlu, {rule})
-626|Gizli kod (isteğe bağlı — çocuk daha sonra kendisi seçebilir)
-627|Gizli kod (isteğe bağlı — çocuk daha sonra kendisi seçebilir)
-628|Gizli kod (isteğe bağlı — çocuk daha sonra kendisi seçebilir)
-629|Yeni gizli kod
-630|{name} için gizli kod
-631|Kendi gizli kodun (4 haneli)
-632|Katılım kodları
-633|Önce {name} için bir gizli kod belirlemen gerekiyor
-634|Aile kasasını yalnızca 18 yaşından büyük biri kurabilir
-635|Küçük
-636|Aldım
-637|Farkı aldım ({amount})
-638|Para aldım
-639|Karşılıklı mahsup
-640|Karşılıklı borçları mahsup et
-641|Karşılıklı borçları mahsup et ({amount})
-642|Davet bağlantısı, onu açan herkesi çocuk olarak ekler. Yalnızca ailenle paylaş.
-643|{terms} ve {privacy} metinlerini okudum ve kabul ediyorum
-644|{terms} ve {privacy} metinlerini okudum ve kabul ediyorum
-645|{terms} ve {privacy} metinlerini okudum ve kabul ediyorum
-646|Normal
-647|Bir saniye, giriş yapılıyor…
-648|Bir saniye, çıkış yapılıyor…
-649|Sana borcu olanların bunu görmesini ister misin?
-650|Kayıt ekle
-651|Geri ödeme kaydet
-652|Yüz tanıma / parmak izi kaydet
-653|Her seferinde yazmadan, haftalık veya aylık otomatik olarak borç kaydeder.
-654|Parmak izi / yüz tanıma kaydet
-655|Yeni düzenli kayıt
-656|Bunu yalnızca ebeveynler yapabilir
-657|Hitap şeklini yalnızca ebeveynler belirleyebilir
-658|Kendi borcunu defterine kaydet
-659|Tamamen ödendi ✅
-660|Ödenenler ({n})
-661|Her şey kaydediliyor…
-662|Kilidi aç
-663|Ödedim
-664|Farkı ödedim ({amount})
-665|Değiştir
-666|Para birimini değiştirmek yalnızca simgeyi değiştirir. Tutarların kendisi çevrilmez.
-667|Gizli kodu değiştir
-668|Aileyi yeniden adlandır
-669|Ailedeki bir rolü (çocuk, genç, ebeveyn) değiştirmek parmak izi veya yüz tanıma ile onaylanır.
-670|Paylaş
-671|Kodumu unuttum
-672|{email} adresine bir kod gönderdik. Kodu ve yeni adresi yaz. Yeni adres, mevcut olanın yerine ancak doğrulamadan sonra geçer.
-673|{email} adresine 6 haneli bir kod gönderdik. 10 dakika geçerli.
-674|Benimkiler
-675|İstek gönder
-676|Doğrulama kodu gönder
-677|Kodu e-postayla gönder
-678|Mevcut e-postaya kod gönder
-679|Ad
-680|Ailenin adı
-681|Ailenin adı eşleşmiyor
-682|Ailenin adı geçersiz
-683|Geçersiz ad
-684|Kaydet
-685|bir saat
-686|{"one":"{n} saat","other":"{n} saat"}
-687|Döviz kurları henüz yüklenmedi. Birazdan tekrar dene.
-688|2 saat
-689|Dil
-690|Geçersiz tarih
-691|Doğum tarihi (kasayı yalnızca 18 yaşından büyük biri kurabilir)
-692|Geçersiz doğum tarihi
-693|Kullanım Koşulları
-694|Kullanım Koşulları
-695|Rol
-696|Rol:
-697|Ana menü
-698|Başka para biriminde bir borç için ödeme
-699|💬 WhatsApp ile ebeveyne gönder
-700|Bu arada cihazında saklanan kişisel deftere yazabilirsin.
-701|📒 Şimdilik kişisel deftere
-702|Merhaba, {name} aile kasasına katılmak istiyor. Giriş yapıp onaylayabilirsin: {url}
-703|→ Aileye dön
-704|Aileye dön
-705|🏠 Aile oluştur
+17|{n} מתוך {goal}
+18|{n} kayıt kasaya taşındı ✅
+19|{n} kayıt taşındı. Kalanlar taşınamadı: {err}
+20|{n} açık kayıt, toplam {sum}
+21|{name} onaylandı ✅
+22|{name} kaldırıldı
+23|{name} kaldırıldı
+24|{name} kaldırıldı
+25|{name} bana borçlu
+26|{name} bana borçlu
+27|{name} bana borçlu
+28|{name} bir sonraki girişte yeni bir kod seçecek
+29|{name} bir sonraki girişte yeni bir kod seçecek
+30|{name} e-posta ile arkadaş ekleyip onlarla borç kaydedebilecek. Her kayıt ayrıca arkadaşın onayını bekler ve siz bunları özet ekranında görürsünüz. İstediğin zaman kapatabilirsin.
+31|{name} e-posta ile arkadaş ekleyip onlarla borç kaydedebilecek. Her kayıt ayrıca arkadaşın onayını bekler ve siz bunları özet ekranında görürsünüz. İstediğin zaman kapatabilirsin.
+32|{name} ülke listesinde yok, bu yüzden para birimi ABD doları olacak.
+33|{name} arkadaşlarla borç kaydetmek istiyor
+34|{name} arkadaşlarla borç kaydetmek istiyor
+35|{name} arkadaşlarla borç kaydetmek istiyor
+36|{name} aileye eklendi ✅
+37|{name} aileye eklendi ✅
+38|{name} aileye eklendi ✅
+39|{name} yalnızca kendi cihazından ebeveyn olarak giriş yapabilir. Nasıl değiştirilir?
+40|{name} kişisel defterine henüz bir şey yazmadı.
+41|{name} artık {role} ✅
+42|{name} seni eklemek istiyor
+43|{name} bir sonraki girişte yeni bir kod seçecek
+44|{name} e-posta ile arkadaş ekleyip onlarla borç kaydedebilecek. Her kayıt ayrıca arkadaşın onayını bekler ve siz bunları özet ekranında görürsünüz. İstediğin zaman kapatabilirsin.
+45|{saved} מתוך {target} ({pct}%)
+46|{who} şunu kaydetti: {line}
+47|{who} şunu kaydetti: {line}
+48|{who} şunu kaydetti: {line}
+49|⏳ {n} kayıt bir ebeveynin onayını bekliyor. Bunları "Geçmiş" bölümünde görebilirsin.
+50|⏳ Doğrulanıyor…
+51|⏳ Katılmak istiyor
+52|⏳ Onay bekliyor
+53|⏳ Onay bekliyor ({n})
+54|⏳ Ebeveynlerinin onayı bekleniyor
+55|⏳ Senin onayın bekleniyor
+56|⏳ Senin onayın bekleniyor ({n})
+57|⏳ Arkadaş bekleniyor
+58|⏳ İsteği onaylamaları bekleniyor
+59|⏳ Henüz bir cihaza bağlı değil
+60|⏳ Bir saniye…
+61|⏳ Bir kayıt bir ebeveynin onayını bekliyor. Bunu "Geçmiş" bölümünde görebilirsin.
+62|⏸️ Paylaşımı duraklat
+63|▶️ Paylaşımı sürdür
+64|⚖️ Mahsup et ({amount})
+65|⚖️ Borçları mahsup et
+66|⚠️ {name} adlı kişinin cihazını değiştirme talebi oluşturuldu ({when} tarihinde mümkün olacak). Haberiniz yoksa iptal edin.
+67|⚠️ Cihazınızı değiştirme talebi oluşturuldu. Değişiklik {when} tarihinde mümkün olacak. Siz yapmadıysanız iptal edin.
+68|{"one":"⚠️ {name} kişisinin kodu yanlış denemelerden sonra bir kez kilitlendi.","other":"⚠️ {name} kişisinin kodu yanlış denemelerden sonra {n} kez kilitlendi."}
+69|⚡ Neon
+70|✅ Onayla
+71|✅ Bu ebeveyn bu cihaza bağlı. Ebeveyn girişi yalnızca buradan, gizli kod ve parmak izi veya yüz tanıma ile yapılabilir.
+72|✅ כל הילדים נכנסים בינתיים בלי קוד סודי. אפשר להוסיף עוד ילדים.
+73|✅ כל הילדים נכנסים בינתיים עם אותו קוד סודי. אפשר להוסיף עוד ילדים.
+74|✅ Doğru
+75|✅ E-postanıza bir kod gönderildi. Yeni telefonda girin.
+76|✅ Ödendi
+77|✅ Geri ödemeyi kaydet
+78|✅ Borcu kaydet
+79|✉️ Kurtarma e-postası ekle
+80|✉️ Kurtarma e-postası: {email}
+81|➕ Başka bir aileye katıl
+82|🌈 Renkli
+83|🌙 Koyu
+84|🍕 Yemek
+85|🍦 Dondurma
+86|🍬 Şeker
+87|🎨 Ekran renkleri
+88|🎮 Oyun
+89|🏠 Aile kasası oluştur
+90|🏠 {family} ailesine geç
+91|🏠 Aile oluştur
+92|👀 10 saniyelik demo
+93|👀 Demo modu: örnek veriler, hiçbir şey kaydedilmez
+94|👁️ Defterimi kim görüyor
+95|👨‍👩‍👧 Ebeveynim ve yeni bir aile kasası kurmak istiyorum
+96|👨‍👩‍👧 Aile
+97|💬 WhatsApp ile ebeveyne gönder
+98|💬 WhatsApp hatırlatması
+99|💰 Param
+100|💰 Aldım
+101|💰 Ödedim
+102|📋 Açık listeyi kopyala
+103|📎 Davet bağlantısı
+104|📒 Defterdeki borçları birleştir
+105|📒 Şimdilik kişisel deftere
+106|📒 Kişisel defter
+107|📒 Defterim
+108|📜 Geçmiş
+109|📜 Değişiklik günlüğü
+110|📜 Geçmiş
+111|📧 Eski cihaz hâlâ bende (kod e-postayla)
+112|📱 Cihazım
+113|🔑 Başka bir ebeveynden bağlama kodum var
+114|🔑 קביעת קוד סודי
+115|🔑 Gizli kodu değiştir
+116|🔒 Ailen bu defteri görebilir, yalnızca görüntüleme.
+117|🔒 {role} olarak ekleme, parmak izi veya yüz tanıma ile onaylanır.
+118|🔔 Bildirimleri aç
+119|🔕 Bildirimleri kapat
+120|🗑️ Sil
+121|🗑️ Tüm defteri sil
+122|🤝 Arkadaşlık istekleri ({n})
+123|🤝 Arkadaş modu istekleri ({n})
+124|🤝 Arkadaşlar
+125|🤝 Arkadaş modu açık
+126|🧹 Ödenenleri sil
+127|🙂 Karakter seç
+128|3 שבועות ברצף
+129|4 haneli
+130|4 ile {max} arası hane
+131|4 ile 8 arası hane
+132|6 haneli
+133|8 שבועות ברצף
+134|Baba
+135|Güvenlik
+136|Kimse kendine borçlu olamaz
+137|Kişi mevcut değil
+138|Sonra eklerim
+139|Onaylandı ✅
+140|Tehlikeli bölge
+141|Borçtan kalandan fazlasını geri ödeyemezsin
+142|Borçtan kalandan fazlasını geri ödeyemezsin ({amount})
+143|Kendini kaldıramazsın
+144|Bu cihazda kopyalanamıyor
+145|Cihaz bu şekilde bağlanamaz
+146|Bu şekilde bağlanamaz. Cihaz değişikliği gerekiyor.
+147|Kendi rolünü değiştiremezsin
+148|Defterle birleştirme
+149|Aileye ne ad verelim?
+150|Adın ne?
+151|Anne
+152|Doğrula
+153|E-postayı doğrula
+154|Yok
+155|Etkin bir talep yok veya iptal edilmiş. Yeni bir talep gönderebilirsiniz.
+156|İnternet bağlantısı yok. Çevrimiçi olunca tekrar dene.
+157|Sunucuyla bağlantı yok
+158|Sunucuyla bağlantı yok. Kişisel defteriniz her zamanki gibi çalışmaya devam eder. Aile hesabındaki değişiklikler bağlantı geri geldiğinde gönderilir, ancak yalnızca uygulama açık kalırsa.
+159|Açık bir şey yok
+160|Açık bir şey yok!
+161|Bu ebeveynin doğrulanmış e-postası yok, bu yüzden bu yol mümkün değil. Başka bir ebeveyn bağlama kodu verebilir.
+162|Bu ebeveynin henüz gizli kodu yok.
+163|Gizli kodun yok. "Hesabım" bölümünden bir kod belirle ve tekrar dene.
+164|Doğrulanmış e-posta yok
+165|Değiştirilecek doğrulanmış e-posta yok
+166|אין קוד סודי. אפשר לקבוע קוד בהמשך, ב"החשבון שלי".
+167|Ödenmiş kayıt yok
+168|Borcun para birimi için döviz kuru yok
+169|Şu an kur yok
+170|Nerede yaşıyorsun?
+171|Onayla
+172|E-posta ile onay
+173|Gizli kodla onayla
+174|Talebi onayla
+175|Ebeveyn onayı
+176|Cihaz değişikliğini onayla
+177|Arkadaş modunu onayla
+178|Rol değişikliğini onayla
+179|Onaylandı
+180|bir birikim hedefine yatırmayı onayladı
+181|Katılma isteğini onayladı
+182|Bu ebeveynin doğrulanmış bir e-postası varsa oraya bir doğrulama kodu göndeririz. E-posta tanımlı değilse başka bir ebeveyn senin için yeni bir kod belirleyebilir.
+183|Bu o değilse yeni bir kod belirlemen iyi olur.
+184|Bu o değilse yeni bir kod belirlemen iyi olur.
+185|Bu o değilse yeni bir kod belirlemen iyi olur.
+186|Arkadaşın arkadaş modu varsa ona bir istek gönderildi 🤝
+187|Kodu unutursanız oraya bir sıfırlama kodu göndeririz. E-posta yoksa yalnızca başka bir ebeveyn yardımcı olabilir.
+188|Yeniyim
+189|Borçluyum
+190|{a} borcum var • bana {b} borcu var
+191|Borçluyum
+192|{name} kişisine borcum var
+193|{to} kişisine borcum var
+194|Bir arkadaşa borcum var
+195|Arkadaşlara borcum var
+196|Borçluyum
+197|Borçluyum
+198|{name} kişisine borcum var
+199|{to} kişisine borcum var
+200|Bir arkadaşa borcum var
+201|Arkadaşlara borcum var
+202|Borçluyum
+203|Borçluyum
+204|{name} kişisine borcum var
+205|{to} kişisine borcum var
+206|Bir arkadaşa borcum var
+207|Arkadaşlara borcum var
+208|Ailemdeki ebeveynlerin kişisel defterime yazdıklarımı görmesini kabul ediyorum. Yalnızca görüntüleyebilirler, değiştiremez veya silemezler.
+209|Kimsenin borcu yok!
+210|Kimsenin borcu yok.
+211|Yalnızca ilk 10 dakika içinde iptal edebilirsin, ya da bir ebeveynden isteyebilirsin
+212|Yalnızca ilk 10 dakika içinde iptal edebilirsin. Düzeltmek için bir geri ödeme kaydet
+213|En fazla {max} geri ödeyebilirsin.
+214|Değişikliği tamamlayabilirsiniz. Gizli kodu yazın ve bu cihazı bağlayın.
+215|Bir borca yalnızca geri ödeme bağlanabilir
+216|Yalnızca seninle ilgili borçları kaydedebilirsin
+217|Yalnızca onaylı arkadaşlarla kayıt yapabilirsin
+218|Her ayın {day}. günü
+219|Hangi gün
+220|Ayın hangi günü (1 ile 28 arası)
+221|Kim olduğu kontrol ediliyor…
+222|Kontrol ediliyor…
+223|Başka bir borç seç
+224|Ülke seç
+225|Tarih seçin
+226|Karakter seç
+227|Nerede yaşadığını seç
+228|Yeni bir gizli kod seç ({rule})
+229|Geri al
+230|İptal
+231|Talebi iptal et
+232|Talebi bu cihazda iptal et
+233|Ebeveyn yetkilerini kaldır
+234|Arkadaş modunu kapat
+235|Arkadaşlar arasında her seferinde en fazla {max} kaydedebilirsin.
+236|Bu arada cihazında saklanan kişisel deftere yazabilirsin.
+237|Onay istedi
+238|bir birikim hedefine para yatırmak istedi
+239|בלי קוד, הילדים נכנסים בלחיצה, וכל ילד יכול לקבוע קוד משלו מתי שירצה. עם קוד, כל הילדים מקבלים אותו קוד, וכשתרצו לתת לכל ילד את המשתמש שלו תאפסו לו את הקוד מלשונית “ניהול”, והוא יבחר קוד משלו.
+240|Bu cihazda parmak izi veya yüz tanıma yok, bu yüzden gizli kodunuzla onaylayın.
+241|Eski cihazda: “Hesabım” > “Cihazım” > Cihaz değiştir. Kod e-postayla gelecek.
+242|Ailede zaten bir cihaza bağlı ebeveyn var, bu yüzden bu cihazı bağlamak için ondan bir bağlama kodu gerekiyor. Çıkış yapın ve giriş ekranında “Yeni cihaz / Cihaz değiştir”e dokunun.
+243|{name} ailesinin üyeleri
+244|Aile üyeleri
+245|Toplamda {name} bana borçlu
+246|Toplamda {name} bana borçlu
+247|Toplamda {name} bana borçlu
+248|Toplamda {name} kişisine borcum var
+249|Toplamda {name} kişisine borcum var
+250|Toplamda {name} kişisine borcum var
+251|Defterde “{name}” için kayıtlar var
+252|Defter: “{a}”. Kasa: “{b}”.
+253|Ebeveynlerden onay iste
+254|ברוכים הבאים לקופה 🪙
+255|Büyük
+256|Yazı boyutu
+257|Sağa kaydır
+258|Sola kaydır
+259|Yeni bir sürüm mevcut ({version})
+260|Aylara göre borç ve geri ödeme grafiği
+261|Reddedildi
+262|bir birikim hedefine yatırmayı reddetti
+263|Katılma isteğini reddetti
+264|Reddet
+265|Karakter
+266|Karakter {avatar}
+267|Harçlık
+268|Düzenli harçlık
+269|bir dakika
+270|{"one":"{n} dakika","other":"{n} dakika"}
+271|Doğrulama iptal edildi
+272|Parmak izi / yüz tanıma doğrulaması başarısız oldu
+273|Doğrulama başarısız oldu. Tekrar dene.
+274|Doğrulama başarısız oldu (bilinmeyen adres).
+275|Doğrulama başarısız oldu. Tekrar dene.
+276|Eklediğin kişiler ilk girişlerinde bir gizli kod seçecek.
+277|Uygulama beklenmedik bir sorunla karşılaştı. Tekrar deneyebilirsiniz; sorun sürerse uygulamayı yenileyin.
+278|Uygulama henüz sunucuya bağlı değil
+279|Anladım
+280|Talep iptal edildi
+281|Talep alındı. Değişiklik {when} tarihinde mümkün olacak. O zamana kadar eski telefon, bulunursa, hâlâ çalışır ve ebeveynler talebi iptal edebilir.
+282|İstek artık mevcut değil
+283|İstek reddedildi
+284|İstek gönderildi
+285|הבקשה נשלחה להורה
+286|İstek ebeveynlerine gönderildi ⏳
+287|İstek ebeveynlerine gönderildi. Onayladıklarında sana haber vereceğiz.
+288|Ayarlar
+289|Aile ayarları
+290|הגשמת יעד
+291|Bu karakter ailede başka biri tarafından zaten kullanılıyor
+292|Bu tarayıcı biyometrik doğrulama için çok eski. Güncelle ve tekrar dene.
+293|İndirme başarısız oldu. İnternet bağlantını kontrol et ve tekrar dene
+294|Bu ebeveyn zaten başka bir cihaza bağlı ya da anahtar bu cihazdan silinmiş. Buradan devam etmek için cihaz değiştirmeniz gerekir: çıkış yapın ve giriş ekranında “Yeni cihaz / Cihaz değiştir”e dokunun.
+295|Bu ebeveyn yalnızca kendi cihazından giriş yapar.
+296|Bu ebeveyn yalnızca kendi cihazından giriş yapar. Cihaz değiştirdiyseniz “Yeni cihaz / Cihaz değiştir”e dokunun.
+297|Ebeveyn zaten bir cihaza bağlı. Cihaz değişikliğinin ayrı bir süreci var.
+298|Anne babaların kişisel defterini artık görmüyor. Yalnızca sende kalıyor.
+299|Her ailenin ebeveynleri defterinin yalnızca görüntülenebilir bir kopyasını görür. Paylaşımı istediğin zaman duraklatabilirsin.
+300|Geri ödeme bu borca uymuyor
+301|Geri ödeme kaydedildi ✅
+302|{name} adlı kişinin cihazında devam edin: kasayı açın, {name} adını seçin, “Yeni cihaz / Cihaz değiştir”e dokunun ve {name} adlı kişinin gizli kodunu ve bu kodu yazın. O andan itibaren {name} ebeveyn olarak yalnızca bu cihazdan giriş yapar.
+303|Not çok uzun
+304|Para yatırma onaylandı ✅
+305|Para yatırma reddedildi
+306|ההפקדה נוספה 🐷
+307|Bildirimler açıldı 🔔
+308|Bildirimler engellenmiş. Tarayıcı ayarlarından izin verebilirsin.
+309|Bildirimler kapatıldı
+310|Ebeveyn yetkilerini kaybedecek. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
+311|Arkadaş modunu kaybedecek. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
+312|Tam ebeveyn yetkilerini alacak: her şeyi görme, onaylama, silme ve aileyi yönetme. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
+313|Geri ödendi
+314|Bir aile üyesi ekledi
+315|Ekle
+316|Aile üyesi ekle
+317|Arkadaş ekle
+318|הוספת ילד/ה
+319|{n} kayıt aktarıldı
+320|Kopyalandı ✅
+321|Ebeveyn
+322|Başka bir ebeveyn “Yönet” altında adınızın yanındaki “Bağlama kodu”nu açar ve size bir kod verir.
+323|Başka bir ebeveynin senin için gizli bir kod belirlemesi gerekiyor
+324|Bir ebeveyn buradan giriş yapar, sonra ailenin geri kalanı için kodlar alır.
+325|Ebeveyn yalnızca kendi cihazından giriş yapar ve ebeveyn işlemleri parmak izi veya yüz tanıma ile onaylanır.
+326|Bir ebeveynin Convex adresini dosyada tanımlaması gerekiyor
+327|Önce bir ebeveynin giriş yapması gerekiyor.
+328|הושג ✅
+329|Arkadaş kaldırıldı
+330|Arkadaşlarım
+331|Borç {debtCur} cinsinden. {payCur} ile bugünkü kurdan ödersin.
+332|Borç şu kadar arttı:
+333|Bu borç zaten ödendi
+334|Borç tamamen kapanacak ✅
+335|Borç bulunamadı
+336|Borç kaydedildi ✅
+337|Borç şu kadar azaldı:
+338|Seninle {name} arasındaki borçlar bu tutara kadar kapatılacak ve yalnızca fark kalacak. Geçmiş korunur.
+339|Para birimine göre açık borçlar
+340|Borçlar mahsup edildi ✅
+341|Geri ödeme
+342|החזרה ראשונה
+343|Geri ödemeler
+344|החזרת הכול 3 שבועות ברצף
+345|החזרת הכול 8 שבועות ברצף
+346|החזרת חוב בפעם הראשונה
+347|{to} kişisine geri ödedim
+348|Aile kodunu değiştirdi
+349|Kodu değiştirmek aileyi kaydeden tüm cihazların bağlantısını keser, bu yüzden bir ebeveynin onaylaması gerekir. Şimdi cihaz doğrulama isteği açılacak.
+350|E-postayı değiştir
+351|Cihaz değiştir (e-postayla kod gönder)
+352|Kodu değiştir
+353|{name} ile hesap
+354|Hesabım
+355|Telefon bozuldu veya kayboldu mu? Başka bir ebeveyn “Yönet” altında size bağlama kodu verebilir. Başka ebeveyn yoksa giriş ekranından değişiklik talep edin: 24 saat sonra mümkün olur ve bununla ilgili e-posta alırsınız.
+356|Ebeveyn yetkilerini kaybedecek. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
+357|Arkadaş modunu kaybedecek. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
+358|Tam ebeveyn yetkilerini alacak: her şeyi görme, onaylama, silme ve aileyi yönetme. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
+359|Merhaba {name}, küçük bir hatırlatma: geri ödenecek {amount} kaldı. Teşekkürler! 🙏
+360|Merhaba {name}, küçük bir hatırlatma: {note} için geri ödenecek {amount} kaldı. Teşekkürler! 🙏
+361|Merhaba, {name} aile kasasına katılmak istiyor. Giriş yapıp onaylayabilirsin: {url}
+362|Geçmiş
+363|Arkadaşlarla geçmiş
+364|Hedefe zaten ulaşıldı
+365|היעד לא קיים
+366|היעד נוסף 🎯
+367|הישגים
+368|הישגים: {name}
+369|Hepsi {amount}
+370|Her şey denk
+371|Her şey denk ✅
+372|Her şey yalnızca bu cihazda saklanır.
+373|Önce en yeni
+374|Param
+375|Ülkem listede yok ($)
+376|Ailenin para birimi
+377|Ailenin para birimi {base}, bu borç ise {cur} cinsinden saklanacak. Bakiyelerde o günün kuruyla gösterilir, ödendiğinde tutar ödeme günündeki kurla çevrilir.
+378|Para birimi: {cur}
+379|E-posta doğrulandı ✅
+380|Bu e-posta başka biri tarafından zaten kullanılıyor
+381|Mevcut e-posta: {email}. Değiştirmek için oraya bir onay kodu göndeririz.
+382|{name} kişisinin e-postası
+383|Arkadaşın e-postası
+384|Arkadaşlar için e-postan:
+385|Konum ve para birimi kaydedildi ✅
+386|Konum ve para birimi güncellendi ✅
+387|Bu cihaz artık bir ebeveyne bağlı değil
+388|Bu cihaz artık bir ebeveyne bağlı değil. Giriş yapmak için cihaz değiştirmeniz gerekir.
+389|Bu cihaz doğrulama için kayıtlı değil. Yeniden kaydet.
+390|Bu cihaz henüz bir ebeveyne bağlı değil.
+391|Cihaz desteklenmiyor
+392|Cihazın bağlantısı kesildi ✅
+393|Cihazım
+394|Bu ekranda bir sorun oluştu. Uygulamanın geri kalanı çalışmaya devam ediyor, başka bir sekmeye geçebilirsiniz.
+395|Devam
+396|Doğrulamaya devam et
+397|Bu aile cihazı kaldırdı. Tekrar girmek için aile koduna ihtiyacın var.
+398|Aile bulunamadı
+399|Aile dolu
+400|Kilit açıldı ✅
+401|Genç, arkadaş modunu kaybedecek. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
+402|Verilerim
+403|Bir aile üyesini çıkardı
+404|Bir cihazı kaldırdı
+405|Tutar çok büyük
+406|Tutar çok büyük.
+407|Önce en büyük tutar
+408|Defterdeki tutarlar
+409|Kaldır
+410|{name} kişisini kaldır
+411|Bir ebeveynin kaldırılmasını bir ebeveyn onaylamalıdır. Şimdi cihaz doğrulama isteği açılacak.
+412|Gizle
+413|Sunucuya aktar
+414|Ebeveyn yetkisi ver
+415|Not
+416|Hareketi azalt
+417|Defter paylaşmak için çok büyük
+418|{name} adlı kişinin kişisel defteri
+419|Defter boşaltıldı
+420|Defter zaten boş
+421|Defter ebeveynlerinle paylaşılmıyor
+422|Defter geçerli değil
+423|Defterim
+424|Dur
+425|Bu işlem yalnızca parmak izi veya yüz tanıma ile onaylanır
+426|Biyometrik doğrulamayı aç
+427|הפקדה
+428|הפקדתי
+429|bir birikim hedefine para yatırdı
+430|Kodu göster 🔒
+431|Katılım kodunu göster
+432|Katıl
+433|Dosya çok büyük
+434|İndirilen dosya uygulamanın yeni bir sürümü değil
+435|İndirilen dosya geçersiz. Tekrar dene
+436|Kod değiştirildi ✅ Parmak izi veya yüz tanıma ile gösterebilirsin
+437|Yeni kod {rule} olmalı.
+438|Mevcut kod
+439|Mevcut kod yanlış.
+440|Gizli kod geçerli değil ({rule})
+441|Gizli kod 4 haneli olmalı
+442|Gizli kod yanlış.
+443|Yazdığın gizli kod yanlış.
+444|Gizli kodunuz
+445|Gizli kodun, onaylamak için
+446|Kod artık geçerli değil. Ebeveynlerinden yeni bir kod iste.
+447|Kod yanlış. Tekrar kontrol et ya da ebeveynlerine sor.
+448|Kod yanlış. {left} deneme hakkın kaldı.
+449|E-postadaki kod
+450|Mevcut e-postadaki kod yanlış ya da süresi dolmuş.
+451|Kod gizli
+452|Kod gizli kalır ve yalnızca parmak izi veya yüz tanıma ile gösterilir.
+453|Kod güncellendi. Yeni kodla kendi cihazınızdan giriş yapın.
+454|Kod {rule} olmalı
+455|Kod {rule} olmalı.
+456|Kod 4 haneli olmalı
+457|Kod en az 4, en fazla {max} haneli olmalı
+458|Kod yanlış ya da süresi dolmuş.
+459|Kod değiştirildi ✅
+460|{name} kişisinin kodu güncellendi
+461|Kodlar aynı değildi. Baştan başlayalım.
+462|Aile Kasası
+463|Kasa silindi
+464|הקופה נפתחה! כתבו את שמות הילדים. נער/ה או הורה נוסף אפשר להוסיף למטה, או אחר כך מלשונית “ניהול”.
+465|Mahsup işlemi onay için bir ebeveyne gönderildi ⏳
+466|Mahsup, iki taraftaki borçları {amount} tutarına kadar kapatır. Fark olduğu gibi kalır ve geçmiş korunur.
+467|Aile kasası oluştur
+468|Gizli kodunu yaz.
+469|Kasayı kur
+470|Aile kasası kur
+471|Sonraki kayıt: {date}
+472|Düzenli kayıt durduruldu
+473|Düzenli kayıt eklendi ✅
+474|הרישום יימחק. אפשר לכתוב למי שרשם למה זה לא נכון.
+475|Kayıt reddedildi
+476|Kayıt silindi
+477|Liste
+478|Liste kopyalandı
+479|Paylaşım duraklatıldı. Ebeveynlerin hiçbir şey görmüyor.
+480|Değişikliği tamamla ve giriş yap
+481|Ad güncellendi ✅
+482|Kurlar {when} güncellendi
+483|Düzeltmeler (belirli bir borç olmadan kaydedilen geri ödemeler)
+484|{base} ile yapılan ödeme bugünkü kurla çevrilir ve borçtan kendi para biriminde düşülür. Kaydettikten sonra bu kur saklanır ve değişmez.
+485|Bu, “{name}” ile aynı kişi mi?
+486|Bu aynı kişi mi? Öyleyse hangi ad kullanılsın?
+487|Bu bir demo, bu yüzden hiçbir şey değiştirilemez. Kendi kasanı oluştur!
+488|Bu senin e-postan
+489|Bu, her girişte kullanacağınız koddur. Aklınızda tutmanızda fayda var.
+490|Bu işlem tüm kasayı siler: tüm kişileri ve tüm kayıtları, ve geri alınamaz.\nOnaylamak için ailenin adını yaz: {name}
+491|Yüz tanıma veya parmak izi
+492|Erkek
+493|Bir arkadaş bana borçlu
+494|Arkadaş eklendi ✅
+495|Arkadaşlar bana borçlu
+496|Arkadaşlar genci bu e-postayla ekler. Buraya hiçbir şey gönderilmez, yalnızca arama için kullanılır.
+497|Arkadaşlar genci bu e-postayla ekler. Buraya hiçbir şey gönderilmez, yalnızca arama için kullanılır.
+498|Arkadaşlar genci bu e-postayla ekler. Buraya hiçbir şey gönderilmez, yalnızca arama için kullanılır.
+499|Arkadaşlar e-posta adresiyle eklenir. Kaydedilen her şeyi özet ekranında görürsün.
+500|Arkadaşlar: {names}
+501|Borç
+502|{cur} cinsinden borç
+503|Borçlar
+504|Geçen aya göre yeni borçlar: {diff}
+505|Sonraki ay
+506|Önceki ay
+507|Açık listeye geri döndü
+508|Geri
+509|Aileye dön
+510|{family} ailesine geri dön
+511|borçlu
+512|Ailede en az bir ebeveyn kalmalı
+513|borçlu
+514|bana borçlu
+515|Bana borçlular
+516|Bana borçlu olanlar
+517|borçlu
+518|Ada, nota veya tutara göre ara
+519|חסכת עד שהגעת ליעד
+520|Yükleniyor…
+521|Ebeveyn henüz belirlemedi
+522|Ebeveyn yetkilerini kaybedecek. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
+523|{day}. gün
+524|Ayın günü geçersiz (1 ile 28 arası)
+525|Geçersiz gün
+526|Güvenle çıkış yapılıyor…
+527|Çok fazla kod isteği. Birkaç dakika sonra tekrar dene
+528|Çok fazla istek. Daha sonra tekrar dene
+529|Şu anda çok fazla yeni aile var. Birkaç dakika sonra tekrar dene
+530|Çok fazla deneme. Bir dakika sonra tekrar dene.
+531|Çok fazla deneme. Birkaç dakika sonra tekrar dene.
+532|Çok fazla kayıt. Daha sonra tekrar dene
+533|Borçtan {left} kaldı.
+534|Çocuk
+535|Çocuk
+536|Çocuk
+537|יעד חדש
+538|Onaylanmış yatırımları olan bir hedef yalnızca bir ebeveynle birlikte silinebilir
+539|יעדי חיסכון
+540|יעדי חיסכון הם לילדים ולנוער
+541|Çıkış yap
+542|Demodan çık
+543|Tam ebeveyn yetkilerini alacak: her şeyi görme, onaylama, silme ve aileyi yönetme. Ardından yüz tanıma veya parmak izi ile doğrulama gerekecek.
+544|Yeşil + sarı
+545|Bazı kişiler size borçlu, siz de onlara borçlusunuz. Mahsup, karşılıklı borçları kapatır ve sadece farkı bırakır.
+546|Kişisel defterde aile üyelerinin adlarına borçlar var
+547|Bekleyen çok fazla katılma isteği var. Bir ebeveynden bunlarla ilgilenmesini iste
+548|İki kişi arasında çok fazla açık borç var. Daha fazla eklemeden önce borçları kapat.
+549|İki kişi arasında çok fazla etkin kayıt var. Daha fazla eklemeden önce borçları kapat.
+550|Aranızda açık bir bakiye var. Önce onu kapatın
+551|Buradaki bazı borçlar başka bir para biriminde: bugünkü kurla mahsup edilecek ve bu kur saklanacak.
+552|“{old}” zaten defterde var.
+553|Bu hedefte onay bekleyen çok sayıda yatırım var
+554|Listede zaten çok fazla arkadaş var
+555|יש כבר הרבה יעדים
+556|Zaten çok fazla düzenli kayıt var
+557|Bu hedefte zaten çok fazla yatırım var
+558|Aile kodum var
+559|Aile kodun var mı? Kasaya giriş yap
+560|Aile kodun var mı? Buraya yaz. Ebeveynlerinden ailenin katılım kodunu iste.
+561|Ailede yalnızca bir ebeveyn var. Cihaz kaybolursa erişimi geri alabilmek için başka bir ebeveyn eklemenizi ve bir e-postayı doğrulamanızı öneririz.
+562|Bu ad altında kayıtlar var. Önce onları sil
+563|Bakiyeler
+564|Burada arkadaşlarla borçları kaydedersin: kim kimin için aldı, kim geri ödeyecek. Arkadaşının da uygulamaya ihtiyacı var ve ebeveynlerinin onaylaması gerekiyor.
+565|כאן רושמים מי חייב למי. לוחצים על אחד הכפתורים הגדולים, בוחרים אדם וסכום, וזהו.
+566|Kapalı
+567|{"one":"Zaten 1 gün","other":"Zaten {n} gün"}
+568|Bu adla zaten biri var
+569|Bu adla zaten biri var. Kişiyi listeden seç ya da adı değiştir
+570|Bu adla zaten biri var. İsteği reddet
+571|Bu profilin zaten bir kodu var
+572|Neredeyse bitti…
+573|Aile kasasını zaten kullanıyor musun?
+574|{need} için parmak izi veya yüz tanıma ayarlanmış bir cihaz gerekir.
+575|Bu telefondan cihaz değiştirmek için doğrulanmış bir e-posta gerekir. “Hesabım” altında e-posta ekleyin.
+576|Ebeveyn olarak giriş yapmak için bu cihazı başka bir ebeveynin bağlama koduyla bağlamanız gerekir. “Yeni cihaz / Cihaz değiştir”e dokunun.
+577|Katılmak için ebeveynlerinin kişisel defterini yalnızca görüntüleyebileceğini kabul etmelisin
+578|{name} için yeni bir kod belirlemek üzere {email} adresine bir doğrulama kodu göndereceğiz.
+579|Bir cihazı bağlamak için üzerinde parmak izi veya yüz tanıma ayarlı olmalı.
+580|Bir çocuğun kendini ebeveyn yapamaması için genç veya ebeveyn olarak ekleme bir ebeveyn tarafından onaylanır. Şimdi cihazdan bir doğrulama isteği açılacak.
+581|Bir çocuğun kendini ebeveyn yapamaması için rol değişikliği bir ebeveyn tarafından onaylanır. Şimdi cihazdan bir doğrulama isteği açılacak.
+582|Yılmaz
+583|Mavi + mor
+584|Arkadaşları kapat
+585|Tüm açık borçlar
+586|Tüm aile
+587|Tüm tutarlar bu para biriminde gösterilir. Başka bir para biriminde borç kaydedebilirsin (örneğin 100 dolar) ve ödendiğinde o günün kuruyla çevrilir.
+588|Her ay
+589|Her {day}
+590|Ne sıklıkla
+591|כל רישום שלכם מחכה לאישור של הורה, ורק אחרי זה הוא נכנס לחשבון. אם טעיתם, אפשר לבטל תוך 10 דקות.
+592|Her hafta
+593|{from}, {to} kişisine ne kadar geri ödedi?
+594|{from}, {to} kişisine ne kadar geri ödedi?
+595|{from}, {to} kişisine ne kadar geri ödedi?
+596|{name} bana ne kadar borçlu?
+597|{name} bana ne kadar borçlu?
+598|{name} bana ne kadar borçlu?
+599|{name} bana ne kadar ödedi?
+600|{name} bana ne kadar ödedi?
+601|{name} bana ne kadar ödedi?
+602|{to} kişisine ne kadar borcum var?
+603|{to} kişisine ne kadar borcum var?
+604|{to} kişisine ne kadar borcum var?
+605|כמה צריך? ({cur})
+606|{to} kişisine ne kadar ödedim?
+607|Ne kadar?
+608|Evet
+609|Evet, aynı kişi. “{n}” kalsın
+610|Evet, aynı kişi. Hepsini “{n}” yap
+611|Evet, “{n}” altında birleştir (defterdeki ad)
+612|Evet, “{n}” altında birleştir (kasadaki ad)
+613|Evet, devam et
+614|Evet, kasaya taşı
+615|Evet, mahsup et
+616|Evet, borcu kaydet
+617|Evet, ödemeyi kaydet
+618|Giriş yap
+619|Ebeveyn girişi
+620|Adınızı yazın
+621|Arkadaşının uygulamada ebeveynleri yanında kaydettiği e-postayı yaz. Onlara bir istek gönderilir ve onaylamaları gerekir. Bu yalnızca arkadaşının da arkadaş modu varsa çalışır.
+622|Gizli kodu yaz
+623|Onaylamak için kodu tekrar yaz
+624|Adı yaz
+625|Ailenin soyadını yazın
+626|Bir tutar yaz
+627|Sıfırdan büyük bir tutar yaz.
+628|Başka bir adres
+629|E-posta adresi geçerli görünmüyor
+630|E-posta adresi geçersiz
+631|E-posta adresi
+632|Yeni e-posta adresi
+633|Geçersiz e-posta adresi
+634|Turuncu + pembe
+635|Hayır
+636|Bu cihazda bildirimler açılamadı
+637|Şu anda bağlanamadık. Bağlantı geri geldiğinde bu ekran kendiliğinden kaybolacak; bu arada kişisel defter bağlantı olmadan da çalışır.
+638|E-postayı bağlayamadık. "Hesabım" bölümünden tekrar deneyebilirsiniz.
+639|Cihazı bağlayamadık. Tekrar deneyin.
+640|Bilinmiyor
+641|Yanlış
+642|“{q}” için hiçbir şey bulunamadı
+643|Telefonda yükleme uygulaması bulunamadı. Dosyayı doğrudan GitHub'dan indirebilirsin
+644|Bu ay hiçbir şey kaydedilmedi.
+645|Hayır, bunlar iki farklı kişi
+646|Hayır, bu başka biri
+647|Hayır, defterde kalsın
+648|Geri ödeme hangi borç için?
+649|Onaylamak için {email} adresine bir doğrulama kodu göndereceğiz.
+650|Sıfırla, bir sonraki girişte kendileri seçsin
+651|Kaydettiğini iptal edelim mi?
+652|לדחות את הרישום?
+653|Reddedilsin mi? Kayıt silinecek.
+654|להוסיף גם נער/ה או הורה נוסף
+655|Yeni bir ebeveyn için gizli bir kod belirlenmeli
+656|Bir ebeveyn için kod belirlenmeli (kendisinin seçmesi için sıfırlanamaz)
+657|Yalnızca ebeveynler için. Kuran kişi ilk ebeveyn olur. Sonra tüm aile için tek bir katılım kodu alırsın ve herkesin rolünü belirlersin: çocuk, genç ya da ebeveyn.
+658|Kodu değiştir
+659|Kod değiştirilsin mi? İçeride olanlar kalır ama eski kod çalışmaz olur ve aileyi kaydetmiş diğer cihazların yeni kodu girmesi gerekir.
+660|Cihaz değiştir
+661|Kendi cihazını değiştirmenin süreci farklıdır
+662|Bağlama kodu ver
+663|{name} arkadaşlardan kaldırılsın mı?
+664|{name} aileden kaldırılsın mı?
+665|Ebeveyni kaldır
+666|Bunlar aile kasasına {name} adına taşınsın mı?
+667|Düzenli kayıt durdurulsun mu? Daha önce kaydedilenler kalır.
+668|Ana sayfada ödenenleri de göster
+669|Hesaplama ayrıntıları için dokun
+670|{name} için arkadaş modu kapatılsın mı? Arkadaşlarla yeni kayıt eklenemeyecek.
+671|Belirtilmemiş
+672|למה? (לא חובה)
+673|Ödenmiş {n} kayıt silinsin mi?
+674|למחוק את היעד "{name}"?
+675|Kumbarayı sil
+676|{name} için kayıt silinsin mi?
+677|Bu kayıt silinsin mi?
+678|Defterdeki tüm kayıtlar silinsin mi? Bu geri alınamaz.
+679|Kime
+680|Kime borcum var?
+681|Kime borcum var?
+682|Kime borcum var?
+683|Kime?
+684|למשל: אופניים
+685|Örneğin: dondurma, sinema bileti
+686|Cihazın bağlantısı kesilsin mi? Katılım kodunu yeniden girmesi gerekecek.
+687|Ailenin para birimi ülkeye göre belirlenir. Daha sonra Yönet sekmesinden değiştirebilirsin.
+688|Cihaza göre
+689|Para birimine göre
+690|Ada göre (A-Z)
+691|Yalnızca görüntüleme. Defter {name} kişisinde kalır ve buradan değiştirilemez.
+692|Salt okunur. Arkadaşla yapılan her kayıt ayrıca onların onayını bekler.
+693|katılım kodunu görmek
+694|rol değiştirmek
+695|Dengede: kimsenin borcu yok
+696|Doğrulanıyor…
+697|alacaklı
+698|alacaklı
+699|alacaklı
+700|Ülke desteklenmiyor
+701|Gizlilik Politikası
+702|Gizlilik Politikası
+703|Yaşanılan ülke
+704|Gençlerin arkadaşlarla kaydettikleri
+705|Neler açık
+706|Bugünden itibaren
+707|Açık
+708|Güncelleme indiriliyor...
+709|Güncelleme indiriliyor... %{percent}
+710|Sil
+711|Kumbaranın silinmesi geri alınamaz, bu yüzden bir ebeveynin onaylaması gerekir. Şimdi cihaz doğrulama isteği açılacak.
+712|Tüm kasayı sil
+713|Telefon mu değiştiriyorsunuz? Buraya dokunun, parmak izi ile onaylayın, e-postanıza bir kod gönderilsin. Sonra yeni telefonda kasayı açın, adınızı seçin ve “Yeni cihaz / Cihaz değiştir”e dokunun. Eski telefonun oturumu kapanır.
+714|Silindi
+715|bir birikim hedefini sildi
+716|Para birimi
+717|Para birimi desteklenmiyor
+718|מי הילדים שלך?
+719|En çok kim borçlu
+720|Kim bana borçlu?
+721|Kim kime borçlu
+722|Kim borçlu (ödeyen)
+723|Kim bana borçlu?
+724|Kim giriş yapıyor?
+725|Son 6 ayda kimin neyi ne zaman değiştirdiği.
+726|Kod kurtarma için e-posta
+727|Kod kurtarma için e-posta (zorunlu değil)
+728|E-posta yalnızca ebeveynler için
+729|Konum ve para birimi
+730|Biri
+731|Cihaz
+732|Yeni cihaz / Cihaz değiştir
+733|Cihaz mevcut değil
+734|Bağlı cihazlar
+735|Aileyi kaydetmiş cihazlar. 180 gün kullanılmayan bir kart kendiliğinden sona erer.
+736|ממתין לאישור: {amount}
+737|{name} ailesindeki bir ebeveynin onaylaması bekleniyor. Bir ebeveyn onayladıktan sonra giriş ekranında adını seç ve seçtiğin gizli kodu yaz.
+738|Bir ebeveynin onaylaması bekleniyor. Bir ebeveyn onayladıktan sonra giriş ekranında adını seç ve seçtiğin gizli kodu yaz.
+739|Geçersiz bildirim aboneliği
+740|Kodu {name} adlı kişiye mesajla değil, elden verin. 30 dakika geçerlidir ve yalnızca bir kez kullanılır.
+741|Geçersiz anahtar
+742|Arkadaş modu
+743|Arkadaş modu onaylandı ✅
+744|Arkadaş modu yalnızca gençler için
+745|Arkadaş modu kapatıldı
+746|{name} için arkadaş modu
+747|Arkadaş modu henüz ebeveynler tarafından onaylanmadı
+748|Kasaya katıl
+749|{name} ailesinin kasasına katılıyorsun. Ailedeki bir ebeveynin onaylaması ve senin çocuk, genç ya da ebeveyn olduğunu belirlemesi gerekir.
+750|Görünüm
+751|Bir şeyler ters gitti
+752|Bir şeyler ters gitti. Tekrar dene.
+753|Aile
+754|Başka bir aile
+755|Diğer aileler
+756|{name} Ailesi
+757|Yönet
+758|Tekrar dene
+759|Çok fazla denedin. {wait} sonra tekrar dene.
+760|Aramayı temizle
+761|Bağlantıyı kes
+762|נכנס בלי קוד
+763|Silindi
+764|Bu cihazda önceki sürümden veriler bulundu: {people} kişi ve {entries} kayıt. Sunucuya aktarılsın mı?
+765|Tekrar dene
+766|Tekrar deneyin
+767|Genç
+768|Genç
+769|Genç
+770|Kadın
+771|Cihaz {name} içinde görünüyor. {name} içinde mi yaşıyorsun?
+772|Kaydedilen borçlar
+773|{total} içinden {left} kaldı
+774|Bu borçtan {left} kaldı.
+775|Gizli kod değiştirildiğinde veya sıfırlandığında oraya bir kod gönderilir, ayrıca ailede birinin kodu kilitlendiğinde bir uyarı gelir.
+776|Onay için bir ebeveyne gönderildi ⏳
+777|Onay için arkadaşa gönderildi ⏳
+778|Doğrulanmış e-postanıza bir kod gönderildi. Onayladıktan sonra değişiklik ancak 24 saat sonra mümkün olur; bu sürede siz ve diğer ebeveynler bildirim alır ve iptal edebilirsiniz.
+779|Kapat
+780|Kayıtların sırası
+781|Toplam
+782|Bugünkü kurla {cur} cinsinden toplam
+783|Ödendi olarak işaretlendi
+784|Bitti
+785|Aylık özet
+786|Tutar ({cur})
+787|Geçersiz tutar
+788|Geçersiz tutar. Arkadaşlar arasında her seferinde en fazla 500 şekel kaydedebilirsin
+789|Henüz hiçbir şey kaydedilmedi.
+790|Bir güncelleme zaten sürüyor
+791|Güncelle
+792|Daha fazla
+793|Ailede henüz başka kimse yok. Bir ebeveynin onları eklemesi gerekiyor.
+794|Henüz onaylı arkadaş yok
+795|Henüz onaylı arkadaş yok. E-postasıyla bir arkadaş ekle.
+796|Henüz arkadaş yok. E-postasıyla bir arkadaş ekle.
+797|עוד אין יעדי חיסכון.
+798|Liste henüz boş. Başlamak için düğmelerden birine dokun.
+799|Henüz düzenli kayıt yok.
+800|Günlükte henüz değişiklik yok.
+801|Henüz hiçbir ebeveyn defteri açmadı
+802|Daha fazla karakter
+803|Henüz değil
+804|Henüz kod seçmedi
+805|Henüz kod seçmedi
+806|Henüz kod seçmedi
+807|Arkadaşlarla henüz hiçbir şey kaydedilmedi.
+808|Henüz hiçbir şey kaydedilmedi.
+809|Henüz kopya gönderilmedi
+810|Talepten bu yana henüz 24 saat geçmedi.
+811|Diğer işlemler
+812|Son güncelleme: {when}
+813|Görünüm
+814|{debt} için (= bugünkü kurla {covers}).
+815|{debt} için.
+816|על מה חוסכים?
+817|Ne için? (atlayabilirsin)
+818|Ne için? (isteğe bağlı)
+819|Şunun için: {debt}
+820|Kiminle?
+821|Çok büyük
+822|Doğrulamanın süresi doldu. Tekrar dene.
+823|Hesaplama ayrıntıları
+824|Geçersiz işlem
+825|Profil
+826|bir birikim hedefi oluşturdu
+827|Ekran renkleri
+828|Neon renkler
+829|Hitap şekli zaten belirlendi ve değiştirilemez
+830|Hitap şekli kaydedildi ✅
+831|Hitap şekli
+832|Hitap şekli:
+833|Ses
+834|Defteri görüntüleyenler:
+835|Bir aile kasası oluştur: herkes aynı hesabı görür ve borçlar herkes için güncellenir.
+836|Parmak izi veya yüz tanıma ile onay gerekli
+837|Bu aileye girmek için aile koduna ihtiyacın var.
+838|Uygulamanın güncelleme yüklemesine izin vermesi gerekiyor: açılan ayarlarda "Bu kaynaktan izin ver" seçeneğini aç ve tekrar "Güncelle"ye dokun
+839|Kullanım koşullarını ve gizlilik politikasını kabul etmelisiniz
+840|Yeniden giriş yapman gerekiyor
+841|Aile koduyla yeniden giriş yapman gerekiyor
+842|Cihazın yeniden bağlanması gerekiyor
+843|Bu telefonu bir kez bağlamanız gerekiyor.
+844|Cihazın bağlanması gerekiyor
+845|Bu cihazın bir ebeveynle ilişkilendirilmesi gerekiyor. Yeniden giriş yapın ve başka bir ebeveynden alacağınız bağlantı koduyla ilişkilendirin
+846|Bu cihazı ve tarayıcıyı bir kez bağlamanız gerekiyor.
+847|Cihaz değiştirmek için doğrulanmış bir e-posta gerekir
+848|Kodu belirle
+849|Kodu belirle ve giriş yap
+850|Hitap şeklini belirle…
+851|קביעת קוד סודי
+852|Herkes için tek kod. Bununla katılan çocuk olarak girer. Sonra "Aile üyeleri" bölümünden genç veya ebeveyn olarak değiştirebilirsin; parmak izi veya yüz tanıma onayı gerekir.
+853|E-postadaki kod
+854|E-postadaki doğrulama kodu yanlış ya da süresi dolmuş.
+855|Doğrulama kodu yanlış ya da süresi dolmuş.
+856|{name} ailesinin kasası için katılım kodu: {code}
+857|Ailenin katılım kodu
+858|Ailenin katılım kodu yalnızca parmak izi veya yüz tanıma ile gösterilir.
+859|Aile kodu değişti. Ebeveynlerinden yeni bir kod iste.
+860|Bağlama kodu
+861|Yeni kod
+862|Yeni kod ({rule})
+863|Mevcut e-postadaki kod
+864|Aile kodu
+865|Gizli kod ({rule}; ne kadar uzunsa o kadar güvenli)
+866|Gizli kod (ebeveyn için zorunlu, {rule})
+867|קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)
+868|קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק
+869|Yeni gizli kod
+870|{name} için gizli kod
+871|Kendi gizli kodun (4 haneli)
+872|Bağlama kodu
+873|Bağlama kodu yalnızca ebeveynler içindir
+874|{name} için bağlama kodu
+875|Bir cihaz için bağlama kodu
+876|Katılım kodları
+877|Önce {name} için bir gizli kod belirlemen gerekiyor
+878|{name} ile {amount} mahsup edildi ✅
+879|Aile kasasını yalnızca 18 yaşından büyük biri kurabilir
+880|Küçük
+881|Aldım
+882|Farkı aldım ({amount})
+883|Para aldım
+884|Karşılıklı mahsup
+885|Karşılıklı borçları mahsup et
+886|Karşılıklı borçları mahsup et ({amount})
+887|Davet bağlantısı, onu açan herkesi çocuk olarak ekler. Yalnızca ailenle paylaş.
+888|Cihaz bağlama
+889|Bu cihazı bağla ve giriş yap
+890|Cihazı bir ebeveyne bağla
+891|Bölüme git
+892|{terms} ve {privacy} metinlerini okudum ve kabul ediyorum
+893|{terms} ve {privacy} metinlerini okudum ve kabul ediyorum
+894|{terms} ve {privacy} metinlerini okudum ve kabul ediyorum
+895|Normal
+896|Bir saniye, giriş yapılıyor…
+897|Bir saniye, çıkış yapılıyor…
+898|Bunları aile kasasında birleştirmek ister misin?
+899|Sana borcu olanların bunu görmesini ister misin?
+900|Titreşim
+901|Kayıt ekle
+902|Geri ödeme kaydet
+903|Her seferinde yazmadan, haftalık veya aylık otomatik olarak borç kaydeder.
+904|Yeni düzenli kayıt
+905|Uygulamayı yenile
+906|Bunu yalnızca ebeveynler yapabilir
+907|רק הורים יכולים לפתוח יעד למישהו אחר
+908|Hitap şeklini yalnızca ebeveynler belirleyebilir
+909|Yalnızca kasayı açan kişinin 18 yaşından büyük olduğunu doğrulamak için. Kimseye gösterilmez.
+910|Bir geri ödeme kaydetti
+911|Bir borç kaydetti
+912|Kendi borcunu defterine kaydet
+913|שבוע נקי
+914|שבוע שלם בלי חובות פתוחים
+915|Tamamen ödendi ✅
+916|Ödenenler ({n})
+917|Her şey kaydediliyor…
+918|Kilidi aç
+919|Ödedim
+920|Farkı ödedim ({amount})
+921|Ailenin adını değiştirdi
+922|Ülkeyi ve para birimini değiştirdi
+923|Bir adı değiştirdi
+924|Bir rolü değiştirdi
+925|Değiştir
+926|Para birimini değiştirmek yalnızca simgeyi değiştirir. Tutarların kendisi çevrilmez.
+927|Gizli kodu değiştir
+928|Aileyi yeniden adlandır
+929|Paylaş
+930|Kodumu unuttum
+931|{email} adresine bir kod gönderdik. Kodu ve yeni adresi yaz. Yeni adres, mevcut olanın yerine ancak doğrulamadan sonra geçer.
+932|{email} adresine 6 haneli bir kod gönderdik. 10 dakika geçerli.
+933|Benimkiler
+934|İstek gönder
+935|Doğrulama kodu gönder
+936|Kodu e-postayla gönder
+937|Mevcut e-postaya kod gönder
+938|Ad
+939|שם היעד חייב להיות עד 40 תווים
+940|Ailenin adı
+941|Ailenin adı eşleşmiyor
+942|Ailenin adı geçersiz
+943|Geçersiz ad
+944|Bilinen adlar
+945|Kaydet
+946|bir saat
+947|{"one":"{n} saat","other":"{n} saat"}
+948|Döviz kurları henüz yüklenmedi. Birazdan tekrar dene.
+949|2 saat
+950|Dil
+951|Geçersiz tarih
+952|Doğum tarihi
+953|Geçersiz doğum tarihi
+954|His
+955|Kullanım Koşulları
+956|Kullanım Koşulları
+957|Rol
+958|Rol:
+959|Ana menü
+960|Başka para biriminde bir borç için ödeme
+961|🆘 Eski cihaz kayboldu veya bozuldu

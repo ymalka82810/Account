@@ -59,6 +59,25 @@ function textFields(/** @type {any} */ from) {
   return /** @type {any[]} */ (Array.from(root.querySelectorAll('input, textarea'))).filter((e) => isKbTarget(e) && e.offsetParent !== null);
 }
 
+// מגלל את הדף כך שהשדה הפעיל (עם התווית שלו) יישאר גלוי מעל המקלדת שלנו. אם יש בטופס כפתור שליחה, מנסים להשאיר גם אותו גלוי,
+// אבל רק אם שניהם נכנסים יחד מעל המקלדת, ואף פעם לא על חשבון השדה עצמו. (scrollIntoView מרכז ביחס לכל המסך, ולכן השדה היה נקבר מתחת למקלדת.)
+function revealAboveKeyboard(/** @type {any} */ field, /** @type {any} */ kbEl) {
+  // גובה המקלדת מהפריסה ולא מ-getBoundingClientRect: בזמן אנימציית הכניסה (kb-up) ה-rect כולל את ה-transform, והגבול יוצא נמוך מדי.
+  const limit = (kbEl ? window.innerHeight - kbEl.offsetHeight : window.innerHeight) - 8;
+  const top = 12;
+  const f = field.getBoundingClientRect();
+  const box = (field.closest('label, .field') || field).getBoundingClientRect();
+  let d = Math.max(0, f.bottom - limit);
+  const submit = field.form && field.form.querySelector('button[type="submit"]');
+  if (submit) {
+    const sb = submit.getBoundingClientRect().bottom;
+    if (sb > limit && sb - limit <= box.top - top) d = Math.max(d, sb - limit);
+  }
+  if (d === 0 && box.top < top) d = box.top - top;
+  // גלילה מיידית: בלי אנימציה, והיא לא תלויה בקצב הפריימים (גלילה חלקה לא התקדמה ב-Chromium 131 ב-CI, והשדה נשאר מתחת למקלדת)
+  if (d) window.scrollBy({ top: d, behavior: 'auto' });
+}
+
 export default function AppKeyboard() {
   const [target, setTarget] = useState(/** @type {any} */ (null));
   const [kind, setKind] = useState('text');
@@ -118,7 +137,8 @@ export default function AppKeyboard() {
     // הכפתור עדיין מקבל click רגיל, והמקלדת נסגרת כשהחלון נסגר או כשלוחצים על שדה אחר / על ⌄.
     const onMouseDown = (/** @type {any} */ e) => {
       if (!targetRef.current || rootRef.current?.contains(e.target)) return;
-      if (e.target.closest?.('button, [role="button"]')) e.preventDefault();
+      // כפתור שפותח חלון בחירה (תאריך, רשימה) כן לוקח פוקוס, וככה המקלדת נסגרת ולא מכסה את החלון
+      if (e.target.closest?.('button:not([aria-haspopup]), [role="button"]')) e.preventDefault();
     };
     // שדה שיצא מהמסמך (למשל חלון שנסגר אחרי רישום) לא משאיר מקלדת פתוחה
     const mo2 = new MutationObserver(() => { if (targetRef.current && !targetRef.current.isConnected) hide(); });
@@ -150,7 +170,7 @@ export default function AppKeyboard() {
     setH();
     const ro = typeof ResizeObserver === 'function' && el ? new ResizeObserver(setH) : null;
     if (ro && el) ro.observe(el);
-    const id = setTimeout(() => { try { target.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch { /* */ } }, 160);
+    const id = setTimeout(() => { try { if (target.closest('.sheet')) target.scrollIntoView({ block: 'center', behavior: 'smooth' }); else revealAboveKeyboard(target, el); } catch { /* */ } }, 160);
     return () => { clearTimeout(id); if (ro) ro.disconnect(); };
   }, [target]);
 

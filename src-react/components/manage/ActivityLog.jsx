@@ -12,10 +12,13 @@ const actions = () => ({
   person_rename: t('שינה/תה שם'), join_approved: t('אישר/ה הצטרפות'), join_rejected: t('דחה/תה הצטרפות'),
   family_rename: t('שינה/תה את שם המשפחה'), code_rotated: t('החליף/ה את קוד המשפחה'),
   locale_set: t('שינה/תה מדינה ומטבע'), device_revoked: t('הסיר/ה מכשיר'),
+  goal_add: t('פתח/ה יעד חיסכון'), goal_deposit: t('הפקיד/ה ליעד חיסכון'), goal_deposit_pending: t('ביקש/ה להפקיד ליעד חיסכון'),
+  goal_deposit_approved: t('אישר/ה הפקדה ליעד חיסכון'), goal_deposit_rejected: t('דחה/תה הפקדה ליעד חיסכון'), goal_removed: t('מחק/ה יעד חיסכון'),
 });
 
 function detail(r) {
   if (r.amount != null && r.from && r.to) return <>{r.from} <Arrow kind="next" /> {r.to}, {money(r.amount, r.currency || undefined)}</>;
+  if (r.kind.startsWith('goal_') && r.amount != null) return <>{r.to ? `${r.to}: ` : ''}{r.subject}, {money(r.amount, r.currency || undefined)}</>;
   if (r.kind === 'role_set') return <>{r.subject} <Arrow kind="next" /> {roleLabel(r.to)}</>;
   if (r.kind === 'person_rename') return <>{r.from} <Arrow kind="next" /> {r.subject}</>;
   return r.subject || '';

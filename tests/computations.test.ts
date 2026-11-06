@@ -189,3 +189,36 @@ describe("יתרות המשפחה", () => {
     expect(open.map((x: any) => [x.debt.id, x.remaining])).toEqual([[d2.id, 1500]]);
   });
 });
+
+describe("סיכומים (stats)", () => {
+  it("סיכום חודשי, חודשים אחרונים ומי חייב הכי הרבה", async () => {
+    const { monthTotals, lastMonths, topDebtors, shiftMonth } = await import("../src-react/lib/stats.js");
+    const entries = [
+      debt(10000, "2026-09-05"), pay(4000, "2026-10-02"), debt(2000, "2026-10-10"),
+      debt(500, "2026-10-11", { status: "pending" }),
+      debt(3000, "2026-10-12", { from: B, to: A }),
+    ];
+    expect(monthTotals(entries, "2026-10")).toEqual({ debts: 5000, payments: 4000, count: 3 });
+    expect(shiftMonth("2026-01", -1)).toBe("2025-12");
+    expect(lastMonths(entries, "2026-10", 2).map((m) => m.key)).toEqual(["2026-09", "2026-10"]);
+    const top = topDebtors(entries, "2026-10-15");
+    expect(top[0]).toEqual({ id: A, amount: 8000, since: "2026-09-05", days: 40 });
+    expect(top[1].id).toBe(B);
+  });
+});
+
+describe("הישגים", () => {
+  it("רצף שבועות נקיים נספר רק אחרי שהיה חוב, ונשבר בחוב פתוח", async () => {
+    const { cleanWeekStreak, achievementsOf } = await import("../src-react/lib/stats.js");
+    const today = "2026-10-15"; // יום חמישי
+    expect(cleanWeekStreak([], A, today)).toBe(0); // מעולם לא חב
+    const paid = [debt(1000, "2026-09-20"), pay(1000, "2026-09-22")];
+    expect(cleanWeekStreak(paid, A, today)).toBe(4); // שבועות שמסתיימים 26.9, 3.10, 10.10, והנוכחי (17.10)
+    expect(cleanWeekStreak([...paid, debt(500, "2026-10-14")], A, today)).toBe(0);
+    expect(cleanWeekStreak([...paid, debt(500, "2026-10-05"), pay(500, "2026-10-06")], A, today)).toBe(4);
+    const ach = achievementsOf(A, paid, [], today);
+    expect(ach.find((x: any) => x.id === "streak3").earned).toBe(true);
+    expect(ach.find((x: any) => x.id === "streak8").earned).toBe(false);
+    expect(ach.find((x: any) => x.id === "firstRepay").earned).toBe(true);
+  });
+});

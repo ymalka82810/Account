@@ -140,11 +140,13 @@ export async function submitFamilyCode(code) {
   } catch (e) { return errMsg(e); }
 }
 
-export function goView(view) { state.view = view; route(); }
+export function goView(view) { if (view !== 'notebook') state.offlineNotebook = false; state.view = view; route(); }
 
 // מעבר לפנקס האישי ממסכי המשפחה. רק כך מוצג בפנקס כפתור חזרה (מכשיר חדש נפתח בו ישר, ואין לאן לחזור).
 export function openNotebook() { state.notebookBack = true; goView('notebook'); }
 export function closeNotebook() { state.notebookBack = false; goView('welcome'); }
+// מסך "אין חיבור": הפנקס עובד במכשיר, גם למי שיש לו כניסה שמורה (שהשרת לא עונה לה כרגע).
+export function openNotebookOffline() { state.offlineNotebook = true; openNotebook(); }
 
 // שדרוג מהפנקס למשפחה (הקמה או הצטרפות עם קוד). "חזרה" מהמסך שנפתח מחזירה לפנקס.
 export function upgradeFromNotebook(view) { state.fromNotebook = true; goView(view); }

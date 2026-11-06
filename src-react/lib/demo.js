@@ -36,6 +36,7 @@ export function demoData() {
       entry('demo-p1', 'payment', NOA, DANA, 5000, 'החזר ראשון', 5, { debtId: 'demo-d1' }),
       entry('demo-d2', 'debt', YOAV, DANA, 3000, 'כרטיס לסרט', 3),
     ],
+    goals: [],
     recurring: [],
   };
 }
@@ -46,6 +47,7 @@ export function demoQuery(name) {
     case 'data:get': return demoData();
     case 'fx:rates': return { rates: null, fetchedAt: Date.now() };
     case 'auth:listDevices': return [];
+    case 'activity:list': return []; // בלעדיו לשונית הניהול בדמו קורסת (null.length)
     default: return null;
   }
 }

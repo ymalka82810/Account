@@ -1,5 +1,6 @@
 import { logActivity } from "./activity";
 import { internalMutation, mutation } from "./_generated/server";
+import { purgeGoals } from "./goals";
 import { internal } from "./_generated/api";
 import { v, ConvexError } from "convex/values";
 import { purgeFriends } from "./friends";
@@ -76,6 +77,7 @@ export const remove = mutation({
     for (const r of await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()) {
       await ctx.db.delete(r._id);
     }
+    await purgeGoals(ctx, familyId);
     for (const j of await ctx.db.query("joinRequests").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()) {
       await ctx.db.delete(j._id);
     }

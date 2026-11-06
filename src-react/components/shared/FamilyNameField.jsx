@@ -24,12 +24,12 @@ export function bareFamilyName(full) {
   return v;
 }
 
-export default function FamilyNameField({ value, onChange, autoFocus, required = true }) {
+export default function FamilyNameField({ value, onChange, autoFocus, required = true, invalid }) {
   const [pre, post] = famAffixes();
   return (
     <span className="affix-row">
       {pre && <span className="affix" aria-hidden="true">{pre}</span>}
-      <input type="text" maxLength={30 - pre.length - post.length} placeholder={t('כהן')} required={required} autoFocus={autoFocus}
+      <input type="text" maxLength={30 - pre.length - post.length} placeholder={t('כהן')} required={required} autoFocus={autoFocus} aria-invalid={invalid || undefined} className={invalid ? 'invalid' : undefined}
         value={value} onChange={(e) => onChange(e.target.value)} />
       {post && <span className="affix" aria-hidden="true">{post}</span>}
     </span>

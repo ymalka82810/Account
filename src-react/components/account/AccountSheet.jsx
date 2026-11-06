@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { t } from '../../i18n/index.js';
 import LanguagePicker from '../shared/LanguagePicker.jsx';
+import PalettePicker from '../shared/PalettePicker.jsx';
+import Arrow from '../shared/Arrow.jsx';
+import FeelSettings from './FeelSettings.jsx';
 import { call } from '../../lib/api.js';
 import { state, CODE_KEY } from '../../state/state.js';
 import { toast, errMsg } from '../../lib/helpers.js';
@@ -17,13 +20,7 @@ import AsyncButton from '../shared/AsyncButton.jsx';
 import Select from '../shared/Select.jsx';
 import { GENDER_OPTIONS } from '../../lib/gender.js';
 import { g } from '../../lib/gender.js';
-
-// צבעי הניאון שנוער יכולים לבחור למסך שלהם.
-const palettes = () => [
-  { id: 'blue', label: t('כחול + סגול') },
-  { id: 'green', label: t('ירוק + צהוב') },
-  { id: 'orange', label: t('כתום + ורוד') },
-];
+import { withIcons } from '../shared/UiIcon.jsx';
 
 function PaletteSheet() {
   const { data, token } = useApp();
@@ -38,16 +35,7 @@ function PaletteSheet() {
 
   return (
     <div className="form">
-      <div className="palette-picks" role="radiogroup" aria-label={t('צבעי המסך')}>
-        {palettes().map((p) => (
-          <button key={p.id} type="button" role="radio" aria-checked={me.palette === p.id}
-            className={'palette-pick' + (me.palette === p.id ? ' sel' : '')} data-pal={p.id}
-            onClick={() => setPalette(p.id)}>
-            <span className="palette-swatch" aria-hidden="true" />
-            {p.label}
-          </button>
-        ))}
-      </div>
+      <PalettePicker value={me.palette} onPick={setPalette} label={t('צבעי המסך')} />
     </div>
   );
 }
@@ -73,7 +61,7 @@ export async function logout() {
   dropSession();
 }
 
-// "החשבון שלי": ההגדרות האישיות של מי שמחובר (התראות, קוד סודי, מייל, בקשת נוער, יציאה).
+// "החשבון שלי": ההגדרות האישיות של מי שמחובר, בקבוצות עם כותרות: פרופיל, אבטחה, תחושה ומשפחות נוספות (סגור), ו"יציאה" בנפרד בתחתית.
 export function AccountSheet() {
   const { data, token } = useApp();
   const sheet = useSheet();
@@ -85,7 +73,7 @@ export function AccountSheet() {
 
   async function setGender(gender) {
     if (!gender) return;
-    try { await call('people:setGender', { token, id: me.id, gender }); }
+    try { await call('people:setGender', { token, id: me.id, gender }); toast(t('צורת הפנייה נשמרה ✅')); }
     catch (e) { toast(errMsg(e)); }
   }
 
@@ -98,69 +86,63 @@ export function AccountSheet() {
             options={[{ value: '', label: t('קביעת צורת פנייה…') }, ...GENDER_OPTIONS.filter((o) => o.value)]} />)
     : (me.gender ? <span>{g(me.gender, 'זכר', 'נקבה')}</span> : <span className="hint">{t('טרם נקבעה ע״י ההורה')}</span>);
 
+  const row = (label, onClick) => (
+    <button className="acct-row" type="button" onClick={onClick}><span>{label}</span><Arrow kind="chev-next" /></button>
+  );
+  const others = otherFamilies(data.family.id);
+
   return (
-    <div className="form">
-      <div className="field"><span>{t('צורת פנייה')}</span>
-        {genderField}</div>
+    <div className="form acct">
+      <section className="acct-group" aria-labelledby="acct-h-profile">
+        <h3 className="acct-h" id="acct-h-profile">{t('פרופיל')}</h3>
+        {row(me.avatar ? me.avatar + ' ' + t('דמות') : withIcons(t('🙂 בחירת דמות')), () => sheet.open(t('דמות'), <AvatarSheet />))}
+        <div className="field"><span>{t('צורת פנייה')}</span>
+          {genderField}</div>
+        <LanguagePicker />
+        {me.role === 'teen' && row(withIcons(t('🎨 צבעי המסך')), () => sheet.open(t('צבעי המסך'), <PaletteSheet />))}
+      </section>
 
-      <LanguagePicker />
+      <section className="acct-group" aria-labelledby="acct-h-security">
+        <h3 className="acct-h" id="acct-h-security">{t('אבטחה')}</h3>
+        {row(withIcons(me.hasPin ? t('🔑 שינוי הקוד הסודי') : t('🔑 קביעת קוד סודי')),
+          () => sheet.open(me.hasPin ? t('שינוי הקוד הסודי') : t('קביעת קוד סודי'), me.email ? <ChangePinEmailSheet /> : <ChangePinSheet />))}
+        {me.role === 'parent' && row(withIcons(me.email ? t('✉️ מייל לשחזור: {email}', { email: me.email }) : t('✉️ הוספת מייל לשחזור קוד')),
+          () => sheet.open('', <EmailSheet />))}
+        {me.role === 'parent' && row(withIcons(t('📱 המכשיר שלי')), () => sheet.open(t('המכשיר שלי'), <DeviceSheet />))}
+        {me.role === 'child' && me.notebookShared && row(withIcons(t('👁️ מי רואה את הפנקס שלי')), () => sheet.open(t('👁️ מי רואה את הפנקס שלי'), <NotebookSharing />))}
+      </section>
 
-      <button className="ghost" type="button" onClick={() => sheet.open(t('דמות'), <AvatarSheet />)}>
-        {me.avatar ? me.avatar + ' ' + t('דמות') : t('🙂 בחירת דמות')}
-      </button>
+      <section className="acct-group" aria-labelledby="acct-h-feel">
+        <h3 className="acct-h" id="acct-h-feel">{t('תחושה')}</h3>
+        {pushSupported() && pushOn !== null && (
+          <AsyncButton className="acct-row" onClick={async () => {
+            if (pushOn) await disablePush(); else await enablePush();
+            setPushOn(await isPushOn());
+          }}><span>{withIcons(pushOn ? t('🔕 כיבוי התראות') : t('🔔 הפעלת התראות'))}</span></AsyncButton>
+        )}
+        <FeelSettings />
+      </section>
 
-      {me.role === 'teen' && (
-        <button className="ghost" type="button" onClick={() => sheet.open(t('צבעי המסך'), <PaletteSheet />)}>
-          {t('🎨 צבעי המסך')}
+      {/* משפחות נוספות: מעבר, הצטרפות ויצירה. סגור כברירת מחדל, כי רוב האנשים משתמשים בהן פעם בחיים */}
+      <details className="acct-more">
+        <summary><span>{t('משפחות נוספות')}</span><Arrow kind="chev-next" /></summary>
+        {others.map((f) => (
+          <button key={f.familyId} className="acct-row" type="button"
+            onClick={async () => { const err = await goToFamily(f); if (err) toast(err); else sheet.close(); }}>
+            <span>{withIcons(t('🏠 מעבר למשפחת {family}', { family: f.name }))}</span>
+          </button>
+        ))}
+        <button className="acct-row" type="button" onClick={() => { sheet.close(); addAnotherFamily(); }}>
+          <span>{withIcons(t('➕ הצטרפות למשפחה נוספת'))}</span>
         </button>
-      )}
+        {me.role === 'parent' && (
+          <button className="acct-row" type="button" onClick={() => { sheet.close(); startNewFamily(); }}>
+            <span>{withIcons(t('🏠 יצירת קופה משפחתית'))}</span>
+          </button>
+        )}
+      </details>
 
-      {me.role === 'child' && me.notebookShared && (
-        <button className="ghost" type="button" onClick={() => sheet.open(t('👁️ מי רואה את הפנקס שלי'), <NotebookSharing />)}>
-          {t('👁️ מי רואה את הפנקס שלי')}
-        </button>
-      )}
-
-      {pushSupported() && pushOn !== null && (
-        <AsyncButton className="ghost" onClick={async () => {
-          if (pushOn) await disablePush(); else await enablePush();
-          setPushOn(await isPushOn());
-        }}>{pushOn ? t('🔕 כיבוי התראות') : t('🔔 הפעלת התראות')}</AsyncButton>
-      )}
-
-      <button className="ghost" type="button"
-        onClick={() => sheet.open(me.hasPin ? t('שינוי הקוד הסודי') : t('קביעת קוד סודי'), me.email ? <ChangePinEmailSheet /> : <ChangePinSheet />)}>
-        {me.hasPin ? t('🔑 שינוי הקוד הסודי') : t('🔑 קביעת קוד סודי')}
-      </button>
-
-      {me.role === 'parent' && (
-        <button className="ghost" type="button" onClick={() => sheet.open(t('המכשיר שלי'), <DeviceSheet />)}>
-          {t('📱 המכשיר שלי')}
-        </button>
-      )}
-
-      {me.role === 'parent' && (
-        <button className="ghost" type="button" onClick={() => sheet.open('', <EmailSheet />)}>
-          {me.email ? t('✉️ מייל לשחזור: {email}', { email: me.email }) : t('✉️ הוספת מייל לשחזור קוד')}
-        </button>
-      )}
-
-      {otherFamilies(data.family.id).map((f) => (
-        <button key={f.familyId} className="ghost" type="button"
-          onClick={async () => { const err = await goToFamily(f); if (err) toast(err); else sheet.close(); }}>
-          {t('🏠 מעבר למשפחת {family}', { family: f.name })}
-        </button>
-      ))}
-      <button className="ghost" type="button" onClick={() => { sheet.close(); addAnotherFamily(); }}>
-        {t('➕ הצטרפות למשפחה נוספת')}
-      </button>
-      {me.role === 'parent' && (
-        <button className="ghost" type="button" onClick={() => { sheet.close(); startNewFamily(); }}>
-          {t('🏠 יצירת קופה משפחתית')}
-        </button>
-      )}
-
-      <AsyncButton className="ghost" onClick={async () => { sheet.close(); await logout(); }}>{t('יציאה')}</AsyncButton>
+      <AsyncButton className="acct-exit" onClick={async () => { sheet.close(); await logout(); }}>{t('יציאה')}</AsyncButton>
 
       <p className="legal"><a href="terms.html">{t('תנאי שימוש')}</a> · <a href="privacy.html">{t('מדיניות פרטיות')}</a></p>
     </div>

@@ -2,6 +2,7 @@ import { query } from "./_generated/server";
 import { v } from "convex/values";
 import { ALERT_WINDOW_MS, avatarOf, getSessionPerson, maskEmail } from "./lib";
 import { isBound } from "./biometric";
+import { goalsFor } from "./goals";
 
 // כל נתוני המשפחה למי שמחובר/ת. בלי כניסה תקינה מחזיר null.
 // אם החשבון הוא מהגרסה הישנה (בלי משפחה), מחזיר legacy כדי שהאפליקציה תעביר אותו.
@@ -25,6 +26,7 @@ export const get = query({
     const recurring = me.role === "parent"
       ? await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect()
       : [];
+    const goals = await goalsFor(ctx, me, familyId);
     return {
       legacy: false as const,
       me: {
@@ -76,6 +78,7 @@ export const get = query({
         status: e.status ?? "approved",
         debtId: e.debtId ?? null,
       })),
+      goals,
       recurring: recurring.map((r) => ({
         id: r._id, from: r.from, to: r.to, amount: r.amount, currency: r.currency ?? "ILS", note: r.note, frequency: r.frequency,
         weekday: r.weekday ?? null, monthDay: r.monthDay ?? null, nextDate: r.nextDate,

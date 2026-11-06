@@ -164,7 +164,7 @@ export function ChangePinSheet() {
           if (res.ok) { sheet.close(); toast(t('הקוד שונה ✅')); }
           else if (res.reason === 'wrong') setErr(t('הקוד הנוכחי לא נכון.'));
           else if (res.reason === 'locked') setErr(t('יותר מדי ניסיונות. נסו שוב עוד דקה.'));
-          else if (res.reason === 'useEmail') sheet.open(t('שינוי הקוד הסודי'), <ChangePinEmailSheet />);
+          else if (res.reason === 'useEmail') { sheet.back(); sheet.open(t('שינוי הקוד הסודי'), <ChangePinEmailSheet />); }
           else setErr(t('משהו השתבש. נסו שוב.'));
         } catch (e) { setErr(errMsg(e)); }
       }}>{t('שמירה')}</AsyncButton>

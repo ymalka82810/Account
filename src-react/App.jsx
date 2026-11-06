@@ -3,7 +3,7 @@ import { state, LAST_ROLE_KEY, LAST_PALETTE_KEY, THEME_COLOR, tabLabels, subscri
 import { t } from './i18n/index.js';
 import { call, callAction, useQuery } from './lib/api.js';
 import { toast, errMsg } from './lib/helpers.js';
-import { restoreFamily, startPin, autoSkipPerson, dropSession, endDemo, deviceHasFamily } from './state/auth.js';
+import { restoreFamily, startPin, autoSkipPerson, dropSession, endDemo, deviceHasFamily, openNotebookOffline } from './state/auth.js';
 import { syncPush } from './lib/push.js';
 import { client } from './lib/client.js';
 import { isDemo } from './lib/demo.js';
@@ -26,7 +26,10 @@ import LocaleSheet from './components/manage/LocaleSheet.jsx';
 import FamilyWelcome from './components/manage/FamilyWelcome.jsx';
 import DeviceGate from './components/account/DeviceGate.jsx';
 import PendingMoves from './components/account/PendingMoves.jsx';
-import { withIcons } from './components/shared/UiIcon.jsx';
+import UiIcon, { withIcons } from './components/shared/UiIcon.jsx';
+import ErrorBoundary from './components/shared/ErrorBoundary.jsx';
+import NoConnection from './components/shared/NoConnection.jsx';
+import { reducedMotion } from './lib/feel.js';
 
 const ICON_CURRENCY_KEY = 'app-icon-currency';
 
@@ -35,7 +38,8 @@ const ICON_CURRENCY_KEY = 'app-icon-currency';
 function currentScreen(data) {
   if (!client) return 'noserver';
   // הפנקס האישי עובד במכשיר בלבד, בלי כניסה, ולכן לא מחכים לשרת.
-  if (!state.token && state.view === 'notebook') return 'notebook';
+  // מי שיש לו כניסה שמורה ופתח אותו ממסך "אין חיבור" (offlineNotebook) נשאר בו גם כשהשרת חוזר, עד שיחזור משם.
+  if ((!state.token || state.offlineNotebook) && state.view === 'notebook') return 'notebook';
   if (state.token) return data && !data.legacy ? 'app' : 'loading';
   if (state.legacyPeople === null || !state.codeChecked) return 'loading';
   if (state.pinFlow) return 'pin';
@@ -82,6 +86,10 @@ const loadingMinMs = () => {
 };
 
 // טקסטים שמתחלפים במסך הטעינה, לפי מה שבאמת קורה (כניסה או יציאה).
+// כמה זמן מחכים לשרת לפני שמראים "אין חיבור". בפיתוח (vite) בדיקות יכולות לקצר דרך window.__kupaStallMs.
+const STALL_MS = 6000;
+const stallMs = () => (import.meta.env.DEV && typeof window.__kupaStallMs === 'number' ? window.__kupaStallMs : STALL_MS);
+
 const loginTexts = () => [t('רגע, מתחברים…'), t('בודקים מי זה…'), t('כבר כמעט…')];
 const logoutTexts = () => [t('רגע, מתנתקים…'), t('שומרים הכל…'), t('יוצאים בבטחה…')];
 
@@ -116,13 +124,23 @@ function Root() {
   const token = state.token;
   const data = useQuery('data:get', token ? { token } : 'skip');
   const fdata = useQuery('friends:get', token ? { token } : 'skip') || null;
-  const roster = useQuery('auth:legacyRoster', {});
+  // "ניסיון חוזר" במסך "אין חיבור" מבטל את ההרשמה לרשימה לרגע ומחדש אותה (שרת שחזר מתחבר גם לבד).
+  const [rosterPause, setRosterPause] = useState(false);
+  const roster = useQuery('auth:legacyRoster', rosterPause ? 'skip' : {});
   // שערי חליפין (לחובות במטבע אחר). אם אין או שהם ישנים, מבקשים מהשרת לעדכן.
   const fx = useQuery('fx:rates', token ? {} : 'skip');
+  // אם העדכון נכשל (אין חיבור, או הספק למטה) מודיעים למשתמש ומנסים שוב כל חצי דקה, עד שזה מצליח.
+  const [fxRetry, setFxRetry] = useState(0);
   useEffect(() => {
     if (fx === undefined) return;
-    if (!fx || Date.now() - fx.fetchedAt > 6 * 60 * 60 * 1000) callAction('fx:ensure', {}).catch(() => {});
-  }, [fx]);
+    if (fx && Date.now() - fx.fetchedAt <= 6 * 60 * 60 * 1000) return;
+    let timer;
+    callAction('fx:ensure', {}).catch((e) => {
+      toast(errMsg(e));
+      timer = setTimeout(() => setFxRetry((n) => n + 1), 30000);
+    });
+    return () => clearTimeout(timer);
+  }, [fx, fxRetry]);
   const [tabSel, setTabSel] = useState(tabFromHash);
   const migrating = useRef(false);
   const firstToken = useRef(true);
@@ -157,6 +175,22 @@ function Root() {
   const [shownScreen, setScreen] = useState(rawScreen);
   // יציאה מהאפליקציה מוצגת מיד: בלי הנתונים אי אפשר לרנדר את המסך הראשי אפילו פעם אחת.
   const screen = shownScreen === 'app' && rawScreen !== 'app' ? rawScreen : shownScreen;
+  // טעינה שנמשכת יותר מדי (שרת לא זמין): מסך "אין חיבור". בלי תשובה מהשרת לא מניחים שאין הורים ישנים,
+  // ולכן ממשיכים לחכות; ברגע שהמצב משתנה (החיבור חזר) המסך נעלם והאפליקציה ממשיכה רגיל.
+  const [stalled, setStalled] = useState(false);
+  const [retryTick, setRetryTick] = useState(0);
+  useEffect(() => {
+    if (rawScreen !== 'loading') { setStalled(false); return undefined; }
+    const timer = setTimeout(() => setStalled(true), stallMs());
+    return () => clearTimeout(timer);
+  }, [rawScreen, retryTick]);
+  useEffect(() => {
+    if (!rosterPause) return undefined;
+    const timer = setTimeout(() => setRosterPause(false), 50);
+    return () => clearTimeout(timer);
+  }, [rosterPause]);
+  const retryConnection = () => { setStalled(false); setRosterPause(true); setRetryTick((n) => n + 1); };
+  const offline = stalled && rawScreen === 'loading';
   const loadingSince = useRef(rawScreen === 'loading' ? Date.now() : null);
   const minMs = useRef(null);
   if (minMs.current == null) minMs.current = loadingMinMs();
@@ -315,10 +349,23 @@ function Root() {
     }, 1500);
     return () => clearTimeout(id);
   }, [token, shareNb, nb.entries, nb.currency, resyncTick]);
+  // קיצור "רשום חוב" ממסך הבית של הטלפון (shortcuts ב-manifest.webmanifest): ?add=debt.
+  // ממתינים עד שהמשתמש/ת בתוך האפליקציה (אחרי קוד סודי), פותחים את אשף החוב פעם אחת ומנקים את הכתובת.
+  useEffect(() => {
+    if (screen !== 'app') return;
+    const params = new URLSearchParams(location.search);
+    if (params.get('add') !== 'debt') return;
+    params.delete('add');
+    const qs = params.toString();
+    history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
+    setTabSel('home');
+    openEntryFlow({ kind: 'debt', from: data.me.id });
+  }, [screen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
-      <section id="screen-loading" className={'screen center' + (screen === 'loading' ? ' active' : '')}>
+      {offline && <NoConnection onRetry={retryConnection} onNotebook={openNotebookOffline} />}
+      <section id="screen-loading" className={'screen center' + (screen === 'loading' && !offline ? ' active' : '')}>
         <div className="coin-drop" aria-hidden="true">
           <div className="coin-drop__mask">
             <div className="coin-drop__coin"><img src="coin.webp" alt="" width="56" height="56" draggable="false" /></div>
@@ -339,10 +386,10 @@ function Root() {
   );
 }
 
-// ---------- אנימציית מעבר גלגל השיניים לאריח הצף ----------
-// גלגל השיניים קופץ ממקומו למרכז המסך (0.45 שנ'), ובמקביל מסתובב באיטיות וגדל עד
-// לגודל מטבע חצי שקל (0.9 שנ' בסך הכול). אז מבזיקים ניצוצות והוא שוקע לאחור ונעלם
-// במהירות (כ-0.35 שנ'), ולבסוף האריח האמיתי נפתח וגדל מאותה נקודה (1.5 שנ').
+// ---------- אנימציית מעבר גלגל השיניים לאריח הצף (ילד ונוער בלבד) ----------
+// גלגל השיניים קופץ ממקומו למרכז המסך, מסתובב וגדל (0.14 שנ'). אז מבזיקים ניצוצות והוא שוקע לאחור
+// ונעלם (0.12 שנ'), ובתחילת השקיעה האריח האמיתי נפתח וגדל מאותה נקודה (0.18 שנ') והניצוצות עפים (0.22 שנ'). בסך הכול כ-0.4 שנ'.
+// הזמנים כאן ו-.gear-launch ב-style.css חייבים להישאר זהים.
 const COIN_SIZE = 192; // הגודל הסופי של גלגל השיניים לפני השקיעה
 function GearLaunch({ fromRect, onSinking, onDone }) {
   const [phase, setPhase] = useState('start'); // start -> flying -> sinking
@@ -358,13 +405,13 @@ function GearLaunch({ fromRect, onSinking, onDone }) {
   }, []);
   useEffect(() => {
     if (phase !== 'flying') return;
-    const t = setTimeout(() => setPhase('sinking'), 900); // 0.45s קפיצה + 0.9s גדילה, מקבילים; יחד עם השקיעה 1.25s
+    const t = setTimeout(() => setPhase('sinking'), 140); // קפיצה וגדילה במקביל
     return () => clearTimeout(t);
   }, [phase]);
   useEffect(() => {
     if (phase !== 'sinking') return;
     onSinkingRef.current();
-    const t = setTimeout(() => onDoneRef.current(), 350);
+    const t = setTimeout(() => onDoneRef.current(), 120);
     return () => clearTimeout(t);
   }, [phase]);
 
@@ -378,7 +425,7 @@ function GearLaunch({ fromRect, onSinking, onDone }) {
     <>
       <div className={'gear-launch' + (phase === 'sinking' ? ' sinking' : '')} style={style} aria-hidden="true">
         <div className={'gear-launch-spin' + (phase === 'flying' ? ' flying' : '') + (phase === 'sinking' ? ' sinking' : '')}>
-          <span className="gear-launch-icon">⚙️</span>
+          <span className="gear-launch-icon"><UiIcon name="gear" /></span>
         </div>
       </div>
     </>
@@ -386,8 +433,8 @@ function GearLaunch({ fromRect, onSinking, onDone }) {
 }
 
 // הניצוצות בשכבה נפרדת מהגלגל (לא מסתובבים ולא נעלמים איתו), וממשיכים לעוף
-// ולדהות גם אחרי שהגלגל נעלם ואחרי שהאריח נפתח, עד שהם יוצאים מהמסך.
-const SPARKS_MS = 2400;
+// ולדהות גם אחרי שהגלגל נעלם ואחרי שהאריח נפתח, עד שהם יוצאים מהמסך (לא חוסמים קלט).
+const SPARKS_MS = 220;
 function GearSparks({ onEnd }) {
   const onEndRef = useRef(onEnd);
   onEndRef.current = onEnd;
@@ -402,6 +449,12 @@ function GearSparks({ onEnd }) {
       ))}
     </div>
   );
+}
+
+// זורק שגיאת רינדור בלשונית כש-window.__kupaCrash שווה לה. קיים רק בפיתוח (vite), ונמחק מבניית הייצור; לבדיקות ה-e2e של ErrorBoundary.
+function CrashProbe({ tab }) {
+  if (import.meta.env.DEV && window.__kupaCrash === tab) throw new Error('בדיקה: שגיאת רינדור בלשונית ' + tab);
+  return null;
 }
 
 // ---------- המסך הראשי ----------
@@ -428,19 +481,34 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
 
   const sheet = useSheet();
   const gearRef = useRef(null);
+  const tabsRef = useRef(null);
   const [launchRect, setLaunchRect] = useState(null);
   // הורה שהמכשיר שלו עוד לא קשור (ראו biometric.ts) לא ממשיך לפני הקישור.
   const dev = useQuery('biometric:deviceStatus', isParent && !isDemo(token) ? { token } : 'skip');
 
+  // ברירת מחדל: החלון עולה בקלילות (Sheet.jsx). האפקט עם הגלגל והניצוצות רק לילד ולנוער, ולא בהפחתת תנועה.
   const openAccount = () => {
-    if (gearRef.current) setLaunchRect(gearRef.current.getBoundingClientRect());
-    else sheet.open('', <AccountSheet />);
+    if (launchRect) return;
+    if (isParent || reducedMotion() || !gearRef.current) sheet.open('', <AccountSheet />);
+    else setLaunchRect(gearRef.current.getBoundingClientRect());
   };
   const [sparksOn, setSparksOn] = useState(false);
-  const finishLaunch = useCallback(() => {
-    setLaunchRect(null);
+  // החלון נפתח כבר בתחילת השקיעה (ולא אחרי סיום האפקט), כך שהאפקט לא מעכב ולא חוסם.
+  const sinkLaunch = useCallback(() => {
+    setSparksOn(true);
     sheet.open('', <AccountSheet />, { x: window.innerWidth / 2, y: window.innerHeight / 2 });
   }, [sheet]);
+  const finishLaunch = useCallback(() => setLaunchRect(null), []);
+
+  useEffect(() => {
+    const el = tabsRef.current;
+    if (!el) return undefined;
+    const set = () => document.documentElement.style.setProperty('--tabs-h', el.offsetHeight + 'px');
+    set();
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(set) : null;
+    if (ro) ro.observe(el);
+    return () => { if (ro) ro.disconnect(); };
+  }, [tabs.length, isParent, dev && dev.bound]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isParent && dev && !dev.bound) return <DeviceGate />;
 
@@ -466,13 +534,13 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
         </div>
         <button className="ghost light" type="button" aria-label={t('החשבון שלי')} onClick={openAccount}>
           {/* בזמן האנימציה הגלגל "יוצא" מהכפתור, אז המקום שלו מתכווץ והטקסט נשאר לבד */}
-          <span ref={gearRef} aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'bottom', overflow: 'hidden', whiteSpace: 'nowrap', transition: 'max-width .3s ease, opacity .2s ease, margin .3s ease', ...(launchRect ? { maxWidth: 0, opacity: 0, marginInlineStart: '-.3em' } : { maxWidth: '2em' }) }}>⚙️</span> {t('החשבון שלי')}
+          <span ref={gearRef} aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'bottom', overflow: 'hidden', whiteSpace: 'nowrap', transition: 'max-width .15s ease, opacity .1s ease, margin .15s ease', ...(launchRect ? { maxWidth: 0, opacity: 0, marginInlineStart: '-.3em' } : { maxWidth: '2em' }) }}><UiIcon name="gear" inline /></span> {t('החשבון שלי')}
         </button>
       </header>
-      {launchRect && <GearLaunch fromRect={launchRect} onSinking={() => setSparksOn(true)} onDone={finishLaunch} />}
+      {launchRect && <GearLaunch fromRect={launchRect} onSinking={sinkLaunch} onDone={finishLaunch} />}
       {sparksOn && <GearSparks onEnd={() => setSparksOn(false)} />}
 
-      <nav className="tabs" role="tablist" aria-label={t('תפריט ראשי')}>
+      <nav className="tabs" ref={tabsRef} role="tablist" aria-label={t('תפריט ראשי')}>
         {tabs.map((id) => (
           <button key={id} id={'tabbtn-' + id} role="tab" aria-controls={'tab-' + id} data-tab={id} className={'tab' + (tab === id ? ' active' : '')} aria-selected={tab === id} onClick={() => setTab(id)}>
             {withIcons(labels[id] || fallbackLabels[id])}
@@ -483,24 +551,24 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
 
       <main>
         <section id="tab-home" role="tabpanel" aria-labelledby="tabbtn-home" className={'panel' + (tab === 'home' ? ' active' : '')}>
-          <Home data={data} token={token} />
+          <ErrorBoundary><CrashProbe tab="home" /><Home data={data} token={token} /></ErrorBoundary>
         </section>
         {isTeen && (
           <section id="tab-friends" role="tabpanel" aria-labelledby="tabbtn-friends" className={'panel' + (tab === 'friends' ? ' active' : '')}>
-            <FriendsTab data={data} fdata={fdata} token={token} />
+            <ErrorBoundary><CrashProbe tab="friends" /><FriendsTab data={data} fdata={fdata} token={token} /></ErrorBoundary>
           </section>
         )}
         <section id="tab-history" role="tabpanel" aria-labelledby="tabbtn-history" className={'panel' + (tab === 'history' ? ' active' : '')}>
-          <HistoryTab data={data} token={token} me={me} isParent={isParent} />
+          <ErrorBoundary><CrashProbe tab="history" /><HistoryTab data={data} token={token} me={me} isParent={isParent} /></ErrorBoundary>
         </section>
         {isParent && (
           <section id="tab-family" role="tabpanel" aria-labelledby="tabbtn-family" className={'panel' + (tab === 'family' ? ' active' : '')}>
-            <FamilyTab data={data} fdata={fdata} token={token} />
+            <ErrorBoundary><CrashProbe tab="family" /><FamilyTab data={data} fdata={fdata} token={token} /></ErrorBoundary>
           </section>
         )}
         {isParent && (
           <section id="tab-manage" role="tabpanel" aria-labelledby="tabbtn-manage" className={'panel' + (tab === 'manage' ? ' active' : '')}>
-            <ManageTab data={data} token={token} />
+            <ErrorBoundary><CrashProbe tab="manage" /><ManageTab data={data} token={token} /></ErrorBoundary>
           </section>
         )}
       </main>

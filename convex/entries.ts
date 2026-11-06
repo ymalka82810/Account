@@ -149,9 +149,11 @@ export const approve = mutation({
 
 // הורה דוחה רשומה שממתינה לאישור. היא נמחקת, ומי שיצר/ה אותה מקבל/ת הודעה.
 export const reject = mutation({
-  args: { token: v.string(), id: v.id("entries") },
-  handler: async (ctx, { token, id }) => {
+  args: { token: v.string(), id: v.id("entries"), reason: v.optional(v.string()) },
+  handler: async (ctx, { token, id, reason }) => {
     const me = await requireParent(ctx, token);
+    const why = (reason ?? "").trim();
+    if (why.length > 80) throw new ConvexError("ההערה ארוכה מדי");
     const e = await ctx.db.get(id);
     if (!e || e.familyId !== me.familyId || e.status !== "pending") return;
     await ctx.db.delete(id);
@@ -159,7 +161,8 @@ export const reject = mutation({
     const to = await ctx.db.get(e.to);
     if (from && to) await logActivity(ctx, me, "entry_rejected", { from: from.name, to: to.name, amount: e.amount, currency: e.currency });
     if (e.createdBy && e.createdBy !== me._id && from && to) {
-      await notify(ctx, [e.createdBy], "לא אושר", entryLine(e, { from: from.name, to: to.name, creator: me.name }));
+      const line = entryLine(e, { from: from.name, to: to.name, creator: me.name });
+      await notify(ctx, [e.createdBy], "לא אושר", why ? `${line}\nסיבה: ${why}` : line);
     }
   },
 });

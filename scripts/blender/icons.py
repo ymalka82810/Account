@@ -570,8 +570,263 @@ def build_family():
     return medallion(figures)
 
 
+# ================================================================== אייקוני "החשבון שלי" וההגדרות
+def ear_clip(pts):
+    """חלוקה למשולשים של מצולע פשוט (גם קעור), כדי שהלוח יימלא בדיוק לפי הצורה."""
+    def cross(o, p, q):
+        return (p[0] - o[0]) * (q[1] - o[1]) - (p[1] - o[1]) * (q[0] - o[0])
+    area = sum(pts[i][0] * pts[(i + 1) % len(pts)][1] - pts[(i + 1) % len(pts)][0] * pts[i][1] for i in range(len(pts)))
+    idx = list(range(len(pts)))
+    if area < 0:
+        idx.reverse()
+    tris = []
+    while len(idx) > 3:
+        for k in range(len(idx)):
+            i0, i1, i2 = idx[k - 1], idx[k], idx[(k + 1) % len(idx)]
+            if cross(pts[i0], pts[i1], pts[i2]) <= 1e-9:
+                continue  # פינה קעורה, לא אוזן
+            if any(cross(pts[i0], pts[i1], pts[j]) > 1e-9 and cross(pts[i1], pts[i2], pts[j]) > 1e-9 and cross(pts[i2], pts[i0], pts[j]) > 1e-9
+                   for j in idx if j not in (i0, i1, i2)):
+                continue
+            tris.append((i0, i1, i2))
+            idx.pop(k)
+            break
+        else:
+            break
+    tris.append(tuple(idx))
+    return tris
+
+
+def plate(pts, depth, material, bev=0.07, loc=(0, 0, 0), smooth=True):
+    """לוח שטוח מצורה דו-ממדית (x, z) בעובי depth, עם קצוות מעוגלים. הצורה יכולה להיות קעורה."""
+    me = bpy.data.meshes.new('plate')
+    me.from_pydata([(x, 0, z) for (x, z) in pts], [], ear_clip(pts))
+    me.update()
+    o = bpy.data.objects.new('plate', me)
+    bpy.context.collection.objects.link(o)
+    o.location = loc
+    s = o.modifiers.new('t', 'SOLIDIFY')
+    s.thickness = depth
+    s.offset = 0
+    b = o.modifiers.new('b', 'BEVEL')
+    b.width = bev
+    b.segments = 3
+    b.limit_method = 'ANGLE'
+    return finish(o, material, 0, smooth)
+
+
+def ring_plate(outer, inner, depth, material, bev=0.05):
+    """לוח עם חור: שתי טבעות נקודות באותו מספר (x, z), ורצועת מרובעים ביניהן."""
+    n = len(outer)
+    bm = bmesh.new()
+    vo = [bm.verts.new((x, 0, z)) for (x, z) in outer]
+    vi = [bm.verts.new((x, 0, z)) for (x, z) in inner]
+    for i in range(n):
+        j = (i + 1) % n
+        bm.faces.new((vo[i], vo[j], vi[j], vi[i]))
+    me = bpy.data.meshes.new('ring')
+    bm.to_mesh(me)
+    bm.free()
+    o = bpy.data.objects.new('ring', me)
+    bpy.context.collection.objects.link(o)
+    s = o.modifiers.new('t', 'SOLIDIFY')
+    s.thickness = depth
+    s.offset = 0
+    b = o.modifiers.new('b', 'BEVEL')
+    b.width = bev
+    b.segments = 3
+    b.limit_method = 'ANGLE'
+    return finish(o, material, 0)
+
+
+def disc(r, loc, material, depth=0.1, bev=0.02):
+    """דיסקית שפונה למצלמה."""
+    return cylinder(r, depth, loc, material, rot=(math.pi / 2, 0, 0), verts=64, bev=bev, sub=0)
+
+
+def torus(major, minor, loc, material, rot=(math.pi / 2, 0, 0), sub=0):
+    bpy.ops.mesh.primitive_torus_add(major_radius=major, minor_radius=minor, major_segments=64, minor_segments=16,
+                                     location=loc, rotation=rot)
+    return finish(bpy.context.object, material, sub)
+
+
+def build_gear():
+    gold, sym = metal('gold'), metal('gold_sym')
+    teeth, steps = 8, 12
+    outer, inner = [], []
+    for i in range(teeth * steps):
+        a = 2 * math.pi * i / (teeth * steps)
+        u = (i % steps) / steps  # מקום בתוך השן: עלייה, משטח עליון, ירידה, ובסיס
+        k = u / 0.2 if u < 0.2 else 1.0 if u < 0.5 else 1 - (u - 0.5) / 0.2 if u < 0.7 else 0.0
+        r = 0.98 + 0.28 * k
+        outer.append((r * math.cos(a), r * math.sin(a)))
+        inner.append((0.36 * math.cos(a), 0.36 * math.sin(a)))
+    parts = [ring_plate(outer, inner, 0.34, gold, bev=0.07)]
+    # טבעות מורמות על הפנים, כמו הטבעת על המטבע
+    parts.append(torus(0.72, 0.05, (0, -0.2, 0), sym))
+    parts.append(torus(0.4, 0.06, (0, -0.17, 0), sym))
+    return group(parts, rot=(math.radians(-8), math.radians(-12), math.radians(8)))
+
+
+def build_check():
+    gold, sym = metal('gold'), metal('gold_sym')
+    parts = [capsule((-0.95, 0, -0.05), (-0.3, 0, -0.72), 0.25, gold),
+             capsule((-0.3, 0, -0.72), (1.0, 0, 0.8), 0.25, gold),
+             sphere(0.25, (-0.3, 0, -0.72), gold)]
+    # פס מבריק לאורך הצד הארוך
+    parts.append(capsule((-0.22, -0.2, -0.55), (0.88, -0.2, 0.62), 0.06, sym, sub=1))
+    return group(parts, rot=(math.radians(-8), math.radians(-10), math.radians(-4)))
+
+
+def build_trash():
+    body, lid, rib = metal('silver'), metal('gold'), metal('gold_matte')
+    bpy.ops.mesh.primitive_cone_add(vertices=64, radius1=0.6, radius2=0.78, depth=1.5, location=(0, 0, -0.2))
+    o = bpy.context.object
+    bv = o.modifiers.new('b', 'BEVEL')
+    bv.width = 0.06
+    bv.segments = 3
+    bv.limit_method = 'ANGLE'
+    parts = [finish(o, body, 0)]
+    for x in (-0.3, 0.0, 0.3):
+        def ry(rad, x=x):
+            return -math.sqrt(max(rad * rad - x * x, 0.0)) - 0.01
+        parts.append(capsule((x, ry(0.74), 0.3), (x, ry(0.64), -0.82), 0.065, rib, sub=1))
+    parts.append(rbox((2.0, 0.6, 0.2), (0, 0, 0.68), lid, bev=0.09))
+    parts.append(rbox((0.7, 0.3, 0.2), (0, 0, 0.9), lid, bev=0.08))
+    return group(parts, rot=(math.radians(-8), math.radians(-14), math.radians(6)))
+
+
+def build_bell():
+    gold, sym, matte = metal('gold'), metal('gold_sym'), metal('gold_matte')
+    prof = [(0.0, 1.0), (0.14, 0.98), (0.34, 0.9), (0.55, 0.62), (0.66, 0.15), (0.74, -0.3), (0.9, -0.62),
+            (1.08, -0.78), (1.1, -0.86), (0.98, -0.86), (0.8, -0.74), (0.5, -0.5), (0.0, -0.45)]
+    parts = [finish(lathe('bell', prof, 72), gold, 2)]
+    parts.append(torus(1.04, 0.07, (0, 0, -0.82), sym, rot=(0, 0, 0), sub=1))
+    parts.append(torus(0.2, 0.065, (0, 0, 1.2), matte, sub=1))
+    parts.append(sphere(0.3, (0, 0, -1.07), metal('copper')))
+    return group(parts, rot=(math.radians(-6), math.radians(-8), math.radians(14)))
+
+
+def build_bell_off():
+    parts = [build_bell()]
+    # קו חוצה: כסף מאחור כדי שיבלוט על הפעמון, ונחושת מלפנים
+    parts.append(capsule((-1.25, -1.2, 1.35), (1.25, -1.2, -1.45), 0.2, metal('silver')))
+    parts.append(capsule((-1.25, -1.35, 1.35), (1.25, -1.35, -1.45), 0.115, metal('copper')))
+    return group(parts)
+
+
+def build_key():
+    gold, sym = metal('gold'), metal('gold_sym')
+    parts = [torus(0.58, 0.25, (0, 0, 1.15), gold, sub=1)]
+    parts.append(capsule((0, 0, 0.55), (0, 0, -1.55), 0.19, gold))
+    parts.append(rbox((0.56, 0.3, 0.3), (0.3, 0, -1.2), sym, bev=0.09))
+    parts.append(rbox((0.44, 0.3, 0.3), (0.24, 0, -0.78), sym, bev=0.09))
+    parts.append(rbox((0.34, 0.3, 0.2), (0, 0, 0.45), gold, bev=0.06))
+    return group(parts, rot=(math.radians(-8), math.radians(36), math.radians(-6)))
+
+
+def build_phone():
+    gold, silver, copper = metal('gold'), metal('silver'), metal('copper')
+    parts = [rbox((1.4, 0.2, 2.5), (0, 0, 0), gold, bev=0.2),
+             rbox((1.1, 0.06, 1.85), (0, -0.12, 0.05), silver, bev=0.05),
+             rbox((0.34, 0.05, 0.07), (0, -0.12, 1.2), copper, bev=0.02, sub=1),
+             disc(0.11, (0, -0.12, -1.05), copper, 0.05, 0.015)]
+    return group(parts, rot=(math.radians(-8), math.radians(-18), math.radians(8)))
+
+
+def build_mail():
+    gold, silver, copper = metal('gold'), metal('silver'), metal('copper')
+    parts = [rbox((2.3, 0.16, 1.55), (0, 0, 0), gold, bev=0.1),
+             plate([(-1.08, 0.7), (1.08, 0.7), (0.0, -0.18)], 0.1, silver, bev=0.05, loc=(0, -0.13, 0.02))]
+    parts.append(disc(0.17, (0, -0.24, -0.12), copper, 0.08, 0.025))
+    return group(parts, rot=(math.radians(-8), math.radians(-10), math.radians(-8)))
+
+
+def build_plus():
+    gold, sym = metal('gold'), metal('gold_sym')
+    a, b = 0.34, 1.0
+    parts = [plate([(-a, b), (a, b), (a, -b), (-a, -b)], 0.28, gold, bev=0.1),
+             plate([(-b, a), (b, a), (b, -a), (-b, -a)], 0.22, gold, bev=0.1)]
+    parts.append(disc(0.16, (0, -0.2, 0), sym, 0.05, 0.015))
+    return group(parts, rot=(math.radians(-8), math.radians(-10), math.radians(4)))
+
+
+def build_home():
+    gold, copper, silver, matte = metal('gold'), metal('copper'), metal('silver'), metal('gold_matte')
+    parts = [rbox((1.7, 1.0, 1.3), (0, 0.02, -0.6), gold, bev=0.09),
+             plate([(-1.4, 0.04), (0.0, 1.5), (1.4, 0.04)], 1.16, copper, bev=0.1),
+             rbox((0.46, 0.12, 0.85), (0, -0.52, -0.82), silver, bev=0.05),
+             rbox((0.3, 0.5, 0.55), (0.72, 0.0, 0.8), matte, bev=0.05)]
+    return group(parts, rot=(math.radians(-8), math.radians(-14), math.radians(2)))
+
+
+def build_person():
+    gold = metal('gold')
+    head = sphere(0.58, (0, 0, 0.52), gold, sub=2)
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=1.0, location=(0, 0, -0.9), segments=48, ring_count=24)
+    torso = bpy.context.object
+    for v in torso.data.vertices:  # חצי כדור: משטחים את החצי התחתון, כמו חזה בפורטרט
+        if v.co.z < 0:
+            v.co.z = 0
+    torso.scale = (1.0, 0.62, 0.95)
+    return group([head, finish(torso, gold, 2)], rot=(math.radians(-8), math.radians(-14), math.radians(4)))
+
+
+def build_palette():
+    gold = metal('gold')
+    pts = []
+    for i in range(72):
+        a = 2 * math.pi * i / 72
+        r = 1.0 + 0.18 * math.cos(a - 0.5)
+        pts.append((1.35 * r * math.cos(a), r * math.sin(a)))
+    base = plate(pts, 0.28, gold, bev=0.09)
+    # חור לאגודל
+    hole = cylinder(0.3, 1.0, (0.55, 0, -0.45), gold, rot=(math.pi / 2, 0, 0), verts=48, bev=0, sub=0)
+    hole.data.materials.clear()
+    bo = base.modifiers.new('hole', 'BOOLEAN')
+    bo.operation = 'DIFFERENCE'
+    bo.object = hole
+    hole.hide_render = True
+    hole.display_type = 'WIRE'
+    parts = [base, hole]
+    for (x, z, name, r) in [(-0.8, 0.45, 'copper', 0.25), (-0.15, 0.85, 'silver', 0.25), (0.55, 0.65, 'gold_matte', 0.23),
+                            (-0.78, -0.35, 'silver_matte', 0.22)]:
+        parts.append(sphere(r, (x, -0.2, z), metal(name), scale=(1, 0.45, 1)))
+    return group(parts, rot=(math.radians(-8), math.radians(-12), math.radians(10)))
+
+
+def lens(w, h, n=24):
+    """צורת שקד משתי קשתות. w חצי רוחב, h חצי גובה."""
+    d = (w * w - h * h) / (2 * h)  # מרכז כל קשת (ב-z), כך שהקשתות נפגשות בקצוות
+    R = h + d
+    pts = []
+    for i in range(n + 1):
+        x = -w + 2 * w * i / n
+        pts.append((x, -d + math.sqrt(max(R * R - x * x, 0.0))))
+    for i in range(n - 1, 0, -1):
+        x = -w + 2 * w * i / n
+        pts.append((x, d - math.sqrt(max(R * R - x * x, 0.0))))
+    return pts
+
+
+def build_eye():
+    gold, silver, copper, sym = metal('gold'), metal('silver'), metal('copper'), metal('gold_sym')
+    parts = [plate(lens(1.5, 0.95), 0.26, gold, bev=0.1),
+             plate(lens(1.26, 0.72), 0.2, silver, bev=0.05, loc=(0, -0.1, 0)),
+             disc(0.6, (0, -0.24, 0), copper, 0.14, 0.05),
+             disc(0.28, (0, -0.34, 0), sym, 0.06, 0.02),
+             sphere(0.1, (0.2, -0.4, 0.2), metal('silver_matte'))]
+    return group(parts, rot=(math.radians(-8), math.radians(-12), math.radians(-4)))
+
+
+NEW = {'gear': build_gear, 'check': build_check, 'trash': build_trash, 'bell': build_bell, 'bell-off': build_bell_off,
+       'key': build_key, 'phone': build_phone, 'mail': build_mail, 'plus': build_plus, 'home': build_home,
+       'person': build_person, 'palette': build_palette, 'eye': build_eye}
+
+
 BUILDERS = {'fly-money': build_fly_money, 'handshake': build_handshake, 'money-bag': build_money_bag,
             'scroll': build_scroll, 'notebook': build_notebook, 'family': build_family}
+BUILDERS.update(NEW)
 
 
 def render(name, out, res, samples):
@@ -587,7 +842,8 @@ if __name__ == '__main__':
     if a[0] == '--all':
         out_dir, res, samples = a[1], int(a[2]), int(a[3])
         os.makedirs(out_dir, exist_ok=True)
-        for key in BUILDERS:
+        only = a[4].split(',') if len(a) > 4 else list(BUILDERS)  # אפשר לרנדר רק חלק מהאייקונים
+        for key in only:
             dst = os.path.join(out_dir, key + '.png')
             if os.path.exists(dst):
                 continue  # אפשר להמשיך ריצה שנקטעה

@@ -26,3 +26,33 @@ export async function expectSum(page, which, value) {
 
 export const confirmBox = (page) => page.getByRole('alertdialog');
 export const savedNotebook = (page) => page.evaluate(() => JSON.parse(localStorage.getItem('kupa-notebook-v1') || 'null'));
+
+// בבדיקות אין שרת, ומסך הפתיחה של מכשיר עם קופה מחכה לתשובה על הורים מהגרסה הישנה (App.jsx: currentScreen).
+// מדמים תשובה ריקה דרך ה-state של האפליקציה (עובד מול שרת הפיתוח של vite), כדי להגיע למסך הפתיחה.
+export async function serverReady(page) {
+  await page.evaluate(async () => {
+    const m = await import('/src-react/state/state.js');
+    m.state.legacyPeople = [];
+    m.state.codeChecked = true;
+    m.bumpAuth();
+  });
+}
+
+// שרת שלא עונה: מחליף את config.js בכתובת מתה, כדי שהבדיקה לא תלויה בשרת אמיתי (ולא מייצרת תעבורה אליו).
+export async function deadServer(page) {
+  await page.route('**/config.js', (route) => route.fulfill({ contentType: 'text/javascript', body: 'window.CONVEX_URL = "http://127.0.0.1:9";' }));
+}
+
+// מסך הקמת הקופה במכשיר חדש. הרישום ברשימת ההורים הישנה מגיע מהשרת, ובבדיקות אין שרת:
+// מדמים תשובה ריקה דרך ה-state של האפליקציה (עובד מול שרת הפיתוח של vite).
+export async function openSetup(page) {
+  await page.getByRole('button', { name: /צור משפחה/ }).click();
+  await page.getByRole('button', { name: /יצירת קופה משפחתית/ }).click();
+  await page.evaluate(async () => {
+    const m = await import('/src-react/state/state.js');
+    m.state.legacyPeople = [];
+    m.state.codeChecked = true;
+    m.bumpAuth();
+  });
+  await expect(page.getByRole('heading', { name: 'הקמת קופה משפחתית' })).toBeVisible({ timeout: 10000 });
+}
