@@ -11,7 +11,8 @@ const LIST_LIMIT = 100;
 export type ActivityKind =
   | "debt_add" | "payment_add" | "entry_pending" | "entry_approved" | "entry_rejected" | "entry_removed"
   | "person_add" | "person_remove" | "role_set" | "person_rename" | "join_approved" | "join_rejected"
-  | "family_rename" | "code_rotated" | "locale_set" | "device_revoked";
+  | "family_rename" | "code_rotated" | "locale_set" | "device_revoked"
+  | "goal_add" | "goal_deposit" | "goal_deposit_pending" | "goal_deposit_approved" | "goal_deposit_rejected" | "goal_removed";
 
 export async function logActivity(
   ctx: MutationCtx, actor: Doc<"people">, kind: ActivityKind,

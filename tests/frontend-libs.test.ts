@@ -9,6 +9,7 @@ import { validPin } from "../convex/lib";
 import { COUNTRY_LANG, LANGUAGES } from "../src-react/i18n/index.js";
 import { translateServer } from "../src-react/i18n/serverMessages.js";
 import { getMemberships, upsertMembership, forgetMembershipByToken, otherMemberships, syncTargets } from "../src-react/lib/memberships.js";
+import { loadDraft } from "../src-react/lib/draft.js";
 import { getCards, upsertCard, removeCard, savedFamilies } from "../src-react/lib/cards.js";
 
 // localStorage מזויף (הבדיקות רצות ב-Node)
@@ -189,4 +190,26 @@ describe("כרטיסי משפחה במכשיר (cards)", () => {
     localStorage.setItem("kupa-cards", "oops");
     expect(getCards()).toEqual([]);
   });
+});
+
+
+describe("טיוטות", () => {
+  const put = (v: unknown, at: number) => localStorage.setItem("k", JSON.stringify({ v, at }));
+  it("טיוטה תקינה נטענת", () => {
+    put({ name: "דנה" }, Date.now());
+    expect(loadDraft("k")).toEqual({ name: "דנה" });
+    expect(localStorage.getItem("k")).not.toBeNull();
+  });
+  it("טיוטה שפגה, פגומה או לא תקינה נמחקת מהמכשיר", () => {
+    put({ name: "ישן" }, Date.now() - 4 * 24 * 60 * 60 * 1000);
+    expect(loadDraft("k")).toBeNull();
+    expect(localStorage.getItem("k")).toBeNull();
+    localStorage.setItem("k", "{לא json");
+    expect(loadDraft("k")).toBeNull();
+    expect(localStorage.getItem("k")).toBeNull();
+    localStorage.setItem("k", JSON.stringify({ v: "טקסט", at: Date.now() }));
+    expect(loadDraft("k")).toBeNull();
+    expect(localStorage.getItem("k")).toBeNull();
+  });
+  it("אין טיוטה: null", () => { expect(loadDraft("k")).toBeNull(); });
 });

@@ -30,12 +30,12 @@ export default function Setup({ current }) {
 function SetupForm({ current }) {
   const nb = useNotebook();
   const sheet = useSheet();
-  // טיוטה (ראו lib/draft.js): רק שם המשפחה, השם ותאריך הלידה. הקוד הסודי והמייל לא נשמרים לעולם.
+  // טיוטה (ראו lib/draft.js): רק שם המשפחה והשם. תאריך הלידה, הקוד הסודי והמייל לא נשמרים לעולם.
   const [draft] = useState(() => loadDraft(SETUP_DRAFT_KEY) || {});
   const [v, setV] = useState({ familyName: String(draft.familyName || '').slice(0, 30), name: String(draft.name || '').slice(0, 20), pin: '', email: '' });
   // אם כבר הוזן תאריך לידה בפנקס האישי, משתמשים בו.
-  const [birthDate, setBirthDate] = useState(nb.birthDate || (parseBirth(draft.birthDate) ? draft.birthDate : ''));
-  useEffect(() => { saveDraft(SETUP_DRAFT_KEY, { familyName: v.familyName, name: v.name, birthDate }); }, [v.familyName, v.name, birthDate]);
+  const [birthDate, setBirthDate] = useState(nb.birthDate || '');
+  useEffect(() => { saveDraft(SETUP_DRAFT_KEY, { familyName: v.familyName, name: v.name }); }, [v.familyName, v.name]);
   // יציאה מהמסך (חזרה, או הקמה שהצליחה) סוגרת את הטופס, ואיתו הטיוטה. רענון הדף לא מריץ את זה, ולכן הטיוטה שורדת אותו.
   useEffect(() => () => clearDraft(SETUP_DRAFT_KEY), []);
   // דמות אקראית, בלי צורת פנייה, והמדינה לפי המכשיר. את כולם אפשר לשנות אחר כך.

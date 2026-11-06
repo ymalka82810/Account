@@ -162,6 +162,9 @@ test.describe('טיוטה', () => {
     expect(raw).toContain('כהן');
     expect(raw).not.toContain('123456');
     expect(raw).not.toContain('a@b.co');
+    // תאריך הלידה לא נשמר בטיוטה, ורק השדות האחרים כן
+    expect(Object.keys(JSON.parse(raw).v).sort()).toEqual(['familyName', 'name']);
+    expect(raw).not.toContain('birthDate');
   });
 });
 

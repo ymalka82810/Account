@@ -66,7 +66,7 @@ export default function Goals({ data, token }) {
           <div className="goal card" key={goal.id}>
             <div className="goal-head">
               <strong>{isParent && who(goal.personId) ? `${who(goal.personId).avatar || ''} ${who(goal.personId).name} · ` : ''}{goal.name}{done ? ' 🎉' : ''}</strong>
-              <button className="small danger" type="button" onClick={() => remove(goal)}>{t('מחיקה')}</button>
+              {(isParent || goal.saved === 0) && <button className="small danger" type="button" onClick={() => remove(goal)}>{t('מחיקה')}</button>}
             </div>
             <div className="goal-bar" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct}>
               <div className="goal-fill" style={{ width: `${pct}%` }} />

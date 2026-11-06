@@ -178,775 +178,785 @@
 177|Approuver le mode amis
 178|Confirmer le changement de rôle
 179|Approuvé
-180|A approuvé une demande d’adhésion
-181|Si ce parent a un e-mail vérifié, un code de vérification lui sera envoyé. S'il n'y a pas d'e-mail, un autre parent peut définir un nouveau code pour vous.
-182|Si ce n'est pas lui, mieux vaut définir un nouveau code.
-183|Si ce n'est pas lui/elle, mieux vaut définir un nouveau code.
-184|Si ce n'est pas elle, mieux vaut définir un nouveau code.
-185|Si l'ami a le mode amis, une demande lui a été envoyée 🤝
-186|Si vous oubliez le code, nous enverrons un code de réinitialisation à cette adresse. Sans e-mail, seul un autre parent pourra aider.
-187|Je suis nouveau/nouvelle
-188|Je dois
-189|Je dois {a} • me doit {b}
-190|Je dois de l'argent
-191|Je dois de l'argent à {name}
-192|Je dois de l'argent à {to}
-193|Je dois de l'argent à un ami
-194|Je dois de l'argent à mes amis
-195|Je dois
-196|Je dois de l'argent
-197|Je dois de l'argent à {name}
-198|Je dois de l'argent à {to}
-199|Je dois de l'argent à un(e) ami(e)
-200|Je dois de l'argent à mes amis
-201|Je dois
-202|Je dois de l'argent
-203|Je dois de l'argent à {name}
-204|Je dois de l'argent à {to}
-205|Je dois de l'argent à une amie
-206|Je dois de l'argent à mes amis
-207|J'accepte que les parents de ma famille voient ce que j'ai écrit dans mon carnet personnel. Ils peuvent seulement le consulter, pas le modifier ni le supprimer.
-208|Personne ne doit rien !
-209|Personne ne doit rien.
-210|Vous ne pouvez annuler que pendant les 10 premières minutes, ou demander à un parent
-211|Vous ne pouvez annuler que pendant les 10 premières minutes. Pour corriger, enregistrez un remboursement
-212|Vous pouvez rembourser jusqu'à {max}.
-213|Vous pouvez terminer le changement. Saisissez le code secret et liez cet appareil.
-214|Seul un remboursement peut être lié à une dette
-215|Vous ne pouvez enregistrer que des dettes qui vous concernent
-216|Vous ne pouvez enregistrer qu'avec des amis approuvés
-217|Le {day} de chaque mois
-218|Quel jour
-219|Quel jour du mois (1 à 28)
-220|On vérifie qui c'est…
-221|Vérification…
-222|Choisir une autre dette
-223|Choisir un pays
-224|Choisir une date
-225|Choisissez un avatar
-226|Indiquez où vous habitez
-227|Choisissez un nouveau code secret ({rule})
-228|Annuler
+180|a approuvé un dépôt sur un objectif d'épargne
+181|A approuvé une demande d’adhésion
+182|Si ce parent a un e-mail vérifié, un code de vérification lui sera envoyé. S'il n'y a pas d'e-mail, un autre parent peut définir un nouveau code pour vous.
+183|Si ce n'est pas lui, mieux vaut définir un nouveau code.
+184|Si ce n'est pas lui/elle, mieux vaut définir un nouveau code.
+185|Si ce n'est pas elle, mieux vaut définir un nouveau code.
+186|Si l'ami a le mode amis, une demande lui a été envoyée 🤝
+187|Si vous oubliez le code, nous enverrons un code de réinitialisation à cette adresse. Sans e-mail, seul un autre parent pourra aider.
+188|Je suis nouveau/nouvelle
+189|Je dois
+190|Je dois {a} • me doit {b}
+191|Je dois de l'argent
+192|Je dois de l'argent à {name}
+193|Je dois de l'argent à {to}
+194|Je dois de l'argent à un ami
+195|Je dois de l'argent à mes amis
+196|Je dois
+197|Je dois de l'argent
+198|Je dois de l'argent à {name}
+199|Je dois de l'argent à {to}
+200|Je dois de l'argent à un(e) ami(e)
+201|Je dois de l'argent à mes amis
+202|Je dois
+203|Je dois de l'argent
+204|Je dois de l'argent à {name}
+205|Je dois de l'argent à {to}
+206|Je dois de l'argent à une amie
+207|Je dois de l'argent à mes amis
+208|J'accepte que les parents de ma famille voient ce que j'ai écrit dans mon carnet personnel. Ils peuvent seulement le consulter, pas le modifier ni le supprimer.
+209|Personne ne doit rien !
+210|Personne ne doit rien.
+211|Vous ne pouvez annuler que pendant les 10 premières minutes, ou demander à un parent
+212|Vous ne pouvez annuler que pendant les 10 premières minutes. Pour corriger, enregistrez un remboursement
+213|Vous pouvez rembourser jusqu'à {max}.
+214|Vous pouvez terminer le changement. Saisissez le code secret et liez cet appareil.
+215|Seul un remboursement peut être lié à une dette
+216|Vous ne pouvez enregistrer que des dettes qui vous concernent
+217|Vous ne pouvez enregistrer qu'avec des amis approuvés
+218|Le {day} de chaque mois
+219|Quel jour
+220|Quel jour du mois (1 à 28)
+221|On vérifie qui c'est…
+222|Vérification…
+223|Choisir une autre dette
+224|Choisir un pays
+225|Choisir une date
+226|Choisissez un avatar
+227|Indiquez où vous habitez
+228|Choisissez un nouveau code secret ({rule})
 229|Annuler
-230|Annuler la demande
-231|Annuler la demande sur cet appareil
-232|Retirer les droits de parent
-233|Désactiver le mode amis
-234|Entre amis, vous pouvez enregistrer jusqu'à {max} à la fois.
-235|En attendant, vous pouvez écrire dans le carnet personnel, enregistré sur votre appareil.
-236|A demandé une approbation
-237|בלי קוד, הילדים נכנסים בלחיצה, וכל ילד יכול לקבוע קוד משלו מתי שירצה. עם קוד, כל הילדים מקבלים אותו קוד, וכשתרצו לתת לכל ילד את המשתמש שלו תאפסו לו את הקוד מלשונית “ניהול”, והוא יבחר קוד משלו.
-238|Cet appareil n'a ni empreinte digitale ni reconnaissance faciale : confirmez avec votre code secret.
-239|Sur l'ancien appareil : « Mon compte » > « Mon appareil » > Changer d'appareil. Le code arrivera par e-mail.
-240|La famille a déjà un parent lié à un appareil ; pour lier celui-ci, il faut un code de liaison de sa part. Déconnectez-vous, puis sur l'écran de connexion appuyez sur « Nouvel appareil / Changer d'appareil ».
-241|Les membres de {name}
-242|Membres de la famille
-243|Au total, {name} me doit de l'argent
-244|Au total, {name} me doit de l'argent
+230|Annuler
+231|Annuler la demande
+232|Annuler la demande sur cet appareil
+233|Retirer les droits de parent
+234|Désactiver le mode amis
+235|Entre amis, vous pouvez enregistrer jusqu'à {max} à la fois.
+236|En attendant, vous pouvez écrire dans le carnet personnel, enregistré sur votre appareil.
+237|A demandé une approbation
+238|a demandé un dépôt sur un objectif d'épargne
+239|בלי קוד, הילדים נכנסים בלחיצה, וכל ילד יכול לקבוע קוד משלו מתי שירצה. עם קוד, כל הילדים מקבלים אותו קוד, וכשתרצו לתת לכל ילד את המשתמש שלו תאפסו לו את הקוד מלשונית “ניהול”, והוא יבחר קוד משלו.
+240|Cet appareil n'a ni empreinte digitale ni reconnaissance faciale : confirmez avec votre code secret.
+241|Sur l'ancien appareil : « Mon compte » > « Mon appareil » > Changer d'appareil. Le code arrivera par e-mail.
+242|La famille a déjà un parent lié à un appareil ; pour lier celui-ci, il faut un code de liaison de sa part. Déconnectez-vous, puis sur l'écran de connexion appuyez sur « Nouvel appareil / Changer d'appareil ».
+243|Les membres de {name}
+244|Membres de la famille
 245|Au total, {name} me doit de l'argent
-246|Au total, je dois de l'argent à {name}
-247|Au total, je dois de l'argent à {name}
+246|Au total, {name} me doit de l'argent
+247|Au total, {name} me doit de l'argent
 248|Au total, je dois de l'argent à {name}
-249|Le carnet contient des enregistrements pour « {name} »
-250|Carnet : « {a} ». Cagnotte : « {b} ».
-251|Demander l'accord des parents
-252|ברוכים הבאים לקופה 🪙
-253|Grand
-254|Taille du texte
-255|Défiler vers la droite
-256|Défiler vers la gauche
-257|Une nouvelle version est disponible ({version})
-258|Graphique des dettes et remboursements par mois
-259|Refusé
-260|A refusé une demande d’adhésion
-261|Refuser
-262|Avatar
-263|Avatar {avatar}
-264|Argent de poche
-265|Argent de poche régulier
-266|une minute
-267|{"one":"{n} minute","other":"{n} minutes"}
-268|Vérification annulée
-269|La vérification par empreinte / reconnaissance faciale a échoué
-270|La vérification a échoué. Réessayez.
-271|La vérification a échoué (adresse inconnue).
-272|La vérification a échoué. Réessayez.
-273|Les personnes ajoutées choisiront un code secret lors de leur première connexion.
-274|L'application a rencontré un problème inattendu. Vous pouvez réessayer et, si cela se reproduit, actualiser l'application.
-275|L'application n'est pas encore connectée au serveur
-276|Compris
-277|La demande a été annulée
-278|La demande a été reçue. Le changement sera possible le {when}. D'ici là, l'ancien téléphone, s'il est retrouvé, fonctionne encore, et les parents peuvent annuler la demande.
-279|La demande n'existe plus
-280|La demande a été refusée
-281|La demande a été envoyée
-282|הבקשה נשלחה להורה
-283|La demande a été envoyée à vos parents ⏳
-284|La demande a été envoyée à vos parents. Nous vous préviendrons dès qu'ils l'approuvent.
-285|Réglages
-286|Réglages de la famille
-287|הגשמת יעד
-288|Cet avatar est déjà pris par un autre membre de la famille
-289|Ce navigateur est trop ancien pour la vérification biométrique. Mettez-le à jour et réessayez.
-290|Le téléchargement a échoué. Vérifiez votre connexion internet et réessayez
-291|Ce parent est déjà lié à un autre appareil, ou la clé a été supprimée de cet appareil. Pour continuer d'ici, il faut changer d'appareil : déconnectez-vous, puis sur l'écran de connexion appuyez sur « Nouvel appareil / Changer d'appareil ».
-292|Ce parent ne se connecte que depuis son propre appareil.
-293|Ce parent ne se connecte que depuis son propre appareil. Si vous avez changé d'appareil, appuyez sur « Nouvel appareil / Changer d'appareil ».
-294|Le parent est déjà lié à un appareil. Le changement d'appareil suit un autre processus.
-295|Tes parents ne voient plus ton carnet personnel. Il reste uniquement chez toi.
-296|Les parents de chaque famille voient une copie de ton carnet, en lecture seule. Tu peux suspendre le partage à tout moment.
-297|Le remboursement ne correspond pas à cette dette
-298|Remboursement enregistré ✅
-299|La suite sur l'appareil de {name} : ouvrez la cagnotte, choisissez {name}, appuyez sur « Nouvel appareil / Changer d'appareil » et saisissez le code secret de {name} ainsi que ce code. Dès lors, {name} se connecte en tant que parent uniquement depuis cet appareil.
-300|La note est trop longue
-301|Dépôt approuvé ✅
-302|Dépôt refusé
-303|ההפקדה נוספה 🐷
-304|Notifications activées 🔔
-305|Les notifications sont bloquées. Vous pouvez les autoriser dans les réglages du navigateur.
-306|Notifications désactivées
-307|Il perdra les droits de parent. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
-308|Il perdra le mode amis. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
-309|Il obtiendra tous les droits de parent : tout voir, approuver, supprimer et gérer la famille. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
-310|Remboursé
-311|A ajouté un membre de la famille
-312|Ajouter
-313|Ajouter un membre de la famille
-314|Ajouter un(e) ami(e)
-315|הוספת ילד/ה
-316|{n} enregistrements transférés
-317|Copié ✅
-318|Parent
-319|Un autre parent ouvre « Code de liaison » à côté de votre nom dans « Gestion » et vous remet un code.
-320|Un autre parent doit définir un code secret pour vous
-321|Un parent se connecte ici, puis reçoit les codes pour le reste de la famille.
-322|Un parent se connecte uniquement depuis son appareil, et les actions de parent sont confirmées par empreinte digitale ou reconnaissance faciale.
-323|Un parent doit définir l'adresse Convex dans le fichier
-324|Un parent doit d'abord se connecter.
-325|הושג ✅
-326|Ami(e) retiré(e)
-327|Mes amis
-328|La dette est en {debtCur}. Vous payez en {payCur} au taux du jour.
-329|La dette a augmenté de
-330|Cette dette a déjà été payée
-331|La dette sera entièrement soldée ✅
-332|Dette introuvable
-333|Dette enregistrée ✅
-334|La dette a diminué de
-335|Les dettes entre vous et {name} seront soldées jusqu'à ce montant, et seule la différence restera. L'historique est conservé.
-336|Dettes ouvertes par devise
-337|Dettes compensées ✅
-338|Remboursement
-339|החזרה ראשונה
-340|Remboursements
-341|החזרת הכול 3 שבועות ברצף
-342|החזרת הכול 8 שבועות ברצף
-343|החזרת חוב בפעם הראשונה
-344|J'ai remboursé {to}
-345|A changé le code de la famille
-346|Changer le code déconnecte tous les appareils qui ont enregistré la famille, donc un parent doit l'approuver. Une demande de vérification de l'appareil va s'ouvrir.
-347|Changer l'e-mail
-348|Changer d'appareil (envoi d'un code par e-mail)
-349|Changer le code
-350|Compte avec {name}
-351|Mon compte
-352|Téléphone cassé ou perdu ? Un autre parent peut vous émettre un code de liaison dans « Gestion ». S'il n'y a pas d'autre parent, demandez un changement sur l'écran de connexion : il sera possible après 24 heures, et vous recevrez un e-mail.
-353|Elle perdra les droits de parent. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
-354|Elle perdra le mode amis. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
-355|Elle obtiendra tous les droits de parent : tout voir, approuver, supprimer et gérer la famille. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
-356|Salut {name}, petit rappel : il reste {amount} à rembourser. Merci ! 🙏
-357|Salut {name}, petit rappel : il reste {amount} à rembourser pour {note}. Merci ! 🙏
-358|Salut, {name} demande à rejoindre la cagnotte familiale. Vous pouvez vous connecter et approuver : {url}
-359|Historique
-360|Historique avec les amis
-361|היעד לא קיים
-362|היעד נוסף 🎯
-363|הישגים
-364|הישגים: {name}
-365|Tout : {amount}
-366|Tout est réglé
-367|Tout est réglé ✅
-368|Tout est enregistré uniquement sur cet appareil.
-369|Les plus récents d'abord
-370|Mon argent
-371|Mon pays n'est pas dans la liste ($)
-372|Devise de la famille
-373|La devise de la famille est {base}, et cette dette sera conservée en {cur}. Dans les soldes, elle est affichée au taux de ce jour-là, et lorsqu'elle est payée, le montant est converti au taux du jour du paiement.
-374|Devise : {cur}
-375|E-mail vérifié ✅
-376|Cet e-mail est déjà utilisé par quelqu'un d'autre
-377|E-mail actuel : {email}. Pour le remplacer, nous lui enverrons un code de confirmation.
-378|E-mail de {name}
-379|E-mail de l'ami(e)
-380|Votre e-mail pour les amis :
-381|Lieu et devise enregistrés ✅
-382|Lieu et devise mis à jour ✅
-383|Cet appareil n'est plus lié à un parent
-384|Cet appareil n'est plus lié à un parent. Pour vous connecter, il faut changer d'appareil.
-385|Cet appareil n'est pas enregistré pour la vérification. Enregistrez-le à nouveau.
-386|Cet appareil n'est pas encore lié à un parent.
-387|Appareil non pris en charge
-388|Appareil déconnecté ✅
-389|Mon appareil
-390|Cet écran a rencontré un problème. Le reste de l'application continue de fonctionner, vous pouvez passer à un autre onglet.
-391|Continuer
-392|Continuer vers la vérification
-393|Cette famille a retiré l’appareil. Pour y entrer à nouveau, il faut le code famille.
-394|Famille introuvable
-395|La famille est complète
-396|Verrou levé ✅
-397|Cet(te) ado perdra le mode amis. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
-398|Mes données
-399|A retiré un membre de la famille
-400|A retiré un appareil
-401|Le montant est trop élevé
-402|Le montant est trop élevé.
-403|Les montants les plus élevés d'abord
-404|Montants dans le carnet
-405|Retirer
-406|Retirer {name}
-407|Le retrait d'un parent doit être approuvé par un parent. Une demande de vérification de l'appareil va s'ouvrir.
-408|Masquer
-409|Transférer vers le serveur
-410|Accorder les droits de parent
-411|Note
-412|Réduire les animations
-413|Le carnet est trop volumineux pour être partagé
-414|Carnet personnel de {name}
-415|Le carnet a été vidé
-416|Le carnet est déjà vide
-417|Le carnet n’est pas partagé avec tes parents
-418|Le carnet n'est pas valide
-419|Mon carnet
-420|Arrêter
-421|Cette action n'est confirmée que par empreinte digitale ou reconnaissance faciale
-422|Activer la vérification biométrique
-423|הפקדה
-424|הפקדתי
-425|Afficher le code 🔒
-426|Afficher le code d'invitation
-427|Rejoindre
-428|Le fichier est trop volumineux
-429|Le fichier téléchargé n'est pas une nouvelle version de l'application
-430|Le fichier téléchargé n'est pas valide. Réessayez
-431|Code remplacé ✅ Vous pouvez l'afficher avec une empreinte digitale ou la reconnaissance faciale
-432|Le nouveau code doit comporter {rule}.
-433|Code actuel
-434|Le code actuel est incorrect.
-435|Le code secret n'est pas valide ({rule})
-436|Le code secret doit comporter 4 chiffres
-437|Le code secret est incorrect.
-438|Le code secret saisi est incorrect.
-439|Votre code secret
-440|Votre code secret, pour confirmer
-441|Le code n'est plus valide. Demandez un nouveau code à vos parents.
-442|Le code est incorrect. Vérifiez à nouveau, ou demandez à vos parents.
-443|Le code est incorrect. Il vous reste {left} essais.
-444|Le code reçu par e-mail
-445|Le code de l'e-mail actuel est erroné ou a expiré.
-446|Le code est masqué
-447|Le code est masqué et ne s'affiche qu'avec une empreinte digitale ou la reconnaissance faciale.
-448|Le code a été mis à jour. Connectez-vous avec le nouveau code depuis votre appareil.
-449|Le code doit comporter {rule}
-450|Le code doit comporter {rule}.
-451|Le code doit comporter 4 chiffres
-452|Le code doit comporter au moins 4 chiffres, jusqu'à {max}
-453|Le code est erroné ou a expiré.
-454|Le code a été modifié ✅
-455|Le code de {name} a été mis à jour
-456|Les codes ne correspondaient pas. Recommençons.
-457|La Cagnotte familiale
-458|La cagnotte a été supprimée
-459|הקופה נפתחה! כתבו את שמות הילדים. נער/ה או הורה נוסף אפשר להוסיף למטה, או אחר כך מלשונית “ניהול”.
-460|La compensation a été envoyée à un parent pour approbation ⏳
-461|La compensation solde les dettes des deux côtés jusqu'à {amount}. La différence reste telle quelle et l'historique est conservé.
-462|Créez une cagnotte familiale
-463|Saisissez votre code secret.
-464|Créer la cagnotte
-465|Créer une cagnotte familiale
-466|Prochain enregistrement : {date}
-467|L'enregistrement régulier a été arrêté
-468|L'enregistrement régulier a été ajouté ✅
-469|הרישום יימחק. אפשר לכתוב למי שרשם למה זה לא נכון.
-470|L'enregistrement a été refusé
-471|L'enregistrement a été supprimé
-472|La liste
-473|La liste a été copiée
-474|Le partage est suspendu. Tes parents ne voient rien.
-475|Terminer le changement et se connecter
-476|Le nom a été mis à jour ✅
-477|Taux mis à jour {when}
-478|Ajustements (remboursements enregistrés sans dette précise)
-479|Le paiement en {base} sera converti au taux du jour et déduit de la dette dans sa propre devise. Après l'enregistrement, ce taux est conservé et ne changera plus.
-480|Est-ce la même personne que « {name} » ?
-481|Est-ce la même personne ? Si oui, quel nom utiliser ?
-482|Ceci est une démo, rien ne peut être modifié. Créez votre propre cagnotte !
-483|C'est votre e-mail
-484|C'est le code que vous utiliserez à chaque connexion. Mieux vaut s'en souvenir.
-485|Cela supprimera toute la cagnotte : toutes les personnes et tous les enregistrements, et c'est irréversible.\nPour confirmer, saisissez le nom de la famille : {name}
-486|Reconnaissance faciale ou empreinte digitale
-487|Masculin
-488|Un(e) ami(e) me doit de l'argent
-489|Ami(e) ajouté(e) ✅
-490|Mes amis me doivent de l'argent
-491|Les amis ajoutent l'ado avec cet e-mail. Rien n'y est envoyé, il sert uniquement à la recherche.
-492|Les amis ajoutent l'ado avec cet e-mail. Rien n'y est envoyé, il sert uniquement à la recherche.
-493|Les amis ajoutent l'ado avec cet e-mail. Rien n'y est envoyé, il sert uniquement à la recherche.
-494|Les amis sont ajoutés par adresse e-mail. Vous verrez tout ce qui est enregistré dans l'aperçu.
-495|Amis : {names}
-496|Dette
-497|Dette en {cur}
-498|Dettes
-499|Nouvelles dettes par rapport au mois dernier : {diff}
-500|Mois suivant
-501|Mois précédent
-502|De retour dans la liste ouverte
-503|Retour
-504|Retour à la famille
-505|Retour à la famille {family}
-506|doit
-507|Il doit rester au moins un parent dans la famille
-508|doit
-509|me doit
-510|Ils me doivent
-511|Ils me doivent de l'argent
-512|doit
-513|Rechercher par nom, note ou montant
-514|חסכת עד שהגעת ליעד
-515|Chargement…
-516|Pas encore défini par le parent
-517|Ils perdront les droits de parent. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
-518|{day}
-519|Jour du mois invalide (1 à 28)
-520|Jour invalide
-521|On se déconnecte en toute sécurité…
-522|Trop de demandes de code. Réessayez dans quelques minutes
-523|Trop de demandes. Réessayez plus tard
-524|Trop de nouvelles familles en ce moment. Réessayez dans quelques minutes
-525|Trop de tentatives. Réessayez dans une minute.
-526|Trop de tentatives. Réessayez dans quelques minutes.
-527|Trop d'enregistrements. Réessayez plus tard
-528|Il restera {left} de la dette.
-529|Enfant
-530|Enfant
-531|Enfant
-532|יעד חדש
-533|יעדי חיסכון
-534|יעדי חיסכון הם לילדים ולנוער
-535|Se déconnecter
-536|Quitter la démo
-537|Ils obtiendront tous les droits de parent : tout voir, approuver, supprimer et gérer la famille. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
-538|Vert + jaune
-539|Certaines personnes vous doivent de l’argent et vous leur en devez aussi. La compensation clôt les dettes mutuelles et ne laisse que la différence.
-540|Le carnet personnel contient des dettes au nom de membres de la famille
-541|Il y a trop de demandes d'adhésion en attente. Demandez à un parent de s'en occuper
-542|Il y a trop de dettes ouvertes entre les deux. Soldez des dettes avant d'en ajouter.
-543|Il y a trop d'enregistrements actifs entre les deux. Soldez des dettes avant d'en ajouter.
-544|Un solde est ouvert entre vous. Soldez-le d'abord
-545|Certaines dettes sont dans une autre devise : elles seront compensées au taux du jour, et ce taux sera conservé.
-546|« {old} » figure déjà dans le carnet.
-547|Il y a déjà beaucoup d'amis dans la liste
-548|יש כבר הרבה יעדים
-549|Il y a déjà beaucoup d'enregistrements réguliers
-550|J'ai un code famille
-551|Vous avez un code famille ? Accédez à la cagnotte
-552|Vous avez un code famille ? Saisissez-le ici. Demandez à vos parents le code d'invitation de la famille.
-553|Il n’y a qu’un seul parent dans la famille. Nous recommandons d’ajouter un autre parent et de vérifier un e-mail, pour pouvoir récupérer l’accès si l’appareil est perdu.
-554|Il existe des enregistrements à son nom. Supprimez-les d'abord
-555|Soldes
-556|Ici, on enregistre les dettes avec des amis : qui a acheté pour qui, et qui doit rembourser. Votre ami doit aussi avoir l'application, et vos parents doivent approuver.
-557|כאן רושמים מי חייב למי. לוחצים על אחד הכפתורים הגדולים, בוחרים אדם וסכום, וזהו.
-558|Désactivé
-559|{"one":"Déjà 1 jour","other":"Déjà {n} jours"}
-560|Quelqu'un porte déjà ce nom
-561|Quelqu'un porte déjà ce nom. Choisissez cette personne dans la liste, ou changez le nom
-562|Quelqu'un porte déjà ce nom. Refusez la demande
-563|Ce profil a déjà un code
-564|Presque…
-565|Vous utilisez déjà la cagnotte ?
-566|Pour {need}, il faut un appareil avec empreinte digitale ou reconnaissance faciale configurée.
-567|Pour changer d'appareil depuis ce téléphone, il faut un e-mail vérifié. Ajoutez un e-mail dans « Mon compte ».
-568|Pour vous connecter en tant que parent, il faut lier cet appareil avec un code de liaison d'un autre parent. Appuyez sur « Nouvel appareil / Changer d'appareil ».
-569|Pour rejoindre la famille, tu dois accepter que tes parents voient ton carnet personnel, en lecture seule
-570|Pour définir un nouveau code pour {name}, nous enverrons un code de vérification à {email}.
-571|Pour lier un appareil, une empreinte digitale ou la reconnaissance faciale doit y être configurée.
-572|Pour qu'un enfant ne puisse pas se faire passer pour parent, l'ajout en tant qu'ado ou parent est approuvé par un parent. Une demande de vérification de l'appareil va s'ouvrir.
-573|Pour qu'un enfant ne puisse pas se faire passer pour parent, le changement de rôle est approuvé par un parent. Une demande de vérification de l'appareil va s'ouvrir.
-574|Cohen
-575|Bleu + violet
-576|Désactiver les amis
-577|Toutes les dettes ouvertes
-578|Toute la famille
-579|Tous les montants sont affichés dans cette devise. Vous pouvez enregistrer une dette dans une autre devise (par exemple 100 dollars), et lorsqu'elle est payée, elle est convertie au taux de ce jour-là.
-580|Tous les mois
-581|Chaque {day}
-582|À quelle fréquence
-583|כל רישום שלכם מחכה לאישור של הורה, ורק אחרי זה הוא נכנס לחשבון. אם טעיתם, אפשר לבטל תוך 10 דקות.
-584|Toutes les semaines
-585|Combien {from} a-t-il remboursé à {to} ?
-586|Combien {from} a-t-il remboursé à {to} ?
-587|Combien {from} a-t-elle remboursé à {to} ?
-588|Combien {name} me doit-il ?
-589|Combien {name} me doit-il ?
-590|Combien {name} me doit-elle ?
-591|Combien {name} m'a-t-il payé ?
-592|Combien {name} m'a-t-il payé ?
-593|Combien {name} m'a-t-elle payé ?
-594|Combien dois-je à {to} ?
-595|Combien dois-je à {to} ?
-596|Combien dois-je à {to} ?
-597|כמה צריך? ({cur})
-598|Combien ai-je payé à {to} ?
-599|Combien ?
-600|Oui
-601|Oui, même personne. Garder « {n} »
-602|Oui, même personne. Tout remplacer par « {n} »
-603|Oui, fusionner sous « {n} » (nom du carnet)
-604|Oui, fusionner sous « {n} » (nom de la cagnotte)
-605|Oui, continuer
-606|Oui, transférer vers la cagnotte
-607|Oui, compenser
-608|Oui, enregistrer la dette
-609|Oui, enregistrer le paiement
-610|Connexion
-611|Connexion parent
-612|Saisissez votre nom
-613|Saisissez l'e-mail que votre ami(e) a enregistré avec ses parents dans l'application. Une demande lui est envoyée et il/elle doit l'approuver. Cela ne fonctionne que si votre ami(e) a aussi le mode amis.
-614|Saisissez le code secret
-615|Saisissez à nouveau le code, pour confirmer
-616|Saisissez le nom
-617|Saisissez le nom de famille
-618|Saisissez un montant
-619|Saisissez un montant supérieur à zéro.
-620|Une autre adresse
-621|L'adresse e-mail semble invalide
-622|L'adresse e-mail n'est pas valide
-623|Adresse e-mail
-624|Nouvelle adresse e-mail
-625|Adresse e-mail non valide
-626|Orange + rose
-627|Non
-628|Nous n'avons pas pu activer les notifications sur cet appareil
-629|Impossible de se connecter pour le moment. Cet écran disparaîtra tout seul au retour de la connexion et, en attendant, le carnet personnel fonctionne sans connexion.
-630|Nous n'avons pas pu connecter l'e-mail. Vous pouvez réessayer dans « Mon compte ».
-631|Nous n'avons pas pu lier l'appareil. Réessayez.
-632|Inconnu
-633|Incorrect
-634|Rien trouvé pour « {q} »
-635|Aucun installateur n'a été trouvé sur le téléphone. Vous pouvez télécharger le fichier directement depuis GitHub
-636|Rien n'a été enregistré ce mois-ci.
-637|Non, ce sont deux personnes différentes
-638|Non, c'est une autre personne
-639|Non, garder dans le carnet
-640|Pour quelle dette est le remboursement ?
-641|Pour confirmer, nous enverrons un code de vérification à {email}.
-642|Réinitialiser, et laisser choisir à la prochaine connexion
-643|Annuler ce que vous avez enregistré ?
-644|לדחות את הרישום?
-645|Refuser ? L'enregistrement sera supprimé.
-646|להוסיף גם נער/ה או הורה נוסף
-647|Un nouveau parent doit avoir un code secret
-648|Un parent doit avoir un code défini (on ne peut pas le réinitialiser pour qu'il le choisisse lui-même)
-649|Réservé aux parents. La personne qui crée est le premier parent. Ensuite, vous recevez un code d'invitation pour toute la famille, et vous définissez le rôle de chacun : enfant, ado ou parent.
-650|Changer le code
-651|Remplacer le code ? Ceux qui sont déjà dedans restent, mais l'ancien code cessera de fonctionner, et les autres appareils qui ont enregistré la famille devront saisir le nouveau code.
-652|Changer d'appareil
-653|Le changement de son propre appareil suit un autre processus
-654|Émettre un code de liaison
-655|Retirer {name} des amis ?
-656|Retirer {name} de la famille ?
-657|Retirer un parent
-658|Les transférer vers la cagnotte familiale au nom de {name} ?
-659|Arrêter l'enregistrement régulier ? Ce qui est déjà enregistré reste.
-660|Afficher aussi ce qui est payé sur la page principale
-661|Touchez pour le détail du calcul
-662|Désactiver le mode amis de {name} ? Il ne sera plus possible d'ajouter de nouveaux enregistrements avec des amis.
-663|Non précisé
-664|למה? (לא חובה)
-665|Supprimer {n} enregistrements payés ?
-666|למחוק את היעד "{name}"?
-667|Supprimer la tirelire
-668|Supprimer l'enregistrement de {name} ?
-669|Supprimer cet enregistrement ?
-670|Supprimer tous les enregistrements du carnet ? C'est irréversible.
-671|À qui
-672|À qui dois-je de l'argent ?
-673|À qui dois-je de l'argent ?
-674|À qui dois-je de l'argent ?
-675|À qui ?
-676|למשל: אופניים
-677|Par exemple : une glace, un billet de cinéma
-678|Déconnecter l'appareil ? Il devra saisir à nouveau le code d'invitation.
-679|La devise de la famille est déterminée par le pays. Vous pourrez la modifier plus tard dans l'onglet Gestion.
-680|Selon l'appareil
-681|Par devise
-682|Par nom (A-Z)
-683|Lecture seule. Le carnet reste chez {name} et ne peut pas être modifié d'ici.
-684|Lecture seule. Chaque enregistrement avec un(e) ami(e) attend aussi son accord.
-685|voir le code d'invitation
-686|changer un rôle
-687|Équilibré : personne ne doit rien
-688|Vérification…
-689|doit recevoir
-690|doit recevoir
-691|doit recevoir
-692|Pays non pris en charge
-693|la politique de confidentialité
-694|Politique de confidentialité
-695|Pays de résidence
-696|Ce que les ados enregistrent avec leurs amis
-697|Ce qui est ouvert
-698|Dès aujourd'hui
-699|Activé
-700|Téléchargement de la mise à jour...
-701|Téléchargement de la mise à jour... {percent} %
-702|Supprimer
-703|La suppression de la tirelire est irréversible, donc un parent doit l'approuver. Une demande de vérification de l'appareil va s'ouvrir.
-704|Supprimer toute la cagnotte
-705|Vous changez de téléphone ? Appuyez ici, confirmez par empreinte digitale, et un code sera envoyé par e-mail. Ouvrez ensuite la cagnotte sur le nouveau téléphone, choisissez votre nom et appuyez sur « Nouvel appareil / Changer d'appareil ». L'ancien téléphone sera déconnecté.
-706|Supprimé
-707|Devise
-708|Devise non prise en charge
-709|מי הילדים שלך?
-710|Qui doit le plus
-711|Qui me doit de l'argent ?
-712|Qui doit à qui
-713|Qui doit (le payeur)
-714|Qui me doit de l'argent ?
-715|Qui se connecte ?
-716|Qui a modifié quoi et quand, sur les 6 derniers mois.
-717|E-mail de récupération du code
-718|E-mail de récupération du code (facultatif)
-719|L'e-mail est réservé aux parents
-720|Lieu et devise
-721|Quelqu'un
-722|Appareil
-723|Nouvel appareil / Changer d'appareil
-724|Cet appareil n'existe pas
-725|Appareils connectés
-726|Appareils ayant enregistré la famille. Une carte inutilisée pendant 180 jours expire d'elle-même.
-727|ממתין לאישור: {amount}
-728|En attente de l'accord d'un parent de {name}. Une fois qu'un parent aura approuvé, choisissez votre nom sur l'écran de connexion et saisissez le code secret que vous avez choisi.
-729|En attente de l'accord d'un parent. Une fois qu'un parent aura approuvé, choisissez votre nom sur l'écran de connexion et saisissez le code secret que vous avez choisi.
-730|Abonnement aux notifications non valide
-731|Remettez le code à {name} en main propre, pas par message. Il est valable 30 minutes et une seule fois.
-732|Clé non valide
-733|Mode amis
-734|Mode amis approuvé ✅
-735|Le mode amis est réservé aux ados
-736|Mode amis désactivé
-737|Mode amis pour {name}
-738|Le mode amis n'a pas encore été approuvé par les parents
-739|Rejoindre la cagnotte
-740|Vous rejoignez la cagnotte de {name}. Un parent de la famille doit approuver votre arrivée et définira si vous êtes enfant, ado ou parent.
-741|Apparence
-742|Un problème est survenu
-743|Une erreur s'est produite. Réessayez.
-744|Famille
-745|Une autre famille
-746|Autres familles
-747|Famille {name}
-748|Gestion
-749|Réessayer
-750|Vous avez essayé trop de fois. Réessayez dans {wait}.
-751|Effacer la recherche
-752|Déconnecter
-753|נכנס בלי קוד
-754|Supprimé
-755|Des données de la version précédente ont été trouvées sur cet appareil : {people} personnes et {entries} enregistrements. Les transférer vers le serveur ?
-756|Réessayer
-757|Réessayez
-758|Ado
-759|Ado
-760|Ado
-761|Féminin
-762|Il semble que cet appareil se trouve en {name}. Habitez-vous en {name} ?
-763|Dettes enregistrées
-764|Il reste {left} sur {total}
-765|Il reste {left} de cette dette.
-766|Un code est envoyé lorsqu'un code secret est modifié ou réinitialisé, ainsi qu'une alerte lorsque le code de quelqu'un de la famille est bloqué.
-767|Envoyé à un parent pour approbation ⏳
-768|Envoyé à l'ami(e) pour approbation ⏳
-769|Un code a été envoyé à votre e-mail vérifié. Après confirmation, le changement ne sera possible que dans 24 heures ; entre-temps, vous et les autres parents recevez une notification et pouvez annuler.
-770|Fermer
-771|Ordre des enregistrements
-772|Total
-773|Total en {cur} au taux du jour
-774|Marqué comme payé
-775|Terminé
-776|Résumé mensuel
-777|Montant ({cur})
-778|Montant non valide
-779|Montant non valide. Entre amis, vous pouvez enregistrer jusqu'à 500 shekels à la fois
-780|Rien n'a encore été enregistré.
-781|Une mise à jour est déjà en cours
-782|Mettre à jour
-783|Plus
-784|Il n'y a encore personne d'autre dans la famille. Un parent doit les ajouter.
-785|Aucun ami approuvé pour le moment
-786|Aucun ami approuvé pour le moment. Ajoutez un(e) ami(e) avec son e-mail.
-787|Aucun ami pour le moment. Ajoutez un(e) ami(e) avec son e-mail.
-788|עוד אין יעדי חיסכון.
-789|La liste est encore vide. Touchez l'un des boutons pour commencer.
-790|Aucun enregistrement régulier pour le moment.
-791|Aucune modification dans le journal pour l’instant.
-792|Aucun parent n’a encore ouvert le carnet
-793|Plus d'avatars
-794|Pas encore
-795|N'a pas encore choisi de code
-796|N'a pas encore choisi de code
-797|N'a pas encore choisi de code
-798|Rien n'a encore été enregistré avec des amis.
-799|Rien n'a encore été enregistré.
-800|Aucune copie n’a encore été envoyée
-801|24 heures ne se sont pas encore écoulées depuis la demande.
-802|Plus d'actions
-803|Dernière mise à jour : {when}
-804|Style
-805|Pour {debt} (= {covers} au taux du jour).
-806|Pour {debt}.
-807|על מה חוסכים?
-808|Pour quoi ? (facultatif)
-809|Pour quoi ? (facultatif)
-810|Pour : {debt}
-811|Avec qui ?
-812|Très grand
-813|La vérification a expiré. Réessayez.
-814|Détail du calcul
-815|Action non valide
-816|Profil
-817|Couleurs de l'écran
-818|Couleurs néon
-819|La forme d'adresse est déjà définie et ne peut pas être modifiée
-820|Forme d'adresse enregistrée ✅
-821|Forme d'adresse
-822|Forme d'adresse :
-823|Son
-824|Ont consulté le carnet :
-825|Créez une cagnotte familiale : tout le monde voit le même compte, et les dettes se mettent à jour pour tous.
-826|Une confirmation par empreinte digitale ou reconnaissance faciale est requise
-827|Il faut le code famille pour entrer dans cette famille.
-828|L'application doit être autorisée à installer des mises à jour : dans les réglages qui s'affichent, activez « Autoriser depuis cette source » puis touchez à nouveau « Mettre à jour »
-829|Vous devez accepter les conditions d'utilisation et la politique de confidentialité
-830|Vous devez vous reconnecter
-831|Vous devez vous reconnecter avec le code de la famille
-832|L'appareil doit être lié de nouveau
-833|Vous devez lier ce téléphone une fois.
-834|L'appareil doit être lié
-835|Cet appareil doit être lié à un parent. Reconnectez-vous et liez-le avec un code de liaison d'un autre parent
-836|Vous devez lier cet appareil et ce navigateur une fois.
-837|Un e-mail vérifié est nécessaire pour changer d'appareil
-838|Définir le code
-839|Définir le code et se connecter
-840|Définir la forme d'adresse…
-841|קביעת קוד סודי
-842|Un code pour tous. Ceux qui rejoignent avec ce code entrent comme enfants. Ensuite, vous pouvez les passer ado ou parent dans « Membres de la famille », avec approbation par empreinte digitale ou reconnaissance faciale.
-843|Code reçu par e-mail
-844|Le code de l'e-mail est erroné ou a expiré.
-845|Le code de vérification est erroné ou a expiré.
-846|Code d'invitation à la cagnotte de {name} : {code}
-847|Code d'invitation de la famille
-848|Le code d'invitation de la famille ne s'affiche qu'avec une empreinte digitale ou la reconnaissance faciale.
-849|Le code de la famille a changé. Demandez un nouveau code à vos parents.
-850|Le code de liaison
-851|Nouveau code
-852|Nouveau code ({rule})
-853|Code de l'e-mail actuel
-854|Code famille
-855|Code secret ({rule} ; plus long = plus sûr)
-856|Code secret (obligatoire pour un parent, {rule})
-857|קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)
-858|קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק
-859|Nouveau code secret
-860|Code secret pour {name}
-861|Votre propre code secret (4 chiffres)
-862|Code de liaison
-863|Le code de liaison est réservé aux parents
-864|Code de liaison pour {name}
-865|Code de liaison pour un appareil
-866|Codes d'invitation
-867|Il faut d'abord définir un code secret pour {name}
-868|{amount} compensés avec {name} ✅
-869|Une cagnotte familiale ne peut être créée que par une personne de plus de 18 ans
-870|Petit
-871|J'ai reçu
-872|J'ai reçu la différence ({amount})
-873|J'ai reçu de l'argent
-874|Compensation mutuelle
-875|Compenser les dettes mutuelles
-876|Compenser les dettes mutuelles ({amount})
-877|Le lien d’invitation ajoute toute personne qui l’ouvre en tant qu’enfant. Partagez-le uniquement avec votre famille.
-878|Liaison de l'appareil
-879|Lier cet appareil et se connecter
-880|Lier l'appareil à un parent
-881|Aller à la section
-882|J'ai lu et j'accepte {terms} et {privacy}
-883|J'ai lu et j'accepte {terms} et {privacy}
-884|J'ai lu et j'accepte {terms} et {privacy}
-885|Normal
-886|Un instant, connexion…
-887|Un instant, déconnexion…
-888|Voulez-vous les fusionner dans la cagnotte familiale ?
-889|Voulez-vous que les débiteurs voient cela ?
-890|Vibration
-891|Enregistrer
-892|Enregistrer un remboursement
-893|Enregistre une dette automatiquement, chaque semaine ou chaque mois, sans la saisir à chaque fois.
-894|Nouvel enregistrement régulier
-895|Actualiser l'application
-896|Seuls les parents peuvent faire cela
-897|רק הורים יכולים לפתוח יעד למישהו אחר
-898|Seuls les parents peuvent définir la forme d'adresse
-899|Uniquement pour vérifier que la personne qui crée la cagnotte a plus de 18 ans. Non affiché.
-900|A enregistré un remboursement
-901|A enregistré une dette
-902|Notez votre propre dette dans le carnet
-903|שבוע נקי
-904|שבוע שלם בלי חובות פתוחים
-905|Payé en totalité ✅
-906|Payés ({n})
-907|On enregistre tout…
-908|Lever le verrou
-909|J'ai payé
-910|J'ai payé la différence ({amount})
-911|A renommé la famille
-912|A changé le pays et la devise
-913|A changé un nom
-914|A changé un rôle
-915|Modifier
-916|Changer la devise ne change que le symbole. Les montants eux-mêmes ne sont pas convertis.
-917|Changer le code secret
-918|Renommer la famille
-919|Partager
-920|J'ai oublié le code
-921|Nous avons envoyé un code à {email}. Saisissez-le, ainsi que la nouvelle adresse. Elle ne remplacera l'actuelle qu'après vérification.
-922|Nous avons envoyé un code à 6 chiffres à {email}. Il est valable 10 minutes.
-923|Les miens
-924|Envoyer la demande
-925|Envoyer le code de vérification
-926|Envoyer le code par e-mail
-927|Envoyer un code à l'e-mail actuel
-928|Nom
-929|שם היעד חייב להיות עד 40 תווים
-930|Nom de la famille
-931|Le nom de la famille ne correspond pas
-932|Le nom de la famille n'est pas valide
-933|Nom non valide
-934|Noms connus
-935|Enregistrer
-936|une heure
-937|{"one":"{n} heure","other":"{n} heures"}
-938|Les taux de change ne sont pas encore chargés. Réessayez dans un instant.
-939|2 heures
-940|Langue
-941|Date non valide
-942|Date de naissance
-943|Date de naissance non valide
-944|Ressenti
-945|les conditions d'utilisation
-946|Conditions d'utilisation
-947|Rôle
-948|Rôle :
-949|Menu principal
-950|Paiement d'une dette dans une autre devise
-951|🆘 L'ancien appareil est perdu ou cassé
+249|Au total, je dois de l'argent à {name}
+250|Au total, je dois de l'argent à {name}
+251|Le carnet contient des enregistrements pour « {name} »
+252|Carnet : « {a} ». Cagnotte : « {b} ».
+253|Demander l'accord des parents
+254|ברוכים הבאים לקופה 🪙
+255|Grand
+256|Taille du texte
+257|Défiler vers la droite
+258|Défiler vers la gauche
+259|Une nouvelle version est disponible ({version})
+260|Graphique des dettes et remboursements par mois
+261|Refusé
+262|a refusé un dépôt sur un objectif d'épargne
+263|A refusé une demande d’adhésion
+264|Refuser
+265|Avatar
+266|Avatar {avatar}
+267|Argent de poche
+268|Argent de poche régulier
+269|une minute
+270|{"one":"{n} minute","other":"{n} minutes"}
+271|Vérification annulée
+272|La vérification par empreinte / reconnaissance faciale a échoué
+273|La vérification a échoué. Réessayez.
+274|La vérification a échoué (adresse inconnue).
+275|La vérification a échoué. Réessayez.
+276|Les personnes ajoutées choisiront un code secret lors de leur première connexion.
+277|L'application a rencontré un problème inattendu. Vous pouvez réessayer et, si cela se reproduit, actualiser l'application.
+278|L'application n'est pas encore connectée au serveur
+279|Compris
+280|La demande a été annulée
+281|La demande a été reçue. Le changement sera possible le {when}. D'ici là, l'ancien téléphone, s'il est retrouvé, fonctionne encore, et les parents peuvent annuler la demande.
+282|La demande n'existe plus
+283|La demande a été refusée
+284|La demande a été envoyée
+285|הבקשה נשלחה להורה
+286|La demande a été envoyée à vos parents ⏳
+287|La demande a été envoyée à vos parents. Nous vous préviendrons dès qu'ils l'approuvent.
+288|Réglages
+289|Réglages de la famille
+290|הגשמת יעד
+291|Cet avatar est déjà pris par un autre membre de la famille
+292|Ce navigateur est trop ancien pour la vérification biométrique. Mettez-le à jour et réessayez.
+293|Le téléchargement a échoué. Vérifiez votre connexion internet et réessayez
+294|Ce parent est déjà lié à un autre appareil, ou la clé a été supprimée de cet appareil. Pour continuer d'ici, il faut changer d'appareil : déconnectez-vous, puis sur l'écran de connexion appuyez sur « Nouvel appareil / Changer d'appareil ».
+295|Ce parent ne se connecte que depuis son propre appareil.
+296|Ce parent ne se connecte que depuis son propre appareil. Si vous avez changé d'appareil, appuyez sur « Nouvel appareil / Changer d'appareil ».
+297|Le parent est déjà lié à un appareil. Le changement d'appareil suit un autre processus.
+298|Tes parents ne voient plus ton carnet personnel. Il reste uniquement chez toi.
+299|Les parents de chaque famille voient une copie de ton carnet, en lecture seule. Tu peux suspendre le partage à tout moment.
+300|Le remboursement ne correspond pas à cette dette
+301|Remboursement enregistré ✅
+302|La suite sur l'appareil de {name} : ouvrez la cagnotte, choisissez {name}, appuyez sur « Nouvel appareil / Changer d'appareil » et saisissez le code secret de {name} ainsi que ce code. Dès lors, {name} se connecte en tant que parent uniquement depuis cet appareil.
+303|La note est trop longue
+304|Dépôt approuvé ✅
+305|Dépôt refusé
+306|ההפקדה נוספה 🐷
+307|Notifications activées 🔔
+308|Les notifications sont bloquées. Vous pouvez les autoriser dans les réglages du navigateur.
+309|Notifications désactivées
+310|Il perdra les droits de parent. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
+311|Il perdra le mode amis. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
+312|Il obtiendra tous les droits de parent : tout voir, approuver, supprimer et gérer la famille. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
+313|Remboursé
+314|A ajouté un membre de la famille
+315|Ajouter
+316|Ajouter un membre de la famille
+317|Ajouter un(e) ami(e)
+318|הוספת ילד/ה
+319|{n} enregistrements transférés
+320|Copié ✅
+321|Parent
+322|Un autre parent ouvre « Code de liaison » à côté de votre nom dans « Gestion » et vous remet un code.
+323|Un autre parent doit définir un code secret pour vous
+324|Un parent se connecte ici, puis reçoit les codes pour le reste de la famille.
+325|Un parent se connecte uniquement depuis son appareil, et les actions de parent sont confirmées par empreinte digitale ou reconnaissance faciale.
+326|Un parent doit définir l'adresse Convex dans le fichier
+327|Un parent doit d'abord se connecter.
+328|הושג ✅
+329|Ami(e) retiré(e)
+330|Mes amis
+331|La dette est en {debtCur}. Vous payez en {payCur} au taux du jour.
+332|La dette a augmenté de
+333|Cette dette a déjà été payée
+334|La dette sera entièrement soldée ✅
+335|Dette introuvable
+336|Dette enregistrée ✅
+337|La dette a diminué de
+338|Les dettes entre vous et {name} seront soldées jusqu'à ce montant, et seule la différence restera. L'historique est conservé.
+339|Dettes ouvertes par devise
+340|Dettes compensées ✅
+341|Remboursement
+342|החזרה ראשונה
+343|Remboursements
+344|החזרת הכול 3 שבועות ברצף
+345|החזרת הכול 8 שבועות ברצף
+346|החזרת חוב בפעם הראשונה
+347|J'ai remboursé {to}
+348|A changé le code de la famille
+349|Changer le code déconnecte tous les appareils qui ont enregistré la famille, donc un parent doit l'approuver. Une demande de vérification de l'appareil va s'ouvrir.
+350|Changer l'e-mail
+351|Changer d'appareil (envoi d'un code par e-mail)
+352|Changer le code
+353|Compte avec {name}
+354|Mon compte
+355|Téléphone cassé ou perdu ? Un autre parent peut vous émettre un code de liaison dans « Gestion ». S'il n'y a pas d'autre parent, demandez un changement sur l'écran de connexion : il sera possible après 24 heures, et vous recevrez un e-mail.
+356|Elle perdra les droits de parent. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
+357|Elle perdra le mode amis. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
+358|Elle obtiendra tous les droits de parent : tout voir, approuver, supprimer et gérer la famille. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
+359|Salut {name}, petit rappel : il reste {amount} à rembourser. Merci ! 🙏
+360|Salut {name}, petit rappel : il reste {amount} à rembourser pour {note}. Merci ! 🙏
+361|Salut, {name} demande à rejoindre la cagnotte familiale. Vous pouvez vous connecter et approuver : {url}
+362|Historique
+363|Historique avec les amis
+364|L'objectif est déjà atteint
+365|היעד לא קיים
+366|היעד נוסף 🎯
+367|הישגים
+368|הישגים: {name}
+369|Tout : {amount}
+370|Tout est réglé
+371|Tout est réglé ✅
+372|Tout est enregistré uniquement sur cet appareil.
+373|Les plus récents d'abord
+374|Mon argent
+375|Mon pays n'est pas dans la liste ($)
+376|Devise de la famille
+377|La devise de la famille est {base}, et cette dette sera conservée en {cur}. Dans les soldes, elle est affichée au taux de ce jour-là, et lorsqu'elle est payée, le montant est converti au taux du jour du paiement.
+378|Devise : {cur}
+379|E-mail vérifié ✅
+380|Cet e-mail est déjà utilisé par quelqu'un d'autre
+381|E-mail actuel : {email}. Pour le remplacer, nous lui enverrons un code de confirmation.
+382|E-mail de {name}
+383|E-mail de l'ami(e)
+384|Votre e-mail pour les amis :
+385|Lieu et devise enregistrés ✅
+386|Lieu et devise mis à jour ✅
+387|Cet appareil n'est plus lié à un parent
+388|Cet appareil n'est plus lié à un parent. Pour vous connecter, il faut changer d'appareil.
+389|Cet appareil n'est pas enregistré pour la vérification. Enregistrez-le à nouveau.
+390|Cet appareil n'est pas encore lié à un parent.
+391|Appareil non pris en charge
+392|Appareil déconnecté ✅
+393|Mon appareil
+394|Cet écran a rencontré un problème. Le reste de l'application continue de fonctionner, vous pouvez passer à un autre onglet.
+395|Continuer
+396|Continuer vers la vérification
+397|Cette famille a retiré l’appareil. Pour y entrer à nouveau, il faut le code famille.
+398|Famille introuvable
+399|La famille est complète
+400|Verrou levé ✅
+401|Cet(te) ado perdra le mode amis. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
+402|Mes données
+403|A retiré un membre de la famille
+404|A retiré un appareil
+405|Le montant est trop élevé
+406|Le montant est trop élevé.
+407|Les montants les plus élevés d'abord
+408|Montants dans le carnet
+409|Retirer
+410|Retirer {name}
+411|Le retrait d'un parent doit être approuvé par un parent. Une demande de vérification de l'appareil va s'ouvrir.
+412|Masquer
+413|Transférer vers le serveur
+414|Accorder les droits de parent
+415|Note
+416|Réduire les animations
+417|Le carnet est trop volumineux pour être partagé
+418|Carnet personnel de {name}
+419|Le carnet a été vidé
+420|Le carnet est déjà vide
+421|Le carnet n’est pas partagé avec tes parents
+422|Le carnet n'est pas valide
+423|Mon carnet
+424|Arrêter
+425|Cette action n'est confirmée que par empreinte digitale ou reconnaissance faciale
+426|Activer la vérification biométrique
+427|הפקדה
+428|הפקדתי
+429|a fait un dépôt sur un objectif d'épargne
+430|Afficher le code 🔒
+431|Afficher le code d'invitation
+432|Rejoindre
+433|Le fichier est trop volumineux
+434|Le fichier téléchargé n'est pas une nouvelle version de l'application
+435|Le fichier téléchargé n'est pas valide. Réessayez
+436|Code remplacé ✅ Vous pouvez l'afficher avec une empreinte digitale ou la reconnaissance faciale
+437|Le nouveau code doit comporter {rule}.
+438|Code actuel
+439|Le code actuel est incorrect.
+440|Le code secret n'est pas valide ({rule})
+441|Le code secret doit comporter 4 chiffres
+442|Le code secret est incorrect.
+443|Le code secret saisi est incorrect.
+444|Votre code secret
+445|Votre code secret, pour confirmer
+446|Le code n'est plus valide. Demandez un nouveau code à vos parents.
+447|Le code est incorrect. Vérifiez à nouveau, ou demandez à vos parents.
+448|Le code est incorrect. Il vous reste {left} essais.
+449|Le code reçu par e-mail
+450|Le code de l'e-mail actuel est erroné ou a expiré.
+451|Le code est masqué
+452|Le code est masqué et ne s'affiche qu'avec une empreinte digitale ou la reconnaissance faciale.
+453|Le code a été mis à jour. Connectez-vous avec le nouveau code depuis votre appareil.
+454|Le code doit comporter {rule}
+455|Le code doit comporter {rule}.
+456|Le code doit comporter 4 chiffres
+457|Le code doit comporter au moins 4 chiffres, jusqu'à {max}
+458|Le code est erroné ou a expiré.
+459|Le code a été modifié ✅
+460|Le code de {name} a été mis à jour
+461|Les codes ne correspondaient pas. Recommençons.
+462|La Cagnotte familiale
+463|La cagnotte a été supprimée
+464|הקופה נפתחה! כתבו את שמות הילדים. נער/ה או הורה נוסף אפשר להוסיף למטה, או אחר כך מלשונית “ניהול”.
+465|La compensation a été envoyée à un parent pour approbation ⏳
+466|La compensation solde les dettes des deux côtés jusqu'à {amount}. La différence reste telle quelle et l'historique est conservé.
+467|Créez une cagnotte familiale
+468|Saisissez votre code secret.
+469|Créer la cagnotte
+470|Créer une cagnotte familiale
+471|Prochain enregistrement : {date}
+472|L'enregistrement régulier a été arrêté
+473|L'enregistrement régulier a été ajouté ✅
+474|הרישום יימחק. אפשר לכתוב למי שרשם למה זה לא נכון.
+475|L'enregistrement a été refusé
+476|L'enregistrement a été supprimé
+477|La liste
+478|La liste a été copiée
+479|Le partage est suspendu. Tes parents ne voient rien.
+480|Terminer le changement et se connecter
+481|Le nom a été mis à jour ✅
+482|Taux mis à jour {when}
+483|Ajustements (remboursements enregistrés sans dette précise)
+484|Le paiement en {base} sera converti au taux du jour et déduit de la dette dans sa propre devise. Après l'enregistrement, ce taux est conservé et ne changera plus.
+485|Est-ce la même personne que « {name} » ?
+486|Est-ce la même personne ? Si oui, quel nom utiliser ?
+487|Ceci est une démo, rien ne peut être modifié. Créez votre propre cagnotte !
+488|C'est votre e-mail
+489|C'est le code que vous utiliserez à chaque connexion. Mieux vaut s'en souvenir.
+490|Cela supprimera toute la cagnotte : toutes les personnes et tous les enregistrements, et c'est irréversible.\nPour confirmer, saisissez le nom de la famille : {name}
+491|Reconnaissance faciale ou empreinte digitale
+492|Masculin
+493|Un(e) ami(e) me doit de l'argent
+494|Ami(e) ajouté(e) ✅
+495|Mes amis me doivent de l'argent
+496|Les amis ajoutent l'ado avec cet e-mail. Rien n'y est envoyé, il sert uniquement à la recherche.
+497|Les amis ajoutent l'ado avec cet e-mail. Rien n'y est envoyé, il sert uniquement à la recherche.
+498|Les amis ajoutent l'ado avec cet e-mail. Rien n'y est envoyé, il sert uniquement à la recherche.
+499|Les amis sont ajoutés par adresse e-mail. Vous verrez tout ce qui est enregistré dans l'aperçu.
+500|Amis : {names}
+501|Dette
+502|Dette en {cur}
+503|Dettes
+504|Nouvelles dettes par rapport au mois dernier : {diff}
+505|Mois suivant
+506|Mois précédent
+507|De retour dans la liste ouverte
+508|Retour
+509|Retour à la famille
+510|Retour à la famille {family}
+511|doit
+512|Il doit rester au moins un parent dans la famille
+513|doit
+514|me doit
+515|Ils me doivent
+516|Ils me doivent de l'argent
+517|doit
+518|Rechercher par nom, note ou montant
+519|חסכת עד שהגעת ליעד
+520|Chargement…
+521|Pas encore défini par le parent
+522|Ils perdront les droits de parent. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
+523|{day}
+524|Jour du mois invalide (1 à 28)
+525|Jour invalide
+526|On se déconnecte en toute sécurité…
+527|Trop de demandes de code. Réessayez dans quelques minutes
+528|Trop de demandes. Réessayez plus tard
+529|Trop de nouvelles familles en ce moment. Réessayez dans quelques minutes
+530|Trop de tentatives. Réessayez dans une minute.
+531|Trop de tentatives. Réessayez dans quelques minutes.
+532|Trop d'enregistrements. Réessayez plus tard
+533|Il restera {left} de la dette.
+534|Enfant
+535|Enfant
+536|Enfant
+537|יעד חדש
+538|Un objectif avec des dépôts approuvés ne peut être supprimé qu'avec un parent
+539|יעדי חיסכון
+540|יעדי חיסכון הם לילדים ולנוער
+541|Se déconnecter
+542|Quitter la démo
+543|Ils obtiendront tous les droits de parent : tout voir, approuver, supprimer et gérer la famille. Ensuite, une vérification par reconnaissance faciale ou empreinte digitale sera requise.
+544|Vert + jaune
+545|Certaines personnes vous doivent de l’argent et vous leur en devez aussi. La compensation clôt les dettes mutuelles et ne laisse que la différence.
+546|Le carnet personnel contient des dettes au nom de membres de la famille
+547|Il y a trop de demandes d'adhésion en attente. Demandez à un parent de s'en occuper
+548|Il y a trop de dettes ouvertes entre les deux. Soldez des dettes avant d'en ajouter.
+549|Il y a trop d'enregistrements actifs entre les deux. Soldez des dettes avant d'en ajouter.
+550|Un solde est ouvert entre vous. Soldez-le d'abord
+551|Certaines dettes sont dans une autre devise : elles seront compensées au taux du jour, et ce taux sera conservé.
+552|« {old} » figure déjà dans le carnet.
+553|Il y a déjà beaucoup de dépôts en attente d'approbation pour cet objectif
+554|Il y a déjà beaucoup d'amis dans la liste
+555|יש כבר הרבה יעדים
+556|Il y a déjà beaucoup d'enregistrements réguliers
+557|Il y a déjà trop de dépôts sur cet objectif
+558|J'ai un code famille
+559|Vous avez un code famille ? Accédez à la cagnotte
+560|Vous avez un code famille ? Saisissez-le ici. Demandez à vos parents le code d'invitation de la famille.
+561|Il n’y a qu’un seul parent dans la famille. Nous recommandons d’ajouter un autre parent et de vérifier un e-mail, pour pouvoir récupérer l’accès si l’appareil est perdu.
+562|Il existe des enregistrements à son nom. Supprimez-les d'abord
+563|Soldes
+564|Ici, on enregistre les dettes avec des amis : qui a acheté pour qui, et qui doit rembourser. Votre ami doit aussi avoir l'application, et vos parents doivent approuver.
+565|כאן רושמים מי חייב למי. לוחצים על אחד הכפתורים הגדולים, בוחרים אדם וסכום, וזהו.
+566|Désactivé
+567|{"one":"Déjà 1 jour","other":"Déjà {n} jours"}
+568|Quelqu'un porte déjà ce nom
+569|Quelqu'un porte déjà ce nom. Choisissez cette personne dans la liste, ou changez le nom
+570|Quelqu'un porte déjà ce nom. Refusez la demande
+571|Ce profil a déjà un code
+572|Presque…
+573|Vous utilisez déjà la cagnotte ?
+574|Pour {need}, il faut un appareil avec empreinte digitale ou reconnaissance faciale configurée.
+575|Pour changer d'appareil depuis ce téléphone, il faut un e-mail vérifié. Ajoutez un e-mail dans « Mon compte ».
+576|Pour vous connecter en tant que parent, il faut lier cet appareil avec un code de liaison d'un autre parent. Appuyez sur « Nouvel appareil / Changer d'appareil ».
+577|Pour rejoindre la famille, tu dois accepter que tes parents voient ton carnet personnel, en lecture seule
+578|Pour définir un nouveau code pour {name}, nous enverrons un code de vérification à {email}.
+579|Pour lier un appareil, une empreinte digitale ou la reconnaissance faciale doit y être configurée.
+580|Pour qu'un enfant ne puisse pas se faire passer pour parent, l'ajout en tant qu'ado ou parent est approuvé par un parent. Une demande de vérification de l'appareil va s'ouvrir.
+581|Pour qu'un enfant ne puisse pas se faire passer pour parent, le changement de rôle est approuvé par un parent. Une demande de vérification de l'appareil va s'ouvrir.
+582|Cohen
+583|Bleu + violet
+584|Désactiver les amis
+585|Toutes les dettes ouvertes
+586|Toute la famille
+587|Tous les montants sont affichés dans cette devise. Vous pouvez enregistrer une dette dans une autre devise (par exemple 100 dollars), et lorsqu'elle est payée, elle est convertie au taux de ce jour-là.
+588|Tous les mois
+589|Chaque {day}
+590|À quelle fréquence
+591|כל רישום שלכם מחכה לאישור של הורה, ורק אחרי זה הוא נכנס לחשבון. אם טעיתם, אפשר לבטל תוך 10 דקות.
+592|Toutes les semaines
+593|Combien {from} a-t-il remboursé à {to} ?
+594|Combien {from} a-t-il remboursé à {to} ?
+595|Combien {from} a-t-elle remboursé à {to} ?
+596|Combien {name} me doit-il ?
+597|Combien {name} me doit-il ?
+598|Combien {name} me doit-elle ?
+599|Combien {name} m'a-t-il payé ?
+600|Combien {name} m'a-t-il payé ?
+601|Combien {name} m'a-t-elle payé ?
+602|Combien dois-je à {to} ?
+603|Combien dois-je à {to} ?
+604|Combien dois-je à {to} ?
+605|כמה צריך? ({cur})
+606|Combien ai-je payé à {to} ?
+607|Combien ?
+608|Oui
+609|Oui, même personne. Garder « {n} »
+610|Oui, même personne. Tout remplacer par « {n} »
+611|Oui, fusionner sous « {n} » (nom du carnet)
+612|Oui, fusionner sous « {n} » (nom de la cagnotte)
+613|Oui, continuer
+614|Oui, transférer vers la cagnotte
+615|Oui, compenser
+616|Oui, enregistrer la dette
+617|Oui, enregistrer le paiement
+618|Connexion
+619|Connexion parent
+620|Saisissez votre nom
+621|Saisissez l'e-mail que votre ami(e) a enregistré avec ses parents dans l'application. Une demande lui est envoyée et il/elle doit l'approuver. Cela ne fonctionne que si votre ami(e) a aussi le mode amis.
+622|Saisissez le code secret
+623|Saisissez à nouveau le code, pour confirmer
+624|Saisissez le nom
+625|Saisissez le nom de famille
+626|Saisissez un montant
+627|Saisissez un montant supérieur à zéro.
+628|Une autre adresse
+629|L'adresse e-mail semble invalide
+630|L'adresse e-mail n'est pas valide
+631|Adresse e-mail
+632|Nouvelle adresse e-mail
+633|Adresse e-mail non valide
+634|Orange + rose
+635|Non
+636|Nous n'avons pas pu activer les notifications sur cet appareil
+637|Impossible de se connecter pour le moment. Cet écran disparaîtra tout seul au retour de la connexion et, en attendant, le carnet personnel fonctionne sans connexion.
+638|Nous n'avons pas pu connecter l'e-mail. Vous pouvez réessayer dans « Mon compte ».
+639|Nous n'avons pas pu lier l'appareil. Réessayez.
+640|Inconnu
+641|Incorrect
+642|Rien trouvé pour « {q} »
+643|Aucun installateur n'a été trouvé sur le téléphone. Vous pouvez télécharger le fichier directement depuis GitHub
+644|Rien n'a été enregistré ce mois-ci.
+645|Non, ce sont deux personnes différentes
+646|Non, c'est une autre personne
+647|Non, garder dans le carnet
+648|Pour quelle dette est le remboursement ?
+649|Pour confirmer, nous enverrons un code de vérification à {email}.
+650|Réinitialiser, et laisser choisir à la prochaine connexion
+651|Annuler ce que vous avez enregistré ?
+652|לדחות את הרישום?
+653|Refuser ? L'enregistrement sera supprimé.
+654|להוסיף גם נער/ה או הורה נוסף
+655|Un nouveau parent doit avoir un code secret
+656|Un parent doit avoir un code défini (on ne peut pas le réinitialiser pour qu'il le choisisse lui-même)
+657|Réservé aux parents. La personne qui crée est le premier parent. Ensuite, vous recevez un code d'invitation pour toute la famille, et vous définissez le rôle de chacun : enfant, ado ou parent.
+658|Changer le code
+659|Remplacer le code ? Ceux qui sont déjà dedans restent, mais l'ancien code cessera de fonctionner, et les autres appareils qui ont enregistré la famille devront saisir le nouveau code.
+660|Changer d'appareil
+661|Le changement de son propre appareil suit un autre processus
+662|Émettre un code de liaison
+663|Retirer {name} des amis ?
+664|Retirer {name} de la famille ?
+665|Retirer un parent
+666|Les transférer vers la cagnotte familiale au nom de {name} ?
+667|Arrêter l'enregistrement régulier ? Ce qui est déjà enregistré reste.
+668|Afficher aussi ce qui est payé sur la page principale
+669|Touchez pour le détail du calcul
+670|Désactiver le mode amis de {name} ? Il ne sera plus possible d'ajouter de nouveaux enregistrements avec des amis.
+671|Non précisé
+672|למה? (לא חובה)
+673|Supprimer {n} enregistrements payés ?
+674|למחוק את היעד "{name}"?
+675|Supprimer la tirelire
+676|Supprimer l'enregistrement de {name} ?
+677|Supprimer cet enregistrement ?
+678|Supprimer tous les enregistrements du carnet ? C'est irréversible.
+679|À qui
+680|À qui dois-je de l'argent ?
+681|À qui dois-je de l'argent ?
+682|À qui dois-je de l'argent ?
+683|À qui ?
+684|למשל: אופניים
+685|Par exemple : une glace, un billet de cinéma
+686|Déconnecter l'appareil ? Il devra saisir à nouveau le code d'invitation.
+687|La devise de la famille est déterminée par le pays. Vous pourrez la modifier plus tard dans l'onglet Gestion.
+688|Selon l'appareil
+689|Par devise
+690|Par nom (A-Z)
+691|Lecture seule. Le carnet reste chez {name} et ne peut pas être modifié d'ici.
+692|Lecture seule. Chaque enregistrement avec un(e) ami(e) attend aussi son accord.
+693|voir le code d'invitation
+694|changer un rôle
+695|Équilibré : personne ne doit rien
+696|Vérification…
+697|doit recevoir
+698|doit recevoir
+699|doit recevoir
+700|Pays non pris en charge
+701|la politique de confidentialité
+702|Politique de confidentialité
+703|Pays de résidence
+704|Ce que les ados enregistrent avec leurs amis
+705|Ce qui est ouvert
+706|Dès aujourd'hui
+707|Activé
+708|Téléchargement de la mise à jour...
+709|Téléchargement de la mise à jour... {percent} %
+710|Supprimer
+711|La suppression de la tirelire est irréversible, donc un parent doit l'approuver. Une demande de vérification de l'appareil va s'ouvrir.
+712|Supprimer toute la cagnotte
+713|Vous changez de téléphone ? Appuyez ici, confirmez par empreinte digitale, et un code sera envoyé par e-mail. Ouvrez ensuite la cagnotte sur le nouveau téléphone, choisissez votre nom et appuyez sur « Nouvel appareil / Changer d'appareil ». L'ancien téléphone sera déconnecté.
+714|Supprimé
+715|a supprimé un objectif d'épargne
+716|Devise
+717|Devise non prise en charge
+718|מי הילדים שלך?
+719|Qui doit le plus
+720|Qui me doit de l'argent ?
+721|Qui doit à qui
+722|Qui doit (le payeur)
+723|Qui me doit de l'argent ?
+724|Qui se connecte ?
+725|Qui a modifié quoi et quand, sur les 6 derniers mois.
+726|E-mail de récupération du code
+727|E-mail de récupération du code (facultatif)
+728|L'e-mail est réservé aux parents
+729|Lieu et devise
+730|Quelqu'un
+731|Appareil
+732|Nouvel appareil / Changer d'appareil
+733|Cet appareil n'existe pas
+734|Appareils connectés
+735|Appareils ayant enregistré la famille. Une carte inutilisée pendant 180 jours expire d'elle-même.
+736|ממתין לאישור: {amount}
+737|En attente de l'accord d'un parent de {name}. Une fois qu'un parent aura approuvé, choisissez votre nom sur l'écran de connexion et saisissez le code secret que vous avez choisi.
+738|En attente de l'accord d'un parent. Une fois qu'un parent aura approuvé, choisissez votre nom sur l'écran de connexion et saisissez le code secret que vous avez choisi.
+739|Abonnement aux notifications non valide
+740|Remettez le code à {name} en main propre, pas par message. Il est valable 30 minutes et une seule fois.
+741|Clé non valide
+742|Mode amis
+743|Mode amis approuvé ✅
+744|Le mode amis est réservé aux ados
+745|Mode amis désactivé
+746|Mode amis pour {name}
+747|Le mode amis n'a pas encore été approuvé par les parents
+748|Rejoindre la cagnotte
+749|Vous rejoignez la cagnotte de {name}. Un parent de la famille doit approuver votre arrivée et définira si vous êtes enfant, ado ou parent.
+750|Apparence
+751|Un problème est survenu
+752|Une erreur s'est produite. Réessayez.
+753|Famille
+754|Une autre famille
+755|Autres familles
+756|Famille {name}
+757|Gestion
+758|Réessayer
+759|Vous avez essayé trop de fois. Réessayez dans {wait}.
+760|Effacer la recherche
+761|Déconnecter
+762|נכנס בלי קוד
+763|Supprimé
+764|Des données de la version précédente ont été trouvées sur cet appareil : {people} personnes et {entries} enregistrements. Les transférer vers le serveur ?
+765|Réessayer
+766|Réessayez
+767|Ado
+768|Ado
+769|Ado
+770|Féminin
+771|Il semble que cet appareil se trouve en {name}. Habitez-vous en {name} ?
+772|Dettes enregistrées
+773|Il reste {left} sur {total}
+774|Il reste {left} de cette dette.
+775|Un code est envoyé lorsqu'un code secret est modifié ou réinitialisé, ainsi qu'une alerte lorsque le code de quelqu'un de la famille est bloqué.
+776|Envoyé à un parent pour approbation ⏳
+777|Envoyé à l'ami(e) pour approbation ⏳
+778|Un code a été envoyé à votre e-mail vérifié. Après confirmation, le changement ne sera possible que dans 24 heures ; entre-temps, vous et les autres parents recevez une notification et pouvez annuler.
+779|Fermer
+780|Ordre des enregistrements
+781|Total
+782|Total en {cur} au taux du jour
+783|Marqué comme payé
+784|Terminé
+785|Résumé mensuel
+786|Montant ({cur})
+787|Montant non valide
+788|Montant non valide. Entre amis, vous pouvez enregistrer jusqu'à 500 shekels à la fois
+789|Rien n'a encore été enregistré.
+790|Une mise à jour est déjà en cours
+791|Mettre à jour
+792|Plus
+793|Il n'y a encore personne d'autre dans la famille. Un parent doit les ajouter.
+794|Aucun ami approuvé pour le moment
+795|Aucun ami approuvé pour le moment. Ajoutez un(e) ami(e) avec son e-mail.
+796|Aucun ami pour le moment. Ajoutez un(e) ami(e) avec son e-mail.
+797|עוד אין יעדי חיסכון.
+798|La liste est encore vide. Touchez l'un des boutons pour commencer.
+799|Aucun enregistrement régulier pour le moment.
+800|Aucune modification dans le journal pour l’instant.
+801|Aucun parent n’a encore ouvert le carnet
+802|Plus d'avatars
+803|Pas encore
+804|N'a pas encore choisi de code
+805|N'a pas encore choisi de code
+806|N'a pas encore choisi de code
+807|Rien n'a encore été enregistré avec des amis.
+808|Rien n'a encore été enregistré.
+809|Aucune copie n’a encore été envoyée
+810|24 heures ne se sont pas encore écoulées depuis la demande.
+811|Plus d'actions
+812|Dernière mise à jour : {when}
+813|Style
+814|Pour {debt} (= {covers} au taux du jour).
+815|Pour {debt}.
+816|על מה חוסכים?
+817|Pour quoi ? (facultatif)
+818|Pour quoi ? (facultatif)
+819|Pour : {debt}
+820|Avec qui ?
+821|Très grand
+822|La vérification a expiré. Réessayez.
+823|Détail du calcul
+824|Action non valide
+825|Profil
+826|a créé un objectif d'épargne
+827|Couleurs de l'écran
+828|Couleurs néon
+829|La forme d'adresse est déjà définie et ne peut pas être modifiée
+830|Forme d'adresse enregistrée ✅
+831|Forme d'adresse
+832|Forme d'adresse :
+833|Son
+834|Ont consulté le carnet :
+835|Créez une cagnotte familiale : tout le monde voit le même compte, et les dettes se mettent à jour pour tous.
+836|Une confirmation par empreinte digitale ou reconnaissance faciale est requise
+837|Il faut le code famille pour entrer dans cette famille.
+838|L'application doit être autorisée à installer des mises à jour : dans les réglages qui s'affichent, activez « Autoriser depuis cette source » puis touchez à nouveau « Mettre à jour »
+839|Vous devez accepter les conditions d'utilisation et la politique de confidentialité
+840|Vous devez vous reconnecter
+841|Vous devez vous reconnecter avec le code de la famille
+842|L'appareil doit être lié de nouveau
+843|Vous devez lier ce téléphone une fois.
+844|L'appareil doit être lié
+845|Cet appareil doit être lié à un parent. Reconnectez-vous et liez-le avec un code de liaison d'un autre parent
+846|Vous devez lier cet appareil et ce navigateur une fois.
+847|Un e-mail vérifié est nécessaire pour changer d'appareil
+848|Définir le code
+849|Définir le code et se connecter
+850|Définir la forme d'adresse…
+851|קביעת קוד סודי
+852|Un code pour tous. Ceux qui rejoignent avec ce code entrent comme enfants. Ensuite, vous pouvez les passer ado ou parent dans « Membres de la famille », avec approbation par empreinte digitale ou reconnaissance faciale.
+853|Code reçu par e-mail
+854|Le code de l'e-mail est erroné ou a expiré.
+855|Le code de vérification est erroné ou a expiré.
+856|Code d'invitation à la cagnotte de {name} : {code}
+857|Code d'invitation de la famille
+858|Le code d'invitation de la famille ne s'affiche qu'avec une empreinte digitale ou la reconnaissance faciale.
+859|Le code de la famille a changé. Demandez un nouveau code à vos parents.
+860|Le code de liaison
+861|Nouveau code
+862|Nouveau code ({rule})
+863|Code de l'e-mail actuel
+864|Code famille
+865|Code secret ({rule} ; plus long = plus sûr)
+866|Code secret (obligatoire pour un parent, {rule})
+867|קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)
+868|קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק
+869|Nouveau code secret
+870|Code secret pour {name}
+871|Votre propre code secret (4 chiffres)
+872|Code de liaison
+873|Le code de liaison est réservé aux parents
+874|Code de liaison pour {name}
+875|Code de liaison pour un appareil
+876|Codes d'invitation
+877|Il faut d'abord définir un code secret pour {name}
+878|{amount} compensés avec {name} ✅
+879|Une cagnotte familiale ne peut être créée que par une personne de plus de 18 ans
+880|Petit
+881|J'ai reçu
+882|J'ai reçu la différence ({amount})
+883|J'ai reçu de l'argent
+884|Compensation mutuelle
+885|Compenser les dettes mutuelles
+886|Compenser les dettes mutuelles ({amount})
+887|Le lien d’invitation ajoute toute personne qui l’ouvre en tant qu’enfant. Partagez-le uniquement avec votre famille.
+888|Liaison de l'appareil
+889|Lier cet appareil et se connecter
+890|Lier l'appareil à un parent
+891|Aller à la section
+892|J'ai lu et j'accepte {terms} et {privacy}
+893|J'ai lu et j'accepte {terms} et {privacy}
+894|J'ai lu et j'accepte {terms} et {privacy}
+895|Normal
+896|Un instant, connexion…
+897|Un instant, déconnexion…
+898|Voulez-vous les fusionner dans la cagnotte familiale ?
+899|Voulez-vous que les débiteurs voient cela ?
+900|Vibration
+901|Enregistrer
+902|Enregistrer un remboursement
+903|Enregistre une dette automatiquement, chaque semaine ou chaque mois, sans la saisir à chaque fois.
+904|Nouvel enregistrement régulier
+905|Actualiser l'application
+906|Seuls les parents peuvent faire cela
+907|רק הורים יכולים לפתוח יעד למישהו אחר
+908|Seuls les parents peuvent définir la forme d'adresse
+909|Uniquement pour vérifier que la personne qui crée la cagnotte a plus de 18 ans. Non affiché.
+910|A enregistré un remboursement
+911|A enregistré une dette
+912|Notez votre propre dette dans le carnet
+913|שבוע נקי
+914|שבוע שלם בלי חובות פתוחים
+915|Payé en totalité ✅
+916|Payés ({n})
+917|On enregistre tout…
+918|Lever le verrou
+919|J'ai payé
+920|J'ai payé la différence ({amount})
+921|A renommé la famille
+922|A changé le pays et la devise
+923|A changé un nom
+924|A changé un rôle
+925|Modifier
+926|Changer la devise ne change que le symbole. Les montants eux-mêmes ne sont pas convertis.
+927|Changer le code secret
+928|Renommer la famille
+929|Partager
+930|J'ai oublié le code
+931|Nous avons envoyé un code à {email}. Saisissez-le, ainsi que la nouvelle adresse. Elle ne remplacera l'actuelle qu'après vérification.
+932|Nous avons envoyé un code à 6 chiffres à {email}. Il est valable 10 minutes.
+933|Les miens
+934|Envoyer la demande
+935|Envoyer le code de vérification
+936|Envoyer le code par e-mail
+937|Envoyer un code à l'e-mail actuel
+938|Nom
+939|שם היעד חייב להיות עד 40 תווים
+940|Nom de la famille
+941|Le nom de la famille ne correspond pas
+942|Le nom de la famille n'est pas valide
+943|Nom non valide
+944|Noms connus
+945|Enregistrer
+946|une heure
+947|{"one":"{n} heure","other":"{n} heures"}
+948|Les taux de change ne sont pas encore chargés. Réessayez dans un instant.
+949|2 heures
+950|Langue
+951|Date non valide
+952|Date de naissance
+953|Date de naissance non valide
+954|Ressenti
+955|les conditions d'utilisation
+956|Conditions d'utilisation
+957|Rôle
+958|Rôle :
+959|Menu principal
+960|Paiement d'une dette dans une autre devise
+961|🆘 L'ancien appareil est perdu ou cassé

@@ -178,775 +178,785 @@
 177|Godkend vennetilstand
 178|Bekræft rolleskiftet
 179|Godkendt
-180|Godkendte en anmodning om at deltage
-181|Hvis denne forælder har en bekræftet e-mail, sender vi en bekræftelseskode dertil. Hvis der ikke er angivet en e-mail, kan en anden forælder vælge en ny kode til dig.
-182|Hvis det ikke er ham, bør du vælge en ny kode.
-183|Hvis det ikke er ham/hende, bør du vælge en ny kode.
-184|Hvis det ikke er hende, bør du vælge en ny kode.
-185|Hvis vennen har vennetilstand, er der sendt en anmodning til dem 🤝
-186|Hvis du glemmer koden, sender vi en nulstillingskode dertil. Uden e-mail kan kun en anden forælder hjælpe.
-187|Jeg er ny
-188|Jeg skylder
-189|Jeg skylder {a} • skylder mig {b}
-190|Jeg skylder penge
-191|Jeg skylder {name}
-192|Jeg skylder {to}
-193|Jeg skylder en ven
-194|Jeg skylder venner
-195|Jeg skylder
-196|Jeg skylder penge
-197|Jeg skylder {name}
-198|Jeg skylder {to}
-199|Jeg skylder en ven
-200|Jeg skylder venner
-201|Jeg skylder
-202|Jeg skylder penge
-203|Jeg skylder {name}
-204|Jeg skylder {to}
-205|Jeg skylder en ven
-206|Jeg skylder venner
-207|Jeg accepterer, at forældrene i min familie kan se det, jeg har skrevet i min personlige notesbog. De kan kun se den, ikke ændre eller slette.
-208|Ingen skylder noget!
-209|Ingen skylder noget.
-210|Du kan kun fortryde inden for de første 10 minutter, eller bede en forælder
-211|Du kan kun fortryde inden for de første 10 minutter. For at rette det, registrér en tilbagebetaling
-212|Du kan betale op til {max} tilbage.
-213|Du kan fuldføre skiftet. Skriv den hemmelige kode og kobl denne enhed.
-214|Kun en tilbagebetaling kan knyttes til en gæld
-215|Du kan kun registrere gæld, der vedrører dig
-216|Du kan kun registrere med godkendte venner
-217|Dag {day} hver måned
-218|Hvilken dag
-219|Hvilken dag i måneden (1 til 28)
-220|Tjekker, hvem det er…
-221|Tjekker…
-222|Vælg en anden gæld
-223|Vælg land
-224|Vælg dato
-225|Vælg en figur
-226|Vælg, hvor du bor
-227|Vælg en ny hemmelig kode ({rule})
-228|Fortryd
-229|Annuller
-230|Annuller anmodningen
-231|Annuller anmodningen på denne enhed
-232|Fjern forældrerettigheder
-233|Slå vennetilstand fra
-234|Mellem venner kan du registrere op til {max} ad gangen.
-235|Imens kan du skrive i den personlige notesbog, som gemmes på din enhed.
-236|Bad om godkendelse
-237|בלי קוד, הילדים נכנסים בלחיצה, וכל ילד יכול לקבוע קוד משלו מתי שירצה. עם קוד, כל הילדים מקבלים אותו קוד, וכשתרצו לתת לכל ילד את המשתמש שלו תאפסו לו את הקוד מלשונית “ניהול”, והוא יבחר קוד משלו.
-238|Denne enhed har ikke fingeraftryk eller ansigtsgenkendelse, så bekræft med din hemmelige kode.
-239|På den gamle enhed: «Min konto» > «Min enhed» > Skift enhed. Koden kommer på e-mail.
-240|Familien har allerede en forælder, der er koblet til en enhed, så for at koble denne enhed skal du bruge en koblingskode fra vedkommende. Log ud og tryk på «Ny enhed / Skift enhed» på loginskærmen.
-241|Medlemmer af {name}
-242|Familiemedlemmer
-243|I alt skylder {name} mig
-244|I alt skylder {name} mig
+180|godkendte en indbetaling til et opsparingsmål
+181|Godkendte en anmodning om at deltage
+182|Hvis denne forælder har en bekræftet e-mail, sender vi en bekræftelseskode dertil. Hvis der ikke er angivet en e-mail, kan en anden forælder vælge en ny kode til dig.
+183|Hvis det ikke er ham, bør du vælge en ny kode.
+184|Hvis det ikke er ham/hende, bør du vælge en ny kode.
+185|Hvis det ikke er hende, bør du vælge en ny kode.
+186|Hvis vennen har vennetilstand, er der sendt en anmodning til dem 🤝
+187|Hvis du glemmer koden, sender vi en nulstillingskode dertil. Uden e-mail kan kun en anden forælder hjælpe.
+188|Jeg er ny
+189|Jeg skylder
+190|Jeg skylder {a} • skylder mig {b}
+191|Jeg skylder penge
+192|Jeg skylder {name}
+193|Jeg skylder {to}
+194|Jeg skylder en ven
+195|Jeg skylder venner
+196|Jeg skylder
+197|Jeg skylder penge
+198|Jeg skylder {name}
+199|Jeg skylder {to}
+200|Jeg skylder en ven
+201|Jeg skylder venner
+202|Jeg skylder
+203|Jeg skylder penge
+204|Jeg skylder {name}
+205|Jeg skylder {to}
+206|Jeg skylder en ven
+207|Jeg skylder venner
+208|Jeg accepterer, at forældrene i min familie kan se det, jeg har skrevet i min personlige notesbog. De kan kun se den, ikke ændre eller slette.
+209|Ingen skylder noget!
+210|Ingen skylder noget.
+211|Du kan kun fortryde inden for de første 10 minutter, eller bede en forælder
+212|Du kan kun fortryde inden for de første 10 minutter. For at rette det, registrér en tilbagebetaling
+213|Du kan betale op til {max} tilbage.
+214|Du kan fuldføre skiftet. Skriv den hemmelige kode og kobl denne enhed.
+215|Kun en tilbagebetaling kan knyttes til en gæld
+216|Du kan kun registrere gæld, der vedrører dig
+217|Du kan kun registrere med godkendte venner
+218|Dag {day} hver måned
+219|Hvilken dag
+220|Hvilken dag i måneden (1 til 28)
+221|Tjekker, hvem det er…
+222|Tjekker…
+223|Vælg en anden gæld
+224|Vælg land
+225|Vælg dato
+226|Vælg en figur
+227|Vælg, hvor du bor
+228|Vælg en ny hemmelig kode ({rule})
+229|Fortryd
+230|Annuller
+231|Annuller anmodningen
+232|Annuller anmodningen på denne enhed
+233|Fjern forældrerettigheder
+234|Slå vennetilstand fra
+235|Mellem venner kan du registrere op til {max} ad gangen.
+236|Imens kan du skrive i den personlige notesbog, som gemmes på din enhed.
+237|Bad om godkendelse
+238|bad om at indbetale til et opsparingsmål
+239|בלי קוד, הילדים נכנסים בלחיצה, וכל ילד יכול לקבוע קוד משלו מתי שירצה. עם קוד, כל הילדים מקבלים אותו קוד, וכשתרצו לתת לכל ילד את המשתמש שלו תאפסו לו את הקוד מלשונית “ניהול”, והוא יבחר קוד משלו.
+240|Denne enhed har ikke fingeraftryk eller ansigtsgenkendelse, så bekræft med din hemmelige kode.
+241|På den gamle enhed: «Min konto» > «Min enhed» > Skift enhed. Koden kommer på e-mail.
+242|Familien har allerede en forælder, der er koblet til en enhed, så for at koble denne enhed skal du bruge en koblingskode fra vedkommende. Log ud og tryk på «Ny enhed / Skift enhed» på loginskærmen.
+243|Medlemmer af {name}
+244|Familiemedlemmer
 245|I alt skylder {name} mig
-246|I alt skylder jeg {name}
-247|I alt skylder jeg {name}
+246|I alt skylder {name} mig
+247|I alt skylder {name} mig
 248|I alt skylder jeg {name}
-249|Notesbogen har poster for «{name}»
-250|Notesbog: «{a}». Kasse: «{b}».
-251|Bed forældrene om godkendelse
-252|ברוכים הבאים לקופה 🪙
-253|Stor
-254|Tekststørrelse
-255|Rul til højre
-256|Rul til venstre
-257|En ny version er tilgængelig ({version})
-258|Diagram over gæld og tilbagebetalinger pr. måned
-259|Afvist
-260|Afviste en anmodning om at deltage
-261|Afvis
-262|Figur
-263|Figur {avatar}
-264|Lommepenge
-265|Faste lommepenge
-266|et minut
-267|{"one":"{n} minut","other":"{n} minutter"}
-268|Bekræftelsen blev annulleret
-269|Bekræftelsen med fingeraftryk / ansigtsgenkendelse mislykkedes
-270|Bekræftelsen mislykkedes. Prøv igen.
-271|Bekræftelsen mislykkedes (ukendt adresse).
-272|Bekræftelsen mislykkedes. Prøv igen.
-273|De personer, du tilføjer, vælger en hemmelig kode, første gang de logger ind.
-274|Appen er løbet ind i et uventet problem. Du kan prøve igen, og hvis det bliver ved, så opdater appen.
-275|Appen er ikke forbundet til serveren endnu
-276|Forstået
-277|Anmodningen blev annulleret
-278|Anmodningen er modtaget. Skiftet kan ske {when}. Indtil da virker den gamle telefon, hvis den bliver fundet, stadig, og forældrene kan annullere anmodningen.
-279|Anmodningen findes ikke længere
-280|Anmodningen blev afvist
-281|Anmodningen blev sendt
-282|הבקשה נשלחה להורה
-283|Anmodningen blev sendt til dine forældre ⏳
-284|Anmodningen blev sendt til dine forældre. Vi giver dig besked, når de godkender.
-285|Indstillinger
-286|Familieindstillinger
-287|הגשמת יעד
-288|Denne figur er allerede optaget af en anden i familien
-289|Denne browser er for gammel til biometrisk bekræftelse. Opdater den, og prøv igen.
-290|Downloadet mislykkedes. Tjek din internetforbindelse, og prøv igen
-291|Denne forælder er allerede koblet til en anden enhed, eller nøglen er slettet fra denne. For at fortsætte herfra skal du skifte enhed: log ud og tryk på «Ny enhed / Skift enhed» på loginskærmen.
-292|Denne forælder logger kun ind fra sin egen enhed.
-293|Denne forælder logger kun ind fra sin egen enhed. Hvis du har skiftet enhed, så tryk på «Ny enhed / Skift enhed».
-294|Forælderen er allerede koblet til en enhed. Enhedsskift har en separat proces.
-295|Dine forældre kan ikke længere se din personlige bog. Den bliver kun hos dig.
-296|Forældrene i hver familie ser en kopi af din bog, kun til visning. Du kan sætte delingen på pause når som helst.
-297|Tilbagebetalingen passer ikke til denne gæld
-298|Tilbagebetalingen blev gemt ✅
-299|Fortsæt på {name}s enhed: åbn kassen, vælg {name}, tryk på «Ny enhed / Skift enhed», og skriv {name}s hemmelige kode og denne kode. Fra da af logger {name} kun ind som forælder fra denne enhed.
-300|Noten er for lang
-301|Indbetalingen godkendt ✅
-302|Indbetalingen afvist
-303|ההפקדה נוספה 🐷
-304|Notifikationer er slået til 🔔
-305|Notifikationer er blokeret. Du kan tillade dem i browserens indstillinger.
-306|Notifikationer er slået fra
-307|Han mister forældrerettighederne. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
-308|Han mister vennetilstand. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
-309|Han får fulde forældrerettigheder: se alt, godkende, slette og administrere familien. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
-310|Tilbagebetalt
-311|Tilføjede et familiemedlem
-312|Tilføj
-313|Tilføj et familiemedlem
-314|Tilføj en ven
-315|הוספת ילד/ה
-316|{n} registreringer blev flyttet
-317|Kopieret ✅
-318|Forælder
-319|En anden forælder åbner «Koblingskode» ved siden af dit navn under «Administrer» og giver dig en kode.
-320|En anden forælder skal vælge en hemmelig kode til dig
-321|En forælder logger ind her og får derefter koder til resten af familien.
-322|En forælder logger kun ind fra sin enhed, og forælderhandlinger bekræftes med fingeraftryk eller ansigtsgenkendelse.
-323|En forælder skal angive Convex-adressen i filen
-324|En forælder skal logge ind først.
-325|הושג ✅
-326|Vennen blev fjernet
-327|Mine venner
-328|Gælden er i {debtCur}. Du betaler i {payCur} til dagens kurs.
-329|Gælden steg med
-330|Denne gæld er allerede betalt
-331|Gælden lukkes helt ✅
-332|Gælden blev ikke fundet
-333|Gælden blev gemt ✅
-334|Gælden faldt med
-335|Gælden mellem dig og {name} lukkes op til dette beløb, og kun forskellen bliver tilbage. Historikken bevares.
-336|Åben gæld pr. valuta
-337|Gælden blev modregnet ✅
-338|Tilbagebetaling
-339|החזרה ראשונה
-340|Tilbagebetalinger
-341|החזרת הכול 3 שבועות ברצף
-342|החזרת הכול 8 שבועות ברצף
-343|החזרת חוב בפעם הראשונה
-344|Jeg betalte tilbage til {to}
-345|Ændrede familiekoden
-346|Når koden ændres, afbrydes alle enheder, der har gemt familien, så en forælder skal godkende det. Der åbnes nu en anmodning om bekræftelse fra enheden.
-347|Skift e-mail
-348|Skift enhed (send en kode på e-mail)
-349|Skift kode
-350|Kontoen med {name}
-351|Min konto
-352|Er telefonen gået i stykker eller væk? En anden forælder kan udstede en koblingskode til dig under «Administrer». Hvis der ikke er en anden forælder, så anmod om skift på loginskærmen: det kan ske efter 24 timer, og du får en e-mail om det.
-353|Hun mister forældrerettighederne. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
-354|Hun mister vennetilstand. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
-355|Hun får fulde forældrerettigheder: se alt, godkende, slette og administrere familien. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
-356|Hej {name}, en lille påmindelse: der mangler stadig {amount} at betale tilbage. Tak! 🙏
-357|Hej {name}, en lille påmindelse: der mangler stadig {amount} at betale tilbage for {note}. Tak! 🙏
-358|Hej, {name} vil gerne med i familiekassen. Du kan logge ind og godkende: {url}
-359|Historik
-360|Historik med venner
-361|היעד לא קיים
-362|היעד נוסף 🎯
-363|הישגים
-364|הישגים: {name}
-365|Alt {amount}
-366|Alt er gjort op
-367|Alt er gjort op ✅
-368|Alt gemmes kun på denne enhed.
-369|Nyeste først
-370|Mine penge
-371|Mit land er ikke på listen ($)
-372|Familiens valuta
-373|Familiens valuta er {base}, og denne gæld gemmes i {cur}. I saldiene vises den til dagens kurs, og når den betales, omregnes beløbet til kursen på betalingsdagen.
-374|Valuta: {cur}
-375|E-mailen blev bekræftet ✅
-376|Denne e-mail bruges allerede af en anden
-377|Nuværende e-mail: {email}. For at skifte den sender vi en bekræftelseskode dertil.
-378|{name}s e-mail
-379|Vennens e-mail
-380|Din e-mail til venner:
-381|Placering og valuta blev gemt ✅
-382|Placering og valuta blev opdateret ✅
-383|Denne enhed er ikke længere koblet til en forælder
-384|Denne enhed er ikke længere koblet til en forælder. For at logge ind skal du skifte enhed.
-385|Denne enhed er ikke registreret til bekræftelse. Registrer den igen.
-386|Denne enhed er endnu ikke koblet til en forælder.
-387|Enheden understøttes ikke
-388|Enheden blev frakoblet ✅
-389|Min enhed
-390|Denne skærm er løbet ind i et problem. Resten af appen virker stadig, så du kan skifte til en anden fane.
-391|Fortsæt
-392|Fortsæt til verificering
-393|Denne familie har fjernet enheden. For at komme ind igen skal du bruge familiekoden.
-394|Familien blev ikke fundet
-395|Familien er fuld
-396|Låsen blev ophævet ✅
-397|Teenageren mister vennetilstand. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
-398|Mine data
-399|Fjernede et familiemedlem
-400|Fjernede en enhed
-401|Beløbet er for stort
-402|Beløbet er for stort.
-403|Største beløb først
-404|Beløb i notesbogen
-405|Fjern
-406|Fjern {name}
-407|Fjernelse af en forælder skal godkendes af en forælder. Der åbnes nu en anmodning om bekræftelse fra enheden.
-408|Skjul
-409|Flyt til serveren
-410|Giv forældrerettigheder
-411|Note
-412|Reducer bevægelse
-413|Notesbogen er for stor til at blive delt
-414|{name}s personlige notesbog
-415|Notesbogen blev tømt
-416|Notesbogen er allerede tom
-417|Bogen deles ikke med dine forældre
-418|Notesbogen er ugyldig
-419|Min notesbog
-420|Stop
-421|Denne handling bekræftes kun med fingeraftryk eller ansigtsgenkendelse
-422|Slå biometrisk bekræftelse til
-423|הפקדה
-424|הפקדתי
-425|Vis koden 🔒
-426|Vis tilmeldingskoden
-427|Tilmeld dig
-428|Filen er for stor
-429|Den downloadede fil er ikke en ny version af appen
-430|Den downloadede fil er ugyldig. Prøv igen
-431|Koden blev skiftet ✅ Du kan vise den med fingeraftryk eller ansigtsgenkendelse
-432|Den nye kode skal være {rule}.
-433|Nuværende kode
-434|Den nuværende kode er forkert.
-435|Den hemmelige kode er ugyldig ({rule})
-436|Den hemmelige kode skal være 4 cifre
-437|Den hemmelige kode er forkert.
-438|Den hemmelige kode, du skrev, er forkert.
-439|Din hemmelige kode
-440|Din hemmelige kode, til bekræftelse
-441|Koden er ikke længere gyldig. Bed dine forældre om en ny kode.
-442|Koden er forkert. Tjek igen, eller spørg dine forældre.
-443|Koden er forkert. Du har {left} forsøg tilbage.
-444|Koden fra e-mailen
-445|Koden fra den nuværende e-mail er forkert eller udløbet.
-446|Koden er skjult
-447|Koden er skjult og vises kun med fingeraftryk eller ansigtsgenkendelse.
-448|Koden er opdateret. Log ind med den nye kode fra din enhed.
-449|Koden skal være {rule}
-450|Koden skal være {rule}.
-451|Koden skal være 4 cifre
-452|Koden skal være mindst 4 cifre, op til {max}
-453|Koden er forkert eller udløbet.
-454|Koden blev ændret ✅
-455|{name}s kode blev opdateret
-456|Koderne var ikke ens. Vi starter forfra.
-457|Familiekassen
-458|Kassen blev slettet
-459|הקופה נפתחה! כתבו את שמות הילדים. נער/ה או הורה נוסף אפשר להוסיף למטה, או אחר כך מלשונית “ניהול”.
-460|Modregningen blev sendt til en forælder til godkendelse ⏳
-461|Modregningen lukker gæld på begge sider op til {amount}. Forskellen bliver stående, som den er, og historikken bevares.
-462|Opret en familiekasse
-463|Skriv din hemmelige kode.
-464|Opret kassen
-465|Opret en familiekasse
-466|Næste registrering: {date}
-467|Den faste registrering blev stoppet
-468|Den faste registrering blev tilføjet ✅
-469|הרישום יימחק. אפשר לכתוב למי שרשם למה זה לא נכון.
-470|Registreringen blev afvist
-471|Registreringen blev slettet
-472|Liste
-473|Listen blev kopieret
-474|Delingen er sat på pause. Dine forældre ser ingenting.
-475|Fuldfør skiftet og log ind
-476|Navnet blev opdateret ✅
-477|Kurserne blev opdateret {when}
-478|Justeringer (tilbagebetalinger registreret uden en bestemt gæld)
-479|Betalingen i {base} omregnes til dagens kurs og trækkes fra gælden i dens egen valuta. Efter gemning bevares kursen og ændres ikke.
-480|Er det samme person som «{name}»?
-481|Er det samme person? Hvis ja, hvilket navn skal bruges?
-482|Dette er en demo, så intet kan ændres. Opret din egen kasse!
-483|Det er din e-mail
-484|Det er den kode, du bruger hver gang du logger ind. Det er en god idé at huske den.
-485|Dette sletter hele kassen: alle personer og alle registreringer, og det kan ikke fortrydes.\nFor at bekræfte skal du skrive familiens navn: {name}
-486|Ansigtsgenkendelse eller fingeraftryk
-487|Mand
-488|En ven skylder mig penge
-489|Vennen blev tilføjet ✅
-490|Venner skylder mig penge
-491|Venner tilføjer teenageren via denne e-mail. Der sendes ikke noget dertil, den bruges kun til søgning.
-492|Venner tilføjer teenageren via denne e-mail. Der sendes ikke noget dertil, den bruges kun til søgning.
-493|Venner tilføjer teenageren via denne e-mail. Der sendes ikke noget dertil, den bruges kun til søgning.
-494|Venner tilføjes via e-mailadresse. Du kan se alt, hvad der registreres, i oversigten.
-495|Venner: {names}
-496|Gæld
-497|Gæld i {cur}
-498|Gæld
-499|Ny gæld i forhold til sidste måned: {diff}
-500|Næste måned
-501|Forrige måned
-502|Tilbage på den åbne liste
-503|Tilbage
-504|Tilbage til familien
-505|Tilbage til familien {family}
-506|skylder
-507|Mindst én forælder skal blive i familien
-508|skylder
-509|skylder mig
-510|Skylder mig
-511|Skylder mig penge
-512|skylder
-513|Søg efter navn, note eller beløb
-514|חסכת עד שהגעת ליעד
-515|Indlæser…
-516|Ikke angivet af forælderen endnu
-517|De mister forældrerettighederne. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
-518|Dag {day}
-519|Ugyldig dag i måneden (1 til 28)
-520|Ugyldig dag
-521|Logger sikkert ud…
-522|For mange kodeanmodninger. Prøv igen om nogle minutter
-523|For mange anmodninger. Prøv igen senere
-524|For mange nye familier lige nu. Prøv igen om nogle minutter
-525|For mange forsøg. Prøv igen om et minut.
-526|For mange forsøg. Prøv igen om nogle minutter.
-527|For mange registreringer. Prøv igen senere
-528|{left} af gælden er tilbage.
-529|Barn
-530|Barn
-531|Barn
-532|יעד חדש
-533|יעדי חיסכון
-534|יעדי חיסכון הם לילדים ולנוער
-535|Log ud
-536|Afslut demoen
-537|De får fulde forældrerettigheder: se alt, godkende, slette og administrere familien. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
-538|Grøn + gul
-539|Nogle personer skylder dig penge, og du skylder dem. Modregning lukker den gensidige gæld og efterlader kun forskellen.
-540|Den personlige notesbog har gæld på navne tilhørende familiemedlemmer
-541|Der er for mange ventende tilmeldingsanmodninger. Bed en forælder om at behandle dem
-542|Der er for meget åben gæld mellem de to. Luk gæld, før du tilføjer mere.
-543|Der er for mange aktive registreringer mellem de to. Luk gæld, før du tilføjer mere.
-544|Der er en åben saldo mellem jer. Gør den op først
-545|Noget af gælden her er i en anden valuta: den modregnes til dagens kurs, og den kurs gemmes.
-546|«{old}» findes allerede i notesbogen.
-547|Der er allerede mange venner på listen
-548|יש כבר הרבה יעדים
-549|Der er allerede mange faste registreringer
-550|Jeg har en familiekode
-551|Har du en familiekode? Log ind i kassen
-552|Har du en familiekode? Skriv den her. Bed dine forældre om familiens tilmeldingskode.
-553|Der er kun én forælder i familien. Vi anbefaler at tilføje en forælder mere og bekræfte en e-mail, så adgangen kan genoprettes, hvis enheden går tabt.
-554|Der er registreringer under dette navn. Slet dem først
-555|Saldi
-556|Her registrerer du gæld med venner: hvem der købte til hvem, og hvem der skal betale tilbage. Din ven skal også have appen, og dine forældre skal godkende.
-557|כאן רושמים מי חייב למי. לוחצים על אחד הכפתורים הגדולים, בוחרים אדם וסכום, וזהו.
-558|Fra
-559|{"one":"Allerede 1 dag","other":"Allerede {n} dage"}
-560|Der findes allerede en med dette navn
-561|Der findes allerede en med dette navn. Vælg personen på listen, eller skift navnet
-562|Der findes allerede en med dette navn. Afvis anmodningen
-563|Denne profil har allerede en kode
-564|Næsten færdig…
-565|Bruger du allerede familiekassen?
-566|For at {need} skal du bruge en enhed med fingeraftryk eller ansigtsgenkendelse sat op.
-567|For at skifte enhed fra denne telefon skal du bruge en bekræftet e-mail. Tilføj en e-mail under «Min konto».
-568|For at logge ind som forælder skal du koble denne enhed med en koblingskode fra en anden forælder. Tryk på «Ny enhed / Skift enhed».
-569|For at deltage skal du acceptere, at dine forældre kan se din personlige notesbog, kun til visning
-570|For at vælge en ny kode til {name} sender vi en bekræftelseskode til {email}.
-571|For at koble en enhed skal den have fingeraftryk eller ansigtsgenkendelse sat op.
-572|For at et barn ikke kan gøre sig selv til forælder, godkendes tilføjelse som teenager eller forælder af en forælder. En verificeringsanmodning fra enheden åbnes nu.
-573|For at et barn ikke kan gøre sig selv til forælder, godkendes rolleændring af en forælder. En verificeringsanmodning fra enheden åbnes nu.
-574|Jensen
-575|Blå + lilla
-576|Slå venner fra
-577|Al åben gæld
-578|Hele familien
-579|Alle beløb vises i denne valuta. Du kan registrere en gæld i en anden valuta (for eksempel 100 dollar), og når den betales, omregnes den til kursen den dag.
-580|Hver måned
-581|Hver {day}
-582|Hvor ofte
-583|כל רישום שלכם מחכה לאישור של הורה, ורק אחרי זה הוא נכנס לחשבון. אם טעיתם, אפשר לבטל תוך 10 דקות.
-584|Hver uge
-585|Hvor meget betalte {from} tilbage til {to}?
-586|Hvor meget betalte {from} tilbage til {to}?
-587|Hvor meget betalte {from} tilbage til {to}?
-588|Hvor meget skylder {name} mig?
-589|Hvor meget skylder {name} mig?
-590|Hvor meget skylder {name} mig?
-591|Hvor meget betalte {name} mig?
-592|Hvor meget betalte {name} mig?
-593|Hvor meget betalte {name} mig?
-594|Hvor meget skylder jeg {to}?
-595|Hvor meget skylder jeg {to}?
-596|Hvor meget skylder jeg {to}?
-597|כמה צריך? ({cur})
-598|Hvor meget betalte jeg {to}?
-599|Hvor meget?
-600|Ja
-601|Ja, samme person. Behold «{n}»
-602|Ja, samme person. Ændr alt til «{n}»
-603|Ja, slå sammen under «{n}» (navnet i notesbogen)
-604|Ja, slå sammen under «{n}» (navnet i kassen)
-605|Ja, fortsæt
-606|Ja, flyt til kassen
-607|Ja, modregn
-608|Ja, gem gælden
-609|Ja, gem betalingen
-610|Log ind
-611|Forælderlogin
-612|Skriv dit navn
-613|Skriv den e-mail, din ven har registreret hos sine forældre i appen. Der sendes en anmodning til dem, og de skal godkende. Det virker kun, hvis din ven også har vennetilstand.
-614|Skriv den hemmelige kode
-615|Skriv koden igen, til bekræftelse
-616|Skriv navnet
-617|Skriv familiens efternavn
-618|Skriv et beløb
-619|Skriv et beløb større end nul.
-620|En anden adresse
-621|E-mailadressen ser ikke gyldig ud
-622|E-mailadressen er ugyldig
-623|E-mailadresse
-624|Ny e-mailadresse
-625|Ugyldig e-mailadresse
-626|Orange + pink
-627|Nej
-628|Vi kunne ikke slå notifikationer til på denne enhed
-629|Vi kunne ikke få forbindelse lige nu. Skærmen forsvinder af sig selv, når forbindelsen er tilbage, og imens virker den personlige notesbog uden forbindelse.
-630|Vi kunne ikke forbinde e-mailen. Du kan prøve igen under "Min konto".
-631|Vi kunne ikke koble enheden. Prøv igen.
-632|Ukendt
-633|Forkert
-634|Intet fundet for “{q}”
-635|Der blev ikke fundet nogen installationsapp på telefonen. Du kan downloade filen direkte fra GitHub
-636|Intet blev registreret i denne måned.
-637|Nej, det er to forskellige personer
-638|Nej, det er en anden person
-639|Nej, behold i notesbogen
-640|Hvilken gæld gælder tilbagebetalingen?
-641|For at bekræfte sender vi en bekræftelseskode til {email}.
-642|Nulstil, så de selv vælger ved næste login
-643|Fortryd det, du registrerede?
-644|לדחות את הרישום?
-645|Afvis? Registreringen slettes.
-646|להוסיף גם נער/ה או הורה נוסף
-647|En ny forælder skal have en hemmelig kode
-648|En forælder skal have en kode, som du vælger (den kan ikke nulstilles, så de selv vælger)
-649|Kun for forældre. Den, der opretter kassen, er den første forælder. Derefter får du én tilmeldingskode til hele familien og vælger en rolle til hver enkelt: barn, teenager eller forælder.
-650|Skift koden
-651|Skift koden? Dem, der allerede er inde, bliver, men den gamle kode holder op med at virke, og andre enheder, der har gemt familien, skal indtaste den nye kode.
-652|Skift enhed
-653|At skifte sin egen enhed har en anden proces
-654|Udsted en koblingskode
-655|Fjern {name} fra vennerne?
-656|Fjern {name} fra familien?
-657|Fjern en forælder
-658|Flyt dem til familiekassen under {name}?
-659|Stop den faste registrering? Det, der allerede er registreret, bliver stående.
-660|Vis også det, der er betalt, på hovedsiden
-661|Tryk for beregningsdetaljer
-662|Slå vennetilstand fra for {name}? Det bliver ikke muligt at tilføje nye registreringer med venner.
-663|Ikke angivet
-664|למה? (לא חובה)
-665|Slet {n} betalte registreringer?
-666|למחוק את היעד "{name}"?
-667|Slet kassen
-668|Slet registreringen for {name}?
-669|Slet denne registrering?
-670|Slet alle registreringer i notesbogen? Det kan ikke fortrydes.
-671|Til hvem
-672|Hvem skylder jeg?
-673|Hvem skylder jeg?
-674|Hvem skylder jeg?
-675|Til hvem?
-676|למשל: אופניים
-677|For eksempel: is, biografbillet
-678|Frakobl enheden? Den skal indtaste tilmeldingskoden igen.
-679|Landet bestemmer familiens valuta. Du kan ændre det senere under fanen Administrer.
-680|Følg enheden
-681|Pr. valuta
-682|Efter navn (A–Å)
-683|Kun til visning. Notesbogen bliver hos {name} og kan ikke ændres herfra.
-684|Skrivebeskyttet. Hver registrering med en ven venter også på deres godkendelse.
-685|se tilmeldingskoden
-686|skifte en rolle
-687|I balance: ingen skylder noget
-688|Bekræfter…
-689|skal have
-690|skal have
-691|skal have
-692|Landet understøttes ikke
-693|privatlivspolitikken
-694|Privatlivspolitik
-695|Bopælsland
-696|Hvad teenagere registrerer med venner
-697|Hvad der er åbent
-698|Fra i dag
-699|Til
-700|Downloader opdatering...
-701|Downloader opdatering... {percent}%
-702|Slet
-703|Sletning af kassen kan ikke fortrydes, så en forælder skal godkende det. Der åbnes nu en anmodning om bekræftelse fra enheden.
-704|Slet hele kassen
-705|Skifter du telefon? Tryk her, bekræft med fingeraftryk, så sendes en kode til din e-mail. Åbn derefter kassen på den nye telefon, vælg dit navn og tryk på «Ny enhed / Skift enhed». Den gamle telefon bliver logget ud.
-706|Slettet
-707|Valuta
-708|Valutaen understøttes ikke
-709|מי הילדים שלך?
-710|Hvem skylder mest
-711|Hvem skylder mig?
-712|Hvem skylder hvem
-713|Hvem skylder (betaleren)
-714|Hvem skylder mig?
-715|Hvem logger ind?
-716|Hvem der ændrede hvad og hvornår, de seneste 6 måneder.
-717|E-mail til kodegendannelse
-718|E-mail til gendannelse af kode (valgfrit)
-719|E-mail er kun for forældre
-720|Placering og valuta
-721|Nogen
-722|Enhed
-723|Ny enhed / Skift enhed
-724|Enheden findes ikke
-725|Forbundne enheder
-726|Enheder, der har gemt familien. Et kort, der ikke bruges i 180 dage, udløber af sig selv.
-727|ממתין לאישור: {amount}
-728|Venter på, at en forælder i {name} godkender. Når en forælder har godkendt, vælger du dit navn på login-skærmen og skriver den hemmelige kode, du valgte.
-729|Venter på, at en forælder godkender. Når en forælder har godkendt, vælger du dit navn på login-skærmen og skriver den hemmelige kode, du valgte.
-730|Ugyldigt notifikationsabonnement
-731|Giv koden til {name} personligt, ikke i en besked. Den gælder i 30 minutter og kun én gang.
-732|Ugyldig nøgle
-733|Vennetilstand
-734|Vennetilstand godkendt ✅
-735|Vennetilstand er kun for teenagere
-736|Vennetilstand blev slået fra
-737|Vennetilstand for {name}
-738|Vennetilstand er ikke godkendt af forældrene endnu
-739|Tilmeld dig kassen
-740|Du tilmelder dig {name}s kasse. En forælder i familien skal godkende og vælger, om du er barn, teenager eller forælder.
-741|Udseende
-742|Noget gik galt
-743|Noget gik galt. Prøv igen.
-744|Familie
-745|En anden familie
-746|Flere familier
-747|Familien {name}
-748|Administrer
-749|Prøv igen
-750|Du prøvede for mange gange. Prøv igen om {wait}.
-751|Ryd søgning
-752|Frakobl
-753|נכנס בלי קוד
-754|Slettet
-755|Data fra den tidligere version blev fundet på denne enhed: {people} personer og {entries} registreringer. Flyt dem til serveren?
-756|Prøv igen
-757|Prøv igen
-758|Teenager
-759|Teenager
-760|Teenager
-761|Kvinde
-762|Enheden ser ud til at være i {name}. Bor du i {name}?
-763|Registreret gæld
-764|{left} tilbage af {total}
-765|{left} er tilbage af denne gæld.
-766|Der sendes en kode dertil, når en hemmelig kode ændres eller nulstilles, og også en besked, når en andens kode i familien bliver låst.
-767|Sendt til en forælder til godkendelse ⏳
-768|Sendt til vennen til godkendelse ⏳
-769|En kode er sendt til din bekræftede e-mail. Når du har bekræftet den, kan skiftet først ske om 24 timer, og i mellemtiden får du og de andre forældre en notifikation og kan annullere.
-770|Luk
-771|Rækkefølge af registreringer
-772|I alt
-773|I alt i {cur} til dagens kurs
-774|Markeret som betalt
-775|Færdig
-776|Månedsoversigt
-777|Beløb ({cur})
-778|Ugyldigt beløb
-779|Ugyldigt beløb. Mellem venner kan du registrere op til 500 shekel ad gangen
-780|Der er ikke registreret noget endnu.
-781|En opdatering er allerede i gang
-782|Opdater
-783|Mere
-784|Der er ingen andre i familien endnu. En forælder skal tilføje dem.
-785|Ingen godkendte venner endnu
-786|Ingen godkendte venner endnu. Tilføj en ven via e-mail.
-787|Ingen venner endnu. Tilføj en ven via e-mail.
-788|עוד אין יעדי חיסכון.
-789|Listen er stadig tom. Tryk på en af knapperne for at komme i gang.
-790|Ingen faste registreringer endnu.
-791|Ingen ændringer i loggen endnu.
-792|Ingen forælder har åbnet bogen endnu
-793|Flere figurer
-794|Ikke endnu
-795|Har ikke valgt en kode endnu
-796|Har ikke valgt en kode endnu
-797|Har ikke valgt en kode endnu
-798|Der er ikke registreret noget med venner endnu.
-799|Der er ikke registreret noget endnu.
-800|Der er ikke sendt nogen kopi endnu
-801|Der er endnu ikke gået 24 timer siden anmodningen.
-802|Flere handlinger
-803|Senest opdateret: {when}
-804|Udseende
-805|For {debt} (= {covers} til dagens kurs).
-806|For {debt}.
-807|על מה חוסכים?
-808|Til hvad? (du kan springe over)
-809|Til hvad? (valgfrit)
-810|For: {debt}
-811|Med hvem?
-812|Ekstra stor
-813|Bekræftelsen er udløbet. Prøv igen.
-814|Beregningsdetaljer
-815|Ugyldig handling
-816|Profil
-817|Skærmfarver
-818|Neonfarver
-819|Tiltaleformen er allerede valgt og kan ikke ændres
-820|Tiltaleform gemt ✅
-821|Tiltaleform
-822|Tiltaleform:
-823|Lyd
-824|Har set bogen:
-825|Opret en familiekasse: alle ser den samme konto, og gælden opdateres for alle.
-826|Bekræftelse med fingeraftryk eller ansigtsgenkendelse er påkrævet
-827|Du skal bruge familiekoden for at komme ind i denne familie.
-828|Appen skal have tilladelse til at installere opdateringer: slå "Tillad fra denne kilde" til i de indstillinger, der åbnes, og tryk på "Opdater" igen
-829|Du skal acceptere brugsvilkårene og privatlivspolitikken
-830|Du skal logge ind igen
-831|Du skal logge ind igen med familiekoden
-832|Enheden skal kobles igen
-833|Du skal koble denne telefon én gang.
-834|Enheden skal kobles
-835|Denne enhed skal knyttes til en forælder. Log ind igen og knyt den med en tilknytningskode fra en anden forælder
-836|Du skal koble denne enhed og browser én gang.
-837|En bekræftet e-mail er nødvendig for at skifte enhed
-838|Vælg koden
-839|Vælg koden og log ind
-840|Vælg tiltaleform…
-841|קביעת קוד סודי
-842|Én kode til alle. Den, der tilmelder sig med den, kommer ind som barn. Senere kan du ændre til teenager eller forælder under "Familiemedlemmer" med godkendelse via fingeraftryk eller ansigtsgenkendelse.
-843|Kode fra e-mailen
-844|Bekræftelseskoden fra e-mailen er forkert eller udløbet.
-845|Bekræftelseskoden er forkert eller udløbet.
-846|Tilmeldingskode til {name}s kasse: {code}
-847|Familiens tilmeldingskode
-848|Familiens tilmeldingskode vises kun med fingeraftryk eller ansigtsgenkendelse.
-849|Familiekoden blev ændret. Bed dine forældre om en ny kode.
-850|Koblingskoden
-851|Ny kode
-852|Ny kode ({rule})
-853|Kode fra den nuværende e-mail
-854|Familiekode
-855|Hemmelig kode ({rule}; længere = mere sikker)
-856|Hemmelig kode (påkrævet for en forælder, {rule})
-857|קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)
-858|קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק
-859|Ny hemmelig kode
-860|Hemmelig kode til {name}
-861|Din egen hemmelige kode (4 cifre)
-862|Koblingskode
-863|Koblingskode er kun for forældre
-864|Koblingskode til {name}
-865|Koblingskode til en enhed
-866|Tilmeldingskoder
-867|Først skal der vælges en hemmelig kode til {name}
-868|Modregnede {amount} mod {name} ✅
-869|En familiekasse kan kun oprettes af en person over 18
-870|Lille
-871|Jeg fik
-872|Jeg fik forskellen ({amount})
-873|Jeg fik penge
-874|Gensidig modregning
-875|Modregn gensidig gæld
-876|Modregn gensidig gæld ({amount})
-877|Invitationslinket tilføjer enhver, der åbner det, som barn. Del det kun med familien.
-878|Enhedskobling
-879|Kobl denne enhed og log ind
-880|Kobl enheden til en forælder
-881|Gå til afsnit
-882|Jeg har læst og accepterer {terms} og {privacy}
-883|Jeg har læst og accepterer {terms} og {privacy}
-884|Jeg har læst og accepterer {terms} og {privacy}
-885|Normal
-886|Et øjeblik, logger ind…
-887|Et øjeblik, logger ud…
-888|Vil du slå dem sammen i familiekassen?
-889|Vil du have, at dem, der skylder dig penge, kan se det her?
-890|Vibration
-891|Registrer
-892|Registrer en tilbagebetaling
-893|Registrerer en gæld automatisk, hver uge eller måned, uden at du skal skrive den ind hver gang.
-894|Ny fast registrering
-895|Opdater appen
-896|Kun forældre kan gøre dette
-897|רק הורים יכולים לפתוח יעד למישהו אחר
-898|Kun forældre kan vælge tiltaleformen
-899|Kun for at sikre, at den, der opretter kassen, er over 18. Vises ikke for nogen.
-900|Registrerede en tilbagebetaling
-901|Registrerede en gæld
-902|Notér din egen gæld i notesbogen
-903|שבוע נקי
-904|שבוע שלם בלי חובות פתוחים
-905|Betalt fuldt ud ✅
-906|Betalt ({n})
-907|Gemmer alt…
-908|Ophæv låsen
-909|Jeg betalte
-910|Jeg betalte forskellen ({amount})
-911|Omdøbte familien
-912|Ændrede land og valuta
-913|Ændrede et navn
-914|Ændrede en rolle
-915|Ændr
-916|Hvis du skifter valuta, ændres kun symbolet. Selve beløbene omregnes ikke.
-917|Skift den hemmelige kode
-918|Omdøb familien
-919|Del
-920|Jeg har glemt koden
-921|Vi har sendt en kode til {email}. Skriv den og den nye adresse. Den erstatter den nuværende først efter bekræftelse.
-922|Vi har sendt en 6-cifret kode til {email}. Den er gyldig i 10 minutter.
-923|Mine
-924|Send anmodning
-925|Send bekræftelseskode
-926|Send koden på e-mail
-927|Send en kode til den nuværende e-mail
-928|Navn
-929|שם היעד חייב להיות עד 40 תווים
-930|Familiens navn
-931|Familiens navn passer ikke
-932|Familiens navn er ugyldigt
-933|Ugyldigt navn
-934|Kendte navne
-935|Gem
-936|en time
-937|{"one":"{n} time","other":"{n} timer"}
-938|Valutakurserne er ikke indlæst endnu. Prøv igen om et øjeblik.
-939|2 timer
-940|Sprog
-941|Ugyldig dato
-942|Fødselsdato
-943|Ugyldig fødselsdato
-944|Respons
-945|brugsvilkårene
-946|Brugsvilkår
-947|Rolle
-948|Rolle:
-949|Hovedmenu
-950|Betaling af en gæld i en anden valuta
-951|🆘 Den gamle enhed er mistet eller gået i stykker
+249|I alt skylder jeg {name}
+250|I alt skylder jeg {name}
+251|Notesbogen har poster for «{name}»
+252|Notesbog: «{a}». Kasse: «{b}».
+253|Bed forældrene om godkendelse
+254|ברוכים הבאים לקופה 🪙
+255|Stor
+256|Tekststørrelse
+257|Rul til højre
+258|Rul til venstre
+259|En ny version er tilgængelig ({version})
+260|Diagram over gæld og tilbagebetalinger pr. måned
+261|Afvist
+262|afviste en indbetaling til et opsparingsmål
+263|Afviste en anmodning om at deltage
+264|Afvis
+265|Figur
+266|Figur {avatar}
+267|Lommepenge
+268|Faste lommepenge
+269|et minut
+270|{"one":"{n} minut","other":"{n} minutter"}
+271|Bekræftelsen blev annulleret
+272|Bekræftelsen med fingeraftryk / ansigtsgenkendelse mislykkedes
+273|Bekræftelsen mislykkedes. Prøv igen.
+274|Bekræftelsen mislykkedes (ukendt adresse).
+275|Bekræftelsen mislykkedes. Prøv igen.
+276|De personer, du tilføjer, vælger en hemmelig kode, første gang de logger ind.
+277|Appen er løbet ind i et uventet problem. Du kan prøve igen, og hvis det bliver ved, så opdater appen.
+278|Appen er ikke forbundet til serveren endnu
+279|Forstået
+280|Anmodningen blev annulleret
+281|Anmodningen er modtaget. Skiftet kan ske {when}. Indtil da virker den gamle telefon, hvis den bliver fundet, stadig, og forældrene kan annullere anmodningen.
+282|Anmodningen findes ikke længere
+283|Anmodningen blev afvist
+284|Anmodningen blev sendt
+285|הבקשה נשלחה להורה
+286|Anmodningen blev sendt til dine forældre ⏳
+287|Anmodningen blev sendt til dine forældre. Vi giver dig besked, når de godkender.
+288|Indstillinger
+289|Familieindstillinger
+290|הגשמת יעד
+291|Denne figur er allerede optaget af en anden i familien
+292|Denne browser er for gammel til biometrisk bekræftelse. Opdater den, og prøv igen.
+293|Downloadet mislykkedes. Tjek din internetforbindelse, og prøv igen
+294|Denne forælder er allerede koblet til en anden enhed, eller nøglen er slettet fra denne. For at fortsætte herfra skal du skifte enhed: log ud og tryk på «Ny enhed / Skift enhed» på loginskærmen.
+295|Denne forælder logger kun ind fra sin egen enhed.
+296|Denne forælder logger kun ind fra sin egen enhed. Hvis du har skiftet enhed, så tryk på «Ny enhed / Skift enhed».
+297|Forælderen er allerede koblet til en enhed. Enhedsskift har en separat proces.
+298|Dine forældre kan ikke længere se din personlige bog. Den bliver kun hos dig.
+299|Forældrene i hver familie ser en kopi af din bog, kun til visning. Du kan sætte delingen på pause når som helst.
+300|Tilbagebetalingen passer ikke til denne gæld
+301|Tilbagebetalingen blev gemt ✅
+302|Fortsæt på {name}s enhed: åbn kassen, vælg {name}, tryk på «Ny enhed / Skift enhed», og skriv {name}s hemmelige kode og denne kode. Fra da af logger {name} kun ind som forælder fra denne enhed.
+303|Noten er for lang
+304|Indbetalingen godkendt ✅
+305|Indbetalingen afvist
+306|ההפקדה נוספה 🐷
+307|Notifikationer er slået til 🔔
+308|Notifikationer er blokeret. Du kan tillade dem i browserens indstillinger.
+309|Notifikationer er slået fra
+310|Han mister forældrerettighederne. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
+311|Han mister vennetilstand. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
+312|Han får fulde forældrerettigheder: se alt, godkende, slette og administrere familien. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
+313|Tilbagebetalt
+314|Tilføjede et familiemedlem
+315|Tilføj
+316|Tilføj et familiemedlem
+317|Tilføj en ven
+318|הוספת ילד/ה
+319|{n} registreringer blev flyttet
+320|Kopieret ✅
+321|Forælder
+322|En anden forælder åbner «Koblingskode» ved siden af dit navn under «Administrer» og giver dig en kode.
+323|En anden forælder skal vælge en hemmelig kode til dig
+324|En forælder logger ind her og får derefter koder til resten af familien.
+325|En forælder logger kun ind fra sin enhed, og forælderhandlinger bekræftes med fingeraftryk eller ansigtsgenkendelse.
+326|En forælder skal angive Convex-adressen i filen
+327|En forælder skal logge ind først.
+328|הושג ✅
+329|Vennen blev fjernet
+330|Mine venner
+331|Gælden er i {debtCur}. Du betaler i {payCur} til dagens kurs.
+332|Gælden steg med
+333|Denne gæld er allerede betalt
+334|Gælden lukkes helt ✅
+335|Gælden blev ikke fundet
+336|Gælden blev gemt ✅
+337|Gælden faldt med
+338|Gælden mellem dig og {name} lukkes op til dette beløb, og kun forskellen bliver tilbage. Historikken bevares.
+339|Åben gæld pr. valuta
+340|Gælden blev modregnet ✅
+341|Tilbagebetaling
+342|החזרה ראשונה
+343|Tilbagebetalinger
+344|החזרת הכול 3 שבועות ברצף
+345|החזרת הכול 8 שבועות ברצף
+346|החזרת חוב בפעם הראשונה
+347|Jeg betalte tilbage til {to}
+348|Ændrede familiekoden
+349|Når koden ændres, afbrydes alle enheder, der har gemt familien, så en forælder skal godkende det. Der åbnes nu en anmodning om bekræftelse fra enheden.
+350|Skift e-mail
+351|Skift enhed (send en kode på e-mail)
+352|Skift kode
+353|Kontoen med {name}
+354|Min konto
+355|Er telefonen gået i stykker eller væk? En anden forælder kan udstede en koblingskode til dig under «Administrer». Hvis der ikke er en anden forælder, så anmod om skift på loginskærmen: det kan ske efter 24 timer, og du får en e-mail om det.
+356|Hun mister forældrerettighederne. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
+357|Hun mister vennetilstand. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
+358|Hun får fulde forældrerettigheder: se alt, godkende, slette og administrere familien. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
+359|Hej {name}, en lille påmindelse: der mangler stadig {amount} at betale tilbage. Tak! 🙏
+360|Hej {name}, en lille påmindelse: der mangler stadig {amount} at betale tilbage for {note}. Tak! 🙏
+361|Hej, {name} vil gerne med i familiekassen. Du kan logge ind og godkende: {url}
+362|Historik
+363|Historik med venner
+364|Målet er allerede nået
+365|היעד לא קיים
+366|היעד נוסף 🎯
+367|הישגים
+368|הישגים: {name}
+369|Alt {amount}
+370|Alt er gjort op
+371|Alt er gjort op ✅
+372|Alt gemmes kun på denne enhed.
+373|Nyeste først
+374|Mine penge
+375|Mit land er ikke på listen ($)
+376|Familiens valuta
+377|Familiens valuta er {base}, og denne gæld gemmes i {cur}. I saldiene vises den til dagens kurs, og når den betales, omregnes beløbet til kursen på betalingsdagen.
+378|Valuta: {cur}
+379|E-mailen blev bekræftet ✅
+380|Denne e-mail bruges allerede af en anden
+381|Nuværende e-mail: {email}. For at skifte den sender vi en bekræftelseskode dertil.
+382|{name}s e-mail
+383|Vennens e-mail
+384|Din e-mail til venner:
+385|Placering og valuta blev gemt ✅
+386|Placering og valuta blev opdateret ✅
+387|Denne enhed er ikke længere koblet til en forælder
+388|Denne enhed er ikke længere koblet til en forælder. For at logge ind skal du skifte enhed.
+389|Denne enhed er ikke registreret til bekræftelse. Registrer den igen.
+390|Denne enhed er endnu ikke koblet til en forælder.
+391|Enheden understøttes ikke
+392|Enheden blev frakoblet ✅
+393|Min enhed
+394|Denne skærm er løbet ind i et problem. Resten af appen virker stadig, så du kan skifte til en anden fane.
+395|Fortsæt
+396|Fortsæt til verificering
+397|Denne familie har fjernet enheden. For at komme ind igen skal du bruge familiekoden.
+398|Familien blev ikke fundet
+399|Familien er fuld
+400|Låsen blev ophævet ✅
+401|Teenageren mister vennetilstand. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
+402|Mine data
+403|Fjernede et familiemedlem
+404|Fjernede en enhed
+405|Beløbet er for stort
+406|Beløbet er for stort.
+407|Største beløb først
+408|Beløb i notesbogen
+409|Fjern
+410|Fjern {name}
+411|Fjernelse af en forælder skal godkendes af en forælder. Der åbnes nu en anmodning om bekræftelse fra enheden.
+412|Skjul
+413|Flyt til serveren
+414|Giv forældrerettigheder
+415|Note
+416|Reducer bevægelse
+417|Notesbogen er for stor til at blive delt
+418|{name}s personlige notesbog
+419|Notesbogen blev tømt
+420|Notesbogen er allerede tom
+421|Bogen deles ikke med dine forældre
+422|Notesbogen er ugyldig
+423|Min notesbog
+424|Stop
+425|Denne handling bekræftes kun med fingeraftryk eller ansigtsgenkendelse
+426|Slå biometrisk bekræftelse til
+427|הפקדה
+428|הפקדתי
+429|indbetalte til et opsparingsmål
+430|Vis koden 🔒
+431|Vis tilmeldingskoden
+432|Tilmeld dig
+433|Filen er for stor
+434|Den downloadede fil er ikke en ny version af appen
+435|Den downloadede fil er ugyldig. Prøv igen
+436|Koden blev skiftet ✅ Du kan vise den med fingeraftryk eller ansigtsgenkendelse
+437|Den nye kode skal være {rule}.
+438|Nuværende kode
+439|Den nuværende kode er forkert.
+440|Den hemmelige kode er ugyldig ({rule})
+441|Den hemmelige kode skal være 4 cifre
+442|Den hemmelige kode er forkert.
+443|Den hemmelige kode, du skrev, er forkert.
+444|Din hemmelige kode
+445|Din hemmelige kode, til bekræftelse
+446|Koden er ikke længere gyldig. Bed dine forældre om en ny kode.
+447|Koden er forkert. Tjek igen, eller spørg dine forældre.
+448|Koden er forkert. Du har {left} forsøg tilbage.
+449|Koden fra e-mailen
+450|Koden fra den nuværende e-mail er forkert eller udløbet.
+451|Koden er skjult
+452|Koden er skjult og vises kun med fingeraftryk eller ansigtsgenkendelse.
+453|Koden er opdateret. Log ind med den nye kode fra din enhed.
+454|Koden skal være {rule}
+455|Koden skal være {rule}.
+456|Koden skal være 4 cifre
+457|Koden skal være mindst 4 cifre, op til {max}
+458|Koden er forkert eller udløbet.
+459|Koden blev ændret ✅
+460|{name}s kode blev opdateret
+461|Koderne var ikke ens. Vi starter forfra.
+462|Familiekassen
+463|Kassen blev slettet
+464|הקופה נפתחה! כתבו את שמות הילדים. נער/ה או הורה נוסף אפשר להוסיף למטה, או אחר כך מלשונית “ניהול”.
+465|Modregningen blev sendt til en forælder til godkendelse ⏳
+466|Modregningen lukker gæld på begge sider op til {amount}. Forskellen bliver stående, som den er, og historikken bevares.
+467|Opret en familiekasse
+468|Skriv din hemmelige kode.
+469|Opret kassen
+470|Opret en familiekasse
+471|Næste registrering: {date}
+472|Den faste registrering blev stoppet
+473|Den faste registrering blev tilføjet ✅
+474|הרישום יימחק. אפשר לכתוב למי שרשם למה זה לא נכון.
+475|Registreringen blev afvist
+476|Registreringen blev slettet
+477|Liste
+478|Listen blev kopieret
+479|Delingen er sat på pause. Dine forældre ser ingenting.
+480|Fuldfør skiftet og log ind
+481|Navnet blev opdateret ✅
+482|Kurserne blev opdateret {when}
+483|Justeringer (tilbagebetalinger registreret uden en bestemt gæld)
+484|Betalingen i {base} omregnes til dagens kurs og trækkes fra gælden i dens egen valuta. Efter gemning bevares kursen og ændres ikke.
+485|Er det samme person som «{name}»?
+486|Er det samme person? Hvis ja, hvilket navn skal bruges?
+487|Dette er en demo, så intet kan ændres. Opret din egen kasse!
+488|Det er din e-mail
+489|Det er den kode, du bruger hver gang du logger ind. Det er en god idé at huske den.
+490|Dette sletter hele kassen: alle personer og alle registreringer, og det kan ikke fortrydes.\nFor at bekræfte skal du skrive familiens navn: {name}
+491|Ansigtsgenkendelse eller fingeraftryk
+492|Mand
+493|En ven skylder mig penge
+494|Vennen blev tilføjet ✅
+495|Venner skylder mig penge
+496|Venner tilføjer teenageren via denne e-mail. Der sendes ikke noget dertil, den bruges kun til søgning.
+497|Venner tilføjer teenageren via denne e-mail. Der sendes ikke noget dertil, den bruges kun til søgning.
+498|Venner tilføjer teenageren via denne e-mail. Der sendes ikke noget dertil, den bruges kun til søgning.
+499|Venner tilføjes via e-mailadresse. Du kan se alt, hvad der registreres, i oversigten.
+500|Venner: {names}
+501|Gæld
+502|Gæld i {cur}
+503|Gæld
+504|Ny gæld i forhold til sidste måned: {diff}
+505|Næste måned
+506|Forrige måned
+507|Tilbage på den åbne liste
+508|Tilbage
+509|Tilbage til familien
+510|Tilbage til familien {family}
+511|skylder
+512|Mindst én forælder skal blive i familien
+513|skylder
+514|skylder mig
+515|Skylder mig
+516|Skylder mig penge
+517|skylder
+518|Søg efter navn, note eller beløb
+519|חסכת עד שהגעת ליעד
+520|Indlæser…
+521|Ikke angivet af forælderen endnu
+522|De mister forældrerettighederne. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
+523|Dag {day}
+524|Ugyldig dag i måneden (1 til 28)
+525|Ugyldig dag
+526|Logger sikkert ud…
+527|For mange kodeanmodninger. Prøv igen om nogle minutter
+528|For mange anmodninger. Prøv igen senere
+529|For mange nye familier lige nu. Prøv igen om nogle minutter
+530|For mange forsøg. Prøv igen om et minut.
+531|For mange forsøg. Prøv igen om nogle minutter.
+532|For mange registreringer. Prøv igen senere
+533|{left} af gælden er tilbage.
+534|Barn
+535|Barn
+536|Barn
+537|יעד חדש
+538|Et mål med godkendte indbetalinger kan kun slettes sammen med en forælder
+539|יעדי חיסכון
+540|יעדי חיסכון הם לילדים ולנוער
+541|Log ud
+542|Afslut demoen
+543|De får fulde forældrerettigheder: se alt, godkende, slette og administrere familien. Derefter kræves bekræftelse med ansigtsgenkendelse eller fingeraftryk.
+544|Grøn + gul
+545|Nogle personer skylder dig penge, og du skylder dem. Modregning lukker den gensidige gæld og efterlader kun forskellen.
+546|Den personlige notesbog har gæld på navne tilhørende familiemedlemmer
+547|Der er for mange ventende tilmeldingsanmodninger. Bed en forælder om at behandle dem
+548|Der er for meget åben gæld mellem de to. Luk gæld, før du tilføjer mere.
+549|Der er for mange aktive registreringer mellem de to. Luk gæld, før du tilføjer mere.
+550|Der er en åben saldo mellem jer. Gør den op først
+551|Noget af gælden her er i en anden valuta: den modregnes til dagens kurs, og den kurs gemmes.
+552|«{old}» findes allerede i notesbogen.
+553|Der venter allerede mange indbetalinger på godkendelse i dette mål
+554|Der er allerede mange venner på listen
+555|יש כבר הרבה יעדים
+556|Der er allerede mange faste registreringer
+557|Der er allerede for mange indbetalinger i dette mål
+558|Jeg har en familiekode
+559|Har du en familiekode? Log ind i kassen
+560|Har du en familiekode? Skriv den her. Bed dine forældre om familiens tilmeldingskode.
+561|Der er kun én forælder i familien. Vi anbefaler at tilføje en forælder mere og bekræfte en e-mail, så adgangen kan genoprettes, hvis enheden går tabt.
+562|Der er registreringer under dette navn. Slet dem først
+563|Saldi
+564|Her registrerer du gæld med venner: hvem der købte til hvem, og hvem der skal betale tilbage. Din ven skal også have appen, og dine forældre skal godkende.
+565|כאן רושמים מי חייב למי. לוחצים על אחד הכפתורים הגדולים, בוחרים אדם וסכום, וזהו.
+566|Fra
+567|{"one":"Allerede 1 dag","other":"Allerede {n} dage"}
+568|Der findes allerede en med dette navn
+569|Der findes allerede en med dette navn. Vælg personen på listen, eller skift navnet
+570|Der findes allerede en med dette navn. Afvis anmodningen
+571|Denne profil har allerede en kode
+572|Næsten færdig…
+573|Bruger du allerede familiekassen?
+574|For at {need} skal du bruge en enhed med fingeraftryk eller ansigtsgenkendelse sat op.
+575|For at skifte enhed fra denne telefon skal du bruge en bekræftet e-mail. Tilføj en e-mail under «Min konto».
+576|For at logge ind som forælder skal du koble denne enhed med en koblingskode fra en anden forælder. Tryk på «Ny enhed / Skift enhed».
+577|For at deltage skal du acceptere, at dine forældre kan se din personlige notesbog, kun til visning
+578|For at vælge en ny kode til {name} sender vi en bekræftelseskode til {email}.
+579|For at koble en enhed skal den have fingeraftryk eller ansigtsgenkendelse sat op.
+580|For at et barn ikke kan gøre sig selv til forælder, godkendes tilføjelse som teenager eller forælder af en forælder. En verificeringsanmodning fra enheden åbnes nu.
+581|For at et barn ikke kan gøre sig selv til forælder, godkendes rolleændring af en forælder. En verificeringsanmodning fra enheden åbnes nu.
+582|Jensen
+583|Blå + lilla
+584|Slå venner fra
+585|Al åben gæld
+586|Hele familien
+587|Alle beløb vises i denne valuta. Du kan registrere en gæld i en anden valuta (for eksempel 100 dollar), og når den betales, omregnes den til kursen den dag.
+588|Hver måned
+589|Hver {day}
+590|Hvor ofte
+591|כל רישום שלכם מחכה לאישור של הורה, ורק אחרי זה הוא נכנס לחשבון. אם טעיתם, אפשר לבטל תוך 10 דקות.
+592|Hver uge
+593|Hvor meget betalte {from} tilbage til {to}?
+594|Hvor meget betalte {from} tilbage til {to}?
+595|Hvor meget betalte {from} tilbage til {to}?
+596|Hvor meget skylder {name} mig?
+597|Hvor meget skylder {name} mig?
+598|Hvor meget skylder {name} mig?
+599|Hvor meget betalte {name} mig?
+600|Hvor meget betalte {name} mig?
+601|Hvor meget betalte {name} mig?
+602|Hvor meget skylder jeg {to}?
+603|Hvor meget skylder jeg {to}?
+604|Hvor meget skylder jeg {to}?
+605|כמה צריך? ({cur})
+606|Hvor meget betalte jeg {to}?
+607|Hvor meget?
+608|Ja
+609|Ja, samme person. Behold «{n}»
+610|Ja, samme person. Ændr alt til «{n}»
+611|Ja, slå sammen under «{n}» (navnet i notesbogen)
+612|Ja, slå sammen under «{n}» (navnet i kassen)
+613|Ja, fortsæt
+614|Ja, flyt til kassen
+615|Ja, modregn
+616|Ja, gem gælden
+617|Ja, gem betalingen
+618|Log ind
+619|Forælderlogin
+620|Skriv dit navn
+621|Skriv den e-mail, din ven har registreret hos sine forældre i appen. Der sendes en anmodning til dem, og de skal godkende. Det virker kun, hvis din ven også har vennetilstand.
+622|Skriv den hemmelige kode
+623|Skriv koden igen, til bekræftelse
+624|Skriv navnet
+625|Skriv familiens efternavn
+626|Skriv et beløb
+627|Skriv et beløb større end nul.
+628|En anden adresse
+629|E-mailadressen ser ikke gyldig ud
+630|E-mailadressen er ugyldig
+631|E-mailadresse
+632|Ny e-mailadresse
+633|Ugyldig e-mailadresse
+634|Orange + pink
+635|Nej
+636|Vi kunne ikke slå notifikationer til på denne enhed
+637|Vi kunne ikke få forbindelse lige nu. Skærmen forsvinder af sig selv, når forbindelsen er tilbage, og imens virker den personlige notesbog uden forbindelse.
+638|Vi kunne ikke forbinde e-mailen. Du kan prøve igen under "Min konto".
+639|Vi kunne ikke koble enheden. Prøv igen.
+640|Ukendt
+641|Forkert
+642|Intet fundet for “{q}”
+643|Der blev ikke fundet nogen installationsapp på telefonen. Du kan downloade filen direkte fra GitHub
+644|Intet blev registreret i denne måned.
+645|Nej, det er to forskellige personer
+646|Nej, det er en anden person
+647|Nej, behold i notesbogen
+648|Hvilken gæld gælder tilbagebetalingen?
+649|For at bekræfte sender vi en bekræftelseskode til {email}.
+650|Nulstil, så de selv vælger ved næste login
+651|Fortryd det, du registrerede?
+652|לדחות את הרישום?
+653|Afvis? Registreringen slettes.
+654|להוסיף גם נער/ה או הורה נוסף
+655|En ny forælder skal have en hemmelig kode
+656|En forælder skal have en kode, som du vælger (den kan ikke nulstilles, så de selv vælger)
+657|Kun for forældre. Den, der opretter kassen, er den første forælder. Derefter får du én tilmeldingskode til hele familien og vælger en rolle til hver enkelt: barn, teenager eller forælder.
+658|Skift koden
+659|Skift koden? Dem, der allerede er inde, bliver, men den gamle kode holder op med at virke, og andre enheder, der har gemt familien, skal indtaste den nye kode.
+660|Skift enhed
+661|At skifte sin egen enhed har en anden proces
+662|Udsted en koblingskode
+663|Fjern {name} fra vennerne?
+664|Fjern {name} fra familien?
+665|Fjern en forælder
+666|Flyt dem til familiekassen under {name}?
+667|Stop den faste registrering? Det, der allerede er registreret, bliver stående.
+668|Vis også det, der er betalt, på hovedsiden
+669|Tryk for beregningsdetaljer
+670|Slå vennetilstand fra for {name}? Det bliver ikke muligt at tilføje nye registreringer med venner.
+671|Ikke angivet
+672|למה? (לא חובה)
+673|Slet {n} betalte registreringer?
+674|למחוק את היעד "{name}"?
+675|Slet kassen
+676|Slet registreringen for {name}?
+677|Slet denne registrering?
+678|Slet alle registreringer i notesbogen? Det kan ikke fortrydes.
+679|Til hvem
+680|Hvem skylder jeg?
+681|Hvem skylder jeg?
+682|Hvem skylder jeg?
+683|Til hvem?
+684|למשל: אופניים
+685|For eksempel: is, biografbillet
+686|Frakobl enheden? Den skal indtaste tilmeldingskoden igen.
+687|Landet bestemmer familiens valuta. Du kan ændre det senere under fanen Administrer.
+688|Følg enheden
+689|Pr. valuta
+690|Efter navn (A–Å)
+691|Kun til visning. Notesbogen bliver hos {name} og kan ikke ændres herfra.
+692|Skrivebeskyttet. Hver registrering med en ven venter også på deres godkendelse.
+693|se tilmeldingskoden
+694|skifte en rolle
+695|I balance: ingen skylder noget
+696|Bekræfter…
+697|skal have
+698|skal have
+699|skal have
+700|Landet understøttes ikke
+701|privatlivspolitikken
+702|Privatlivspolitik
+703|Bopælsland
+704|Hvad teenagere registrerer med venner
+705|Hvad der er åbent
+706|Fra i dag
+707|Til
+708|Downloader opdatering...
+709|Downloader opdatering... {percent}%
+710|Slet
+711|Sletning af kassen kan ikke fortrydes, så en forælder skal godkende det. Der åbnes nu en anmodning om bekræftelse fra enheden.
+712|Slet hele kassen
+713|Skifter du telefon? Tryk her, bekræft med fingeraftryk, så sendes en kode til din e-mail. Åbn derefter kassen på den nye telefon, vælg dit navn og tryk på «Ny enhed / Skift enhed». Den gamle telefon bliver logget ud.
+714|Slettet
+715|slettede et opsparingsmål
+716|Valuta
+717|Valutaen understøttes ikke
+718|מי הילדים שלך?
+719|Hvem skylder mest
+720|Hvem skylder mig?
+721|Hvem skylder hvem
+722|Hvem skylder (betaleren)
+723|Hvem skylder mig?
+724|Hvem logger ind?
+725|Hvem der ændrede hvad og hvornår, de seneste 6 måneder.
+726|E-mail til kodegendannelse
+727|E-mail til gendannelse af kode (valgfrit)
+728|E-mail er kun for forældre
+729|Placering og valuta
+730|Nogen
+731|Enhed
+732|Ny enhed / Skift enhed
+733|Enheden findes ikke
+734|Forbundne enheder
+735|Enheder, der har gemt familien. Et kort, der ikke bruges i 180 dage, udløber af sig selv.
+736|ממתין לאישור: {amount}
+737|Venter på, at en forælder i {name} godkender. Når en forælder har godkendt, vælger du dit navn på login-skærmen og skriver den hemmelige kode, du valgte.
+738|Venter på, at en forælder godkender. Når en forælder har godkendt, vælger du dit navn på login-skærmen og skriver den hemmelige kode, du valgte.
+739|Ugyldigt notifikationsabonnement
+740|Giv koden til {name} personligt, ikke i en besked. Den gælder i 30 minutter og kun én gang.
+741|Ugyldig nøgle
+742|Vennetilstand
+743|Vennetilstand godkendt ✅
+744|Vennetilstand er kun for teenagere
+745|Vennetilstand blev slået fra
+746|Vennetilstand for {name}
+747|Vennetilstand er ikke godkendt af forældrene endnu
+748|Tilmeld dig kassen
+749|Du tilmelder dig {name}s kasse. En forælder i familien skal godkende og vælger, om du er barn, teenager eller forælder.
+750|Udseende
+751|Noget gik galt
+752|Noget gik galt. Prøv igen.
+753|Familie
+754|En anden familie
+755|Flere familier
+756|Familien {name}
+757|Administrer
+758|Prøv igen
+759|Du prøvede for mange gange. Prøv igen om {wait}.
+760|Ryd søgning
+761|Frakobl
+762|נכנס בלי קוד
+763|Slettet
+764|Data fra den tidligere version blev fundet på denne enhed: {people} personer og {entries} registreringer. Flyt dem til serveren?
+765|Prøv igen
+766|Prøv igen
+767|Teenager
+768|Teenager
+769|Teenager
+770|Kvinde
+771|Enheden ser ud til at være i {name}. Bor du i {name}?
+772|Registreret gæld
+773|{left} tilbage af {total}
+774|{left} er tilbage af denne gæld.
+775|Der sendes en kode dertil, når en hemmelig kode ændres eller nulstilles, og også en besked, når en andens kode i familien bliver låst.
+776|Sendt til en forælder til godkendelse ⏳
+777|Sendt til vennen til godkendelse ⏳
+778|En kode er sendt til din bekræftede e-mail. Når du har bekræftet den, kan skiftet først ske om 24 timer, og i mellemtiden får du og de andre forældre en notifikation og kan annullere.
+779|Luk
+780|Rækkefølge af registreringer
+781|I alt
+782|I alt i {cur} til dagens kurs
+783|Markeret som betalt
+784|Færdig
+785|Månedsoversigt
+786|Beløb ({cur})
+787|Ugyldigt beløb
+788|Ugyldigt beløb. Mellem venner kan du registrere op til 500 shekel ad gangen
+789|Der er ikke registreret noget endnu.
+790|En opdatering er allerede i gang
+791|Opdater
+792|Mere
+793|Der er ingen andre i familien endnu. En forælder skal tilføje dem.
+794|Ingen godkendte venner endnu
+795|Ingen godkendte venner endnu. Tilføj en ven via e-mail.
+796|Ingen venner endnu. Tilføj en ven via e-mail.
+797|עוד אין יעדי חיסכון.
+798|Listen er stadig tom. Tryk på en af knapperne for at komme i gang.
+799|Ingen faste registreringer endnu.
+800|Ingen ændringer i loggen endnu.
+801|Ingen forælder har åbnet bogen endnu
+802|Flere figurer
+803|Ikke endnu
+804|Har ikke valgt en kode endnu
+805|Har ikke valgt en kode endnu
+806|Har ikke valgt en kode endnu
+807|Der er ikke registreret noget med venner endnu.
+808|Der er ikke registreret noget endnu.
+809|Der er ikke sendt nogen kopi endnu
+810|Der er endnu ikke gået 24 timer siden anmodningen.
+811|Flere handlinger
+812|Senest opdateret: {when}
+813|Udseende
+814|For {debt} (= {covers} til dagens kurs).
+815|For {debt}.
+816|על מה חוסכים?
+817|Til hvad? (du kan springe over)
+818|Til hvad? (valgfrit)
+819|For: {debt}
+820|Med hvem?
+821|Ekstra stor
+822|Bekræftelsen er udløbet. Prøv igen.
+823|Beregningsdetaljer
+824|Ugyldig handling
+825|Profil
+826|oprettede et opsparingsmål
+827|Skærmfarver
+828|Neonfarver
+829|Tiltaleformen er allerede valgt og kan ikke ændres
+830|Tiltaleform gemt ✅
+831|Tiltaleform
+832|Tiltaleform:
+833|Lyd
+834|Har set bogen:
+835|Opret en familiekasse: alle ser den samme konto, og gælden opdateres for alle.
+836|Bekræftelse med fingeraftryk eller ansigtsgenkendelse er påkrævet
+837|Du skal bruge familiekoden for at komme ind i denne familie.
+838|Appen skal have tilladelse til at installere opdateringer: slå "Tillad fra denne kilde" til i de indstillinger, der åbnes, og tryk på "Opdater" igen
+839|Du skal acceptere brugsvilkårene og privatlivspolitikken
+840|Du skal logge ind igen
+841|Du skal logge ind igen med familiekoden
+842|Enheden skal kobles igen
+843|Du skal koble denne telefon én gang.
+844|Enheden skal kobles
+845|Denne enhed skal knyttes til en forælder. Log ind igen og knyt den med en tilknytningskode fra en anden forælder
+846|Du skal koble denne enhed og browser én gang.
+847|En bekræftet e-mail er nødvendig for at skifte enhed
+848|Vælg koden
+849|Vælg koden og log ind
+850|Vælg tiltaleform…
+851|קביעת קוד סודי
+852|Én kode til alle. Den, der tilmelder sig med den, kommer ind som barn. Senere kan du ændre til teenager eller forælder under "Familiemedlemmer" med godkendelse via fingeraftryk eller ansigtsgenkendelse.
+853|Kode fra e-mailen
+854|Bekræftelseskoden fra e-mailen er forkert eller udløbet.
+855|Bekræftelseskoden er forkert eller udløbet.
+856|Tilmeldingskode til {name}s kasse: {code}
+857|Familiens tilmeldingskode
+858|Familiens tilmeldingskode vises kun med fingeraftryk eller ansigtsgenkendelse.
+859|Familiekoden blev ændret. Bed dine forældre om en ny kode.
+860|Koblingskoden
+861|Ny kode
+862|Ny kode ({rule})
+863|Kode fra den nuværende e-mail
+864|Familiekode
+865|Hemmelig kode ({rule}; længere = mere sikker)
+866|Hemmelig kode (påkrævet for en forælder, {rule})
+867|קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)
+868|קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק
+869|Ny hemmelig kode
+870|Hemmelig kode til {name}
+871|Din egen hemmelige kode (4 cifre)
+872|Koblingskode
+873|Koblingskode er kun for forældre
+874|Koblingskode til {name}
+875|Koblingskode til en enhed
+876|Tilmeldingskoder
+877|Først skal der vælges en hemmelig kode til {name}
+878|Modregnede {amount} mod {name} ✅
+879|En familiekasse kan kun oprettes af en person over 18
+880|Lille
+881|Jeg fik
+882|Jeg fik forskellen ({amount})
+883|Jeg fik penge
+884|Gensidig modregning
+885|Modregn gensidig gæld
+886|Modregn gensidig gæld ({amount})
+887|Invitationslinket tilføjer enhver, der åbner det, som barn. Del det kun med familien.
+888|Enhedskobling
+889|Kobl denne enhed og log ind
+890|Kobl enheden til en forælder
+891|Gå til afsnit
+892|Jeg har læst og accepterer {terms} og {privacy}
+893|Jeg har læst og accepterer {terms} og {privacy}
+894|Jeg har læst og accepterer {terms} og {privacy}
+895|Normal
+896|Et øjeblik, logger ind…
+897|Et øjeblik, logger ud…
+898|Vil du slå dem sammen i familiekassen?
+899|Vil du have, at dem, der skylder dig penge, kan se det her?
+900|Vibration
+901|Registrer
+902|Registrer en tilbagebetaling
+903|Registrerer en gæld automatisk, hver uge eller måned, uden at du skal skrive den ind hver gang.
+904|Ny fast registrering
+905|Opdater appen
+906|Kun forældre kan gøre dette
+907|רק הורים יכולים לפתוח יעד למישהו אחר
+908|Kun forældre kan vælge tiltaleformen
+909|Kun for at sikre, at den, der opretter kassen, er over 18. Vises ikke for nogen.
+910|Registrerede en tilbagebetaling
+911|Registrerede en gæld
+912|Notér din egen gæld i notesbogen
+913|שבוע נקי
+914|שבוע שלם בלי חובות פתוחים
+915|Betalt fuldt ud ✅
+916|Betalt ({n})
+917|Gemmer alt…
+918|Ophæv låsen
+919|Jeg betalte
+920|Jeg betalte forskellen ({amount})
+921|Omdøbte familien
+922|Ændrede land og valuta
+923|Ændrede et navn
+924|Ændrede en rolle
+925|Ændr
+926|Hvis du skifter valuta, ændres kun symbolet. Selve beløbene omregnes ikke.
+927|Skift den hemmelige kode
+928|Omdøb familien
+929|Del
+930|Jeg har glemt koden
+931|Vi har sendt en kode til {email}. Skriv den og den nye adresse. Den erstatter den nuværende først efter bekræftelse.
+932|Vi har sendt en 6-cifret kode til {email}. Den er gyldig i 10 minutter.
+933|Mine
+934|Send anmodning
+935|Send bekræftelseskode
+936|Send koden på e-mail
+937|Send en kode til den nuværende e-mail
+938|Navn
+939|שם היעד חייב להיות עד 40 תווים
+940|Familiens navn
+941|Familiens navn passer ikke
+942|Familiens navn er ugyldigt
+943|Ugyldigt navn
+944|Kendte navne
+945|Gem
+946|en time
+947|{"one":"{n} time","other":"{n} timer"}
+948|Valutakurserne er ikke indlæst endnu. Prøv igen om et øjeblik.
+949|2 timer
+950|Sprog
+951|Ugyldig dato
+952|Fødselsdato
+953|Ugyldig fødselsdato
+954|Respons
+955|brugsvilkårene
+956|Brugsvilkår
+957|Rolle
+958|Rolle:
+959|Hovedmenu
+960|Betaling af en gæld i en anden valuta
+961|🆘 Den gamle enhed er mistet eller gået i stykker

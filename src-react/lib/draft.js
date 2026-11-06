@@ -8,9 +8,12 @@ export const SETUP_DRAFT_KEY = 'kupa-draft-setup';
 
 export function loadDraft(key) {
   try {
-    const d = JSON.parse(localStorage.getItem(key) || 'null');
+    const raw = localStorage.getItem(key);
+    if (raw === null) return null;
+    const d = JSON.parse(raw);
     if (d && d.v && typeof d.v === 'object' && Date.now() - d.at < MAX_AGE) return d.v;
-  } catch (e) { /* פגום או אין גישה: אין טיוטה */ }
+    localStorage.removeItem(key); // פגה או לא תקינה: לא משאירים במכשיר
+  } catch (e) { clearDraft(key); /* פגום או אין גישה: אין טיוטה */ }
   return null;
 }
 
