@@ -20,6 +20,7 @@ import AsyncButton from '../shared/AsyncButton.jsx';
 import Select from '../shared/Select.jsx';
 import { GENDER_OPTIONS } from '../../lib/gender.js';
 import { g } from '../../lib/gender.js';
+import { withIcons } from '../shared/UiIcon.jsx';
 
 function PaletteSheet() {
   const { data, token } = useApp();
@@ -94,21 +95,21 @@ export function AccountSheet() {
     <div className="form acct">
       <section className="acct-group" aria-labelledby="acct-h-profile">
         <h3 className="acct-h" id="acct-h-profile">{t('פרופיל')}</h3>
-        {row(me.avatar ? me.avatar + ' ' + t('דמות') : t('🙂 בחירת דמות'), () => sheet.open(t('דמות'), <AvatarSheet />))}
+        {row(me.avatar ? me.avatar + ' ' + t('דמות') : withIcons(t('🙂 בחירת דמות')), () => sheet.open(t('דמות'), <AvatarSheet />))}
         <div className="field"><span>{t('צורת פנייה')}</span>
           {genderField}</div>
         <LanguagePicker />
-        {me.role === 'teen' && row(t('🎨 צבעי המסך'), () => sheet.open(t('צבעי המסך'), <PaletteSheet />))}
+        {me.role === 'teen' && row(withIcons(t('🎨 צבעי המסך')), () => sheet.open(t('צבעי המסך'), <PaletteSheet />))}
       </section>
 
       <section className="acct-group" aria-labelledby="acct-h-security">
         <h3 className="acct-h" id="acct-h-security">{t('אבטחה')}</h3>
-        {row(me.hasPin ? t('🔑 שינוי הקוד הסודי') : t('🔑 קביעת קוד סודי'),
+        {row(withIcons(me.hasPin ? t('🔑 שינוי הקוד הסודי') : t('🔑 קביעת קוד סודי')),
           () => sheet.open(me.hasPin ? t('שינוי הקוד הסודי') : t('קביעת קוד סודי'), me.email ? <ChangePinEmailSheet /> : <ChangePinSheet />))}
-        {me.role === 'parent' && row(me.email ? t('✉️ מייל לשחזור: {email}', { email: me.email }) : t('✉️ הוספת מייל לשחזור קוד'),
+        {me.role === 'parent' && row(withIcons(me.email ? t('✉️ מייל לשחזור: {email}', { email: me.email }) : t('✉️ הוספת מייל לשחזור קוד')),
           () => sheet.open('', <EmailSheet />))}
-        {me.role === 'parent' && row(t('📱 המכשיר שלי'), () => sheet.open(t('המכשיר שלי'), <DeviceSheet />))}
-        {me.role === 'child' && me.notebookShared && row(t('👁️ מי רואה את הפנקס שלי'), () => sheet.open(t('👁️ מי רואה את הפנקס שלי'), <NotebookSharing />))}
+        {me.role === 'parent' && row(withIcons(t('📱 המכשיר שלי')), () => sheet.open(t('המכשיר שלי'), <DeviceSheet />))}
+        {me.role === 'child' && me.notebookShared && row(withIcons(t('👁️ מי רואה את הפנקס שלי')), () => sheet.open(t('👁️ מי רואה את הפנקס שלי'), <NotebookSharing />))}
       </section>
 
       <section className="acct-group" aria-labelledby="acct-h-feel">
@@ -117,7 +118,7 @@ export function AccountSheet() {
           <AsyncButton className="acct-row" onClick={async () => {
             if (pushOn) await disablePush(); else await enablePush();
             setPushOn(await isPushOn());
-          }}>{pushOn ? t('🔕 כיבוי התראות') : t('🔔 הפעלת התראות')}</AsyncButton>
+          }}><span>{withIcons(pushOn ? t('🔕 כיבוי התראות') : t('🔔 הפעלת התראות'))}</span></AsyncButton>
         )}
         <FeelSettings />
       </section>
@@ -128,15 +129,15 @@ export function AccountSheet() {
         {others.map((f) => (
           <button key={f.familyId} className="acct-row" type="button"
             onClick={async () => { const err = await goToFamily(f); if (err) toast(err); else sheet.close(); }}>
-            <span>{t('🏠 מעבר למשפחת {family}', { family: f.name })}</span>
+            <span>{withIcons(t('🏠 מעבר למשפחת {family}', { family: f.name }))}</span>
           </button>
         ))}
         <button className="acct-row" type="button" onClick={() => { sheet.close(); addAnotherFamily(); }}>
-          <span>{t('➕ הצטרפות למשפחה נוספת')}</span>
+          <span>{withIcons(t('➕ הצטרפות למשפחה נוספת'))}</span>
         </button>
         {me.role === 'parent' && (
           <button className="acct-row" type="button" onClick={() => { sheet.close(); startNewFamily(); }}>
-            <span>{t('🏠 יצירת קופה משפחתית')}</span>
+            <span>{withIcons(t('🏠 יצירת קופה משפחתית'))}</span>
           </button>
         )}
       </details>

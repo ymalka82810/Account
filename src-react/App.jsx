@@ -26,7 +26,7 @@ import LocaleSheet from './components/manage/LocaleSheet.jsx';
 import FamilyWelcome from './components/manage/FamilyWelcome.jsx';
 import DeviceGate from './components/account/DeviceGate.jsx';
 import PendingMoves from './components/account/PendingMoves.jsx';
-import { withIcons } from './components/shared/UiIcon.jsx';
+import UiIcon, { withIcons } from './components/shared/UiIcon.jsx';
 import ErrorBoundary from './components/shared/ErrorBoundary.jsx';
 import NoConnection from './components/shared/NoConnection.jsx';
 import { reducedMotion } from './lib/feel.js';
@@ -425,7 +425,7 @@ function GearLaunch({ fromRect, onSinking, onDone }) {
     <>
       <div className={'gear-launch' + (phase === 'sinking' ? ' sinking' : '')} style={style} aria-hidden="true">
         <div className={'gear-launch-spin' + (phase === 'flying' ? ' flying' : '') + (phase === 'sinking' ? ' sinking' : '')}>
-          <span className="gear-launch-icon">⚙️</span>
+          <span className="gear-launch-icon"><UiIcon name="gear" /></span>
         </div>
       </div>
     </>
@@ -534,7 +534,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
         </div>
         <button className="ghost light" type="button" aria-label={t('החשבון שלי')} onClick={openAccount}>
           {/* בזמן האנימציה הגלגל "יוצא" מהכפתור, אז המקום שלו מתכווץ והטקסט נשאר לבד */}
-          <span ref={gearRef} aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'bottom', overflow: 'hidden', whiteSpace: 'nowrap', transition: 'max-width .15s ease, opacity .1s ease, margin .15s ease', ...(launchRect ? { maxWidth: 0, opacity: 0, marginInlineStart: '-.3em' } : { maxWidth: '2em' }) }}>⚙️</span> {t('החשבון שלי')}
+          <span ref={gearRef} aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'bottom', overflow: 'hidden', whiteSpace: 'nowrap', transition: 'max-width .15s ease, opacity .1s ease, margin .15s ease', ...(launchRect ? { maxWidth: 0, opacity: 0, marginInlineStart: '-.3em' } : { maxWidth: '2em' }) }}><UiIcon name="gear" inline /></span> {t('החשבון שלי')}
         </button>
       </header>
       {launchRect && <GearLaunch fromRect={launchRect} onSinking={sinkLaunch} onDone={finishLaunch} />}

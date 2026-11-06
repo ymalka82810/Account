@@ -136,7 +136,7 @@ function Home({ nb, onSettings, pulling, returned, family }) {
     toast(t('קוזזו {amount} מול {name} ✅', { amount, name: c.person.name }));
   };
   const del = async (e) => {
-    if (!(await confirm({ icon: '🗑️', title: t('מחיקה'), message: t('למחוק את הרישום של {name}?', { name: e.name }), okText: t('מחיקה'), cancelText: t('חזרה'), danger: true }))) return;
+    if (!(await confirm({ icon: <UiIcon name="trash" />, title: t('מחיקה'), message: t('למחוק את הרישום של {name}?', { name: e.name }), okText: t('מחיקה'), cancelText: t('חזרה'), danger: true }))) return;
     const gone = removeEntry(e.id);
     // "בטל" מחזיר את הרישום בדיוק כמו שהיה: אותו מזהה, תאריך ומקום ברשימה
     toast(t('נמחק'), gone ? { label: t('בטל'), onClick: () => restoreEntry(gone.entry, gone.index) } : undefined);
@@ -155,7 +155,7 @@ function Home({ nb, onSettings, pulling, returned, family }) {
       </div>
       <strong>{money(e.amount, cur)}</strong>
       <div className="acts">
-        <button className="small" type="button" onClick={() => pay(e)}>{e.paid ? <><Arrow kind="return" /> {t('עוד לא')}</> : t('✅ שולם')}</button>
+        <button className="small" type="button" onClick={() => pay(e)}>{e.paid ? <><Arrow kind="return" /> {t('עוד לא')}</> : withIcons(t('✅ שולם'))}</button>
         <RowMenu onDelete={() => del(e)} />
       </div>
     </div>
@@ -166,10 +166,10 @@ function Home({ nb, onSettings, pulling, returned, family }) {
       <div className="nb-head">
         {family
           ? <button className="ghost nb-fam-btn" type="button" onClick={closeNotebook}>{t('חזרה למשפחה')}</button>
-          : <button className="ghost nb-fam-btn" type="button" onClick={() => sheet.open(t('🏠 צור משפחה'), <FamilyEntry />)}>{t('🏠 צור משפחה')}</button>}
+          : <button className="ghost nb-fam-btn" type="button" onClick={() => sheet.open(t('🏠 צור משפחה'), <FamilyEntry />)}>{withIcons(t('🏠 צור משפחה'))}</button>}
         <h1>{withIcons(t('📒 הפנקס שלי'))}</h1>
         <button className={'ghost nb-gear' + (pulling ? ' nb-gear-spin' : '')} type="button" aria-label={t('הגדרות')} onClick={onSettings}>
-          <span className="nb-gear-ico">⚙️</span>
+          <span className="nb-gear-ico"><UiIcon name="gear" inline /></span>
         </button>
       </div>
 
@@ -252,7 +252,7 @@ function RowMenu({ onDelete }) {
       <button className="small" type="button" aria-label={t('עוד פעולות')} aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(!open)}>⋯</button>
       {open && (
         <div className="row-menu-list" role="menu">
-          <button className="small danger" type="button" role="menuitem" onClick={() => { setOpen(false); onDelete(); }}>{t('🗑️ מחיקה')}</button>
+          <button className="small danger" type="button" role="menuitem" onClick={() => { setOpen(false); onDelete(); }}>{withIcons(t('🗑️ מחיקה'))}</button>
         </div>
       )}
     </div>
@@ -265,7 +265,7 @@ function FamilyEntry() {
   return (
     <div className="form">
       <p><strong>{t('רוצים שהחייבים יראו את זה?')}</strong> {t('צרו קופה משפחתית: כולם רואים את אותו חשבון, והחובות מתעדכנים לכולם.')}</p>
-      <button className="primary" type="button" onClick={() => { sheet.close(); upgradeFromNotebook('setup'); }}>{t('🏠 יצירת קופה משפחתית')}</button>
+      <button className="primary" type="button" onClick={() => { sheet.close(); upgradeFromNotebook('setup'); }}>{withIcons(t('🏠 יצירת קופה משפחתית'))}</button>
       <button className="ghost" type="button" onClick={() => { sheet.close(); goView('welcome'); }}>{t('יש לכם קוד משפחה? כניסה לקופה')}</button>
     </div>
   );
@@ -421,7 +421,7 @@ function Settings({ nb, onBack, closing }) {
   return (
     <div className={'nb-page nb-settings' + (closing ? ' nb-pushed-out' : ' nb-pull-in')}>
       <div className="nb-head">
-        <h1 className={closing ? 'nb-gear-spin-back' : undefined}><span className="nb-gear-ico">⚙️</span> {t('הגדרות')}</h1>
+        <h1 className={closing ? 'nb-gear-spin-back' : undefined}><span className="nb-gear-ico"><UiIcon name="gear" inline /></span> {t('הגדרות')}</h1>
         <button className="ghost nb-gear" type="button" aria-label={t('חזרה')} onClick={onBack}><Arrow kind="left" /></button>
       </div>
 
@@ -459,7 +459,7 @@ function Settings({ nb, onBack, closing }) {
         <p className="hint">{t('הכול שמור רק במכשיר הזה.')}</p>
         <button className="ghost" type="button" onClick={copy}>{t('📋 העתקת הרשימה הפתוחה')}</button>
         <button className="ghost" type="button" onClick={wipePaid}>{t('🧹 מחיקת מה ששולם')}{paidCount ? ` (${paidCount})` : ''}</button>
-        <button className="ghost danger" type="button" onClick={wipeAll}>{t('🗑️ מחיקת כל הפנקס')}</button>
+        <button className="ghost danger" type="button" onClick={wipeAll}>{withIcons(t('🗑️ מחיקת כל הפנקס'))}</button>
       </section>
 
       <p className="legal"><a href="terms.html">{t('תנאי שימוש')}</a> · <a href="privacy.html">{t('מדיניות פרטיות')}</a></p>

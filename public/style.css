@@ -702,9 +702,10 @@ button.small { min-height: var(--tap); }
 .gear-launch-spin.sinking { animation: gear-spin-back .12s cubic-bezier(.5, 0, .9, .6) forwards; }
 @keyframes gear-spin-slow { from { transform: rotate(0deg); } to { transform: rotate(225deg); } }
 @keyframes gear-spin-back { from { transform: rotate(225deg); } to { transform: rotate(-45deg); } }
-.gear-launch-icon { font-size: 1.3rem; transition: font-size .14s cubic-bezier(.22, .8, .2, 1); }
-.gear-launch-spin.flying .gear-launch-icon { font-size: 5.7rem; }
-.gear-launch-spin.sinking .gear-launch-icon { transition: font-size .12s ease-in; font-size: 0; }
+.gear-launch-icon { display: block; width: 1.5rem; height: 1.5rem; transition: width .14s cubic-bezier(.22, .8, .2, 1), height .14s cubic-bezier(.22, .8, .2, 1); }
+.gear-launch-icon .ui-icon { width: 100%; height: 100%; }
+.gear-launch-spin.flying .gear-launch-icon { width: 5.7rem; height: 5.7rem; }
+.gear-launch-spin.sinking .gear-launch-icon { transition: width .12s ease-in, height .12s ease-in; width: 0; height: 0; }
 .gear-sparks { position: fixed; left: 50%; top: 50%; width: 0; height: 0; z-index: 22; pointer-events: none; }
 .gear-sparks .spark {
   position: absolute; left: -3px; top: -14px; width: 6px; height: 28px; border-radius: 3px;
@@ -1055,6 +1056,7 @@ button.charcoalbtn:active { background: #353b45; }
   box-shadow: 0 12px 40px rgba(0, 0, 0, .4); animation: confirm-pop .2s cubic-bezier(.22, .8, .2, 1);
 }
 .confirm-icon { font-size: 2rem; line-height: 1; margin-bottom: 6px; }
+.confirm-icon .ui-icon { width: 2.6rem; height: 2.6rem; margin-inline: auto; }
 .confirm-title { margin: 0 0 6px; font-size: 1.2rem; }
 .confirm-amount { font-size: 2.2rem; font-weight: 800; padding: 4px 0 2px; }
 .confirm-msg { margin: 6px 0 16px; font-size: .95rem; line-height: 1.5; opacity: .85; white-space: pre-line; }
