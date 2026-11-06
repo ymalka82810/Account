@@ -5,7 +5,11 @@ import { t } from '../../i18n/index.js';
 // (שגיאה באחת לא פוגעת בשאר ובניווט), ו-index.jsx עוטף את השורש כגיבוי אחרון (root).
 // המשתמש רואה הסבר קצר בשפת הממשק, בלי stack; הפרטים הטכניים רק ב-console.error.
 // "נסו שוב" מאפס את הגבול ומרנדר את התוכן מחדש. הצבעים מגיעים ממשתני הערכה (ילד / נוער / הורה), כולל מצב כהה.
-export default class ErrorBoundary extends Component {
+// אין בפרויקט @types/react: Component מטופל כ-any כדי ש-setState ו-props יעברו את בדיקת הטיפוסים.
+/** @type {any} */
+const Base = Component;
+
+export default class ErrorBoundary extends Base {
   state = { failed: false };
 
   static getDerivedStateFromError() { return { failed: true }; }
