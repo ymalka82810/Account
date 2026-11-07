@@ -115,6 +115,8 @@ function applyDocument() {
   const root = document.documentElement;
   root.lang = lang;
   root.dir = LANGUAGES[lang].dir;
+  // כותרת הלשונית/החלון לפי השפה (המפתח קיים בכל חבילות השפה; בלי תרגום יוצג המקור העברי).
+  document.title = t('הקופה המשפחתית');
 }
 
 // מחליף שפה (מוריד אותה אם צריך). מחזיר false אם ההורדה נכשלה והשפה לא הוחלפה.

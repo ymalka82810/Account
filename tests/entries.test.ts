@@ -168,3 +168,31 @@ describe("החזר על חוב", () => {
     await expect(t.mutation(api.entries.add, pay(tok, A.ids["דנה"], A.ids["אבא"], 1000))).rejects.toThrow("שערי ההמרה");
   });
 });
+
+describe("שליחה חוזרת (clientId)", () => {
+  it("אותו clientId פעמיים יוצר רישום אחד ומחזיר את אותו מזהה", async () => {
+    const args = debt(A.tokens["אבא"], A.ids["דנה"], A.ids["גיל"], 5000, { clientId: "abcdef1234567890" });
+    const a = await t.mutation(api.entries.add, args);
+    const b = await t.mutation(api.entries.add, args);
+    expect(b).toBe(a);
+    expect(await entriesOf(A.familyId)).toHaveLength(1);
+  });
+
+  it("clientId שונה יוצר רישום נוסף", async () => {
+    await t.mutation(api.entries.add, debt(A.tokens["אבא"], A.ids["דנה"], A.ids["גיל"], 5000, { clientId: "abcdef1234567890" }));
+    await t.mutation(api.entries.add, debt(A.tokens["אבא"], A.ids["דנה"], A.ids["גיל"], 5000, { clientId: "abcdef1234567891" }));
+    expect(await entriesOf(A.familyId)).toHaveLength(2);
+  });
+
+  it("clientId של אדם אחד לא חוסם אדם אחר עם אותו מזהה", async () => {
+    const id = "samesame12345678";
+    await t.mutation(api.entries.add, debt(A.tokens["אבא"], A.ids["דנה"], A.ids["גיל"], 5000, { clientId: id }));
+    await t.mutation(api.entries.add, debt(B.tokens["אמא"], B.ids["נועם"], B.ids["אמא"], 5000, { clientId: id }));
+    expect(await entriesOf(B.familyId)).toHaveLength(1);
+  });
+
+  it("clientId קצר או ארוך מדי נדחה", async () => {
+    await expect(t.mutation(api.entries.add, debt(A.tokens["אבא"], A.ids["דנה"], A.ids["גיל"], 5000, { clientId: "short" }))).rejects.toThrow("מזהה לא תקין");
+    await expect(t.mutation(api.entries.add, debt(A.tokens["אבא"], A.ids["דנה"], A.ids["גיל"], 5000, { clientId: "x".repeat(65) }))).rejects.toThrow("מזהה לא תקין");
+  });
+});

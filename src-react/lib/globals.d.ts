@@ -4,6 +4,7 @@ declare global {
   interface Window {
     CONVEX_URL?: string;
     VAPID_PUBLIC_KEY?: string;
+    FCM_ENABLED?: boolean;
     Capacitor?: any;
   }
   interface Navigator {

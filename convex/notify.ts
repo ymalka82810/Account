@@ -5,9 +5,10 @@ import { fmtMoney } from "./currency";
 
 export const shekel = (agorot: number) => fmtMoney(agorot, "ILS");
 
-// שולח התראה רק למי שיש לו מכשיר רשום, ורק אם מפתחות ההתראות הוגדרו בשרת.
+// שולח התראה רק למי שיש לו מכשיר רשום, ורק אם הוגדר בשרת ערוץ התראות (Web Push או FCM לאנדרואיד).
 export async function notify(ctx: MutationCtx, personIds: Id<"people">[], title: string, body: string): Promise<void> {
-  if (!process.env.VAPID_PRIVATE_KEY || !process.env.VAPID_PUBLIC_KEY) return;
+  const webOn = !!process.env.VAPID_PRIVATE_KEY && !!process.env.VAPID_PUBLIC_KEY;
+  if (!webOn && !process.env.FCM_SERVICE_ACCOUNT) return;
   const withDevice: Id<"people">[] = [];
   for (const id of Array.from(new Set(personIds))) {
     const sub = await ctx.db.query("pushSubs").withIndex("by_person", (q) => q.eq("personId", id)).first();

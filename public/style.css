@@ -1546,3 +1546,13 @@ body[data-theme="teen"] .row-menu-list { border-radius: 16px; box-shadow: 0 10px
 .err-actions { display: grid; gap: 8px; width: 100%; margin-top: 6px; }
 .err-actions button { min-height: var(--tap); width: 100%; }
 body[data-theme="teen"] .err-box { background: #07070b; border-color: var(--neon-a); box-shadow: 0 0 24px var(--neon-glow); }
+
+/* סמן טעינה ראשוני: מוצג מיד מה-HTML, עוד לפני שהאפליקציה נטענת, ונעלם כש-React מרנדר. */
+.boot { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; }
+.boot__coin {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 4px solid rgba(0, 0, 0, .12); border-top-color: var(--coin, #e0a82e);
+  animation: boot-spin .9s linear infinite;
+}
+@keyframes boot-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .boot__coin { animation-duration: 3s; } }

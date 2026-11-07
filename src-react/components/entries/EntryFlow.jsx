@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { state } from '../../state/state.js';
 import { t } from '../../i18n/index.js';
 import { call } from '../../lib/api.js';
+import { isDemo } from '../../lib/demo.js';
+import { isOffline, enqueueEntry, newClientId } from '../../lib/outbox.js';
 import { today, toast, errMsg } from '../../lib/helpers.js';
 import { openDebtsOf, debtLabel, debtLeftText, namesFor, money, moneyWithValue, baseCurrency, convert, totalsByCurrency, hasForeignOpen, draftEntry, pairOwes } from '../../lib/computations.js';
 import { useConfirm } from '../shared/Confirm.jsx';
@@ -226,6 +228,16 @@ export function EntryFlow({ opts }) {
 
     const save = async () => {
       if (foreignCase && !(await confirmForeign())) return;
+      // בלי חיבור לשרת: רישום חדש בקופה המשפחתית נשמר במכשיר ונשלח כשהחיבור חוזר (גם אם האפליקציה נסגרה).
+      if (!opts.endpoint && !isDemo(state.token) && isOffline()) {
+        const queued = enqueueEntry({
+          kind: opts.kind, from: st.from, to: st.to, amount: st.agorot,
+          note: isDebt ? st.note.trim() : (st.note.trim() || t('החזר')), date: today(),
+          ...(st.debtId ? { debtId: st.debtId } : {}),
+          ...(canPickCurrency ? { currency: st.cur } : {}),
+        });
+        if (queued) { sheet.close(); toast(t('נשמר במכשיר, יישלח כשהחיבור יחזור')); setTab(opts.returnTab || 'home'); return; }
+      }
       try {
         // entries:add ו-friends:addEntry מקבלות ארגומנטים קצת שונים (המטבע רק בקופה המשפחתית), לכן הארגומנטים כאן דינמיים.
         const newId = await call(/** @type {'entries:add'} */ (opts.endpoint || 'entries:add'), /** @type {any} */ ({
@@ -233,6 +245,7 @@ export function EntryFlow({ opts }) {
           note: isDebt ? st.note.trim() : (st.note.trim() || t('החזר')), date: today(),
           ...(st.debtId ? { debtId: st.debtId } : {}),
           ...(canPickCurrency ? { currency: st.cur } : {}),
+          ...(opts.endpoint ? {} : { clientId: newClientId() }),
         }));
         sheet.close();
         const removeEndpoint = /** @type {'entries:remove' | 'friends:removeEntry'} */ (opts.endpoint === 'friends:addEntry' ? 'friends:removeEntry' : 'entries:remove');

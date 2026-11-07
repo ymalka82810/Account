@@ -38,6 +38,26 @@ export const subscribe = mutation({
   },
 });
 
+// רישום אפליקציית האנדרואיד (FCM). האסימון נשמר באותה טבלה בכתובת "fcm:<אסימון>", כך ש-unsubscribe ו-forPeople עובדים כמו קודם.
+const FCM_TOKEN_RE = /^[A-Za-z0-9_:.\-]{20,4096}$/;
+export const subscribeNative = mutation({
+  args: { token: v.string(), deviceToken: v.string() },
+  handler: async (ctx, { token, deviceToken }) => {
+    const me = await requirePerson(ctx, token);
+    if (!FCM_TOKEN_RE.test(deviceToken)) throw new ConvexError("מנוי התראות לא תקין");
+    const endpoint = `fcm:${deviceToken}`;
+    for (const s of await ctx.db.query("pushSubs").withIndex("by_endpoint", (q) => q.eq("endpoint", endpoint)).collect()) {
+      await ctx.db.delete(s._id);
+    }
+    const mine = await ctx.db.query("pushSubs").withIndex("by_person", (q) => q.eq("personId", me._id)).collect();
+    if (mine.length >= MAX_DEVICES_PER_PERSON) {
+      const oldest = [...mine].sort((a, b) => a.createdAt - b.createdAt)[0];
+      await ctx.db.delete(oldest._id);
+    }
+    await ctx.db.insert("pushSubs", { personId: me._id, familyId: me.familyId, endpoint, p256dh: "", auth: "", createdAt: Date.now() });
+  },
+});
+
 export const unsubscribe = mutation({
   args: { token: v.string(), endpoint: v.string() },
   handler: async (ctx, { token, endpoint }) => {

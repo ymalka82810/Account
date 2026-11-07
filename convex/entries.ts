@@ -30,9 +30,16 @@ export const add = mutation({
     date: v.string(),
     // החזר על חוב מסוים (רשומת חוב שכבר אושרה).
     debtId: v.optional(v.id("entries")),
+    // מזהה אקראי שהמכשיר יצר לפני השליחה. שליחה חוזרת של אותה רשומה (למשל אחרי ניתוק, או מתור ההמתנה של המכשיר) לא תיצור כפילות.
+    clientId: v.optional(v.string()),
   },
-  handler: async (ctx, { token, currency: askedCurrency, ...e }) => {
+  handler: async (ctx, { token, currency: askedCurrency, clientId, ...e }) => {
     const me = await requirePerson(ctx, token);
+    if (clientId !== undefined) {
+      if (clientId.length < 8 || clientId.length > 64) throw new ConvexError("מזהה לא תקין");
+      const dup = await ctx.db.query("entries").withIndex("by_client", (q) => q.eq("createdBy", me._id).eq("clientId", clientId)).first();
+      if (dup) return dup._id;
+    }
     const family = await ctx.db.get(me.familyId);
     const base = family?.currency ?? LEGACY_CURRENCY;
     const currency = e.kind === "payment" ? base : (askedCurrency ?? base);
@@ -101,6 +108,7 @@ export const add = mutation({
     const pending = me.role !== "parent";
     const id = await ctx.db.insert("entries", {
       ...e, note, currency, ...(fx ? { fx } : {}), familyId: me.familyId, createdBy: me._id, createdAt: Date.now(),
+      ...(clientId !== undefined ? { clientId } : {}),
       ...(pending ? { status: "pending" as const } : {}),
     });
 

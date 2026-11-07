@@ -175,7 +175,10 @@ export default defineSchema({
     // החובות וההחזרים של הכיוון הזה (from → to) נסגרו לגמרי, ולכן אין להם יותר השפעה על יתרות.
     // הם נשארים בהיסטוריה אבל לא נשלחים עם הנתונים הראשיים. ראו ledger.ts.
     archived: v.optional(v.literal(true)),
+    // מזהה שהמכשיר יצר בזמן השליחה, למניעת כפילות בשליחה חוזרת (ראו entries:add).
+    clientId: v.optional(v.string()),
   })
+    .index("by_client", ["createdBy", "clientId"])
     .index("by_family", ["familyId"])
     .index("by_family_active", ["familyId", "archived"])
     .index("by_from", ["from"])

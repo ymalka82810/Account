@@ -68,6 +68,7 @@ export function dropSession() {
   if (state.token) forgetMembershipByToken(state.token);
   state.token = '';
   localStorage.removeItem(TOKEN_KEY);
+  try { localStorage.removeItem('kupa-outbox-v1'); } catch (e) { /* */ }
   state.pinFlow = null;
   state.view = 'login';
   state.codeChecked = false;

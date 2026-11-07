@@ -382,3 +382,40 @@ describe("push:subscribe מקבל רק שרתי Push מוכרים", () => {
     expect(await t.run((ctx) => ctx.db.query("pushSubs").collect())).toHaveLength(0);
   });
 });
+
+describe("push:subscribeNative (אפליקציית אנדרואיד, FCM)", () => {
+  const tok = "dXyz123_abc-DEF:APA91bHkJ4n0pQ7rS8tUvWxYz";
+  const native = (deviceToken: string, who = "דנה") => t.mutation(api.push.subscribeNative, { token: A.tokens[who], deviceToken });
+
+  it("אסימון תקין נרשם בכתובת fcm:", async () => {
+    await native(tok);
+    const subs = await t.run((ctx) => ctx.db.query("pushSubs").collect());
+    expect(subs.map((s) => s.endpoint)).toEqual([`fcm:${tok}`]);
+  });
+
+  it("אותו אסימון עובר לאדם שמחובר עכשיו ולא נשמר פעמיים", async () => {
+    await native(tok, "דנה");
+    await native(tok, "אבא");
+    const subs = await t.run((ctx) => ctx.db.query("pushSubs").collect());
+    expect(subs).toHaveLength(1);
+    expect(subs[0].personId).toBe(A.ids["אבא"]);
+  });
+
+  it("אסימון עם תווים לא תקינים, קצר מדי או ארוך מדי נדחה", async () => {
+    for (const bad of ["short", "has space in it 1234567890", "https://evil.example.com/x/1234567890", "a".repeat(4097)]) {
+      await expect(native(bad)).rejects.toThrow("מנוי התראות לא תקין");
+    }
+  });
+
+  it("push:subscribe לא מקבל כתובת fcm: (לא עוקפים את רשימת השרתים המוכרים)", async () => {
+    await expect(t.mutation(api.push.subscribe, { token: A.tokens["דנה"], endpoint: `fcm:${tok}`, p256dh: "k", auth: "a" })).rejects.toThrow("מנוי התראות לא תקין");
+  });
+
+  it("push:unsubscribe מסיר את האסימון של המחובר בלבד", async () => {
+    await native(tok, "דנה");
+    await t.mutation(api.push.unsubscribe, { token: A.tokens["אבא"], endpoint: `fcm:${tok}` });
+    expect(await t.run((ctx) => ctx.db.query("pushSubs").collect())).toHaveLength(1);
+    await t.mutation(api.push.unsubscribe, { token: A.tokens["דנה"], endpoint: `fcm:${tok}` });
+    expect(await t.run((ctx) => ctx.db.query("pushSubs").collect())).toHaveLength(0);
+  });
+});
