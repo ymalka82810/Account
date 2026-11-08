@@ -20,14 +20,26 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  min-height: 100%;
+  /* הרקע וה-color-scheme של הערכה חייבים לשבת גם על html: אחרת הקנבס מאחורי ה-body (גלילה חוצה, פס תחתון, שינוי גובה סרגל הכתובת) נשאר בהיר */
+  background: var(--bg);
+  overscroll-behavior-y: none;
+}
+html[data-theme="parent"] { background: #0b0d10; color-scheme: dark; }
+html[data-theme="teen"] { background: #000; color-scheme: dark; }
+html[data-theme="child"], html:not([data-theme]) { background: #f4b4d6; }
 
 body {
   margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg);
   color: var(--ink);
   line-height: 1.5;
   padding-bottom: env(safe-area-inset-bottom, 0);
+  overscroll-behavior-y: none;
 }
 
 .top {

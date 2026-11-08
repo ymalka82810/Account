@@ -50,7 +50,9 @@ function currentScreen(data) {
 }
 
 function applyTheme(role, palette) {
-  if (role) document.body.dataset.theme = role; else delete document.body.dataset.theme;
+  // גם על html, כדי שהקנבס שמאחורי ה-body יקבל את צבע הערכה (ראו style.css)
+  const root = document.documentElement;
+  if (role) { document.body.dataset.theme = role; root.dataset.theme = role; } else { delete document.body.dataset.theme; delete root.dataset.theme; }
   if (role === 'teen' && palette) document.body.dataset.palette = palette; else delete document.body.dataset.palette;
   const tc = document.querySelector('meta[name="theme-color"]');
   if (tc) tc.setAttribute('content', THEME_COLOR[role] || THEME_COLOR.child);
