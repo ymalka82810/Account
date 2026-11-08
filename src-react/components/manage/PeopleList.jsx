@@ -107,7 +107,7 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
             )}
             {p.role === 'teen' && p.friendsEnabled && <div className="meta">{t('🤝 מצב חברים פעיל')} • {p.friendEmail || ''}</div>}
             {p.id !== me && (
-              <div className="meta">
+              <div className="meta person-field">
                 {t('תפקיד:')}{' '}
                 {roleBusy === p.id ? <span>{t('⏳ מאמתים…')}</span> : (
                   <Select className="dd-inline" value={p.role} onChange={(r) => changeRole(p, r)} options={[
@@ -119,7 +119,7 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
                 {' '}<span aria-hidden="true">🔒</span>
               </div>
             )}
-            <div className="meta">
+            <div className="meta person-field">
               {t('צורת פנייה:')}{' '}
               {p.gender ? (
                 <span>{g(p.gender, 'זכר', 'נקבה')}</span>
@@ -128,6 +128,7 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
               )}
             </div>
           </div>
+          <div className="person-actions">
           <button className="small" type="button" onClick={() => sheet.open(t('קוד סודי ל{name}', { name: p.name }), <ResetPinSheet person={p} />)}>{t('קוד חדש')}</button>
           {p.notebookShared && (
             <button className="small" type="button" onClick={() => sheet.open(t('הפנקס האישי של {name}', { name: p.name }), <ChildNotebook token={token} person={p} />)}>{withIcons(t('📒 הפנקס האישי'))}</button>
@@ -156,6 +157,7 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
               }
             }}>{t('הסרה')}</button>
           )}
+          </div>
         </div>
       ))}
     </div>
