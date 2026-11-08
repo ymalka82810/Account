@@ -32,9 +32,13 @@ export const list = query({
     for (const r of rows) {
       if (r.actorGender === undefined && !genders.has(r.actorId)) genders.set(r.actorId, (await ctx.db.get(r.actorId))?.gender);
     }
+    // מגדר בן/בת המשפחה נקבע בדרך כלל אחרי ההוספה, אז ברגע הרישום הוא חסר: משלימים לפי השם מבני המשפחה הנוכחיים.
+    const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
+    const byName = new Map(members.map((p) => [p.name, p.gender]));
+    const SUBJECT_IS_PERSON = new Set(["person_add", "role_set", "person_rename"]);
     return rows.map((r) => ({
       id: r._id, kind: r.kind, actor: r.actorName, actorGender: r.actorGender ?? genders.get(r.actorId) ?? null,
-      subjectGender: r.subjectGender ?? null, from: r.from ?? null, to: r.to ?? null,
+      subjectGender: r.subjectGender ?? (SUBJECT_IS_PERSON.has(r.kind) && r.subject ? byName.get(r.subject) : undefined) ?? null, from: r.from ?? null, to: r.to ?? null,
       subject: r.subject ?? null, amount: r.amount ?? null, currency: r.currency ?? null, at: r.at,
     }));
   },
