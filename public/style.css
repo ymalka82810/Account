@@ -531,6 +531,25 @@ body[data-theme] .tile-body .person {
   margin-bottom: 0;
 }
 #peopleList { display: grid; gap: 10px; }
+/* בני משפחה: כרטיס נפתח - בכותרת רק השם (והאווטאר), וההגדרות והכפתורים בפנים */
+.person.person-card { display: block; padding: 0; overflow: hidden; }
+.person-card > summary.person-head {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; min-height: var(--tap);
+}
+.person-card > summary.person-head::-webkit-details-marker { display: none; }
+.person-card > summary.person-head::after {
+  content: ''; margin-inline-start: auto; width: 20px; height: 20px; flex-shrink: 0;
+  background: var(--coin-deep);
+  -webkit-mask: var(--ico-down) center / contain no-repeat; mask: var(--ico-down) center / contain no-repeat;
+  transition: transform .26s cubic-bezier(.2, .8, .2, 1);
+}
+.person-card[open]:not(.closing) > summary.person-head::after { transform: rotate(180deg); }
+.person-card .person-name { font-weight: 700; font-size: 1.05rem; }
+.person-card .person-flag { font-size: 1rem; }
+.person-card .person-body { padding: 0 14px 12px; display: grid; gap: 4px; }
+.person-card .person-body .text { min-width: 0; }
+
 
 /* ריבועי בחירת אדם */
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px; width: 100%; max-width: 520px; margin-top: 14px; }

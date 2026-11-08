@@ -14,6 +14,7 @@ import { roleLabel } from '../../lib/computations.js';
 import Select from '../shared/Select.jsx';
 import { g, GENDER_OPTIONS } from '../../lib/gender.js';
 import { withIcons } from '../shared/UiIcon.jsx';
+import { toggleDetails } from '../../lib/motion.js';
 
 // כאן זו קביעה ראשונית וחד-פעמית (לא ניתנת לשינוי אחר כך), אז בלי אפשרות "ללא ציון".
 const GENDER_SET_OPTIONS = GENDER_OPTIONS.filter((o) => o.value);
@@ -91,10 +92,14 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
         </div>
       ))}
       {people.map((p) => (
-        <div className="person" key={p.id}>
-          {p.avatar && <span className="avatar-md" aria-hidden="true">{p.avatar}</span>}
+        <details className="person person-card" key={p.id}>
+          <summary className="person-head" onClick={toggleDetails}>
+            {p.avatar && <span className="avatar-md" aria-hidden="true">{p.avatar}</span>}
+            <span className="person-name">{p.name}</span>
+            {p.lockAlert && <span className="person-flag" aria-hidden="true">⚠️</span>}
+          </summary>
+          <div className="person-body">
           <div className="text">
-            {p.name}{' '}
             <span className="meta">
               {roleLabel(p.role, p.gender) + (p.hasPin ? '' : p.freeEntry ? ' • ' + t('נכנס בלי קוד') : ' • ' + g(p.gender, 'עוד לא בחר קוד', 'עוד לא בחרה קוד', 'עוד לא בחר/ה קוד')) + (p.role === 'parent' && !p.deviceBound ? ' • ' + t('⏳ עוד לא קשור/ה למכשיר') : '')}
             </span>
@@ -158,7 +163,8 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
             }}>{t('הסרה')}</button>
           )}
           </div>
-        </div>
+          </div>
+        </details>
       ))}
     </div>
   );
