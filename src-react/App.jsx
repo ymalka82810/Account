@@ -1,3 +1,4 @@
+import Avatar from './components/shared/Avatar.jsx';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { state, LAST_ROLE_KEY, LAST_PALETTE_KEY, THEME_COLOR, tabLabels, subscribeAuth, authVersion, bumpAuth } from './state/state.js';
 import { t } from './i18n/index.js';
@@ -508,7 +509,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
       )}
       <header className="top">
         <div className="who-am-i">
-          {data.me.avatar && <span className="avatar-sm" aria-hidden="true">{data.me.avatar}</span>}
+          {data.me.avatar && <Avatar value={data.me.avatar} className="avatar-sm" />}
           <div>
             <h1>{data.me.name} {data.family.name.replace(/^משפחת\s+/, '')}</h1>
           </div>

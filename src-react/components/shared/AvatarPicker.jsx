@@ -2,6 +2,7 @@ import { t } from '../../i18n/index.js';
 import { useEffect, useRef, useState } from 'react';
 import { AVATARS } from '../../state/state.js';
 import { useSheet } from './Sheet.jsx';
+import Avatar from './Avatar.jsx';
 
 export const randomAvatar = (options = AVATARS) => options[Math.floor(Math.random() * options.length)];
 
@@ -82,7 +83,7 @@ export default function AvatarPicker({ value, onChange, options = AVATARS, taken
 
   const btn = (a) => (
     <button key={a} type="button" className={'av' + (a === value ? ' on' : '')} aria-label={t('דמות {avatar}', { avatar: a })}
-      aria-pressed={a === value} onClick={() => onChange(a)}>{a}</button>
+      aria-pressed={a === value} onClick={() => onChange(a)}><Avatar value={a} className="av-face" /></button>
   );
 
   if (!compact) return <div className="avatars">{shown.map(btn)}</div>;

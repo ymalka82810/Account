@@ -1,3 +1,4 @@
+import Avatar from '../shared/Avatar.jsx';
 import { useState } from 'react';
 import Arrow from '../shared/Arrow.jsx';
 import UiIcon from '../shared/UiIcon.jsx';
@@ -46,7 +47,7 @@ export default function Home({ data, token }) {
 
     cards.push(
       <div key={p.id} className={'debt ' + (iOwe ? 'owe' : 'get')}>
-        {p.avatar && <div className="debt-avatar avatar-md" aria-hidden="true">{p.avatar}</div>}
+        {p.avatar && <Avatar as="div" value={p.avatar} className="debt-avatar avatar-md" />}
         <button type="button" className="debt-total" aria-label={t('פירוט החישוב')}
           onClick={() => sheet.open('', <BalanceSheet otherId={p.id} />)}>
           <span className="who">{iOwe ? owesLine(me, p.id) : owesLine(p.id, me)}</span>

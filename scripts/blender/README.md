@@ -51,3 +51,20 @@
 
 אייקון חדש: פונקציית בנייה ב-`BUILDERS` ב-`icons.py`, ואז להוסיף אותו גם ל-`public/sw.js` ול-`preloadImages.js`.
 רינדור על מעבד אחד: כ-20-90 שניות לאייקון ב-512/128.
+
+## דמויות פלסטלינה (אווטארים)
+
+הדמויות לבחירת המשתמש (`AVATARS` ו-`PARENT_AVATARS` ב-`src-react/state/state.js`) מרונדרות בסגנון פלסטלינה (כמו אארדמן),
+בנפרד לגמרי מהאייקונים המתכתיים למעלה. הצורה והצבע באים מתמונות Noto Color Emoji (`2D/png/512` בריפו
+`googlefonts/noto-emoji`, רישיון Apache 2.0), שהופכות לכרית רכה עם דופן עגולה וגרגר של טביעות אצבע:
+
+    git clone --depth 1 --filter=blob:none --sparse https://github.com/googlefonts/noto-emoji.git /tmp/noto-emoji
+    git -C /tmp/noto-emoji sparse-checkout set 2D/png/512
+    python3 scripts/blender/avatars_prep.py /tmp/avatars_maps /tmp/noto-emoji/2D/png/512
+    blender -b -P scripts/blender/avatars.py -- /tmp/avatars_maps /tmp/avatars_raw 256 40
+    python3 scripts/blender/compose_avatars.py /tmp/avatars_raw
+
+הפלט: `public/avatars/<key>.webp` (192px, שקוף), כש-`<key>` הוא קודי האימוג'י בהקסה מופרדים ב-`-` בלי FE0F
+(למשל `1f98a` לשועל, `1f43b-200d-2744` לדוב קוטב). `src-react/components/shared/Avatar.jsx` מציג את התמונה, וערך
+שאינו ברשימה (דמות ישנה, ברירת מחדל) נשאר אימוג'י. דמות חדשה: מוסיפים אותה ל-`state.js` ומריצים את שלושת השלבים
+(הרינדור מדלג על קבצים שכבר קיימים). רינדור על מעבד אחד: כ-15 שניות לדמות.

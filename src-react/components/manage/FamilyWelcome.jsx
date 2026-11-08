@@ -1,3 +1,4 @@
+import Avatar from '../shared/Avatar.jsx';
 import { useRef, useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { call } from '../../lib/api.js';
@@ -92,7 +93,7 @@ export default function FamilyWelcome() {
         <div className="list">
           {others.map((p) => (
             <div className="person" key={p.id}>
-              {p.avatar && <span className="avatar-md" aria-hidden="true">{p.avatar}</span>}
+              {p.avatar && <Avatar value={p.avatar} className="avatar-md" />}
               <div className="text">{p.name} <span className="meta">{roleLabel(p.role, p.gender)}</span></div>
             </div>
           ))}

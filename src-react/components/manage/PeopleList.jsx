@@ -1,3 +1,4 @@
+import Avatar from '../shared/Avatar.jsx';
 import Arrow from '../shared/Arrow.jsx';
 import { useState } from 'react';
 import { t, tn } from '../../i18n/index.js';
@@ -84,7 +85,7 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
     <div id="peopleList">
       {joinRequests.map((r) => (
         <div className="person" key={r.id}>
-          {r.avatar && <span className="avatar-md" aria-hidden="true">{r.avatar}</span>}
+          {r.avatar && <Avatar value={r.avatar} className="avatar-md" />}
           <div className="text">
             {r.name} <span className="meta">{t('⏳ מבקש/ת להצטרף')}</span>
           </div>
@@ -95,7 +96,7 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
       {people.map((p) => (
         <details className="person person-card" key={p.id}>
           <summary className="person-head" onClick={toggleDetails}>
-            {p.avatar && <span className="avatar-md" aria-hidden="true">{p.avatar}</span>}
+            {p.avatar && <Avatar value={p.avatar} className="avatar-md" />}
             <span className="person-name">{p.name}</span>
             {p.lockAlert && <span className="person-flag" aria-hidden="true">⚠️</span>}
             <Arrow kind="chev-next" className="person-marker" />

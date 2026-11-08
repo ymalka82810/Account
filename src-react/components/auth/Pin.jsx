@@ -1,3 +1,4 @@
+import Avatar from '../shared/Avatar.jsx';
 import Arrow from '../shared/Arrow.jsx';
 import { useState } from 'react';
 import { t } from '../../i18n/index.js';
@@ -18,7 +19,7 @@ export default function Pin({ current }) {
     return (
       <In screen="pin" current={current}>
         <button className="ghost back" type="button" onClick={pinBack}><Arrow kind="back" /> {t('חזרה')}</button>
-        {f.person.avatar && <div className="avatar-xl" aria-hidden="true">{f.person.avatar}</div>}
+        {f.person.avatar && <Avatar as="div" value={f.person.avatar} className="avatar-xl" />}
         <h1>{f.person.name}</h1>
         <p className="hint">{t('אין קוד סודי. אפשר לקבוע קוד בהמשך, ב"החשבון שלי".')}</p>
         <p className="error" role="alert" aria-live="assertive">{f.busy ? t('בודקים…') : f.error}</p>
@@ -35,7 +36,7 @@ export default function Pin({ current }) {
   return (
     <In screen="pin" current={current}>
       <button className="ghost back" type="button" onClick={pinBack}><Arrow kind="back" /> {t('חזרה')}</button>
-      {f.person.avatar && <div className="avatar-xl" aria-hidden="true">{f.person.avatar}</div>}
+      {f.person.avatar && <Avatar as="div" value={f.person.avatar} className="avatar-xl" />}
       <h1>{f.person.name}</h1>
       <p className="hint">{title}</p>
       {/* key לפי מספר הרעידות: מרנדר מחדש את האלמנט ומפעיל שוב את האנימציה */}

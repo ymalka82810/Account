@@ -1,3 +1,4 @@
+import Avatar from '../shared/Avatar.jsx';
 import { call } from '../../lib/api.js';
 import { t } from '../../i18n/index.js';
 import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
@@ -76,7 +77,7 @@ export default function FriendsTab({ data, fdata, token }) {
       if (f.incoming) continue; // בקשות נכנסות מוצגות בתיבה למעלה
       cards.push(
         <div className="debt" key={f.id}>
-          <span className="avatar-md" aria-hidden="true">{p.avatar}</span>
+          <Avatar value={p.avatar} className="avatar-md" />
           <div className="text">
             <div className="who">{p.name}</div>
             <div className="meta">{t('⏳ ממתין שיאשרו את הבקשה')}</div>
@@ -94,7 +95,7 @@ export default function FriendsTab({ data, fdata, token }) {
     const open = n === 0 ? [] : openDebtsOf(dFrom, dTo, entries, 'ILS');
     cards.push(
       <div key={f.id} className={'debt' + (n === 0 ? '' : iOwe ? ' owe' : ' get') + (open.length > 1 ? ' multi' : '')}>
-        <span className="avatar-md" aria-hidden="true">{p.avatar}</span>
+        <Avatar value={p.avatar} className="avatar-md" />
         <div className="text">
           <div className="who">{n === 0 ? p.name : iOwe ? owesLine(me, p.id) : owesLine(p.id, me)}</div>
           <div className="amt">{n === 0 ? t('הכול מסודר ✅') : money(amount, 'ILS')}</div>
@@ -150,7 +151,7 @@ export default function FriendsTab({ data, fdata, token }) {
               const p = fdata.people[f.other];
               return (
                 <div className="row" key={f.id}>
-                  <span className="avatar-md" aria-hidden="true">{p ? p.avatar : '🙂'}</span>
+                  <Avatar value={p ? p.avatar : '🙂'} className="avatar-md" />
                   <div className="text">{t('{name} רוצה להוסיף אותך', { name: p ? p.name : t('מישהו') })}</div>
                   <div className="acts">
                     <button className="small okbtn" type="button"

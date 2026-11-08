@@ -1,3 +1,4 @@
+import Avatar from '../shared/Avatar.jsx';
 import { useState } from 'react';
 import { g } from '../../lib/gender.js';
 import { t } from '../../i18n/index.js';
@@ -30,7 +31,7 @@ export { default as AvatarPicker, randomAvatar } from '../shared/AvatarPicker.js
 export function Tile({ avatar, name, onClick }) {
   return (
     <button className="tile" type="button" onClick={onClick}>
-      {avatar && <span className="avatar-lg" aria-hidden="true">{avatar}</span>}
+      {avatar && <Avatar value={avatar} className="avatar-lg" />}
       <span className="tname">{name}</span>
     </button>
   );

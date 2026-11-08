@@ -585,6 +585,11 @@ html[dir="rtl"] .person-card[open]:not(.closing) > summary.person-head .person-m
 /* הדמויות כבר מקבלות את האפקט מהמסגרת שלהן - בלי צל כפול */
 .avatar-lg .emo, .avatar-md .emo, .avatar-sm .emo, .avatar-xl .emo, .av .emo { filter: none; }
 
+/* דמויות הפלסטלינה (public/avatars): יש להן עומק וצל משלהן, אז בלי אפקט הסטיקר של האימוג'י */
+.avatar-img { display: block; width: 1.12em; height: 1.12em; margin: -.06em; object-fit: contain; pointer-events: none; filter: drop-shadow(0 .05em .05em rgba(0, 0, 0, .2)); }
+.avatar-lg:has(> .avatar-img), .avatar-md:has(> .avatar-img), .avatar-sm:has(> .avatar-img), .avatar-xl:has(> .avatar-img), .av:has(.avatar-img) { filter: none; }
+.av-face { display: block; line-height: 1; }
+
 /* בורר דמות */
 .avatars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
 .av {

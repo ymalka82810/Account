@@ -1,3 +1,4 @@
+import Avatar from '../shared/Avatar.jsx';
 import { money } from '../../lib/computations.js';
 import Arrow from '../shared/Arrow.jsx';
 import { useSheet } from '../shared/Sheet.jsx';
@@ -14,7 +15,7 @@ export default function Balances({ people, debts }) {
         return (
           <button type="button" key={p.id} className={'fam-row ' + (v > 0 ? 'plus' : v < 0 ? 'minus' : 'zero')}
             onClick={() => sheet.open('', <PersonSheet personId={p.id} />)}>
-            {p.avatar && <span className="fam-av" aria-hidden="true">{p.avatar}</span>}
+            {p.avatar && <Avatar value={p.avatar} className="fam-av" />}
             <span className="fam-name">{p.name}</span>
             <span className="fam-amt"><strong>{money(Math.abs(v))}</strong><small>{balanceWhat(p, v)}</small></span>
             <Arrow kind="chev-next" />
