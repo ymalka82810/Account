@@ -1,23 +1,22 @@
-import { useState } from 'react';
-import { AVATARS, PARENT_AVATARS } from '../../state/state.js';
-
-// תמונות הפלסטלינה של הדמויות (public/avatars/<key>.webp, מ-scripts/blender/avatars.py).
-// ערך שאינו ברשימה (דמות ישנה, ברירת המחדל, סימן ➕) נשאר אימוג'י רגיל.
-const KNOWN = new Set([...AVATARS, ...PARENT_AVATARS]);
-
-/** שם הקובץ של דמות: הקודים בהקסה מופרדים ב-'-', בלי FE0F (כמו key_of ב-scripts/blender/avatars_prep.py). */
-const avatarKey = (/** @type {string} */ a) => Array.from(a, (c) => /** @type {number} */ (c.codePointAt(0))).filter((c) => c !== 0xfe0f).map((c) => c.toString(16)).join('-');
+import { useEffect, useState } from 'react';
+import { avatarReady, avatarUrl, loadAvatar } from '../../lib/avatars.js';
 
 /**
+ * דמות פלסטלינה (public/avatars). עד שהתמונה נטענה, ואם נכשלה, מוצג האימוג'י ולא ריבוע ריק.
  * @param {{ value: string, className?: string, as?: 'span' | 'div' }} props
  */
 export default function Avatar({ value, className, as: Tag = 'span' }) {
-  // תמונה שלא נטענה (קובץ חסר, חסימה, רשת) לא משאירה ריבוע ריק: מציגים את האימוג'י במקומה
-  const [failed, setFailed] = useState('');
+  const [, rerender] = useState(0);
+  useEffect(() => {
+    if (!avatarUrl(value) || avatarReady(value)) return undefined;
+    let alive = true;
+    loadAvatar(value).then((ok) => { if (alive && ok) rerender((n) => n + 1); });
+    return () => { alive = false; };
+  }, [value]);
   return (
     <Tag className={className} aria-hidden="true">
-      {KNOWN.has(value) && failed !== value
-        ? <img className="avatar-img" src={`avatars/${avatarKey(value)}.webp`} alt="" draggable={false} decoding="async" onError={() => setFailed(value)} />
+      {avatarReady(value)
+        ? <img className="avatar-img" src={avatarUrl(value) || ''} alt="" draggable={false} decoding="async" />
         : value}
     </Tag>
   );

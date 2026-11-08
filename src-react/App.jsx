@@ -1,3 +1,4 @@
+import { useAvatarsReady } from './lib/avatars.js';
 import Avatar from './components/shared/Avatar.jsx';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { state, LAST_ROLE_KEY, LAST_PALETTE_KEY, THEME_COLOR, tabLabels, subscribeAuth, authVersion, bumpAuth } from './state/state.js';
@@ -36,12 +37,12 @@ const ICON_CURRENCY_KEY = 'app-icon-currency';
 
 // ---------- איזה מסך מוצג ----------
 // loading | noserver | welcome | setup | login | join | pin | notebook | app
-function currentScreen(data) {
+function currentScreen(data, avatarsReady) {
   if (!client) return 'noserver';
   // הפנקס האישי עובד במכשיר בלבד, בלי כניסה, ולכן לא מחכים לשרת.
   // מי שיש לו כניסה שמורה ופתח אותו ממסך "אין חיבור" (offlineNotebook) נשאר בו גם כשהשרת חוזר, עד שיחזור משם.
   if ((!state.token || state.offlineNotebook) && state.view === 'notebook') return 'notebook';
-  if (state.token) return data && !data.legacy ? 'app' : 'loading';
+  if (state.token) return data && !data.legacy && avatarsReady ? 'app' : 'loading'; // ממתינים גם לדמויות של בני המשפחה
   if (state.legacyPeople === null || !state.codeChecked) return 'loading';
   if (state.pinFlow) return 'pin';
   if (state.view === 'setup') return 'setup';
@@ -174,7 +175,8 @@ function Root() {
     call('auth:migrateMe', { token }).catch(() => dropSession()).finally(() => { migrating.current = false; });
   }, [token, data]);
 
-  const rawScreen = currentScreen(data);
+  const avatarsReady = useAvatarsReady(token, data && !data.legacy ? [...data.people.map((p) => p.avatar), data.me.avatar] : []);
+  const rawScreen = currentScreen(data, avatarsReady);
   const [shownScreen, setScreen] = useState(rawScreen);
   // יציאה מהאפליקציה מוצגת מיד: בלי הנתונים אי אפשר לרנדר את המסך הראשי אפילו פעם אחת.
   const screen = shownScreen === 'app' && rawScreen !== 'app' ? rawScreen : shownScreen;
