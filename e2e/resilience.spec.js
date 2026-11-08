@@ -177,7 +177,7 @@ async function timeToOpen(page) {
     btn.click();
     let launch = 0;
     const tick = () => {
-      launch = Math.max(launch, document.querySelectorAll('.gear-launch, .gear-sparks').length);
+      launch = Math.max(launch, document.querySelectorAll('.gear-launch').length);
       const wrap = document.querySelector('.sheet-wrap');
       const sheet = document.querySelector('.sheet');
       if (wrap && !wrap.hidden) {

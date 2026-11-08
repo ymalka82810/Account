@@ -387,8 +387,8 @@ function Root() {
 }
 
 // ---------- אנימציית מעבר גלגל השיניים לאריח הצף (ילד ונוער בלבד) ----------
-// גלגל השיניים קופץ ממקומו למרכז המסך, מסתובב וגדל (0.32 שנ'). אז מבזיקים ניצוצות והוא שוקע לאחור
-// ונעלם (0.26 שנ'), ובתחילת השקיעה האריח האמיתי נפתח וגדל מאותה נקודה (0.55 שנ') והניצוצות עפים (0.4 שנ'). בסך הכול כ-0.9 שנ'.
+// גלגל השיניים קופץ ממקומו למרכז המסך, מסתובב וגדל (0.32 שנ'). אז הוא שוקע לאחור
+// ונעלם (0.26 שנ'), ובתחילת השקיעה האריח האמיתי נפתח וגדל מאותה נקודה (0.55 שנ'). בסך הכול כ-0.9 שנ'.
 // הזמנים כאן ו-.gear-launch ב-style.css חייבים להישאר זהים.
 const COIN_SIZE = 192; // הגודל הסופי של גלגל השיניים לפני השקיעה
 function GearLaunch({ fromRect, onSinking, onDone }) {
@@ -432,25 +432,6 @@ function GearLaunch({ fromRect, onSinking, onDone }) {
   );
 }
 
-// הניצוצות בשכבה נפרדת מהגלגל (לא מסתובבים ולא נעלמים איתו), וממשיכים לעוף
-// ולדהות גם אחרי שהגלגל נעלם ואחרי שהאריח נפתח, עד שהם יוצאים מהמסך (לא חוסמים קלט).
-const SPARKS_MS = 400;
-function GearSparks({ onEnd }) {
-  const onEndRef = useRef(onEnd);
-  onEndRef.current = onEnd;
-  useEffect(() => {
-    const t = setTimeout(() => onEndRef.current(), SPARKS_MS + 60);
-    return () => clearTimeout(t);
-  }, []);
-  return (
-    <div className="gear-sparks" aria-hidden="true">
-      {Array.from({ length: 14 }, (_, i) => (
-        <span key={i} className={'spark' + (i % 2 ? ' spark--short' : '')} style={{ '--ang': `${i * (360 / 14)}deg`, animationDelay: `${(i % 3) * 15}ms` }} />
-      ))}
-    </div>
-  );
-}
-
 // זורק שגיאת רינדור בלשונית כש-window.__kupaCrash שווה לה. קיים רק בפיתוח (vite), ונמחק מבניית הייצור; לבדיקות ה-e2e של ErrorBoundary.
 function CrashProbe({ tab }) {
   if (import.meta.env.DEV && window.__kupaCrash === tab) throw new Error('בדיקה: שגיאת רינדור בלשונית ' + tab);
@@ -486,16 +467,14 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
   // הורה שהמכשיר שלו עוד לא קשור (ראו biometric.ts) לא ממשיך לפני הקישור.
   const dev = useQuery('biometric:deviceStatus', isParent && !isDemo(token) ? { token } : 'skip');
 
-  // ברירת מחדל: החלון עולה בקלילות (Sheet.jsx). האפקט עם הגלגל והניצוצות רק לילד ולנוער, ולא בהפחתת תנועה.
+  // ברירת מחדל: החלון עולה בקלילות (Sheet.jsx). האפקט עם הגלגל רק לילד ולנוער, ולא בהפחתת תנועה.
   const openAccount = () => {
     if (launchRect) return;
     if (isParent || reducedMotion() || !gearRef.current) sheet.open('', <AccountSheet />);
     else setLaunchRect(gearRef.current.getBoundingClientRect());
   };
-  const [sparksOn, setSparksOn] = useState(false);
   // החלון נפתח כבר בתחילת השקיעה (ולא אחרי סיום האפקט), כך שהאפקט לא מעכב ולא חוסם.
   const sinkLaunch = useCallback(() => {
-    setSparksOn(true);
     sheet.open('', <AccountSheet />, { x: window.innerWidth / 2, y: window.innerHeight / 2 });
   }, [sheet]);
   const finishLaunch = useCallback(() => setLaunchRect(null), []);
@@ -538,7 +517,6 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
         </button>
       </header>
       {launchRect && <GearLaunch fromRect={launchRect} onSinking={sinkLaunch} onDone={finishLaunch} />}
-      {sparksOn && <GearSparks onEnd={() => setSparksOn(false)} />}
 
       <nav className="tabs" ref={tabsRef} role="tablist" aria-label={t('תפריט ראשי')}>
         {tabs.map((id) => (

@@ -745,20 +745,6 @@ button.small { min-height: var(--tap); }
 .gear-launch-icon .ui-icon { width: 100%; height: 100%; }
 .gear-launch-spin.flying .gear-launch-icon { width: 5.7rem; height: 5.7rem; }
 .gear-launch-spin.sinking .gear-launch-icon { transition: width .26s ease-in, height .26s ease-in; width: 0; height: 0; }
-.gear-sparks { position: fixed; left: 50%; top: 50%; width: 0; height: 0; z-index: 22; pointer-events: none; }
-.gear-sparks .spark {
-  position: absolute; left: -3px; top: -14px; width: 6px; height: 28px; border-radius: 3px;
-  background: linear-gradient(#fffbe6, #ffd54a 45%, #ff8a00);
-  box-shadow: 0 0 6px 2px rgba(255, 200, 60, .9), 0 0 14px 4px rgba(255, 140, 0, .55);
-  opacity: 0; transform: rotate(var(--ang)) translateY(-60px) scaleY(.5);
-  animation: spark-burst .4s cubic-bezier(.25, .45, .5, .95) forwards;
-}
-.gear-sparks .spark--short { width: 5px; height: 18px; left: -2.5px; top: -9px; }
-@keyframes spark-burst {
-  0%   { opacity: 1; transform: rotate(var(--ang)) translateY(-60px)  scaleY(.5); }
-  55%  { opacity: 1; }
-  100% { opacity: 0; transform: rotate(var(--ang)) translateY(-70vmax) scaleY(1.2); }
-}
 
 /* חלון קופץ */
 :root { --ease-out: cubic-bezier(.22, 1, .36, 1); --ease-soft: cubic-bezier(.4, 0, .2, 1); }
