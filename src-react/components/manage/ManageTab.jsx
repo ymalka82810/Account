@@ -36,7 +36,7 @@ export default function ManageTab({ data, token }) {
         <Codes data={data} token={token} />
       </Collapsible>
 
-      <Collapsible name="manage-tiles" title={t('📜 יומן שינויים')} subtitle={t('מי שינה מה ומתי, ב-6 החודשים האחרונים.')}>
+      <Collapsible name="manage-tiles" title={t('יומן שינויים')} subtitle={t('מי שינה מה ומתי, ב-6 החודשים האחרונים.')}>
         <ActivityLog token={token} />
       </Collapsible>
 
