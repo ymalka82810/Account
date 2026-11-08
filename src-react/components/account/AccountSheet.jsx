@@ -5,7 +5,7 @@ import PalettePicker from '../shared/PalettePicker.jsx';
 import Arrow from '../shared/Arrow.jsx';
 import { toggleDetails } from '../../lib/motion.js';
 import FeelSettings from './FeelSettings.jsx';
-import { call } from '../../lib/api.js';
+import { call, useQuery } from '../../lib/api.js';
 import { state, CODE_KEY } from '../../state/state.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { dropSession, goToFamily, otherFamilies, addAnotherFamily, startNewFamily } from '../../state/auth.js';
@@ -69,6 +69,8 @@ export function AccountSheet() {
   const me = data.me;
   const [pushOn, setPushOn] = useState(null);
   useSheetTitle(t('החשבון שלי'));
+  // טעינה מוקדמת: רשימת המכשירים כבר מוכנה כשנפתח "המכשירים שלי", כך שהחלון נפתח בגובהו המלא ולא קופץ אחרי הטעינה.
+  useQuery('biometric:deviceStatus', me.role === 'parent' ? { token } : 'skip');
 
   useEffect(() => { if (pushSupported()) isPushOn().then(setPushOn); }, []);
 
