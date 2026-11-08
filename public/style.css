@@ -506,10 +506,10 @@ body[data-theme="teen"] #screen-loading p {
   background: var(--coin-deep);
   -webkit-mask: var(--ico-down) center / contain no-repeat;
   mask: var(--ico-down) center / contain no-repeat;
-  transition: transform .15s ease;
+  transition: transform .26s cubic-bezier(.2, .8, .2, 1);
   flex-shrink: 0;
 }
-.tile-section[open] > summary::after { transform: rotate(180deg); }
+.tile-section[open]:not(.closing) > summary::after { transform: rotate(180deg); }
 /* מלבן פנימי קבוע מאחורי הכותרת, עם רווח מהמסגרת כדי שלא ייראה חופף לה */
 .tile-section > summary::before {
   content: '';
