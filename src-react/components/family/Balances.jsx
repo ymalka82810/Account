@@ -1,28 +1,24 @@
-import { t } from '../../i18n/index.js';
 import { money } from '../../lib/computations.js';
-import { g } from '../../lib/gender.js';
+import Arrow from '../shared/Arrow.jsx';
+import { useSheet } from '../shared/Sheet.jsx';
+import PersonSheet from './PersonSheet.jsx';
+import { balanceOf, balanceWhat } from './balance.js';
 
-// יתרות: כמה מגיע או חייב לכל אחד במשפחה.
+// בני המשפחה: שורה קטנה לכל אדם (שם ויתרה). לחיצה פותחת את הדף האישי שלו בחלון תחתון.
 export default function Balances({ people, debts }) {
-  const bal = new Map(people.map((p) => [p.id, 0]));
-  debts.forEach((d) => {
-    bal.set(d.creditor, bal.get(d.creditor) + d.amount);
-    bal.set(d.debtor, bal.get(d.debtor) - d.amount);
-  });
-  const max = Math.max(1, ...people.map((p) => Math.abs(bal.get(p.id) || 0)));
+  const sheet = useSheet();
   return (
-    <div id="balances" className="balances">
+    <div className="fam-rows">
       {people.map((p) => {
-        const v = bal.get(p.id) || 0;
+        const v = balanceOf(p.id, debts);
         return (
-          <div className={'bal ' + (v > 0 ? 'plus' : v < 0 ? 'minus' : 'zero')} key={p.id}>
-            <div className="name">{p.avatar ? `${p.avatar} ` : ''}{p.name}</div>
-            <div className="num">{money(Math.abs(v))}</div>
-            <div className="what">{v > 0 ? g(p.gender, 'מגיע לו', 'מגיע לה', 'מגיע לו/ה') : v < 0 ? g(p.gender, 'חייב', 'חייבת', 'חייב/ת') : t('הכול מסודר')}</div>
-            {v !== 0 && (
-              <div className="bal-bar"><div className="bal-bar-fill" style={{ width: `${(Math.abs(v) / max) * 100}%` }} /></div>
-            )}
-          </div>
+          <button type="button" key={p.id} className={'fam-row ' + (v > 0 ? 'plus' : v < 0 ? 'minus' : 'zero')}
+            onClick={() => sheet.open('', <PersonSheet personId={p.id} />)}>
+            {p.avatar && <span className="fam-av" aria-hidden="true">{p.avatar}</span>}
+            <span className="fam-name">{p.name}</span>
+            <span className="fam-amt"><strong>{money(Math.abs(v))}</strong><small>{balanceWhat(p, v)}</small></span>
+            <Arrow kind="chev-next" />
+          </button>
         );
       })}
     </div>

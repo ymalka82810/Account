@@ -8,7 +8,7 @@ export default function TeenOverview({ teens }) {
   if (!teens.length) return null;
   return (
     <div id="teenFriendsRoot">
-      <h2 id="sec-teens" className="sec-h">{t('מה הנוער רושם עם חברים')}</h2>
+      <h2>{t('מה הנוער רושם עם חברים')}</h2>
       <p className="hint">{t('לקריאה בלבד. כל רישום עם חבר/ה ממתין גם לאישור שלהם.')}</p>
       {/* כל נער/ה באריח נפרד שנפתח לפי הצורך (נפתח מראש כשיש רק אחד) */}
       {teens.map((teen) => (

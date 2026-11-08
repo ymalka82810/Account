@@ -88,24 +88,35 @@ main { max-width: 640px; margin: 0 auto; padding: 16px; }
 .panel.active { display: block; }
 h2 { font-size: 1.1rem; margin: 22px 0 10px; }
 
-/* יתרות */
-.balances { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-.bal {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 12px 14px;
+/* בני המשפחה: שורה קטנה לכל אדם, ודף אישי בחלון תחתון */
+.fam-rows { display: grid; gap: 8px; margin-bottom: 8px; }
+.fam-row {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-height: var(--tap); text-align: start;
+  font: inherit; color: inherit; cursor: pointer;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 14px;
 }
-.bal .name { font-weight: 700; }
-.bal .num { font-size: 1.35rem; font-weight: 800; margin-top: 4px; }
-.bal .what { font-size: .85rem; color: var(--ink-soft); }
-.bal.plus { border-inline-start: 6px solid var(--get); }
-.bal.minus { border-inline-start: 6px solid var(--owe); }
-.bal.zero { border-inline-start: 6px solid var(--line); }
+.fam-row:active, .fam-row:focus-visible { border-color: var(--coin-deep); }
+.fam-row.plus { border-inline-start: 6px solid var(--get); }
+.fam-row.minus { border-inline-start: 6px solid var(--owe); }
+.fam-row.zero { border-inline-start: 6px solid var(--line); }
+.fam-av { font-size: 1.4rem; line-height: 1; }
+.fam-name { flex: 1; min-width: 0; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fam-amt { display: grid; justify-items: end; }
+.fam-amt small { font-size: .8rem; color: var(--ink-soft); }
+.fam-row.plus .fam-amt strong { color: var(--get); }
+.fam-row.minus .fam-amt strong { color: var(--owe); }
+.fam-link { margin-top: 8px; font-weight: 500; }
+.fam-link .fam-name { font-weight: 500; }
+.fam-badge { min-width: 1.6em; padding: 1px 8px; border-radius: 99px; text-align: center; font-size: .85rem; background: var(--line); }
+.person-bal { text-align: center; padding: 6px 0 4px; }
+.person-bal .num { font-size: 1.8rem; font-weight: 800; }
+.person-bal .what { color: var(--ink-soft); }
+.sec-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sec-row h2 { margin: 0; }
+/* מצב ריק קטן: שורה אחת במקום קופסה גדולה */
+.empty.empty-sm { padding: 10px 12px; border-width: 1px; font-size: .9rem; }
 .bal-bar { height: 5px; border-radius: 99px; background: var(--line); margin-top: 8px; overflow: hidden; }
 .bal-bar-fill { height: 100%; border-radius: 99px; }
-.bal.plus .bal-bar-fill { background: var(--get); }
-.bal.minus .bal-bar-fill { background: var(--owe); }
 .plus .num { color: var(--get); }
 .minus .num { color: var(--owe); }
 
@@ -805,7 +816,7 @@ body[data-theme="child"] .card,
 body[data-theme="child"] .tile,
 body[data-theme="child"] .sum,
 body[data-theme="child"] .bigbtn,
-body[data-theme="child"] .bal,
+body[data-theme="child"] .fam-row,
 body[data-theme="child"] .debt,
 body[data-theme="child"] .person {
   box-shadow: 0 4px 14px rgba(74, 68, 104, .08);
@@ -877,7 +888,7 @@ body[data-theme="parent"] .who-am-i .avatar-sm { font-size: 1.5rem; }
 body[data-theme="parent"] .tab[data-tab="family"] { order: -1; }
 body[data-theme="parent"] .tab.active { border-bottom-color: var(--coin); }
 body[data-theme="parent"] main h2 { font-size: .85rem; font-weight: 700; color: var(--ink-soft); letter-spacing: .06em; margin: 28px 0 10px; }
-body[data-theme="parent"] .card, body[data-theme="parent"] .bal,
+body[data-theme="parent"] .card, body[data-theme="parent"] .fam-row,
 body[data-theme="parent"] .debt, body[data-theme="parent"] .person { box-shadow: none; }
 body[data-theme="parent"] .sum { border-radius: var(--radius); padding: 12px; }
 body[data-theme="parent"] .sum .num { font-size: 1.45rem; }
@@ -936,7 +947,7 @@ body[data-theme="teen"] .bigbtn.owe:hover, body[data-theme="teen"] .bigbtn.owe:f
 body[data-theme="teen"] .bigbtn.get:hover, body[data-theme="teen"] .bigbtn.get:focus-visible { box-shadow: 0 0 0 1px var(--btn-get-bot), 0 8px 24px var(--btn-get-glow); }
 body[data-theme="teen"] .bigbtn.owe:active { box-shadow: 0 0 0 1px var(--btn-owe-bot), 0 4px 12px var(--btn-owe-glow); }
 body[data-theme="teen"] .bigbtn.get:active { box-shadow: 0 0 0 1px var(--btn-get-bot), 0 4px 12px var(--btn-get-glow); }
-body[data-theme="teen"] .card, body[data-theme="teen"] .debt, body[data-theme="teen"] .person, body[data-theme="teen"] .bal { border-color: var(--line); }
+body[data-theme="teen"] .card, body[data-theme="teen"] .debt, body[data-theme="teen"] .person, body[data-theme="teen"] .fam-row { border-color: var(--line); }
 body[data-theme="teen"] button.primary { border-radius: 16px; background: var(--neon-grad); color: var(--on-coin); box-shadow: 0 0 18px var(--neon-glow); }
 body[data-theme="teen"] .chip, body[data-theme="teen"] .av, body[data-theme="teen"] .tile { border-radius: 99px; }
 body[data-theme="teen"] .tile { border-radius: 22px; }
@@ -1528,10 +1539,6 @@ body[data-theme="parent"] .acct-row, body[data-theme="parent"] .acct-more > summ
 .row-menu-list .small { width: 100%; white-space: nowrap; }
 body[data-theme="parent"] .row-menu-list { border-radius: 8px; box-shadow: 0 6px 20px rgba(0, 0, 0, .5); }
 body[data-theme="teen"] .row-menu-list { border-radius: 16px; box-shadow: 0 10px 30px var(--neon-glow); }
-
-/* ===== לשונית המשפחה: קפיצות עוגן דביקות מתחת ללשוניות (--tabs-h נקבע ב-App.jsx) ===== */
-.sec-jump { position: sticky; top: var(--tabs-h, 56px); z-index: 4; display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 0; background: var(--bg); }
-.sec-h { scroll-margin-top: calc(var(--tabs-h, 56px) + 64px); }
 
 /* ===== ErrorBoundary (shared/ErrorBoundary.jsx) ו"אין חיבור" (shared/NoConnection.jsx) ===== */
 /* הצבעים מגיעים ממשתני הערכה, ולכן אותו כרטיס נראה נכון בילד, בנוער ובהורה (כולל כהה). */
