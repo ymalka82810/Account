@@ -485,7 +485,7 @@ body[data-theme="teen"] #screen-loading p {
   padding: 14px 16px;
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-areas: "title marker" "subtitle subtitle";
+  grid-template-areas: "title marker";
   align-items: center;
   column-gap: 10px;
   position: relative;
@@ -513,15 +513,8 @@ body[data-theme="teen"] #screen-loading p {
   pointer-events: none;
 }
 .tile-title { grid-area: title; font-weight: 700; font-size: 1.05rem; position: relative; }
-.tile-section > summary .hint {
-  grid-area: subtitle;
-  margin: 6px 0 0;
-  text-align: start;
-  display: none;
-  position: relative;
-}
-.tile-section[open] > summary .hint { display: block; }
 .tile-body { padding: 0 16px 16px; display: grid; gap: 14px; }
+.tile-body > .hint { margin: 0; }
 
 /* ריבועי בחירת אדם */
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px; width: 100%; max-width: 520px; margin-top: 14px; }
