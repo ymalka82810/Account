@@ -1570,8 +1570,10 @@ body[data-motion="off"] *, body[data-motion="off"] *::before, body[data-motion="
 .acct-more-body { display: grid; gap: 8px; margin-top: 8px; }
 .acct-more > summary {
   list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: var(--tap);
-  padding: 10px 14px; border: 1.5px dashed var(--line); border-radius: 12px; font-weight: 600; color: var(--ink-soft);
+  padding: 10px 14px; font: inherit; color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 12px;
 }
+.acct-more > summary:hover, .acct-more > summary:active, .acct-more > summary:focus-visible, .acct-more[open] > summary { border-color: var(--coin); }
+.acct-more > summary .arrow { flex: none; }
 .acct-more > summary::-webkit-details-marker { display: none; }
 .acct-more[open]:not(.closing) > summary .arrow { transform: rotate(90deg); }
 html[dir="rtl"] .acct-more[open]:not(.closing) > summary .arrow { transform: scaleX(-1) rotate(90deg); }
