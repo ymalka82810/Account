@@ -111,8 +111,8 @@ h2 { font-size: 1.1rem; margin: 22px 0 10px; }
 .person-bal { text-align: center; padding: 6px 0 4px; }
 .person-bal .num { font-size: 1.8rem; font-weight: 800; }
 .person-bal .what { color: var(--ink-soft); }
-.sec-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.sec-row h2 { margin: 0; }
+.sec-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 22px 0 10px; }
+.sec-row h2, body[data-theme] main .sec-row h2 { margin: 0; }
 /* מצב ריק קטן: שורה אחת במקום קופסה גדולה */
 .empty.empty-sm { padding: 10px 12px; border-width: 1px; font-size: .9rem; }
 .bal-bar { height: 5px; border-radius: 99px; background: var(--line); margin-top: 8px; overflow: hidden; }
