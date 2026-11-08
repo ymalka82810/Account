@@ -5,10 +5,10 @@ import { useSheet } from './Sheet.jsx';
 
 export const randomAvatar = (options = AVATARS) => options[Math.floor(Math.random() * options.length)];
 
-// compact=true: מציג 4 שורות, כל אחת נגללת לצדדים בפני עצמה ומכילה עד 20 דמויות (בסדר קבוע),
+// compact=true: מציג 2 שורות, כל אחת נגללת לצדדים בפני עצמה ומכילה עד 20 דמויות (בסדר קבוע),
 // ומתחתיהן כפתור "עוד" שפותח את הרשימה המלאה באריח (sheet) נפרד; הבחירה שם נסגרת
 // וחוזרת ל-onChange הרגיל, בלי לשמור כלום בשרת (מתאים לטופס יצירה, לא רק לעריכת דמות קיימת).
-const ROWS = 4;
+const ROWS = 2;
 const MAX_PER_ROW = 20;
 
 const Chevron = ({ dir }) => (
@@ -88,7 +88,7 @@ export default function AvatarPicker({ value, onChange, options = AVATARS, taken
   if (!compact) return <div className="avatars">{shown.map(btn)}</div>;
 
   // הסדר קבוע לגמרי: הדמויות לא זזות ולא מתחלפות בין שורות בעת בחירה.
-  // רק אם הדמות הנבחרת לא נכנסת ב-4 השורות (למשל הגרלה ראשונית), היא תופסת את המקום האחרון.
+  // רק אם הדמות הנבחרת לא נכנסת ב-2 השורות (למשל הגרלה ראשונית), היא תופסת את המקום האחרון.
   const perRow = Math.min(MAX_PER_ROW, Math.ceil(shown.length / ROWS));
   let list = shown.slice(0, ROWS * perRow);
   if (value && shown.includes(value) && !list.includes(value)) list = [...list.slice(0, -1), value];
