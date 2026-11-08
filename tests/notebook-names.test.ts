@@ -16,6 +16,12 @@ describe("התאמת שמות בפנקס", () => {
     expect(nameMatch("שרה", "משה")).toBeNull();
     expect(nameMatch("דני", "רוני")).toBeNull();
   });
+  test("שמות קצרים (3 אותיות) שנבדלים באות אחת אינם דומים", () => {
+    expect(nameMatch("אדם", "אדל")).toBeNull();
+    expect(nameMatch("רון", "רום")).toBeNull();
+    expect(nameMatch("אדם", "אדם")).toBe("same");
+    expect(nameMatch("אדם", "אדם כהן")).toBe("similar");
+  });
 });
 
 // @ts-ignore - מודול JS של הפרונטאנד

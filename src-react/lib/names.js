@@ -26,6 +26,8 @@ export function nameMatch(a, b) {
   const [short, long] = x.length <= y.length ? [x, y] : [y, x];
   if (short.length >= 3 && long.startsWith(short)) return 'similar';
   // אותו שם פרטי עם שם משפחה בצד אחד בלבד ("דני" מול "דני כהן") נתפס כבר בבדיקה למעלה.
+  // בשמות של 3 אותיות החלפת אות אחת היא שליש מהשם (אדם/אדל, רון/רום) - לא נחשב דומה.
+  if (long.length <= 3) return null;
   const limit = long.length >= 7 ? 2 : 1;
   if (short.length >= 3 && editDistance(x, y) <= limit) return 'similar';
   return null;
