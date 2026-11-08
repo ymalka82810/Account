@@ -744,6 +744,13 @@ button.small { min-height: var(--tap); }
 @keyframes sheet-grow { from { opacity: 0; transform: scale(.02); } to { opacity: 1; transform: scale(1); } }
 @media (min-width: 640px) { .sheet-wrap { align-items: center; } .sheet { border-radius: 24px; } }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+/* כותרת החלון (כולל ✕) נשארת צמודה למעלה בגלילה: בלי כפתור חתוך שחופף לתוכן */
+.sheet-head {
+  position: sticky; top: -16px; z-index: 6; margin-top: -16px; padding-top: 16px; padding-bottom: 8px;
+  background: var(--bg);
+}
+body[data-theme="child"] .sheet-head { background: #e9ecf9; }
+body[data-theme="teen"] .sheet-head { background: #07070b; }
 .sheet-head h2 { margin: 0; }
 .flow { display: grid; gap: 12px; }
 .flow-q { font-size: 1.15rem; font-weight: 700; margin: 8px 0 0; text-align: center; }
