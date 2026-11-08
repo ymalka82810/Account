@@ -42,8 +42,10 @@ jobs:
           {
             node -v; npm -v
             ls -la assets android/app/src/main/res | head -40
-            npx --yes @capacitor/assets@3 generate --android --assetPath assets --verbose
-            echo "assets exit code: $?"
+            . /etc/os-release; echo "$PRETTY_NAME"; uname -m
+            mkdir -p /tmp/capa && (cd /tmp/capa && npm init -y >/dev/null && npm i @capacitor/assets@3 --foreground-scripts 2>&1 | grep -v "npm warn deprecated" | tail -30)
+            node /tmp/capa/node_modules/@capacitor/assets/bin/capacitor-assets generate --android --assetPath assets 2>&1 | head -30
+            echo "assets exit code: ${PIPESTATUS[0]}"
           } > /tmp/diag.log 2>&1
           code=$(grep -o 'assets exit code: [0-9]*' /tmp/diag.log | grep -o '[0-9]*$')
           cat /tmp/diag.log
