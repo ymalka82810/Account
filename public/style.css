@@ -352,6 +352,8 @@ input.invalid { border-color: var(--owe); box-shadow: 0 0 0 2px var(--owe); }
   text-align: center;
   box-shadow: 0 6px 20px rgba(0,0,0,.25);
 }
+/* הודעות מערכת נסגרות בהחלקה הצידה (lib/useSwipeDismiss.js); גלילה אנכית נשארת של הדפדפן */
+.toast, .update-banner, .offline-banner { touch-action: pan-y; }
 .toast-action {
   margin-inline-start: 14px;
   background: none;

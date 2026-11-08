@@ -3,6 +3,7 @@ import { t } from '../../i18n/index.js';
 import { client } from '../../lib/client.js';
 import { deviceHasFamily } from '../../state/auth.js';
 import { startOutbox } from '../../lib/outbox.js';
+import { useSwipeDismiss } from '../../lib/useSwipeDismiss.js';
 
 // סימון קצר כשאין חיבור לשרת. הפנקס האישי נשמר במכשיר, ולכן לא נחסם ולא תלוי בחיבור.
 // מה שהקוד באמת עושה: רישום חוב או החזר חדש בלי חיבור נשמר במכשיר (lib/outbox.js) ונשלח כשהחיבור חוזר, גם אחרי סגירת האפליקציה.
@@ -12,13 +13,16 @@ const DELAY_MS = 4000;
 
 export default function OfflineBanner() {
   const [down, setDown] = useState(false);
+  // נסגר בהחלקה עד שהחיבור חוזר; ניתוק חדש מציג אותו שוב
+  const [dismissed, setDismissed] = useState(false);
+  const swipe = useSwipeDismiss(() => setDismissed(true));
   useEffect(() => {
     if (!client) return undefined;
     const stopOutbox = startOutbox();
     let timer = 0;
     const apply = (/** @type {{ isWebSocketConnected: boolean }} */ cs) => {
       clearTimeout(timer);
-      if (cs.isWebSocketConnected) { setDown(false); return; }
+      if (cs.isWebSocketConnected) { setDown(false); setDismissed(false); return; }
       timer = window.setTimeout(() => setDown(!client.connectionState().isWebSocketConnected), DELAY_MS);
     };
     apply(client.connectionState());
@@ -26,9 +30,9 @@ export default function OfflineBanner() {
     return () => { clearTimeout(timer); off(); stopOutbox(); };
   }, []);
 
-  if (!down || !deviceHasFamily()) return null;
+  if (!down || dismissed || !deviceHasFamily()) return null;
   return (
-    <div className="offline-banner" role="status">
+    <div className="offline-banner" role="status" {...swipe}>
       {t('אין חיבור לשרת. הפנקס האישי ממשיך לעבוד כרגיל. חובות והחזרים חדשים בקופה המשפחתית נשמרים במכשיר ויישלחו כשהחיבור יחזור. שאר השינויים יישלחו רק אם האפליקציה תישאר פתוחה.')}
     </div>
   );
