@@ -42,6 +42,7 @@ export function SheetProvider({ children }) {
   const [leaving, setLeaving] = useState(false);
   const leaveTimer = useRef(0);
   const lastStack = useRef(/** @type {any[]} */ ([]));
+  const lastAppCtx = useRef(/** @type {any} */ (null));
   const markHeight = () => { prevH.current = sheetElRef.current ? sheetElRef.current.offsetHeight : 0; };
 
   const queue = (fn) => { histQueue.current = histQueue.current.then(fn).catch(() => {}); };
@@ -135,6 +136,10 @@ export function SheetProvider({ children }) {
   }, [stack]);
 
   if (stack.length) lastStack.current = stack;
+  // בזמן סגירה מונפשת הגוף עוד מוצג, אבל ההקשר של App כבר יכול להתאפס (יציאה מהחשבון). ממשיכים להציג את ההקשר
+  // האחרון של החלון הפתוח, אחרת useApp() מחזיר null והגוף זורק שגיאה (מסך "נסו שוב" ביציאה).
+  if (stack.length) lastAppCtx.current = appCtx;
+  const bodyCtx = stack.length ? appCtx : lastAppCtx.current;
   const view = stack.length ? stack : (leaving ? lastStack.current : []);
   const top = view[view.length - 1] || null;
   const first = stack[0] || null;
@@ -218,7 +223,7 @@ export function SheetProvider({ children }) {
           {view.map((e, i) => (
             <div key={e.key} hidden={i !== view.length - 1}
               className={i === view.length - 1 && isOpen && navDir.current && (view.length > 1 || navDir.current === 'back') ? 'sheet-page-' + navDir.current : undefined}>
-              <SheetCtx.Provider value={ctxOf(e.key)}><AppCtx.Provider value={appCtx}>{e.body}</AppCtx.Provider></SheetCtx.Provider>
+              <SheetCtx.Provider value={ctxOf(e.key)}><AppCtx.Provider value={bodyCtx}>{e.body}</AppCtx.Provider></SheetCtx.Provider>
             </div>
           ))}
         </div>
