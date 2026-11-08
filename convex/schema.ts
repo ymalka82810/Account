@@ -118,6 +118,9 @@ export default defineSchema({
     kind: v.string(),
     // שמות כפי שהיו ברגע הפעולה (האדם יכול להימחק או להחליף שם אחר כך)
     actorName: v.string(),
+    // מגדר מי שביצע/ה ומי שהפעולה נעשתה עליו/ה, כפי שהיה ברגע הפעולה (לצורת הפנייה ביומן)
+    actorGender: v.optional(v.union(v.literal("male"), v.literal("female"))),
+    subjectGender: v.optional(v.union(v.literal("male"), v.literal("female"))),
     from: v.optional(v.string()),
     to: v.optional(v.string()),
     subject: v.optional(v.string()),

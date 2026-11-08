@@ -45,7 +45,7 @@ export const add = mutation({
     if (personAvatar && members.some((p) => p.avatar === personAvatar)) throw new ConvexError("הדמות הזו כבר תפוסה על ידי מישהו אחר במשפחה");
     // ילד/ה או נער/ה שנוספו בלי קוד נכנסים בלי קוד, ויכולים לקבוע קוד בעצמם מתי שרוצים (auth:setFirstPin).
     const id = await ctx.db.insert("people", { familyId: me.familyId, name: clean, role, avatar: personAvatar, gender, ...(!pin && role !== "parent" ? { freeEntry: true } : {}) });
-    await logActivity(ctx, me, "person_add", { subject: clean });
+    await logActivity(ctx, me, "person_add", { subject: clean, subjectGender: gender });
     if (pin) {
       const pinSalt = randomHex(16);
       await ctx.db.patch(id, { pinSalt, pinHash: await hashPin(pin, pinSalt), pinLength: pin.length });
@@ -82,7 +82,7 @@ export const remove = mutation({
     const rec = await ctx.db.query("recurring").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     for (const r of rec) if (r.from === id || r.to === id) await ctx.db.delete(r._id);
     await ctx.db.delete(id);
-    await logActivity(ctx, me, "person_remove", { subject: target.name });
+    await logActivity(ctx, me, "person_remove", { subject: target.name, subjectGender: target.gender });
   },
 });
 
@@ -113,7 +113,7 @@ export const setRole = mutation({
       await ctx.db.patch(id, { notebookShared: false, notebookPaused: undefined, ...(p.notebookShared ? { notebookShareEnded: true } : {}) });
       await purgeNotebook(ctx, id);
     }
-    await logActivity(ctx, me, "role_set", { subject: p.name, to: role });
+    await logActivity(ctx, me, "role_set", { subject: p.name, subjectGender: p.gender, to: role });
     // הורה שהפך לילד/ה או לנער/ה לא צריך את המכשירים הביומטריים שלו.
     if (p.role === "parent") await purgeBiometric(ctx, id);
     // מי שהפך להורה לא ממשיך עם הסשן הקיים: הוא נכנס מחדש וקושר מכשיר בקוד קישור (הורה לא קשור לא פועל כהורה).
@@ -134,7 +134,7 @@ export const rename = mutation({
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     if (members.some((m) => m._id !== id && m.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה");
     await ctx.db.patch(id, { name: clean });
-    await logActivity(ctx, me, "person_rename", { from: p.name, subject: clean });
+    await logActivity(ctx, me, "person_rename", { from: p.name, subject: clean, subjectGender: p.gender });
   },
 });
 

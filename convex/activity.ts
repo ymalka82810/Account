@@ -16,10 +16,10 @@ export type ActivityKind =
 
 export async function logActivity(
   ctx: MutationCtx, actor: Doc<"people">, kind: ActivityKind,
-  extra: { from?: string; to?: string; subject?: string; amount?: number; currency?: string } = {},
+  extra: { from?: string; to?: string; subject?: string; subjectGender?: "male" | "female"; amount?: number; currency?: string } = {},
 ) {
   if (!actor.familyId) return;
-  await ctx.db.insert("activity", { familyId: actor.familyId, actorId: actor._id, actorName: actor.name, kind, ...extra, at: Date.now() });
+  await ctx.db.insert("activity", { familyId: actor.familyId, actorId: actor._id, actorName: actor.name, actorGender: actor.gender, kind, ...extra, at: Date.now() });
 }
 
 export const list = query({
@@ -27,8 +27,14 @@ export const list = query({
   handler: async (ctx, { token }) => {
     const me = await requireParent(ctx, token);
     const rows = await ctx.db.query("activity").withIndex("by_family_at", (q) => q.eq("familyId", me.familyId)).order("desc").take(LIST_LIMIT);
+    // שורות ישנות נכתבו בלי מגדר: משלימים מהמגדר הנוכחי של מי שביצע/ה (הוא ננעל אחרי שנקבע, לכן מדויק).
+    const genders = new Map<string, "male" | "female" | undefined>();
+    for (const r of rows) {
+      if (r.actorGender === undefined && !genders.has(r.actorId)) genders.set(r.actorId, (await ctx.db.get(r.actorId))?.gender);
+    }
     return rows.map((r) => ({
-      id: r._id, kind: r.kind, actor: r.actorName, from: r.from ?? null, to: r.to ?? null,
+      id: r._id, kind: r.kind, actor: r.actorName, actorGender: r.actorGender ?? genders.get(r.actorId) ?? null,
+      subjectGender: r.subjectGender ?? null, from: r.from ?? null, to: r.to ?? null,
       subject: r.subject ?? null, amount: r.amount ?? null, currency: r.currency ?? null, at: r.at,
     }));
   },
