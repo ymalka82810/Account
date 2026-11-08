@@ -20,9 +20,9 @@ export default function Summary({ entries, onMore }) {
     <>
       <h2>{t('סיכום חודשי')}</h2>
       <div className="sum-nav">
-        <button className="ghost small" aria-label={t('חודש קודם')} onClick={() => setMonth(shiftMonth(month, -1))}>‹</button>
+        <button className="ghost small cal-nav" aria-label={t('חודש קודם')} onClick={() => setMonth(shiftMonth(month, -1))}><Arrow kind="chev-back" /></button>
         <strong>{monthName(month)}</strong>
-        <button className="ghost small" aria-label={t('חודש הבא')} disabled={month >= thisMonth} onClick={() => setMonth(shiftMonth(month, 1))}>›</button>
+        <button className="ghost small cal-nav" aria-label={t('חודש הבא')} disabled={month >= thisMonth} onClick={() => setMonth(shiftMonth(month, 1))}><Arrow kind="chev-next" /></button>
       </div>
 
       <div className="sum-cards">

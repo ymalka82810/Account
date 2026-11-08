@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import Arrow from './Arrow.jsx';
 
 // תפריט בחירה מעוצב משלנו (במקום <select> עם רשימת ברירת המחדל של הדפדפן/מערכת ההפעלה),
 // כדי שהעיצוב יתאים לערכת הנושא של כל רמת משתמש (ילד/נער/הורה).
@@ -72,7 +73,7 @@ export default function Select({ value, onChange, options, className = '', place
         onClick={() => { if (!open) setActiveIdx(Math.max(0, options.findIndex((o) => o.value === value))); setOpen((o) => !o); }}
         onKeyDown={onKeyDown}>
         <span className="dd-val">{current ? current.label : placeholder}</span>
-        <span className="dd-arrow" aria-hidden="true" />
+        <Arrow kind="chev-next" className="dd-arrow" />
       </button>
       {open && pos && createPortal(
         <ul ref={listRef} className={'dd-list' + (pos.above ? ' dd-list-up' : '')} role="listbox"

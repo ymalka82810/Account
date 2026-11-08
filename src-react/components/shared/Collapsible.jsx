@@ -1,3 +1,4 @@
+import Arrow from './Arrow.jsx';
 import { setDetailsOpen, toggleDetails } from '../../lib/motion.js';
 
 // אריח נפתח/נסגר להגדרה בודדת (לדוגמה בלשונית הניהול), כדי שרשימת ההגדרות לא תהיה ארוכה מדי.
@@ -19,6 +20,7 @@ export default function Collapsible({ title, subtitle, defaultOpen, name, childr
     <details className="tile-section" data-group={name} open={defaultOpen || undefined}>
       <summary onClick={onSummary}>
         <span className="tile-title">{title}</span>
+        <Arrow kind="chev-next" className="tile-marker" />
       </summary>
       <div className="tile-body">
         {subtitle && <p className="hint">{subtitle}</p>}

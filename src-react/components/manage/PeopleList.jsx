@@ -1,3 +1,4 @@
+import Arrow from '../shared/Arrow.jsx';
 import { useState } from 'react';
 import { t, tn } from '../../i18n/index.js';
 import { useBioConfirm } from '../shared/BioConfirm.jsx';
@@ -97,6 +98,7 @@ export default function PeopleList({ people, me, token, joinRequests = [] }) {
             {p.avatar && <span className="avatar-md" aria-hidden="true">{p.avatar}</span>}
             <span className="person-name">{p.name}</span>
             {p.lockAlert && <span className="person-flag" aria-hidden="true">⚠️</span>}
+            <Arrow kind="chev-next" className="person-marker" />
           </summary>
           <div className="person-body">
           <div className="text">

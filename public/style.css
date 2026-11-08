@@ -1,6 +1,5 @@
 :root {
   /* אייקוני חצים משלנו (SVG) לשימוש כמסכה: הצבע בא מ-background של האלמנט, כלומר מערכת הנושא */
-  --ico-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   color-scheme: light;
   --ink: #4a4468;
   --ink-soft: #8d84ab;
@@ -219,16 +218,9 @@ body[data-theme="teen"] .cal-day.on { background: var(--neon-grad); color: var(-
 .dd-btn:hover { border-color: var(--coin); }
 .dd-btn[aria-expanded="true"] { border-color: var(--coin-deep); }
 .dd-val { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.dd-arrow {
-  flex: none;
-  width: 16px;
-  height: 16px;
-  background: var(--coin-deep);
-  -webkit-mask: var(--ico-down) center / contain no-repeat;
-  mask: var(--ico-down) center / contain no-repeat;
-  transition: transform .15s ease;
-}
-.dd-btn[aria-expanded="true"] .dd-arrow { transform: rotate(180deg); }
+.dd-arrow { flex: none; width: 1.15em; height: 1.15em; }
+.dd-btn[aria-expanded="true"] .dd-arrow { transform: rotate(90deg); }
+html[dir="rtl"] .dd-btn[aria-expanded="true"] .dd-arrow { transform: scaleX(-1) rotate(90deg); }
 /* חצים בעיצוב שלנו (רכיב Arrow): מקו עגול וגמיש, בצבע הדגש של ערכת הנושא; הכיוון הלוגי מתהפך לפי כיוון השפה */
 .arrow {
   width: 1.15em; height: 1.15em; flex: none; vertical-align: -.2em;
@@ -498,18 +490,9 @@ body[data-theme="teen"] #screen-loading p {
   position: relative;
 }
 .tile-section > summary::-webkit-details-marker { display: none; }
-.tile-section > summary::after {
-  grid-area: marker;
-  content: '';
-  width: 20px;
-  height: 20px;
-  background: var(--coin-deep);
-  -webkit-mask: var(--ico-down) center / contain no-repeat;
-  mask: var(--ico-down) center / contain no-repeat;
-  transition: transform .26s cubic-bezier(.2, .8, .2, 1);
-  flex-shrink: 0;
-}
-.tile-section[open]:not(.closing) > summary::after { transform: rotate(180deg); }
+.tile-section > summary .tile-marker { grid-area: marker; position: relative; width: 1.3rem; height: 1.3rem; transition: transform .26s cubic-bezier(.2, .8, .2, 1); }
+.tile-section[open]:not(.closing) > summary .tile-marker { transform: rotate(90deg); }
+html[dir="rtl"] .tile-section[open]:not(.closing) > summary .tile-marker { transform: scaleX(-1) rotate(90deg); }
 /* מלבן פנימי קבוע מאחורי הכותרת, עם רווח מהמסגרת כדי שלא ייראה חופף לה */
 .tile-section > summary::before {
   content: '';
@@ -538,13 +521,9 @@ body[data-theme] .tile-body .person {
   padding: 10px 14px; min-height: var(--tap);
 }
 .person-card > summary.person-head::-webkit-details-marker { display: none; }
-.person-card > summary.person-head::after {
-  content: ''; margin-inline-start: auto; width: 20px; height: 20px; flex-shrink: 0;
-  background: var(--coin-deep);
-  -webkit-mask: var(--ico-down) center / contain no-repeat; mask: var(--ico-down) center / contain no-repeat;
-  transition: transform .26s cubic-bezier(.2, .8, .2, 1);
-}
-.person-card[open]:not(.closing) > summary.person-head::after { transform: rotate(180deg); }
+.person-card > summary.person-head .person-marker { margin-inline-start: auto; width: 1.3rem; height: 1.3rem; transition: transform .26s cubic-bezier(.2, .8, .2, 1); }
+.person-card[open]:not(.closing) > summary.person-head .person-marker { transform: rotate(90deg); }
+html[dir="rtl"] .person-card[open]:not(.closing) > summary.person-head .person-marker { transform: scaleX(-1) rotate(90deg); }
 .person-card .person-name { font-weight: 700; font-size: 1.05rem; }
 .person-card .person-flag { font-size: 1rem; }
 .person-card .person-body { padding: 0 14px 12px; display: grid; gap: 4px; }
