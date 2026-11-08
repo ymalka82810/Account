@@ -728,30 +728,30 @@ button.small { min-height: var(--tap); }
   position: fixed; z-index: 21; transform: translate(-50%, -50%);
   background: var(--card); border: 2px solid var(--line); border-radius: 50%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, .35); overflow: visible; pointer-events: none; opacity: 1;
-  transition: left .14s cubic-bezier(.3, .6, .3, 1), top .14s cubic-bezier(.3, .6, .3, 1),
-    width .14s cubic-bezier(.22, .8, .2, 1), height .14s cubic-bezier(.22, .8, .2, 1);
+  transition: left .32s cubic-bezier(.3, .6, .3, 1), top .32s cubic-bezier(.3, .6, .3, 1),
+    width .32s cubic-bezier(.22, .8, .2, 1), height .32s cubic-bezier(.22, .8, .2, 1);
 }
-.gear-launch.sinking { transition: width .12s ease-in, height .12s ease-in, opacity .12s ease-in; }
+.gear-launch.sinking { transition: width .26s ease-in, height .26s ease-in, opacity .26s ease-in; }
 /* הסיבוב רץ בדיב נפרד כדי שתמיד יתבצע כאנימציית keyframes אמיתית (מעבר transition בין rotate(0) ל-rotate(360) לא זז בפועל) */
 .gear-launch-spin { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-/* סיבוב שמתחיל מהר (500°/שנ') ומאט בהדרגה עד עצירה מלאה
-   (האטה ריבועית: 225° ב-0.14 שנ'). בשקיעה הגלגל מתגלגל
+/* סיבוב שמתחיל מהר (230°/שנ') ומאט בהדרגה עד עצירה מלאה
+   (האטה ריבועית: 225° ב-0.32 שנ'). בשקיעה הגלגל מתגלגל
    אחורה מאותה זווית, ומאיץ עד הרבה מעבר למהירות ההתחלתית. */
-.gear-launch-spin.flying { animation: gear-spin-slow .14s cubic-bezier(.33, .67, .67, 1) forwards; }
-.gear-launch-spin.sinking { animation: gear-spin-back .12s cubic-bezier(.5, 0, .9, .6) forwards; }
+.gear-launch-spin.flying { animation: gear-spin-slow .32s cubic-bezier(.33, .67, .67, 1) forwards; }
+.gear-launch-spin.sinking { animation: gear-spin-back .26s cubic-bezier(.5, 0, .9, .6) forwards; }
 @keyframes gear-spin-slow { from { transform: rotate(0deg); } to { transform: rotate(225deg); } }
 @keyframes gear-spin-back { from { transform: rotate(225deg); } to { transform: rotate(-45deg); } }
-.gear-launch-icon { display: block; width: 1.5rem; height: 1.5rem; transition: width .14s cubic-bezier(.22, .8, .2, 1), height .14s cubic-bezier(.22, .8, .2, 1); }
+.gear-launch-icon { display: block; width: 1.5rem; height: 1.5rem; transition: width .32s cubic-bezier(.22, .8, .2, 1), height .32s cubic-bezier(.22, .8, .2, 1); }
 .gear-launch-icon .ui-icon { width: 100%; height: 100%; }
 .gear-launch-spin.flying .gear-launch-icon { width: 5.7rem; height: 5.7rem; }
-.gear-launch-spin.sinking .gear-launch-icon { transition: width .12s ease-in, height .12s ease-in; width: 0; height: 0; }
+.gear-launch-spin.sinking .gear-launch-icon { transition: width .26s ease-in, height .26s ease-in; width: 0; height: 0; }
 .gear-sparks { position: fixed; left: 50%; top: 50%; width: 0; height: 0; z-index: 22; pointer-events: none; }
 .gear-sparks .spark {
   position: absolute; left: -3px; top: -14px; width: 6px; height: 28px; border-radius: 3px;
   background: linear-gradient(#fffbe6, #ffd54a 45%, #ff8a00);
   box-shadow: 0 0 6px 2px rgba(255, 200, 60, .9), 0 0 14px 4px rgba(255, 140, 0, .55);
   opacity: 0; transform: rotate(var(--ang)) translateY(-60px) scaleY(.5);
-  animation: spark-burst .22s cubic-bezier(.25, .45, .5, .95) forwards;
+  animation: spark-burst .4s cubic-bezier(.25, .45, .5, .95) forwards;
 }
 .gear-sparks .spark--short { width: 5px; height: 18px; left: -2.5px; top: -9px; }
 @keyframes spark-burst {
@@ -765,7 +765,7 @@ button.small { min-height: var(--tap); }
 .sheet-wrap { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end; justify-content: center; }
 .sheet-bg { position: absolute; inset: 0; background: rgba(10, 16, 40, .55); animation: sheet-bg-in .32s var(--ease-soft); }
 @keyframes sheet-bg-in { from { opacity: 0; } to { opacity: 1; } }
-.sheet-bg-reveal { opacity: 0; animation: sheet-bg-fade .32s var(--ease-soft) forwards; }
+.sheet-bg-reveal { opacity: 0; animation: sheet-bg-fade .45s var(--ease-soft) forwards; }
 @keyframes sheet-bg-fade { to { opacity: 1; } }
 .sheet {
   position: relative; width: 100%; max-width: 560px; max-height: 94vh; max-height: 94dvh; overflow-y: auto;
@@ -776,7 +776,7 @@ button.small { min-height: var(--tap); }
 }
 @keyframes sheet-rise { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: none; } }
 .sheet-reveal-pending { opacity: 0; transform: scale(.02); animation: none; }
-.sheet-reveal { animation: sheet-grow .36s var(--ease-out); }
+.sheet-reveal { animation: sheet-grow .55s var(--ease-out); }
 @keyframes sheet-grow { from { opacity: 0; transform: scale(.02); } to { opacity: 1; transform: scale(1); } }
 @media (min-width: 640px) { .sheet-wrap { align-items: center; } .sheet { border-radius: 24px; } }
 /* מעבר בין חלונות מקוננים (למשל מההגדרות לחלון שנפתח מהן): נכנס מהצד, וחזרה נכנסת מהצד ההפוך */

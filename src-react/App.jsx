@@ -387,8 +387,8 @@ function Root() {
 }
 
 // ---------- אנימציית מעבר גלגל השיניים לאריח הצף (ילד ונוער בלבד) ----------
-// גלגל השיניים קופץ ממקומו למרכז המסך, מסתובב וגדל (0.14 שנ'). אז מבזיקים ניצוצות והוא שוקע לאחור
-// ונעלם (0.12 שנ'), ובתחילת השקיעה האריח האמיתי נפתח וגדל מאותה נקודה (0.18 שנ') והניצוצות עפים (0.22 שנ'). בסך הכול כ-0.4 שנ'.
+// גלגל השיניים קופץ ממקומו למרכז המסך, מסתובב וגדל (0.32 שנ'). אז מבזיקים ניצוצות והוא שוקע לאחור
+// ונעלם (0.26 שנ'), ובתחילת השקיעה האריח האמיתי נפתח וגדל מאותה נקודה (0.55 שנ') והניצוצות עפים (0.4 שנ'). בסך הכול כ-0.9 שנ'.
 // הזמנים כאן ו-.gear-launch ב-style.css חייבים להישאר זהים.
 const COIN_SIZE = 192; // הגודל הסופי של גלגל השיניים לפני השקיעה
 function GearLaunch({ fromRect, onSinking, onDone }) {
@@ -405,13 +405,13 @@ function GearLaunch({ fromRect, onSinking, onDone }) {
   }, []);
   useEffect(() => {
     if (phase !== 'flying') return;
-    const t = setTimeout(() => setPhase('sinking'), 140); // קפיצה וגדילה במקביל
+    const t = setTimeout(() => setPhase('sinking'), 320); // קפיצה וגדילה במקביל
     return () => clearTimeout(t);
   }, [phase]);
   useEffect(() => {
     if (phase !== 'sinking') return;
     onSinkingRef.current();
-    const t = setTimeout(() => onDoneRef.current(), 120);
+    const t = setTimeout(() => onDoneRef.current(), 260);
     return () => clearTimeout(t);
   }, [phase]);
 
@@ -434,7 +434,7 @@ function GearLaunch({ fromRect, onSinking, onDone }) {
 
 // הניצוצות בשכבה נפרדת מהגלגל (לא מסתובבים ולא נעלמים איתו), וממשיכים לעוף
 // ולדהות גם אחרי שהגלגל נעלם ואחרי שהאריח נפתח, עד שהם יוצאים מהמסך (לא חוסמים קלט).
-const SPARKS_MS = 220;
+const SPARKS_MS = 400;
 function GearSparks({ onEnd }) {
   const onEndRef = useRef(onEnd);
   onEndRef.current = onEnd;
