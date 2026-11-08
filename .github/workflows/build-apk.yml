@@ -36,7 +36,15 @@ jobs:
       - run: npx cap sync android
 
       - name: Generate app icons
-        run: npx --yes @capacitor/assets@3 generate --android --assetPath assets
+        shell: bash
+        run: |
+          node -v; npm -v
+          ls -la assets android/app/src/main/res | head -40
+          set +e
+          npx --yes @capacitor/assets@3 generate --android --assetPath assets --verbose 2>&1 | tee /tmp/assets.log
+          code=${PIPESTATUS[0]}
+          echo "assets exit code: $code"
+          exit $code
 
       # אייקון לפי מטבע: activity-alias לכל מטבע (₪, $, €...) במקום ה-LAUNCHER של MainActivity
       - name: Currency launcher icons
