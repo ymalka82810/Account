@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { t } from '../../i18n/index.js';
+import { useApp } from '../../state/appContext.js';
+import { useSheet } from '../shared/Sheet.jsx';
 import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { money } from '../../lib/computations.js';
@@ -10,19 +12,16 @@ import { useConfirm } from '../shared/Confirm.jsx';
 
 const toMinor = (s) => Math.round(parseFloat(s) * 100);
 
-// יעדי חיסכון עם פס התקדמות. ילד/ה ונער/ה רואים את שלהם ומבקשים להפקיד (ממתין לאישור הורה).
-// הורה רואה את כל המשפחה, מפקיד ישירות, מאשר הפקדות ופותח יעד לכל ילד/ה.
-export default function Goals({ data, token }) {
+// טופס "יעד חדש" בחלון תחתון. הורה פותח אותו מהדף האישי של ילד/ה (ownerId) או בוחר למי; ילד/ה ונער/ה פותחים רק לעצמם.
+export function NewGoalSheet({ ownerId }) {
+  const { data, token } = useApp();
+  const sheet = useSheet();
   const isParent = data.me.role === 'parent';
   const kids = data.people.filter((p) => p.role !== 'parent');
-  const [owner, setOwner] = useState(isParent ? kids[0]?.id : data.me.id);
+  const [owner, setOwner] = useState(ownerId || kids[0]?.id);
   const [name, setName] = useState('');
   const [target, setTarget] = useState('');
-  const [dep, setDep] = useState({}); // goalId -> טקסט הסכום
-  const confirm = useConfirm();
   const [error, setError] = useState('');
-  const who = (id) => data.people.find((p) => p.id === id);
-  if (isParent && kids.length === 0) return null;
 
   async function addGoal(ev) {
     ev.preventDefault();
@@ -31,10 +30,39 @@ export default function Goals({ data, token }) {
     if (!Number.isFinite(minor) || minor <= 0) { setError(t('כתבו סכום גדול מאפס.')); return; }
     try {
       await call('goals:add', { token, personId: isParent ? owner : undefined, name, target: minor });
-      setName(''); setTarget('');
       toast(t('היעד נוסף 🎯'));
+      sheet.back();
     } catch (e) { setError(errMsg(e)); }
   }
+
+  return (
+    <form className="form" autoComplete="off" onSubmit={addGoal}>
+      {isParent && !ownerId && (
+        <div className="field"><span>{t('למי')}</span>
+          <Select value={owner} onChange={setOwner} options={kids.map((p) => ({ value: p.id, label: (p.avatar ? `${p.avatar} ` : '') + p.name }))} /></div>
+      )}
+      <label className="field"><span>{t('על מה חוסכים?')}</span>
+        <input type="text" maxLength={40} required placeholder={t('למשל: אופניים')} value={name} onChange={(e) => setName(e.target.value)} /></label>
+      <label className="field"><span>{t('כמה צריך? ({cur})', { cur: currencySymbol(data.family.currency) })}</span>
+        <input type="number" inputMode="decimal" min="0.01" step="0.01" required value={target} onChange={(e) => setTarget(e.target.value)} /></label>
+      {error && <p className="error" role="alert">{error}</p>}
+      <button className="primary" type="submit">{t('הוספה')}</button>
+    </form>
+  );
+}
+
+// יעדי חיסכון עם פס התקדמות. ילד/ה ונער/ה רואים את שלהם ומבקשים להפקיד (ממתין לאישור הורה).
+// הורה מפקיד ישירות ומאשר הפקדות; ב-personId מוצגים רק היעדים של אדם אחד (הדף האישי שלו).
+// יעד חדש נפתח בחלון תחתון ולא בתוך הדף.
+export default function Goals({ data, token, personId }) {
+  const isParent = data.me.role === 'parent';
+  const sheet = useSheet();
+  const kids = data.people.filter((p) => p.role !== 'parent');
+  const [dep, setDep] = useState({}); // goalId -> טקסט הסכום
+  const confirm = useConfirm();
+  const who = (id) => data.people.find((p) => p.id === id);
+  const goals = personId ? data.goals.filter((x) => x.personId === personId) : data.goals;
+  if (isParent && kids.length === 0) return null;
 
   async function deposit(goal) {
     const minor = toMinor(dep[goal.id]);
@@ -57,15 +85,18 @@ export default function Goals({ data, token }) {
 
   return (
     <>
-      <h2>{t('יעדי חיסכון')}</h2>
-      {data.goals.length === 0 && <div className="empty">{t('עוד אין יעדי חיסכון.')}</div>}
-      {data.goals.map((goal) => {
+      <div className="sec-row">
+        <h2>{t('יעדי חיסכון')}</h2>
+        <button className="ghost small" type="button" onClick={() => sheet.open(t('יעד חדש'), <NewGoalSheet ownerId={personId} />)}>+ {t('יעד חדש')}</button>
+      </div>
+      {goals.length === 0 && <div className="empty empty-sm">{t('עוד אין יעדי חיסכון.')}</div>}
+      {goals.map((goal) => {
         const pct = Math.min(100, Math.round((goal.saved / goal.target) * 100));
         const done = goal.saved >= goal.target;
         return (
           <div className="goal card" key={goal.id}>
             <div className="goal-head">
-              <strong>{isParent && who(goal.personId) ? `${who(goal.personId).avatar || ''} ${who(goal.personId).name} · ` : ''}{goal.name}{done ? ' 🎉' : ''}</strong>
+              <strong>{isParent && !personId && who(goal.personId) ? `${who(goal.personId).avatar || ''} ${who(goal.personId).name} · ` : ''}{goal.name}{done ? ' 🎉' : ''}</strong>
               {(isParent || goal.saved === 0) && <button className="small danger" type="button" onClick={() => remove(goal)}>{t('מחיקה')}</button>}
             </div>
             <div className="goal-bar" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct}>
@@ -93,19 +124,6 @@ export default function Goals({ data, token }) {
           </div>
         );
       })}
-      <form className="form card" autoComplete="off" onSubmit={addGoal}>
-        <h3>{t('יעד חדש')}</h3>
-        {isParent && (
-          <div className="field"><span>{t('למי')}</span>
-            <Select value={owner} onChange={setOwner} options={kids.map((p) => ({ value: p.id, label: (p.avatar ? `${p.avatar} ` : '') + p.name }))} /></div>
-        )}
-        <label className="field"><span>{t('על מה חוסכים?')}</span>
-          <input type="text" maxLength={40} required placeholder={t('למשל: אופניים')} value={name} onChange={(e) => setName(e.target.value)} /></label>
-        <label className="field"><span>{t('כמה צריך? ({cur})', { cur: currencySymbol(data.family.currency) })}</span>
-          <input type="number" inputMode="decimal" min="0.01" step="0.01" required value={target} onChange={(e) => setTarget(e.target.value)} /></label>
-        {error && <p className="error" role="alert">{error}</p>}
-        <button className="primary" type="submit">{t('הוספה')}</button>
-      </form>
     </>
   );
 }

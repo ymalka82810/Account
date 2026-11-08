@@ -8,13 +8,13 @@ export default function TeenOverview({ teens }) {
   if (!teens.length) return null;
   return (
     <div id="teenFriendsRoot">
-      <h2 id="sec-teens" className="sec-h">{t('מה הנוער רושם עם חברים')}</h2>
+      <h2>{t('מה הנוער רושם עם חברים')}</h2>
       <p className="hint">{t('לקריאה בלבד. כל רישום עם חבר/ה ממתין גם לאישור שלהם.')}</p>
       {/* כל נער/ה באריח נפרד שנפתח לפי הצורך (נפתח מראש כשיש רק אחד) */}
       {teens.map((teen) => (
         <Collapsible key={teen.name} title={<>🤝 {teen.name}</>} defaultOpen={teens.length === 1}>
           <div className="meta">{teen.friends.length ? t('חברים: {names}', { names: teen.friends.join(', ') }) : t('עוד אין חברים מאושרים')}</div>
-          {teen.entries.length === 0 && <div className="empty">{t('עוד לא נרשם כלום.')}</div>}
+          {teen.entries.length === 0 && <div className="empty empty-sm">{t('עוד לא נרשם כלום.')}</div>}
           {teen.entries.map((e, i) => (
             <div className="row" key={i}>
               <div className="text">

@@ -32,7 +32,7 @@ export default function ChildNotebook({ token, person }) {
       <p className="hint">{t('לצפייה בלבד. הפנקס נשאר אצל {name} ואי אפשר לשנות אותו מכאן.', { name: person.name })}</p>
       <p className="meta">{t('אני חייב')}: {money(sum('iowe'), cur)} • {t('חייבים לי')}: {money(sum('owed'), cur)}</p>
       <h2 className="nb-h2">{t('מה פתוח')}</h2>
-      {open.length > 0 ? <div className="list">{open.map(row)}</div> : <div className="empty">{t('אין כלום פתוח!')}</div>}
+      {open.length > 0 ? <div className="list">{open.map(row)}</div> : <div className="empty empty-sm">{t('אין כלום פתוח!')}</div>}
       {done.length > 0 && (
         <details className="nb-paid">
           <summary>{t('שולמו ({n})', { n: done.length })}</summary>

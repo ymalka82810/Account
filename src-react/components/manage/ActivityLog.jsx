@@ -28,7 +28,7 @@ function detail(r) {
 export default function ActivityLog({ token }) {
   const rows = useQuery('activity:list', { token });
   if (rows === undefined) return <p className="hint">{t('⏳ רגע…')}</p>;
-  if (rows.length === 0) return <div className="empty">{t('עוד אין שינויים ביומן.')}</div>;
+  if (rows.length === 0) return <div className="empty empty-sm">{t('עוד אין שינויים ביומן.')}</div>;
   const label = actions();
   return (
     <div className="list">

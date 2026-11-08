@@ -21,7 +21,7 @@ export default function HistoryTab({ data, token, me, isParent }) {
         </div>
       )}
       {status === 'LoadingFirstPage'
-        ? <div className="empty">{t('טוען…')}</div>
+        ? <div className="empty empty-sm">{t('טוען…')}</div>
         : <EntriesList list={results} emptyText={t('עדיין לא נרשם כלום.')} token={token} me={me} isParent={isParent}
             lookup={(id) => data.people.find((p) => p.id === id)} debtList={data.entries} />}
       {status === 'CanLoadMore' && (
