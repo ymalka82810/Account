@@ -24,7 +24,7 @@ export default function ManageTab({ data, token }) {
       </Collapsible>
 
       <Collapsible name="manage-tiles" title={t('הגדרות המשפחה')}>
-        <PersonForm token={token} />
+        <PersonForm />
         <FamilySettings data={data} />
       </Collapsible>
 

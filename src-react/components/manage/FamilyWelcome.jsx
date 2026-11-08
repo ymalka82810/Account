@@ -17,11 +17,13 @@ import { NotebookMergeSheet, findNotebookMatches } from './NotebookMerge.jsx';
 
 // הוספת ילדים בבת אחת, עם קוד סודי אחד זהה לכולם. את הקוד קובעים פעם אחת, עם הילד הראשון;
 // כשההורה רוצה לתת לילד את המשתמש שלו, הוא מאפס לו את הקוד מלשונית "ניהול" והילד בוחר קוד משלו.
-function ChildrenForm({ token, people }) {
+function ChildrenForm({ people }) {
   const [name, setName] = useState('');
   const [gender, setGender] = useState('');
   const [pin, setPin] = useState('');
   const [busy, setBusy] = useState(false);
+  // נעילה מיידית נגד שליחה כפולה (Enter במקלדת + לחיצה על "הוספה" באותו רגע): ה-busy של React מתעדכן רק ברינדור הבא.
+  const sending = useRef(false);
   // כל ילד מקבל דמות פנויה (השרת לא מרשה שתי דמויות זהות); הרשימה המקומית מכסה הוספות שעוד לא התעדכנו.
   const usedAvatars = useRef(new Set());
   // הקוד המשותף נקבע עם הילד הראשון שנוסף כאן; אחריו השדה נעלם ושאר הילדים מקבלים אותו קוד.
@@ -37,12 +39,13 @@ function ChildrenForm({ token, people }) {
   async function submit(ev) {
     ev.preventDefault();
     const clean = name.trim().replace(/\s+/g, ' ');
-    if (!clean || busy) return;
+    if (!clean || sending.current) return;
     if (pin && !pinOk(pin, 'child')) { toast(t('הקוד צריך להיות {rule}', { rule: pinLabel('child') })); return; }
+    sending.current = true;
     setBusy(true);
     try {
       const avatar = freeAvatar();
-      await call('people:add', { token: state.token || token, name: clean, role: 'child', avatar, gender: gender || undefined, pin: pin || undefined });
+      await call('people:add', { token: state.token, name: clean, role: 'child', avatar, gender: gender || undefined, pin: pin || undefined });
       if (avatar) usedAvatars.current.add(avatar);
       toast(g(gender, '{name} נוסף למשפחה ✅', '{name} נוספה למשפחה ✅', '{name} נוסף/ה למשפחה ✅', { name: clean }));
       setName(''); setGender(''); setShared(true); setSharedPin(!!pin);
@@ -74,7 +77,7 @@ function ChildrenForm({ token, people }) {
 // נפתח אוטומטית מיד אחרי הקמת משפחה: שואלים מי הילדים ומוסיפים אותם עכשיו, בלי לחפש איפה עושים את זה.
 // בסיום, אם יש בפנקס האישי שמות שמתאימים לבני המשפחה, עוברים לשאלת האיחוד.
 export default function FamilyWelcome() {
-  const { data, token, me } = useApp();
+  const { data, me } = useApp();
   const nb = useNotebook();
   const sheet = useSheet();
   const others = data.people.filter((p) => p.id !== me);
@@ -95,9 +98,9 @@ export default function FamilyWelcome() {
           ))}
         </div>
       )}
-      <ChildrenForm token={token} people={data.people} />
+      <ChildrenForm people={data.people} />
       <Collapsible title={t('להוסיף גם נער/ה או הורה נוסף')}>
-        <PersonForm token={token} />
+        <PersonForm />
       </Collapsible>
       <button className="primary" type="button" onClick={done}>{others.length ? t('סיימתי') : t('אוסיף אחר כך')}</button>
     </div>

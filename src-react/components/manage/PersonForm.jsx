@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { call } from '../../lib/api.js';
 import { state, PARENT_AVATARS } from '../../state/state.js';
@@ -11,13 +11,15 @@ import { BioError } from '../../lib/biometric.js';
 import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
 
 // הוספת בן/בת משפחה (הורים).
-export default function PersonForm({ token }) {
+export default function PersonForm() {
   const [name, setName] = useState('');
   const [role, setRole] = useState('child');
   const [gender, setGender] = useState('');
   const [avatar, setAvatar] = useState(randomAvatar);
   const [pin, setPin] = useState('');
   const [busy, setBusy] = useState(false);
+  // נעילה מיידית נגד שליחה כפולה: ה-busy של React מתעדכן רק ברינדור הבא.
+  const sending = useRef(false);
   const bioConfirm = useBioConfirm();
 
   function changeRole(newRole) {
@@ -28,19 +30,20 @@ export default function PersonForm({ token }) {
   async function submit(ev) {
     ev.preventDefault();
     const trimmed = name.trim();
-    if (!trimmed || busy) return;
+    if (!trimmed || sending.current) return;
     if (pin && !pinOk(pin, role)) { toast(t('הקוד צריך להיות {rule}', { rule: pinLabel(role) })); return; }
     if (role === 'parent' && !pin) { toast(t('להורה חדש צריך לקבוע קוד סודי')); return; }
+    sending.current = true;
     setBusy(true);
     try {
       // הוספה בתור נער/ה או הורה מאושרת בטביעת אצבע / זיהוי פנים, כמו שינוי תפקיד.
       const clean = trimmed.replace(/\s+/g, ' ');
       const proof = role === 'child' ? undefined : await bioConfirm(`add:${role}:${clean}`, { why: t('כדי שילד לא יהפוך את עצמו להורה, הוספה בתור נער/ה או הורה מאושרת על ידי הורה. תיפתח עכשיו בקשת אימות מהמכשיר.') });
-      await call('people:add', { token: state.token || token, name: clean, role, avatar, gender: gender || undefined, pin: pin || undefined, proof });
+      await call('people:add', { token: state.token, name: clean, role, avatar, gender: gender || undefined, pin: pin || undefined, proof });
       setName(''); setPin('');
       toast(g(gender, '{name} נוסף למשפחה ✅', '{name} נוספה למשפחה ✅', '{name} נוסף/ה למשפחה ✅', { name: trimmed }));
     } catch (e) { toast(e instanceof BioError ? e.message : errMsg(e)); }
-    finally { setBusy(false); }
+    finally { sending.current = false; setBusy(false); }
   }
 
   return (

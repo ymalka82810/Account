@@ -38,6 +38,7 @@ export const add = mutation({
     }
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     if (members.length >= MAX_FAMILY_SIZE) throw new ConvexError("המשפחה מלאה");
+    // השם ייחודי רק בתוך המשפחה הזו (לפי המזהה שלה). במשפחה אחרת, גם עם אותו שם משפחה, אותו שם מותר.
     if (members.some((p) => p.name === clean)) throw new ConvexError("כבר יש מישהו בשם הזה");
     if (pin !== undefined && !validPin(pin, role)) throw new ConvexError(pinRuleMessage(role));
     const personAvatar = avatar?.slice(0, 8);
