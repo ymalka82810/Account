@@ -522,6 +522,15 @@ body[data-theme="teen"] #screen-loading p {
 .tile-title { grid-area: title; font-weight: 700; font-size: 1.05rem; position: relative; }
 .tile-body { padding: 0 16px 16px; display: grid; gap: 14px; }
 .tile-body > .hint { margin: 0; }
+/* כרטיסים בתוך אריח לא מקבלים מסגרת משלהם: מסגרת בתוך מסגרת נראתה כמסגרות חופפות. הרקע הפנימי בלבד מפריד ביניהם */
+.tile-body .person,
+body[data-theme] .tile-body .person {
+  border: 0;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--ink) 6%, var(--card));
+  margin-bottom: 0;
+}
+#peopleList { display: grid; gap: 10px; }
 
 /* ריבועי בחירת אדם */
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px; width: 100%; max-width: 520px; margin-top: 14px; }
