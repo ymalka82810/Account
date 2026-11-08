@@ -4,6 +4,7 @@ import { t, intlLocale } from '../../i18n/index.js';
 import LanguagePicker from '../shared/LanguagePicker.jsx';
 import LocalePicker from '../shared/LocalePicker.jsx';
 import PalettePicker from '../shared/PalettePicker.jsx';
+import Reveal from '../shared/Reveal.jsx';
 import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
 import { today, toast } from '../../lib/helpers.js';
 import { money, fmtDate } from '../../lib/computations.js';
@@ -430,11 +431,11 @@ function Settings({ nb, onBack, closing }) {
         <LanguagePicker />
         <div className="field"><span>{t('עיצוב')}</span>
           <Opts value={s.look} options={looks()} label={t('עיצוב')} onPick={(v) => setSetting('look', v)} /></div>
-        {s.look === 'neon' && (
+        <Reveal show={s.look === 'neon'}>
           <div className="field"><span>{t('צבעי הניאון')}</span>
             <PalettePicker value={s.palette} onPick={(v) => setSetting('palette', v)} label={t('צבעי הניאון')} />
           </div>
-        )}
+        </Reveal>
         <div className="field"><span>{t('גודל הכתב')}</span>
           <Opts value={s.textSize} options={sizes()} label={t('גודל הכתב')} onPick={(v) => setSetting('textSize', v)} /></div>
       </section>
