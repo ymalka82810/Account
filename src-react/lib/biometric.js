@@ -35,6 +35,8 @@ export async function bioSupported() {
 
 // האם המכשיר הזה כבר רשום לאימות של ההורה הזה.
 export const bioReady = (personId) => { try { return !!localStorage.getItem(LOCAL_KEY(personId)); } catch (e) { return false; } };
+// המפתח ששמור במכשיר הזה להורה (כדי לסמן ברשימת המכשירים איזה מהם זה).
+export const bioLocalCredential = (personId) => { try { return localStorage.getItem(LOCAL_KEY(personId)); } catch (e) { return null; } };
 export const bioForgetLocal = (personId) => { try { localStorage.removeItem(LOCAL_KEY(personId)); } catch (e) { /* */ } };
 
 
@@ -107,6 +109,15 @@ export async function bioMoveFinish(ticket, userId, name, challenge) {
   return res;
 }
 
+// סיום הוספת מכשיר נוסף: המכשיר החדש יוצר מפתח, והשרת מוסיף אותו (המכשירים הקיימים ממשיכים לעבוד) ופותח כאן סשן.
+// ticket וה-challenge מגיעים מ-deviceMove:addDeviceStart. מחזיר את התשובה, כולל token.
+export async function bioAddDeviceFinish(ticket, userId, name, challenge) {
+  const { payload, local } = await makeKey(userId, name, challenge);
+  const res = await call('deviceMove:addDeviceFinish', { ticket, ...payload });
+  localStorage.setItem(LOCAL_KEY(userId), local);
+  return res;
+}
+
 // חתימה על אתגר במכשיר, עם טביעת אצבע / זיהוי פנים. מחזיר את החלק של ההוכחה שתלוי במכשיר.
 async function signChallenge(personId, credentialId, challenge, title) {
   try {
@@ -159,12 +170,12 @@ export async function bioProve(token, personId, action, title = t('אישור ש
 // code: 'code' (קוד המשפחה כבר לא תקף) | 'throttled' | 'otherDevice' | 'cancel' | 'failed'.
 export async function bioLoginProof(personId, familyCode) {
   const credentialId = localStorage.getItem(LOCAL_KEY(personId));
-  if (!credentialId) throw new BioError('otherDevice', t('ההורה הזה נכנס רק מהמכשיר שלו.'));
-  const res = await call('biometric:loginChallenge', { code: familyCode, personId });
+  if (!credentialId) throw new BioError('otherDevice', t('המכשיר הזה לא קשור להורה הזה.'));
+  const res = await call('biometric:loginChallenge', { code: familyCode, personId, credentialId });
   if (!res.ok) {
     if (res.reason === 'code') throw new BioError('code', '');
     if (res.reason === 'throttled') throw new BioError('throttled', t('יותר מדי ניסיונות. נסו שוב עוד דקה.'));
-    throw new BioError('otherDevice', t('ההורה הזה נכנס רק מהמכשיר שלו.'));
+    throw new BioError('otherDevice', t('המכשיר הזה לא קשור להורה הזה.'));
   }
   if (res.credentialId !== credentialId) throw new BioError('otherDevice', t('המכשיר הזה כבר לא קשור להורה. כדי להיכנס צריך להחליף מכשיר.'));
   return signChallenge(personId, credentialId, res.challenge, t('כניסה כהורה'));

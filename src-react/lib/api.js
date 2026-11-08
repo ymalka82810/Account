@@ -26,7 +26,7 @@ export function deviceId() {
 }
 
 const AUTH_CALLS = ['auth:enter', 'auth:join', 'auth:createFamily', 'auth:login', 'auth:claimProfile', 'auth:enterFree', 'emailAuth:requestResetCode', 'emailAuth:resetWithCode',
-  'biometric:loginChallenge', 'deviceMove:moveStart', 'deviceMove:recoveryRequest', 'deviceMove:recoveryConfirm', 'deviceMove:recoveryFinish'];
+  'biometric:loginChallenge', 'deviceMove:moveStart', 'deviceMove:addDeviceStart', 'deviceMove:recoveryRequest', 'deviceMove:recoveryConfirm', 'deviceMove:recoveryFinish'];
 
 /**
  * קריאת mutation לפי שם. השם והארגומנטים נבדקים מול convex/ ב-`npm run typecheck`.

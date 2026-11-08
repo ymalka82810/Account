@@ -79,19 +79,24 @@ export const notifyLock = internalAction({
 
 // התראה על החלפת מכשיר של הורה: אל ההורה עצמו ואל שאר ההורים (עם מייל מאומת).
 //   requested = הוגשה בקשה שתבשיל בעוד 24 שעות (אפשר לבטל מהמכשיר הקשור).   changed = המכשיר הוחלף.
+//   added = נוסף מכשיר נוסף (הקיימים ממשיכים לעבוד).
 export const notifyDeviceChange = internalAction({
-  args: { personId: v.id("people"), kind: v.union(v.literal("requested"), v.literal("changed")) },
+  args: { personId: v.id("people"), kind: v.union(v.literal("requested"), v.literal("changed"), v.literal("added")) },
   handler: async (ctx, { personId, kind }) => {
     const { name, emails } = await ctx.runQuery(internal.email.deviceRecipients, { personId });
     for (const to of emails) {
       await deliver(
         to,
-        kind === "requested" ? "בקשה להחלפת מכשיר של " + name + " בקופה" : "המכשיר של " + name + " הוחלף בקופה",
+        kind === "requested" ? "בקשה להחלפת מכשיר של " + name + " בקופה"
+          : kind === "added" ? "נוסף מכשיר ל" + name + " בקופה" : "המכשיר של " + name + " הוחלף בקופה",
         kind === "requested"
           ? `הוגשה בקשה להחליף את המכשיר שממנו ${name} נכנס/ת לקופה כהורה.\n` +
             `ההחלפה תתאפשר רק בעוד 24 שעות. אם זה לא את/ה, היכנסו לקופה מהמכשיר הרגיל וביטלו את הבקשה בלשונית "ניהול".`
-          : `${name} נכנס/ת עכשיו לקופה כהורה ממכשיר חדש, והמכשיר הקודם נותק.\n` +
-            `אם זה לא ${name}, כדאי להודיע להורה השני ולשנות את הקוד הסודי.`,
+          : kind === "added"
+            ? `נוסף מכשיר נוסף שממנו ${name} יכול/ה להיכנס לקופה כהורה, והמכשירים הקיימים ממשיכים לעבוד.\n` +
+              `אם זה לא ${name}, כדאי להודיע להורה השני, להסיר את המכשיר החדש ב"המכשירים שלי" ולשנות את הקוד הסודי.`
+            : `${name} נכנס/ת עכשיו לקופה כהורה ממכשיר חדש, והמכשיר הקודם נותק.\n` +
+              `אם זה לא ${name}, כדאי להודיע להורה השני ולשנות את הקוד הסודי.`,
       );
     }
   },

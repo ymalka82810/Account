@@ -108,7 +108,7 @@ export function AccountSheet() {
           () => sheet.open(me.hasPin ? t('שינוי הקוד הסודי') : t('קביעת קוד סודי'), me.email ? <ChangePinEmailSheet /> : <ChangePinSheet />))}
         {me.role === 'parent' && row(withIcons(me.email ? t('✉️ מייל לשחזור: {email}', { email: me.email }) : t('✉️ הוספת מייל לשחזור קוד')),
           () => sheet.open('', <EmailSheet />))}
-        {me.role === 'parent' && row(withIcons(t('📱 המכשיר שלי')), () => sheet.open(t('המכשיר שלי'), <DeviceSheet />))}
+        {me.role === 'parent' && row(withIcons(t('📱 המכשירים שלי')), () => sheet.open(t('המכשירים שלי'), <DeviceSheet />))}
         {me.role === 'child' && me.notebookShared && row(withIcons(t('👁️ מי רואה את הפנקס שלי')), () => sheet.open(t('👁️ מי רואה את הפנקס שלי'), <NotebookSharing />))}
       </section>
 

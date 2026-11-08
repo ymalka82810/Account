@@ -7,7 +7,7 @@ import {
   generateEmailCode, hashPin, isThrottled, noteHit, randomHex, verifyPin,
 } from "./lib";
 
-export type CodePurpose = "verify" | "pinChange" | "pinReset" | "childReset" | "emailChange" | "deviceMove" | "deviceBind" | "deviceRecovery";
+export type CodePurpose = "verify" | "pinChange" | "pinReset" | "childReset" | "emailChange" | "deviceMove" | "deviceBind" | "deviceAdd" | "deviceRecovery";
 
 // יוצר קוד חדש (מבטל קודם באותה מטרה), שומר גיבוב ומתזמן שליחה למייל.
 export async function issueCode(ctx: MutationCtx, person: Doc<"people">, email: string, purpose: CodePurpose): Promise<void> {
