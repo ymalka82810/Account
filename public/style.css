@@ -1556,3 +1556,27 @@ body[data-theme="teen"] .err-box { background: #07070b; border-color: var(--neon
 }
 @keyframes boot-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .boot__coin { animation-duration: 3s; } }
+
+/* ===== הורים: משוב לחיצה ברור =====
+   בערכת ההורים (כהה, פינות חדות) לחיצה כמעט ולא נראתה. עכשיו כל אלמנט לחיץ מקבל מסגרת תכלת שנדלקת מיד בלחיצה
+   ודועכת בעדינות בעזיבה, וכרטיסים ושורות מקבלים גם גוון רקע; כפתורים צבעוניים מבהיקים. */
+body[data-theme="parent"] :is(button, [role="button"], .tab, .tile, .fam-row, .acct-row, .debt-total, .debt-pick, .person, summary, .dd-btn, .dd-opt, .av):not(.kb-key):not(.kb-sug) {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+body[data-theme="parent"] :is(button, [role="button"], .tab, .tile, .fam-row, .acct-row, .debt-total, .debt-pick, .person, summary, .dd-btn, .dd-opt):not(.kb-key):not(.kb-sug):not(.bigbtn) {
+  transition: outline-color .4s ease, background-color .4s ease, border-color .4s ease, filter .4s ease;
+}
+body[data-theme="parent"] :is(.tab, .fam-row, .dd-opt) { outline-offset: -3px; }
+/* ברגע הלחיצה: ללא מעבר, כך שהמסגרת נדלקת מיד */
+body[data-theme="parent"] :is(button, [role="button"], .tab, .tile, .fam-row, .acct-row, .debt-total, .debt-pick, .person, summary, .dd-btn, .dd-opt, .av):not(.kb-key):not(.kb-sug):active {
+  outline-color: var(--coin-deep);
+  transition: none;
+  filter: brightness(1.18);
+}
+body[data-theme="parent"] :is(.ghost, button.small, .tab, .tile, .fam-row, .acct-row, .debt-total, .debt-pick, .person, summary, .dd-btn, .dd-opt):active {
+  background-color: color-mix(in srgb, var(--coin) 22%, var(--card));
+  border-color: var(--coin-deep);
+}
+/* הניווט במקלדת נשאר ברור כמו קודם */
+body[data-theme="parent"] :is(button, [role="button"], .tab, .tile, .fam-row, .acct-row, .dd-btn, .dd-opt):focus-visible { outline-color: var(--coin-deep); }
