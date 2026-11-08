@@ -54,7 +54,8 @@ body {
 .tabs {
   display: flex;
   gap: 4px;
-  padding: 10px 12px 0;
+  /* הלשוניות דבוקות למעלה: בלי הריווח הזה הן נכנסות מתחת לשעה ולסוללה כשהאפליקציה מצוירת מקצה לקצה */
+  padding: calc(10px + env(safe-area-inset-top, 0)) 12px 0;
   position: sticky;
   top: 0;
   background: var(--bg);
@@ -967,7 +968,7 @@ body[data-theme="teen"] .top h1 {
 }
 body[data-theme="teen"] .sub { color: var(--ink-soft); }
 body[data-theme="teen"] .ghost.light { color: var(--ink); border-color: var(--neon-a); background: transparent; }
-body[data-theme="teen"] .tabs { gap: 8px; padding: 12px 12px 10px; border-bottom: 0; }
+body[data-theme="teen"] .tabs { gap: 8px; padding: calc(12px + env(safe-area-inset-top, 0)) 12px 10px; border-bottom: 0; }
 body[data-theme="teen"] .tab { border: 0; border-radius: 18px; padding: 6px 4px; background: var(--card); color: var(--ink-soft); }
 body[data-theme="teen"] .tab.active { background: var(--neon-grad); color: var(--on-coin); box-shadow: 0 0 16px var(--neon-glow); }
 body[data-theme="teen"] .sum { border-radius: 20px; }
@@ -1341,7 +1342,7 @@ body:not([data-theme="parent"]):not([data-theme="teen"]) .sheet form button.prim
 
 /* כפתור החזרה בהגדרות נשאר צמוד למעלה בזמן גלילה */
 #screen-notebook .nb-settings .nb-head {
-  position: sticky; top: 0; z-index: 4; padding-block: 8px; margin-block: -8px 0;
+  position: sticky; top: 0; z-index: 4; padding-block: calc(8px + env(safe-area-inset-top, 0)) 8px; margin-block: calc(-8px - env(safe-area-inset-top, 0)) 0;
   background: color-mix(in srgb, var(--bg) 82%, transparent);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
 }
