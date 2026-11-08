@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import Reveal from '../shared/Reveal.jsx';
 import { t } from '../../i18n/index.js';
 import { call } from '../../lib/api.js';
 import { useApp } from '../../state/appContext.js';
@@ -76,7 +77,7 @@ export default function PersonForm() {
         : t('קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)')}</span>
         <input type="password" inputMode="numeric" pattern={role === 'parent' ? '\\d{4,8}' : '\\d{4}'} maxLength={pinMax(role)} autoComplete="new-password"
           value={pin} onChange={(e) => setPin(e.target.value)} /></label>
-      {role !== 'child' && <p className="hint">{t('🔒 הוספה בתור {role} מאושרת בטביעת אצבע או בזיהוי פנים.', { role: role === 'parent' ? t('הורה') : g(gender, 'נער', 'נערה', 'נער/ה') })}</p>}
+      <Reveal show={role !== 'child'}><p className="hint">{t('🔒 הוספה בתור {role} מאושרת בטביעת אצבע או בזיהוי פנים.', { role: role === 'parent' ? t('הורה') : g(gender, 'נער', 'נערה', 'נער/ה') })}</p></Reveal>
       <button className="primary" type="submit" disabled={busy}>{busy ? t('⏳ רגע…') : t('הוספה')}</button>
     </form>
   );

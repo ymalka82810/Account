@@ -5,6 +5,7 @@ import { toast, errMsg } from '../../lib/helpers.js';
 import { dropSession } from '../../state/auth.js';
 import { useApp } from '../../state/appContext.js';
 import { useState } from 'react';
+import Reveal from '../shared/Reveal.jsx';
 import { useSheet } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
 import { Err } from '../shared/fields.jsx';
@@ -52,8 +53,8 @@ function LocaleSettings({ data }) {
         <Select value={currency} onChange={setCurrency}
           options={CURRENCIES.map((c) => ({ value: c, label: currencyLabel(c) }))} /></div>
       <p className="hint">{t('כל הסכומים מוצגים במטבע הזה. אפשר לרשום חוב במטבע אחר (למשל 100 דולר), וכשמשלמים אותו הוא מומר לפי השער של אותו יום.')}</p>
-      {changed && <button className="primary" type="button" disabled={busy} onClick={save}>{t('שמירה')}</button>}
-      {others.length > 0 && (
+      <Reveal show={changed}><button className="primary" type="button" disabled={busy} onClick={save}>{t('שמירה')}</button></Reveal>
+      <Reveal show={others.length > 0}>
         <div className="fx-rates">
           {others.map((c) => {
             const r = convert(100, c, base, rates);
@@ -61,7 +62,7 @@ function LocaleSettings({ data }) {
           })}
           {fx && <div className="meta">{t('השערים עודכנו {when}', { when: new Date(fx.fetchedAt).toLocaleString(intlLocale(), { dateStyle: 'short', timeStyle: 'short' }) })}</div>}
         </div>
-      )}
+      </Reveal>
     </div>
   );
 }

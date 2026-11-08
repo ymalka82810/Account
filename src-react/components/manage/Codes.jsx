@@ -6,6 +6,7 @@ import { CODE_KEY } from '../../state/state.js';
 import { useBioConfirm } from '../shared/BioConfirm.jsx';
 import { BioError } from '../../lib/biometric.js';
 import { useConfirm } from '../shared/Confirm.jsx';
+import Reveal from '../shared/Reveal.jsx';
 
 // כמה זמן הקוד נשאר גלוי אחרי האימות.
 const SHOW_MS = 30000;
@@ -122,18 +123,18 @@ export default function Codes({ data, token }) {
           <button className="small" type="button" onClick={rotate} disabled={busy}>{t('החלפת קוד')}</button>
         </div>
       </div>
-      {devices?.length > 0 && (
+      <Reveal show={!!devices?.length}>
         <div className="codeblock">
           <div className="meta">{t('מכשירים מחוברים')}</div>
           <p className="hint">{t('מכשירים ששמרו את המשפחה. כרטיס שלא בשימוש 180 יום פג מעצמו.')}</p>
-          {devices.map((d) => (
+          {(devices ?? []).map((d) => (
             <div className="tools" key={d.id}>
               <span>{t('{device} · נראה לאחרונה {date}', { device: d.label || t('מכשיר'), date: fmtDay(d.lastUsedAt ?? d.createdAt) })}</span>
               <button className="small" type="button" onClick={() => revoke(d.id)}>{t('ניתוק')}</button>
             </div>
           ))}
         </div>
-      )}
+      </Reveal>
     </div>
   );
 }

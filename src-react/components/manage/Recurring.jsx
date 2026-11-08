@@ -1,6 +1,7 @@
 import { t } from '../../i18n/index.js';
 import { call } from '../../lib/api.js';
 import { useState } from 'react';
+import Reveal from '../shared/Reveal.jsx';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { WEEKDAYS, weekdayName } from '../../state/state.js';
 import { money, fmtDate, namesFor, baseCurrency } from '../../lib/computations.js';
@@ -88,16 +89,17 @@ export default function Recurring({ data, token }) {
             { value: 'weekly', label: t('כל שבוע') },
             { value: 'monthly', label: t('כל חודש') },
           ]} /></div>
-        {freq === 'weekly' ? (
+        <Reveal show={freq === 'weekly'}>
           <div className="field"><span>{t('באיזה יום')}</span>
             <Select value={weekday} onChange={setWeekday}
               options={WEEKDAYS.map((d, i) => ({ value: String(i), label: t('יום {day}', { day: weekdayName(i) }) }))} /></div>
-        ) : (
+        </Reveal>
+        <Reveal show={freq !== 'weekly'}>
           <div className="field"><span>{t('באיזה יום בחודש (1 עד 28)')}</span>
             <Select value={monthDay} onChange={setMonthDay}
               options={Array.from({ length: 28 }, (_, i) => ({ value: String(i + 1), label: String(i + 1) }))} /></div>
-        )}
-        {error && <p className="error" role="alert">{error}</p>}
+        </Reveal>
+        <Reveal show={!!error}><p className="error" role="alert">{error}</p></Reveal>
         <button className="primary" type="submit">{t('הוספה')}</button>
       </form>
     </>

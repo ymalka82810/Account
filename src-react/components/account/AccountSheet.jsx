@@ -3,6 +3,7 @@ import { t } from '../../i18n/index.js';
 import LanguagePicker from '../shared/LanguagePicker.jsx';
 import PalettePicker from '../shared/PalettePicker.jsx';
 import Arrow from '../shared/Arrow.jsx';
+import { toggleDetails } from '../../lib/motion.js';
 import FeelSettings from './FeelSettings.jsx';
 import { call } from '../../lib/api.js';
 import { state, CODE_KEY } from '../../state/state.js';
@@ -125,7 +126,7 @@ export function AccountSheet() {
 
       {/* משפחות נוספות: מעבר, הצטרפות ויצירה. סגור כברירת מחדל, כי רוב האנשים משתמשים בהן פעם בחיים */}
       <details className="acct-more">
-        <summary><span>{t('משפחות נוספות')}</span><Arrow kind="chev-next" /></summary>
+        <summary onClick={toggleDetails}><span>{t('משפחות נוספות')}</span><Arrow kind="chev-next" /></summary>
         <div className="acct-more-body">
           {others.map((f) => (
             <button key={f.familyId} className="acct-row" type="button"

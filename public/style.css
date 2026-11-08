@@ -1537,8 +1537,8 @@ body[data-motion="off"] *, body[data-motion="off"] *::before, body[data-motion="
   padding: 10px 14px; border: 1.5px dashed var(--line); border-radius: 12px; font-weight: 600; color: var(--ink-soft);
 }
 .acct-more > summary::-webkit-details-marker { display: none; }
-.acct-more[open] > summary .arrow { transform: rotate(90deg); }
-html[dir="rtl"] .acct-more[open] > summary .arrow { transform: scaleX(-1) rotate(90deg); }
+.acct-more[open]:not(.closing) > summary .arrow { transform: rotate(90deg); }
+html[dir="rtl"] .acct-more[open]:not(.closing) > summary .arrow { transform: scaleX(-1) rotate(90deg); }
 /* יציאה: שורה נפרדת, בולטת ושונה משאר השורות (צבע ה"חוב" של הערכה) */
 .acct-exit {
   font: inherit; font-weight: 700; width: 100%; min-height: 52px; padding: 12px 14px; cursor: pointer;

@@ -7,6 +7,7 @@ import { useSheetTitle } from '../shared/Sheet.jsx';
 import { useBioConfirm } from '../shared/BioConfirm.jsx';
 import { useConfirm } from '../shared/Confirm.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
+import Reveal from '../shared/Reveal.jsx';
 import { Err } from '../shared/fields.jsx';
 import { BioError, bioLocalCredential } from '../../lib/biometric.js';
 
@@ -95,7 +96,7 @@ export function DeviceSheet() {
       <p className="hint">{t('מחליפים טלפון? לוחצים כאן, מאשרים בטביעת אצבע, ונשלח קוד למייל. אחר כך פותחים את הקופה בטלפון החדש, בוחרים את השם שלכם ולוחצים "מכשיר חדש / החלפת מכשיר". כל המכשירים הקודמים ינותקו.')}</p>
       <p className="hint">{t('הטלפון נהרס או אבד? הורה אחר יכול להנפיק לכם קוד קישור ב"ניהול". אם אין הורה אחר, בקשו החלפה במסך הכניסה: היא תתאפשר אחרי 24 שעות, ותקבלו על כך מייל.')}</p>
       {!data.me.email && <p className="hint">{t('כדי להחליף מכשיר מהטלפון הזה צריך מייל מאומת. הוסיפו מייל ב"החשבון שלי".')}</p>}
-      {sent && <p className="hint">{t('✅ נשלח קוד למייל. הזינו אותו בטלפון החדש.')}</p>}
+      <Reveal show={!!sent} appear><p className="hint">{t('✅ נשלח קוד למייל. הזינו אותו בטלפון החדש.')}</p></Reveal>
       {err && <Err>{err}</Err>}
       {data.me.email && <AsyncButton className="ghost" onClick={requestMove}>{t('החלפת מכשיר (שליחת קוד למייל)')}</AsyncButton>}
     </div>
