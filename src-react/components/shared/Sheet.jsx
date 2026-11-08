@@ -1,7 +1,8 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AppCtx } from '../../state/appContext.js';
 import { t } from '../../i18n/index.js';
 import Arrow from './Arrow.jsx';
+import { reducedMotion } from '../../lib/motion.js';
 
 // החלון הקופץ. sheet.open(title, <Body />) פותח חלון חדש מעל הקודם (מחסנית): בחלון השני ומעלה יש בכותרת חץ חזרה,
 // והחלונות שמתחת נשארים בזיכרון עם מה שהוזן בהם. sheet.back() סוגר רק את העליון, ו-sheet.close() סוגר הכול.
@@ -19,6 +20,8 @@ export function useSheetTitle(title) {
 // היסטוריה: כל חלון בעומק n רושם state של {kupaSheet: n}. לשאר הניווט באפליקציה (לשוניות, הגדרות הפנקס) אין state,
 // ולכן popstate שלהם נשאר בדיוק כמו קודם: ה-hash לא משתנה בגלל חלון.
 const HIST_KEY = 'kupaSheet';
+const LEAVE_MS = 170; // משך אנימציית הסגירה של החלון
+const HEIGHT_MS = 240; // משך שינוי הגובה במעבר בין חלון לחלון
 const histDepthOf = () => (history.state && history.state[HIST_KEY]) || 0;
 
 export function SheetProvider({ children }) {
@@ -31,6 +34,15 @@ export function SheetProvider({ children }) {
   const histDepth = useRef(0); // כמה רשומות היסטוריה פתחנו (אחרי כל הפעולות שבתור)
   const histQueue = useRef(Promise.resolve()); // פעולות היסטוריה לפי הסדר: go() אסינכרוני ולא מתערבב עם pushState שאחריו
   const ignorePops = useRef(0); // popstate שאנחנו עצמנו גרמנו לו (סגירה מהכפתור) ולא "חזרה" של המשתמש
+  // מעבר בין חלונות: כיוון האחרון (push = נפתח חלון מעל, back = חזרה), הגובה לפני השינוי, ואנימציית הגובה שרצה.
+  const navDir = useRef(/** @type {'push' | 'back' | null} */ (null));
+  const prevH = useRef(0);
+  const heightAnim = useRef(/** @type {Animation | null} */ (null));
+  // סגירה מונפשת: אחרי שהמחסנית מתרוקנת ממשיכים להציג את החלונות האחרונים עוד רגע, בזמן שהם יוצאים.
+  const [leaving, setLeaving] = useState(false);
+  const leaveTimer = useRef(0);
+  const lastStack = useRef(/** @type {any[]} */ ([]));
+  const markHeight = () => { prevH.current = sheetElRef.current ? sheetElRef.current.offsetHeight : 0; };
 
   const queue = (fn) => { histQueue.current = histQueue.current.then(fn).catch(() => {}); };
   const syncHistory = useCallback((len) => {
@@ -57,6 +69,13 @@ export function SheetProvider({ children }) {
     const prev = stackRef.current;
     stackRef.current = next;
     setStack(next);
+    clearTimeout(leaveTimer.current);
+    if (next.length === 0 && prev.length > 0 && !reducedMotion()) {
+      setLeaving(true);
+      leaveTimer.current = window.setTimeout(() => setLeaving(false), LEAVE_MS);
+    } else {
+      setLeaving(false);
+    }
     if (next.length < prev.length) {
       const f = prev[next.length].focusBack;
       if (f && f.focus) setTimeout(() => f.focus(), 0);
@@ -69,12 +88,16 @@ export function SheetProvider({ children }) {
     counter.current += 1;
     const entry = { key: counter.current, title, body, revealFrom, focusBack: document.activeElement };
     const next = [...stackRef.current, entry];
+    navDir.current = 'push';
+    markHeight();
     commit(next);
     syncHistory(next.length);
   }, [commit, syncHistory]);
   const back = useCallback(() => {
     const cur = stackRef.current;
     if (!cur.length) return;
+    navDir.current = 'back';
+    markHeight();
     commit(cur.slice(0, -1));
     syncHistory(cur.length - 1);
   }, [commit, syncHistory]);
@@ -111,10 +134,27 @@ export function SheetProvider({ children }) {
     for (const k of entryCtxs.current.keys()) if (!live.has(k)) entryCtxs.current.delete(k);
   }, [stack]);
 
-  const top = stack[stack.length - 1] || null;
+  if (stack.length) lastStack.current = stack;
+  const view = stack.length ? stack : (leaving ? lastStack.current : []);
+  const top = view[view.length - 1] || null;
   const first = stack[0] || null;
   const topKey = top && top.key;
   useEffect(() => { if (topKey && closeBtn.current) closeBtn.current.focus(); }, [topKey]);
+
+  // מעבר בין חלון לחלון: הגובה של החלון מתכוונן בהדרגה מהגובה הקודם לחדש, במקום לקפוץ.
+  useLayoutEffect(() => {
+    const el = sheetElRef.current;
+    const from = prevH.current;
+    prevH.current = 0;
+    if (!el || !from || !stack.length || reducedMotion() || typeof el.animate !== 'function') return;
+    const to = el.offsetHeight;
+    if (Math.abs(to - from) < 2) return;
+    heightAnim.current?.cancel();
+    heightAnim.current = el.animate(
+      [{ height: `${from}px`, overflow: 'hidden' }, { height: `${to}px`, overflow: 'hidden' }],
+      { duration: HEIGHT_MS, easing: 'cubic-bezier(.2, .8, .2, 1)' },
+    );
+  }, [topKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // כשנפתח אריח עם נקודת מוצא, ממתינים לרינדור ומודדים את מיקומו כדי לקבוע
   // את מרכז הגדילה (transform-origin) בדיוק על אותה נקודה.
@@ -142,7 +182,7 @@ export function SheetProvider({ children }) {
       if (ignorePops.current > 0) { ignorePops.current -= 1; return; }
       const k = histDepthOf();
       const cur = stackRef.current;
-      if (k < cur.length) { histDepth.current = k; commit(cur.slice(0, k)); }
+      if (k < cur.length) { histDepth.current = k; navDir.current = 'back'; markHeight(); commit(cur.slice(0, k)); }
     };
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
@@ -160,7 +200,7 @@ export function SheetProvider({ children }) {
   return (
     <SheetCtx.Provider value={ctxValue}>
       {children}
-      <div className="sheet-wrap" hidden={!isOpen}>
+      <div className={'sheet-wrap' + (!isOpen && leaving ? ' sheet-wrap-leaving' : '')} hidden={!isOpen && !leaving}>
         <div className={'sheet-bg' + (revealFrom ? ' sheet-bg-reveal' : '')} onClick={close} />
         <div
           ref={sheetElRef}
@@ -169,14 +209,15 @@ export function SheetProvider({ children }) {
           role="dialog" aria-modal="true" aria-labelledby="sheetTitle"
         >
           <div className="sheet-head">
-            {stack.length > 1 && (
+            {view.length > 1 && (
               <button className="ghost sheet-back" type="button" aria-label={t('חזרה')} onClick={back}><Arrow kind="back" /></button>
             )}
             <h2 id="sheetTitle">{top ? top.title : ''}</h2>
             <button ref={closeBtn} className="ghost" type="button" aria-label={t('סגירה')} onClick={close}>✕</button>
           </div>
-          {stack.map((e, i) => (
-            <div key={e.key} hidden={i !== stack.length - 1}>
+          {view.map((e, i) => (
+            <div key={e.key} hidden={i !== view.length - 1}
+              className={i === view.length - 1 && isOpen && navDir.current && (view.length > 1 || navDir.current === 'back') ? 'sheet-page-' + navDir.current : undefined}>
               <SheetCtx.Provider value={ctxOf(e.key)}><AppCtx.Provider value={appCtx}>{e.body}</AppCtx.Provider></SheetCtx.Provider>
             </div>
           ))}

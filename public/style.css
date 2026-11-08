@@ -759,6 +759,21 @@ button.small { min-height: var(--tap); }
 .sheet-reveal { animation: sheet-grow .18s cubic-bezier(.22, .8, .2, 1); }
 @keyframes sheet-grow { from { opacity: 0; transform: scale(.02); } to { opacity: 1; transform: scale(1); } }
 @media (min-width: 640px) { .sheet-wrap { align-items: center; } .sheet { border-radius: 24px; } }
+/* מעבר בין חלונות מקוננים (למשל מההגדרות לחלון שנפתח מהן): נכנס מהצד, וחזרה נכנסת מהצד ההפוך */
+html[dir="rtl"] { --ix: -1; }
+.sheet-page-push { animation: sheet-page-end .24s cubic-bezier(.2, .8, .2, 1) backwards; }
+.sheet-page-back { animation: sheet-page-start .24s cubic-bezier(.2, .8, .2, 1) backwards; }
+@keyframes sheet-page-end { from { opacity: 0; transform: translateX(calc(var(--ix, 1) * 36px)); } }
+@keyframes sheet-page-start { from { opacity: 0; transform: translateX(calc(var(--ix, 1) * -36px)); } }
+/* סגירת החלון: יורד ונעלם, והרקע דוהה. בזמן הזה לוחצים דרכו על המסך שמאחוריו */
+.sheet-wrap.sheet-wrap-leaving { pointer-events: none; }
+.sheet-wrap.sheet-wrap-leaving .sheet-bg { animation: sheet-bg-out .17s ease-in forwards; }
+.sheet-wrap.sheet-wrap-leaving .sheet { animation: sheet-fall .17s ease-in forwards; }
+@keyframes sheet-bg-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes sheet-fall { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(16px); } }
+@media (prefers-reduced-motion: reduce) {
+  .sheet-page-push, .sheet-page-back { animation: none; }
+}
 .sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 /* כותרת החלון (כולל ✕) נשארת צמודה למעלה בגלילה: בלי כפתור חתוך שחופף לתוכן */
 .sheet-head {
