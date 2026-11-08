@@ -67,32 +67,40 @@ export function DeviceSheet() {
 
   return (
     <div className="form">
-      <p className="hint">{dev?.bound
-        ? t('✅ כניסה כהורה אפשרית רק מהמכשירים שברשימה, עם הקוד הסודי וטביעת אצבע או זיהוי פנים.')
-        : t('המכשיר הזה עוד לא קשור להורה.')}</p>
-      {devices.map((d) => (
-        <div className="person" key={d.id}>
-          <div className="text">
-            {deviceName(d)}{d.credentialId === here ? ' ' + t('(המכשיר הזה)') : ''}
-            <div className="meta">
-              {t('נוסף ב-{date}', { date: dateOf(d.createdAt) })}
-              {d.lastUsedAt ? ' • ' + t('שימוש אחרון: {date}', { date: dateOf(d.lastUsedAt) }) : ''}
+      {/* הרשימה נטענת מהשרת אחרי שהחלון כבר נפתח: מחליקה פנימה בהדרגה במקום לקפוץ (וגם בלי הודעת "לא קשור" שמופיעה לרגע ונעלמת) */}
+      <Reveal show={!!dev} appear>
+        <div className="form">
+          <p className="hint">{dev?.bound
+            ? t('✅ כניסה כהורה אפשרית רק מהמכשירים שברשימה, עם הקוד הסודי וטביעת אצבע או זיהוי פנים.')
+            : t('המכשיר הזה עוד לא קשור להורה.')}</p>
+          {devices.map((d) => (
+            <div className="person" key={d.id}>
+              <div className="text">
+                {deviceName(d)}{d.credentialId === here ? ' ' + t('(המכשיר הזה)') : ''}
+                <div className="meta">
+                  {t('נוסף ב-{date}', { date: dateOf(d.createdAt) })}
+                  {d.lastUsedAt ? ' • ' + t('שימוש אחרון: {date}', { date: dateOf(d.lastUsedAt) }) : ''}
+                </div>
+              </div>
+              {devices.length > 1 && d.credentialId !== here && (
+                <AsyncButton className="small danger" onClick={() => removeDevice(d)}>{t('הסרה')}</AsyncButton>
+              )}
             </div>
-          </div>
-          {devices.length > 1 && d.credentialId !== here && (
-            <AsyncButton className="small danger" onClick={() => removeDevice(d)}>{t('הסרה')}</AsyncButton>
-          )}
+          ))}
+          {dev?.bound && devices.length > 1 && <p className="hint">{t('את המכשיר שבו אתם נמצאים מסירים ממכשיר אחר.')}</p>}
         </div>
-      ))}
-      {dev?.bound && devices.length > 1 && <p className="hint">{t('את המכשיר שבו אתם נמצאים מסירים ממכשיר אחר.')}</p>}
-      {addCode ? (
-        <>
+      </Reveal>
+      <Reveal show={!!addCode} appear>
+        <div className="form">
           <div className="big-emoji code-display" aria-label={t('קוד ההוספה')}>{addCode}</div>
           <p className="hint">{t('במכשיר החדש: פותחים את הקופה, בוחרים את השם שלכם, לוחצים על "מכשיר חדש / החלפת מכשיר" ואז על "הוספת המכשיר הזה", ומקלידים את הקוד הסודי שלכם ואת הקוד הזה. הקוד תקף 30 דקות ופעם אחת.')}</p>
-        </>
-      ) : dev?.bound && (full
-        ? <p className="hint">{t('קשורים כבר {n} מכשירים, וזה המקסימום. כדי להוסיף עוד, מסירים מכשיר.', { n: devices.length })}</p>
-        : <AsyncButton className="primary" onClick={addDevice}>{t('➕ הוספת מכשיר (למשל דפדפן)')}</AsyncButton>)}
+        </div>
+      </Reveal>
+      <Reveal show={!addCode && !!dev?.bound}>
+        {full
+          ? <p className="hint">{t('קשורים כבר {n} מכשירים, וזה המקסימום. כדי להוסיף עוד, מסירים מכשיר.', { n: devices.length })}</p>
+          : <AsyncButton className="primary" onClick={addDevice}>{t('➕ הוספת מכשיר (למשל דפדפן)')}</AsyncButton>}
+      </Reveal>
       <p className="hint">{t('מחליפים טלפון? לוחצים כאן, מאשרים בטביעת אצבע, ונשלח קוד למייל. אחר כך פותחים את הקופה בטלפון החדש, בוחרים את השם שלכם ולוחצים "מכשיר חדש / החלפת מכשיר". כל המכשירים הקודמים ינותקו.')}</p>
       <p className="hint">{t('הטלפון נהרס או אבד? הורה אחר יכול להנפיק לכם קוד קישור ב"ניהול". אם אין הורה אחר, בקשו החלפה במסך הכניסה: היא תתאפשר אחרי 24 שעות, ותקבלו על כך מייל.')}</p>
       {!data.me.email && <p className="hint">{t('כדי להחליף מכשיר מהטלפון הזה צריך מייל מאומת. הוסיפו מייל ב"החשבון שלי".')}</p>}
