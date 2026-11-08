@@ -99,7 +99,7 @@ export default function Home({ data, token }) {
       <h2>{t('מי חייב למי')}</h2>
       <div id="myDebts">
         {data.people.length < 2 ? (
-          <div className="empty">{t('עוד אין אף אחד אחר במשפחה. הורה צריך להוסיף אותם.')}</div>
+          <div className="empty empty-sm">{t('עוד אין אף אחד אחר במשפחה. הורה צריך להוסיף אותם.')}</div>
         ) : cards.length === 0 ? (
           <div className="empty"><div className="big-emoji" aria-hidden="true">🎉</div>{t('אף אחד לא חייב כלום!')}</div>
         ) : cards}

@@ -14,7 +14,7 @@ export default function TeenOverview({ teens }) {
       {teens.map((teen) => (
         <Collapsible key={teen.name} title={<>🤝 {teen.name}</>} defaultOpen={teens.length === 1}>
           <div className="meta">{teen.friends.length ? t('חברים: {names}', { names: teen.friends.join(', ') }) : t('עוד אין חברים מאושרים')}</div>
-          {teen.entries.length === 0 && <div className="empty">{t('עוד לא נרשם כלום.')}</div>}
+          {teen.entries.length === 0 && <div className="empty empty-sm">{t('עוד לא נרשם כלום.')}</div>}
           {teen.entries.map((e, i) => (
             <div className="row" key={i}>
               <div className="text">

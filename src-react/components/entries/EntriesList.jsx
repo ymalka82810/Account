@@ -9,7 +9,7 @@ export default function EntriesList({
   list, emptyText, token, me, isParent, lookup, debtList, removeEndpoint, pendingLabel, display,
 }) {
   const confirm = useConfirm();
-  if (!list.length) return <div className="empty">{emptyText}</div>;
+  if (!list.length) return <div className="empty empty-sm">{emptyText}</div>;
   const { owesLine, repaidLine } = namesFor(me, lookup);
   const debtMap = debtStates(debtList);
   const sorted = [...list].sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt);

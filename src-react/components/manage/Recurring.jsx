@@ -61,7 +61,7 @@ export default function Recurring({ data, token }) {
   return (
     <>
       <div id="recurringList">
-        {data.recurring.length === 0 && <div className="empty">{t('עוד אין רישומים קבועים.')}</div>}
+        {data.recurring.length === 0 && <div className="empty empty-sm">{t('עוד אין רישומים קבועים.')}</div>}
         {data.recurring.map((r) => (
           <div className="row" key={r.id}>
             <div className="text">
