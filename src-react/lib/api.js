@@ -47,6 +47,9 @@ export const call = (name, args) =>
 export const callAction = (name, args) =>
   isDemo(state.token) ? demoBlocked() : client.action(/** @type {any} */ (name), /** @type {any} */ (args));
 
+// השרת לא מכיר את הטוקן (יציאה, פג תוקף): אותה הודעה שה-App בודק בשליחת הפנקס (requirePerson בשרת).
+const isSessionGone = (e) => !!e && typeof e.data === 'string' && e.data.includes('צריך להיכנס מחדש');
+
 /**
  * useQuery לפי שם, עם טיפוס התוצאה מהשרת. 'skip' = לא לשלוח.
  * @template {QueryName} N
@@ -56,6 +59,15 @@ export const callAction = (name, args) =>
  */
 export const useQuery = (name, args) => {
   const demo = isDemo(state.token) && args !== 'skip' && name !== 'auth:legacyRoster';
-  const res = useConvexQuery(/** @type {any} */ (name), /** @type {any} */ (demo ? 'skip' : args));
+  let res;
+  try {
+    res = useConvexQuery(/** @type {any} */ (name), /** @type {any} */ (demo ? 'skip' : args));
+  } catch (e) {
+    // Convex זורק את שגיאת השאילתה רק אחרי שכל ה-hooks רצו, ולכן אפשר לתפוס אותה כאן בבטחה.
+    // כניסה שהשרת כבר לא מכיר (יציאה: הסשן נמחק לפני שהטוקן נוקה מהמכשיר) היא לא תקלה: אין מה להציג,
+    // וה-App סוגר את הכניסה לבד. בלי זה שאילתה של הורה (למשל biometric:deviceStatus) הפילה את כל האפליקציה ל"נסו שוב".
+    if (!isSessionGone(e)) throw e;
+    res = undefined;
+  }
   return demo ? /** @type {any} */ (demoQuery(name)) : res;
 };
