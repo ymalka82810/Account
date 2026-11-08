@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { call } from '../../lib/api.js';
-import { state, PARENT_AVATARS } from '../../state/state.js';
+import { useApp } from '../../state/appContext.js';
+import { state, AVATARS, PARENT_AVATARS } from '../../state/state.js';
 import AvatarPicker, { randomAvatar } from '../shared/AvatarPicker.jsx';
 import Select from '../shared/Select.jsx';
 import { toast, errMsg } from '../../lib/helpers.js';
@@ -12,10 +13,18 @@ import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
 
 // הוספת בן/בת משפחה (הורים).
 export default function PersonForm() {
+  const { data } = useApp();
+  // השרת לא מרשה שתי דמויות זהות במשפחה, לכן כל הוספה מקבלת דמות פנויה (justUsed מכסה הוספה שעוד לא התעדכנה ברשימה).
+  const freeAvatar = (forRole, justUsed) => {
+    const options = forRole === 'parent' ? PARENT_AVATARS : AVATARS;
+    const taken = new Set([...data.people.map((p) => p.avatar), justUsed]);
+    const free = options.filter((a) => !taken.has(a));
+    return randomAvatar(free.length ? free : options);
+  };
   const [name, setName] = useState('');
   const [role, setRole] = useState('child');
   const [gender, setGender] = useState('');
-  const [avatar, setAvatar] = useState(randomAvatar);
+  const [avatar, setAvatar] = useState(() => freeAvatar('child'));
   const [pin, setPin] = useState('');
   const [busy, setBusy] = useState(false);
   // נעילה מיידית נגד שליחה כפולה: ה-busy של React מתעדכן רק ברינדור הבא.
@@ -24,7 +33,7 @@ export default function PersonForm() {
 
   function changeRole(newRole) {
     setRole(newRole);
-    setAvatar(randomAvatar(newRole === 'parent' ? PARENT_AVATARS : undefined));
+    setAvatar(freeAvatar(newRole));
   }
 
   async function submit(ev) {
@@ -40,7 +49,7 @@ export default function PersonForm() {
       const clean = trimmed.replace(/\s+/g, ' ');
       const proof = role === 'child' ? undefined : await bioConfirm(`add:${role}:${clean}`, { why: t('כדי שילד לא יהפוך את עצמו להורה, הוספה בתור נער/ה או הורה מאושרת על ידי הורה. תיפתח עכשיו בקשת אימות מהמכשיר.') });
       await call('people:add', { token: state.token, name: clean, role, avatar, gender: gender || undefined, pin: pin || undefined, proof });
-      setName(''); setPin('');
+      setName(''); setPin(''); setAvatar(freeAvatar(role, avatar));
       toast(g(gender, '{name} נוסף למשפחה ✅', '{name} נוספה למשפחה ✅', '{name} נוסף/ה למשפחה ✅', { name: trimmed }));
     } catch (e) { toast(e instanceof BioError ? e.message : errMsg(e)); }
     finally { sending.current = false; setBusy(false); }

@@ -50,7 +50,7 @@ function ChildrenForm({ people }) {
       toast(g(gender, '{name} נוסף למשפחה ✅', '{name} נוספה למשפחה ✅', '{name} נוסף/ה למשפחה ✅', { name: clean }));
       setName(''); setGender(''); setShared(true); setSharedPin(!!pin);
     } catch (e) { toast(errMsg(e)); }
-    finally { setBusy(false); }
+    finally { sending.current = false; setBusy(false); }
   }
 
   return (
