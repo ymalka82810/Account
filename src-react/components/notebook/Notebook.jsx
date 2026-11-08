@@ -69,7 +69,7 @@ export default function Notebook({ current }) {
     if (reduce) { location.hash = SETTINGS_HASH; setPage('settings'); return; }
     setReturned(false);
     setPulling(true);
-    setTimeout(() => { setPulling(false); location.hash = SETTINGS_HASH; setPage('settings'); }, 250);
+    setTimeout(() => { setPulling(false); location.hash = SETTINGS_HASH; setPage('settings'); }, 320);
   };
   // סגירה: הגלגל מסתובב לכיוון ההפוך, וכל התנועה ימינה כמו גלילה של הדף:
   // ההגדרות יוצאות ימינה והעמוד הראשי נכנס משמאל
@@ -84,7 +84,7 @@ export default function Notebook({ current }) {
     const reduce = reducedMotion();
     if (reduce) { leaveSettings(); return; }
     setClosing(true);
-    setTimeout(() => { setClosing(false); setReturned(true); leaveSettings(); }, 250);
+    setTimeout(() => { setClosing(false); setReturned(true); leaveSettings(); }, 320);
   };
 
   return (

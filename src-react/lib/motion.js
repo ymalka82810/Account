@@ -1,7 +1,7 @@
 // אנימציית הצגה והסתרה של קטעים בממשק (גובה, ריווחים ושקיפות), כדי שתוכן לא יקפוץ פתאום למטה.
 // משמש את Collapsible, את Reveal ואת הרשימות הנפתחות (details). מי שמגדיר "הפחתת תנועה" במכשיר מקבל החלפה מיידית.
-const DURATION = 260;
-const EASE = 'cubic-bezier(.2, .8, .2, 1)';
+const DURATION = 340;
+const EASE = 'cubic-bezier(.22, 1, .36, 1)';
 
 /** @type {WeakMap<Element, Animation>} */
 const running = new WeakMap();

@@ -20,8 +20,8 @@ export function useSheetTitle(title) {
 // היסטוריה: כל חלון בעומק n רושם state של {kupaSheet: n}. לשאר הניווט באפליקציה (לשוניות, הגדרות הפנקס) אין state,
 // ולכן popstate שלהם נשאר בדיוק כמו קודם: ה-hash לא משתנה בגלל חלון.
 const HIST_KEY = 'kupaSheet';
-const LEAVE_MS = 170; // משך אנימציית הסגירה של החלון
-const HEIGHT_MS = 240; // משך שינוי הגובה במעבר בין חלון לחלון
+const LEAVE_MS = 300; // משך אנימציית הסגירה של החלון
+const HEIGHT_MS = 400; // משך שינוי הגובה במעבר בין חלון לחלון
 const histDepthOf = () => (history.state && history.state[HIST_KEY]) || 0;
 
 export function SheetProvider({ children }) {
@@ -152,7 +152,7 @@ export function SheetProvider({ children }) {
     heightAnim.current?.cancel();
     heightAnim.current = el.animate(
       [{ height: `${from}px`, overflow: 'hidden' }, { height: `${to}px`, overflow: 'hidden' }],
-      { duration: HEIGHT_MS, easing: 'cubic-bezier(.2, .8, .2, 1)' },
+      { duration: HEIGHT_MS, easing: 'cubic-bezier(.22, 1, .36, 1)' },
     );
   }, [topKey]); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -761,35 +761,36 @@ button.small { min-height: var(--tap); }
 }
 
 /* חלון קופץ */
+:root { --ease-out: cubic-bezier(.22, 1, .36, 1); --ease-soft: cubic-bezier(.4, 0, .2, 1); }
 .sheet-wrap { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end; justify-content: center; }
-.sheet-bg { position: absolute; inset: 0; background: rgba(10, 16, 40, .55); animation: sheet-bg-in .18s ease-out; }
+.sheet-bg { position: absolute; inset: 0; background: rgba(10, 16, 40, .55); animation: sheet-bg-in .32s var(--ease-soft); }
 @keyframes sheet-bg-in { from { opacity: 0; } to { opacity: 1; } }
-.sheet-bg-reveal { opacity: 0; animation: sheet-bg-fade .18s ease forwards; }
+.sheet-bg-reveal { opacity: 0; animation: sheet-bg-fade .32s var(--ease-soft) forwards; }
 @keyframes sheet-bg-fade { to { opacity: 1; } }
 .sheet {
   position: relative; width: 100%; max-width: 560px; max-height: 94vh; max-height: 94dvh; overflow-y: auto;
   background: var(--bg); border-radius: 24px 24px 0 0;
   padding: 16px 18px calc(20px + env(safe-area-inset-bottom, 0));
   box-shadow: 0 -8px 30px rgba(0, 0, 0, .3);
-  animation: sheet-rise .18s ease-out; /* ברירת מחדל לכולם: עלייה קלה. ילד ונוער עם הגלגל: sheet-reveal */
+  animation: sheet-rise .4s var(--ease-out); /* ברירת מחדל לכולם: עלייה קלה. ילד ונוער עם הגלגל: sheet-reveal */
 }
-@keyframes sheet-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes sheet-rise { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: none; } }
 .sheet-reveal-pending { opacity: 0; transform: scale(.02); animation: none; }
-.sheet-reveal { animation: sheet-grow .18s cubic-bezier(.22, .8, .2, 1); }
+.sheet-reveal { animation: sheet-grow .36s var(--ease-out); }
 @keyframes sheet-grow { from { opacity: 0; transform: scale(.02); } to { opacity: 1; transform: scale(1); } }
 @media (min-width: 640px) { .sheet-wrap { align-items: center; } .sheet { border-radius: 24px; } }
 /* מעבר בין חלונות מקוננים (למשל מההגדרות לחלון שנפתח מהן): נכנס מהצד, וחזרה נכנסת מהצד ההפוך */
 html[dir="rtl"] { --ix: -1; }
-.sheet-page-push { animation: sheet-page-end .24s cubic-bezier(.2, .8, .2, 1) backwards; }
-.sheet-page-back { animation: sheet-page-start .24s cubic-bezier(.2, .8, .2, 1) backwards; }
-@keyframes sheet-page-end { from { opacity: 0; transform: translateX(calc(var(--ix, 1) * 36px)); } }
-@keyframes sheet-page-start { from { opacity: 0; transform: translateX(calc(var(--ix, 1) * -36px)); } }
+.sheet-page-push { animation: sheet-page-end .44s var(--ease-out) backwards; }
+.sheet-page-back { animation: sheet-page-start .44s var(--ease-out) backwards; }
+@keyframes sheet-page-end { from { opacity: 0; transform: translateX(calc(var(--ix, 1) * 56px)); } }
+@keyframes sheet-page-start { from { opacity: 0; transform: translateX(calc(var(--ix, 1) * -56px)); } }
 /* סגירת החלון: יורד ונעלם, והרקע דוהה. בזמן הזה לוחצים דרכו על המסך שמאחוריו */
 .sheet-wrap.sheet-wrap-leaving { pointer-events: none; }
-.sheet-wrap.sheet-wrap-leaving .sheet-bg { animation: sheet-bg-out .17s ease-in forwards; }
-.sheet-wrap.sheet-wrap-leaving .sheet { animation: sheet-fall .17s ease-in forwards; }
+.sheet-wrap.sheet-wrap-leaving .sheet-bg { animation: sheet-bg-out .3s var(--ease-soft) forwards; }
+.sheet-wrap.sheet-wrap-leaving .sheet { animation: sheet-fall .3s var(--ease-soft) forwards; }
 @keyframes sheet-bg-out { from { opacity: 1; } to { opacity: 0; } }
-@keyframes sheet-fall { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(16px); } }
+@keyframes sheet-fall { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(28px); } }
 @media (prefers-reduced-motion: reduce) {
   .sheet-page-push, .sheet-page-back { animation: none; }
 }
@@ -1297,21 +1298,22 @@ body[data-theme] .sum .lbl, body:not([data-theme]) .sum .lbl { font-weight: 800;
 #screen-notebook { overflow-x: clip; }
 #screen-notebook .nb-gear-ico { display: inline-block; }
 @media (prefers-reduced-motion: no-preference) {
-  #screen-notebook .nb-gear-spin .nb-gear-ico { animation: nb-gear-turn .24s cubic-bezier(.5, 0, .3, 1) forwards; }
-  #screen-notebook .nb-page.nb-pulled { transition: transform .24s cubic-bezier(.5, 0, .3, 1), opacity .24s ease-in; }
-  #screen-notebook .nb-page.nb-pulled { transform: translateX(26%); opacity: .35; }
-  #screen-notebook .nb-pull-in { animation: nb-pull-in .26s cubic-bezier(.2, .8, .25, 1) backwards; }
+  #screen-notebook .nb-gear-spin .nb-gear-ico { animation: nb-gear-turn .5s var(--ease-soft) forwards; }
+  #screen-notebook .nb-page { will-change: transform, opacity; }
+  #screen-notebook .nb-page.nb-pulled { transition: transform .32s var(--ease-soft), opacity .32s var(--ease-soft); }
+  #screen-notebook .nb-page.nb-pulled { transform: translateX(14%); opacity: 0; }
+  #screen-notebook .nb-pull-in { animation: nb-pull-in .5s var(--ease-out) backwards; }
 }
 /* סגירה: הכיוון ההפוך של הפתיחה */
 @media (prefers-reduced-motion: no-preference) {
-  #screen-notebook .nb-gear-spin-back .nb-gear-ico { animation: nb-gear-turn-back .24s cubic-bezier(.5, 0, .3, 1) forwards; }
-  #screen-notebook .nb-pushed-out { transition: transform .24s cubic-bezier(.5, 0, .3, 1), opacity .24s ease-in; transform: translateX(70%); opacity: 0; }
-  #screen-notebook .nb-push-back { animation: nb-push-back .26s cubic-bezier(.2, .8, .25, 1) backwards; }
+  #screen-notebook .nb-gear-spin-back .nb-gear-ico { animation: nb-gear-turn-back .5s var(--ease-soft) forwards; }
+  #screen-notebook .nb-pushed-out { transition: transform .32s var(--ease-soft), opacity .32s var(--ease-soft); transform: translateX(14%); opacity: 0; }
+  #screen-notebook .nb-push-back { animation: nb-push-back .5s var(--ease-out) backwards; }
 }
 @keyframes nb-gear-turn-back { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
-@keyframes nb-push-back { from { transform: translateX(-26%); opacity: .35; } to { transform: translateX(0); opacity: 1; } }
+@keyframes nb-push-back { from { transform: translateX(-14%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes nb-gear-turn { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-@keyframes nb-pull-in { from { transform: translateX(-70%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes nb-pull-in { from { transform: translateX(-14%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
 /* כתב גדול בפנקס: עמודות grid לא מתרחבות מעבר למסך (ברירת המחדל min-content דוחפת תוכן החוצה) */
 #screen-notebook .nb-page { grid-template-columns: minmax(0, 1fr); }
