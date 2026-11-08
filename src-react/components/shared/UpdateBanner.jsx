@@ -24,7 +24,7 @@ export default function UpdateBanner() {
     setError('');
     setPercent(0);
     try {
-      await installUpdate(update.url, update.sha256, setPercent);
+      await installUpdate(update.url, update.sha256, setPercent, update.fallbackUrl);
     } catch (e) {
       setError(updateErrorText(e));
     }

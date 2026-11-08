@@ -42,7 +42,7 @@ async function fetchReleases(repo) {
 
 // The newest release in `repo` whose tag starts with `tag` + a digit, if its versionCode (written in the
 // release notes by the build; the tag's trailing number is the fallback) is newer than the installed APK.
-// The release must carry an .apk asset. Returns {version, url, sha256?} or null.
+// The release must carry an .apk asset. Returns {version, url, fallbackUrl, sha256?} or null.
 export async function findUpdate(repo, tag) {
   const { versionCode } = await appInfo();
   const ours = new RegExp(`^${tag}\\d`);
@@ -53,18 +53,18 @@ export async function findUpdate(repo, tag) {
   const sha256 = /^sha256:\s*([0-9a-f]{64})\s*$/im.exec(body)?.[1]?.toLowerCase();
   const apk = release.assets.find((a) => a.name.endsWith('.apk'));
   if (latest <= versionCode || !apk) return null;
-  return { version: release.tag_name.slice(tag.length), url: apk.browser_download_url, sha256 };
+  return { version: release.tag_name.slice(tag.length), url: apk.browser_download_url, fallbackUrl: apk.url, sha256 };
 }
 
 // Downloads the APK (straight from the app at full speed, with the system DownloadManager as a fallback),
 // checks its SHA-256 (when given) and opens the system install dialog once the app is in the foreground.
 // onProgress gets 0–100 (-1 if the size is unknown).
-// Rejects with an Error whose message is "busy", "bad url", "download", "checksum", "not an update",
+// Rejects with an Error whose message is "busy", "bad url", "download: <detail>", "checksum", "not an update",
 // "permission" or "no installer".
-export async function installUpdate(url, sha256, onProgress) {
+export async function installUpdate(url, sha256, onProgress, fallbackUrl) {
   const listener = onProgress && cap.addListener('AppUpdater', 'progress', (e) => onProgress(e.percent));
   try {
-    await call('downloadAndInstall', { url, sha256 });
+    await call('downloadAndInstall', { url, sha256, fallbackUrl });
   } finally {
     listener?.remove();
   }
@@ -78,5 +78,6 @@ export function updateErrorText(e) {
   if (code.includes('checksum')) return t('הקובץ שירד לא תקין. נסו שוב');
   if (code.includes('not an update')) return t('הקובץ שירד אינו גרסה חדשה של האפליקציה');
   if (code.includes('busy')) return t('עדכון כבר מתבצע');
-  return t('ההורדה נכשלה. בדקו חיבור לאינטרנט ונסו שוב');
+  const detail = /^download:\s*(.+)$/.exec(code)?.[1];
+  return t('ההורדה נכשלה. בדקו חיבור לאינטרנט ונסו שוב') + (detail ? ` (${detail})` : '');
 }

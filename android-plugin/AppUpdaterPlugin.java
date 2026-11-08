@@ -50,8 +50,8 @@ import java.security.NoSuchAlgorithmException;
  * Register it in MainActivity: registerPlugin(AppUpdaterPlugin.class) before super.onCreate().
  *
  * JS: appInfo() -> {versionCode, versionName}
- *     downloadAndInstall({url, sha256?}) -> resolves once the install dialog is shown; rejects with
- *       "busy", "bad url", "download", "checksum", "not an update", "permission" or "no installer"
+ *     downloadAndInstall({url, sha256?, fallbackUrl?}) -> resolves once the install dialog is shown; rejects with
+ *       "busy", "bad url", "download: <detail>", "checksum", "not an update", "permission" or "no installer"
  *     event "progress" -> {percent} while downloading (-1 when the size is unknown)
  */
 @CapacitorPlugin(name = "AppUpdater")
@@ -112,9 +112,13 @@ public class AppUpdaterPlugin extends Plugin {
                         waitFor(id); // a DownloadManager download from an earlier try is still running
                     } else {
                         try {
-                            downloadDirect(url);
+                            downloadWithRetry(url, call.getString("fallbackUrl"));
                         } catch (IOException e) {
-                            waitFor(enqueue(url));
+                            try {
+                                waitFor(enqueue(url));
+                            } catch (IOException e2) {
+                                throw new IOException(e.getMessage() + " / " + e2.getMessage());
+                            }
                         }
                     }
                 }
@@ -131,16 +135,38 @@ public class AppUpdaterPlugin extends Plugin {
                 }
                 getActivity().runOnUiThread(() -> whenInForeground(() -> installOrAskPermission(call, apk)));
             } catch (IOException e) {
-                call.reject("download");
+                call.reject("download: " + e.getMessage());
             } finally {
                 busy = false;
             }
         }).start();
     }
 
-    // Downloads url straight into apkFile() (through a .part file, so a broken download never looks finished),
+    // github.com's release-download endpoint sometimes answers 504 for a while. Try it a few times, alternating with
+    // the GitHub API's asset URL (a different front end that redirects to the same file), before giving up on the direct download
+    private void downloadWithRetry(String url, String fallbackUrl) throws IOException {
+        boolean hasFallback = fallbackUrl != null && fallbackUrl.startsWith("https://");
+        IOException last = null;
+        for (int attempt = 0; attempt < 4; attempt++) {
+            String source = hasFallback && attempt % 2 == 1 ? fallbackUrl : url;
+            try {
+                downloadDirect(url, source);
+                return;
+            } catch (IOException e) {
+                last = e;
+            }
+            try {
+                Thread.sleep(1500L * (attempt + 1));
+            } catch (InterruptedException e) {
+                throw new IOException("interrupted");
+            }
+        }
+        throw last;
+    }
+
+    // Downloads source straight into apkFile() (through a .part file, so a broken download never looks finished),
     // reporting progress like waitFor; remembers the url so a second try reuses the finished file
-    private void downloadDirect(String url) throws IOException {
+    private void downloadDirect(String url, String source) throws IOException {
         DownloadManager dm = downloadManager();
         long old = prefs().getLong("id", -1);
         if (old != -1) dm.remove(old);
@@ -149,7 +175,8 @@ public class AppUpdaterPlugin extends Plugin {
         File dir = updateDir();
         if (dir == null || !(dir.isDirectory() || dir.mkdirs())) throw new IOException("no external storage");
         File part = new File(dir, APK + ".part");
-        HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+        HttpURLConnection conn = (HttpURLConnection) new URL(source).openConnection();
+        if (!source.equals(url)) conn.setRequestProperty("Accept", "application/octet-stream"); // API asset URL
         conn.setInstanceFollowRedirects(true); // GitHub answers with a redirect to its file server (https to https)
         conn.setConnectTimeout(15000);
         conn.setReadTimeout(30000);
