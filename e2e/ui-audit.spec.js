@@ -70,6 +70,16 @@ test.describe('החשבון שלי', () => {
     const exit = await page.locator('.acct-exit').boundingBox();
     const lastRow = await page.locator('.acct-more .acct-row').last().boundingBox();
     expect(exit.y).toBeGreaterThan(lastRow.y);
+
+    // השורות בתוך "משפחות נוספות" לא נוגעות זו בזו ולא בכותרת
+    const rows = page.locator('.acct-more .acct-row');
+    const first = await rows.first().boundingBox();
+    const summary = await page.locator('.acct-more > summary').boundingBox();
+    expect(first.y - (summary.y + summary.height)).toBeGreaterThanOrEqual(6);
+    if (await rows.count() > 1) {
+      const second = await rows.nth(1).boundingBox();
+      expect(second.y - (first.y + first.height)).toBeGreaterThanOrEqual(6);
+    }
   });
 
   test('מחסנית החלונות: חץ חזרה, Back של הדפדפן ו-Escape סוגרים שלב אחד', async ({ page }) => {

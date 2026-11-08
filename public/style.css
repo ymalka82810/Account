@@ -1517,13 +1517,14 @@ body[data-motion="off"] *, body[data-motion="off"] *::before, body[data-motion="
 .acct-switch[aria-checked="true"] .switch-knob::after { inset-inline-start: 19px; }
 .acct-switch[aria-checked="true"] .acct-state { color: var(--ink); }
 .acct-motion { gap: 8px; }
-.acct-more { display: grid; gap: 8px; }
+/* details לא מכבד grid/gap בכל הדפדפנים - הרווח בין השורות יושב על עטיפה פנימית */
+.acct-more { display: block; }
+.acct-more-body { display: grid; gap: 8px; margin-top: 8px; }
 .acct-more > summary {
   list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: var(--tap);
   padding: 10px 14px; border: 1.5px dashed var(--line); border-radius: 12px; font-weight: 600; color: var(--ink-soft);
 }
 .acct-more > summary::-webkit-details-marker { display: none; }
-.acct-more[open] > summary { margin-bottom: 8px; }
 .acct-more[open] > summary .arrow { transform: rotate(90deg); }
 html[dir="rtl"] .acct-more[open] > summary .arrow { transform: scaleX(-1) rotate(90deg); }
 /* יציאה: שורה נפרדת, בולטת ושונה משאר השורות (צבע ה"חוב" של הערכה) */

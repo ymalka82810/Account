@@ -126,20 +126,22 @@ export function AccountSheet() {
       {/* משפחות נוספות: מעבר, הצטרפות ויצירה. סגור כברירת מחדל, כי רוב האנשים משתמשים בהן פעם בחיים */}
       <details className="acct-more">
         <summary><span>{t('משפחות נוספות')}</span><Arrow kind="chev-next" /></summary>
-        {others.map((f) => (
-          <button key={f.familyId} className="acct-row" type="button"
-            onClick={async () => { const err = await goToFamily(f); if (err) toast(err); else sheet.close(); }}>
-            <span>{withIcons(t('🏠 מעבר למשפחת {family}', { family: f.name }))}</span>
+        <div className="acct-more-body">
+          {others.map((f) => (
+            <button key={f.familyId} className="acct-row" type="button"
+              onClick={async () => { const err = await goToFamily(f); if (err) toast(err); else sheet.close(); }}>
+              <span>{withIcons(t('🏠 מעבר למשפחת {family}', { family: f.name }))}</span>
+            </button>
+          ))}
+          <button className="acct-row" type="button" onClick={() => { sheet.close(); addAnotherFamily(); }}>
+            <span>{withIcons(t('➕ הצטרפות למשפחה נוספת'))}</span>
           </button>
-        ))}
-        <button className="acct-row" type="button" onClick={() => { sheet.close(); addAnotherFamily(); }}>
-          <span>{withIcons(t('➕ הצטרפות למשפחה נוספת'))}</span>
-        </button>
-        {me.role === 'parent' && (
-          <button className="acct-row" type="button" onClick={() => { sheet.close(); startNewFamily(); }}>
-            <span>{withIcons(t('🏠 יצירת קופה משפחתית'))}</span>
-          </button>
-        )}
+          {me.role === 'parent' && (
+            <button className="acct-row" type="button" onClick={() => { sheet.close(); startNewFamily(); }}>
+              <span>{withIcons(t('🏠 יצירת קופה משפחתית'))}</span>
+            </button>
+          )}
+        </div>
       </details>
 
       <AsyncButton className="acct-exit" onClick={async () => { sheet.close(); await logout(); }}>{t('יציאה')}</AsyncButton>
