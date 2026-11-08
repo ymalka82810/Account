@@ -35,23 +35,14 @@ jobs:
       - run: npx cap add android
       - run: npx cap sync android
 
+      # @capacitor/assets@3 תלוי ב-sharp@0.32, שמוריד את libvips מ-GitHub Releases בזמן ההתקנה. כשההורדה נכשלת (504)
+      # npx בולע את השגיאה ויוצא עם 1 בלי שום פלט. sharp@0.33 מגיע עם הקבצים הבינאריים כחבילות npm רגילות,
+      # לכן מתקינים את הכלי בנפרד עם override, וכל כשל התקנה יהיה גלוי.
       - name: Generate app icons
-        shell: bash
         run: |
-          set +e
-          {
-            node -v; npm -v
-            ls -la assets android/app/src/main/res | head -40
-            . /etc/os-release; echo "$PRETTY_NAME"; uname -m
-            mkdir -p /tmp/capa && (cd /tmp/capa && npm init -y >/dev/null && npm i @capacitor/assets@3 --foreground-scripts 2>&1 | grep -v "npm warn deprecated" | tail -30)
-            node /tmp/capa/node_modules/@capacitor/assets/bin/capacitor-assets generate --android --assetPath assets 2>&1 | head -30
-            echo "assets exit code: ${PIPESTATUS[0]}"
-          } > /tmp/diag.log 2>&1
-          code=$(grep -o 'assets exit code: [0-9]*' /tmp/diag.log | grep -o '[0-9]*$')
-          cat /tmp/diag.log
-          MSG=$(tail -c 8000 /tmp/diag.log | python3 -c 'import sys; print(sys.stdin.read().replace("%","%25").replace("\r","%0D").replace("\n","%0A"))')
-          echo "::error title=diag::$MSG"
-          exit ${code:-1}
+          mkdir /tmp/capa
+          (cd /tmp/capa && npm init -y >/dev/null && npm pkg set overrides.sharp=0.33.5 && npm i @capacitor/assets@3 --no-audit --no-fund)
+          node /tmp/capa/node_modules/@capacitor/assets/bin/capacitor-assets generate --android --assetPath assets
 
       # אייקון לפי מטבע: activity-alias לכל מטבע (₪, $, €...) במקום ה-LAUNCHER של MainActivity
       - name: Currency launcher icons
