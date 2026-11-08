@@ -4,7 +4,7 @@ import { internal } from "./_generated/api";
 import { Doc, Id } from "./_generated/dataModel";
 import { concat, derToRaw } from "./der";
 import {
-  LOGIN_CHALLENGES_PER_DEVICE, LOGIN_CHALLENGES_PER_PERSON, Member, cleanDeviceId, codeThrottled, failCode, findFamilyByCode, randomHex, registerPinFail,
+  LOGIN_CHALLENGES_PER_DEVICE, LOGIN_CHALLENGES_PER_PERSON, MAX_PARENT_DEVICES, Member, cleanDeviceId, codeThrottled, failCode, findFamilyByCode, randomHex, registerPinFail,
   requireParent, upgradePinHash, verifyPin,
 } from "./lib";
 import { verifyCode } from "./emailCodes";
@@ -16,10 +16,12 @@ import { verifyCode } from "./emailCodes";
 // באפליקציה (APK): מפתח EC בתוך ה-Android Keystore שאי אפשר להשתמש בו בלי טביעת אצבע
 // או פנים (BiometricPrompt). האפליקציה חותמת על האתגר והשרת בודק את החתימה.
 //
-// הורה קשור למכשיר אחד בלבד: למפתח ביומטרי אחד (bioKeys). כניסה כהורה דורשת גם את הקוד הסודי
-// וגם חתימה של המפתח הזה (auth:login), ולכן ידיעת הקוד הסודי בלבד לא מספיקה. קישור ראשון של
-// מכשיר נעשה בהקמת הקופה; החלפת מכשיר נעשית ב-deviceMove.ts (אישור מהמכשיר הישן + קוד
-// מהמייל, או קוד קישור מהורה אחר, או בקשה עם המתנה של 24 שעות כשהמכשיר אבד).
+// הורה קשור למכשירים שלו: עד MAX_PARENT_DEVICES מפתחות ביומטריים (bioKeys), למשל אפליקציה ודפדפן.
+// כניסה כהורה דורשת גם את הקוד הסודי וגם חתימה של אחד המפתחות (auth:login), ולכן ידיעת הקוד
+// הסודי בלבד לא מספיקה. קישור ראשון של מכשיר נעשה בהקמת הקופה; הוספת מכשיר נוסף וגם החלפת מכשיר
+// נעשות ב-deviceMove.ts: הוספה (אישור מהמכשיר הקשור, קוד שמקלידים במכשיר החדש, הקיימים ממשיכים
+// לעבוד); החלפה (אישור מהמכשיר הישן + קוד מהמייל, או קוד קישור מהורה אחר, או בקשה עם המתנה של
+// 24 שעות כשהמכשיר אבד) מוחקת את כל המפתחות הקודמים.
 
 const CHALLENGE_MS = 3 * 60 * 1000;
 
@@ -125,8 +127,10 @@ export async function familyHasBoundParent(ctx: QueryCtx, familyId: Id<"families
   return false;
 }
 
-// מקבל את הפרטים של מפתח חדש מהמכשיר, בודק אותם (חתימה, אתגר, מקור) ושומר אותו בתור המפתח היחיד
-// של ההורה. מפתחות קודמים נמחקים, כך שהמכשיר הישן מפסיק לעבוד. מי שקורא אחראי לאתגר ולהרשאה.
+// מקבל את הפרטים של מפתח חדש מהמכשיר, בודק אותם (חתימה, אתגר, מקור) ושומר אותו.
+// ברירת המחדל: זה המפתח היחיד של ההורה, ומפתחות קודמים נמחקים כך שהמכשירים הישנים מפסיקים לעבוד.
+// עם keepOthers (הוספת מכשיר) המפתחות הקיימים נשארים, עד MAX_PARENT_DEVICES.
+// מי שקורא אחראי לאתגר ולהרשאה.
 export const keyArgs = {
   challenge: v.string(),
   kind: v.union(v.literal("webauthn"), v.literal("android")),
@@ -139,7 +143,7 @@ export const keyArgs = {
 };
 type KeyArgs = { challenge: string; kind: "webauthn" | "android"; credentialId: string; publicKey: string; alg: number; clientDataJSON?: string; signature?: string; label?: string };
 
-export async function acceptKey(ctx: MutationCtx, personId: Id<"people">, a: KeyArgs): Promise<void> {
+export async function acceptKey(ctx: MutationCtx, personId: Id<"people">, a: KeyArgs, opts?: { keepOthers?: boolean }): Promise<void> {
   await takeChallenge(ctx, personId, "register", a.challenge);
   if (a.credentialId.length > 600 || a.publicKey.length > 1200) throw new ConvexError("מפתח לא תקין");
   if (a.alg !== -7 && a.alg !== -257) throw new ConvexError("המכשיר לא נתמך");
@@ -158,7 +162,13 @@ export async function acceptKey(ctx: MutationCtx, personId: Id<"people">, a: Key
       throw new ConvexError("האימות נכשל. נסו שוב.");
     }
   }
-  for (const k of await boundKeys(ctx, personId)) await ctx.db.delete(k._id);
+  const existing = await boundKeys(ctx, personId);
+  if (opts?.keepOthers) {
+    if (existing.some((k) => k.credentialId === a.credentialId)) throw new ConvexError("המכשיר הזה כבר קשור להורה");
+    if (existing.length >= MAX_PARENT_DEVICES) throw new ConvexError("אפשר לקשור עד " + MAX_PARENT_DEVICES + " מכשירים להורה. הסירו מכשיר ונסו שוב.");
+  } else {
+    for (const k of existing) await ctx.db.delete(k._id);
+  }
   await ctx.db.insert("bioKeys", {
     personId, kind: a.kind, credentialId: a.credentialId, publicKey: a.publicKey, alg: a.alg,
     origin, label: a.label?.slice(0, 60), createdAt: Date.now(),
@@ -229,8 +239,9 @@ export const challenge = mutation({
 // אתגר לכניסה: לפני שיש סשן, אבל רק למי שמחזיק את קוד המשפחה (או כרטיס מכשיר). מי שאין לו
 // מפתח במכשיר הזה לא יכול לחתום, ולכן לא נכנס כהורה גם אם הוא יודע את הקוד הסודי.
 export const loginChallenge = mutation({
-  args: { code: v.optional(v.string()), personId: v.id("people"), device: v.optional(v.string()) },
-  handler: async (ctx, { code, personId, device }) => {
+  // credentialId: המפתח ששמור במכשיר הזה. כשיש להורה כמה מכשירים, השרת מחזיר את המפתח הזה ולא סתם הראשון.
+  args: { code: v.optional(v.string()), personId: v.id("people"), device: v.optional(v.string()), credentialId: v.optional(v.string()) },
+  handler: async (ctx, { code, personId, device, credentialId }) => {
     if (await codeThrottled(ctx, device)) return { ok: false as const, reason: "throttled" as const };
     const p = await ctx.db.get(personId);
     const found = code ? await findFamilyByCode(ctx, code) : null;
@@ -259,7 +270,7 @@ export const loginChallenge = mutation({
     }
     const challenge = randomHex(32);
     await ctx.db.insert("bioChallenges", { personId, action: "login", challenge, expiresAt: now + CHALLENGE_MS, device: dev });
-    const key = keys[0];
+    const key = keys.find((k) => k.credentialId === credentialId) ?? keys[0];
     return { ok: true as const, challenge, credentialId: key.credentialId, kind: key.kind };
   },
 });
@@ -277,6 +288,11 @@ export const deviceStatus = query({
       needsEmailCode: !!me.emailVerified,
       kind: keys[0]?.kind ?? null,
       boundAt: keys[0]?.createdAt ?? null,
+      max: MAX_PARENT_DEVICES,
+      // כל המכשירים הקשורים להורה (בלי המפתחות עצמם), להצגה ולהסרה.
+      devices: keys
+        .map((k) => ({ id: k._id, credentialId: k.credentialId, kind: k.kind, label: k.label ?? null, createdAt: k.createdAt, lastUsedAt: k.lastUsedAt ?? null }))
+        .sort((x, y) => x.createdAt - y.createdAt),
     };
   },
 });

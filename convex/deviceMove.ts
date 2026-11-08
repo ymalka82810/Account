@@ -4,15 +4,22 @@ import { internal } from "./_generated/api";
 import { Doc, Id } from "./_generated/dataModel";
 import { checkPinForeign, openSession } from "./auth";
 import {
-  acceptKey, familyHasBoundParent, isBound, keyArgs, proofValidator, requireBiometric, startRegistration,
+  acceptKey, boundKeys, familyHasBoundParent, isBound, keyArgs, proofValidator, requireBiometric, startRegistration,
 } from "./biometric";
 import { issueCode, issueLocalCode, verifyCode } from "./emailCodes";
 import {
-  BIND_CODE_TTL_MS, RECOVERY_TTL_MS, RECOVERY_WAIT_MS, TICKET_TTL_MS,
+  BIND_CODE_TTL_MS, MAX_PARENT_DEVICES, RECOVERY_TTL_MS, RECOVERY_WAIT_MS, TICKET_TTL_MS,
   codeThrottled, failCode, findFamilyByCode, hashToken, randomHex, requireParent, requireSameFamily,
 } from "./lib";
 
-// החלפת מכשיר להורה. הורה קשור למכשיר אחד (ראו biometric.ts), והחלפה אפשרית רק בשלוש דרכים:
+// מכשירים של הורה (ראו biometric.ts). להורה יכולים להיות כמה מכשירים קשורים (עד MAX_PARENT_DEVICES, למשל
+// האפליקציה והדפדפן), ויש שני סוגי פעולות:
+//
+//  א. הוספת מכשיר נוסף: המכשירים הקיימים ממשיכים לעבוד. הורה קשור מנפיק לעצמו קוד, מאשר בטביעת אצבע
+//     במכשיר הקשור, ומקליד אותו במכשיר החדש יחד עם הקוד הסודי. (issueAddCode, addDeviceStart, addDeviceFinish)
+//     הסרת מכשיר אחד: removeDevice.
+//  ב. החלפת מכשיר (מכשיר שאבד, או מעבר טלפון): כל המפתחות הקודמים נמחקים והמכשיר החדש הוא היחיד.
+//     אפשרית רק בשלוש דרכים:
 //
 //  1. המכשיר הישן עדיין קיים: טביעת אצבע בו + קוד שנשלח למייל המאומת, ובמכשיר החדש קוד סודי + הקוד מהמייל.
 //     (requestMoveCode, moveStart, moveFinish)
@@ -21,8 +28,8 @@ import {
 //  3. המכשיר אבד ואין הורה אחר: קוד סודי + קוד מהמייל, ואז המתנה של 24 שעות שבהן ההורים מקבלים מייל
 //     ויכולים לבטל. (recoveryRequest, recoveryConfirm, recoveryFinish, cancelRecovery)
 //
-// בכל הדרכים הקשירה מסתיימת באותו שלב: המכשיר החדש יוצר מפתח, ו-moveFinish מחליף את המפתח הקודם
-// (המכשיר הישן מפסיק לעבוד ונותקים אותו מכל הסשנים).
+// בכל דרכי ההחלפה הקשירה מסתיימת באותו שלב: המכשיר החדש יוצר מפתח, ו-moveFinish מחליף את המפתחות הקודמים
+// (המכשירים הישנים מפסיקים לעבוד ונותקים אותם מכל הסשנים).
 //
 // ערוץ האימות החיצוני הוא המייל, והוא עובר רק דרך issueCode (emailCodes.ts) ו-email.ts. כשיעברו
 // לחשבון גוגל מחליפים רק אותם, ושאר ההיגיון נשאר.
@@ -47,13 +54,13 @@ async function gate(ctx: MutationCtx, a: { code?: string; personId: Id<"people">
   return r.ok ? { ok: true, person: p } : r;
 }
 
-// כרטיס להשלמת הקישור: קודים אומתו, נשאר רק שהמכשיר החדש יצור מפתח (moveFinish).
-async function issueTicket(ctx: MutationCtx, p: Doc<"people">) {
+// כרטיס להשלמת הקישור: קודים אומתו, נשאר רק שהמכשיר החדש יצור מפתח (moveFinish, או addDeviceFinish כש-add).
+async function issueTicket(ctx: MutationCtx, p: Doc<"people">, add = false) {
   for (const t of await ctx.db.query("deviceTickets").withIndex("by_person", (q) => q.eq("personId", p._id)).collect()) {
     await ctx.db.delete(t._id);
   }
   const ticket = randomHex(32);
-  await ctx.db.insert("deviceTickets", { personId: p._id, ticketHash: await hashSecret(ticket), expiresAt: Date.now() + TICKET_TTL_MS });
+  await ctx.db.insert("deviceTickets", { personId: p._id, ticketHash: await hashSecret(ticket), expiresAt: Date.now() + TICKET_TTL_MS, ...(add ? { add: true } : {}) });
   return { ok: true as const, ticket, challenge: await startRegistration(ctx, p._id), userId: p._id, name: p.name };
 }
 
@@ -123,7 +130,8 @@ export const moveFinish = mutation({
     if (ticket.length > 100) throw new ConvexError("פג תוקף האימות. נסו שוב.");
     const hash = await hashSecret(ticket);
     const row = await ctx.db.query("deviceTickets").withIndex("by_hash", (q) => q.eq("ticketHash", hash)).first();
-    if (!row || row.expiresAt < Date.now()) throw new ConvexError("פג תוקף האימות. נסו שוב.");
+    // כרטיס להוספת מכשיר לא מחליף מפתחות: הוא נגמר רק ב-addDeviceFinish.
+    if (!row || row.expiresAt < Date.now() || row.add) throw new ConvexError("פג תוקף האימות. נסו שוב.");
     const p = await ctx.db.get(row.personId);
     if (!p || p.role !== "parent" || !p.familyId) throw new ConvexError("פג תוקף האימות. נסו שוב.");
     await acceptKey(ctx, p._id, a);
@@ -132,6 +140,71 @@ export const moveFinish = mutation({
     for (const r of await ctx.db.query("deviceRecoveries").withIndex("by_person", (q) => q.eq("personId", p._id)).collect()) await ctx.db.delete(r._id);
     await ctx.scheduler.runAfter(0, internal.email.notifyDeviceChange, { personId: p._id, kind: "changed" });
     return { ok: true as const, token: await openSession(ctx, p._id) };
+  },
+});
+
+// ---------- א. הוספת מכשיר נוסף ----------
+// קוד להוספת מכשיר, להורה עצמו. דורש טביעת אצבע במכשיר קשור (פעולה add-device, בלי חלופת קוד סודי),
+// כך שמי שרק יודע את הקוד הסודי וקוד המשפחה לא יכול להוסיף מכשיר. הקוד חד-פעמי, ובתוקף 30 דקות.
+export const issueAddCode = mutation({
+  args: { token: v.string(), proof: v.optional(proofValidator) },
+  handler: async (ctx, { token, proof }) => {
+    const me = await requireParent(ctx, token);
+    if ((await boundKeys(ctx, me._id)).length >= MAX_PARENT_DEVICES) {
+      throw new ConvexError("אפשר לקשור עד " + MAX_PARENT_DEVICES + " מכשירים. הסירו מכשיר ונסו שוב.");
+    }
+    await requireBiometric(ctx, me, "add-device", proof);
+    return { ok: true as const, code: await issueLocalCode(ctx, me, "deviceAdd", BIND_CODE_TTL_MS) };
+  },
+});
+
+// במכשיר החדש: קוד המשפחה, הקוד הסודי של ההורה והקוד מהמכשיר הקשור. מחזיר כרטיס ליצירת המפתח (addDeviceFinish).
+export const addDeviceStart = mutation({
+  args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string(), secretCode: v.string(), device: v.optional(v.string()) },
+  handler: async (ctx, { code, personId, pin, secretCode, device }) => {
+    const g = await gate(ctx, { code, personId, pin, device });
+    if (!g.ok) return asFail(g);
+    if (!(await verifyCode(ctx, personId, "deviceAdd", secretCode))) return { ok: false as const, reason: "secretCode" as const };
+    // הוספה אפשרית רק להורה שכבר קשור: קישור ראשון והחלפה עוברים בתהליכים שלהם.
+    if (!(await isBound(ctx, personId))) return { ok: false as const, reason: "secretCode" as const };
+    if ((await boundKeys(ctx, personId)).length >= MAX_PARENT_DEVICES) return { ok: false as const, reason: "full" as const };
+    return await issueTicket(ctx, g.person, true);
+  },
+});
+
+// סיום ההוספה: המכשיר החדש יצר מפתח. המפתחות והסשנים הקיימים נשארים, ופותחים סשן במכשיר החדש.
+export const addDeviceFinish = mutation({
+  args: { ticket: v.string(), ...keyArgs },
+  handler: async (ctx, { ticket, ...a }) => {
+    if (ticket.length > 100) throw new ConvexError("פג תוקף האימות. נסו שוב.");
+    const hash = await hashSecret(ticket);
+    const row = await ctx.db.query("deviceTickets").withIndex("by_hash", (q) => q.eq("ticketHash", hash)).first();
+    if (!row || row.expiresAt < Date.now() || !row.add) throw new ConvexError("פג תוקף האימות. נסו שוב.");
+    const p = await ctx.db.get(row.personId);
+    if (!p || p.role !== "parent" || !p.familyId) throw new ConvexError("פג תוקף האימות. נסו שוב.");
+    await acceptKey(ctx, p._id, a, { keepOthers: true });
+    await ctx.db.delete(row._id);
+    await ctx.scheduler.runAfter(0, internal.email.notifyDeviceChange, { personId: p._id, kind: "added" });
+    return { ok: true as const, token: await openSession(ctx, p._id) };
+  },
+});
+
+// הסרת מכשיר אחד של ההורה (למשל טאבלט שנמסר). דורש טביעת אצבע, ותמיד נשאר לפחות מכשיר אחד.
+// כל שאר הסשנים של ההורה מתנתקים, כדי שמכשיר שהוסר לא יישאר מחובר.
+export const removeDevice = mutation({
+  args: { token: v.string(), keyId: v.id("bioKeys"), proof: v.optional(proofValidator) },
+  handler: async (ctx, { token, keyId, proof }) => {
+    const me = await requireParent(ctx, token);
+    const keys = await boundKeys(ctx, me._id);
+    if (!keys.some((k) => k._id === keyId)) throw new ConvexError("המכשיר לא נמצא");
+    if (keys.length < 2) throw new ConvexError("אי אפשר להסיר את המכשיר האחרון. להחלפת מכשיר יש תהליך נפרד.");
+    await requireBiometric(ctx, me, "remove-device:" + keyId, proof);
+    await ctx.db.delete(keyId);
+    const mine = await hashToken(token);
+    for (const s of await ctx.db.query("sessions").withIndex("by_person", (q) => q.eq("personId", me._id)).collect()) {
+      if (s.tokenHash !== mine) await ctx.db.delete(s._id);
+    }
+    return { ok: true as const };
   },
 });
 

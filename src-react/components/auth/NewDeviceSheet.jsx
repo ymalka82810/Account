@@ -8,10 +8,12 @@ import { codeGone, setToken } from '../../state/auth.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
 import { codeProps, pinProps, Err, Field } from '../shared/fields.jsx';
-import { BioError, bioMoveFinish, bioSupported } from '../../lib/biometric.js';
+import { BioError, bioAddDeviceFinish, bioMoveFinish, bioSupported } from '../../lib/biometric.js';
 import { pinOk } from '../../lib/pin.js';
 
-// "מכשיר חדש / החלפת מכשיר" במסך הכניסה של הורה. הורה קשור למכשיר אחד, והחלפה אפשרית בשלוש דרכים:
+// "מכשיר חדש / החלפת מכשיר" במסך הכניסה של הורה. הורה יכול להיכנס רק ממכשירים שקשורים אליו.
+// הוספת מכשיר נוסף (המכשירים הקיימים ממשיכים לעבוד), או החלפה (הקודמים מנותקים) בשלוש דרכים:
+//   add      - הוספה: קוד שההורה הנפיק לעצמו ממכשיר קשור (למשל הדפדפן, כשהאפליקציה כבר קשורה)
 //   parent   - קוד קישור שהורה אחר הנפיק (גם לקישור הורה חדש, וגם כשהטלפון נהרס)
 //   email    - המכשיר הישן עוד אצלכם: אישרתם בו בטביעת אצבע וקיבלתם קוד למייל
 //   recovery - המכשיר אבד ואין הורה אחר: קוד סודי + קוד מהמייל, ואחרי 24 שעות משלימים
@@ -32,8 +34,9 @@ export function NewDeviceSheet() {
   const code = state.fam.code;
 
   // הכניסה למכשיר החדש: יוצרים מפתח ומשלימים. אחרי זה נכנסים ישר.
-  async function complete(res) {
-    const done = await bioMoveFinish(res.ticket, res.userId, res.name, res.challenge);
+  async function complete(res, add = false) {
+    const finish = add ? bioAddDeviceFinish : bioMoveFinish;
+    const done = await finish(res.ticket, res.userId, res.name, res.challenge);
     if (!done.ok) { setErr(t('משהו השתבש. נסו שוב.')); return; }
     localStorage.removeItem(RECOVERY_KEY(person.id));
     state.pinFlow = null;
@@ -51,6 +54,7 @@ export function NewDeviceSheet() {
           : res.reason === 'wrong' ? t('הקוד הסודי שגוי.')
             : res.reason === 'nopin' ? t('אין להורה הזה קוד סודי עדיין.')
               : res.reason === 'secretCode' ? t('הקוד שגוי או שפג תוקפו.')
+                : res.reason === 'full' ? t('כבר קשורים להורה הזה המספר המרבי של מכשירים. אפשר להסיר מכשיר ב"המכשירים שלי".')
                 : res.reason === 'noEmail' ? t('אין להורה הזה מייל מאומת, ולכן אי אפשר בדרך הזו. הורה אחר יכול להנפיק קוד קישור.')
                   : res.reason === 'wait' ? t('עוד לא עברו 24 שעות מהבקשה.')
                     : res.reason === 'none' ? t('אין בקשה פעילה, או שהיא בוטלה. אפשר להגיש בקשה חדשה.')
@@ -70,7 +74,8 @@ export function NewDeviceSheet() {
   if (step === 'choose') {
     return (
       <div className="form">
-        <p className="hint">{t('{name} נכנס/ת כהורה רק מהמכשיר שלו/ה. איך מחליפים?', { name: person.name })}</p>
+        <p className="hint">{t('{name} נכנס/ת כהורה רק ממכשירים שקשורים אליו/ה. מה רוצים לעשות?', { name: person.name })}</p>
+        <button className="ghost" type="button" onClick={() => { setMethod('add'); setStep('enter'); }}>{t('➕ הוספת המכשיר הזה (קוד מהמכשיר הקשור שלי)')}</button>
         <button className="ghost" type="button" onClick={() => { setMethod('parent'); setStep('enter'); }}>{t('🔑 יש לי קוד קישור מהורה אחר')}</button>
         <button className="ghost" type="button" onClick={() => { setMethod('email'); setStep('enter'); }}>{t('📧 המכשיר הישן עוד אצלי (קוד במייל)')}</button>
         <button className="ghost" type="button" onClick={() => setStep('recoveryPin')}>{t('🆘 המכשיר הישן אבד או נהרס')}</button>
@@ -81,18 +86,22 @@ export function NewDeviceSheet() {
   if (step === 'enter') {
     return (
       <div className="form">
-        <p className="hint">{method === 'parent'
-          ? t('הורה אחר פותח ב"ניהול" את "קוד קישור" ליד השם שלכם ומוסר לכם קוד.')
-          : t('במכשיר הישן: "החשבון שלי" > "המכשיר שלי" > החלפת מכשיר. הקוד יגיע למייל.')}</p>
+        <p className="hint">{method === 'add'
+          ? t('במכשיר שכבר קשור: "החשבון שלי" > "המכשירים שלי" > הוספת מכשיר. יופיע שם קוד. המכשירים הקיימים ימשיכו לעבוד.')
+          : method === 'parent'
+            ? t('הורה אחר פותח ב"ניהול" את "קוד קישור" ליד השם שלכם ומוסר לכם קוד.')
+            : t('במכשיר הישן: "החשבון שלי" > "המכשירים שלי" > החלפת מכשיר. הקוד יגיע למייל. כל המכשירים הקודמים ינותקו.')}</p>
         <Field label={t('הקוד הסודי שלכם')}><input {...pinProps('current-password')} value={pin} onChange={(e) => setPin(e.target.value)} /></Field>
-        <Field label={method === 'parent' ? t('קוד הקישור') : t('הקוד מהמייל')}><input {...codeProps} value={secret} onChange={(e) => setSecret(e.target.value)} /></Field>
+        <Field label={method === 'add' ? t('קוד ההוספה') : method === 'parent' ? t('קוד הקישור') : t('הקוד מהמייל')}><input {...codeProps} value={secret} onChange={(e) => setSecret(e.target.value)} /></Field>
         {err && <Err>{err}</Err>}
         <AsyncButton className="primary" onClick={guard(async () => {
           if (!pinOk(pin, 'parent')) { setErr(t('הקלידו את הקוד הסודי שלכם.')); return; }
-          const res = await call('deviceMove:moveStart', { code, personId: person.id, pin, method, secretCode: secret });
+          const res = method === 'add'
+            ? await call('deviceMove:addDeviceStart', { code, personId: person.id, pin, secretCode: secret })
+            : await call('deviceMove:moveStart', { code, personId: person.id, pin, method, secretCode: secret });
           if (failed(res)) { setPin(''); return; }
-          await complete(res);
-        })}>{t('קישור המכשיר הזה והכניסה')}</AsyncButton>
+          await complete(res, method === 'add');
+        })}>{method === 'add' ? t('הוספת המכשיר הזה והכניסה') : t('קישור המכשיר הזה והכניסה')}</AsyncButton>
         <button className="ghost linkish" type="button" onClick={() => { setStep('choose'); setErr(''); }}><Arrow kind="back" /> {t('חזרה')}</button>
       </div>
     );

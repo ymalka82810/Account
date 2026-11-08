@@ -144,6 +144,8 @@ export default defineSchema({
     purpose: v.union(v.literal("verify"), v.literal("pinChange"), v.literal("pinReset"), v.literal("childReset"), v.literal("emailChange"),
       // החלפת מכשיר להורה: deviceMove נשלח למייל המאומת, deviceBind הורה אחר מוסר ביד (לא נשלח)
       v.literal("deviceMove"), v.literal("deviceBind"),
+      // הוספת מכשיר נוסף להורה שכבר קשור: קוד שההורה מנפיק לעצמו ממכשיר קשור ומקליד במכשיר החדש (לא נשלח)
+      v.literal("deviceAdd"),
       // החלפת מכשיר שאבד (המתנה של 24 שעות): קוד נפרד מ-deviceMove, כדי שלא יהיה אפשר להשתמש בו ב-moveStart ולדלג על ההמתנה
       v.literal("deviceRecovery")),
     codeHash: v.string(),
@@ -297,6 +299,8 @@ export default defineSchema({
     personId: v.id("people"),
     ticketHash: v.string(),
     expiresAt: v.number(),
+    // כרטיס להוספת מכשיר (לא להחלפה): moveFinish דוחה אותו, addDeviceFinish דורש אותו.
+    add: v.optional(v.boolean()),
   })
     .index("by_hash", ["ticketHash"])
     .index("by_person", ["personId"]),

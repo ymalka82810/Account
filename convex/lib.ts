@@ -430,6 +430,7 @@ export function maskEmail(email: string): string {
 // ---------- קישור הורה למכשיר ----------
 export const TICKET_TTL_MS = 10 * 60 * 1000; // מהרגע שהקודים אומתו ועד שהמכשיר החדש נרשם
 export const BIND_CODE_TTL_MS = 30 * 60 * 1000; // קוד קישור שהורה מוסר להורה אחר
+export const MAX_PARENT_DEVICES = 3; // כמה מכשירים (מפתחות) יכולים להיות קשורים להורה אחד, למשל טלפון, טאבלט ודפדפן
 export const RECOVERY_WAIT_MS = 24 * 60 * 60 * 1000; // המתנה לפני החלפת מכשיר שאבד
 export const RECOVERY_TTL_MS = 7 * 24 * 60 * 60 * 1000; // כמה זמן הבקשה תקפה אחרי שהוגשה
 export const LOGIN_CHALLENGES_PER_DEVICE = 3;

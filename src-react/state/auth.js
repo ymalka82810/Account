@@ -287,7 +287,7 @@ async function submitPin() {
   const code = f.legacy ? undefined : state.fam.code;
   try {
     if (f.mode === 'login') {
-      // הורה שקשור למכשיר נכנס רק מהמכשיר שלו: חתימה של המפתח שבמכשיר, נוסף על הקוד הסודי.
+      // הורה שקשור למכשירים נכנס רק מאחד מהם: חתימה של המפתח שבמכשיר, נוסף על הקוד הסודי.
       let proof;
       if (f.person.role === 'parent' && f.person.deviceBound && !f.legacy) {
         try { proof = await bioLoginProof(f.person.id, code); }
@@ -303,7 +303,7 @@ async function submitPin() {
       if (res.ok) { state.pinFlow = null; setToken(res.token); return; }
       f.entered = '';
       if (res.reason === 'code') { codeGone(); return; }
-      if (res.reason === 'device') { renderPin(t('ההורה הזה נכנס רק מהמכשיר שלו. אם החלפתם מכשיר, לחצו על "מכשיר חדש / החלפת מכשיר".')); shake(); return; }
+      if (res.reason === 'device') { renderPin(t('המכשיר הזה לא קשור להורה הזה. כדי להוסיף אותו או להחליף מכשיר, לחצו על "מכשיר חדש / החלפת מכשיר".')); shake(); return; }
       if (res.reason === 'needBind') { renderPin(t('כדי להיכנס כהורה צריך לקשר את המכשיר הזה עם קוד קישור מהורה אחר. לחצו על "מכשיר חדש / החלפת מכשיר".')); shake(); return; }
       if (res.reason === 'wrong') renderPin(t('הקוד לא נכון. נשארו עוד {left} ניסיונות.', { left: res.left }));
       else if (res.reason === 'locked') renderPin(t('ניסיתם יותר מדי פעמים. נסו שוב בעוד {wait}.', { wait: fmtWait(res.waitSeconds) }));
