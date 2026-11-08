@@ -38,13 +38,18 @@ jobs:
       - name: Generate app icons
         shell: bash
         run: |
-          node -v; npm -v
-          ls -la assets android/app/src/main/res | head -40
           set +e
-          npx --yes @capacitor/assets@3 generate --android --assetPath assets --verbose 2>&1 | tee /tmp/assets.log
-          code=${PIPESTATUS[0]}
-          echo "assets exit code: $code"
-          exit $code
+          {
+            node -v; npm -v
+            ls -la assets android/app/src/main/res | head -40
+            npx --yes @capacitor/assets@3 generate --android --assetPath assets --verbose
+            echo "assets exit code: $?"
+          } > /tmp/diag.log 2>&1
+          code=$(grep -o 'assets exit code: [0-9]*' /tmp/diag.log | grep -o '[0-9]*$')
+          cat /tmp/diag.log
+          MSG=$(tail -c 8000 /tmp/diag.log | python3 -c 'import sys; print(sys.stdin.read().replace("%","%25").replace("\r","%0D").replace("\n","%0A"))')
+          echo "::error title=diag::$MSG"
+          exit ${code:-1}
 
       # אייקון לפי מטבע: activity-alias לכל מטבע (₪, $, €...) במקום ה-LAUNCHER של MainActivity
       - name: Currency launcher icons
