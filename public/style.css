@@ -892,9 +892,9 @@ body[data-theme="parent"] .card, body[data-theme="parent"] .fam-row,
 body[data-theme="parent"] .debt, body[data-theme="parent"] .person { box-shadow: none; }
 body[data-theme="parent"] .sum { border-radius: var(--radius); padding: 12px; }
 body[data-theme="parent"] .sum .num { font-size: 1.45rem; }
-body[data-theme="parent"] .bigbtn { min-height: 64px; border-radius: var(--radius); font-size: .98rem; position: relative; padding-inline: 3.6rem; text-align: center; }
-/* האייקון מחוץ לזרימה, כדי שלא ידחוף את המילים: הטקסט נשאר ממורכז בכל כפתור */
-body[data-theme="parent"] .bigbtn .ui-icon { position: absolute; inset-inline-end: 10px; top: 50%; transform: translateY(-50%); width: 2.2rem; height: 2.2rem; }
+body[data-theme="parent"] .bigbtn { min-height: 88px; border-radius: var(--radius); font-size: .98rem; padding-inline: 6px; text-align: center; white-space: nowrap; }
+/* האייקון מעל שורת טקסט אחת */
+body[data-theme="parent"] .bigbtn .ui-icon { width: 2.4rem; height: 2.4rem; }
 body[data-theme="parent"] .bigbtn span { font-size: 1.3rem; }
 body[data-theme="parent"] button.primary, body[data-theme="parent"] .ghost, body[data-theme="parent"] button.small { border-radius: 8px; }
 body[data-theme="parent"] .tile, body[data-theme="parent"] .av { border-radius: 8px; }
