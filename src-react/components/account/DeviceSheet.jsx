@@ -86,7 +86,7 @@ export function DeviceSheet() {
       {dev?.bound && devices.length > 1 && <p className="hint">{t('את המכשיר שבו אתם נמצאים מסירים ממכשיר אחר.')}</p>}
       {addCode ? (
         <>
-          <div className="big-emoji" style={{ letterSpacing: '.3em', direction: 'ltr' }} aria-label={t('קוד ההוספה')}>{addCode}</div>
+          <div className="big-emoji code-display" aria-label={t('קוד ההוספה')}>{addCode}</div>
           <p className="hint">{t('במכשיר החדש: פותחים את הקופה, בוחרים את השם שלכם, לוחצים על "מכשיר חדש / החלפת מכשיר" ואז על "הוספת המכשיר הזה", ומקלידים את הקוד הסודי שלכם ואת הקוד הזה. הקוד תקף 30 דקות ופעם אחת.')}</p>
         </>
       ) : dev?.bound && (full

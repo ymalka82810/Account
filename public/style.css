@@ -386,6 +386,8 @@ code { background: var(--card); border: 1px solid var(--line); padding: 1px 6px;
 .screen h1 { margin: 0; }
 .hint { color: var(--ink-soft); margin: 4px 0 0; }
 .big-emoji { font-size: 3.4rem; line-height: 1.1; }
+/* קוד חד-פעמי למסירה: ממורכז (ה-padding מאזן את הרווח שאחרי הספרה האחרונה) */
+.code-display { letter-spacing: .3em; padding-inline-start: .3em; direction: ltr; text-align: center; }
 
 /* אנימציית מטבע במסך הטעינה: המטבע מסתובב מצד לצד סיבוב שלם אחד לכיוון אחד
    במהירות קבועה, נעצר עם הפנים קדימה ואז שוקע לתוך חריץ קבוע (שלא זז) בראש קופת החיסכון.
