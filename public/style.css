@@ -605,7 +605,12 @@ html[dir="rtl"] .person-card[open]:not(.closing) > summary.person-head .person-m
 /* ברינדור יש שוליים שקופים (הדמות כ-80% מהמסגרת), לכן התמונה גדולה מ-1em ונכנסת למסגרת בשוליים שליליים */
 .avatar-img { display: block; width: 1.5em; height: 1.5em; margin: -.25em; object-fit: contain; pointer-events: none; filter: drop-shadow(0 .05em .05em rgba(0, 0, 0, .2)); }
 .avatar-lg:has(> .avatar-img), .avatar-md:has(> .avatar-img), .avatar-sm:has(> .avatar-img), .avatar-xl:has(> .avatar-img), .av:has(.avatar-img) { filter: none; }
-.av-face { display: block; line-height: 1; }
+.av-face { display: flex; justify-content: center; align-items: center; line-height: 1; }
+/* התמונה היא בלוק ולא טקסט, ולכן text-align לא ממרכז אותה - בלי זה היא נצמדת לצד ההתחלה (ימין ב-RTL).
+   המסגרת מתכווצת לגודל התמונה (כמו אימוג'י) או ממרכזת אותה, ורק .debt-avatar נשארת בצד ההתחלה. */
+:is(span.avatar-lg, span.avatar-md, span.avatar-sm, span.avatar-xl, span.fam-av):has(> .avatar-img) { display: inline-flex; vertical-align: middle; }
+:is(div.avatar-lg, div.avatar-md, div.avatar-sm, div.avatar-xl):has(> .avatar-img) { display: flex; justify-content: center; }
+div.debt-avatar:has(> .avatar-img) { justify-content: flex-start; }
 
 /* בורר דמות */
 .avatars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
