@@ -19,4 +19,6 @@ jobs:
       - name: Run diagnose
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
-        run: npx convex run pushSend:diagnose
+        run: |
+          npx convex run pushSend:diagnose > /tmp/out.json
+          python3 -c "import json; [print('::notice title=push::' + l) for l in json.load(open('/tmp/out.json'))]"
