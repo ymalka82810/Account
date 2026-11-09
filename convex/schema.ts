@@ -220,7 +220,11 @@ export default defineSchema({
     kind: v.union(v.literal("debt"), v.literal("payment")),
     from: v.id("people"),
     to: v.id("people"),
-    amount: v.number(), // באגורות
+    amount: v.number(), // מאיות של המטבע (כמו אגורות)
+    // מטבע הרשומה: מי שרושם בוחר, ברירת המחדל היא המטבע של המשפחה שלו. חסר = דולר; רשומות ישנות קיבלו ILS במפורש.
+    currency: v.optional(v.string()),
+    // בהחזר: שערי ההמרה ברגע התשלום, כמו ב-entries (כשיש חובות במטבע אחר בין השניים).
+    fx: v.optional(v.record(v.string(), v.number())),
     note: v.string(),
     date: v.string(), // YYYY-MM-DD
     createdBy: v.id("people"),

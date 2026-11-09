@@ -85,7 +85,7 @@ export const fillLegacyCurrency = internalMutation({
       await ctx.db.patch(f._id, { currency: "ILS", ...(f.country ? {} : { country: "IL" }) });
       counts.families = (counts.families ?? 0) + 1;
     }
-    for (const table of ["entries", "recurring", "goals", "activity"] as const) {
+    for (const table of ["entries", "recurring", "goals", "activity", "friendEntries"] as const) {
       for (const d of await ctx.db.query(table).collect()) {
         if (d.currency) continue;
         await ctx.db.patch(d._id, { currency: "ILS" });
