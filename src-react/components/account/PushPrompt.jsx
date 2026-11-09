@@ -8,12 +8,14 @@ import AsyncButton from '../shared/AsyncButton.jsx';
 export default function PushPrompt() {
   const [on, setOn] = useState(/** @type {boolean | null} */ (null));
   const [err, setErr] = useState('');
+  const [progress, setProgress] = useState('');
   useEffect(() => { if (pushSupported()) isPushOn().then(setOn); }, []);
   if (!pushSupported() || on !== false) return null;
   return (
     <div className="card notice">
       <p><strong>{t('🔔 רוצים לדעת מיד?')}</strong> {t('הפעלת התראות תשלח לטלפון הודעה כשמישהו מבקש להצטרף למשפחה או רושם חוב שממתין לאישור שלך.')}</p>
-      <AsyncButton className="primary" onClick={async () => { setErr(await enablePush()); setOn(await isPushOn()); }}>{t('הפעלת התראות')}</AsyncButton>
+      <AsyncButton className="primary" onClick={async () => { setErr(''); setErr(await enablePush(setProgress)); setOn(await isPushOn()); }}>{t('הפעלת התראות')}</AsyncButton>
+      {progress && <p className="push-progress" role="status">{progress}</p>}
       {err && <p className="push-err" role="alert">{err}</p>}
     </div>
   );
