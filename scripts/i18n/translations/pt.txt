@@ -704,392 +704,396 @@
 703|Sim, continuar
 704|Sim, remover
 705|Sim, mover para o cofre
-706|Sim, compensar
-707|Sim, guardar a dívida
-708|Sim, guardar o pagamento
-709|Entrar
-710|Entrada de progenitor
-711|Entrar no cofre
-712|Escreva o seu nome
-713|Escreve o e-mail que o(a) teu(tua) amigo(a) registou com os pais na aplicação. É-lhe enviado um pedido e tem de aprovar. Só funciona se o(a) teu(tua) amigo(a) também tiver o modo amigos.
-714|Escreve o código secreto
-715|Escreve o código outra vez, para confirmar
-716|Escreve o nome
-717|Escreva o apelido da família
-718|Escreve um valor
-719|Escreve um valor maior que zero.
-720|Outro endereço
-721|O e-mail não parece válido
-722|O endereço de e-mail não é válido
-723|Endereço de e-mail
-724|Novo endereço de e-mail
-725|Endereço de e-mail inválido
-726|Laranja + rosa
-727|Não
-728|Não aprovado
-729|Não foi possível procurar atualizações. Verifica a ligação à internet e tenta novamente
-730|Não foi possível ativar as notificações: o passo "{stage}" não respondeu em {n} segundos
-731|Não foi possível ativar as notificações. Passo: {stage}. Motivo: {detail}
-732|Não foi possível ligar agora. Este ecrã desaparece sozinho quando a ligação voltar e, entretanto, o caderno pessoal funciona sem ligação.
-733|Não conseguimos conectar o e-mail. Você pode tentar novamente em "Minha conta".
-734|Não foi possível associar o dispositivo. Tenta novamente.
-735|Desconhecido
-736|Incorreto
-737|Nada encontrado para “{q}”
-738|Não foi encontrado um instalador no telemóvel. Podes transferir o ficheiro diretamente do GitHub
-739|Não foi registado nada este mês.
-740|Não, são duas pessoas diferentes
-741|Não, é outra pessoa
-742|Não, deixar no caderno
-743|Para que dívida é a devolução?
-744|Para confirmar, enviamos um código de verificação para {email}.
-745|Repor e deixar que escolha no próximo acesso
-746|Cancelar o que registaste?
-747|Recusar o registo?
-748|Recusar? O registo será apagado.
-749|Adicionar também um adolescente ou outro pai/mãe
-750|Adicionar um dispositivo
-751|Um novo pai/mãe precisa de um código secreto
-752|Para um pai/mãe tem de ser definido um código (não se pode repor para que escolha sozinho)
-753|Só para pais. Quem cria o cofre é o primeiro pai/mãe. Depois recebes um código de adesão para toda a família e defines o papel de cada pessoa: criança, adolescente ou pai/mãe.
-754|Os teus pais ainda não têm notificações no telemóvel, por isso não sabem que pediste para entrar. É melhor avisá-los.
-755|Alterar o código
-756|Substituir o código? Quem já está dentro fica, mas o código antigo deixa de funcionar, e os outros dispositivos que guardaram a família terão de introduzir o novo código.
-757|Trocar de dispositivo
-758|A troca do próprio dispositivo tem outro processo
-759|Emitir um código de associação
-760|Remover {name} dos amigos?
-761|Remover {name} da família?
-762|Remover um dos pais
-763|Remover um dispositivo
-764|Movê-los para o cofre familiar em nome de {name}?
-765|Parar o registo periódico? O que já foi registado fica.
-766|Mostrar também o que está pago na página principal
-767|Toca para ver o detalhe do cálculo
-768|Desativar o modo amigos de {name}? Deixará de ser possível adicionar novos registos com amigos.
-769|Não especificado
-770|Porquê? (opcional)
-771|Apagar {n} registos pagos?
-772|Apagar o objetivo "{name}"?
-773|Excluir o cofrinho
-774|Apagar o registo de {name}?
-775|Apagar este registo?
-776|Apagar todos os registos do caderno? Não pode ser desfeito.
-777|A quem
-778|A quem devo dinheiro?
-779|A quem devo dinheiro?
-780|A quem devo dinheiro?
-781|A quem?
-782|Por exemplo: uma bicicleta
-783|Por exemplo: gelado, bilhete de cinema
-784|Tentar de novo
-785|Desligar o dispositivo? Terá de introduzir novamente o código de adesão.
-786|A moeda da família é definida pelo país. Podes alterá-la depois no separador Gestão.
-787|Como o dispositivo
-788|Por moeda
-789|Por nome (A-Z)
-790|há {n}
-791|Apenas para consulta. O caderno fica com {name} e não pode ser alterado a partir daqui.
-792|Só leitura. Cada registo com um(a) amigo(a) também aguarda a aprovação dele(a).
-793|ver o código de adesão
-794|alterar um papel
-795|Equilibrado: ninguém deve nada
-796|A verificar…
-797|tem a receber
-798|tem a receber
-799|tem a receber
-800|País não suportado
-801|a política de privacidade
-802|Política de privacidade
-803|País de residência
-804|O que os adolescentes registam com amigos
-805|O que está em aberto
-806|Desde hoje
-807|Ativado
-808|A transferir atualização...
-809|A transferir atualização... {percent}%
-810|ID inválido
-811|Apagar
-812|A exclusão do cofrinho não pode ser desfeita, por isso um dos pais precisa aprovar. Agora será aberto um pedido de verificação do dispositivo.
-813|Apagar todo o cofre
-814|Vais trocar de telemóvel? Toca aqui, confirma com a impressão digital e enviamos um código para o teu e-mail. Depois abre o cofre no telemóvel novo, escolhe o teu nome e toca em "Dispositivo novo / Trocar de dispositivo". Todos os dispositivos anteriores serão desligados.
-815|Eliminado
-816|apagou um objetivo de poupança
-817|Eliminado
-818|apagou um objetivo de poupança
-819|Eliminado
-820|apagou um objetivo de poupança
-821|Moeda
-822|Moeda não suportada
-823|Quem são os teus filhos?
-824|Quem deve mais
-825|Quem me deve dinheiro?
-826|Quem deve a quem
-827|Quem deve (quem paga)
+706|Sim, ativar
+707|Sim, compensar
+708|Sim, guardar a dívida
+709|Sim, guardar o pagamento
+710|Entrar
+711|Entrada de progenitor
+712|Entrar no cofre
+713|Escreva o seu nome
+714|Escreve o e-mail que o(a) teu(tua) amigo(a) registou com os pais na aplicação. É-lhe enviado um pedido e tem de aprovar. Só funciona se o(a) teu(tua) amigo(a) também tiver o modo amigos.
+715|Escreve o código secreto
+716|Escreve o código outra vez, para confirmar
+717|Escreve o nome
+718|Escreva o apelido da família
+719|Escreve um valor
+720|Escreve um valor maior que zero.
+721|Outro endereço
+722|O e-mail não parece válido
+723|O endereço de e-mail não é válido
+724|Endereço de e-mail
+725|Novo endereço de e-mail
+726|Endereço de e-mail inválido
+727|Laranja + rosa
+728|Não
+729|Não aprovado
+730|Não foi possível procurar atualizações. Verifica a ligação à internet e tenta novamente
+731|Não foi possível ativar as notificações: o passo "{stage}" não respondeu em {n} segundos
+732|Não foi possível ativar as notificações. Passo: {stage}. Motivo: {detail}
+733|Não foi possível ligar agora. Este ecrã desaparece sozinho quando a ligação voltar e, entretanto, o caderno pessoal funciona sem ligação.
+734|Não conseguimos conectar o e-mail. Você pode tentar novamente em "Minha conta".
+735|Não foi possível associar o dispositivo. Tenta novamente.
+736|Desconhecido
+737|Incorreto
+738|Nada encontrado para “{q}”
+739|Não foi encontrado um instalador no telemóvel. Podes transferir o ficheiro diretamente do GitHub
+740|Não foi registado nada este mês.
+741|Agora não
+742|Não, são duas pessoas diferentes
+743|Não, é outra pessoa
+744|Não, deixar no caderno
+745|Para que dívida é a devolução?
+746|Para confirmar, enviamos um código de verificação para {email}.
+747|Repor e deixar que escolha no próximo acesso
+748|Cancelar o que registaste?
+749|Recusar o registo?
+750|Recusar? O registo será apagado.
+751|Adicionar também um adolescente ou outro pai/mãe
+752|Adicionar um dispositivo
+753|Um novo pai/mãe precisa de um código secreto
+754|Para um pai/mãe tem de ser definido um código (não se pode repor para que escolha sozinho)
+755|Só para pais. Quem cria o cofre é o primeiro pai/mãe. Depois recebes um código de adesão para toda a família e defines o papel de cada pessoa: criança, adolescente ou pai/mãe.
+756|Os teus pais ainda não têm notificações no telemóvel, por isso não sabem que pediste para entrar. É melhor avisá-los.
+757|Alterar o código
+758|Substituir o código? Quem já está dentro fica, mas o código antigo deixa de funcionar, e os outros dispositivos que guardaram a família terão de introduzir o novo código.
+759|Trocar de dispositivo
+760|A troca do próprio dispositivo tem outro processo
+761|Emitir um código de associação
+762|Remover {name} dos amigos?
+763|Remover {name} da família?
+764|Remover um dos pais
+765|Remover um dispositivo
+766|Movê-los para o cofre familiar em nome de {name}?
+767|Parar o registo periódico? O que já foi registado fica.
+768|Ativar notificações?
+769|Mostrar também o que está pago na página principal
+770|Toca para ver o detalhe do cálculo
+771|Desativar o modo amigos de {name}? Deixará de ser possível adicionar novos registos com amigos.
+772|Não especificado
+773|Porquê? (opcional)
+774|Apagar {n} registos pagos?
+775|Apagar o objetivo "{name}"?
+776|Excluir o cofrinho
+777|Apagar o registo de {name}?
+778|Apagar este registo?
+779|Apagar todos os registos do caderno? Não pode ser desfeito.
+780|A quem
+781|A quem devo dinheiro?
+782|A quem devo dinheiro?
+783|A quem devo dinheiro?
+784|A quem?
+785|Por exemplo: uma bicicleta
+786|Por exemplo: gelado, bilhete de cinema
+787|Tentar de novo
+788|Desligar o dispositivo? Terá de introduzir novamente o código de adesão.
+789|A moeda da família é definida pelo país. Podes alterá-la depois no separador Gestão.
+790|Como o dispositivo
+791|Por moeda
+792|Por nome (A-Z)
+793|há {n}
+794|Apenas para consulta. O caderno fica com {name} e não pode ser alterado a partir daqui.
+795|Só leitura. Cada registo com um(a) amigo(a) também aguarda a aprovação dele(a).
+796|ver o código de adesão
+797|alterar um papel
+798|Equilibrado: ninguém deve nada
+799|A verificar…
+800|tem a receber
+801|tem a receber
+802|tem a receber
+803|País não suportado
+804|a política de privacidade
+805|Política de privacidade
+806|País de residência
+807|O que os adolescentes registam com amigos
+808|O que está em aberto
+809|Desde hoje
+810|Ativado
+811|A transferir atualização...
+812|A transferir atualização... {percent}%
+813|ID inválido
+814|Apagar
+815|A exclusão do cofrinho não pode ser desfeita, por isso um dos pais precisa aprovar. Agora será aberto um pedido de verificação do dispositivo.
+816|Apagar todo o cofre
+817|Vais trocar de telemóvel? Toca aqui, confirma com a impressão digital e enviamos um código para o teu e-mail. Depois abre o cofre no telemóvel novo, escolhe o teu nome e toca em "Dispositivo novo / Trocar de dispositivo". Todos os dispositivos anteriores serão desligados.
+818|Eliminado
+819|apagou um objetivo de poupança
+820|Eliminado
+821|apagou um objetivo de poupança
+822|Eliminado
+823|apagou um objetivo de poupança
+824|Moeda
+825|Moeda não suportada
+826|Quem são os teus filhos?
+827|Quem deve mais
 828|Quem me deve dinheiro?
-829|Quem está a entrar?
-830|Quem alterou o quê e quando, nos últimos 6 meses.
-831|E-mail para recuperação do código
-832|E-mail para recuperar o código (opcional)
-833|O e-mail é só para pais
-834|Localização e moeda
-835|Alguém
-836|Dispositivo
-837|Dispositivo novo / Trocar de dispositivo
-838|O dispositivo não existe
-839|Dispositivos ligados
-840|Dispositivos que guardaram a família. Um cartão sem utilização durante 180 dias expira sozinho.
-841|Agora mesmo
-842|A aguardar aprovação: {amount}
-843|A aguardar aprovação de um pai/mãe
-844|A aguardar aprovação de um pai/mãe
-845|Subscrição de notificações inválida
-846|Entrega o código a {name} em mão, não por mensagem. É válido 30 minutos e uma só vez.
-847|Chave inválida
-848|Modo amigos
-849|Modo amigos aprovado ✅
-850|O modo amigos é só para adolescentes
-851|Modo amigos desativado
-852|Modo amigos para {name}
-853|O modo amigos ainda não foi aprovado pelos pais
-854|Entrar no cofre
-855|Estás a entrar no cofre de {name}. Um pai/mãe da família tem de aprovar a adesão e define se és criança, adolescente ou pai/mãe.
-856|Aspeto
-857|Algo correu mal
-858|Algo correu mal. Tenta novamente.
-859|Família
-860|Outra família
-861|Mais famílias
-862|Família {name}
-863|Adicionado a {date}
-864|Gestão
-865|Tentar novamente
-866|Tentaste demasiadas vezes. Tenta novamente dentro de {wait}.
-867|Limpar pesquisa
-868|Desligar
-869|Entra sem código
-870|Apagado
-871|Foram encontrados neste dispositivo dados da versão anterior: {people} pessoas e {entries} registos. Transferi-los para o servidor?
-872|Tentar novamente
-873|Tente novamente
-874|Adolescente
-875|Adolescente
-876|Adolescente
-877|Feminino
-878|Parece que o dispositivo está em {name}. Moram em {name}?
-879|Dívidas registadas
-880|Restam {left} de {total}
-881|Desta dívida restam {left}.
-882|É enviado um código quando um código secreto é alterado ou reposto, e também um alerta quando o código de alguém da família fica bloqueado.
-883|Enviado a um dos pais para aprovação ⏳
-884|Enviado ao(à) amigo(a) para aprovação ⏳
-885|Foi enviado um código para o teu e-mail verificado. Depois de o confirmares, a troca só será possível daqui a 24 horas; entretanto, tu e os outros progenitores recebem uma notificação e podem cancelar.
-886|Foi enviada uma notificação de teste para {n} dispositivos. Deve aparecer daqui a pouco.
-887|Guardado no dispositivo, será enviado quando a ligação voltar
-888|Fechar
-889|Ordem dos registos
-890|Total
-891|Total em {cur} à taxa de hoje
-892|Marcado como pago
-893|Concluído
-894|Resumo mensal
-895|Valor ({cur})
-896|Valor inválido
-897|Valor inválido. Entre amigos podes registar até 500 xéqueis de cada vez
-898|Já passou algum tempo. O pai/a mãe provavelmente ainda não viu o pedido. Podes enviar-lhe uma mensagem.
-899|Ainda não foi registado nada.
-900|Já está em curso uma atualização
-901|Atualizar para a versão {version}
-902|Atualizar
-903|Mais
-904|Ainda não há mais ninguém na família. Um pai/mãe tem de os adicionar.
-905|Ainda não há amigos aprovados
-906|Ainda não há amigos aprovados. Adiciona um(a) amigo(a) pelo e-mail.
-907|Ainda não há amigos. Adiciona um(a) amigo(a) pelo e-mail.
-908|Ainda não há objetivos de poupança.
-909|A lista ainda está vazia. Toca num dos botões para começar.
-910|Ainda não há registos periódicos.
-911|Ainda não há alterações no registo.
-912|Nenhum pai ou mãe abriu ainda o caderno
-913|Mais avatares
-914|Ainda não
-915|Ainda não escolheu código
-916|Ainda não escolheu código
-917|Ainda não escolheu código
-918|Ainda não foi registado nada com amigos.
-919|Ainda não foi registado nada.
-920|Ainda não foi enviada nenhuma cópia
-921|Ainda não passaram 24 horas desde o pedido.
-922|Mais ações
-923|Última atualização: {when}
-924|Aspeto
-925|Agora é a vez do pai/da mãe: abrir a app, ir ao separador "Gestão" e tocar em "Aprovar" junto ao teu nome.
-926|Por {debt} (= {covers} à taxa de hoje).
-927|Por {debt}.
-928|Estás a poupar para quê?
-929|Para quê? (podes saltar)
-930|Para quê? (opcional)
-931|Para: {debt}
-932|Com quem?
-933|Enorme
-934|A verificação expirou. Tenta novamente.
-935|Detalhe do cálculo
-936|Ação inválida
-937|Perfil
-938|criou um objetivo de poupança
-939|criou um objetivo de poupança
-940|criou um objetivo de poupança
-941|Cores do ecrã
-942|Cores néon
-943|O tratamento já está definido e não pode ser alterado
-944|Forma de tratamento guardada ✅
-945|Tratamento
-946|Tratamento:
-947|Som
-948|Viram o caderno:
-949|Cria um cofre familiar: todos veem a mesma conta e as dívidas atualizam-se para todos.
-950|É necessária confirmação com impressão digital ou reconhecimento facial
-951|Precisas do código de família para entrar nesta família.
-952|A aplicação precisa de permissão para instalar atualizações: nas definições que aparecerem, ativa «Permitir desta origem» e toca novamente em «Atualizar»
-953|É preciso aceitar os termos de utilização e a política de privacidade
-954|Tens de aceitar que os teus pais vejam o teu caderno pessoal
-955|Tens de entrar novamente
-956|Tens de entrar novamente com o código da família
-957|É preciso associar o dispositivo de novo
-958|Tens de associar este telemóvel uma vez.
-959|É preciso associar o dispositivo
-960|Este dispositivo precisa ser vinculado a um dos pais. Entre novamente e vincule-o com um código de vínculo de outro dos pais
-961|Tens de associar este dispositivo e este navegador uma vez.
-962|É preciso um e-mail verificado para trocar de dispositivo
-963|Definir o código
-964|Definir o código e entrar
-965|Definir o tratamento…
-966|Definir um código secreto
-967|Um código para todos. Quem entra com ele entra como criança. Depois pode mudar-se em «Membros da família» para adolescente ou pai/mãe, com aprovação por impressão digital ou reconhecimento facial.
-968|Código do e-mail
-969|O código do e-mail está errado ou expirou.
-970|O código de verificação está errado ou expirou.
-971|Código de associação
-972|Código de adesão ao cofre de {name}: {code}
-973|Código de adesão da família
-974|O código de adesão da família só é mostrado com impressão digital ou reconhecimento facial.
-975|O código da família mudou. Pede um novo código aos teus pais.
-976|O código de associação
-977|Novo código
-978|Novo código ({rule})
-979|Código do e-mail atual
-980|Código da família
-981|Código secreto ({rule}; mais longo = mais seguro)
-982|Código secreto (obrigatório para pais, {rule})
-983|Código secreto (opcional — sem código entra-se com um toque e pode definir-se um mais tarde)
-984|Um código secreto para todos os filhos ({rule}). Pode ficar vazio
-985|Novo código secreto
-986|Código secreto para {name}
-987|O teu próprio código secreto (4 dígitos)
-988|Código de associação
-989|O código de associação é só para progenitores
-990|Código de associação para {name}
-991|Código de associação para um dispositivo
-992|Códigos de adesão
-993|Primeiro é preciso definir um código secreto a {name}
-994|{amount} compensados com {name} ✅
-995|Um cofre familiar só pode ser criado por quem tem mais de 18 anos
-996|Pequeno
-997|Recebi
-998|Recebi a diferença ({amount})
-999|Recebi dinheiro
-1000|Compensação mútua
-1001|Compensar dívidas mútuas
-1002|Compensar dívidas mútuas ({amount})
-1003|O link de convite adiciona como filho(a) quem o abrir. Partilha-o só com a tua família.
-1004|Associação do dispositivo
-1005|Associar este dispositivo e entrar
-1006|Associar o dispositivo a um progenitor
-1007|Li e aceito {terms} e {privacy}
-1008|Li e aceito {terms} e {privacy}
-1009|Li e aceito {terms} e {privacy}
-1010|Já há {n} dispositivos associados, que é o máximo. Para adicionar outro, remove um dispositivo.
-1011|Normal
-1012|Só um momento, a entrar…
-1013|Só um momento, a sair…
-1014|Queres juntá-los no cofre familiar?
-1015|Queres que os devedores vejam isto?
-1016|Vibração
-1017|Registar
-1018|registo no Firebase
-1019|Registar uma devolução
-1020|Regista uma dívida automaticamente, semanal ou mensalmente, sem a escreveres de cada vez.
-1021|Novo registo periódico
-1022|Um registo guardado sem ligação não foi enviado: {err}
-1023|Atualizar a aplicação
-1024|Só os pais podem fazer isto
-1025|Só os pais podem criar um objetivo para outra pessoa
-1026|Só os pais podem definir o tratamento
-1027|Apenas para confirmar que quem cria o cofre tem mais de 18 anos. Não é mostrado a ninguém.
-1028|Registou um reembolso
-1029|Registou uma dívida
-1030|Registou um reembolso
-1031|Registou uma dívida
+829|Quem deve a quem
+830|Quem deve (quem paga)
+831|Quem me deve dinheiro?
+832|Quem está a entrar?
+833|Quem alterou o quê e quando, nos últimos 6 meses.
+834|E-mail para recuperação do código
+835|E-mail para recuperar o código (opcional)
+836|O e-mail é só para pais
+837|Localização e moeda
+838|Alguém
+839|Dispositivo
+840|Dispositivo novo / Trocar de dispositivo
+841|O dispositivo não existe
+842|Dispositivos ligados
+843|Dispositivos que guardaram a família. Um cartão sem utilização durante 180 dias expira sozinho.
+844|Agora mesmo
+845|A aguardar aprovação: {amount}
+846|A aguardar aprovação de um pai/mãe
+847|A aguardar aprovação de um pai/mãe
+848|Subscrição de notificações inválida
+849|Entrega o código a {name} em mão, não por mensagem. É válido 30 minutos e uma só vez.
+850|Chave inválida
+851|Modo amigos
+852|Modo amigos aprovado ✅
+853|O modo amigos é só para adolescentes
+854|Modo amigos desativado
+855|Modo amigos para {name}
+856|O modo amigos ainda não foi aprovado pelos pais
+857|Entrar no cofre
+858|Estás a entrar no cofre de {name}. Um pai/mãe da família tem de aprovar a adesão e define se és criança, adolescente ou pai/mãe.
+859|Aspeto
+860|Algo correu mal
+861|Algo correu mal. Tenta novamente.
+862|Família
+863|Outra família
+864|Mais famílias
+865|Família {name}
+866|Adicionado a {date}
+867|Gestão
+868|Tentar novamente
+869|Tentaste demasiadas vezes. Tenta novamente dentro de {wait}.
+870|Limpar pesquisa
+871|Desligar
+872|Entra sem código
+873|Apagado
+874|Foram encontrados neste dispositivo dados da versão anterior: {people} pessoas e {entries} registos. Transferi-los para o servidor?
+875|Tentar novamente
+876|Tente novamente
+877|Adolescente
+878|Adolescente
+879|Adolescente
+880|Feminino
+881|Parece que o dispositivo está em {name}. Moram em {name}?
+882|Dívidas registadas
+883|Restam {left} de {total}
+884|Desta dívida restam {left}.
+885|É enviado um código quando um código secreto é alterado ou reposto, e também um alerta quando o código de alguém da família fica bloqueado.
+886|Enviado a um dos pais para aprovação ⏳
+887|Enviado ao(à) amigo(a) para aprovação ⏳
+888|Vamos enviar uma notificação para o telemóvel quando for registada uma dívida que te diga respeito ou algo aguardar a tua aprovação.\nDepois de "Sim", o telemóvel pergunta uma vez se permites.
+889|Foi enviado um código para o teu e-mail verificado. Depois de o confirmares, a troca só será possível daqui a 24 horas; entretanto, tu e os outros progenitores recebem uma notificação e podem cancelar.
+890|Foi enviada uma notificação de teste para {n} dispositivos. Deve aparecer daqui a pouco.
+891|Guardado no dispositivo, será enviado quando a ligação voltar
+892|Fechar
+893|Ordem dos registos
+894|Total
+895|Total em {cur} à taxa de hoje
+896|Marcado como pago
+897|Concluído
+898|Resumo mensal
+899|Valor ({cur})
+900|Valor inválido
+901|Valor inválido. Entre amigos podes registar até 500 xéqueis de cada vez
+902|Já passou algum tempo. O pai/a mãe provavelmente ainda não viu o pedido. Podes enviar-lhe uma mensagem.
+903|Ainda não foi registado nada.
+904|Já está em curso uma atualização
+905|Atualizar para a versão {version}
+906|Atualizar
+907|Mais
+908|Ainda não há mais ninguém na família. Um pai/mãe tem de os adicionar.
+909|Ainda não há amigos aprovados
+910|Ainda não há amigos aprovados. Adiciona um(a) amigo(a) pelo e-mail.
+911|Ainda não há amigos. Adiciona um(a) amigo(a) pelo e-mail.
+912|Ainda não há objetivos de poupança.
+913|A lista ainda está vazia. Toca num dos botões para começar.
+914|Ainda não há registos periódicos.
+915|Ainda não há alterações no registo.
+916|Nenhum pai ou mãe abriu ainda o caderno
+917|Mais avatares
+918|Ainda não
+919|Ainda não escolheu código
+920|Ainda não escolheu código
+921|Ainda não escolheu código
+922|Ainda não foi registado nada com amigos.
+923|Ainda não foi registado nada.
+924|Ainda não foi enviada nenhuma cópia
+925|Ainda não passaram 24 horas desde o pedido.
+926|Mais ações
+927|Última atualização: {when}
+928|Aspeto
+929|Agora é a vez do pai/da mãe: abrir a app, ir ao separador "Gestão" e tocar em "Aprovar" junto ao teu nome.
+930|Por {debt} (= {covers} à taxa de hoje).
+931|Por {debt}.
+932|Estás a poupar para quê?
+933|Para quê? (podes saltar)
+934|Para quê? (opcional)
+935|Para: {debt}
+936|Com quem?
+937|Enorme
+938|A verificação expirou. Tenta novamente.
+939|Detalhe do cálculo
+940|Ação inválida
+941|Perfil
+942|criou um objetivo de poupança
+943|criou um objetivo de poupança
+944|criou um objetivo de poupança
+945|Cores do ecrã
+946|Cores néon
+947|O tratamento já está definido e não pode ser alterado
+948|Forma de tratamento guardada ✅
+949|Tratamento
+950|Tratamento:
+951|Som
+952|Viram o caderno:
+953|Cria um cofre familiar: todos veem a mesma conta e as dívidas atualizam-se para todos.
+954|É necessária confirmação com impressão digital ou reconhecimento facial
+955|Precisas do código de família para entrar nesta família.
+956|A aplicação precisa de permissão para instalar atualizações: nas definições que aparecerem, ativa «Permitir desta origem» e toca novamente em «Atualizar»
+957|É preciso aceitar os termos de utilização e a política de privacidade
+958|Tens de aceitar que os teus pais vejam o teu caderno pessoal
+959|Tens de entrar novamente
+960|Tens de entrar novamente com o código da família
+961|É preciso associar o dispositivo de novo
+962|Tens de associar este telemóvel uma vez.
+963|É preciso associar o dispositivo
+964|Este dispositivo precisa ser vinculado a um dos pais. Entre novamente e vincule-o com um código de vínculo de outro dos pais
+965|Tens de associar este dispositivo e este navegador uma vez.
+966|É preciso um e-mail verificado para trocar de dispositivo
+967|Definir o código
+968|Definir o código e entrar
+969|Definir o tratamento…
+970|Definir um código secreto
+971|Um código para todos. Quem entra com ele entra como criança. Depois pode mudar-se em «Membros da família» para adolescente ou pai/mãe, com aprovação por impressão digital ou reconhecimento facial.
+972|Código do e-mail
+973|O código do e-mail está errado ou expirou.
+974|O código de verificação está errado ou expirou.
+975|Código de associação
+976|Código de adesão ao cofre de {name}: {code}
+977|Código de adesão da família
+978|O código de adesão da família só é mostrado com impressão digital ou reconhecimento facial.
+979|O código da família mudou. Pede um novo código aos teus pais.
+980|O código de associação
+981|Novo código
+982|Novo código ({rule})
+983|Código do e-mail atual
+984|Código da família
+985|Código secreto ({rule}; mais longo = mais seguro)
+986|Código secreto (obrigatório para pais, {rule})
+987|Código secreto (opcional — sem código entra-se com um toque e pode definir-se um mais tarde)
+988|Um código secreto para todos os filhos ({rule}). Pode ficar vazio
+989|Novo código secreto
+990|Código secreto para {name}
+991|O teu próprio código secreto (4 dígitos)
+992|Código de associação
+993|O código de associação é só para progenitores
+994|Código de associação para {name}
+995|Código de associação para um dispositivo
+996|Códigos de adesão
+997|Primeiro é preciso definir um código secreto a {name}
+998|{amount} compensados com {name} ✅
+999|Um cofre familiar só pode ser criado por quem tem mais de 18 anos
+1000|Pequeno
+1001|Recebi
+1002|Recebi a diferença ({amount})
+1003|Recebi dinheiro
+1004|Compensação mútua
+1005|Compensar dívidas mútuas
+1006|Compensar dívidas mútuas ({amount})
+1007|O link de convite adiciona como filho(a) quem o abrir. Partilha-o só com a tua família.
+1008|Associação do dispositivo
+1009|Associar este dispositivo e entrar
+1010|Associar o dispositivo a um progenitor
+1011|Li e aceito {terms} e {privacy}
+1012|Li e aceito {terms} e {privacy}
+1013|Li e aceito {terms} e {privacy}
+1014|Já há {n} dispositivos associados, que é o máximo. Para adicionar outro, remove um dispositivo.
+1015|Normal
+1016|Só um momento, a entrar…
+1017|Só um momento, a sair…
+1018|Queres juntá-los no cofre familiar?
+1019|Queres que os devedores vejam isto?
+1020|Vibração
+1021|Registar
+1022|registo no Firebase
+1023|Registar uma devolução
+1024|Regista uma dívida automaticamente, semanal ou mensalmente, sem a escreveres de cada vez.
+1025|Novo registo periódico
+1026|Um registo guardado sem ligação não foi enviado: {err}
+1027|Atualizar a aplicação
+1028|Só os pais podem fazer isto
+1029|Só os pais podem criar um objetivo para outra pessoa
+1030|Só os pais podem definir o tratamento
+1031|Apenas para confirmar que quem cria o cofre tem mais de 18 anos. Não é mostrado a ninguém.
 1032|Registou um reembolso
 1033|Registou uma dívida
-1034|Regista uma dívida tua no caderno
-1035|Semana limpa
-1036|Uma semana inteira sem dívidas em aberto
-1037|Pago na totalidade ✅
-1038|Pagos ({n})
-1039|A guardar tudo…
-1040|Libertar o bloqueio
-1041|Paguei
-1042|Paguei a diferença ({amount})
-1043|Última utilização: {date}
-1044|Mudou o nome da família
-1045|Alterou o país e a moeda
-1046|Alterou um nome
-1047|Alterou uma função
+1034|Registou um reembolso
+1035|Registou uma dívida
+1036|Registou um reembolso
+1037|Registou uma dívida
+1038|Regista uma dívida tua no caderno
+1039|Semana limpa
+1040|Uma semana inteira sem dívidas em aberto
+1041|Pago na totalidade ✅
+1042|Pagos ({n})
+1043|A guardar tudo…
+1044|Libertar o bloqueio
+1045|Paguei
+1046|Paguei a diferença ({amount})
+1047|Última utilização: {date}
 1048|Mudou o nome da família
 1049|Alterou o país e a moeda
 1050|Alterou um nome
 1051|Alterou uma função
-1052|Alterar
-1053|Alterar a moeda só muda o símbolo. Os valores em si não são convertidos.
-1054|Alterar o código secreto
-1055|Mudar o nome da família
-1056|Mudou o nome da família
-1057|Alterou o país e a moeda
-1058|Alterou um nome
-1059|Alterou uma função
-1060|Partilhar
-1061|Esqueci-me do código
-1062|Passo: {stage}… ({n} segundos)
-1063|Enviámos um código para {email}. Escreve-o, juntamente com o novo endereço. Só substituirá o atual depois de verificado.
-1064|Enviámos um código de 6 dígitos para {email}. É válido durante 10 minutos.
-1065|Meus
-1066|Enviar pedido
-1067|Enviar código de verificação
-1068|Enviar o código por e-mail
-1069|Enviar um código para o e-mail atual
-1070|Nome
-1071|O nome do objetivo pode ter no máximo 40 caracteres
-1072|Nome da família
-1073|O nome da família não corresponde
-1074|O nome da família é inválido
-1075|Nome inválido
-1076|Nomes conhecidos
-1077|Guardar
-1078|gravação no servidor
-1079|uma hora
-1080|{"one": "{n} hora", "other": "{n} horas"}
-1081|As taxas de câmbio ainda não foram carregadas. Tenta novamente daqui a pouco.
-1082|2 horas
-1083|Idioma
-1084|Data inválida
-1085|Data de nascimento
-1086|Data de nascimento inválida
-1087|Sensação
-1088|os termos de utilização
-1089|Termos de utilização
-1090|Papel
-1091|Papel:
-1092|Menu principal
-1093|Pagamento de uma dívida noutra moeda
-1094|🆘 O dispositivo antigo perdeu-se ou avariou
+1052|Mudou o nome da família
+1053|Alterou o país e a moeda
+1054|Alterou um nome
+1055|Alterou uma função
+1056|Alterar
+1057|Alterar a moeda só muda o símbolo. Os valores em si não são convertidos.
+1058|Alterar o código secreto
+1059|Mudar o nome da família
+1060|Mudou o nome da família
+1061|Alterou o país e a moeda
+1062|Alterou um nome
+1063|Alterou uma função
+1064|Partilhar
+1065|Esqueci-me do código
+1066|Passo: {stage}… ({n} segundos)
+1067|Enviámos um código para {email}. Escreve-o, juntamente com o novo endereço. Só substituirá o atual depois de verificado.
+1068|Enviámos um código de 6 dígitos para {email}. É válido durante 10 minutos.
+1069|Meus
+1070|Enviar pedido
+1071|Enviar código de verificação
+1072|Enviar o código por e-mail
+1073|Enviar um código para o e-mail atual
+1074|Nome
+1075|O nome do objetivo pode ter no máximo 40 caracteres
+1076|Nome da família
+1077|O nome da família não corresponde
+1078|O nome da família é inválido
+1079|Nome inválido
+1080|Nomes conhecidos
+1081|Guardar
+1082|gravação no servidor
+1083|uma hora
+1084|{"one": "{n} hora", "other": "{n} horas"}
+1085|As taxas de câmbio ainda não foram carregadas. Tenta novamente daqui a pouco.
+1086|2 horas
+1087|Idioma
+1088|Data inválida
+1089|Data de nascimento
+1090|Data de nascimento inválida
+1091|Sensação
+1092|os termos de utilização
+1093|Termos de utilização
+1094|Papel
+1095|Papel:
+1096|Menu principal
+1097|Pagamento de uma dívida noutra moeda
+1098|🆘 O dispositivo antigo perdeu-se ou avariou

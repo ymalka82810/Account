@@ -92,6 +92,19 @@ async function sendSubToServer(sub) {
   await call('push:subscribe', { token: state.token, endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth });
 }
 
+// מצב ההרשאה להתראות במכשיר: 'granted' (כבר אושר), 'prompt' (עוד לא נשאלו - חלון המערכת יופיע), 'denied' (נחסם).
+// לפני 'prompt' מציגים חלון הסבר משלנו בעיצוב האפליקציה, כדי שחלון המערכת יופיע רק למי שבחר "כן".
+export async function permissionState() {
+  try {
+    if (isNative()) {
+      const r = (await withTimeout((async () => (await loadNative()).PN.checkPermissions())(), 5000, 'check')).receive;
+      return r === 'granted' ? 'granted' : r === 'denied' ? 'denied' : 'prompt';
+    }
+    const p = Notification.permission;
+    return p === 'granted' ? 'granted' : p === 'denied' ? 'denied' : 'prompt';
+  } catch (e) { return 'prompt'; }
+}
+
 // האם ההתראות פעילות במכשיר הזה.
 export async function isPushOn() {
   if (isNative()) {

@@ -704,392 +704,396 @@
 703|Ja, weiter
 704|Ja, entfernen
 705|Ja, in die Kasse verschieben
-706|Ja, verrechnen
-707|Ja, Schuld speichern
-708|Ja, Zahlung speichern
-709|Anmelden
-710|Elternteil-Anmeldung
-711|Zur Kasse
-712|Gib deinen Namen ein
-713|Gib die E-Mail ein, die dein Freund / deine Freundin bei seinen/ihren Eltern in der App hinterlegt hat. Es wird eine Anfrage gesendet, die bestätigt werden muss. Das funktioniert nur, wenn dein Freund / deine Freundin ebenfalls den Freundemodus hat.
-714|Gib den geheimen Code ein
-715|Gib den Code zur Bestätigung noch einmal ein
-716|Gib den Namen ein
-717|Gib den Familiennamen ein
-718|Gib einen Betrag ein
-719|Gib einen Betrag größer als null ein.
-720|Andere Adresse
-721|Die E-Mail-Adresse sieht nicht gültig aus
-722|Die E-Mail-Adresse ist ungültig
-723|E-Mail-Adresse
-724|Neue E-Mail-Adresse
-725|Ungültige E-Mail-Adresse
-726|Orange + Rosa
-727|Nein
-728|Nicht bestätigt
-729|Updates konnten nicht geprüft werden. Prüfe deine Internetverbindung und versuche es erneut
-730|Benachrichtigungen konnten nicht aktiviert werden: Der Schritt „{stage}" hat nicht innerhalb von {n} Sekunden reagiert
-731|Benachrichtigungen konnten nicht aktiviert werden. Schritt: {stage}. Grund: {detail}
-732|Wir konnten gerade keine Verbindung herstellen. Dieser Bildschirm verschwindet von selbst, sobald die Verbindung wieder da ist. Das persönliche Heft funktioniert in der Zwischenzeit auch ohne Verbindung.
-733|Wir konnten die E-Mail nicht verbinden. Du kannst es unter „Mein Konto“ erneut versuchen.
-734|Wir konnten das Gerät nicht verknüpfen. Versuch es nochmal.
-735|Unbekannt
-736|Falsch
-737|Nichts gefunden für „{q}“
-738|Auf dem Telefon wurde kein Installationsprogramm gefunden. Du kannst die Datei direkt von GitHub herunterladen
-739|In diesem Monat wurde nichts erfasst.
-740|Nein, das sind zwei verschiedene Personen
-741|Nein, das ist eine andere Person
-742|Nein, im Notizbuch lassen
-743|Für welche Schuld ist die Rückzahlung?
-744|Zur Bestätigung senden wir einen Bestätigungscode an {email}.
-745|Zurücksetzen und bei der nächsten Anmeldung selbst wählen lassen
-746|Das Erfasste stornieren?
-747|Eintrag ablehnen?
-748|Ablehnen? Der Eintrag wird gelöscht.
-749|Auch einen Teenager oder weiteren Elternteil hinzufügen
-750|Gerät hinzufügen
-751|Ein neuer Elternteil braucht einen geheimen Code
-752|Für einen Elternteil muss ein Code festgelegt werden (er kann nicht zurückgesetzt werden, damit er selbst wählt)
-753|Nur für Eltern. Wer die Kasse einrichtet, ist der erste Elternteil. Danach erhältst du einen Beitrittscode für die ganze Familie und legst die Rolle jeder Person fest: Kind, Teenager oder Elternteil.
-754|Deine Eltern haben noch keine Benachrichtigungen auf dem Handy, also wissen sie nicht, dass du beitreten möchtest. Sag ihnen am besten Bescheid.
-755|Code ändern
-756|Den Code ersetzen? Wer schon drin ist, bleibt, aber der alte Code funktioniert nicht mehr, und andere Geräte, die die Familie gespeichert haben, müssen den neuen Code eingeben.
-757|Gerät wechseln
-758|Für den Wechsel des eigenen Geräts gibt es einen anderen Ablauf
-759|Verknüpfungscode ausstellen
-760|{name} aus den Freunden entfernen?
-761|{name} aus der Familie entfernen?
-762|Elternteil entfernen
-763|Gerät entfernen
-764|In die Familienkasse zu {name} verschieben?
-765|Den regelmäßigen Eintrag beenden? Was schon erfasst ist, bleibt.
-766|Auf der Hauptseite auch Bezahltes anzeigen
-767|Tippe für die Details der Berechnung
-768|Den Freundemodus von {name} ausschalten? Neue Einträge mit Freunden sind dann nicht mehr möglich.
-769|Keine Angabe
-770|Warum? (optional)
-771|{n} bezahlte Einträge löschen?
-772|Das Ziel „{name}“ löschen?
-773|Kasse löschen
-774|Den Eintrag von {name} löschen?
-775|Diesen Eintrag löschen?
-776|Alle Einträge im Notizbuch löschen? Das lässt sich nicht rückgängig machen.
-777|An wen
-778|Wem schulde ich Geld?
-779|Wem schulde ich Geld?
-780|Wem schulde ich Geld?
-781|An wen?
-782|Zum Beispiel: ein Fahrrad
-783|Zum Beispiel: Eis, Kinokarte
-784|Erneut versuchen
-785|Das Gerät trennen? Es muss den Beitrittscode dann erneut eingeben.
-786|Die Währung der Familie wird durch das Land bestimmt. Du kannst sie später im Tab Verwaltung ändern.
-787|Wie das Gerät
-788|Nach Währung
-789|Nach Name (A–Z)
-790|vor {n}
-791|Nur zum Ansehen. Das Notizbuch bleibt bei {name} und kann von hier aus nicht geändert werden.
-792|Nur lesen. Jeder Eintrag mit einem Freund / einer Freundin wartet auch auf dessen/deren Bestätigung.
-793|den Beitrittscode zu sehen
-794|eine Rolle zu ändern
-795|Ausgeglichen: Niemand schuldet etwas
-796|Wird bestätigt…
-797|bekommt noch
-798|bekommt noch
-799|bekommt noch
-800|Land wird nicht unterstützt
-801|die Datenschutzerklärung
-802|Datenschutzerklärung
-803|Wohnland
-804|Was Teenager mit Freunden erfassen
-805|Was offen ist
-806|Ab heute
-807|An
-808|Update wird heruntergeladen...
-809|Update wird heruntergeladen... {percent} %
-810|Ungültige ID
-811|Löschen
-812|Das Löschen der Kasse kann nicht rückgängig gemacht werden, deshalb muss ein Elternteil zustimmen. Gleich öffnet sich eine Geräteabfrage zur Bestätigung.
-813|Ganze Kasse löschen
-814|Neues Handy? Tippe hier, bestätige mit dem Fingerabdruck, und wir schicken einen Code per E-Mail. Öffne dann die Kasse auf dem neuen Handy, wähle deinen Namen und tippe auf „Neues Gerät / Gerät wechseln“. Alle bisherigen Geräte werden abgemeldet.
-815|Gelöscht
-816|hat ein Sparziel gelöscht
-817|Gelöscht
-818|hat ein Sparziel gelöscht
-819|Gelöscht
-820|hat ein Sparziel gelöscht
-821|Währung
-822|Währung wird nicht unterstützt
-823|Wer sind deine Kinder?
-824|Wer schuldet am meisten
-825|Wer schuldet mir Geld?
-826|Wer wem Geld schuldet
-827|Wer schuldet (der Zahlende)
+706|Ja, aktivieren
+707|Ja, verrechnen
+708|Ja, Schuld speichern
+709|Ja, Zahlung speichern
+710|Anmelden
+711|Elternteil-Anmeldung
+712|Zur Kasse
+713|Gib deinen Namen ein
+714|Gib die E-Mail ein, die dein Freund / deine Freundin bei seinen/ihren Eltern in der App hinterlegt hat. Es wird eine Anfrage gesendet, die bestätigt werden muss. Das funktioniert nur, wenn dein Freund / deine Freundin ebenfalls den Freundemodus hat.
+715|Gib den geheimen Code ein
+716|Gib den Code zur Bestätigung noch einmal ein
+717|Gib den Namen ein
+718|Gib den Familiennamen ein
+719|Gib einen Betrag ein
+720|Gib einen Betrag größer als null ein.
+721|Andere Adresse
+722|Die E-Mail-Adresse sieht nicht gültig aus
+723|Die E-Mail-Adresse ist ungültig
+724|E-Mail-Adresse
+725|Neue E-Mail-Adresse
+726|Ungültige E-Mail-Adresse
+727|Orange + Rosa
+728|Nein
+729|Nicht bestätigt
+730|Updates konnten nicht geprüft werden. Prüfe deine Internetverbindung und versuche es erneut
+731|Benachrichtigungen konnten nicht aktiviert werden: Der Schritt „{stage}" hat nicht innerhalb von {n} Sekunden reagiert
+732|Benachrichtigungen konnten nicht aktiviert werden. Schritt: {stage}. Grund: {detail}
+733|Wir konnten gerade keine Verbindung herstellen. Dieser Bildschirm verschwindet von selbst, sobald die Verbindung wieder da ist. Das persönliche Heft funktioniert in der Zwischenzeit auch ohne Verbindung.
+734|Wir konnten die E-Mail nicht verbinden. Du kannst es unter „Mein Konto“ erneut versuchen.
+735|Wir konnten das Gerät nicht verknüpfen. Versuch es nochmal.
+736|Unbekannt
+737|Falsch
+738|Nichts gefunden für „{q}“
+739|Auf dem Telefon wurde kein Installationsprogramm gefunden. Du kannst die Datei direkt von GitHub herunterladen
+740|In diesem Monat wurde nichts erfasst.
+741|Nicht jetzt
+742|Nein, das sind zwei verschiedene Personen
+743|Nein, das ist eine andere Person
+744|Nein, im Notizbuch lassen
+745|Für welche Schuld ist die Rückzahlung?
+746|Zur Bestätigung senden wir einen Bestätigungscode an {email}.
+747|Zurücksetzen und bei der nächsten Anmeldung selbst wählen lassen
+748|Das Erfasste stornieren?
+749|Eintrag ablehnen?
+750|Ablehnen? Der Eintrag wird gelöscht.
+751|Auch einen Teenager oder weiteren Elternteil hinzufügen
+752|Gerät hinzufügen
+753|Ein neuer Elternteil braucht einen geheimen Code
+754|Für einen Elternteil muss ein Code festgelegt werden (er kann nicht zurückgesetzt werden, damit er selbst wählt)
+755|Nur für Eltern. Wer die Kasse einrichtet, ist der erste Elternteil. Danach erhältst du einen Beitrittscode für die ganze Familie und legst die Rolle jeder Person fest: Kind, Teenager oder Elternteil.
+756|Deine Eltern haben noch keine Benachrichtigungen auf dem Handy, also wissen sie nicht, dass du beitreten möchtest. Sag ihnen am besten Bescheid.
+757|Code ändern
+758|Den Code ersetzen? Wer schon drin ist, bleibt, aber der alte Code funktioniert nicht mehr, und andere Geräte, die die Familie gespeichert haben, müssen den neuen Code eingeben.
+759|Gerät wechseln
+760|Für den Wechsel des eigenen Geräts gibt es einen anderen Ablauf
+761|Verknüpfungscode ausstellen
+762|{name} aus den Freunden entfernen?
+763|{name} aus der Familie entfernen?
+764|Elternteil entfernen
+765|Gerät entfernen
+766|In die Familienkasse zu {name} verschieben?
+767|Den regelmäßigen Eintrag beenden? Was schon erfasst ist, bleibt.
+768|Benachrichtigungen aktivieren?
+769|Auf der Hauptseite auch Bezahltes anzeigen
+770|Tippe für die Details der Berechnung
+771|Den Freundemodus von {name} ausschalten? Neue Einträge mit Freunden sind dann nicht mehr möglich.
+772|Keine Angabe
+773|Warum? (optional)
+774|{n} bezahlte Einträge löschen?
+775|Das Ziel „{name}“ löschen?
+776|Kasse löschen
+777|Den Eintrag von {name} löschen?
+778|Diesen Eintrag löschen?
+779|Alle Einträge im Notizbuch löschen? Das lässt sich nicht rückgängig machen.
+780|An wen
+781|Wem schulde ich Geld?
+782|Wem schulde ich Geld?
+783|Wem schulde ich Geld?
+784|An wen?
+785|Zum Beispiel: ein Fahrrad
+786|Zum Beispiel: Eis, Kinokarte
+787|Erneut versuchen
+788|Das Gerät trennen? Es muss den Beitrittscode dann erneut eingeben.
+789|Die Währung der Familie wird durch das Land bestimmt. Du kannst sie später im Tab Verwaltung ändern.
+790|Wie das Gerät
+791|Nach Währung
+792|Nach Name (A–Z)
+793|vor {n}
+794|Nur zum Ansehen. Das Notizbuch bleibt bei {name} und kann von hier aus nicht geändert werden.
+795|Nur lesen. Jeder Eintrag mit einem Freund / einer Freundin wartet auch auf dessen/deren Bestätigung.
+796|den Beitrittscode zu sehen
+797|eine Rolle zu ändern
+798|Ausgeglichen: Niemand schuldet etwas
+799|Wird bestätigt…
+800|bekommt noch
+801|bekommt noch
+802|bekommt noch
+803|Land wird nicht unterstützt
+804|die Datenschutzerklärung
+805|Datenschutzerklärung
+806|Wohnland
+807|Was Teenager mit Freunden erfassen
+808|Was offen ist
+809|Ab heute
+810|An
+811|Update wird heruntergeladen...
+812|Update wird heruntergeladen... {percent} %
+813|Ungültige ID
+814|Löschen
+815|Das Löschen der Kasse kann nicht rückgängig gemacht werden, deshalb muss ein Elternteil zustimmen. Gleich öffnet sich eine Geräteabfrage zur Bestätigung.
+816|Ganze Kasse löschen
+817|Neues Handy? Tippe hier, bestätige mit dem Fingerabdruck, und wir schicken einen Code per E-Mail. Öffne dann die Kasse auf dem neuen Handy, wähle deinen Namen und tippe auf „Neues Gerät / Gerät wechseln“. Alle bisherigen Geräte werden abgemeldet.
+818|Gelöscht
+819|hat ein Sparziel gelöscht
+820|Gelöscht
+821|hat ein Sparziel gelöscht
+822|Gelöscht
+823|hat ein Sparziel gelöscht
+824|Währung
+825|Währung wird nicht unterstützt
+826|Wer sind deine Kinder?
+827|Wer schuldet am meisten
 828|Wer schuldet mir Geld?
-829|Wer meldet sich an?
-830|Wer was wann geändert hat, in den letzten 6 Monaten.
-831|E-Mail zur Code-Wiederherstellung
-832|E-Mail zur Code-Wiederherstellung (optional)
-833|E-Mail nur für Eltern
-834|Ort und Währung
-835|Jemand
-836|Gerät
-837|Neues Gerät / Gerät wechseln
-838|Gerät existiert nicht
-839|Verbundene Geräte
-840|Geräte, die die Familie gespeichert haben. Eine Karte, die 180 Tage nicht benutzt wird, läuft von selbst ab.
-841|Gerade eben
-842|Wartet auf Bestätigung: {amount}
-843|Wartet auf Bestätigung eines Elternteils
-844|Warten auf Bestätigung eines Elternteils
-845|Ungültiges Benachrichtigungs-Abo
-846|Gib {name} den Code persönlich, nicht per Nachricht. Er gilt 30 Minuten und nur einmal.
-847|Ungültiger Schlüssel
-848|Freundemodus
-849|Freundemodus bestätigt ✅
-850|Der Freundemodus ist nur für Teenager
-851|Freundemodus ausgeschaltet
-852|Freundemodus für {name}
-853|Der Freundemodus wurde von den Eltern noch nicht bestätigt
-854|Der Kasse beitreten
-855|Du trittst der Kasse von {name} bei. Ein Elternteil der Familie muss den Beitritt bestätigen und legt fest, ob du Kind, Teenager oder Elternteil bist.
-856|Aussehen
-857|Etwas ist schiefgelaufen
-858|Etwas ist schiefgelaufen. Versuche es erneut.
-859|Familie
-860|Andere Familie
-861|Weitere Familien
-862|Familie {name}
-863|Hinzugefügt am {date}
-864|Verwaltung
-865|Erneut versuchen
-866|Du hast es zu oft versucht. Versuche es in {wait} erneut.
-867|Suche löschen
-868|Trennen
-869|Meldet sich ohne Code an
-870|Gelöscht
-871|Auf diesem Gerät wurden Daten der vorherigen Version gefunden: {people} Personen und {entries} Einträge. Auf den Server übertragen?
-872|Erneut versuchen
-873|Versuch es noch einmal
-874|Teenager
-875|Teenager
-876|Teenager
-877|Weiblich
-878|Es sieht aus, als befände sich das Gerät in {name}. Wohnt ihr in {name}?
-879|Erfasste Schulden
-880|Noch {left} von {total}
-881|Von dieser Schuld sind noch {left} übrig.
-882|Ein Code wird gesendet, wenn ein geheimer Code geändert oder zurückgesetzt wird, außerdem eine Benachrichtigung, wenn der Code von jemandem aus der Familie gesperrt wird.
-883|An einen Elternteil zur Bestätigung gesendet ⏳
-884|An den Freund / die Freundin zur Bestätigung gesendet ⏳
-885|Ein Code wurde an deine bestätigte E-Mail gesendet. Nach der Bestätigung ist der Wechsel erst in 24 Stunden möglich; in der Zwischenzeit erhaltet ihr und die anderen Eltern eine Benachrichtigung und könnt abbrechen.
-886|Eine Testbenachrichtigung wurde an {n} Geräte gesendet. Sie sollte gleich erscheinen.
-887|Auf dem Gerät gespeichert, wird bei Verbindung gesendet
-888|Schließen
-889|Reihenfolge der Einträge
-890|Gesamt
-891|Gesamt in {cur} zum heutigen Kurs
-892|Als bezahlt markiert
-893|Fertig
-894|Monatsübersicht
-895|Betrag ({cur})
-896|Ungültiger Betrag
-897|Ungültiger Betrag. Unter Freunden kannst du jeweils bis zu 500 Schekel erfassen
-898|Es ist schon eine Weile her. Der Elternteil hat die Anfrage wohl noch nicht gesehen. Du kannst ihm eine Nachricht schicken.
-899|Es wurde noch nichts erfasst.
-900|Ein Update läuft bereits
-901|Auf Version {version} aktualisieren
-902|Aktualisieren
-903|Mehr
-904|Es ist noch niemand sonst in der Familie. Ein Elternteil muss sie hinzufügen.
-905|Noch keine bestätigten Freunde
-906|Noch keine bestätigten Freunde. Füge einen Freund / eine Freundin per E-Mail hinzu.
-907|Noch keine Freunde. Füge einen Freund / eine Freundin per E-Mail hinzu.
-908|Noch keine Sparziele.
-909|Die Liste ist noch leer. Tippe auf eine der Schaltflächen, um zu beginnen.
-910|Noch keine regelmäßigen Einträge.
-911|Noch keine Änderungen im Protokoll.
-912|Noch kein Elternteil hat das Heft geöffnet
-913|Mehr Avatare
-914|Noch nicht
-915|Hat noch keinen Code gewählt
-916|Hat noch keinen Code gewählt
-917|Hat noch keinen Code gewählt
-918|Mit Freunden wurde noch nichts erfasst.
-919|Es wurde noch nichts erfasst.
-920|Es wurde noch keine Kopie gesendet
-921|Seit der Anfrage sind noch keine 24 Stunden vergangen.
-922|Weitere Aktionen
-923|Zuletzt aktualisiert: {when}
-924|Design
-925|Jetzt ist der Elternteil dran: App öffnen, zum Tab „Verwaltung“ gehen und neben deinem Namen auf „Bestätigen“ tippen.
-926|Für {debt} (= {covers} zum heutigen Kurs).
-927|Für {debt}.
-928|Worauf sparst du?
-929|Wofür? (kann übersprungen werden)
-930|Wofür? (optional)
-931|Für: {debt}
-932|Mit wem?
-933|Sehr groß
-934|Die Bestätigung ist abgelaufen. Versuche es erneut.
-935|Details der Berechnung
-936|Ungültige Aktion
-937|Profil
-938|hat ein Sparziel angelegt
-939|hat ein Sparziel angelegt
-940|hat ein Sparziel angelegt
-941|Bildschirmfarben
-942|Neonfarben
-943|Die Anrede ist bereits festgelegt und kann nicht geändert werden
-944|Anrede gespeichert ✅
-945|Anrede
-946|Anrede:
-947|Ton
-948|Haben das Heft angesehen:
-949|Erstelle eine Familienkasse: Alle sehen dasselbe Konto, und die Schulden werden für alle aktualisiert.
-950|Eine Bestätigung per Fingerabdruck oder Gesichtserkennung ist erforderlich
-951|Für den Zugang zu dieser Familie brauchst du den Familiencode.
-952|Die App muss Updates installieren dürfen: Aktiviere in den angezeigten Einstellungen „Aus dieser Quelle zulassen“ und tippe erneut auf „Aktualisieren“
-953|Du musst die Nutzungsbedingungen und die Datenschutzerklärung akzeptieren
-954|Du musst zustimmen, dass deine Eltern dein persönliches Notizbuch sehen
-955|Du musst dich erneut anmelden
-956|Du musst dich erneut mit dem Familiencode anmelden
-957|Das Gerät muss neu verknüpft werden
-958|Du musst dieses Handy einmal verknüpfen.
-959|Das Gerät muss verknüpft werden
-960|Dieses Gerät muss mit einem Elternteil verknüpft werden. Melde dich erneut an und verknüpfe es mit einem Verknüpfungscode von einem anderen Elternteil
-961|Du musst dieses Gerät und diesen Browser einmal verknüpfen.
-962|Zum Gerätewechsel ist eine bestätigte E-Mail nötig
-963|Code festlegen
-964|Code festlegen und anmelden
-965|Anrede festlegen…
-966|Geheimcode festlegen
-967|Ein Code für alle. Wer damit beitritt, kommt als Kind herein. Danach kannst du unter „Familienmitglieder“ auf Teenager oder Elternteil umstellen, bestätigt per Fingerabdruck oder Gesichtserkennung.
-968|Code aus der E-Mail
-969|Der Code aus der E-Mail ist falsch oder abgelaufen.
-970|Der Bestätigungscode ist falsch oder abgelaufen.
-971|Kopplungscode
-972|Beitrittscode zur Kasse von {name}: {code}
-973|Beitrittscode der Familie
-974|Der Beitrittscode der Familie wird nur per Fingerabdruck oder Gesichtserkennung angezeigt.
-975|Der Familiencode hat sich geändert. Bitte deine Eltern um einen neuen Code.
-976|Der Verknüpfungscode
-977|Neuer Code
-978|Neuer Code ({rule})
-979|Code aus der aktuellen E-Mail
-980|Familiencode
-981|Geheimer Code ({rule}; länger = sicherer)
-982|Geheimer Code (für Elternteile Pflicht, {rule})
-983|Geheimcode (optional — ohne Code meldet man sich mit einem Tippen an und kann später einen festlegen)
-984|Ein Geheimcode für alle Kinder ({rule}). Kann leer bleiben
-985|Neuer geheimer Code
-986|Geheimer Code für {name}
-987|Dein eigener geheimer Code (4 Ziffern)
-988|Verknüpfungscode
-989|Der Verknüpfungscode ist nur für Eltern
-990|Verknüpfungscode für {name}
-991|Verknüpfungscode für ein Gerät
-992|Beitrittscodes
-993|Zuerst muss ein geheimer Code für {name} festgelegt werden
-994|{amount} mit {name} verrechnet ✅
-995|Eine Familienkasse kann nur von Personen über 18 eingerichtet werden
-996|Klein
-997|Ich habe erhalten
-998|Ich habe die Differenz erhalten ({amount})
-999|Ich habe Geld erhalten
-1000|Gegenseitige Verrechnung
-1001|Gegenseitige Schulden verrechnen
-1002|Gegenseitige Schulden verrechnen ({amount})
-1003|Der Einladungslink fügt jeden, der ihn öffnet, als Kind hinzu. Teile ihn nur mit deiner Familie.
-1004|Geräteverknüpfung
-1005|Dieses Gerät verknüpfen und anmelden
-1006|Gerät mit einem Elternteil verknüpfen
-1007|Ich habe {terms} und {privacy} gelesen und stimme zu
-1008|Ich habe {terms} und {privacy} gelesen und stimme zu
-1009|Ich habe {terms} und {privacy} gelesen und stimme zu
-1010|Es sind bereits {n} Geräte verknüpft, das ist das Maximum. Um ein weiteres hinzuzufügen, entferne ein Gerät.
-1011|Normal
-1012|Einen Moment, Anmeldung läuft…
-1013|Einen Moment, Abmeldung läuft…
-1014|Möchtest du sie in der Familienkasse zusammenführen?
-1015|Sollen die Schuldner das sehen?
-1016|Vibration
-1017|Erfassen
-1018|Registrierung bei Firebase
-1019|Rückzahlung erfassen
-1020|Erfasst automatisch eine Schuld, wöchentlich oder monatlich, ohne dass du jedes Mal tippen musst.
-1021|Neuer regelmäßiger Eintrag
-1022|Ein offline gespeicherter Eintrag wurde nicht gesendet: {err}
-1023|App neu laden
-1024|Das können nur Eltern tun
-1025|Nur Eltern können ein Ziel für jemand anderen anlegen
-1026|Nur Eltern können die Anrede festlegen
-1027|Nur um sicherzustellen, dass die Person, die die Kasse eröffnet, über 18 ist. Wird niemandem angezeigt.
-1028|Rückzahlung erfasst
-1029|Schuld erfasst
-1030|Rückzahlung erfasst
-1031|Schuld erfasst
+829|Wer wem Geld schuldet
+830|Wer schuldet (der Zahlende)
+831|Wer schuldet mir Geld?
+832|Wer meldet sich an?
+833|Wer was wann geändert hat, in den letzten 6 Monaten.
+834|E-Mail zur Code-Wiederherstellung
+835|E-Mail zur Code-Wiederherstellung (optional)
+836|E-Mail nur für Eltern
+837|Ort und Währung
+838|Jemand
+839|Gerät
+840|Neues Gerät / Gerät wechseln
+841|Gerät existiert nicht
+842|Verbundene Geräte
+843|Geräte, die die Familie gespeichert haben. Eine Karte, die 180 Tage nicht benutzt wird, läuft von selbst ab.
+844|Gerade eben
+845|Wartet auf Bestätigung: {amount}
+846|Wartet auf Bestätigung eines Elternteils
+847|Warten auf Bestätigung eines Elternteils
+848|Ungültiges Benachrichtigungs-Abo
+849|Gib {name} den Code persönlich, nicht per Nachricht. Er gilt 30 Minuten und nur einmal.
+850|Ungültiger Schlüssel
+851|Freundemodus
+852|Freundemodus bestätigt ✅
+853|Der Freundemodus ist nur für Teenager
+854|Freundemodus ausgeschaltet
+855|Freundemodus für {name}
+856|Der Freundemodus wurde von den Eltern noch nicht bestätigt
+857|Der Kasse beitreten
+858|Du trittst der Kasse von {name} bei. Ein Elternteil der Familie muss den Beitritt bestätigen und legt fest, ob du Kind, Teenager oder Elternteil bist.
+859|Aussehen
+860|Etwas ist schiefgelaufen
+861|Etwas ist schiefgelaufen. Versuche es erneut.
+862|Familie
+863|Andere Familie
+864|Weitere Familien
+865|Familie {name}
+866|Hinzugefügt am {date}
+867|Verwaltung
+868|Erneut versuchen
+869|Du hast es zu oft versucht. Versuche es in {wait} erneut.
+870|Suche löschen
+871|Trennen
+872|Meldet sich ohne Code an
+873|Gelöscht
+874|Auf diesem Gerät wurden Daten der vorherigen Version gefunden: {people} Personen und {entries} Einträge. Auf den Server übertragen?
+875|Erneut versuchen
+876|Versuch es noch einmal
+877|Teenager
+878|Teenager
+879|Teenager
+880|Weiblich
+881|Es sieht aus, als befände sich das Gerät in {name}. Wohnt ihr in {name}?
+882|Erfasste Schulden
+883|Noch {left} von {total}
+884|Von dieser Schuld sind noch {left} übrig.
+885|Ein Code wird gesendet, wenn ein geheimer Code geändert oder zurückgesetzt wird, außerdem eine Benachrichtigung, wenn der Code von jemandem aus der Familie gesperrt wird.
+886|An einen Elternteil zur Bestätigung gesendet ⏳
+887|An den Freund / die Freundin zur Bestätigung gesendet ⏳
+888|Wir senden eine Benachrichtigung an dein Handy, wenn eine Schuld eingetragen wird, die dich betrifft, oder wenn etwas auf deine Bestätigung wartet.\nNach „Ja" fragt das Handy einmal nach der Erlaubnis.
+889|Ein Code wurde an deine bestätigte E-Mail gesendet. Nach der Bestätigung ist der Wechsel erst in 24 Stunden möglich; in der Zwischenzeit erhaltet ihr und die anderen Eltern eine Benachrichtigung und könnt abbrechen.
+890|Eine Testbenachrichtigung wurde an {n} Geräte gesendet. Sie sollte gleich erscheinen.
+891|Auf dem Gerät gespeichert, wird bei Verbindung gesendet
+892|Schließen
+893|Reihenfolge der Einträge
+894|Gesamt
+895|Gesamt in {cur} zum heutigen Kurs
+896|Als bezahlt markiert
+897|Fertig
+898|Monatsübersicht
+899|Betrag ({cur})
+900|Ungültiger Betrag
+901|Ungültiger Betrag. Unter Freunden kannst du jeweils bis zu 500 Schekel erfassen
+902|Es ist schon eine Weile her. Der Elternteil hat die Anfrage wohl noch nicht gesehen. Du kannst ihm eine Nachricht schicken.
+903|Es wurde noch nichts erfasst.
+904|Ein Update läuft bereits
+905|Auf Version {version} aktualisieren
+906|Aktualisieren
+907|Mehr
+908|Es ist noch niemand sonst in der Familie. Ein Elternteil muss sie hinzufügen.
+909|Noch keine bestätigten Freunde
+910|Noch keine bestätigten Freunde. Füge einen Freund / eine Freundin per E-Mail hinzu.
+911|Noch keine Freunde. Füge einen Freund / eine Freundin per E-Mail hinzu.
+912|Noch keine Sparziele.
+913|Die Liste ist noch leer. Tippe auf eine der Schaltflächen, um zu beginnen.
+914|Noch keine regelmäßigen Einträge.
+915|Noch keine Änderungen im Protokoll.
+916|Noch kein Elternteil hat das Heft geöffnet
+917|Mehr Avatare
+918|Noch nicht
+919|Hat noch keinen Code gewählt
+920|Hat noch keinen Code gewählt
+921|Hat noch keinen Code gewählt
+922|Mit Freunden wurde noch nichts erfasst.
+923|Es wurde noch nichts erfasst.
+924|Es wurde noch keine Kopie gesendet
+925|Seit der Anfrage sind noch keine 24 Stunden vergangen.
+926|Weitere Aktionen
+927|Zuletzt aktualisiert: {when}
+928|Design
+929|Jetzt ist der Elternteil dran: App öffnen, zum Tab „Verwaltung“ gehen und neben deinem Namen auf „Bestätigen“ tippen.
+930|Für {debt} (= {covers} zum heutigen Kurs).
+931|Für {debt}.
+932|Worauf sparst du?
+933|Wofür? (kann übersprungen werden)
+934|Wofür? (optional)
+935|Für: {debt}
+936|Mit wem?
+937|Sehr groß
+938|Die Bestätigung ist abgelaufen. Versuche es erneut.
+939|Details der Berechnung
+940|Ungültige Aktion
+941|Profil
+942|hat ein Sparziel angelegt
+943|hat ein Sparziel angelegt
+944|hat ein Sparziel angelegt
+945|Bildschirmfarben
+946|Neonfarben
+947|Die Anrede ist bereits festgelegt und kann nicht geändert werden
+948|Anrede gespeichert ✅
+949|Anrede
+950|Anrede:
+951|Ton
+952|Haben das Heft angesehen:
+953|Erstelle eine Familienkasse: Alle sehen dasselbe Konto, und die Schulden werden für alle aktualisiert.
+954|Eine Bestätigung per Fingerabdruck oder Gesichtserkennung ist erforderlich
+955|Für den Zugang zu dieser Familie brauchst du den Familiencode.
+956|Die App muss Updates installieren dürfen: Aktiviere in den angezeigten Einstellungen „Aus dieser Quelle zulassen“ und tippe erneut auf „Aktualisieren“
+957|Du musst die Nutzungsbedingungen und die Datenschutzerklärung akzeptieren
+958|Du musst zustimmen, dass deine Eltern dein persönliches Notizbuch sehen
+959|Du musst dich erneut anmelden
+960|Du musst dich erneut mit dem Familiencode anmelden
+961|Das Gerät muss neu verknüpft werden
+962|Du musst dieses Handy einmal verknüpfen.
+963|Das Gerät muss verknüpft werden
+964|Dieses Gerät muss mit einem Elternteil verknüpft werden. Melde dich erneut an und verknüpfe es mit einem Verknüpfungscode von einem anderen Elternteil
+965|Du musst dieses Gerät und diesen Browser einmal verknüpfen.
+966|Zum Gerätewechsel ist eine bestätigte E-Mail nötig
+967|Code festlegen
+968|Code festlegen und anmelden
+969|Anrede festlegen…
+970|Geheimcode festlegen
+971|Ein Code für alle. Wer damit beitritt, kommt als Kind herein. Danach kannst du unter „Familienmitglieder“ auf Teenager oder Elternteil umstellen, bestätigt per Fingerabdruck oder Gesichtserkennung.
+972|Code aus der E-Mail
+973|Der Code aus der E-Mail ist falsch oder abgelaufen.
+974|Der Bestätigungscode ist falsch oder abgelaufen.
+975|Kopplungscode
+976|Beitrittscode zur Kasse von {name}: {code}
+977|Beitrittscode der Familie
+978|Der Beitrittscode der Familie wird nur per Fingerabdruck oder Gesichtserkennung angezeigt.
+979|Der Familiencode hat sich geändert. Bitte deine Eltern um einen neuen Code.
+980|Der Verknüpfungscode
+981|Neuer Code
+982|Neuer Code ({rule})
+983|Code aus der aktuellen E-Mail
+984|Familiencode
+985|Geheimer Code ({rule}; länger = sicherer)
+986|Geheimer Code (für Elternteile Pflicht, {rule})
+987|Geheimcode (optional — ohne Code meldet man sich mit einem Tippen an und kann später einen festlegen)
+988|Ein Geheimcode für alle Kinder ({rule}). Kann leer bleiben
+989|Neuer geheimer Code
+990|Geheimer Code für {name}
+991|Dein eigener geheimer Code (4 Ziffern)
+992|Verknüpfungscode
+993|Der Verknüpfungscode ist nur für Eltern
+994|Verknüpfungscode für {name}
+995|Verknüpfungscode für ein Gerät
+996|Beitrittscodes
+997|Zuerst muss ein geheimer Code für {name} festgelegt werden
+998|{amount} mit {name} verrechnet ✅
+999|Eine Familienkasse kann nur von Personen über 18 eingerichtet werden
+1000|Klein
+1001|Ich habe erhalten
+1002|Ich habe die Differenz erhalten ({amount})
+1003|Ich habe Geld erhalten
+1004|Gegenseitige Verrechnung
+1005|Gegenseitige Schulden verrechnen
+1006|Gegenseitige Schulden verrechnen ({amount})
+1007|Der Einladungslink fügt jeden, der ihn öffnet, als Kind hinzu. Teile ihn nur mit deiner Familie.
+1008|Geräteverknüpfung
+1009|Dieses Gerät verknüpfen und anmelden
+1010|Gerät mit einem Elternteil verknüpfen
+1011|Ich habe {terms} und {privacy} gelesen und stimme zu
+1012|Ich habe {terms} und {privacy} gelesen und stimme zu
+1013|Ich habe {terms} und {privacy} gelesen und stimme zu
+1014|Es sind bereits {n} Geräte verknüpft, das ist das Maximum. Um ein weiteres hinzuzufügen, entferne ein Gerät.
+1015|Normal
+1016|Einen Moment, Anmeldung läuft…
+1017|Einen Moment, Abmeldung läuft…
+1018|Möchtest du sie in der Familienkasse zusammenführen?
+1019|Sollen die Schuldner das sehen?
+1020|Vibration
+1021|Erfassen
+1022|Registrierung bei Firebase
+1023|Rückzahlung erfassen
+1024|Erfasst automatisch eine Schuld, wöchentlich oder monatlich, ohne dass du jedes Mal tippen musst.
+1025|Neuer regelmäßiger Eintrag
+1026|Ein offline gespeicherter Eintrag wurde nicht gesendet: {err}
+1027|App neu laden
+1028|Das können nur Eltern tun
+1029|Nur Eltern können ein Ziel für jemand anderen anlegen
+1030|Nur Eltern können die Anrede festlegen
+1031|Nur um sicherzustellen, dass die Person, die die Kasse eröffnet, über 18 ist. Wird niemandem angezeigt.
 1032|Rückzahlung erfasst
 1033|Schuld erfasst
-1034|Trag deine eigene Schuld ins Heft ein
-1035|Saubere Woche
-1036|Eine ganze Woche ohne offene Schulden
-1037|Vollständig bezahlt ✅
-1038|Bezahlt ({n})
-1039|Alles wird gespeichert…
-1040|Sperre aufheben
-1041|Ich habe bezahlt
-1042|Ich habe die Differenz bezahlt ({amount})
-1043|Zuletzt verwendet: {date}
-1044|Familie umbenannt
-1045|Land und Währung geändert
-1046|Namen geändert
-1047|Rolle geändert
+1034|Rückzahlung erfasst
+1035|Schuld erfasst
+1036|Rückzahlung erfasst
+1037|Schuld erfasst
+1038|Trag deine eigene Schuld ins Heft ein
+1039|Saubere Woche
+1040|Eine ganze Woche ohne offene Schulden
+1041|Vollständig bezahlt ✅
+1042|Bezahlt ({n})
+1043|Alles wird gespeichert…
+1044|Sperre aufheben
+1045|Ich habe bezahlt
+1046|Ich habe die Differenz bezahlt ({amount})
+1047|Zuletzt verwendet: {date}
 1048|Familie umbenannt
 1049|Land und Währung geändert
 1050|Namen geändert
 1051|Rolle geändert
-1052|Ändern
-1053|Das Ändern der Währung ändert nur das Symbol. Die Beträge selbst werden nicht umgerechnet.
-1054|Geheimen Code ändern
-1055|Familie umbenennen
-1056|Familie umbenannt
-1057|Land und Währung geändert
-1058|Namen geändert
-1059|Rolle geändert
-1060|Teilen
-1061|Ich habe den Code vergessen
-1062|Schritt: {stage}… ({n} Sekunden)
-1063|Wir haben einen Code an {email} gesendet. Gib ihn und die neue Adresse ein. Sie ersetzt die aktuelle erst nach der Bestätigung.
-1064|Wir haben einen 6-stelligen Code an {email} gesendet. Er ist 10 Minuten gültig.
-1065|Meine
-1066|Anfrage senden
-1067|Bestätigungscode senden
-1068|Code per E-Mail senden
-1069|Code an die aktuelle E-Mail senden
-1070|Name
-1071|Der Name des Ziels darf höchstens 40 Zeichen lang sein
-1072|Name der Familie
-1073|Der Name der Familie stimmt nicht überein
-1074|Der Name der Familie ist ungültig
-1075|Ungültiger Name
-1076|Bekannte Namen
-1077|Speichern
-1078|Speichern auf dem Server
-1079|eine Stunde
-1080|{"one": "{n} Stunde", "other": "{n} Stunden"}
-1081|Die Wechselkurse sind noch nicht geladen. Versuche es gleich noch einmal.
-1082|2 Stunden
-1083|Sprache
-1084|Ungültiges Datum
-1085|Geburtsdatum
-1086|Ungültiges Geburtsdatum
-1087|Rückmeldung
-1088|die Nutzungsbedingungen
-1089|Nutzungsbedingungen
-1090|Rolle
-1091|Rolle:
-1092|Hauptmenü
-1093|Zahlung auf eine Schuld in anderer Währung
-1094|🆘 Das alte Gerät ist verloren oder kaputt
+1052|Familie umbenannt
+1053|Land und Währung geändert
+1054|Namen geändert
+1055|Rolle geändert
+1056|Ändern
+1057|Das Ändern der Währung ändert nur das Symbol. Die Beträge selbst werden nicht umgerechnet.
+1058|Geheimen Code ändern
+1059|Familie umbenennen
+1060|Familie umbenannt
+1061|Land und Währung geändert
+1062|Namen geändert
+1063|Rolle geändert
+1064|Teilen
+1065|Ich habe den Code vergessen
+1066|Schritt: {stage}… ({n} Sekunden)
+1067|Wir haben einen Code an {email} gesendet. Gib ihn und die neue Adresse ein. Sie ersetzt die aktuelle erst nach der Bestätigung.
+1068|Wir haben einen 6-stelligen Code an {email} gesendet. Er ist 10 Minuten gültig.
+1069|Meine
+1070|Anfrage senden
+1071|Bestätigungscode senden
+1072|Code per E-Mail senden
+1073|Code an die aktuelle E-Mail senden
+1074|Name
+1075|Der Name des Ziels darf höchstens 40 Zeichen lang sein
+1076|Name der Familie
+1077|Der Name der Familie stimmt nicht überein
+1078|Der Name der Familie ist ungültig
+1079|Ungültiger Name
+1080|Bekannte Namen
+1081|Speichern
+1082|Speichern auf dem Server
+1083|eine Stunde
+1084|{"one": "{n} Stunde", "other": "{n} Stunden"}
+1085|Die Wechselkurse sind noch nicht geladen. Versuche es gleich noch einmal.
+1086|2 Stunden
+1087|Sprache
+1088|Ungültiges Datum
+1089|Geburtsdatum
+1090|Ungültiges Geburtsdatum
+1091|Rückmeldung
+1092|die Nutzungsbedingungen
+1093|Nutzungsbedingungen
+1094|Rolle
+1095|Rolle:
+1096|Hauptmenü
+1097|Zahlung auf eine Schuld in anderer Währung
+1098|🆘 Das alte Gerät ist verloren oder kaputt

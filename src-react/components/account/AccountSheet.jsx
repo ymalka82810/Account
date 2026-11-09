@@ -12,7 +12,8 @@ import { toast, errMsg } from '../../lib/helpers.js';
 import { dropSession, goToFamily, otherFamilies, addAnotherFamily, startNewFamily } from '../../state/auth.js';
 import { getMemberships } from '../../lib/memberships.js';
 import { getCards, upsertCard } from '../../lib/cards.js';
-import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice, testPush } from '../../lib/push.js';
+import { useEnablePush } from './useEnablePush.js';
+import { pushSupported, isPushOn, disablePush, releasePushDevice, testPush } from '../../lib/push.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import { ChangePinSheet, ChangePinEmailSheet, EmailSheet, AvatarSheet } from './AccountSheets.jsx';
@@ -71,6 +72,7 @@ export function AccountSheet() {
   const [pushOn, setPushOn] = useState(null);
   const [pushErr, setPushErr] = useState('');
   const [pushProgress, setPushProgress] = useState('');
+  const enablePush = useEnablePush();
   useSheetTitle(t('החשבון שלי'));
   // טעינה מוקדמת: רשימת המכשירים כבר מוכנה כשנפתח "המכשירים שלי", כך שהחלון נפתח בגובהו המלא ולא קופץ אחרי הטעינה.
   useQuery('biometric:deviceStatus', me.role === 'parent' ? { token } : 'skip');
@@ -122,7 +124,7 @@ export function AccountSheet() {
         <h3 className="acct-h" id="acct-h-feel">{t('תחושה')}</h3>
         {pushSupported() && pushOn !== null && (
           <AsyncButton className="acct-row" onClick={async () => {
-            if (pushOn) await disablePush(); else { setPushErr(''); setPushErr(await enablePush(setPushProgress)); }
+            if (pushOn) await disablePush(); else { setPushErr(''); setPushErr((await enablePush(setPushProgress)) || ''); }
             setPushOn(await isPushOn());
           }}><span>{withIcons(pushOn ? t('🔕 כיבוי התראות') : t('🔔 הפעלת התראות'))}</span></AsyncButton>
         )}
