@@ -63,6 +63,12 @@ test('החלקה ימינה ושמאלה מחליפה לשונית, וגלילה
   expect(await indicatorMovesMidSwipe(page, 60)).toBeGreaterThan(5);
   await expect(active(page)).toHaveAttribute('data-tab', 'family');
 
+  // להורה הסדר על המסך (מימין לשמאל): משפחה, בית, היסטוריה, ניהול
+  await swipe(page, 200);
+  await expect(active(page)).toHaveAttribute('data-tab', 'home');
+  await expectIndicatorUnderActive(page);
+  await swipe(page, 200);
+  await expect(active(page)).toHaveAttribute('data-tab', 'history');
   await swipe(page, 200);
   await expect(active(page)).toHaveAttribute('data-tab', 'manage');
   await expectIndicatorUnderActive(page);
@@ -72,9 +78,8 @@ test('החלקה ימינה ושמאלה מחליפה לשונית, וגלילה
   await expect(active(page)).toHaveAttribute('data-tab', 'manage');
 
   await swipe(page, -200);
-  await expect(active(page)).toHaveAttribute('data-tab', 'family');
-  await swipe(page, -200);
   await expect(active(page)).toHaveAttribute('data-tab', 'history');
+  await expectIndicatorUnderActive(page);
 
   // תנועה אנכית בעיקר - לא מחליפה
   await swipe(page, 40, 220);

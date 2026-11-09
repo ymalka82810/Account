@@ -953,7 +953,6 @@ body[data-theme="parent"] .sheet { border: 1px solid var(--line); border-bottom:
 body[data-theme="parent"] .tile-section > summary::before { background: rgba(255, 255, 255, .06); }
 body[data-theme="parent"] .debt-line { background: rgba(255, 255, 255, .04); }
 body[data-theme="parent"] .who-am-i .avatar-sm { font-size: 1.5rem; }
-body[data-theme="parent"] .tab[data-tab="family"] { order: -1; }
 body[data-theme="parent"] .tab-indicator { background: var(--coin); }
 body[data-theme="parent"] main h2 { font-size: .85rem; font-weight: 700; color: var(--ink-soft); letter-spacing: .06em; margin: 28px 0 10px; }
 body[data-theme="parent"] .card, body[data-theme="parent"] .fam-row,

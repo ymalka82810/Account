@@ -468,7 +468,10 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
       + fdata.entries.filter((e) => isPending(e) && e.createdBy !== me).length
     : 0;
 
-  const tabs = ['home', ...(isTeen ? ['friends'] : []), 'history', ...(isParent ? ['family', 'manage'] : [])];
+  // הסדר כאן הוא הסדר על המסך (ההחלקה והפס הולכים לפיו). להורה "משפחה" ראשונה.
+  const tabs = isParent
+    ? ['family', 'home', ...(isTeen ? ['friends'] : []), 'history', 'manage']
+    : ['home', ...(isTeen ? ['friends'] : []), 'history'];
   const myPending = isParent ? 0 : data.entries.filter((e) => isPending(e) && (e.from === me || e.to === me)).length;
   const badge = { home: myPending, family: isParent ? parentCount : 0, friends: friendsCount };
 
