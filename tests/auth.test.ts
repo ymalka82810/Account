@@ -251,6 +251,22 @@ describe("הקמת משפחה והצטרפות", () => {
     expect(await login(noa._id, "5555", "new")).toMatchObject({ ok: true });
   });
 
+  it("מצב בקשת ההצטרפות נראה למצטרף/ת בכל שלב: ממתינה, אושרה, נדחתה, ולא קיימת", async () => {
+    const r1: any = await t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "5555", device: "new", shareNotebook: true });
+    expect(typeof r1.requestId).toBe("string");
+    expect(await t.query(api.auth.joinStatus, { requestId: r1.requestId })).toMatchObject({ state: "pending", parents: 1, notified: false });
+    const req = (await t.run((ctx) => ctx.db.query("joinRequests").collect()))[0];
+    await t.mutation(api.auth.approveJoin, { token: A.tokens["אבא"], requestId: req._id });
+    expect(await t.query(api.auth.joinStatus, { requestId: r1.requestId })).toMatchObject({ state: "approved", name: "נועה" });
+
+    const r2: any = await t.mutation(api.auth.join, { code: CODE_A, name: "גל", pin: "5555", device: "new2", shareNotebook: true });
+    const req2 = (await t.run((ctx) => ctx.db.query("joinRequests").collect()))[0];
+    await t.mutation(api.auth.rejectJoin, { token: A.tokens["אבא"], requestId: req2._id });
+    expect(await t.query(api.auth.joinStatus, { requestId: r2.requestId })).toMatchObject({ state: "rejected", name: "גל" });
+
+    expect(await t.query(api.auth.joinStatus, { requestId: "לא-מזהה" })).toEqual({ state: "gone" });
+  });
+
   it("בלי אישור הילד/ה שההורים יראו את הפנקס האישי אי אפשר להצטרף", async () => {
     await expect(t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "5555" })).rejects.toThrow("הפנקס האישי");
     await expect(t.mutation(api.auth.join, { code: CODE_A, name: "נועה", pin: "5555", shareNotebook: false })).rejects.toThrow("הפנקס האישי");

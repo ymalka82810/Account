@@ -99,6 +99,19 @@ export default defineSchema({
     shareNotebook: v.optional(v.boolean()),
   }).index("by_family", ["familyId"]),
 
+  // תוצאת בקשת הצטרפות אחרי שהורה טיפל בה (אישור או דחייה), כדי שהמצטרף/ת יראו מה קרה גם אחרי שהבקשה עצמה נמחקה.
+  // requestId = המזהה של הבקשה שנמחקה (טקסט). נמחק אחרי שבוע (maintenance:cleanup) או עם מחיקת הקופה.
+  joinOutcomes: defineTable({
+    requestId: v.string(),
+    familyId: v.id("families"),
+    name: v.string(),
+    status: v.union(v.literal("approved"), v.literal("rejected")),
+    at: v.number(),
+  })
+    .index("by_request", ["requestId"])
+    .index("by_family", ["familyId"])
+    .index("by_at", ["at"]),
+
   // עותק של הפנקס האישי של ילד/ה שאישר/ה שההורים יראו אותו. הפנקס עצמו נשאר במכשיר,
   // והעותק מתעדכן ממנו בכל שינוי. הורים קוראים בלבד. נמחק כשהילד/ה יוצא/ת מהמשפחה או משנה תפקיד.
   notebooks: defineTable({

@@ -158,13 +158,37 @@ export const join = mutation({
     await noteHit(ctx, famKey, JOIN_WINDOW_MS);
     // לא נכנסים מיד: הבקשה ממתינה עד שהורה מאשר (auth:approveJoin).
     const pinSalt = randomHex(16);
-    await ctx.db.insert("joinRequests", {
+    const requestId = await ctx.db.insert("joinRequests", {
       familyId, name: clean, avatar: avatar?.slice(0, 8), device: cleanDeviceId(device) || undefined, pinSalt, pinHash: await hashPin(pin, pinSalt), createdAt: Date.now(),
       shareNotebook: true,
     });
     // התראה להורים, כדי שלא יצטרכו לגלות את הבקשה בעצמם (רק למי שיש לו מכשיר רשום להתראות).
     await notify(ctx, members.filter((p) => p.role === "parent").map((p) => p._id), "בקשת הצטרפות 👋", `${clean} מבקש/ת להצטרף לקופה. צריך את האישור שלך.`);
-    return { ok: true as const, pending: true as const };
+    return { ok: true as const, pending: true as const, requestId: requestId as string };
+  },
+});
+
+// מצב בקשת ההצטרפות, לצפייה חיה של המצטרף/ת (אין סשן עד האישור). המזהה הוא סוד שרק המכשיר ששלח את הבקשה מכיר.
+// ממתינה: מחזיר כמה הורים יש ואם לאחד מהם יש מכשיר שמקבל התראות. אושרה/נדחתה: מהתוצאה שנשמרה. אחרת: gone.
+export const joinStatus = query({
+  args: { requestId: v.string() },
+  handler: async (ctx, { requestId }) => {
+    const id = ctx.db.normalizeId("joinRequests", requestId);
+    const req = id ? await ctx.db.get(id) : null;
+    if (req) {
+      const parents = (await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", req.familyId)).collect()).filter((p) => p.role === "parent");
+      const pushOn = !!process.env.FCM_SERVICE_ACCOUNT || (!!process.env.VAPID_PRIVATE_KEY && !!process.env.VAPID_PUBLIC_KEY);
+      let notified = false;
+      if (pushOn) {
+        for (const p of parents) {
+          if (await ctx.db.query("pushSubs").withIndex("by_person", (q) => q.eq("personId", p._id)).first()) { notified = true; break; }
+        }
+      }
+      return { state: "pending" as const, createdAt: req.createdAt, parents: parents.length, notified };
+    }
+    const out = await ctx.db.query("joinOutcomes").withIndex("by_request", (q) => q.eq("requestId", requestId)).first();
+    if (out) return { state: out.status, name: out.name, at: out.at };
+    return { state: "gone" as const };
   },
 });
 
@@ -187,6 +211,7 @@ export const approveJoin = mutation({
     const trustKey = await trustKeyOf(id, r.device);
     await ctx.db.patch(id, { pinSalt: r.pinSalt, pinHash: r.pinHash, trustedDevices: trustKey ? [trustKey] : [] });
     await ctx.db.delete(requestId);
+    await ctx.db.insert("joinOutcomes", { requestId, familyId: r.familyId, name: r.name, status: "approved", at: Date.now() });
     await logActivity(ctx, me, "join_approved", { subject: r.name });
   },
 });
@@ -198,6 +223,7 @@ export const rejectJoin = mutation({
     const r = await ctx.db.get(requestId);
     if (!r || r.familyId !== me.familyId) return;
     await ctx.db.delete(requestId);
+    await ctx.db.insert("joinOutcomes", { requestId, familyId: r.familyId, name: r.name, status: "rejected", at: Date.now() });
     await logActivity(ctx, me, "join_rejected", { subject: r.name });
   },
 });

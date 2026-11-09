@@ -5,6 +5,8 @@ import { ACTIVITY_KEEP_MS } from "./activity";
 const BATCH = 500;
 // כל חלונות ההגבלה קצרים מזה, אז רשומה ישנה יותר מיממה כבר לא משפיעה על כלום.
 const THROTTLE_KEEP_MS = 24 * 60 * 60 * 1000;
+// תוצאת בקשת הצטרפות (אושרה/נדחתה) נשמרת שבוע, כדי שמי שביקש/ה יראה מה קרה גם אם חזר/ה אחרי כמה ימים.
+const JOIN_OUTCOME_KEEP_MS = 7 * 24 * 60 * 60 * 1000;
 
 // מחיקה חד-פעמית של קודים שנשמרו בעבר בטקסט גלוי (pinPlain). להרצה ידנית:
 // npx convex run maintenance:clearPinPlain. אחרי שהחזירה cleared=0 אפשר להסיר את השדה מה-schema.
@@ -60,7 +62,13 @@ export const cleanup = internalMutation({
       .take(BATCH);
     for (const a of oldActivity) await ctx.db.delete(a._id);
 
-    if (oldActivity.length === BATCH || sessions.length === BATCH || throttles.length === BATCH || codes.length === BATCH || passes.length === BATCH) {
+    const oldOutcomes = await ctx.db
+      .query("joinOutcomes")
+      .withIndex("by_at", (q) => q.lt("at", now - JOIN_OUTCOME_KEEP_MS))
+      .take(BATCH);
+    for (const o of oldOutcomes) await ctx.db.delete(o._id);
+
+    if (oldActivity.length === BATCH || sessions.length === BATCH || throttles.length === BATCH || codes.length === BATCH || passes.length === BATCH || oldOutcomes.length === BATCH) {
       await ctx.scheduler.runAfter(0, internal.maintenance.cleanup, {});
     }
   },

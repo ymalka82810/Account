@@ -2,11 +2,12 @@ import Arrow from '../shared/Arrow.jsx';
 import { useRef, useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { state } from '../../state/state.js';
-import { goView, joinFamily, openNotebook } from '../../state/auth.js';
+import { goView, joinFamily } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
-import { withIcons } from '../shared/UiIcon.jsx';
 import { pinOk } from '../../lib/pin.js';
 import { PasswordInput } from '../shared/fields.jsx';
+import JoinWait from './JoinWait.jsx';
+import { getJoinPending } from '../../lib/joinPending.js';
 
 export default function Join({ current }) {
   const fam = state.fam;
@@ -14,9 +15,8 @@ export default function Join({ current }) {
   const [avatar, setAvatar] = useState(() => randomAvatar());
   const [error, setError] = useState('');
   const [busy, run] = useBusy();
-  const [sent, setSent] = useState(false);
+  const [pending, setPending] = useState(getJoinPending); // בקשה פתוחה שנשמרה במכשיר (גם אחרי רענון)
   const [shareNb, setShareNb] = useState(false);
-  const [sentName, setSentName] = useState('');
   const [terms, setTerms] = useState(false);
   const [bad, setBad] = useState(''); // השדה השגוי הראשון: name | pin | share | terms
   const formRef = useRef(null);
@@ -40,7 +40,7 @@ export default function Join({ current }) {
     if (!terms) return fail(t('צריך לאשר את תנאי השימוש ומדיניות הפרטיות'), 'terms');
     run(async () => {
       const err = await joinFamily({ ...v, avatar });
-      if (err && err.pending) { setSentName(v.name); setSent(true); }
+      if (err && err.pending) setPending(getJoinPending());
       else if (err) setError(err);
       setV({ name: '', pin: '' });
     });
@@ -48,21 +48,13 @@ export default function Join({ current }) {
   // הודעה מוכנה להורה בוואטסאפ, כמו תזכורת החוב (WhatsAppRemind): איש הקשר נבחר שם, ושום מספר לא נשמר.
   // הקישור הוא לאפליקציה בלבד, בלי קוד המשפחה: ההורה כבר מכיר אותו.
   const askParent = () => {
-    const text = t('היי, {name} ביקש/ה להצטרף לקופה המשפחתית. אפשר להיכנס ולאשר: {url}', { name: sentName, url: location.origin + location.pathname });
+    const text = t('היי, {name} ביקש/ה להצטרף לקופה המשפחתית. אפשר להיכנס ולאשר: {url}', { name: pending ? pending.name : '', url: location.origin + location.pathname });
     window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
   };
-  if (sent) {
+  if (pending) {
     return (
       <In screen="join" current={current}>
-        <div className="card-narrow">
-          <div className="big-emoji" aria-hidden="true">⏳</div>
-          <h1>{t('הבקשה נשלחה')}</h1>
-          <p className="hint">{fam ? t('ממתינים לאישור הורה ב{name}. אחרי שהורה יאשר, בוחרים את השם שלך במסך הכניסה ומקלידים את הקוד הסודי שבחרת.', { name: fam.name }) : t('ממתינים לאישור הורה. אחרי שהורה יאשר, בוחרים את השם שלך במסך הכניסה ומקלידים את הקוד הסודי שבחרת.')}</p>
-          <button className="primary" type="button" onClick={askParent}>{t('💬 שלחו להורה בוואטסאפ')}</button>
-          <p className="hint">{t('בינתיים אפשר לרשום בפנקס האישי, שנשמר במכשיר שלך.')}</p>
-          <button className="ghost" type="button" onClick={openNotebook}>{withIcons(t('📒 בינתיים, לפנקס האישי'))}</button>
-          <button className="ghost linkish" type="button" onClick={() => goView('welcome')}>{t('הבנתי')}</button>
-        </div>
+        <JoinWait pending={pending} askParent={askParent} onNew={() => setPending(null)} />
       </In>
     );
   }

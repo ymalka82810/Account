@@ -5,6 +5,7 @@ import { DEMO_TOKEN } from '../lib/demo.js';
 import { PARENT_PIN_MAX } from '../lib/pin.js';
 import { BioError, bioLoginProof, bioRegister, bioSupported } from '../lib/biometric.js';
 import { t } from '../i18n/index.js';
+import { setJoinPending } from '../lib/joinPending.js';
 import { forgetMembershipByToken, getMemberships } from '../lib/memberships.js';
 import { upsertCard, removeCard, getCards, savedFamilies } from '../lib/cards.js';
 
@@ -180,7 +181,10 @@ export async function joinFamily({ name, avatar, pin, gender }) {
       return res.reason === 'throttled' ? t('יותר מדי ניסיונות. נסו שוב עוד דקה.') : t('הקוד כבר לא תקף. בקשו קוד חדש מההורים.');
     }
     // הבקשה ממתינה לאישור הורה. אין סשן עד שהורה מאשר, ואז נכנסים דרך מסך הבחירה עם הקוד שנבחר.
-    if (res.pending) return { pending: true };
+    if (res.pending) {
+      setJoinPending(res.requestId, name);
+      return { pending: true };
+    }
     state.view = 'welcome';
     setToken(/** @type {any} */ (res).token); // join מחזיר היום רק pending, לא טוקן
     return '';

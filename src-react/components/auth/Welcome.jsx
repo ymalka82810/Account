@@ -9,6 +9,8 @@ import { useSheet } from '../shared/Sheet.jsx';
 import { useLang } from '../../i18n/useLang.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 import { withIcons } from '../shared/UiIcon.jsx';
+import { JoinPendingChip } from './JoinWait.jsx';
+import { getJoinPending } from '../../lib/joinPending.js';
 
 // קוד בכתובת (?code=...) או כרטיס/טוקן שמורים במכשיר: מי שמגיע עם קוד לא צריך לחפש איפה מקלידים אותו.
 const urlCode = () => { try { return new URLSearchParams(location.search).get('code') || ''; } catch (e) { return ''; } };
@@ -18,6 +20,7 @@ export default function Welcome({ current }) {
   const [invite] = useState(urlCode);
   const [code, setCode] = useState(() => prettyCode(invite));
   const [open] = useState(() => !!invite || hasSavedCode());
+  const joinPending = getJoinPending();
   // הקוד הוא סוד הצטרפות: אחרי הקריאה מוחקים אותו מהכתובת (היסטוריה, referrer).
   useEffect(() => {
     if (invite) history.replaceState(null, '', location.pathname + location.hash);
@@ -46,6 +49,7 @@ export default function Welcome({ current }) {
             <button className="ghost" type="button" onClick={startDemo}>{t('👀 דמו של 10 שניות')}</button>
           </div>
         )}
+        {joinPending && <JoinPendingChip pending={joinPending} />}
         <details className="family-code" open={open || undefined}>
           <summary>{t('יש לי קוד משפחה')}</summary>
           <p className="hint">{t('יש לכם קוד משפחה? כתבו אותו כאן. בקשו מההורים את קוד ההצטרפות של המשפחה.')}</p>
