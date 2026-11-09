@@ -9,6 +9,7 @@ export const randomAvatar = (options = AVATARS) => options[Math.floor(Math.rando
 // compact=true: מציג 2 שורות, כל אחת נגללת לצדדים בפני עצמה ומכילה עד 20 דמויות (בסדר קבוע),
 // ומתחתיהן כפתור "עוד" שפותח את הרשימה המלאה באריח (sheet) נפרד; הבחירה שם נסגרת
 // וחוזרת ל-onChange הרגיל, בלי לשמור כלום בשרת (מתאים לטופס יצירה, לא רק לעריכת דמות קיימת).
+// הרשימה המלאה (לא compact): כל הדמויות ב-6 שורות, כבלוק אחד שנגלל לצדדים (כל השורות יחד).
 const ROWS = 2;
 const MAX_PER_ROW = 20;
 
@@ -20,7 +21,7 @@ const Chevron = ({ dir }) => (
 
 // שורה נגללת בלי פס גלילה: משני הצדדים הצללה, ועליה חץ לכיוון שאפשר להמשיך לגלול אליו.
 // החצים פיזיים (שמאל/ימין) ולא לוגיים, והחישוב מתאים גם ל-RTL (שם scrollLeft שלילי).
-function ScrollRow({ children }) {
+function ScrollRow({ children, className = '' }) {
   const ref = useRef(null);
   const [edge, setEdge] = useState({ left: false, right: false });
 
@@ -50,7 +51,7 @@ function ScrollRow({ children }) {
 
   return (
     <div className="avatars-row-wrap">
-      <div className="avatars-row" ref={ref}>{children}</div>
+      <div className={'avatars-row' + (className ? ' ' + className : '')} ref={ref}>{children}</div>
       <div className={'row-edge left' + (edge.left ? ' show' : '')} aria-hidden={!edge.left}>
         <button type="button" tabIndex={edge.left ? 0 : -1} aria-label={t('גלול שמאלה')} onClick={() => go(-1)}><Chevron dir="left" /></button>
       </div>
@@ -86,7 +87,7 @@ export default function AvatarPicker({ value, onChange, options = AVATARS, taken
       aria-pressed={a === value} onClick={() => onChange(a)}><Avatar value={a} className="av-face" /></button>
   );
 
-  if (!compact) return <div className="avatars">{shown.map(btn)}</div>;
+  if (!compact) return <div className="avatars-full" ref={box}><ScrollRow className="avatars-grid">{shown.map(btn)}</ScrollRow></div>;
 
   // הסדר קבוע לגמרי: הדמויות לא זזות ולא מתחלפות בין שורות בעת בחירה.
   // רק אם הדמות הנבחרת לא נכנסת ב-2 השורות (למשל הגרלה ראשונית), היא תופסת את המקום האחרון.
