@@ -583,11 +583,11 @@ html[dir="rtl"] .person-card[open]:not(.closing) > summary.person-head .person-m
 
 
 /* ריבועי בחירת אדם */
-.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px; width: 100%; max-width: 520px; margin-top: 14px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 92px), 1fr)); gap: 12px; width: 100%; max-width: 520px; margin-top: 14px; }
 .tile {
   font: inherit; color: var(--ink); background: var(--card);
   border: 2px solid var(--line); border-radius: 20px; padding: 16px 8px;
-  display: grid; gap: 6px; justify-items: center; cursor: pointer; min-height: 120px;
+  display: grid; gap: 6px; justify-items: center; cursor: pointer; min-height: 120px; min-width: 0;
 }
 .tile:active { transform: scale(.97); }
 .tile:hover { border-color: var(--coin-deep); }
@@ -799,7 +799,7 @@ button.small { min-height: var(--tap); }
 .sheet-bg-reveal { opacity: 0; animation: sheet-bg-fade .45s var(--ease-soft) forwards; }
 @keyframes sheet-bg-fade { to { opacity: 1; } }
 .sheet {
-  position: relative; width: 100%; max-width: 560px; max-height: 94vh; max-height: 94dvh; overflow-y: auto;
+  position: relative; width: 100%; max-width: 560px; max-height: 94vh; max-height: 94dvh; overflow-y: auto; overflow-x: hidden;
   background: var(--bg); border-radius: 24px 24px 0 0;
   padding: 16px 18px calc(20px + env(safe-area-inset-bottom, 0));
   box-shadow: 0 -8px 30px rgba(0, 0, 0, .3);
