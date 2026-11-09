@@ -98,6 +98,8 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible), [role="button"]:f
 main { max-width: 640px; margin: 0 auto; padding: 16px; }
 .panel { display: none; }
 .panel.active { display: block; }
+/* בזמן החלקה בין לשוניות (useTabSwipe) הלשונית זזה הצידה - בלי פס גלילה אופקי לכל הדף */
+main.swiping { overflow-x: clip; }
 h2 { font-size: 1.1rem; margin: 22px 0 10px; }
 
 /* בני המשפחה: שורה קטנה לכל אדם, ודף אישי בחלון תחתון */

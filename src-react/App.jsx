@@ -20,6 +20,7 @@ import { EntryFlow } from './components/entries/EntryFlow.jsx';
 import { AccountSheet } from './components/account/AccountSheet.jsx';
 import Auth from './components/auth/Auth.jsx';
 import Home from './components/home/Home.jsx';
+import { useTabSwipe } from './lib/useTabSwipe.js';
 import FriendsTab from './components/friends/FriendsTab.jsx';
 import FamilyTab from './components/family/FamilyTab.jsx';
 import ManageTab from './components/manage/ManageTab.jsx';
@@ -465,6 +466,8 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
   const myPending = isParent ? 0 : data.entries.filter((e) => isPending(e) && (e.from === me || e.to === me)).length;
   const badge = { home: myPending, family: isParent ? parentCount : 0, friends: friendsCount };
 
+  const swipe = useTabSwipe(tabs, tab, setTab);
+
   const sheet = useSheet();
   const gearRef = useRef(null);
   const tabsRef = useRef(null);
@@ -532,7 +535,7 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
         ))}
       </nav>
 
-      <main>
+      <main {...swipe}>
         <section id="tab-home" role="tabpanel" aria-labelledby="tabbtn-home" className={'panel' + (tab === 'home' ? ' active' : '')}>
           <ErrorBoundary><CrashProbe tab="home" /><Home data={data} token={token} /></ErrorBoundary>
         </section>
