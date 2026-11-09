@@ -66,6 +66,20 @@ jobs:
           # רטט כשסכום משתנה (navigator.vibrate ב-WebView דורש את ההרשאה)
           sed -i 's#<application#<uses-permission android:name="android.permission.VIBRATE" />\n    <application#' $MANIFEST
           grep -q android.permission.VIBRATE $MANIFEST
+          # Android App Links: קישור ymalka82810.github.io/Account/... נפתח באפליקציה (assetlinks.json בריפו ymalka82810.github.io)
+          python3 - <<'PY'
+          p = 'android/app/src/main/AndroidManifest.xml'
+          s = open(p, encoding='utf-8').read()
+          f = ('        <intent-filter android:autoVerify="true">\n'
+               '            <action android:name="android.intent.action.VIEW" />\n'
+               '            <category android:name="android.intent.category.DEFAULT" />\n'
+               '            <category android:name="android.intent.category.BROWSABLE" />\n'
+               '            <data android:scheme="https" android:host="ymalka82810.github.io" android:pathPrefix="/Account" />\n'
+               '        </intent-filter>\n')
+          i = s.index('</activity>')
+          open(p, 'w', encoding='utf-8').write(s[:i] + f + '        ' + s[i:])
+          PY
+          grep -q 'android:autoVerify="true"' $MANIFEST
           grep -q fileprovider $MANIFEST
           grep -q app_update android/app/src/main/res/xml/file_paths.xml || \
             sed -i 's#</paths>#    <external-files-path name="app_update" path="app-update/" />\n</paths>#' android/app/src/main/res/xml/file_paths.xml
