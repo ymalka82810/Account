@@ -1,4 +1,4 @@
-const CACHE = 'kupa-v46';
+const CACHE = 'kupa-v47';
 // מאז שהאתר עובר דרך Vite build, קובץ ה-JS הראשי יוצא עם hash בשם
 // (למשל assets/index-ABC123.js) שלא ידוע מראש. לכן לא מפרטים כאן כל
 // קובץ src/*.js בנפרד (כמו קודם) - caches.addAll() נכשל כולו אם קובץ
@@ -52,12 +52,21 @@ self.addEventListener('push', (e) => {
     badge: 'icon.svg',
     dir: 'rtl',
     lang: 'he',
+    data: { tab: d.tab || '' },
   }));
 });
 self.addEventListener('notificationclick', (e) => {
   e.notification.close();
+  // פותחים את הלשונית שהשרת ציין (למשל #manage לבקשת הצטרפות)
+  const tab = (e.notification.data && e.notification.data.tab) || '';
+  const hash = /^(home|friends|history|family|manage)$/.test(tab) ? '#' + tab : '';
   e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
-    for (const c of list) if ('focus' in c) return c.focus();
-    return self.clients.openWindow('./');
+    for (const c of list) {
+      if ('focus' in c) {
+        if (hash && 'navigate' in c) c.navigate(c.url.split('#')[0] + hash).catch(() => {});
+        return c.focus();
+      }
+    }
+    return self.clients.openWindow('./' + hash);
   }));
 });

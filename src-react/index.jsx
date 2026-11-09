@@ -21,6 +21,7 @@ import { preloadImages } from './lib/preloadImages.js';
 import { initBarTapSound } from './lib/metalSound.js';
 import { applyMotion } from './lib/feel.js';
 import { initDeepLinks } from './lib/deepLink.js';
+import { initPushListeners } from './lib/push.js';
 
 // key={lang}: החלפת שפה בונה את העץ מחדש, כך שכל t() בכל מקום מתרנדר שוב בלי לחבר כל קומפוננטה.
 function Root() {
@@ -39,6 +40,7 @@ Promise.all([setLang(initialLang(), { persist: false }).catch(() => {}), preload
 initBarTapSound();
 applyMotion();
 initDeepLinks();
+initPushListeners();
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(() => {});

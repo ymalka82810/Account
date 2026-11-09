@@ -67,7 +67,7 @@
 66|⚖️ Kvitta skulder
 67|⚠️ En begäran om att byta {name}s enhet har gjorts (möjlig {when}). Om ni inte vet om den, avbryt den.
 68|⚠️ En begäran om att byta din enhet har gjorts. Bytet kan ske {when}. Om det inte var du, avbryt den.
-69|{"one":"⚠️ {name}s kod låstes en gång efter felaktiga försök.","other":"⚠️ {name}s kod låstes {n} gånger efter felaktiga försök."}
+69|{"one": "⚠️ {name}s kod låstes en gång efter felaktiga försök.", "other": "⚠️ {name}s kod låstes {n} gånger efter felaktiga försök."}
 70|⚡ Neon
 71|✅ Godkänn
 72|✅ Alla barn loggar in utan hemlig kod tills vidare. Du kan lägga till fler barn.
@@ -120,238 +120,238 @@
 119|🔒 Att lägga till en {role} godkänns med fingeravtryck eller ansiktsigenkänning.
 120|🔔 Slå på aviseringar
 121|🔔 Vill du få veta direkt?
-122|🔕 Stäng av aviseringar
-123|🗑️ Radera
-124|🗑️ Radera hela blocket
-125|🤝 Vänförfrågningar ({n})
-126|🤝 Förfrågningar om vänläge ({n})
-127|🤝 Vänner
-128|🤝 Vänläge är på
-129|🧹 Radera det som är betalt
-130|🙂 Välj en figur
-131|3 veckor i rad
-132|4 siffror
-133|4 till {max} siffror
-134|4 till 8 siffror
-135|6 siffror
-136|8 veckor i rad
-137|Pappa
-138|Säkerhet
-139|Man kan inte vara skyldig sig själv
-140|Personen finns inte
-141|Jag lägger till dem senare
-142|Godkänd ✅
-143|Godkänd! Du kan logga in
-144|Du är godkänd!
-145|Farlig zon
-146|Du kan inte betala tillbaka mer än vad som återstår av skulden
-147|Du kan inte betala tillbaka mer än vad som återstår av skulden ({amount})
-148|Den sista enheten kan inte tas bort. Att byta enhet är en separat process.
-149|Du kan inte ta bort dig själv
-150|Det går inte att kopiera på den här enheten
-151|Så här kan en enhet inte kopplas
-152|Det går inte att koppla så här. Ett enhetsbyte behövs.
-153|Du kan inte ändra din egen roll
-154|Slå ihop med blocket
-155|Vad ska familjen heta?
-156|Vad heter du?
-157|Mamma
-158|Verifiera
-159|Verifiera e-posten
-160|Ingen
-161|Det finns ingen aktiv begäran, eller så har den avbrutits. Du kan skicka en ny.
-162|Ingen internetanslutning. Statusen uppdateras så snart anslutningen är tillbaka.
-163|Ingen internetanslutning. Försök igen när du är online.
-164|Ingen anslutning till servern
-165|Ingen anslutning till servern. Din personliga anteckningsbok fungerar som vanligt. Nya skulder och återbetalningar i familjekassan sparas på enheten och skickas när anslutningen är tillbaka. Andra ändringar skickas bara om appen förblir öppen.
-166|Inget är öppet
-167|Inget är öppet!
-168|Den här föräldern har ingen verifierad e-post, så den här vägen går inte. En annan förälder kan utfärda en kopplingskod.
-169|Den här föräldern har ingen hemlig kod än.
-170|Du har ingen hemlig kod. Ange en under "Mitt konto" och försök igen.
-171|Ingen verifierad e-post
-172|Ingen verifierad e-post att byta ut
-173|Det finns ingen öppen förfrågan i det här namnet längre. Den kan ha tagits bort, eller så har kassan stängts. Du kan skicka en ny förfrågan.
-174|Ingen hemlig kod. Du kan ange en senare under ”Mitt konto”.
-175|Inga betalda registreringar
-176|Ingen växelkurs för skuldens valuta
-177|Ingen kurs just nu
-178|Var bor du?
-179|Godkänn
-180|Bekräftelse via e-post
-181|Bekräfta med hemlig kod
-182|Bekräfta begäran
-183|Bekräfta att enheten läggs till
-184|Förälders godkännande
-185|Bekräfta enhetsbyte
-186|Bekräfta att enheten tas bort
-187|Godkänn vänläge
-188|Bekräfta rollbytet
-189|Godkänt
-190|godkände en insättning på ett sparmål
-191|Godkände en förfrågan om att gå med
-192|Godkänt
-193|godkände en insättning på ett sparmål
-194|Godkände en förfrågan om att gå med
-195|Godkänt
-196|godkände en insättning på ett sparmål
-197|Godkände en förfrågan om att gå med
-198|Om den här föräldern har en verifierad e-post skickar vi en verifieringskod dit. Om ingen e-post har angetts kan en annan förälder ange en ny kod åt dig.
-199|Om det inte är han bör du ange en ny kod.
-200|Om det inte är han/hon bör du ange en ny kod.
-201|Om det inte är hon bör du ange en ny kod.
-202|Om vännen har vänläge har en förfrågan skickats till dem 🤝
-203|Om du glömmer koden skickar vi en återställningskod dit. Utan e-post kan bara en annan förälder hjälpa till.
-204|Jag är ny
-205|Jag är skyldig
-206|Jag är skyldig {a} • skyldig mig {b}
-207|Jag är skyldig pengar
-208|Jag är skyldig {name}
-209|Jag är skyldig {to}
-210|Jag är skyldig en vän
-211|Jag är skyldig vänner
-212|Jag är skyldig
-213|Jag är skyldig pengar
-214|Jag är skyldig {name}
-215|Jag är skyldig {to}
-216|Jag är skyldig en vän
-217|Jag är skyldig vänner
-218|Jag är skyldig
-219|Jag är skyldig pengar
-220|Jag är skyldig {name}
-221|Jag är skyldig {to}
-222|Jag är skyldig en vän
-223|Jag är skyldig vänner
-224|Jag godkänner att föräldrarna i min familj kan se det jag skrivit i min personliga anteckningsbok. De kan bara titta, inte ändra eller ta bort.
-225|Ingen är skyldig något!
-226|Ingen är skyldig något.
-227|App
-228|Du kan bara ångra inom de första 10 minuterna, eller be en förälder
-229|Du kan bara ångra inom de första 10 minuterna. För att rätta det, registrera en återbetalning
-230|Du kan betala tillbaka upp till {max}.
-231|Du kan slutföra bytet. Skriv den hemliga koden och koppla den här enheten.
-232|Bara en återbetalning kan kopplas till en skuld
-233|Du kan bara registrera skulder som rör dig
-234|Du kan bara registrera med godkända vänner
-235|Enheten du använder nu tas bort från en annan enhet.
-236|Dag {day} varje månad
-237|Vilken dag
-238|Vilken dag i månaden (1 till 28)
-239|Kontrollerar förfrågans status…
-240|Kollar vem det är…
-241|Kollar…
-242|Välj en annan skuld
-243|Välj land
-244|Välj datum
-245|Välj en figur
-246|Välj var du bor
-247|Välj en ny hemlig kod ({rule})
-248|Ångra
-249|Avbryt
-250|Avbryt begäran
-251|Avbryt begäran på den här enheten
-252|Ta bort föräldrabehörighet
-253|Stäng av vänläge
-254|Mellan vänner kan du registrera upp till {max} åt gången.
-255|Under tiden kan du skriva i den personliga anteckningsboken, som sparas på din enhet.
-256|Bad om godkännande
-257|bad om att få sätta in pengar på ett sparmål
-258|Bad om godkännande
-259|bad om att få sätta in pengar på ett sparmål
-260|Bad om godkännande
-261|bad om att få sätta in pengar på ett sparmål
-262|Utan kod loggar barnen in med ett tryck, och varje barn kan ange en egen kod när det vill. Med kod får alla barn samma, och när du vill ge varje barn en egen användare återställer du koden under fliken ”Hantera” så väljer barnet en egen.
-263|Den här enheten har inget fingeravtryck eller ansiktsigenkänning, så bekräfta med din hemliga kod.
-264|På den nya enheten: öppna kassan, välj ditt namn, tryck på ”Ny enhet / Byt enhet” och sedan ”Lägg till den här enheten”, och skriv din hemliga kod och den här koden. Koden gäller i 30 minuter och bara en gång.
-265|På den gamla enheten: ”Mitt konto” > ”Mina enheter” > Byt enhet. Koden kommer via e-post. Alla tidigare enheter kopplas bort.
-266|På en enhet som redan är kopplad: ”Mitt konto” > ”Mina enheter” > Lägg till en enhet. Där visas en kod. De befintliga enheterna fortsätter att fungera.
-267|Familjen har redan en förälder som är kopplad till en enhet, så för att koppla den här enheten behövs en kopplingskod från den föräldern. Logga ut och tryck på ”Ny enhet / Byt enhet” på inloggningsskärmen.
-268|Medlemmar i {name}
-269|Familjemedlemmar
-270|Sammanlagt är {name} skyldig mig
+122|🔔 Skicka en testnotis
+123|🔕 Stäng av aviseringar
+124|🗑️ Radera
+125|🗑️ Radera hela blocket
+126|🤝 Vänförfrågningar ({n})
+127|🤝 Förfrågningar om vänläge ({n})
+128|🤝 Vänner
+129|🤝 Vänläge är på
+130|🧹 Radera det som är betalt
+131|🙂 Välj en figur
+132|3 veckor i rad
+133|4 siffror
+134|4 till {max} siffror
+135|4 till 8 siffror
+136|6 siffror
+137|8 veckor i rad
+138|Pappa
+139|Säkerhet
+140|Man kan inte vara skyldig sig själv
+141|Personen finns inte
+142|Jag lägger till dem senare
+143|Godkänd ✅
+144|Godkänd! Du kan logga in
+145|Du är godkänd!
+146|Farlig zon
+147|Du kan inte betala tillbaka mer än vad som återstår av skulden
+148|Du kan inte betala tillbaka mer än vad som återstår av skulden ({amount})
+149|Den sista enheten kan inte tas bort. Att byta enhet är en separat process.
+150|Du kan inte ta bort dig själv
+151|Det går inte att kopiera på den här enheten
+152|Så här kan en enhet inte kopplas
+153|Det går inte att koppla så här. Ett enhetsbyte behövs.
+154|Du kan inte ändra din egen roll
+155|Slå ihop med blocket
+156|Vad ska familjen heta?
+157|Vad heter du?
+158|Mamma
+159|Verifiera
+160|Verifiera e-posten
+161|Ingen
+162|Det finns ingen aktiv begäran, eller så har den avbrutits. Du kan skicka en ny.
+163|Ingen internetanslutning. Statusen uppdateras så snart anslutningen är tillbaka.
+164|Ingen internetanslutning. Försök igen när du är online.
+165|Ingen anslutning till servern
+166|Ingen anslutning till servern. Din personliga anteckningsbok fungerar som vanligt. Nya skulder och återbetalningar i familjekassan sparas på enheten och skickas när anslutningen är tillbaka. Andra ändringar skickas bara om appen förblir öppen.
+167|Inget är öppet
+168|Inget är öppet!
+169|Den här föräldern har ingen verifierad e-post, så den här vägen går inte. En annan förälder kan utfärda en kopplingskod.
+170|Den här föräldern har ingen hemlig kod än.
+171|Du har ingen hemlig kod. Ange en under "Mitt konto" och försök igen.
+172|Ingen verifierad e-post
+173|Ingen verifierad e-post att byta ut
+174|Det finns ingen öppen förfrågan i det här namnet längre. Den kan ha tagits bort, eller så har kassan stängts. Du kan skicka en ny förfrågan.
+175|Ingen hemlig kod. Du kan ange en senare under ”Mitt konto”.
+176|Inga betalda registreringar
+177|Ingen växelkurs för skuldens valuta
+178|Ingen kurs just nu
+179|Var bor du?
+180|Godkänn
+181|Bekräftelse via e-post
+182|Bekräfta med hemlig kod
+183|Bekräfta begäran
+184|Bekräfta att enheten läggs till
+185|Förälders godkännande
+186|Bekräfta enhetsbyte
+187|Bekräfta att enheten tas bort
+188|Godkänn vänläge
+189|Bekräfta rollbytet
+190|Godkänt
+191|godkände en insättning på ett sparmål
+192|Godkände en förfrågan om att gå med
+193|Godkänt
+194|godkände en insättning på ett sparmål
+195|Godkände en förfrågan om att gå med
+196|Godkänt
+197|godkände en insättning på ett sparmål
+198|Godkände en förfrågan om att gå med
+199|Om den här föräldern har en verifierad e-post skickar vi en verifieringskod dit. Om ingen e-post har angetts kan en annan förälder ange en ny kod åt dig.
+200|Om det inte är han bör du ange en ny kod.
+201|Om det inte är han/hon bör du ange en ny kod.
+202|Om det inte är hon bör du ange en ny kod.
+203|Om vännen har vänläge har en förfrågan skickats till dem 🤝
+204|Om du glömmer koden skickar vi en återställningskod dit. Utan e-post kan bara en annan förälder hjälpa till.
+205|Jag är ny
+206|Jag är skyldig
+207|Jag är skyldig {a} • skyldig mig {b}
+208|Jag är skyldig pengar
+209|Jag är skyldig {name}
+210|Jag är skyldig {to}
+211|Jag är skyldig en vän
+212|Jag är skyldig vänner
+213|Jag är skyldig
+214|Jag är skyldig pengar
+215|Jag är skyldig {name}
+216|Jag är skyldig {to}
+217|Jag är skyldig en vän
+218|Jag är skyldig vänner
+219|Jag är skyldig
+220|Jag är skyldig pengar
+221|Jag är skyldig {name}
+222|Jag är skyldig {to}
+223|Jag är skyldig en vän
+224|Jag är skyldig vänner
+225|Jag godkänner att föräldrarna i min familj kan se det jag skrivit i min personliga anteckningsbok. De kan bara titta, inte ändra eller ta bort.
+226|Ingen är skyldig något!
+227|Ingen är skyldig något.
+228|App
+229|Du kan bara ångra inom de första 10 minuterna, eller be en förälder
+230|Du kan bara ångra inom de första 10 minuterna. För att rätta det, registrera en återbetalning
+231|Du kan betala tillbaka upp till {max}.
+232|Du kan slutföra bytet. Skriv den hemliga koden och koppla den här enheten.
+233|Bara en återbetalning kan kopplas till en skuld
+234|Du kan bara registrera skulder som rör dig
+235|Du kan bara registrera med godkända vänner
+236|Enheten du använder nu tas bort från en annan enhet.
+237|Dag {day} varje månad
+238|Vilken dag
+239|Vilken dag i månaden (1 till 28)
+240|Kontrollerar förfrågans status…
+241|Kollar vem det är…
+242|Kollar…
+243|Välj en annan skuld
+244|Välj land
+245|Välj datum
+246|Välj en figur
+247|Välj var du bor
+248|Välj en ny hemlig kod ({rule})
+249|Ångra
+250|Avbryt
+251|Avbryt begäran
+252|Avbryt begäran på den här enheten
+253|Ta bort föräldrabehörighet
+254|Stäng av vänläge
+255|Mellan vänner kan du registrera upp till {max} åt gången.
+256|Under tiden kan du skriva i den personliga anteckningsboken, som sparas på din enhet.
+257|Bad om godkännande
+258|bad om att få sätta in pengar på ett sparmål
+259|Bad om godkännande
+260|bad om att få sätta in pengar på ett sparmål
+261|Bad om godkännande
+262|bad om att få sätta in pengar på ett sparmål
+263|Utan kod loggar barnen in med ett tryck, och varje barn kan ange en egen kod när det vill. Med kod får alla barn samma, och när du vill ge varje barn en egen användare återställer du koden under fliken ”Hantera” så väljer barnet en egen.
+264|Den här enheten har inget fingeravtryck eller ansiktsigenkänning, så bekräfta med din hemliga kod.
+265|På den nya enheten: öppna kassan, välj ditt namn, tryck på ”Ny enhet / Byt enhet” och sedan ”Lägg till den här enheten”, och skriv din hemliga kod och den här koden. Koden gäller i 30 minuter och bara en gång.
+266|På den gamla enheten: ”Mitt konto” > ”Mina enheter” > Byt enhet. Koden kommer via e-post. Alla tidigare enheter kopplas bort.
+267|På en enhet som redan är kopplad: ”Mitt konto” > ”Mina enheter” > Lägg till en enhet. Där visas en kod. De befintliga enheterna fortsätter att fungera.
+268|Familjen har redan en förälder som är kopplad till en enhet, så för att koppla den här enheten behövs en kopplingskod från den föräldern. Logga ut och tryck på ”Ny enhet / Byt enhet” på inloggningsskärmen.
+269|Medlemmar i {name}
+270|Familjemedlemmar
 271|Sammanlagt är {name} skyldig mig
 272|Sammanlagt är {name} skyldig mig
-273|Sammanlagt är jag skyldig {name}
+273|Sammanlagt är {name} skyldig mig
 274|Sammanlagt är jag skyldig {name}
 275|Sammanlagt är jag skyldig {name}
-276|Blocket har poster för ”{name}”
-277|Blocket: ”{a}”. Kassan: ”{b}”.
-278|Du behöver inte göra något. Efter godkännandet kan du logga in med den hemliga kod du valde.
-279|Ny förfrågan
-280|Be föräldrarna om godkännande
-281|Din förfrågan om att gå med
-282|Välkommen till kassan 🪙
-283|Stor
-284|Textstorlek
-285|Rulla åt höger
-286|Rulla åt vänster
-287|En ny version finns tillgänglig ({version})
-288|Diagram över skulder och återbetalningar per månad
-289|Avvisat
-290|avslog en insättning på ett sparmål
-291|Avvisade en förfrågan om att gå med
-292|Avvisat
-293|avslog en insättning på ett sparmål
-294|Avvisade en förfrågan om att gå med
-295|Avslå
-296|Avvisat
-297|avslog en insättning på ett sparmål
-298|Avvisade en förfrågan om att gå med
-299|Figur
-300|Figur {avatar}
-301|Fickpengar
-302|Återkommande fickpengar
-303|Webbläsare
-304|en minut
-305|{"one":"{n} minut","other":"{n} minuter"}
-306|Verifieringen avbröts
-307|Verifieringen med fingeravtryck / ansiktsigenkänning misslyckades
-308|Verifieringen misslyckades. Försök igen.
-309|Verifieringen misslyckades (okänd adress).
-310|Verifieringen misslyckades. Försök igen.
-311|De som du lägger till väljer en hemlig kod första gången de loggar in.
-312|Appen stötte på ett oväntat problem. Du kan försöka igen, och om det fortsätter kan du uppdatera appen.
-313|Appen är inte ansluten till servern än
-314|Uppfattat
-315|Begäran avbröts
-316|Begäran togs emot. Bytet kan ske {when}. Fram till dess fungerar den gamla telefonen, om den hittas, fortfarande, och föräldrarna kan avbryta begäran.
-317|Förfrågan finns inte längre
-318|Förfrågan godkändes inte
-319|Förfrågan finns inte längre
-320|Förfrågan om att gå med i kassan har skickats. Skärmen uppdateras av sig själv, du behöver inte ladda om.
-321|Förfrågan om att gå med i {name}s kassa har skickats. Skärmen uppdateras av sig själv, du behöver inte ladda om.
-322|Förfrågan avslogs
-323|Förfrågan har skickats och sparats hos familjen
-324|Förfrågan har skickats till en förälder
-325|Förfrågan skickades till dina föräldrar ⏳
-326|Förfrågan skickades till dina föräldrar. Vi meddelar dig när de godkänner.
-327|Inställningar
-328|Familjeinställningar
-329|Mål uppnått
-330|Den här figuren är redan upptagen av någon annan i familjen
-331|Den här webbläsaren är för gammal för biometrisk verifiering. Uppdatera den och försök igen.
-332|Nedladdningen misslyckades. Kontrollera internetanslutningen och försök igen
-333|Den här föräldern är redan kopplad till en annan enhet, eller så har nyckeln raderats från den här. För att fortsätta härifrån måste du byta enhet: logga ut och tryck på ”Ny enhet / Byt enhet” på inloggningsskärmen.
-334|Föräldern är redan kopplad till en enhet. Enhetsbyte har en separat process.
-335|Föräldern fick en avisering i mobilen
-336|Dina föräldrar ser inte längre din personliga bok. Den stannar bara hos dig.
-337|Föräldrarna fick en avisering i mobilen
-338|Föräldrarna i varje familj ser en kopia av din bok, endast för visning. Du kan pausa delningen när som helst.
-339|Återbetalningen passar inte den här skulden
-340|Återbetalningen sparades ✅
-341|Fortsätt på {name}s enhet: öppna kassan, välj {name}, tryck på ”Ny enhet / Byt enhet” och skriv {name}s hemliga kod och den här koden. Från det ögonblicket loggar {name} in som förälder bara från den här enheten.
-342|Anteckningen är för lång
-343|Insättningen godkänd ✅
-344|Insättningen avslogs
-345|Insättning tillagd 🐷
-346|Aviseringar påslagna 🔔
-347|Aviseringar är blockerade. Du kan tillåta dem i webbläsarens inställningar.
-348|Aviseringar avstängda
-349|Han förlorar föräldrabehörigheten. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
-350|Han förlorar vänläget. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
-351|Han får full föräldrabehörighet: se allt, godkänna, radera och hantera familjen. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
-352|Återbetalda
-353|Lade till en familjemedlem
+276|Sammanlagt är jag skyldig {name}
+277|Blocket har poster för ”{name}”
+278|Blocket: ”{a}”. Kassan: ”{b}”.
+279|Du behöver inte göra något. Efter godkännandet kan du logga in med den hemliga kod du valde.
+280|Ny förfrågan
+281|Be föräldrarna om godkännande
+282|Din förfrågan om att gå med
+283|Välkommen till kassan 🪙
+284|Stor
+285|Textstorlek
+286|Rulla åt höger
+287|Rulla åt vänster
+288|En ny version finns tillgänglig ({version})
+289|Diagram över skulder och återbetalningar per månad
+290|Avvisat
+291|avslog en insättning på ett sparmål
+292|Avvisade en förfrågan om att gå med
+293|Avvisat
+294|avslog en insättning på ett sparmål
+295|Avvisade en förfrågan om att gå med
+296|Avslå
+297|Avvisat
+298|avslog en insättning på ett sparmål
+299|Avvisade en förfrågan om att gå med
+300|Figur
+301|Figur {avatar}
+302|Fickpengar
+303|Återkommande fickpengar
+304|Webbläsare
+305|en minut
+306|{"one": "{n} minut", "other": "{n} minuter"}
+307|Verifieringen avbröts
+308|Verifieringen med fingeravtryck / ansiktsigenkänning misslyckades
+309|Verifieringen misslyckades. Försök igen.
+310|Verifieringen misslyckades (okänd adress).
+311|Verifieringen misslyckades. Försök igen.
+312|De som du lägger till väljer en hemlig kod första gången de loggar in.
+313|Appen stötte på ett oväntat problem. Du kan försöka igen, och om det fortsätter kan du uppdatera appen.
+314|Appen är inte ansluten till servern än
+315|Uppfattat
+316|Begäran avbröts
+317|Begäran togs emot. Bytet kan ske {when}. Fram till dess fungerar den gamla telefonen, om den hittas, fortfarande, och föräldrarna kan avbryta begäran.
+318|Förfrågan finns inte längre
+319|Förfrågan godkändes inte
+320|Förfrågan finns inte längre
+321|Förfrågan om att gå med i kassan har skickats. Skärmen uppdateras av sig själv, du behöver inte ladda om.
+322|Förfrågan om att gå med i {name}s kassa har skickats. Skärmen uppdateras av sig själv, du behöver inte ladda om.
+323|Förfrågan avslogs
+324|Förfrågan har skickats och sparats hos familjen
+325|Förfrågan har skickats till en förälder
+326|Förfrågan skickades till dina föräldrar ⏳
+327|Förfrågan skickades till dina föräldrar. Vi meddelar dig när de godkänner.
+328|Inställningar
+329|Familjeinställningar
+330|Mål uppnått
+331|Den här figuren är redan upptagen av någon annan i familjen
+332|Den här webbläsaren är för gammal för biometrisk verifiering. Uppdatera den och försök igen.
+333|Nedladdningen misslyckades. Kontrollera internetanslutningen och försök igen
+334|Den här föräldern är redan kopplad till en annan enhet, eller så har nyckeln raderats från den här. För att fortsätta härifrån måste du byta enhet: logga ut och tryck på ”Ny enhet / Byt enhet” på inloggningsskärmen.
+335|Föräldern är redan kopplad till en enhet. Enhetsbyte har en separat process.
+336|Föräldern fick en avisering i mobilen
+337|Dina föräldrar ser inte längre din personliga bok. Den stannar bara hos dig.
+338|Föräldrarna fick en avisering i mobilen
+339|Föräldrarna i varje familj ser en kopia av din bok, endast för visning. Du kan pausa delningen när som helst.
+340|Återbetalningen passar inte den här skulden
+341|Återbetalningen sparades ✅
+342|Fortsätt på {name}s enhet: öppna kassan, välj {name}, tryck på ”Ny enhet / Byt enhet” och skriv {name}s hemliga kod och den här koden. Från det ögonblicket loggar {name} in som förälder bara från den här enheten.
+343|Anteckningen är för lång
+344|Insättningen godkänd ✅
+345|Insättningen avslogs
+346|Insättning tillagd 🐷
+347|Aviseringar påslagna 🔔
+348|Aviseringar är blockerade. Du kan tillåta dem i webbläsarens inställningar.
+349|Aviseringar avstängda
+350|Han förlorar föräldrabehörigheten. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
+351|Han förlorar vänläget. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
+352|Han får full föräldrabehörighet: se allt, godkänna, radera och hantera familjen. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
+353|Återbetalda
 354|Lade till en familjemedlem
 355|Lade till en familjemedlem
 356|Lade till en familjemedlem
@@ -360,717 +360,722 @@
 359|Lade till en familjemedlem
 360|Lade till en familjemedlem
 361|Lade till en familjemedlem
-362|Lägg till
-363|Lägg till en familjemedlem
-364|Lägg till den här enheten och logga in
-365|Lägg till en vän
-366|Lägg till ett barn
-367|{n} registreringar flyttades
-368|Kopierat ✅
-369|Förälder
-370|En annan förälder öppnar ”Kopplingskod” vid ditt namn under ”Hantera” och ger dig en kod.
-371|En annan förälder måste ange en hemlig kod åt dig
-372|En förälder har godkänt att du går med. Logga in nu: välj ditt namn och skriv den hemliga kod du valde.
-373|En förälder i familjen avslog förfrågan. Kanske stod det ett namn de inte känner igen, eller så var det inte meningen. Prata med dem, sedan kan du försöka igen.
-374|En förälder loggar in här och får sedan koder till resten av familjen.
-375|En förälder loggar bara in från enheter som är kopplade till hen (du kan lägga till fler enheter senare), och föräldraåtgärder bekräftas med fingeravtryck eller ansiktsigenkänning.
-376|En förälder måste ange Convex-adressen i filen
-377|En förälder måste logga in först.
-378|Uppnått ✅
-379|Vännen togs bort
-380|Mina vänner
-381|Skulden är i {debtCur}. Du betalar i {payCur} till dagens kurs.
-382|Skulden har ökat med
-383|Den här skulden är redan betald
-384|Skulden stängs helt ✅
-385|Skulden hittades inte
-386|Skulden sparades ✅
-387|Skulden har minskat med
-388|Skulderna mellan dig och {name} stängs upp till det här beloppet, och bara skillnaden återstår. Historiken sparas.
-389|Öppna skulder per valuta
-390|Skulderna kvittades ✅
-391|Återbetalning
-392|Första återbetalningen
-393|Återbetalningar
-394|Betalade tillbaka allt 3 veckor i rad
-395|Betalade tillbaka allt 8 veckor i rad
-396|Betalade tillbaka en skuld för första gången
-397|Jag betalade tillbaka till {to}
-398|Ändrade familjekoden
+362|Lade till en familjemedlem
+363|Lägg till
+364|Lägg till en familjemedlem
+365|Lägg till den här enheten och logga in
+366|Lägg till en vän
+367|Lägg till ett barn
+368|{n} registreringar flyttades
+369|Kopierat ✅
+370|Förälder
+371|En annan förälder öppnar ”Kopplingskod” vid ditt namn under ”Hantera” och ger dig en kod.
+372|En annan förälder måste ange en hemlig kod åt dig
+373|En förälder har godkänt att du går med. Logga in nu: välj ditt namn och skriv den hemliga kod du valde.
+374|En förälder i familjen avslog förfrågan. Kanske stod det ett namn de inte känner igen, eller så var det inte meningen. Prata med dem, sedan kan du försöka igen.
+375|En förälder loggar in här och får sedan koder till resten av familjen.
+376|En förälder loggar bara in från enheter som är kopplade till hen (du kan lägga till fler enheter senare), och föräldraåtgärder bekräftas med fingeravtryck eller ansiktsigenkänning.
+377|En förälder måste ange Convex-adressen i filen
+378|En förälder måste logga in först.
+379|Uppnått ✅
+380|Vännen togs bort
+381|Mina vänner
+382|Skulden är i {debtCur}. Du betalar i {payCur} till dagens kurs.
+383|Skulden har ökat med
+384|Den här skulden är redan betald
+385|Skulden stängs helt ✅
+386|Skulden hittades inte
+387|Skulden sparades ✅
+388|Skulden har minskat med
+389|Skulderna mellan dig och {name} stängs upp till det här beloppet, och bara skillnaden återstår. Historiken sparas.
+390|Öppna skulder per valuta
+391|Skulderna kvittades ✅
+392|Återbetalning
+393|Första återbetalningen
+394|Återbetalningar
+395|Betalade tillbaka allt 3 veckor i rad
+396|Betalade tillbaka allt 8 veckor i rad
+397|Betalade tillbaka en skuld för första gången
+398|Jag betalade tillbaka till {to}
 399|Ändrade familjekoden
 400|Ändrade familjekoden
-401|Att byta koden kopplar bort alla enheter som sparat familjen, så en förälder måste godkänna det. Nu öppnas en begäran om verifiering på enheten.
-402|Byt e-post
-403|Byt enhet (skicka en kod via e-post)
-404|Byt kod
-405|Kontot med {name}
-406|Mitt konto
-407|Har telefonen gått sönder eller försvunnit? En annan förälder kan utfärda en kopplingskod åt dig under ”Hantera”. Finns ingen annan förälder, begär ett byte på inloggningsskärmen: det kan ske efter 24 timmar, och du får ett e-postmeddelande om det.
-408|Hon förlorar föräldrabehörigheten. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
-409|Hon förlorar vänläget. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
-410|Hon får full föräldrabehörighet: se allt, godkänna, radera och hantera familjen. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
-411|Hej {name}, en liten påminnelse: det återstår {amount} att betala tillbaka. Tack! 🙏
-412|Hej {name}, en liten påminnelse: det återstår {amount} att betala tillbaka för {note}. Tack! 🙏
-413|Hej, {name} vill gå med i familjekassan. Du kan logga in och godkänna: {url}
-414|Historik
-415|Historik med vänner
-416|Målet är redan uppnått
-417|Målet finns inte
-418|Mål tillagt 🎯
-419|Prestationer
-420|Prestationer: {name}
-421|Allt {amount}
-422|Allt är uppgjort
-423|Allt är uppgjort ✅
-424|Allt sparas bara på den här enheten.
-425|Nyast först
-426|Mina pengar
-427|Mitt land finns inte i listan ($)
-428|Familjens valuta
-429|Familjens valuta är {base}, och den här skulden sparas i {cur}. I saldona visas den till dagens kurs, och när den betalas räknas beloppet om till kursen på betalningsdagen.
-430|Valuta: {cur}
-431|E-posten verifierades ✅
-432|Den här e-posten används redan av någon annan
-433|Nuvarande e-post: {email}. För att byta den skickar vi en bekräftelsekod dit.
-434|{name}s e-post
-435|Vännens e-post
-436|Din e-post för vänner:
-437|Plats och valuta sparades ✅
-438|Plats och valuta uppdaterades ✅
-439|Enheten borttagen ✅
-440|Den här enheten kommer inte längre att kunna logga in som förälder. Du kan lägga till den igen senare.
-441|Den här enheten är inte längre kopplad till en förälder
-442|Den här enheten är inte längre kopplad till en förälder. För att logga in måste du byta enhet.
-443|Den här enheten är redan kopplad till en förälder
-444|Den här enheten är inte kopplad till den här föräldern.
-445|Den här enheten är inte kopplad till den här föräldern. Tryck på ”Ny enhet / Byt enhet” för att lägga till den eller byta enhet.
-446|Den här enheten är inte registrerad för verifiering. Registrera den igen.
-447|Den här enheten är inte kopplad till en förälder än.
-448|Enheten hittades inte
-449|Enheten stöds inte
-450|Enheten kopplades från ✅
-451|Mina enheter
-452|Den här skärmen stötte på ett problem. Resten av appen fungerar som vanligt, så du kan byta till en annan flik.
-453|Fortsätt
-454|Fortsätt till verifiering
-455|Den här familjen har tagit bort enheten. För att komma in igen behöver du familjekoden.
-456|Familjen hittades inte
-457|Familjen är full
-458|Låset släpptes ✅
-459|Tonåringen förlorar vänläget. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
-460|Mina data
-461|Tog bort en familjemedlem
-462|Tog bort en familjemedlem
+401|Ändrade familjekoden
+402|Att byta koden kopplar bort alla enheter som sparat familjen, så en förälder måste godkänna det. Nu öppnas en begäran om verifiering på enheten.
+403|Byt e-post
+404|Byt enhet (skicka en kod via e-post)
+405|Byt kod
+406|Kontot med {name}
+407|Mitt konto
+408|Har telefonen gått sönder eller försvunnit? En annan förälder kan utfärda en kopplingskod åt dig under ”Hantera”. Finns ingen annan förälder, begär ett byte på inloggningsskärmen: det kan ske efter 24 timmar, och du får ett e-postmeddelande om det.
+409|Hon förlorar föräldrabehörigheten. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
+410|Hon förlorar vänläget. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
+411|Hon får full föräldrabehörighet: se allt, godkänna, radera och hantera familjen. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
+412|Hej {name}, en liten påminnelse: det återstår {amount} att betala tillbaka. Tack! 🙏
+413|Hej {name}, en liten påminnelse: det återstår {amount} att betala tillbaka för {note}. Tack! 🙏
+414|Hej, {name} vill gå med i familjekassan. Du kan logga in och godkänna: {url}
+415|Historik
+416|Historik med vänner
+417|Målet är redan uppnått
+418|Målet finns inte
+419|Mål tillagt 🎯
+420|Prestationer
+421|Prestationer: {name}
+422|Allt {amount}
+423|Allt är uppgjort
+424|Allt är uppgjort ✅
+425|Allt sparas bara på den här enheten.
+426|Nyast först
+427|Mina pengar
+428|Mitt land finns inte i listan ($)
+429|Familjens valuta
+430|Familjens valuta är {base}, och den här skulden sparas i {cur}. I saldona visas den till dagens kurs, och när den betalas räknas beloppet om till kursen på betalningsdagen.
+431|Valuta: {cur}
+432|E-posten verifierades ✅
+433|Den här e-posten används redan av någon annan
+434|Nuvarande e-post: {email}. För att byta den skickar vi en bekräftelsekod dit.
+435|{name}s e-post
+436|Vännens e-post
+437|Din e-post för vänner:
+438|Plats och valuta sparades ✅
+439|Plats och valuta uppdaterades ✅
+440|Enheten borttagen ✅
+441|Den här enheten kommer inte längre att kunna logga in som förälder. Du kan lägga till den igen senare.
+442|Den här enheten är inte längre kopplad till en förälder
+443|Den här enheten är inte längre kopplad till en förälder. För att logga in måste du byta enhet.
+444|Den här enheten är redan kopplad till en förälder
+445|Den här enheten är inte kopplad till den här föräldern.
+446|Den här enheten är inte kopplad till den här föräldern. Tryck på ”Ny enhet / Byt enhet” för att lägga till den eller byta enhet.
+447|Den här enheten är inte registrerad för verifiering. Registrera den igen.
+448|Den här enheten är inte kopplad till en förälder än.
+449|Den här enheten är inte registrerad för notiser än. Stäng av dem och slå på dem igen.
+450|Enheten hittades inte
+451|Enheten stöds inte
+452|Enheten kopplades från ✅
+453|Mina enheter
+454|Den här skärmen stötte på ett problem. Resten av appen fungerar som vanligt, så du kan byta till en annan flik.
+455|Fortsätt
+456|Fortsätt till verifiering
+457|Den här familjen har tagit bort enheten. För att komma in igen behöver du familjekoden.
+458|Familjen hittades inte
+459|Familjen är full
+460|Låset släpptes ✅
+461|Tonåringen förlorar vänläget. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
+462|Mina data
 463|Tog bort en familjemedlem
-464|Tog bort en enhet
+464|Tog bort en familjemedlem
 465|Tog bort en familjemedlem
-466|Tog bort en familjemedlem
+466|Tog bort en enhet
 467|Tog bort en familjemedlem
-468|Tog bort en enhet
+468|Tog bort en familjemedlem
 469|Tog bort en familjemedlem
-470|Tog bort en familjemedlem
+470|Tog bort en enhet
 471|Tog bort en familjemedlem
-472|Tog bort en enhet
-473|Beloppet är för stort
-474|Beloppet är för stort.
-475|Största beloppet först
-476|Belopp i blocket
-477|Ta bort
-478|Ta bort {name}
-479|Att ta bort en förälder måste godkännas av en förälder. Nu öppnas en begäran om verifiering på enheten.
-480|Ta bort enhet
-481|Dölj
-482|Dölj koden
-483|Flytta till servern
-484|Ge föräldrabehörighet
-485|Anteckning
-486|Minska rörelse
-487|Anteckningsboken är för stor för att delas
-488|{name}s personliga anteckningsbok
-489|Blocket tömdes
-490|Blocket är redan tomt
-491|Boken delas inte med dina föräldrar
-492|Anteckningsboken är ogiltig
-493|Mitt block
-494|Stopp
-495|Den här åtgärden bekräftas bara med fingeravtryck eller ansiktsigenkänning
-496|Slå på biometrisk verifiering
-497|Aktivera aviseringar
-498|Med aviseringar får du ett meddelande i mobilen när någon ber om att gå med i familjen eller registrerar en skuld som väntar på ditt godkännande.
-499|Insättning
-500|Jag satte in
-501|satte in pengar på ett sparmål
-502|satte in pengar på ett sparmål
+472|Tog bort en familjemedlem
+473|Tog bort en familjemedlem
+474|Tog bort en enhet
+475|Beloppet är för stort
+476|Beloppet är för stort.
+477|Största beloppet först
+478|Belopp i blocket
+479|Ta bort
+480|Ta bort {name}
+481|Att ta bort en förälder måste godkännas av en förälder. Nu öppnas en begäran om verifiering på enheten.
+482|Ta bort enhet
+483|Dölj
+484|Dölj koden
+485|Flytta till servern
+486|Ge föräldrabehörighet
+487|Anteckning
+488|Minska rörelse
+489|Anteckningsboken är för stor för att delas
+490|{name}s personliga anteckningsbok
+491|Blocket tömdes
+492|Blocket är redan tomt
+493|Boken delas inte med dina föräldrar
+494|Anteckningsboken är ogiltig
+495|Mitt block
+496|Stopp
+497|Den här åtgärden bekräftas bara med fingeravtryck eller ansiktsigenkänning
+498|Slå på biometrisk verifiering
+499|Aktivera aviseringar
+500|Med aviseringar får du ett meddelande i mobilen när någon ber om att gå med i familjen eller registrerar en skuld som väntar på ditt godkännande.
+501|Insättning
+502|Jag satte in
 503|satte in pengar på ett sparmål
-504|Visa koden
-505|Visa koden 🔒
-506|Visa anslutningskoden
-507|Gå med
-508|Filen är för stor
-509|Den nedladdade filen är inte en ny version av appen
-510|Den nedladdade filen är ogiltig. Försök igen
-511|Koden byttes ✅ Du kan visa den med fingeravtryck eller ansiktsigenkänning
-512|Den nya koden måste vara {rule}.
-513|Nuvarande kod
-514|Den nuvarande koden är fel.
-515|Hemlig kod är ogiltig ({rule})
-516|Den hemliga koden måste vara 4 siffror
-517|Den hemliga koden måste vara exakt 4 siffror
-518|Den hemliga koden är fel.
-519|Den hemliga koden du skrev är fel.
-520|Din hemliga kod
-521|Din hemliga kod, för att bekräfta
-522|Koden är inte längre giltig. Be dina föräldrar om en ny kod.
-523|Koden är fel. Kontrollera igen eller fråga dina föräldrar.
-524|Koden är fel. {left} försök kvar.
-525|Koden från e-posten
-526|Koden från den nuvarande e-posten är fel eller har gått ut.
-527|Koden är dold
-528|Koden är dold och visas bara med fingeravtryck eller ansiktsigenkänning.
-529|Koden har uppdaterats. Logga in med den nya koden från din enhet.
-530|Koden måste vara {rule}
-531|Koden måste vara {rule}.
-532|Koden måste vara 4 siffror
-533|Koden måste vara minst 4 siffror, upp till {max}
-534|Koden är fel eller har gått ut.
-535|Koden ändrades ✅
-536|{name}s kod uppdaterades
-537|Koderna var inte identiska. Vi börjar om.
-538|Familjekassan
-539|Kassan raderades
-540|Kassan är öppnad! Skriv barnens namn. En tonåring eller en till förälder kan du lägga till nedan, eller senare under fliken ”Hantera”.
-541|Kvittningen skickades till en förälder för godkännande ⏳
-542|Kvittningen stänger skulder på båda sidor upp till {amount}. Skillnaden består som den är och historiken sparas.
-543|Skapa en familjekassa
-544|Skriv din hemliga kod.
-545|Skapa kassan
-546|Skapa en familjekassa
-547|Nästa registrering: {date}
-548|Den återkommande registreringen stoppades
-549|Den återkommande registreringen lades till ✅
-550|Posten tas bort. Du kan skriva till den som registrerade den varför den inte stämmer.
-551|Registreringen avslogs
-552|Registreringen raderades
-553|Lista
-554|Listan kopierades
-555|Delningen är pausad. Dina föräldrar ser ingenting.
-556|Slutför bytet och logga in
-557|Namnet uppdaterades ✅
-558|Kurserna uppdaterades {when}
-559|Justeringar (återbetalningar som registrerats utan en specifik skuld)
-560|Betalningen i {base} räknas om till dagens kurs och dras av från skulden i dess egen valuta. Efter sparandet behålls kursen och ändras inte.
-561|Är det samma person som ”{name}”?
-562|Är det samma person? Om ja, vilket namn ska användas?
-563|Det här är en demo, så inget kan ändras. Skapa din egen kassa!
-564|Det här är din e-post
-565|Det här är koden du använder vid varje inloggning. Bra att komma ihåg den.
-566|Det här raderar hela kassan: alla personer och alla registreringar, och det går inte att ångra.\nFör att bekräfta, skriv familjens namn: {name}
-567|Ansiktsigenkänning eller fingeravtryck
-568|Man
-569|En vän är skyldig mig pengar
-570|Vännen lades till ✅
-571|Vänner är skyldiga mig pengar
-572|Vänner lägger till tonåringen via den här e-posten. Inget skickas dit, den används bara för sökning.
-573|Vänner lägger till tonåringen via den här e-posten. Inget skickas dit, den används bara för sökning.
-574|Vänner lägger till tonåringen via den här e-posten. Inget skickas dit, den används bara för sökning.
-575|Vänner läggs till via e-postadress. Du ser allt som registreras i översikten.
-576|Vänner: {names}
-577|Skuld
-578|Skuld i {cur}
-579|Skulder
-580|Nya skulder jämfört med förra månaden: {diff}
-581|Nästa månad
-582|Föregående månad
-583|Tillbaka i den öppna listan
-584|Tillbaka
-585|Tillbaka till familjen
-586|Tillbaka till familjen {family}
-587|är skyldig
-588|Minst en förälder måste finnas kvar i familjen
-589|är skyldig
-590|är skyldig mig
-591|Skyldiga mig
-592|Skyldiga mig pengar
+504|satte in pengar på ett sparmål
+505|satte in pengar på ett sparmål
+506|Visa koden
+507|Visa koden 🔒
+508|Visa anslutningskoden
+509|Gå med
+510|Filen är för stor
+511|Den nedladdade filen är inte en ny version av appen
+512|Den nedladdade filen är ogiltig. Försök igen
+513|Koden byttes ✅ Du kan visa den med fingeravtryck eller ansiktsigenkänning
+514|Den nya koden måste vara {rule}.
+515|Nuvarande kod
+516|Den nuvarande koden är fel.
+517|Hemlig kod är ogiltig ({rule})
+518|Den hemliga koden måste vara 4 siffror
+519|Den hemliga koden måste vara exakt 4 siffror
+520|Den hemliga koden är fel.
+521|Den hemliga koden du skrev är fel.
+522|Din hemliga kod
+523|Din hemliga kod, för att bekräfta
+524|Koden är inte längre giltig. Be dina föräldrar om en ny kod.
+525|Koden är fel. Kontrollera igen eller fråga dina föräldrar.
+526|Koden är fel. {left} försök kvar.
+527|Koden från e-posten
+528|Koden från den nuvarande e-posten är fel eller har gått ut.
+529|Koden är dold
+530|Koden är dold och visas bara med fingeravtryck eller ansiktsigenkänning.
+531|Koden har uppdaterats. Logga in med den nya koden från din enhet.
+532|Koden måste vara {rule}
+533|Koden måste vara {rule}.
+534|Koden måste vara 4 siffror
+535|Koden måste vara minst 4 siffror, upp till {max}
+536|Koden är fel eller har gått ut.
+537|Koden ändrades ✅
+538|{name}s kod uppdaterades
+539|Koderna var inte identiska. Vi börjar om.
+540|Familjekassan
+541|Kassan raderades
+542|Kassan är öppnad! Skriv barnens namn. En tonåring eller en till förälder kan du lägga till nedan, eller senare under fliken ”Hantera”.
+543|Kvittningen skickades till en förälder för godkännande ⏳
+544|Kvittningen stänger skulder på båda sidor upp till {amount}. Skillnaden består som den är och historiken sparas.
+545|Skapa en familjekassa
+546|Skriv din hemliga kod.
+547|Skapa kassan
+548|Skapa en familjekassa
+549|Nästa registrering: {date}
+550|Den återkommande registreringen stoppades
+551|Den återkommande registreringen lades till ✅
+552|Posten tas bort. Du kan skriva till den som registrerade den varför den inte stämmer.
+553|Registreringen avslogs
+554|Registreringen raderades
+555|Lista
+556|Listan kopierades
+557|Delningen är pausad. Dina föräldrar ser ingenting.
+558|Slutför bytet och logga in
+559|Namnet uppdaterades ✅
+560|Kurserna uppdaterades {when}
+561|Justeringar (återbetalningar som registrerats utan en specifik skuld)
+562|Kassans notiser
+563|Testnotisen nådde {sent} av {n} enheter ({why})
+564|Betalningen i {base} räknas om till dagens kurs och dras av från skulden i dess egen valuta. Efter sparandet behålls kursen och ändras inte.
+565|Är det samma person som ”{name}”?
+566|Är det samma person? Om ja, vilket namn ska användas?
+567|Det här är en demo, så inget kan ändras. Skapa din egen kassa!
+568|Det här är din e-post
+569|Det här är koden du använder vid varje inloggning. Bra att komma ihåg den.
+570|Det här raderar hela kassan: alla personer och alla registreringar, och det går inte att ångra.\nFör att bekräfta, skriv familjens namn: {name}
+571|Ansiktsigenkänning eller fingeravtryck
+572|Man
+573|En vän är skyldig mig pengar
+574|Vännen lades till ✅
+575|Vänner är skyldiga mig pengar
+576|Vänner lägger till tonåringen via den här e-posten. Inget skickas dit, den används bara för sökning.
+577|Vänner lägger till tonåringen via den här e-posten. Inget skickas dit, den används bara för sökning.
+578|Vänner lägger till tonåringen via den här e-posten. Inget skickas dit, den används bara för sökning.
+579|Vänner läggs till via e-postadress. Du ser allt som registreras i översikten.
+580|Vänner: {names}
+581|Skuld
+582|Skuld i {cur}
+583|Skulder
+584|Nya skulder jämfört med förra månaden: {diff}
+585|Nästa månad
+586|Föregående månad
+587|Tillbaka i den öppna listan
+588|Tillbaka
+589|Tillbaka till familjen
+590|Tillbaka till familjen {family}
+591|är skyldig
+592|Minst en förälder måste finnas kvar i familjen
 593|är skyldig
-594|Sök på namn, anteckning eller belopp
-595|Du sparade tills du nådde målet
-596|Laddar…
-597|Inte angiven av föräldern än
-598|De förlorar föräldrabehörigheten. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
-599|Dag {day}
-600|Ogiltig dag i månaden (1 till 28)
-601|Ogiltig dag
-602|Ändringslogg
-603|Loggar ut säkert…
-604|För många kodförfrågningar. Försök igen om några minuter
-605|För många förfrågningar. Försök igen senare
-606|För många nya familjer just nu. Försök igen om några minuter
-607|För många försök. Försök igen om en minut.
-608|För många försök. Försök igen om några minuter.
-609|För många registreringar. Försök igen senare
-610|{left} av skulden återstår.
-611|Barn
-612|Barn
-613|Barn
-614|Nytt mål
-615|Ett mål med godkända insättningar kan bara tas bort tillsammans med en förälder
-616|Sparmål
-617|Sparmål är för barn och tonåringar
-618|Logga ut
-619|Avsluta demon
-620|De får full föräldrabehörighet: se allt, godkänna, radera och hantera familjen. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
-621|Grön + gul
-622|Vissa personer är skyldiga dig pengar och du är skyldig dem. Kvittning stänger de ömsesidiga skulderna och lämnar bara skillnaden.
-623|Det personliga blocket har skulder på namn som tillhör familjemedlemmar
-624|Det finns för många väntande anslutningsförfrågningar. Be en förälder hantera dem
-625|Det finns för många öppna skulder mellan de två. Stäng skulder innan du lägger till fler.
-626|Det finns för många aktiva registreringar mellan de två. Stäng skulder innan du lägger till fler.
-627|Det finns ett öppet saldo mellan er. Gör upp det först
-628|Några skulder här är i en annan valuta: de kvittas till dagens kurs, och den kursen sparas.
-629|”{old}” finns redan i blocket.
-630|Det väntar redan många insättningar på godkännande i det här målet
-631|Det finns redan många vänner i listan
-632|Det finns redan många mål
-633|Det finns redan många återkommande registreringar
-634|Det finns redan för många insättningar i det här målet
-635|Jag har en familjekod
-636|Har du en familjekod? Logga in i kassan
-637|Har du en familjekod? Skriv den här. Be dina föräldrar om familjens anslutningskod.
-638|Det finns bara en förälder i familjen. Vi rekommenderar att du lägger till en förälder till och verifierar en e-postadress, så att åtkomsten kan återställas om enheten tappas bort.
-639|Det finns registreringar under det här namnet. Radera dem först
-640|Här registrerar du skulder med vänner: vem som köpte åt vem och vem som ska betala tillbaka. Din vän behöver också appen, och dina föräldrar behöver godkänna.
-641|Här skriver man upp vem som är skyldig vem. Tryck på en av de stora knapparna, välj en person och ett belopp, klart.
-642|Av
-643|{"one":"Redan 1 dag","other":"Redan {n} dagar"}
-644|Det finns redan någon med det namnet
-645|Det finns redan någon med det namnet. Välj personen i listan eller ändra namnet
-646|Det finns redan någon med det namnet. Avslå förfrågan
-647|Den här profilen har redan en kod
-648|Nästan klart…
-649|Finns inte längre
-650|Använder du redan familjekassan?
-651|Den här föräldern har redan max antal kopplade enheter. Du kan ta bort en enhet under ”Mina enheter”.
-652|För att {need} behöver du en enhet med fingeravtryck eller ansiktsigenkänning inställt.
-653|För att byta enhet från den här telefonen behövs en verifierad e-postadress. Lägg till en e-postadress under ”Mitt konto”.
-654|För att logga in som förälder måste du koppla den här enheten med en kopplingskod från en annan förälder. Tryck på ”Ny enhet / Byt enhet”.
-655|För att gå med måste du godkänna att dina föräldrar kan se din personliga anteckningsbok, endast visning
-656|För att ange en ny kod åt {name} skickar vi en verifieringskod till {email}.
-657|För att koppla en enhet måste fingeravtryck eller ansiktsigenkänning vara inställt på den.
-658|För att ett barn inte ska kunna göra sig själv till förälder godkänns tillägg som tonåring eller förälder av en förälder. En verifieringsbegäran från enheten öppnas nu.
-659|För att ett barn inte ska kunna göra sig själv till förälder godkänns rolländring av en förälder. En verifieringsbegäran från enheten öppnas nu.
-660|Andersson
-661|Blå + lila
-662|Stäng av vänner
-663|Alla öppna skulder
-664|Hela familjen
-665|Alla belopp visas i den här valutan. Du kan registrera en skuld i en annan valuta (till exempel 100 dollar), och när den betalas räknas den om till kursen den dagen.
-666|Varje månad
-667|Varje {day}
-668|Hur ofta
-669|Varje post du gör väntar på en förälders godkännande och kommer först sedan in på kontot. Om du gjorde fel kan du ångra inom 10 minuter.
-670|Varje vecka
-671|Hur mycket betalade {from} tillbaka till {to}?
-672|Hur mycket betalade {from} tillbaka till {to}?
-673|Hur mycket betalade {from} tillbaka till {to}?
-674|Hur mycket är {name} skyldig mig?
-675|Hur mycket är {name} skyldig mig?
-676|Hur mycket är {name} skyldig mig?
-677|Hur mycket betalade {name} mig?
-678|Hur mycket betalade {name} mig?
-679|Hur mycket betalade {name} mig?
-680|Hur mycket är jag skyldig {to}?
-681|Hur mycket är jag skyldig {to}?
-682|Hur mycket är jag skyldig {to}?
-683|Hur mycket behövs? ({cur})
-684|Hur mycket betalade jag {to}?
-685|Hur mycket?
-686|Ja
-687|Ja, samma person. Behåll ”{n}”
-688|Ja, samma person. Ändra allt till ”{n}”
-689|Ja, slå ihop under ”{n}” (namnet i blocket)
-690|Ja, slå ihop under ”{n}” (namnet i kassan)
-691|Ja, fortsätt
-692|Ja, ta bort
-693|Ja, flytta till kassan
-694|Ja, kvitta
-695|Ja, spara skulden
-696|Ja, spara betalningen
-697|Logga in
-698|Föräldrainloggning
-699|Gå till kassan
-700|Skriv ditt namn
-701|Skriv den e-post som din vän registrerade hos sina föräldrar i appen. En förfrågan skickas till dem, och de måste godkänna. Det fungerar bara om din vän också har vänläge.
-702|Skriv den hemliga koden
-703|Skriv koden igen, för att bekräfta
-704|Skriv namnet
-705|Skriv familjens efternamn
-706|Skriv ett belopp
-707|Skriv ett belopp större än noll.
-708|En annan adress
-709|E-postadressen ser inte giltig ut
-710|E-postadressen är ogiltig
-711|E-postadress
-712|Ny e-postadress
-713|Ogiltig e-postadress
-714|Orange + rosa
-715|Nej
-716|Inte godkänd
-717|Vi kunde inte slå på aviseringar på den här enheten
-718|Vi kunde inte ansluta just nu. Den här skärmen försvinner av sig själv när anslutningen är tillbaka, och under tiden fungerar den personliga anteckningsboken utan anslutning.
-719|Vi kunde inte koppla e-postadressen. Du kan försöka igen under "Mitt konto".
-720|Vi kunde inte koppla enheten. Försök igen.
-721|Okänd
-722|Fel
-723|Hittade inget för “{q}”
-724|Ingen installationsapp hittades på telefonen. Du kan ladda ner filen direkt från GitHub
-725|Inget registrerades den här månaden.
-726|Nej, det är två olika personer
-727|Nej, det är en annan person
-728|Nej, behåll i blocket
-729|Vilken skuld gäller återbetalningen?
-730|För att bekräfta skickar vi en verifieringskod till {email}.
-731|Återställ, så att de väljer själva vid nästa inloggning
-732|Ångra det du registrerade?
-733|Avslå posten?
-734|Avslå? Registreringen raderas.
-735|Lägg även till en tonåring eller en till förälder
-736|Lägg till en enhet
-737|En ny förälder behöver en hemlig kod
-738|En förälder behöver en kod som du anger (den kan inte återställas så att hen väljer själv)
-739|Endast för föräldrar. Den som skapar kassan är den första föräldern. Sedan får du en anslutningskod för hela familjen och anger en roll för var och en: barn, tonåring eller förälder.
-740|Dina föräldrar har inga aviseringar i mobilen än, så de vet inte att du har bett om att gå med. Säg gärna till dem.
-741|Byt koden
-742|Byta koden? De som redan är inne stannar kvar, men den gamla koden slutar fungera, och andra enheter som sparat familjen måste ange den nya koden.
-743|Byt enhet
-744|Att byta sin egen enhet har en annan process
-745|Utfärda en kopplingskod
-746|Ta bort {name} från vännerna?
-747|Ta bort {name} från familjen?
-748|Ta bort en förälder
-749|Ta bort en enhet
-750|Flytta dem till familjekassan under {name}?
-751|Stoppa den återkommande registreringen? Det som redan registrerats finns kvar.
-752|Visa även det som är betalt på huvudsidan
-753|Tryck för beräkningsdetaljer
-754|Stänga av vänläget för {name}? Det går då inte att lägga till nya registreringar med vänner.
-755|Ej angiven
-756|Varför? (valfritt)
-757|Radera {n} betalda registreringar?
-758|Ta bort målet ”{name}”?
-759|Radera kassan
-760|Radera registreringen för {name}?
-761|Radera den här registreringen?
-762|Radera alla registreringar i blocket? Det går inte att ångra.
-763|Till vem
-764|Vem är jag skyldig?
-765|Vem är jag skyldig?
-766|Vem är jag skyldig?
-767|Till vem?
-768|Till exempel: en cykel
-769|Till exempel: glass, biobiljett
-770|Försök igen
-771|Koppla från enheten? Den måste ange anslutningskoden igen.
-772|Landet avgör familjens valuta. Du kan ändra det senare under fliken Hantera.
-773|Som enheten
-774|Per valuta
-775|Efter namn (A–Ö)
-776|för {n} sedan
-777|Endast visning. Anteckningsboken finns kvar hos {name} och kan inte ändras härifrån.
-778|Skrivskyddat. Varje registrering med en vän väntar också på deras godkännande.
-779|se anslutningskoden
-780|ändra en roll
-781|Balanserat: ingen är skyldig något
-782|Verifierar…
-783|ska få
-784|ska få
-785|ska få
-786|Landet stöds inte
-787|integritetspolicyn
-788|Integritetspolicy
-789|Bosättningsland
-790|Vad tonåringar registrerar med vänner
-791|Vad som är öppet
-792|Från idag
-793|På
-794|Laddar ner uppdatering...
-795|Laddar ner uppdatering... {percent}%
-796|Ogiltigt ID
-797|Radera
-798|Att radera kassan kan inte ångras, så en förälder måste godkänna det. Nu öppnas en begäran om verifiering på enheten.
-799|Radera hela kassan
-800|Byter du mobil? Tryck här, bekräfta med fingeravtryck så skickar vi en kod till din e-post. Öppna sedan kassan på den nya mobilen, välj ditt namn och tryck på ”Ny enhet / Byt enhet”. Alla tidigare enheter kopplas bort.
-801|Raderat
-802|tog bort ett sparmål
-803|Raderat
-804|tog bort ett sparmål
+594|är skyldig mig
+595|Skyldiga mig
+596|Skyldiga mig pengar
+597|är skyldig
+598|Sök på namn, anteckning eller belopp
+599|Du sparade tills du nådde målet
+600|Laddar…
+601|Inte angiven av föräldern än
+602|De förlorar föräldrabehörigheten. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
+603|Dag {day}
+604|Ogiltig dag i månaden (1 till 28)
+605|Ogiltig dag
+606|Ändringslogg
+607|Loggar ut säkert…
+608|För många kodförfrågningar. Försök igen om några minuter
+609|För många förfrågningar. Försök igen senare
+610|För många nya familjer just nu. Försök igen om några minuter
+611|För många försök. Försök igen om en minut.
+612|För många försök. Försök igen om några minuter.
+613|För många registreringar. Försök igen senare
+614|{left} av skulden återstår.
+615|Barn
+616|Barn
+617|Barn
+618|Nytt mål
+619|Ett mål med godkända insättningar kan bara tas bort tillsammans med en förälder
+620|Sparmål
+621|Sparmål är för barn och tonåringar
+622|Logga ut
+623|Avsluta demon
+624|De får full föräldrabehörighet: se allt, godkänna, radera och hantera familjen. Därefter krävs verifiering med ansiktsigenkänning eller fingeravtryck.
+625|Grön + gul
+626|Vissa personer är skyldiga dig pengar och du är skyldig dem. Kvittning stänger de ömsesidiga skulderna och lämnar bara skillnaden.
+627|Det personliga blocket har skulder på namn som tillhör familjemedlemmar
+628|Det finns för många väntande anslutningsförfrågningar. Be en förälder hantera dem
+629|Det finns för många öppna skulder mellan de två. Stäng skulder innan du lägger till fler.
+630|Det finns för många aktiva registreringar mellan de två. Stäng skulder innan du lägger till fler.
+631|Det finns ett öppet saldo mellan er. Gör upp det först
+632|Några skulder här är i en annan valuta: de kvittas till dagens kurs, och den kursen sparas.
+633|”{old}” finns redan i blocket.
+634|Det väntar redan många insättningar på godkännande i det här målet
+635|Det finns redan många vänner i listan
+636|Det finns redan många mål
+637|Det finns redan många återkommande registreringar
+638|Det finns redan för många insättningar i det här målet
+639|Jag har en familjekod
+640|Har du en familjekod? Logga in i kassan
+641|Har du en familjekod? Skriv den här. Be dina föräldrar om familjens anslutningskod.
+642|Det finns bara en förälder i familjen. Vi rekommenderar att du lägger till en förälder till och verifierar en e-postadress, så att åtkomsten kan återställas om enheten tappas bort.
+643|Det finns registreringar under det här namnet. Radera dem först
+644|Här registrerar du skulder med vänner: vem som köpte åt vem och vem som ska betala tillbaka. Din vän behöver också appen, och dina föräldrar behöver godkänna.
+645|Här skriver man upp vem som är skyldig vem. Tryck på en av de stora knapparna, välj en person och ett belopp, klart.
+646|Av
+647|{"one": "Redan 1 dag", "other": "Redan {n} dagar"}
+648|Det finns redan någon med det namnet
+649|Det finns redan någon med det namnet. Välj personen i listan eller ändra namnet
+650|Det finns redan någon med det namnet. Avslå förfrågan
+651|Den här profilen har redan en kod
+652|Nästan klart…
+653|Finns inte längre
+654|Använder du redan familjekassan?
+655|Den här föräldern har redan max antal kopplade enheter. Du kan ta bort en enhet under ”Mina enheter”.
+656|För att {need} behöver du en enhet med fingeravtryck eller ansiktsigenkänning inställt.
+657|För att byta enhet från den här telefonen behövs en verifierad e-postadress. Lägg till en e-postadress under ”Mitt konto”.
+658|För att logga in som förälder måste du koppla den här enheten med en kopplingskod från en annan förälder. Tryck på ”Ny enhet / Byt enhet”.
+659|För att gå med måste du godkänna att dina föräldrar kan se din personliga anteckningsbok, endast visning
+660|För att ange en ny kod åt {name} skickar vi en verifieringskod till {email}.
+661|För att koppla en enhet måste fingeravtryck eller ansiktsigenkänning vara inställt på den.
+662|För att ett barn inte ska kunna göra sig själv till förälder godkänns tillägg som tonåring eller förälder av en förälder. En verifieringsbegäran från enheten öppnas nu.
+663|För att ett barn inte ska kunna göra sig själv till förälder godkänns rolländring av en förälder. En verifieringsbegäran från enheten öppnas nu.
+664|Andersson
+665|Blå + lila
+666|Stäng av vänner
+667|Alla öppna skulder
+668|Hela familjen
+669|Alla belopp visas i den här valutan. Du kan registrera en skuld i en annan valuta (till exempel 100 dollar), och när den betalas räknas den om till kursen den dagen.
+670|Varje månad
+671|Varje {day}
+672|Hur ofta
+673|Varje post du gör väntar på en förälders godkännande och kommer först sedan in på kontot. Om du gjorde fel kan du ångra inom 10 minuter.
+674|Varje vecka
+675|Hur mycket betalade {from} tillbaka till {to}?
+676|Hur mycket betalade {from} tillbaka till {to}?
+677|Hur mycket betalade {from} tillbaka till {to}?
+678|Hur mycket är {name} skyldig mig?
+679|Hur mycket är {name} skyldig mig?
+680|Hur mycket är {name} skyldig mig?
+681|Hur mycket betalade {name} mig?
+682|Hur mycket betalade {name} mig?
+683|Hur mycket betalade {name} mig?
+684|Hur mycket är jag skyldig {to}?
+685|Hur mycket är jag skyldig {to}?
+686|Hur mycket är jag skyldig {to}?
+687|Hur mycket behövs? ({cur})
+688|Hur mycket betalade jag {to}?
+689|Hur mycket?
+690|Ja
+691|Ja, samma person. Behåll ”{n}”
+692|Ja, samma person. Ändra allt till ”{n}”
+693|Ja, slå ihop under ”{n}” (namnet i blocket)
+694|Ja, slå ihop under ”{n}” (namnet i kassan)
+695|Ja, fortsätt
+696|Ja, ta bort
+697|Ja, flytta till kassan
+698|Ja, kvitta
+699|Ja, spara skulden
+700|Ja, spara betalningen
+701|Logga in
+702|Föräldrainloggning
+703|Gå till kassan
+704|Skriv ditt namn
+705|Skriv den e-post som din vän registrerade hos sina föräldrar i appen. En förfrågan skickas till dem, och de måste godkänna. Det fungerar bara om din vän också har vänläge.
+706|Skriv den hemliga koden
+707|Skriv koden igen, för att bekräfta
+708|Skriv namnet
+709|Skriv familjens efternamn
+710|Skriv ett belopp
+711|Skriv ett belopp större än noll.
+712|En annan adress
+713|E-postadressen ser inte giltig ut
+714|E-postadressen är ogiltig
+715|E-postadress
+716|Ny e-postadress
+717|Ogiltig e-postadress
+718|Orange + rosa
+719|Nej
+720|Inte godkänd
+721|Vi kunde inte slå på aviseringar på den här enheten
+722|Vi kunde inte ansluta just nu. Den här skärmen försvinner av sig själv när anslutningen är tillbaka, och under tiden fungerar den personliga anteckningsboken utan anslutning.
+723|Vi kunde inte koppla e-postadressen. Du kan försöka igen under "Mitt konto".
+724|Vi kunde inte koppla enheten. Försök igen.
+725|Okänd
+726|Fel
+727|Hittade inget för “{q}”
+728|Ingen installationsapp hittades på telefonen. Du kan ladda ner filen direkt från GitHub
+729|Inget registrerades den här månaden.
+730|Nej, det är två olika personer
+731|Nej, det är en annan person
+732|Nej, behåll i blocket
+733|Vilken skuld gäller återbetalningen?
+734|För att bekräfta skickar vi en verifieringskod till {email}.
+735|Återställ, så att de väljer själva vid nästa inloggning
+736|Ångra det du registrerade?
+737|Avslå posten?
+738|Avslå? Registreringen raderas.
+739|Lägg även till en tonåring eller en till förälder
+740|Lägg till en enhet
+741|En ny förälder behöver en hemlig kod
+742|En förälder behöver en kod som du anger (den kan inte återställas så att hen väljer själv)
+743|Endast för föräldrar. Den som skapar kassan är den första föräldern. Sedan får du en anslutningskod för hela familjen och anger en roll för var och en: barn, tonåring eller förälder.
+744|Dina föräldrar har inga aviseringar i mobilen än, så de vet inte att du har bett om att gå med. Säg gärna till dem.
+745|Byt koden
+746|Byta koden? De som redan är inne stannar kvar, men den gamla koden slutar fungera, och andra enheter som sparat familjen måste ange den nya koden.
+747|Byt enhet
+748|Att byta sin egen enhet har en annan process
+749|Utfärda en kopplingskod
+750|Ta bort {name} från vännerna?
+751|Ta bort {name} från familjen?
+752|Ta bort en förälder
+753|Ta bort en enhet
+754|Flytta dem till familjekassan under {name}?
+755|Stoppa den återkommande registreringen? Det som redan registrerats finns kvar.
+756|Visa även det som är betalt på huvudsidan
+757|Tryck för beräkningsdetaljer
+758|Stänga av vänläget för {name}? Det går då inte att lägga till nya registreringar med vänner.
+759|Ej angiven
+760|Varför? (valfritt)
+761|Radera {n} betalda registreringar?
+762|Ta bort målet ”{name}”?
+763|Radera kassan
+764|Radera registreringen för {name}?
+765|Radera den här registreringen?
+766|Radera alla registreringar i blocket? Det går inte att ångra.
+767|Till vem
+768|Vem är jag skyldig?
+769|Vem är jag skyldig?
+770|Vem är jag skyldig?
+771|Till vem?
+772|Till exempel: en cykel
+773|Till exempel: glass, biobiljett
+774|Försök igen
+775|Koppla från enheten? Den måste ange anslutningskoden igen.
+776|Landet avgör familjens valuta. Du kan ändra det senare under fliken Hantera.
+777|Som enheten
+778|Per valuta
+779|Efter namn (A–Ö)
+780|för {n} sedan
+781|Endast visning. Anteckningsboken finns kvar hos {name} och kan inte ändras härifrån.
+782|Skrivskyddat. Varje registrering med en vän väntar också på deras godkännande.
+783|se anslutningskoden
+784|ändra en roll
+785|Balanserat: ingen är skyldig något
+786|Verifierar…
+787|ska få
+788|ska få
+789|ska få
+790|Landet stöds inte
+791|integritetspolicyn
+792|Integritetspolicy
+793|Bosättningsland
+794|Vad tonåringar registrerar med vänner
+795|Vad som är öppet
+796|Från idag
+797|På
+798|Laddar ner uppdatering...
+799|Laddar ner uppdatering... {percent}%
+800|Ogiltigt ID
+801|Radera
+802|Att radera kassan kan inte ångras, så en förälder måste godkänna det. Nu öppnas en begäran om verifiering på enheten.
+803|Radera hela kassan
+804|Byter du mobil? Tryck här, bekräfta med fingeravtryck så skickar vi en kod till din e-post. Öppna sedan kassan på den nya mobilen, välj ditt namn och tryck på ”Ny enhet / Byt enhet”. Alla tidigare enheter kopplas bort.
 805|Raderat
 806|tog bort ett sparmål
-807|Valuta
-808|Valutan stöds inte
-809|Vilka är dina barn?
-810|Vem är skyldig mest
-811|Vem är skyldig mig?
-812|Vem är skyldig vem
-813|Vem är skyldig (betalaren)
-814|Vem är skyldig mig?
-815|Vem loggar in?
-816|Vem som ändrade vad och när, de senaste 6 månaderna.
-817|E-post för kodåterställning
-818|E-post för kodåterställning (valfritt)
-819|E-post är bara för föräldrar
-820|Plats och valuta
-821|Någon
-822|Enhet
-823|Ny enhet / Byt enhet
-824|Enheten finns inte
-825|Anslutna enheter
-826|Enheter som sparat familjen. Ett kort som inte används på 180 dagar går ut av sig självt.
-827|Alldeles nyss
-828|Väntar på godkännande: {amount}
-829|Väntar på en förälders godkännande
-830|Väntar på en förälders godkännande
-831|Ogiltig aviseringsprenumeration
-832|Ge koden till {name} personligen, inte i ett meddelande. Den gäller i 30 minuter och bara en gång.
-833|Ogiltig nyckel
-834|Vänläge
-835|Vänläge godkänt ✅
-836|Vänläge är bara för tonåringar
-837|Vänläge stängdes av
-838|Vänläge för {name}
-839|Vänläge har inte godkänts av föräldrarna än
-840|Gå med i kassan
-841|Du går med i kassan för {name}. En förälder i familjen måste godkänna och anger om du är barn, tonåring eller förälder.
-842|Utseende
-843|Något gick fel
-844|Något gick fel. Försök igen.
-845|Familj
-846|En annan familj
-847|Fler familjer
-848|Familjen {name}
-849|Tillagd {date}
-850|Hantera
-851|Försök igen
-852|Du försökte för många gånger. Försök igen om {wait}.
-853|Rensa sökningen
-854|Koppla från
-855|Loggar in utan kod
-856|Raderad
-857|Data från den tidigare versionen hittades på den här enheten: {people} personer och {entries} registreringar. Flytta dem till servern?
-858|Försök igen
-859|Försök igen
-860|Tonåring
-861|Tonåring
-862|Tonåring
-863|Kvinna
-864|Enheten verkar vara i {name}. Bor du i {name}?
-865|Registrerade skulder
-866|{left} kvar av {total}
-867|{left} återstår av den här skulden.
-868|En kod skickas dit när en hemlig kod ändras eller återställs, och även en avisering när någons kod i familjen låses.
-869|Skickat till en förälder för godkännande ⏳
-870|Skickat till vännen för godkännande ⏳
-871|En kod har skickats till din verifierade e-post. När du bekräftat den kan bytet ske först om 24 timmar, och under tiden får du och de andra föräldrarna en avisering och kan avbryta.
-872|Sparat på enheten, skickas när anslutningen är tillbaka
-873|Stäng
-874|Ordning på registreringarna
-875|Totalt
-876|Totalt i {cur} till dagens kurs
-877|Markerad som betald
-878|Klart
-879|Månadssammanfattning
-880|Belopp ({cur})
-881|Ogiltigt belopp
-882|Ogiltigt belopp. Mellan vänner kan du registrera upp till 500 shekel åt gången
-883|Det har gått ett tag. Föräldern har nog inte sett förfrågan än. Du kan skicka ett meddelande.
-884|Inget har registrerats än.
-885|En uppdatering pågår redan
-886|Uppdatera
-887|Mer
-888|Det finns ingen annan i familjen än. En förälder måste lägga till dem.
-889|Inga godkända vänner än
-890|Inga godkända vänner än. Lägg till en vän via e-post.
-891|Inga vänner än. Lägg till en vän via e-post.
-892|Inga sparmål än.
-893|Listan är fortfarande tom. Tryck på en av knapparna för att börja.
-894|Inga återkommande registreringar än.
-895|Inga ändringar i loggen ännu.
-896|Ingen förälder har öppnat boken ännu
-897|Fler figurer
-898|Inte än
-899|Har inte valt en kod än
-900|Har inte valt en kod än
-901|Har inte valt en kod än
-902|Inget har registrerats med vänner än.
-903|Inget har registrerats än.
-904|Ingen kopia har skickats ännu
-905|Det har inte gått 24 timmar sedan begäran än.
-906|Fler åtgärder
-907|Senast uppdaterad: {when}
-908|Utseende
-909|Nu är det förälderns tur: öppna appen, gå till fliken ”Hantera” och tryck på ”Godkänn” bredvid ditt namn.
-910|För {debt} (= {covers} till dagens kurs).
-911|För {debt}.
-912|Vad sparar du till?
-913|För vad? (du kan hoppa över)
-914|För vad? (valfritt)
-915|För: {debt}
-916|Med vem?
-917|Extra stor
-918|Verifieringen har gått ut. Försök igen.
-919|Beräkningsdetaljer
-920|Ogiltig åtgärd
-921|Profil
-922|skapade ett sparmål
-923|skapade ett sparmål
-924|skapade ett sparmål
-925|Skärmfärger
-926|Neonfärger
-927|Tilltalsformen är redan vald och kan inte ändras
-928|Tilltalsform sparad ✅
-929|Tilltalsform
-930|Tilltalsform:
-931|Ljud
-932|Har tittat i boken:
-933|Skapa en familjekassa: alla ser samma konto och skulderna uppdateras för alla.
-934|Bekräftelse med fingeravtryck eller ansiktsigenkänning krävs
-935|Du behöver familjekoden för att komma in i den här familjen.
-936|Appen behöver tillåtelse att installera uppdateringar: slå på "Tillåt från den här källan" i inställningarna som öppnas och tryck på "Uppdatera" igen
-937|Du måste godkänna användarvillkoren och integritetspolicyn
-938|Du måste godkänna att dina föräldrar ser din personliga anteckningsbok
-939|Du måste logga in igen
-940|Du måste logga in igen med familjekoden
-941|Enheten måste kopplas igen
-942|Du behöver koppla den här telefonen en gång.
-943|Enheten måste kopplas
-944|Den här enheten måste kopplas till en förälder. Logga in igen och koppla den med en länkkod från en annan förälder
-945|Du behöver koppla den här enheten och webbläsaren en gång.
-946|En verifierad e-postadress behövs för att byta enhet
-947|Ange koden
-948|Ange koden och logga in
-949|Ange tilltalsform…
-950|Ange en hemlig kod
-951|En kod för alla. Den som går med med den kommer in som barn. Senare kan du ändra till tonåring eller förälder under "Familjemedlemmar", med godkännande via fingeravtryck eller ansiktsigenkänning.
-952|Kod från e-posten
-953|Verifieringskoden från e-posten är fel eller har gått ut.
-954|Verifieringskoden är fel eller har gått ut.
-955|Kopplingskod
-956|Anslutningskod till kassan för {name}: {code}
-957|Familjens anslutningskod
-958|Familjens anslutningskod visas bara med fingeravtryck eller ansiktsigenkänning.
-959|Familjekoden ändrades. Be dina föräldrar om en ny kod.
-960|Kopplingskoden
-961|Ny kod
-962|Ny kod ({rule})
-963|Kod från den nuvarande e-posten
-964|Familjekod
-965|Hemlig kod ({rule}; längre = säkrare)
-966|Hemlig kod (obligatorisk för en förälder, {rule})
-967|Hemlig kod (valfritt — utan kod loggar man in med ett tryck och kan ange en kod senare)
-968|En hemlig kod för alla barn ({rule}). Får lämnas tom
-969|Ny hemlig kod
-970|Hemlig kod för {name}
-971|Din egen hemliga kod (4 siffror)
-972|Kopplingskod
-973|Kopplingskod är bara för föräldrar
-974|Kopplingskod för {name}
-975|Kopplingskod för en enhet
-976|Anslutningskoder
-977|Först måste en hemlig kod anges för {name}
-978|Kvittade {amount} mot {name} ✅
-979|En familjekassa kan bara skapas av någon över 18
-980|Liten
-981|Jag fick
-982|Jag fick mellanskillnaden ({amount})
-983|Jag fick pengar
-984|Ömsesidig kvittning
-985|Kvitta ömsesidiga skulder
-986|Kvitta ömsesidiga skulder ({amount})
-987|Inbjudningslänken lägger till alla som öppnar den som barn. Dela den bara med familjen.
-988|Enhetskoppling
-989|Koppla den här enheten och logga in
-990|Koppla enheten till en förälder
-991|Jag har läst och godkänner {terms} och {privacy}
-992|Jag har läst och godkänner {terms} och {privacy}
-993|Jag har läst och godkänner {terms} och {privacy}
-994|{n} enheter är redan kopplade, vilket är max. Ta bort en enhet för att lägga till en till.
-995|Normal
-996|Ett ögonblick, loggar in…
-997|Ett ögonblick, loggar ut…
-998|Vill du slå ihop dem i familjekassan?
-999|Vill du att de som är skyldiga dig pengar ska se det här?
-1000|Vibration
-1001|Registrera
-1002|Registrera en återbetalning
-1003|Registrerar en skuld automatiskt, varje vecka eller månad, utan att du skriver in den varje gång.
-1004|Ny återkommande registrering
-1005|En post som sparades offline skickades inte: {err}
-1006|Uppdatera appen
-1007|Bara föräldrar kan göra det här
-1008|Bara föräldrar kan skapa ett mål åt någon annan
-1009|Bara föräldrar kan ange tilltalsformen
-1010|Bara för att säkerställa att den som skapar kassan är över 18. Visas inte för någon.
-1011|Registrerade en återbetalning
-1012|Registrerade en skuld
-1013|Registrerade en återbetalning
-1014|Registrerade en skuld
-1015|Registrerade en återbetalning
-1016|Registrerade en skuld
-1017|Skriv in din egen skuld i anteckningsboken
-1018|Ren vecka
-1019|En hel vecka utan öppna skulder
-1020|Helt betald ✅
-1021|Betalda ({n})
-1022|Sparar allt…
-1023|Släpp låset
-1024|Jag betalade
-1025|Jag betalade mellanskillnaden ({amount})
-1026|Senast använd: {date}
-1027|Bytte namn på familjen
-1028|Ändrade land och valuta
-1029|Ändrade ett namn
-1030|Ändrade en roll
-1031|Bytte namn på familjen
-1032|Ändrade land och valuta
-1033|Ändrade ett namn
-1034|Ändrade en roll
-1035|Ändra
-1036|Att byta valuta ändrar bara symbolen. Beloppen själva räknas inte om.
-1037|Ändra den hemliga koden
-1038|Byt namn på familjen
-1039|Bytte namn på familjen
-1040|Ändrade land och valuta
-1041|Ändrade ett namn
-1042|Ändrade en roll
-1043|Dela
-1044|Jag glömde koden
-1045|Vi skickade en kod till {email}. Skriv den och den nya adressen. Den ersätter den nuvarande först efter verifiering.
-1046|Vi skickade en 6-siffrig kod till {email}. Den gäller i 10 minuter.
-1047|Mina
-1048|Skicka förfrågan
-1049|Skicka verifieringskod
-1050|Skicka koden via e-post
-1051|Skicka en kod till den nuvarande e-posten
-1052|Namn
-1053|Målets namn får vara högst 40 tecken
-1054|Familjens namn
-1055|Familjens namn stämmer inte
-1056|Familjens namn är ogiltigt
-1057|Ogiltigt namn
-1058|Kända namn
-1059|Spara
-1060|en timme
-1061|{"one":"{n} timme","other":"{n} timmar"}
-1062|Växelkurserna har inte laddats än. Försök igen om en stund.
-1063|2 timmar
-1064|Språk
-1065|Ogiltigt datum
-1066|Födelsedatum
-1067|Ogiltigt födelsedatum
-1068|Känsla
-1069|användarvillkoren
-1070|Användarvillkor
-1071|Roll
-1072|Roll:
-1073|Huvudmeny
-1074|Betalning av en skuld i en annan valuta
-1075|🆘 Den gamla enheten har försvunnit eller gått sönder
+807|Raderat
+808|tog bort ett sparmål
+809|Raderat
+810|tog bort ett sparmål
+811|Valuta
+812|Valutan stöds inte
+813|Vilka är dina barn?
+814|Vem är skyldig mest
+815|Vem är skyldig mig?
+816|Vem är skyldig vem
+817|Vem är skyldig (betalaren)
+818|Vem är skyldig mig?
+819|Vem loggar in?
+820|Vem som ändrade vad och när, de senaste 6 månaderna.
+821|E-post för kodåterställning
+822|E-post för kodåterställning (valfritt)
+823|E-post är bara för föräldrar
+824|Plats och valuta
+825|Någon
+826|Enhet
+827|Ny enhet / Byt enhet
+828|Enheten finns inte
+829|Anslutna enheter
+830|Enheter som sparat familjen. Ett kort som inte används på 180 dagar går ut av sig självt.
+831|Alldeles nyss
+832|Väntar på godkännande: {amount}
+833|Väntar på en förälders godkännande
+834|Väntar på en förälders godkännande
+835|Ogiltig aviseringsprenumeration
+836|Ge koden till {name} personligen, inte i ett meddelande. Den gäller i 30 minuter och bara en gång.
+837|Ogiltig nyckel
+838|Vänläge
+839|Vänläge godkänt ✅
+840|Vänläge är bara för tonåringar
+841|Vänläge stängdes av
+842|Vänläge för {name}
+843|Vänläge har inte godkänts av föräldrarna än
+844|Gå med i kassan
+845|Du går med i kassan för {name}. En förälder i familjen måste godkänna och anger om du är barn, tonåring eller förälder.
+846|Utseende
+847|Något gick fel
+848|Något gick fel. Försök igen.
+849|Familj
+850|En annan familj
+851|Fler familjer
+852|Familjen {name}
+853|Tillagd {date}
+854|Hantera
+855|Försök igen
+856|Du försökte för många gånger. Försök igen om {wait}.
+857|Rensa sökningen
+858|Koppla från
+859|Loggar in utan kod
+860|Raderad
+861|Data från den tidigare versionen hittades på den här enheten: {people} personer och {entries} registreringar. Flytta dem till servern?
+862|Försök igen
+863|Försök igen
+864|Tonåring
+865|Tonåring
+866|Tonåring
+867|Kvinna
+868|Enheten verkar vara i {name}. Bor du i {name}?
+869|Registrerade skulder
+870|{left} kvar av {total}
+871|{left} återstår av den här skulden.
+872|En kod skickas dit när en hemlig kod ändras eller återställs, och även en avisering när någons kod i familjen låses.
+873|Skickat till en förälder för godkännande ⏳
+874|Skickat till vännen för godkännande ⏳
+875|En kod har skickats till din verifierade e-post. När du bekräftat den kan bytet ske först om 24 timmar, och under tiden får du och de andra föräldrarna en avisering och kan avbryta.
+876|En testnotis skickades till {n} enheter. Den bör dyka upp om ett ögonblick.
+877|Sparat på enheten, skickas när anslutningen är tillbaka
+878|Stäng
+879|Ordning på registreringarna
+880|Totalt
+881|Totalt i {cur} till dagens kurs
+882|Markerad som betald
+883|Klart
+884|Månadssammanfattning
+885|Belopp ({cur})
+886|Ogiltigt belopp
+887|Ogiltigt belopp. Mellan vänner kan du registrera upp till 500 shekel åt gången
+888|Det har gått ett tag. Föräldern har nog inte sett förfrågan än. Du kan skicka ett meddelande.
+889|Inget har registrerats än.
+890|En uppdatering pågår redan
+891|Uppdatera
+892|Mer
+893|Det finns ingen annan i familjen än. En förälder måste lägga till dem.
+894|Inga godkända vänner än
+895|Inga godkända vänner än. Lägg till en vän via e-post.
+896|Inga vänner än. Lägg till en vän via e-post.
+897|Inga sparmål än.
+898|Listan är fortfarande tom. Tryck på en av knapparna för att börja.
+899|Inga återkommande registreringar än.
+900|Inga ändringar i loggen ännu.
+901|Ingen förälder har öppnat boken ännu
+902|Fler figurer
+903|Inte än
+904|Har inte valt en kod än
+905|Har inte valt en kod än
+906|Har inte valt en kod än
+907|Inget har registrerats med vänner än.
+908|Inget har registrerats än.
+909|Ingen kopia har skickats ännu
+910|Det har inte gått 24 timmar sedan begäran än.
+911|Fler åtgärder
+912|Senast uppdaterad: {when}
+913|Utseende
+914|Nu är det förälderns tur: öppna appen, gå till fliken ”Hantera” och tryck på ”Godkänn” bredvid ditt namn.
+915|För {debt} (= {covers} till dagens kurs).
+916|För {debt}.
+917|Vad sparar du till?
+918|För vad? (du kan hoppa över)
+919|För vad? (valfritt)
+920|För: {debt}
+921|Med vem?
+922|Extra stor
+923|Verifieringen har gått ut. Försök igen.
+924|Beräkningsdetaljer
+925|Ogiltig åtgärd
+926|Profil
+927|skapade ett sparmål
+928|skapade ett sparmål
+929|skapade ett sparmål
+930|Skärmfärger
+931|Neonfärger
+932|Tilltalsformen är redan vald och kan inte ändras
+933|Tilltalsform sparad ✅
+934|Tilltalsform
+935|Tilltalsform:
+936|Ljud
+937|Har tittat i boken:
+938|Skapa en familjekassa: alla ser samma konto och skulderna uppdateras för alla.
+939|Bekräftelse med fingeravtryck eller ansiktsigenkänning krävs
+940|Du behöver familjekoden för att komma in i den här familjen.
+941|Appen behöver tillåtelse att installera uppdateringar: slå på "Tillåt från den här källan" i inställningarna som öppnas och tryck på "Uppdatera" igen
+942|Du måste godkänna användarvillkoren och integritetspolicyn
+943|Du måste godkänna att dina föräldrar ser din personliga anteckningsbok
+944|Du måste logga in igen
+945|Du måste logga in igen med familjekoden
+946|Enheten måste kopplas igen
+947|Du behöver koppla den här telefonen en gång.
+948|Enheten måste kopplas
+949|Den här enheten måste kopplas till en förälder. Logga in igen och koppla den med en länkkod från en annan förälder
+950|Du behöver koppla den här enheten och webbläsaren en gång.
+951|En verifierad e-postadress behövs för att byta enhet
+952|Ange koden
+953|Ange koden och logga in
+954|Ange tilltalsform…
+955|Ange en hemlig kod
+956|En kod för alla. Den som går med med den kommer in som barn. Senare kan du ändra till tonåring eller förälder under "Familjemedlemmar", med godkännande via fingeravtryck eller ansiktsigenkänning.
+957|Kod från e-posten
+958|Verifieringskoden från e-posten är fel eller har gått ut.
+959|Verifieringskoden är fel eller har gått ut.
+960|Kopplingskod
+961|Anslutningskod till kassan för {name}: {code}
+962|Familjens anslutningskod
+963|Familjens anslutningskod visas bara med fingeravtryck eller ansiktsigenkänning.
+964|Familjekoden ändrades. Be dina föräldrar om en ny kod.
+965|Kopplingskoden
+966|Ny kod
+967|Ny kod ({rule})
+968|Kod från den nuvarande e-posten
+969|Familjekod
+970|Hemlig kod ({rule}; längre = säkrare)
+971|Hemlig kod (obligatorisk för en förälder, {rule})
+972|Hemlig kod (valfritt — utan kod loggar man in med ett tryck och kan ange en kod senare)
+973|En hemlig kod för alla barn ({rule}). Får lämnas tom
+974|Ny hemlig kod
+975|Hemlig kod för {name}
+976|Din egen hemliga kod (4 siffror)
+977|Kopplingskod
+978|Kopplingskod är bara för föräldrar
+979|Kopplingskod för {name}
+980|Kopplingskod för en enhet
+981|Anslutningskoder
+982|Först måste en hemlig kod anges för {name}
+983|Kvittade {amount} mot {name} ✅
+984|En familjekassa kan bara skapas av någon över 18
+985|Liten
+986|Jag fick
+987|Jag fick mellanskillnaden ({amount})
+988|Jag fick pengar
+989|Ömsesidig kvittning
+990|Kvitta ömsesidiga skulder
+991|Kvitta ömsesidiga skulder ({amount})
+992|Inbjudningslänken lägger till alla som öppnar den som barn. Dela den bara med familjen.
+993|Enhetskoppling
+994|Koppla den här enheten och logga in
+995|Koppla enheten till en förälder
+996|Jag har läst och godkänner {terms} och {privacy}
+997|Jag har läst och godkänner {terms} och {privacy}
+998|Jag har läst och godkänner {terms} och {privacy}
+999|{n} enheter är redan kopplade, vilket är max. Ta bort en enhet för att lägga till en till.
+1000|Normal
+1001|Ett ögonblick, loggar in…
+1002|Ett ögonblick, loggar ut…
+1003|Vill du slå ihop dem i familjekassan?
+1004|Vill du att de som är skyldiga dig pengar ska se det här?
+1005|Vibration
+1006|Registrera
+1007|Registrera en återbetalning
+1008|Registrerar en skuld automatiskt, varje vecka eller månad, utan att du skriver in den varje gång.
+1009|Ny återkommande registrering
+1010|En post som sparades offline skickades inte: {err}
+1011|Uppdatera appen
+1012|Bara föräldrar kan göra det här
+1013|Bara föräldrar kan skapa ett mål åt någon annan
+1014|Bara föräldrar kan ange tilltalsformen
+1015|Bara för att säkerställa att den som skapar kassan är över 18. Visas inte för någon.
+1016|Registrerade en återbetalning
+1017|Registrerade en skuld
+1018|Registrerade en återbetalning
+1019|Registrerade en skuld
+1020|Registrerade en återbetalning
+1021|Registrerade en skuld
+1022|Skriv in din egen skuld i anteckningsboken
+1023|Ren vecka
+1024|En hel vecka utan öppna skulder
+1025|Helt betald ✅
+1026|Betalda ({n})
+1027|Sparar allt…
+1028|Släpp låset
+1029|Jag betalade
+1030|Jag betalade mellanskillnaden ({amount})
+1031|Senast använd: {date}
+1032|Bytte namn på familjen
+1033|Ändrade land och valuta
+1034|Ändrade ett namn
+1035|Ändrade en roll
+1036|Bytte namn på familjen
+1037|Ändrade land och valuta
+1038|Ändrade ett namn
+1039|Ändrade en roll
+1040|Ändra
+1041|Att byta valuta ändrar bara symbolen. Beloppen själva räknas inte om.
+1042|Ändra den hemliga koden
+1043|Byt namn på familjen
+1044|Bytte namn på familjen
+1045|Ändrade land och valuta
+1046|Ändrade ett namn
+1047|Ändrade en roll
+1048|Dela
+1049|Jag glömde koden
+1050|Vi skickade en kod till {email}. Skriv den och den nya adressen. Den ersätter den nuvarande först efter verifiering.
+1051|Vi skickade en 6-siffrig kod till {email}. Den gäller i 10 minuter.
+1052|Mina
+1053|Skicka förfrågan
+1054|Skicka verifieringskod
+1055|Skicka koden via e-post
+1056|Skicka en kod till den nuvarande e-posten
+1057|Namn
+1058|Målets namn får vara högst 40 tecken
+1059|Familjens namn
+1060|Familjens namn stämmer inte
+1061|Familjens namn är ogiltigt
+1062|Ogiltigt namn
+1063|Kända namn
+1064|Spara
+1065|en timme
+1066|{"one": "{n} timme", "other": "{n} timmar"}
+1067|Växelkurserna har inte laddats än. Försök igen om en stund.
+1068|2 timmar
+1069|Språk
+1070|Ogiltigt datum
+1071|Födelsedatum
+1072|Ogiltigt födelsedatum
+1073|Känsla
+1074|användarvillkoren
+1075|Användarvillkor
+1076|Roll
+1077|Roll:
+1078|Huvudmeny
+1079|Betalning av en skuld i en annan valuta
+1080|🆘 Den gamla enheten har försvunnit eller gått sönder

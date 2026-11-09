@@ -67,7 +67,7 @@
 66|⚖️ Offset debts
 67|⚠️ A request was made to switch {name}'s device (it can go through on {when}). If you don't know about it, cancel it.
 68|⚠️ A request was made to switch your device. The switch can go through on {when}. If this wasn't you, cancel it.
-69|{"one":"⚠️ {name}'s code was locked once after wrong attempts.","other":"⚠️ {name}'s code was locked {n} times after wrong attempts."}
+69|{"one": "⚠️ {name}'s code was locked once after wrong attempts.", "other": "⚠️ {name}'s code was locked {n} times after wrong attempts."}
 70|⚡ Neon
 71|✅ Approve
 72|✅ All the children sign in without a secret code for now. You can add more children.
@@ -120,238 +120,238 @@
 119|🔒 Adding a {role} is approved with a fingerprint or face recognition.
 120|🔔 Turn on notifications
 121|🔔 Want to know right away?
-122|🔕 Turn off notifications
-123|🗑️ Delete
-124|🗑️ Delete the whole notebook
-125|🤝 Friend requests ({n})
-126|🤝 Friends mode requests ({n})
-127|🤝 Friends
-128|🤝 Friends mode is on
-129|🧹 Delete what's paid
-130|🙂 Choose an avatar
-131|3 weeks in a row
-132|4 digits
-133|4 to {max} digits
-134|4 to 8 digits
-135|6 digits
-136|8 weeks in a row
-137|Dad
-138|Security
-139|A person can't owe themselves
-140|Person doesn't exist
-141|I'll add them later
-142|Approved ✅
-143|Approved! You can sign in
-144|You're approved!
-145|Danger zone
-146|You can't repay more than what's left of the debt
-147|You can't repay more than what's left of the debt ({amount})
-148|You can't remove the last device. Switching devices is a separate process.
-149|You can't remove yourself
-150|Can't copy on this device
-151|This device can't be linked this way
-152|Can't link this way. A device switch is needed.
-153|You can't change your own role
-154|Merge with the notebook
-155|What should the family be called?
-156|What's your name?
-157|Mom
-158|Verify
-159|Verify the email
-160|None
-161|There is no active request, or it was cancelled. You can submit a new one.
-162|No internet connection. The status will update as soon as the connection is back.
-163|No internet connection. Try again when you're online.
-164|No connection to the server
-165|No connection to the server. Your personal notebook keeps working as usual. New debts and repayments in the family wallet are saved on this device and will be sent when the connection returns. Other changes are sent only if the app stays open.
-166|Nothing open
-167|Nothing open!
-168|This parent has no verified email, so this route isn't possible. Another parent can issue a link code.
-169|This parent doesn't have a secret code yet.
-170|You don't have a secret code. Set one in "My account" and try again.
-171|No verified email
-172|No verified email to replace
-173|There's no open request under this name anymore. It may have been deleted, or the wallet may have been closed. You can send a new request.
-174|No secret code. You can set one later in "My account".
-175|No paid entries
-176|No exchange rate for the debt's currency
-177|No rate right now
-178|Where do you live?
-179|Approve
-180|Email confirmation
-181|Confirm with secret code
-182|Confirm the request
-183|Confirm adding a device
-184|Parent approval
-185|Confirm device switch
-186|Confirm removing a device
-187|Approve friends mode
-188|Confirm the role change
-189|Approved
-190|approved a savings goal deposit
-191|Approved a join request
-192|Approved
-193|approved a savings goal deposit
-194|Approved a join request
-195|Approved
-196|approved a savings goal deposit
-197|Approved a join request
-198|If this parent has a verified email, we'll send it a verification code. If no email is set, another parent can set a new code for you.
-199|If that's not him, it's worth setting a new code.
-200|If that's not him/her, it's worth setting a new code.
-201|If that's not her, it's worth setting a new code.
-202|If the friend has friends mode, a request was sent to them 🤝
-203|If you forget the code, we'll send a reset code to it. Without an email, only another parent can help.
-204|I'm new
-205|I owe
-206|I owe {a} • owes me {b}
-207|I owe money
-208|I owe {name}
-209|I owe {to}
-210|I owe a friend
-211|I owe friends
-212|I owe
-213|I owe money
-214|I owe {name}
-215|I owe {to}
-216|I owe a friend
-217|I owe friends
-218|I owe
-219|I owe money
-220|I owe {name}
-221|I owe {to}
-222|I owe a friend
-223|I owe friends
-224|I agree that the parents in my family can see what I wrote in my personal notebook. They can only view it, not change or delete it.
-225|Nobody owes anything!
-226|Nobody owes anything.
-227|App
-228|You can cancel only within the first 10 minutes, or ask a parent
-229|You can cancel only within the first 10 minutes. To fix it, record a repayment
-230|You can repay up to {max}.
-231|You can complete the switch. Type the secret code and link this device.
-232|Only a repayment can be linked to a debt
-233|You can only record debts that involve you
-234|You can only record with approved friends
-235|The device you're using has to be removed from another device.
-236|On day {day} of every month
-237|Which day
-238|Which day of the month (1 to 28)
-239|Checking the request status…
-240|Checking who it is…
-241|Checking…
-242|Choose another debt
-243|Choose a country
-244|Choose a date
-245|Choose an avatar
-246|Choose where you live
-247|Choose a new secret code ({rule})
-248|Undo
-249|Cancel
-250|Cancel the request
-251|Cancel the request on this device
-252|Remove parent permissions
-253|Turn off friends mode
-254|Between friends you can record up to {max} each time.
-255|Meanwhile, you can write in the personal notebook, which is saved on your device.
-256|Asked for approval
-257|asked to make a savings goal deposit
-258|Asked for approval
-259|asked to make a savings goal deposit
-260|Asked for approval
-261|asked to make a savings goal deposit
-262|Without a code, children just tap to sign in, and each child can set their own code whenever they like. With a code, all the children get the same one, and when you want to give each child their own user, reset their code from the “Manage” tab and they'll choose their own.
-263|This device has no fingerprint or face recognition, so confirm with your secret code.
-264|On the new device: open the wallet, choose your name, tap "New device / Replace device" and then "Add this device", and type your secret code and this code. The code is valid for 30 minutes and works only once.
-265|On the old device: "My account" > "My devices" > Switch device. The code will arrive by email. All previous devices will be disconnected.
-266|On a device that's already linked: "My account" > "My devices" > Add a device. A code will appear there. Existing devices will keep working.
-267|The family already has a parent linked to a device, so to link this device you need a link code from them. Sign out, and on the sign-in screen tap "New device / Replace device".
-268|Members of {name}
-269|Family members
-270|In total {name} owes me
+122|🔔 Send a test notification
+123|🔕 Turn off notifications
+124|🗑️ Delete
+125|🗑️ Delete the whole notebook
+126|🤝 Friend requests ({n})
+127|🤝 Friends mode requests ({n})
+128|🤝 Friends
+129|🤝 Friends mode is on
+130|🧹 Delete what's paid
+131|🙂 Choose an avatar
+132|3 weeks in a row
+133|4 digits
+134|4 to {max} digits
+135|4 to 8 digits
+136|6 digits
+137|8 weeks in a row
+138|Dad
+139|Security
+140|A person can't owe themselves
+141|Person doesn't exist
+142|I'll add them later
+143|Approved ✅
+144|Approved! You can sign in
+145|You're approved!
+146|Danger zone
+147|You can't repay more than what's left of the debt
+148|You can't repay more than what's left of the debt ({amount})
+149|You can't remove the last device. Switching devices is a separate process.
+150|You can't remove yourself
+151|Can't copy on this device
+152|This device can't be linked this way
+153|Can't link this way. A device switch is needed.
+154|You can't change your own role
+155|Merge with the notebook
+156|What should the family be called?
+157|What's your name?
+158|Mom
+159|Verify
+160|Verify the email
+161|None
+162|There is no active request, or it was cancelled. You can submit a new one.
+163|No internet connection. The status will update as soon as the connection is back.
+164|No internet connection. Try again when you're online.
+165|No connection to the server
+166|No connection to the server. Your personal notebook keeps working as usual. New debts and repayments in the family wallet are saved on this device and will be sent when the connection returns. Other changes are sent only if the app stays open.
+167|Nothing open
+168|Nothing open!
+169|This parent has no verified email, so this route isn't possible. Another parent can issue a link code.
+170|This parent doesn't have a secret code yet.
+171|You don't have a secret code. Set one in "My account" and try again.
+172|No verified email
+173|No verified email to replace
+174|There's no open request under this name anymore. It may have been deleted, or the wallet may have been closed. You can send a new request.
+175|No secret code. You can set one later in "My account".
+176|No paid entries
+177|No exchange rate for the debt's currency
+178|No rate right now
+179|Where do you live?
+180|Approve
+181|Email confirmation
+182|Confirm with secret code
+183|Confirm the request
+184|Confirm adding a device
+185|Parent approval
+186|Confirm device switch
+187|Confirm removing a device
+188|Approve friends mode
+189|Confirm the role change
+190|Approved
+191|approved a savings goal deposit
+192|Approved a join request
+193|Approved
+194|approved a savings goal deposit
+195|Approved a join request
+196|Approved
+197|approved a savings goal deposit
+198|Approved a join request
+199|If this parent has a verified email, we'll send it a verification code. If no email is set, another parent can set a new code for you.
+200|If that's not him, it's worth setting a new code.
+201|If that's not him/her, it's worth setting a new code.
+202|If that's not her, it's worth setting a new code.
+203|If the friend has friends mode, a request was sent to them 🤝
+204|If you forget the code, we'll send a reset code to it. Without an email, only another parent can help.
+205|I'm new
+206|I owe
+207|I owe {a} • owes me {b}
+208|I owe money
+209|I owe {name}
+210|I owe {to}
+211|I owe a friend
+212|I owe friends
+213|I owe
+214|I owe money
+215|I owe {name}
+216|I owe {to}
+217|I owe a friend
+218|I owe friends
+219|I owe
+220|I owe money
+221|I owe {name}
+222|I owe {to}
+223|I owe a friend
+224|I owe friends
+225|I agree that the parents in my family can see what I wrote in my personal notebook. They can only view it, not change or delete it.
+226|Nobody owes anything!
+227|Nobody owes anything.
+228|App
+229|You can cancel only within the first 10 minutes, or ask a parent
+230|You can cancel only within the first 10 minutes. To fix it, record a repayment
+231|You can repay up to {max}.
+232|You can complete the switch. Type the secret code and link this device.
+233|Only a repayment can be linked to a debt
+234|You can only record debts that involve you
+235|You can only record with approved friends
+236|The device you're using has to be removed from another device.
+237|On day {day} of every month
+238|Which day
+239|Which day of the month (1 to 28)
+240|Checking the request status…
+241|Checking who it is…
+242|Checking…
+243|Choose another debt
+244|Choose a country
+245|Choose a date
+246|Choose an avatar
+247|Choose where you live
+248|Choose a new secret code ({rule})
+249|Undo
+250|Cancel
+251|Cancel the request
+252|Cancel the request on this device
+253|Remove parent permissions
+254|Turn off friends mode
+255|Between friends you can record up to {max} each time.
+256|Meanwhile, you can write in the personal notebook, which is saved on your device.
+257|Asked for approval
+258|asked to make a savings goal deposit
+259|Asked for approval
+260|asked to make a savings goal deposit
+261|Asked for approval
+262|asked to make a savings goal deposit
+263|Without a code, children just tap to sign in, and each child can set their own code whenever they like. With a code, all the children get the same one, and when you want to give each child their own user, reset their code from the “Manage” tab and they'll choose their own.
+264|This device has no fingerprint or face recognition, so confirm with your secret code.
+265|On the new device: open the wallet, choose your name, tap "New device / Replace device" and then "Add this device", and type your secret code and this code. The code is valid for 30 minutes and works only once.
+266|On the old device: "My account" > "My devices" > Switch device. The code will arrive by email. All previous devices will be disconnected.
+267|On a device that's already linked: "My account" > "My devices" > Add a device. A code will appear there. Existing devices will keep working.
+268|The family already has a parent linked to a device, so to link this device you need a link code from them. Sign out, and on the sign-in screen tap "New device / Replace device".
+269|Members of {name}
+270|Family members
 271|In total {name} owes me
 272|In total {name} owes me
-273|In total I owe {name}
+273|In total {name} owes me
 274|In total I owe {name}
 275|In total I owe {name}
-276|The notebook has entries for “{name}”
-277|Notebook: “{a}”. Wallet: “{b}”.
-278|There's nothing for you to do. After approval you can sign in with the secret code you chose.
-279|New request
-280|Ask parents for approval
-281|Your join request
-282|Welcome to the wallet 🪙
-283|Large
-284|Text size
-285|Scroll right
-286|Scroll left
-287|A new version is available ({version})
-288|Chart of debts and repayments by month
-289|Rejected
-290|rejected a savings goal deposit
-291|Rejected a join request
-292|Rejected
-293|rejected a savings goal deposit
-294|Rejected a join request
-295|Decline
-296|Rejected
-297|rejected a savings goal deposit
-298|Rejected a join request
-299|Avatar
-300|Avatar {avatar}
-301|Pocket money
-302|Recurring pocket money
-303|Browser
-304|a minute
-305|{"one":"{n} minute","other":"{n} minutes"}
-306|Verification canceled
-307|Fingerprint / face verification failed
-308|Verification failed. Try again.
-309|Verification failed (unknown address).
-310|Verification failed. Try again.
-311|The people you add will choose a secret code the first time they sign in.
-312|The app ran into an unexpected problem. You can try again, and if it keeps happening, refresh the app.
-313|The app isn't connected to the server yet
-314|Got it
-315|The request was cancelled
-316|The request was received. The switch can go through on {when}. Until then the old phone, if found, still works, and the parents can cancel the request.
-317|The request no longer exists
-318|The request was not approved
-319|The request no longer exists
-320|Your request to join the wallet was sent. This screen updates by itself, no need to refresh.
-321|Your request to join {name}'s wallet was sent. This screen updates by itself, no need to refresh.
-322|The request was declined
-323|The request was sent and saved with the family
-324|The request was sent to a parent
-325|The request was sent to your parents ⏳
-326|The request was sent to your parents. We'll let you know when they approve.
-327|Settings
-328|Family settings
-329|Goal reached
-330|This avatar is already taken by someone else in the family
-331|This browser is too old for biometric verification. Update it and try again.
-332|The download failed. Check your internet connection and try again
-333|This parent is already linked to another device, or the key was deleted from this device. To continue from here you need to switch devices: sign out, and on the sign-in screen tap "New device / Replace device".
-334|The parent is already linked to a device. Switching devices is a separate process.
-335|The parent got a notification on their phone
-336|Your parents can no longer see your personal notebook. It stays only with you.
-337|The parents got a notification on their phones
-338|The parents in each family see a view-only copy of your notebook. You can pause sharing at any time.
-339|The repayment doesn't match this debt
-340|Repayment saved ✅
-341|Continue on {name}'s device: open the wallet, choose {name}, tap "New device / Replace device", and type {name}'s secret code and this code. From then on {name} signs in as a parent only from this device.
-342|The note is too long
-343|Deposit approved ✅
-344|Deposit declined
-345|Deposit added 🐷
-346|Notifications turned on 🔔
-347|Notifications are blocked. You can allow them in your browser settings.
-348|Notifications turned off
-349|He will lose parent permissions. After that, verification with face recognition or a fingerprint will be required.
-350|He will lose friends mode. After that, verification with face recognition or a fingerprint will be required.
-351|He will get full parent permissions: see everything, approve, delete and manage the family. After that, verification with face recognition or a fingerprint will be required.
-352|Repaid
-353|Added a family member
+276|In total I owe {name}
+277|The notebook has entries for “{name}”
+278|Notebook: “{a}”. Wallet: “{b}”.
+279|There's nothing for you to do. After approval you can sign in with the secret code you chose.
+280|New request
+281|Ask parents for approval
+282|Your join request
+283|Welcome to the wallet 🪙
+284|Large
+285|Text size
+286|Scroll right
+287|Scroll left
+288|A new version is available ({version})
+289|Chart of debts and repayments by month
+290|Rejected
+291|rejected a savings goal deposit
+292|Rejected a join request
+293|Rejected
+294|rejected a savings goal deposit
+295|Rejected a join request
+296|Decline
+297|Rejected
+298|rejected a savings goal deposit
+299|Rejected a join request
+300|Avatar
+301|Avatar {avatar}
+302|Pocket money
+303|Recurring pocket money
+304|Browser
+305|a minute
+306|{"one": "{n} minute", "other": "{n} minutes"}
+307|Verification canceled
+308|Fingerprint / face verification failed
+309|Verification failed. Try again.
+310|Verification failed (unknown address).
+311|Verification failed. Try again.
+312|The people you add will choose a secret code the first time they sign in.
+313|The app ran into an unexpected problem. You can try again, and if it keeps happening, refresh the app.
+314|The app isn't connected to the server yet
+315|Got it
+316|The request was cancelled
+317|The request was received. The switch can go through on {when}. Until then the old phone, if found, still works, and the parents can cancel the request.
+318|The request no longer exists
+319|The request was not approved
+320|The request no longer exists
+321|Your request to join the wallet was sent. This screen updates by itself, no need to refresh.
+322|Your request to join {name}'s wallet was sent. This screen updates by itself, no need to refresh.
+323|The request was declined
+324|The request was sent and saved with the family
+325|The request was sent to a parent
+326|The request was sent to your parents ⏳
+327|The request was sent to your parents. We'll let you know when they approve.
+328|Settings
+329|Family settings
+330|Goal reached
+331|This avatar is already taken by someone else in the family
+332|This browser is too old for biometric verification. Update it and try again.
+333|The download failed. Check your internet connection and try again
+334|This parent is already linked to another device, or the key was deleted from this device. To continue from here you need to switch devices: sign out, and on the sign-in screen tap "New device / Replace device".
+335|The parent is already linked to a device. Switching devices is a separate process.
+336|The parent got a notification on their phone
+337|Your parents can no longer see your personal notebook. It stays only with you.
+338|The parents got a notification on their phones
+339|The parents in each family see a view-only copy of your notebook. You can pause sharing at any time.
+340|The repayment doesn't match this debt
+341|Repayment saved ✅
+342|Continue on {name}'s device: open the wallet, choose {name}, tap "New device / Replace device", and type {name}'s secret code and this code. From then on {name} signs in as a parent only from this device.
+343|The note is too long
+344|Deposit approved ✅
+345|Deposit declined
+346|Deposit added 🐷
+347|Notifications turned on 🔔
+348|Notifications are blocked. You can allow them in your browser settings.
+349|Notifications turned off
+350|He will lose parent permissions. After that, verification with face recognition or a fingerprint will be required.
+351|He will lose friends mode. After that, verification with face recognition or a fingerprint will be required.
+352|He will get full parent permissions: see everything, approve, delete and manage the family. After that, verification with face recognition or a fingerprint will be required.
+353|Repaid
 354|Added a family member
 355|Added a family member
 356|Added a family member
@@ -360,717 +360,722 @@
 359|Added a family member
 360|Added a family member
 361|Added a family member
-362|Add
-363|Add a family member
-364|Add this device and sign in
-365|Add a friend
-366|Add a child
-367|{n} entries transferred
-368|Copied ✅
-369|Parent
-370|Another parent opens "Link code" next to your name under "Manage" and gives you a code.
-371|Another parent needs to set a secret code for you
-372|A parent approved your request. Now sign in: choose your name and type the secret code you chose.
-373|A parent in the family declined the request. Maybe the name was one they didn't recognize, or it wasn't what they meant. Talk to them, and then you can try again.
-374|A parent signs in here, and then gets codes for the rest of the family.
-375|A parent signs in only from devices linked to them (you can add another device later), and parent actions are confirmed with a fingerprint or face recognition.
-376|A parent needs to set the Convex address in the file
-377|A parent needs to sign in first.
-378|Achieved ✅
-379|Friend removed
-380|My friends
-381|The debt is in {debtCur}. You pay in {payCur} at today's rate.
-382|Debt grew by
-383|This debt has already been paid
-384|The debt will be fully closed ✅
-385|Debt not found
-386|Debt saved ✅
-387|Debt shrank by
-388|Debts between you and {name} will be closed up to this amount, and only the difference will remain. The history is kept.
-389|Open debts by currency
-390|Debts offset ✅
-391|Repayment
-392|First repayment
-393|Repayments
-394|Repaid everything 3 weeks in a row
-395|Repaid everything 8 weeks in a row
-396|Repaid a debt for the first time
-397|I repaid {to}
-398|Changed the family code
+362|Added a family member
+363|Add
+364|Add a family member
+365|Add this device and sign in
+366|Add a friend
+367|Add a child
+368|{n} entries transferred
+369|Copied ✅
+370|Parent
+371|Another parent opens "Link code" next to your name under "Manage" and gives you a code.
+372|Another parent needs to set a secret code for you
+373|A parent approved your request. Now sign in: choose your name and type the secret code you chose.
+374|A parent in the family declined the request. Maybe the name was one they didn't recognize, or it wasn't what they meant. Talk to them, and then you can try again.
+375|A parent signs in here, and then gets codes for the rest of the family.
+376|A parent signs in only from devices linked to them (you can add another device later), and parent actions are confirmed with a fingerprint or face recognition.
+377|A parent needs to set the Convex address in the file
+378|A parent needs to sign in first.
+379|Achieved ✅
+380|Friend removed
+381|My friends
+382|The debt is in {debtCur}. You pay in {payCur} at today's rate.
+383|Debt grew by
+384|This debt has already been paid
+385|The debt will be fully closed ✅
+386|Debt not found
+387|Debt saved ✅
+388|Debt shrank by
+389|Debts between you and {name} will be closed up to this amount, and only the difference will remain. The history is kept.
+390|Open debts by currency
+391|Debts offset ✅
+392|Repayment
+393|First repayment
+394|Repayments
+395|Repaid everything 3 weeks in a row
+396|Repaid everything 8 weeks in a row
+397|Repaid a debt for the first time
+398|I repaid {to}
 399|Changed the family code
 400|Changed the family code
-401|Changing the code disconnects every device that saved the family, so a parent must approve it. A device verification prompt will open now.
-402|Change email
-403|Switch device (send a code by email)
-404|Change code
-405|Account with {name}
-406|My account
-407|Phone broken or lost? Another parent can issue you a link code under "Manage". If there is no other parent, request a switch on the sign-in screen: it can go through after 24 hours, and you'll get an email about it.
-408|She will lose parent permissions. After that, verification with face recognition or a fingerprint will be required.
-409|She will lose friends mode. After that, verification with face recognition or a fingerprint will be required.
-410|She will get full parent permissions: see everything, approve, delete and manage the family. After that, verification with face recognition or a fingerprint will be required.
-411|Hi {name}, a small reminder: {amount} is still left to pay back. Thanks! 🙏
-412|Hi {name}, a small reminder: {amount} is still left to pay back for {note}. Thanks! 🙏
-413|Hi, {name} asked to join the family wallet. You can sign in and approve: {url}
-414|History
-415|History with friends
-416|The goal has already been reached
-417|The goal doesn't exist
-418|Goal added 🎯
-419|Achievements
-420|Achievements: {name}
-421|All {amount}
-422|All settled
-423|All settled ✅
-424|Everything is saved only on this device.
-425|Newest first
-426|My money
-427|My country isn't listed ($)
-428|Family currency
-429|The family currency is {base}, and this debt will be kept in {cur}. In balances it's shown at that day's rate, and when it's paid the amount is converted at the rate on the payment day.
-430|Currency: {cur}
-431|Email verified ✅
-432|This email is already used by someone else
-433|Current email: {email}. To replace it, we'll send it a confirmation code.
-434|{name}'s email
-435|The friend's email
-436|Your email for friends:
-437|Location and currency saved ✅
-438|Location and currency updated ✅
-439|Device removed ✅
-440|This device will stop signing in as a parent. You can add it again later.
-441|This device is no longer linked to a parent
-442|This device is no longer linked to a parent. To sign in you need to switch devices.
-443|This device is already linked to a parent
-444|This device isn't linked to this parent.
-445|This device isn't linked to this parent. To add it or switch devices, tap "New device / Replace device".
-446|This device isn't registered for verification. Register it again.
-447|This device isn't linked to a parent yet.
-448|Device not found
-449|The device isn't supported
-450|Device disconnected ✅
-451|My devices
-452|This screen ran into a problem. The rest of the app keeps working, so you can switch to another tab.
-453|Continue
-454|Continue to verification
-455|This family removed the device. To enter again you need the family code.
-456|Family not found
-457|The family is full
-458|Lock released ✅
-459|This teen will lose friends mode. After that, verification with face recognition or a fingerprint will be required.
-460|My data
-461|Removed a family member
-462|Removed a family member
+401|Changed the family code
+402|Changing the code disconnects every device that saved the family, so a parent must approve it. A device verification prompt will open now.
+403|Change email
+404|Switch device (send a code by email)
+405|Change code
+406|Account with {name}
+407|My account
+408|Phone broken or lost? Another parent can issue you a link code under "Manage". If there is no other parent, request a switch on the sign-in screen: it can go through after 24 hours, and you'll get an email about it.
+409|She will lose parent permissions. After that, verification with face recognition or a fingerprint will be required.
+410|She will lose friends mode. After that, verification with face recognition or a fingerprint will be required.
+411|She will get full parent permissions: see everything, approve, delete and manage the family. After that, verification with face recognition or a fingerprint will be required.
+412|Hi {name}, a small reminder: {amount} is still left to pay back. Thanks! 🙏
+413|Hi {name}, a small reminder: {amount} is still left to pay back for {note}. Thanks! 🙏
+414|Hi, {name} asked to join the family wallet. You can sign in and approve: {url}
+415|History
+416|History with friends
+417|The goal has already been reached
+418|The goal doesn't exist
+419|Goal added 🎯
+420|Achievements
+421|Achievements: {name}
+422|All {amount}
+423|All settled
+424|All settled ✅
+425|Everything is saved only on this device.
+426|Newest first
+427|My money
+428|My country isn't listed ($)
+429|Family currency
+430|The family currency is {base}, and this debt will be kept in {cur}. In balances it's shown at that day's rate, and when it's paid the amount is converted at the rate on the payment day.
+431|Currency: {cur}
+432|Email verified ✅
+433|This email is already used by someone else
+434|Current email: {email}. To replace it, we'll send it a confirmation code.
+435|{name}'s email
+436|The friend's email
+437|Your email for friends:
+438|Location and currency saved ✅
+439|Location and currency updated ✅
+440|Device removed ✅
+441|This device will stop signing in as a parent. You can add it again later.
+442|This device is no longer linked to a parent
+443|This device is no longer linked to a parent. To sign in you need to switch devices.
+444|This device is already linked to a parent
+445|This device isn't linked to this parent.
+446|This device isn't linked to this parent. To add it or switch devices, tap "New device / Replace device".
+447|This device isn't registered for verification. Register it again.
+448|This device isn't linked to a parent yet.
+449|This device isn't registered for notifications yet. Turn them off and on again.
+450|Device not found
+451|The device isn't supported
+452|Device disconnected ✅
+453|My devices
+454|This screen ran into a problem. The rest of the app keeps working, so you can switch to another tab.
+455|Continue
+456|Continue to verification
+457|This family removed the device. To enter again you need the family code.
+458|Family not found
+459|The family is full
+460|Lock released ✅
+461|This teen will lose friends mode. After that, verification with face recognition or a fingerprint will be required.
+462|My data
 463|Removed a family member
-464|Removed a device
+464|Removed a family member
 465|Removed a family member
-466|Removed a family member
+466|Removed a device
 467|Removed a family member
-468|Removed a device
+468|Removed a family member
 469|Removed a family member
-470|Removed a family member
+470|Removed a device
 471|Removed a family member
-472|Removed a device
-473|The amount is too large
-474|The amount is too large.
-475|Largest amount first
-476|Amounts in the notebook
-477|Remove
-478|Remove {name}
-479|Removing a parent must be approved by a parent. A device verification prompt will open now.
-480|Remove device
-481|Hide
-482|Hide code
-483|Transfer to the server
-484|Grant parent permissions
-485|Note
-486|Reduce motion
-487|The notebook is too big to share
-488|{name}'s personal notebook
-489|The notebook was emptied
-490|The notebook is already empty
-491|The notebook isn't shared with your parents
-492|The notebook is not valid
-493|My notebook
-494|Stop
-495|This action is confirmed only with a fingerprint or face recognition
-496|Turn on biometric verification
-497|Turn on notifications
-498|Turning on notifications sends a message to your phone when someone asks to join the family or records a debt waiting for your approval.
-499|Deposit
-500|I deposited
-501|made a savings goal deposit
-502|made a savings goal deposit
+472|Removed a family member
+473|Removed a family member
+474|Removed a device
+475|The amount is too large
+476|The amount is too large.
+477|Largest amount first
+478|Amounts in the notebook
+479|Remove
+480|Remove {name}
+481|Removing a parent must be approved by a parent. A device verification prompt will open now.
+482|Remove device
+483|Hide
+484|Hide code
+485|Transfer to the server
+486|Grant parent permissions
+487|Note
+488|Reduce motion
+489|The notebook is too big to share
+490|{name}'s personal notebook
+491|The notebook was emptied
+492|The notebook is already empty
+493|The notebook isn't shared with your parents
+494|The notebook is not valid
+495|My notebook
+496|Stop
+497|This action is confirmed only with a fingerprint or face recognition
+498|Turn on biometric verification
+499|Turn on notifications
+500|Turning on notifications sends a message to your phone when someone asks to join the family or records a debt waiting for your approval.
+501|Deposit
+502|I deposited
 503|made a savings goal deposit
-504|Show code
-505|Show the code 🔒
-506|Show the join code
-507|Join
-508|The file is too large
-509|The downloaded file isn't a new version of the app
-510|The downloaded file is invalid. Try again
-511|Code replaced ✅ You can show it with a fingerprint or face recognition
-512|The new code must be {rule}.
-513|Current code
-514|The current code is incorrect.
-515|The PIN is not valid ({rule})
-516|The secret code must be 4 digits
-517|The secret code must be exactly 4 digits
-518|The secret code is incorrect.
-519|The secret code you typed is incorrect.
-520|Your secret code
-521|Your secret code, to confirm
-522|The code is no longer valid. Ask your parents for a new code.
-523|The code is incorrect. Check again, or ask your parents.
-524|The code is incorrect. {left} attempts left.
-525|The code from the email
-526|The code from the current email is wrong or has expired.
-527|The code is hidden
-528|The code stays hidden and is shown only with a fingerprint or face recognition.
-529|The code was updated. Sign in with the new code from your device.
-530|The code must be {rule}
-531|The code must be {rule}.
-532|The code must be 4 digits
-533|The code must be at least 4 digits, up to {max}
-534|The code is wrong or has expired.
-535|The code was changed ✅
-536|{name}'s code was updated
-537|The codes didn't match. Let's start over.
-538|Family Wallet
-539|The wallet was deleted
-540|The wallet is open! Write your children’s names. You can add a teen or another parent below, or later from the “Manage” tab.
-541|The offset was sent to a parent for approval ⏳
-542|The offset closes debts on both sides up to {amount}. The difference stays as it is and the history is kept.
-543|Set up a family wallet
-544|Type your secret code.
-545|Create the wallet
-546|Create a family wallet
-547|Next entry: {date}
-548|The recurring entry was stopped
-549|The recurring entry was added ✅
-550|The entry will be deleted. You can tell whoever recorded it why it's wrong.
-551|The entry was declined
-552|The entry was deleted
-553|List
-554|The list was copied
-555|Sharing is paused. Your parents can't see anything.
-556|Complete the switch and sign in
-557|The name was updated ✅
-558|Rates updated {when}
-559|Adjustments (repayments recorded without a specific debt)
-560|The payment in {base} will be converted at today's rate and deducted from the debt in its own currency. After saving, this rate is kept and won't change.
-561|Is this the same person as “{name}”?
-562|Is this the same person? If so, which name should be used?
-563|This is a demo, so nothing can be changed. Create your own wallet!
-564|This is your email
-565|This is the code you'll use every time you sign in. It's worth remembering.
-566|This will delete the whole wallet: all people and all entries, and it can't be undone.\nTo confirm, type the family name: {name}
-567|Face recognition or a fingerprint
-568|Male
-569|A friend owes me
-570|Friend added ✅
-571|Friends owe me
-572|Friends add the teen using this email. Nothing is sent to it, it's used only for searching.
-573|Friends add the teen using this email. Nothing is sent to it, it's used only for searching.
-574|Friends add the teen using this email. Nothing is sent to it, it's used only for searching.
-575|Friends are added by email address. You'll see everything that's recorded in the overview.
-576|Friends: {names}
-577|Debt
-578|Debt in {cur}
-579|Debts
-580|New debts compared with last month: {diff}
-581|Next month
-582|Previous month
-583|Back on the open list
-584|Back
-585|Back to family
-586|Back to the {family} family
-587|owes
-588|At least one parent must remain in the family
-589|owes
-590|owes me
-591|Owed to me
-592|Owed to me
+504|made a savings goal deposit
+505|made a savings goal deposit
+506|Show code
+507|Show the code 🔒
+508|Show the join code
+509|Join
+510|The file is too large
+511|The downloaded file isn't a new version of the app
+512|The downloaded file is invalid. Try again
+513|Code replaced ✅ You can show it with a fingerprint or face recognition
+514|The new code must be {rule}.
+515|Current code
+516|The current code is incorrect.
+517|The PIN is not valid ({rule})
+518|The secret code must be 4 digits
+519|The secret code must be exactly 4 digits
+520|The secret code is incorrect.
+521|The secret code you typed is incorrect.
+522|Your secret code
+523|Your secret code, to confirm
+524|The code is no longer valid. Ask your parents for a new code.
+525|The code is incorrect. Check again, or ask your parents.
+526|The code is incorrect. {left} attempts left.
+527|The code from the email
+528|The code from the current email is wrong or has expired.
+529|The code is hidden
+530|The code stays hidden and is shown only with a fingerprint or face recognition.
+531|The code was updated. Sign in with the new code from your device.
+532|The code must be {rule}
+533|The code must be {rule}.
+534|The code must be 4 digits
+535|The code must be at least 4 digits, up to {max}
+536|The code is wrong or has expired.
+537|The code was changed ✅
+538|{name}'s code was updated
+539|The codes didn't match. Let's start over.
+540|Family Wallet
+541|The wallet was deleted
+542|The wallet is open! Write your children’s names. You can add a teen or another parent below, or later from the “Manage” tab.
+543|The offset was sent to a parent for approval ⏳
+544|The offset closes debts on both sides up to {amount}. The difference stays as it is and the history is kept.
+545|Set up a family wallet
+546|Type your secret code.
+547|Create the wallet
+548|Create a family wallet
+549|Next entry: {date}
+550|The recurring entry was stopped
+551|The recurring entry was added ✅
+552|The entry will be deleted. You can tell whoever recorded it why it's wrong.
+553|The entry was declined
+554|The entry was deleted
+555|List
+556|The list was copied
+557|Sharing is paused. Your parents can't see anything.
+558|Complete the switch and sign in
+559|The name was updated ✅
+560|Rates updated {when}
+561|Adjustments (repayments recorded without a specific debt)
+562|Kupa notifications
+563|The test notification reached {sent} of {n} devices ({why})
+564|The payment in {base} will be converted at today's rate and deducted from the debt in its own currency. After saving, this rate is kept and won't change.
+565|Is this the same person as “{name}”?
+566|Is this the same person? If so, which name should be used?
+567|This is a demo, so nothing can be changed. Create your own wallet!
+568|This is your email
+569|This is the code you'll use every time you sign in. It's worth remembering.
+570|This will delete the whole wallet: all people and all entries, and it can't be undone.\nTo confirm, type the family name: {name}
+571|Face recognition or a fingerprint
+572|Male
+573|A friend owes me
+574|Friend added ✅
+575|Friends owe me
+576|Friends add the teen using this email. Nothing is sent to it, it's used only for searching.
+577|Friends add the teen using this email. Nothing is sent to it, it's used only for searching.
+578|Friends add the teen using this email. Nothing is sent to it, it's used only for searching.
+579|Friends are added by email address. You'll see everything that's recorded in the overview.
+580|Friends: {names}
+581|Debt
+582|Debt in {cur}
+583|Debts
+584|New debts compared with last month: {diff}
+585|Next month
+586|Previous month
+587|Back on the open list
+588|Back
+589|Back to family
+590|Back to the {family} family
+591|owes
+592|At least one parent must remain in the family
 593|owes
-594|Search by name, note or amount
-595|You saved until you reached the goal
-596|Loading…
-597|Not set yet by the parent
-598|They will lose parent permissions. After that, verification with face recognition or a fingerprint will be required.
-599|{day}
-600|Invalid day of the month (1 to 28)
-601|Invalid day
-602|Change log
-603|Signing out safely…
-604|Too many code requests. Try again in a few minutes
-605|Too many requests. Try again later
-606|Too many new families right now. Try again in a few minutes
-607|Too many attempts. Try again in a minute.
-608|Too many attempts. Try again in a few minutes.
-609|Too many entries. Try again later
-610|{left} of the debt will remain.
-611|Child
-612|Child
-613|Child
-614|New goal
-615|A goal with approved deposits can only be deleted together with a parent
-616|Savings goals
-617|Savings goals are for kids and teens
-618|Sign out
-619|Exit the demo
-620|They will get full parent permissions: see everything, approve, delete and manage the family. After that, verification with face recognition or a fingerprint will be required.
-621|Green + yellow
-622|Some people owe you and you owe them. Offsetting closes the mutual debts and leaves only the difference.
-623|The personal notebook has debts under names of family members
-624|There are too many pending join requests. Ask a parent to handle them
-625|There are too many open debts between the two. Close debts before adding more.
-626|There are too many active entries between the two. Close debts before adding more.
-627|There's an open balance between you. Settle it first
-628|Some debts here are in another currency: they'll be offset at today's rate, and that rate will be saved.
-629|“{old}” is already in the notebook.
-630|There are already many deposits waiting for approval in this goal
-631|There are already many friends on the list
-632|There are already many goals
-633|There are already many recurring entries
-634|There are already too many deposits in this goal
-635|I have a family code
-636|Have a family code? Sign in to the wallet
-637|Have a family code? Type it here. Ask your parents for the family's join code.
-638|There is only one parent in the family. We recommend adding another parent and verifying an email, so access can be recovered if the device is lost.
-639|There are entries under this name. Delete them first
-640|Here you record debts with friends: who bought for whom, and who needs to pay back. Your friend needs the app too, and your parents need to approve.
-641|Here you record who owes whom. Tap one of the big buttons, choose a person and an amount, and that's it.
-642|Off
-643|{"one":"1 day already","other":"{n} days already"}
-644|Someone with this name already exists
-645|Someone with this name already exists. Pick them from the list, or change the name
-646|Someone with this name already exists. Decline the request
-647|This profile already has a code
-648|Almost there…
-649|No longer exists
-650|Already using the wallet?
-651|This parent already has the maximum number of linked devices. You can remove a device in "My devices".
-652|To {need}, you need a device with a fingerprint or face recognition set up.
-653|To switch devices from this phone you need a verified email. Add an email under "My account".
-654|To sign in as a parent you need to link this device with a link code from another parent. Tap "New device / Replace device".
-655|To join, you need to agree that your parents can see your personal notebook, view only
-656|To set a new code for {name}, we'll send a verification code to {email}.
-657|To link a device it must have a fingerprint or face recognition set up.
-658|So a child can't make themselves a parent, adding someone as a teen or parent is approved by a parent. A verification request from the device will open now.
-659|So a child can't make themselves a parent, a role change is approved by a parent. A verification request from the device will open now.
-660|Cohen
-661|Blue + purple
-662|Turn off friends
-663|All open debts
-664|Whole family
-665|All amounts are shown in this currency. You can record a debt in another currency (for example 100 dollars), and when it's paid it's converted at that day's rate.
-666|Every month
-667|Every {day}
-668|How often
-669|Every entry of yours waits for a parent's approval, and only then goes into the account. If you made a mistake, you can cancel within 10 minutes.
-670|Every week
-671|How much did {from} repay {to}?
-672|How much did {from} repay {to}?
-673|How much did {from} repay {to}?
-674|How much does {name} owe me?
-675|How much does {name} owe me?
-676|How much does {name} owe me?
-677|How much did {name} pay me?
-678|How much did {name} pay me?
-679|How much did {name} pay me?
-680|How much do I owe {to}?
-681|How much do I owe {to}?
-682|How much do I owe {to}?
-683|How much is needed? ({cur})
-684|How much did I pay {to}?
-685|How much?
-686|Yes
-687|Yes, same person. Keep “{n}”
-688|Yes, same person. Change everything to “{n}”
-689|Yes, merge under “{n}” (the notebook name)
-690|Yes, merge under “{n}” (the wallet name)
-691|Yes, continue
-692|Yes, remove
-693|Yes, move to the wallet
-694|Yes, offset
-695|Yes, save the debt
-696|Yes, save the payment
-697|Sign in
-698|Parent sign-in
-699|Enter the wallet
-700|Type your name
-701|Type the email your friend registered with their parents in the app. A request is sent to them, and they need to approve. This works only if your friend also has friends mode.
-702|Type the secret code
-703|Type the code again, to confirm
-704|Type the name
-705|Type the family name
-706|Type an amount
-707|Type an amount greater than zero.
-708|Another address
-709|The email address doesn't look valid
-710|The email address is invalid
-711|Email address
-712|New email address
-713|Invalid email address
-714|Orange + pink
-715|No
-716|Not approved
-717|We couldn't turn on notifications on this device
-718|We couldn't connect right now. This screen will go away by itself when the connection is back, and meanwhile the personal notebook works without a connection.
-719|We couldn't connect the email. You can try again in "My account".
-720|We couldn't link the device. Try again.
-721|Unknown
-722|Incorrect
-723|Nothing found for “{q}”
-724|No installer was found on the phone. You can download the file directly from GitHub
-725|Nothing was recorded this month.
-726|No, these are two different people
-727|No, this is a different person
-728|No, keep in the notebook
-729|Which debt is the repayment for?
-730|To confirm, we'll send a verification code to {email}.
-731|Reset, and let them choose at the next sign-in
-732|Cancel what you recorded?
-733|Reject this entry?
-734|Decline? The entry will be deleted.
-735|Also add a teen or another parent
-736|Add a device
-737|A new parent needs a secret code
-738|A parent needs a code set (you can't reset it for them to choose themselves)
-739|For parents only. Whoever sets it up is the first parent. Then you get one join code for the whole family, and you set each person's role: child, teen or parent.
-740|Your parents don't have phone notifications yet, so they don't know you asked to join. It's a good idea to tell them.
-741|Change the code
-742|Replace the code? Those already inside stay, but the old code will stop working, and other devices that saved the family will need to enter the new code.
-743|Switch device
-744|Switching your own device is a different process
-745|Issue a link code
-746|Remove {name} from friends?
-747|Remove {name} from the family?
-748|Remove a parent
-749|Remove a device
-750|Move them to the family wallet under {name}?
-751|Stop the recurring entry? What's already recorded stays.
-752|Also show what's paid on the main page
-753|Tap for the calculation details
-754|Turn off friends mode for {name}? New entries with friends won't be possible.
-755|Not specified
-756|Why? (optional)
-757|Delete {n} paid entries?
-758|Delete the goal "{name}"?
-759|Delete the wallet
-760|Delete the entry for {name}?
-761|Delete this entry?
-762|Delete all the entries in the notebook? This can't be undone.
-763|To whom
-764|Who do I owe?
-765|Who do I owe?
-766|Who do I owe?
-767|To whom?
-768|For example: a bike
-769|For example: ice cream, a movie ticket
-770|Try again
-771|Disconnect the device? It will need to enter the join code again.
-772|The family currency is set by the country. You can change it later in the Manage tab.
-773|Follow device
-774|By currency
-775|By name (A-Z)
-776|{n} ago
-777|View only. The notebook stays with {name} and can't be changed from here.
-778|Read-only. Every entry with a friend also waits for their approval.
-779|view the join code
-780|change a role
-781|Balanced: nobody owes anything
-782|Verifying…
-783|is owed
-784|is owed
-785|is owed
-786|Country not supported
-787|Privacy Policy
-788|Privacy Policy
-789|Country of residence
-790|What teens record with friends
-791|What's open
-792|From today
-793|On
-794|Downloading update...
-795|Downloading update... {percent}%
-796|Invalid ID
-797|Delete
-798|Deleting the wallet can't be undone, so a parent must approve it. A device verification prompt will open now.
-799|Delete the whole wallet
-800|Switching phones? Tap here, confirm with your fingerprint, and we'll send a code to your email. Then open the wallet on the new phone, choose your name and tap "New device / Replace device". All previous devices will be disconnected.
-801|Deleted
-802|deleted a savings goal
-803|Deleted
-804|deleted a savings goal
+594|owes me
+595|Owed to me
+596|Owed to me
+597|owes
+598|Search by name, note or amount
+599|You saved until you reached the goal
+600|Loading…
+601|Not set yet by the parent
+602|They will lose parent permissions. After that, verification with face recognition or a fingerprint will be required.
+603|{day}
+604|Invalid day of the month (1 to 28)
+605|Invalid day
+606|Change log
+607|Signing out safely…
+608|Too many code requests. Try again in a few minutes
+609|Too many requests. Try again later
+610|Too many new families right now. Try again in a few minutes
+611|Too many attempts. Try again in a minute.
+612|Too many attempts. Try again in a few minutes.
+613|Too many entries. Try again later
+614|{left} of the debt will remain.
+615|Child
+616|Child
+617|Child
+618|New goal
+619|A goal with approved deposits can only be deleted together with a parent
+620|Savings goals
+621|Savings goals are for kids and teens
+622|Sign out
+623|Exit the demo
+624|They will get full parent permissions: see everything, approve, delete and manage the family. After that, verification with face recognition or a fingerprint will be required.
+625|Green + yellow
+626|Some people owe you and you owe them. Offsetting closes the mutual debts and leaves only the difference.
+627|The personal notebook has debts under names of family members
+628|There are too many pending join requests. Ask a parent to handle them
+629|There are too many open debts between the two. Close debts before adding more.
+630|There are too many active entries between the two. Close debts before adding more.
+631|There's an open balance between you. Settle it first
+632|Some debts here are in another currency: they'll be offset at today's rate, and that rate will be saved.
+633|“{old}” is already in the notebook.
+634|There are already many deposits waiting for approval in this goal
+635|There are already many friends on the list
+636|There are already many goals
+637|There are already many recurring entries
+638|There are already too many deposits in this goal
+639|I have a family code
+640|Have a family code? Sign in to the wallet
+641|Have a family code? Type it here. Ask your parents for the family's join code.
+642|There is only one parent in the family. We recommend adding another parent and verifying an email, so access can be recovered if the device is lost.
+643|There are entries under this name. Delete them first
+644|Here you record debts with friends: who bought for whom, and who needs to pay back. Your friend needs the app too, and your parents need to approve.
+645|Here you record who owes whom. Tap one of the big buttons, choose a person and an amount, and that's it.
+646|Off
+647|{"one": "1 day already", "other": "{n} days already"}
+648|Someone with this name already exists
+649|Someone with this name already exists. Pick them from the list, or change the name
+650|Someone with this name already exists. Decline the request
+651|This profile already has a code
+652|Almost there…
+653|No longer exists
+654|Already using the wallet?
+655|This parent already has the maximum number of linked devices. You can remove a device in "My devices".
+656|To {need}, you need a device with a fingerprint or face recognition set up.
+657|To switch devices from this phone you need a verified email. Add an email under "My account".
+658|To sign in as a parent you need to link this device with a link code from another parent. Tap "New device / Replace device".
+659|To join, you need to agree that your parents can see your personal notebook, view only
+660|To set a new code for {name}, we'll send a verification code to {email}.
+661|To link a device it must have a fingerprint or face recognition set up.
+662|So a child can't make themselves a parent, adding someone as a teen or parent is approved by a parent. A verification request from the device will open now.
+663|So a child can't make themselves a parent, a role change is approved by a parent. A verification request from the device will open now.
+664|Cohen
+665|Blue + purple
+666|Turn off friends
+667|All open debts
+668|Whole family
+669|All amounts are shown in this currency. You can record a debt in another currency (for example 100 dollars), and when it's paid it's converted at that day's rate.
+670|Every month
+671|Every {day}
+672|How often
+673|Every entry of yours waits for a parent's approval, and only then goes into the account. If you made a mistake, you can cancel within 10 minutes.
+674|Every week
+675|How much did {from} repay {to}?
+676|How much did {from} repay {to}?
+677|How much did {from} repay {to}?
+678|How much does {name} owe me?
+679|How much does {name} owe me?
+680|How much does {name} owe me?
+681|How much did {name} pay me?
+682|How much did {name} pay me?
+683|How much did {name} pay me?
+684|How much do I owe {to}?
+685|How much do I owe {to}?
+686|How much do I owe {to}?
+687|How much is needed? ({cur})
+688|How much did I pay {to}?
+689|How much?
+690|Yes
+691|Yes, same person. Keep “{n}”
+692|Yes, same person. Change everything to “{n}”
+693|Yes, merge under “{n}” (the notebook name)
+694|Yes, merge under “{n}” (the wallet name)
+695|Yes, continue
+696|Yes, remove
+697|Yes, move to the wallet
+698|Yes, offset
+699|Yes, save the debt
+700|Yes, save the payment
+701|Sign in
+702|Parent sign-in
+703|Enter the wallet
+704|Type your name
+705|Type the email your friend registered with their parents in the app. A request is sent to them, and they need to approve. This works only if your friend also has friends mode.
+706|Type the secret code
+707|Type the code again, to confirm
+708|Type the name
+709|Type the family name
+710|Type an amount
+711|Type an amount greater than zero.
+712|Another address
+713|The email address doesn't look valid
+714|The email address is invalid
+715|Email address
+716|New email address
+717|Invalid email address
+718|Orange + pink
+719|No
+720|Not approved
+721|We couldn't turn on notifications on this device
+722|We couldn't connect right now. This screen will go away by itself when the connection is back, and meanwhile the personal notebook works without a connection.
+723|We couldn't connect the email. You can try again in "My account".
+724|We couldn't link the device. Try again.
+725|Unknown
+726|Incorrect
+727|Nothing found for “{q}”
+728|No installer was found on the phone. You can download the file directly from GitHub
+729|Nothing was recorded this month.
+730|No, these are two different people
+731|No, this is a different person
+732|No, keep in the notebook
+733|Which debt is the repayment for?
+734|To confirm, we'll send a verification code to {email}.
+735|Reset, and let them choose at the next sign-in
+736|Cancel what you recorded?
+737|Reject this entry?
+738|Decline? The entry will be deleted.
+739|Also add a teen or another parent
+740|Add a device
+741|A new parent needs a secret code
+742|A parent needs a code set (you can't reset it for them to choose themselves)
+743|For parents only. Whoever sets it up is the first parent. Then you get one join code for the whole family, and you set each person's role: child, teen or parent.
+744|Your parents don't have phone notifications yet, so they don't know you asked to join. It's a good idea to tell them.
+745|Change the code
+746|Replace the code? Those already inside stay, but the old code will stop working, and other devices that saved the family will need to enter the new code.
+747|Switch device
+748|Switching your own device is a different process
+749|Issue a link code
+750|Remove {name} from friends?
+751|Remove {name} from the family?
+752|Remove a parent
+753|Remove a device
+754|Move them to the family wallet under {name}?
+755|Stop the recurring entry? What's already recorded stays.
+756|Also show what's paid on the main page
+757|Tap for the calculation details
+758|Turn off friends mode for {name}? New entries with friends won't be possible.
+759|Not specified
+760|Why? (optional)
+761|Delete {n} paid entries?
+762|Delete the goal "{name}"?
+763|Delete the wallet
+764|Delete the entry for {name}?
+765|Delete this entry?
+766|Delete all the entries in the notebook? This can't be undone.
+767|To whom
+768|Who do I owe?
+769|Who do I owe?
+770|Who do I owe?
+771|To whom?
+772|For example: a bike
+773|For example: ice cream, a movie ticket
+774|Try again
+775|Disconnect the device? It will need to enter the join code again.
+776|The family currency is set by the country. You can change it later in the Manage tab.
+777|Follow device
+778|By currency
+779|By name (A-Z)
+780|{n} ago
+781|View only. The notebook stays with {name} and can't be changed from here.
+782|Read-only. Every entry with a friend also waits for their approval.
+783|view the join code
+784|change a role
+785|Balanced: nobody owes anything
+786|Verifying…
+787|is owed
+788|is owed
+789|is owed
+790|Country not supported
+791|Privacy Policy
+792|Privacy Policy
+793|Country of residence
+794|What teens record with friends
+795|What's open
+796|From today
+797|On
+798|Downloading update...
+799|Downloading update... {percent}%
+800|Invalid ID
+801|Delete
+802|Deleting the wallet can't be undone, so a parent must approve it. A device verification prompt will open now.
+803|Delete the whole wallet
+804|Switching phones? Tap here, confirm with your fingerprint, and we'll send a code to your email. Then open the wallet on the new phone, choose your name and tap "New device / Replace device". All previous devices will be disconnected.
 805|Deleted
 806|deleted a savings goal
-807|Currency
-808|Currency not supported
-809|Who are your children?
-810|Who owes the most
-811|Who owes me?
-812|Who owes whom
-813|Who owes (the payer)
-814|Who owes me?
-815|Who's signing in?
-816|Who changed what and when, over the last 6 months.
-817|Email for code recovery
-818|Email for code recovery (optional)
-819|Email is for parents only
-820|Location and currency
-821|Someone
-822|Device
-823|New device / Replace device
-824|Device doesn't exist
-825|Connected devices
-826|Devices that saved the family. A card that isn't used for 180 days expires on its own.
-827|Just now
-828|Awaiting approval: {amount}
-829|Waiting for a parent's approval
-830|Waiting for a parent's approval
-831|Invalid notification subscription
-832|Give {name} the code in person, not in a message. It's valid for 30 minutes and works once.
-833|Invalid key
-834|Friends mode
-835|Friends mode approved ✅
-836|Friends mode is for teens only
-837|Friends mode turned off
-838|Friends mode for {name}
-839|Friends mode hasn't been approved by the parents yet
-840|Join the wallet
-841|You're joining the wallet of {name}. A parent in the family needs to approve and will set whether you're a child, teen or parent.
-842|Look and feel
-843|Something went wrong
-844|Something went wrong. Try again.
-845|Family
-846|Another family
-847|More families
-848|The {name} Family
-849|Added on {date}
-850|Manage
-851|Try again
-852|You tried too many times. Try again in {wait}.
-853|Clear search
-854|Disconnect
-855|Signs in without a code
-856|Deleted
-857|Data from the previous version was found on this device: {people} people and {entries} entries. Transfer them to the server?
-858|Try again
-859|Try again
-860|Teen
-861|Teen
-862|Teen
-863|Female
-864|It looks like this device is in {name}. Do you live in {name}?
-865|Debts recorded
-866|{left} left of {total}
-867|{left} is left of this debt.
-868|A code is sent when a secret code is changed or reset, and also an alert when someone's code in the family gets locked.
-869|Sent to a parent for approval ⏳
-870|Sent to the friend for approval ⏳
-871|A code was sent to your verified email. After you confirm it, the switch can go through only in 24 hours, and meanwhile you and the other parents get a notification and can cancel.
-872|Saved on this device, will be sent when the connection returns
-873|Close
-874|Order of entries
-875|Total
-876|Total in {cur} at today's rate
-877|Marked as paid
-878|Done
-879|Monthly summary
-880|Amount ({cur})
-881|Invalid amount
-882|Invalid amount. Between friends you can record up to 500 shekels each time
-883|It's been a while. The parent probably hasn't seen the request yet. You can send them a message.
-884|Nothing has been recorded yet.
-885|An update is already in progress
-886|Update
-887|More
-888|There's no one else in the family yet. A parent needs to add them.
-889|No approved friends yet
-890|No approved friends yet. Add a friend by their email.
-891|No friends yet. Add a friend by their email.
-892|No savings goals yet.
-893|The list is still empty. Tap one of the buttons to start.
-894|No recurring entries yet.
-895|No changes in the log yet.
-896|No parent has opened the notebook yet
-897|More avatars
-898|Not yet
-899|Hasn't chosen a code yet
-900|Hasn't chosen a code yet
-901|Hasn't chosen a code yet
-902|Nothing has been recorded with friends yet.
-903|Nothing has been recorded yet.
-904|No copy has been sent yet
-905|24 hours haven't passed since the request yet.
-906|More actions
-907|Last updated: {when}
-908|Look
-909|Now it's the parent's turn: open the app, go to the "Manage" tab, and tap "Approve" next to your name.
-910|For {debt} (= {covers} at today's rate).
-911|For {debt}.
-912|What are you saving for?
-913|What for? (you can skip)
-914|What for? (optional)
-915|For: {debt}
-916|With whom?
-917|Extra large
-918|The verification expired. Try again.
-919|Calculation details
-920|Invalid action
-921|Profile
-922|opened a savings goal
-923|opened a savings goal
-924|opened a savings goal
-925|Screen colors
-926|Neon colors
-927|The form of address is already set and can't be changed
-928|Form of address saved ✅
-929|Form of address
-930|Form of address:
-931|Sound
-932|Viewed the notebook:
-933|Create a family wallet: everyone sees the same account, and debts update for everyone.
-934|Confirmation with a fingerprint or face recognition is required
-935|You need the family code to enter this family.
-936|The app needs permission to install updates: in the settings that open, turn on "Allow from this source" and tap "Update" again
-937|You need to accept the terms of use and privacy policy
-938|You need to agree that your parents can see your personal notebook
-939|You need to sign in again
-940|You need to sign in again with the family code
-941|The device needs to be linked again
-942|You need to link this phone once.
-943|The device needs to be linked
-944|This device needs to be linked to a parent. Sign in again and link it with a link code from another parent
-945|You need to link this device and browser once.
-946|A verified email is needed to switch devices
-947|Set the code
-948|Set the code and sign in
-949|Set the form of address…
-950|Set a secret code
-951|One code for everyone. Whoever joins with it enters as a child. Later you can change them in "Family members" to a teen or a parent, with fingerprint or face recognition approval.
-952|Code from the email
-953|The code from the email is wrong or has expired.
-954|The verification code is wrong or has expired.
-955|Pairing code
-956|Join code for the wallet of {name}: {code}
-957|The family's join code
-958|The family's join code is revealed only with a fingerprint or face recognition.
-959|The family code changed. Ask your parents for a new code.
-960|The link code
-961|New code
-962|New code ({rule})
-963|Code from the current email
-964|Family code
-965|Secret code ({rule}; longer = more secure)
-966|Secret code (required for a parent, {rule})
-967|Secret code (optional — without one, they sign in with a tap and can set a code later)
-968|One secret code for all the children ({rule}). You can leave it empty
-969|New secret code
-970|Secret code for {name}
-971|Your own secret code (4 digits)
-972|Link code
-973|A link code is for parents only
-974|Link code for {name}
-975|Link code for a device
-976|Join codes
-977|First you need to set a secret code for {name}
-978|Offset {amount} with {name} ✅
-979|A family wallet can only be created by someone over 18
-980|Small
-981|I received
-982|I received the difference ({amount})
-983|I received money
-984|Mutual offset
-985|Offset mutual debts
-986|Offset mutual debts ({amount})
-987|The invite link adds anyone who opens it as a child. Share it only with your family.
-988|Linking the device
-989|Link this device and sign in
-990|Link the device to a parent
-991|I have read and I agree to the {terms} and the {privacy}
-992|I have read and I agree to the {terms} and the {privacy}
-993|I have read and I agree to the {terms} and the {privacy}
-994|{n} devices are already linked, which is the maximum. To add another, remove a device.
-995|Normal
-996|One moment, signing in…
-997|One moment, signing out…
-998|Want to merge them into the family wallet?
-999|Want the people who owe you to see this?
-1000|Vibration
-1001|Record
-1002|Record a repayment
-1003|Records a debt automatically, weekly or monthly, without typing it each time.
-1004|New recurring entry
-1005|An entry saved while offline was not sent: {err}
-1006|Refresh the app
-1007|Only parents can do this
-1008|Only parents can open a goal for someone else
-1009|Only parents can set the form of address
-1010|Just to confirm that whoever creates the wallet is over 18. It isn't shown to anyone.
-1011|Recorded a repayment
-1012|Recorded a debt
-1013|Recorded a repayment
-1014|Recorded a debt
-1015|Recorded a repayment
-1016|Recorded a debt
-1017|Record a debt of your own in the notebook
-1018|Clean week
-1019|A whole week with no open debts
-1020|Paid in full ✅
-1021|Paid ({n})
-1022|Saving everything…
-1023|Release the lock
-1024|I paid
-1025|I paid the difference ({amount})
-1026|Last used: {date}
-1027|Renamed the family
-1028|Changed the country and currency
-1029|Changed a name
-1030|Changed a role
-1031|Renamed the family
-1032|Changed the country and currency
-1033|Changed a name
-1034|Changed a role
-1035|Change
-1036|Changing the currency changes only the symbol. The amounts themselves aren't converted.
-1037|Change the secret code
-1038|Rename the family
-1039|Renamed the family
-1040|Changed the country and currency
-1041|Changed a name
-1042|Changed a role
-1043|Share
-1044|I forgot the code
-1045|We sent a code to {email}. Type it, and the new address. It replaces the current one only after verification.
-1046|We sent a 6-digit code to {email}. It's valid for 10 minutes.
-1047|Mine
-1048|Send request
-1049|Send verification code
-1050|Send the code by email
-1051|Send a code to the current email
-1052|Name
-1053|The goal name must be up to 40 characters
-1054|Family name
-1055|The family name doesn't match
-1056|The family name is invalid
-1057|Invalid name
-1058|Known names
-1059|Save
-1060|an hour
-1061|{"one":"{n} hour","other":"{n} hours"}
-1062|The exchange rates haven't loaded yet. Try again in a moment.
-1063|2 hours
-1064|Language
-1065|Invalid date
-1066|Date of birth
-1067|Invalid date of birth
-1068|Feel
-1069|Terms of Use
-1070|Terms of Use
-1071|Role
-1072|Role:
-1073|Main menu
-1074|Payment toward a debt in another currency
-1075|🆘 The old device was lost or broken
+807|Deleted
+808|deleted a savings goal
+809|Deleted
+810|deleted a savings goal
+811|Currency
+812|Currency not supported
+813|Who are your children?
+814|Who owes the most
+815|Who owes me?
+816|Who owes whom
+817|Who owes (the payer)
+818|Who owes me?
+819|Who's signing in?
+820|Who changed what and when, over the last 6 months.
+821|Email for code recovery
+822|Email for code recovery (optional)
+823|Email is for parents only
+824|Location and currency
+825|Someone
+826|Device
+827|New device / Replace device
+828|Device doesn't exist
+829|Connected devices
+830|Devices that saved the family. A card that isn't used for 180 days expires on its own.
+831|Just now
+832|Awaiting approval: {amount}
+833|Waiting for a parent's approval
+834|Waiting for a parent's approval
+835|Invalid notification subscription
+836|Give {name} the code in person, not in a message. It's valid for 30 minutes and works once.
+837|Invalid key
+838|Friends mode
+839|Friends mode approved ✅
+840|Friends mode is for teens only
+841|Friends mode turned off
+842|Friends mode for {name}
+843|Friends mode hasn't been approved by the parents yet
+844|Join the wallet
+845|You're joining the wallet of {name}. A parent in the family needs to approve and will set whether you're a child, teen or parent.
+846|Look and feel
+847|Something went wrong
+848|Something went wrong. Try again.
+849|Family
+850|Another family
+851|More families
+852|The {name} Family
+853|Added on {date}
+854|Manage
+855|Try again
+856|You tried too many times. Try again in {wait}.
+857|Clear search
+858|Disconnect
+859|Signs in without a code
+860|Deleted
+861|Data from the previous version was found on this device: {people} people and {entries} entries. Transfer them to the server?
+862|Try again
+863|Try again
+864|Teen
+865|Teen
+866|Teen
+867|Female
+868|It looks like this device is in {name}. Do you live in {name}?
+869|Debts recorded
+870|{left} left of {total}
+871|{left} is left of this debt.
+872|A code is sent when a secret code is changed or reset, and also an alert when someone's code in the family gets locked.
+873|Sent to a parent for approval ⏳
+874|Sent to the friend for approval ⏳
+875|A code was sent to your verified email. After you confirm it, the switch can go through only in 24 hours, and meanwhile you and the other parents get a notification and can cancel.
+876|A test notification was sent to {n} devices. It should appear in a moment.
+877|Saved on this device, will be sent when the connection returns
+878|Close
+879|Order of entries
+880|Total
+881|Total in {cur} at today's rate
+882|Marked as paid
+883|Done
+884|Monthly summary
+885|Amount ({cur})
+886|Invalid amount
+887|Invalid amount. Between friends you can record up to 500 shekels each time
+888|It's been a while. The parent probably hasn't seen the request yet. You can send them a message.
+889|Nothing has been recorded yet.
+890|An update is already in progress
+891|Update
+892|More
+893|There's no one else in the family yet. A parent needs to add them.
+894|No approved friends yet
+895|No approved friends yet. Add a friend by their email.
+896|No friends yet. Add a friend by their email.
+897|No savings goals yet.
+898|The list is still empty. Tap one of the buttons to start.
+899|No recurring entries yet.
+900|No changes in the log yet.
+901|No parent has opened the notebook yet
+902|More avatars
+903|Not yet
+904|Hasn't chosen a code yet
+905|Hasn't chosen a code yet
+906|Hasn't chosen a code yet
+907|Nothing has been recorded with friends yet.
+908|Nothing has been recorded yet.
+909|No copy has been sent yet
+910|24 hours haven't passed since the request yet.
+911|More actions
+912|Last updated: {when}
+913|Look
+914|Now it's the parent's turn: open the app, go to the "Manage" tab, and tap "Approve" next to your name.
+915|For {debt} (= {covers} at today's rate).
+916|For {debt}.
+917|What are you saving for?
+918|What for? (you can skip)
+919|What for? (optional)
+920|For: {debt}
+921|With whom?
+922|Extra large
+923|The verification expired. Try again.
+924|Calculation details
+925|Invalid action
+926|Profile
+927|opened a savings goal
+928|opened a savings goal
+929|opened a savings goal
+930|Screen colors
+931|Neon colors
+932|The form of address is already set and can't be changed
+933|Form of address saved ✅
+934|Form of address
+935|Form of address:
+936|Sound
+937|Viewed the notebook:
+938|Create a family wallet: everyone sees the same account, and debts update for everyone.
+939|Confirmation with a fingerprint or face recognition is required
+940|You need the family code to enter this family.
+941|The app needs permission to install updates: in the settings that open, turn on "Allow from this source" and tap "Update" again
+942|You need to accept the terms of use and privacy policy
+943|You need to agree that your parents can see your personal notebook
+944|You need to sign in again
+945|You need to sign in again with the family code
+946|The device needs to be linked again
+947|You need to link this phone once.
+948|The device needs to be linked
+949|This device needs to be linked to a parent. Sign in again and link it with a link code from another parent
+950|You need to link this device and browser once.
+951|A verified email is needed to switch devices
+952|Set the code
+953|Set the code and sign in
+954|Set the form of address…
+955|Set a secret code
+956|One code for everyone. Whoever joins with it enters as a child. Later you can change them in "Family members" to a teen or a parent, with fingerprint or face recognition approval.
+957|Code from the email
+958|The code from the email is wrong or has expired.
+959|The verification code is wrong or has expired.
+960|Pairing code
+961|Join code for the wallet of {name}: {code}
+962|The family's join code
+963|The family's join code is revealed only with a fingerprint or face recognition.
+964|The family code changed. Ask your parents for a new code.
+965|The link code
+966|New code
+967|New code ({rule})
+968|Code from the current email
+969|Family code
+970|Secret code ({rule}; longer = more secure)
+971|Secret code (required for a parent, {rule})
+972|Secret code (optional — without one, they sign in with a tap and can set a code later)
+973|One secret code for all the children ({rule}). You can leave it empty
+974|New secret code
+975|Secret code for {name}
+976|Your own secret code (4 digits)
+977|Link code
+978|A link code is for parents only
+979|Link code for {name}
+980|Link code for a device
+981|Join codes
+982|First you need to set a secret code for {name}
+983|Offset {amount} with {name} ✅
+984|A family wallet can only be created by someone over 18
+985|Small
+986|I received
+987|I received the difference ({amount})
+988|I received money
+989|Mutual offset
+990|Offset mutual debts
+991|Offset mutual debts ({amount})
+992|The invite link adds anyone who opens it as a child. Share it only with your family.
+993|Linking the device
+994|Link this device and sign in
+995|Link the device to a parent
+996|I have read and I agree to the {terms} and the {privacy}
+997|I have read and I agree to the {terms} and the {privacy}
+998|I have read and I agree to the {terms} and the {privacy}
+999|{n} devices are already linked, which is the maximum. To add another, remove a device.
+1000|Normal
+1001|One moment, signing in…
+1002|One moment, signing out…
+1003|Want to merge them into the family wallet?
+1004|Want the people who owe you to see this?
+1005|Vibration
+1006|Record
+1007|Record a repayment
+1008|Records a debt automatically, weekly or monthly, without typing it each time.
+1009|New recurring entry
+1010|An entry saved while offline was not sent: {err}
+1011|Refresh the app
+1012|Only parents can do this
+1013|Only parents can open a goal for someone else
+1014|Only parents can set the form of address
+1015|Just to confirm that whoever creates the wallet is over 18. It isn't shown to anyone.
+1016|Recorded a repayment
+1017|Recorded a debt
+1018|Recorded a repayment
+1019|Recorded a debt
+1020|Recorded a repayment
+1021|Recorded a debt
+1022|Record a debt of your own in the notebook
+1023|Clean week
+1024|A whole week with no open debts
+1025|Paid in full ✅
+1026|Paid ({n})
+1027|Saving everything…
+1028|Release the lock
+1029|I paid
+1030|I paid the difference ({amount})
+1031|Last used: {date}
+1032|Renamed the family
+1033|Changed the country and currency
+1034|Changed a name
+1035|Changed a role
+1036|Renamed the family
+1037|Changed the country and currency
+1038|Changed a name
+1039|Changed a role
+1040|Change
+1041|Changing the currency changes only the symbol. The amounts themselves aren't converted.
+1042|Change the secret code
+1043|Rename the family
+1044|Renamed the family
+1045|Changed the country and currency
+1046|Changed a name
+1047|Changed a role
+1048|Share
+1049|I forgot the code
+1050|We sent a code to {email}. Type it, and the new address. It replaces the current one only after verification.
+1051|We sent a 6-digit code to {email}. It's valid for 10 minutes.
+1052|Mine
+1053|Send request
+1054|Send verification code
+1055|Send the code by email
+1056|Send a code to the current email
+1057|Name
+1058|The goal name must be up to 40 characters
+1059|Family name
+1060|The family name doesn't match
+1061|The family name is invalid
+1062|Invalid name
+1063|Known names
+1064|Save
+1065|an hour
+1066|{"one": "{n} hour", "other": "{n} hours"}
+1067|The exchange rates haven't loaded yet. Try again in a moment.
+1068|2 hours
+1069|Language
+1070|Invalid date
+1071|Date of birth
+1072|Invalid date of birth
+1073|Feel
+1074|Terms of Use
+1075|Terms of Use
+1076|Role
+1077|Role:
+1078|Main menu
+1079|Payment toward a debt in another currency
+1080|🆘 The old device was lost or broken

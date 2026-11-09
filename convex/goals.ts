@@ -92,7 +92,7 @@ export const deposit = mutation({
     });
     await logActivity(ctx, me, isParent ? "goal_deposit" : "goal_deposit_pending", { to: (await ctx.db.get(goal.personId))?.name, subject: goal.name, amount, currency: goal.currency ?? LEGACY_CURRENCY });
     if (!isParent) {
-      await notify(ctx, await parentIds(ctx, me.familyId), "הפקדה ליעד חיסכון 🐷", `${me.name} רוצה להוסיף ${fmtMoney(amount, goal.currency)} ליעד "${goal.name}"`);
+      await notify(ctx, await parentIds(ctx, me.familyId), "הפקדה ליעד חיסכון 🐷", `${me.name} רוצה להוסיף ${fmtMoney(amount, goal.currency)} ליעד "${goal.name}"`, "family");
     }
   },
 });

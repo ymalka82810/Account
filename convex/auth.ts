@@ -163,7 +163,7 @@ export const join = mutation({
       shareNotebook: true,
     });
     // התראה להורים, כדי שלא יצטרכו לגלות את הבקשה בעצמם (רק למי שיש לו מכשיר רשום להתראות).
-    await notify(ctx, members.filter((p) => p.role === "parent").map((p) => p._id), "בקשת הצטרפות 👋", `${clean} מבקש/ת להצטרף לקופה. צריך את האישור שלך.`);
+    await notify(ctx, members.filter((p) => p.role === "parent").map((p) => p._id), "בקשת הצטרפות 👋", `${clean} מבקש/ת להצטרף לקופה. צריך את האישור שלך.`, "manage");
     return { ok: true as const, pending: true as const, requestId: requestId as string };
   },
 });

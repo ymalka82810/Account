@@ -61,6 +61,6 @@ export const forFamily = internalMutation({
     const body = stale.length === 1
       ? `${name.get(stale[0].debtor)} עדיין חייב/ת ל${name.get(stale[0].creditor)} ${fmtMoney(stale[0].net, base)}`
       : `יש ${stale.length} חובות פתוחים שלא זזו כבר שבועיים, בסך ${fmtMoney(stale.reduce((s, p) => s + p.net, 0), base)}`;
-    await notify(ctx, parents, "תזכורת: חוב פתוח ⏰", body);
+    await notify(ctx, parents, "תזכורת: חוב פתוח ⏰", body, "family");
   },
 });

@@ -51,6 +51,18 @@ jobs:
             python3 -c "import json; d=json.load(open('android/app/google-services.json')); assert any(c['client_info']['android_client_info']['package_name']=='$APP_ID' for c in d['client']), 'google-services.json is not for $APP_ID'"
             sed -i 's/window.FCM_ENABLED = [a-z]*;/window.FCM_ENABLED = true;/' $CONFIG
             grep -q 'window.FCM_ENABLED = true;' $CONFIG
+            # אייקון ההתראה בשורת הסטטוס (בלעדיו אנדרואיד מציג ריבוע אפור), וערוץ ברירת המחדל "kupa" (כמו ANDROID_CHANNEL בשרת)
+            mkdir -p android/app/src/main/res/drawable
+            cp android-plugin/ic_stat_kupa.xml android/app/src/main/res/drawable/ic_stat_kupa.xml
+            python3 - <<'PYM'
+          p = 'android/app/src/main/AndroidManifest.xml'
+          s = open(p, encoding='utf-8').read()
+          m = ('        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_stat_kupa" />\n'
+               '        <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="kupa" />\n')
+          i = s.index('<activity')
+          open(p, 'w', encoding='utf-8').write(s[:i] + m.lstrip() + '        ' + s[i:])
+          PYM
+            grep -q default_notification_icon $MANIFEST
           else
             echo "::warning::GOOGLE_SERVICES_JSON secret is missing - push notifications are disabled in this APK"
             sed -i 's/window.FCM_ENABLED = [a-z]*;/window.FCM_ENABLED = false;/' $CONFIG

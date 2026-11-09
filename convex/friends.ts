@@ -60,7 +60,7 @@ export const requestAccess = mutation({
     await ctx.db.patch(me._id, { friendsRequested: true });
     const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     const parents = members.filter((p) => p.role === "parent").map((p) => p._id);
-    await notify(ctx, parents, "בקשה למצב חברים 🤝", `${me.name} מבקש/ת לרשום חובות עם חברים. צריך את האישור שלך.`);
+    await notify(ctx, parents, "בקשה למצב חברים 🤝", `${me.name} מבקש/ת לרשום חובות עם חברים. צריך את האישור שלך.`, "family");
   },
 });
 
@@ -120,11 +120,11 @@ export const addFriend = mutation({
       const existing = await findFriendship(ctx, me._id, target._id);
       if (!existing) {
         await ctx.db.insert("friendships", { a: me._id, b: target._id, status: "pending", createdAt: Date.now() });
-        await notify(ctx, [target._id], "בקשת חברות 🤝", `${me.name} רוצה להוסיף אותך כחבר/ה בקופה.`);
+        await notify(ctx, [target._id], "בקשת חברות 🤝", `${me.name} רוצה להוסיף אותך כחבר/ה בקופה.`, "friends");
       } else if (existing.status === "pending" && existing.b === me._id) {
         // שניכם ביקשתם אחד את השני: מאשרים.
         await ctx.db.patch(existing._id, { status: "accepted" });
-        await notify(ctx, [target._id], "חבר/ה חדש/ה ✅", `${me.name} אישר/ה את החברות.`);
+        await notify(ctx, [target._id], "חבר/ה חדש/ה ✅", `${me.name} אישר/ה את החברות.`, "friends");
       }
     }
     return { ok: true as const };
@@ -139,7 +139,7 @@ export const respondFriend = mutation({
     if (!f || f.b !== me._id || f.status !== "pending") return;
     if (accept) {
       await ctx.db.patch(f._id, { status: "accepted" });
-      await notify(ctx, [f.a], "חבר/ה חדש/ה ✅", `${me.name} אישר/ה את החברות.`);
+      await notify(ctx, [f.a], "חבר/ה חדש/ה ✅", `${me.name} אישר/ה את החברות.`, "friends");
     } else {
       await ctx.db.delete(f._id);
     }
@@ -218,7 +218,7 @@ export const addEntry = mutation({
     });
     const from = e.from === me._id ? me : other;
     const to = e.to === me._id ? me : other;
-    await notify(ctx, [other._id], "ממתין לאישור שלך ⏳", entryTextFor(other._id, e, { from: from.name, to: to.name, creator: me.name }));
+    await notify(ctx, [other._id], "ממתין לאישור שלך ⏳", entryTextFor(other._id, e, { from: from.name, to: to.name, creator: me.name }), "friends");
     return id;
   },
 });

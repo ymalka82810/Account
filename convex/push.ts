@@ -85,3 +85,9 @@ export const removeDead = internalMutation({
     for (const id of ids) await ctx.db.delete(id);
   },
 });
+
+// מי מחובר עם הטוקן הזה (לשליחת התראת ניסיון מ-action, שאין לו גישה ישירה למסד).
+export const personForToken = internalQuery({
+  args: { token: v.string() },
+  handler: async (ctx, { token }) => (await requirePerson(ctx, token))._id,
+});

@@ -121,7 +121,7 @@ export const add = mutation({
     if (pending) {
       const members = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
       const parents = members.filter((p) => p.role === "parent" && p._id !== me._id).map((p) => p._id);
-      await notify(ctx, parents, "ממתין לאישור ⏳", `${me.name} רשם/ה: ${entryLine(ec, names)}`);
+      await notify(ctx, parents, "ממתין לאישור ⏳", `${me.name} רשם/ה: ${entryLine(ec, names)}`, "family");
     } else {
       for (const r of [e.from, e.to]) {
         if (r !== me._id) await notify(ctx, [r], "הקופה המשפחתית 🪙", entryTextFor(r, ec, names));

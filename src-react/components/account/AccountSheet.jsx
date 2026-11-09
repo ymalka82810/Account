@@ -11,7 +11,7 @@ import { toast, errMsg } from '../../lib/helpers.js';
 import { dropSession, goToFamily, otherFamilies, addAnotherFamily, startNewFamily } from '../../state/auth.js';
 import { getMemberships } from '../../lib/memberships.js';
 import { getCards, upsertCard } from '../../lib/cards.js';
-import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice } from '../../lib/push.js';
+import { pushSupported, isPushOn, enablePush, disablePush, releasePushDevice, testPush } from '../../lib/push.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import { ChangePinSheet, ChangePinEmailSheet, EmailSheet, AvatarSheet } from './AccountSheets.jsx';
@@ -122,6 +122,9 @@ export function AccountSheet() {
             if (pushOn) await disablePush(); else await enablePush();
             setPushOn(await isPushOn());
           }}><span>{withIcons(pushOn ? t('🔕 כיבוי התראות') : t('🔔 הפעלת התראות'))}</span></AsyncButton>
+        )}
+        {pushSupported() && pushOn && (
+          <AsyncButton className="acct-row" onClick={testPush}><span>{withIcons(t('🔔 שליחת התראת ניסיון'))}</span></AsyncButton>
         )}
         <FeelSettings />
       </section>

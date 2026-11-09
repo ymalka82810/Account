@@ -67,7 +67,7 @@
 66|⚖️ Vzájemné zúčtování dluhů
 67|⚠️ Byla podána žádost o výměnu zařízení uživatele {name} (bude možná {when}). Pokud o tom nevíte, zrušte ji.
 68|⚠️ Byla podána žádost o výměnu vašeho zařízení. Výměna bude možná {when}. Pokud jste to nebyli vy, zrušte ji.
-69|{"one":"⚠️ Kód uživatele {name} byl po chybných pokusech zablokován jednou.","few":"⚠️ Kód uživatele {name} byl po chybných pokusech zablokován {n}krát.","many":"⚠️ Kód uživatele {name} byl po chybných pokusech zablokován {n}krát.","other":"⚠️ Kód uživatele {name} byl po chybných pokusech zablokován {n}krát."}
+69|{"one": "⚠️ Kód uživatele {name} byl po chybných pokusech zablokován jednou.", "few": "⚠️ Kód uživatele {name} byl po chybných pokusech zablokován {n}krát.", "many": "⚠️ Kód uživatele {name} byl po chybných pokusech zablokován {n}krát.", "other": "⚠️ Kód uživatele {name} byl po chybných pokusech zablokován {n}krát."}
 70|⚡ Neon
 71|✅ Schválit
 72|✅ Zatím se všechny děti přihlašují bez tajného kódu. Můžete přidat další děti.
@@ -120,238 +120,238 @@
 119|🔒 Přidání jako „{role}“ se schvaluje otiskem prstu nebo rozpoznáním obličeje.
 120|🔔 Zapnout oznámení
 121|🔔 Chcete to vědět hned?
-122|🔕 Vypnout oznámení
-123|🗑️ Smazat
-124|🗑️ Smazat celý zápisník
-125|🤝 Žádosti o přátelství ({n})
-126|🤝 Žádosti o režim přátel ({n})
-127|🤝 Přátelé
-128|🤝 Režim přátel je zapnutý
-129|🧹 Smazat zaplacené
-130|🙂 Vybrat avatar
-131|3 týdny v řadě
-132|4 číslice
-133|4 až {max} číslic
-134|4 až 8 číslic
-135|6 číslic
-136|8 týdnů v řadě
-137|Táta
-138|Zabezpečení
-139|Člověk nemůže dlužit sám sobě
-140|Takový člověk neexistuje
-141|Přidám je později
-142|Schváleno ✅
-143|Schváleno! Můžeš se přihlásit
-144|Jsi schválen(a)!
-145|Nebezpečná zóna
-146|Nelze vrátit víc, než z dluhu zbývá
-147|Nelze vrátit víc, než z dluhu zbývá ({amount})
-148|Poslední zařízení nelze odebrat. Výměna zařízení má samostatný postup.
-149|Nemůžete odebrat sami sebe
-150|Na tomto zařízení nelze kopírovat
-151|Takto zařízení propojit nelze
-152|Takto propojit nelze. Je potřeba výměna zařízení.
-153|Nemůžete změnit vlastní roli
-154|Sloučení se zápisníkem
-155|Jak se má rodina jmenovat?
-156|Jak se jmenujete?
-157|Máma
-158|Ověřit
-159|Ověření e-mailu
-160|Žádný
-161|Žádná žádost není aktivní, nebo byla zrušena. Můžete podat novou.
-162|Nejste připojeni k internetu. Stav se aktualizuje, jakmile se připojení obnoví.
-163|Žádné připojení k internetu. Zkuste to znovu, až budete online.
-164|Žádné připojení k serveru
-165|Není připojení k serveru. Osobní sešit funguje jako obvykle. Nové dluhy a splátky v rodinné pokladně se uloží do zařízení a odešlou se po obnovení připojení. Ostatní změny se odešlou, jen pokud aplikace zůstane otevřená.
-166|Nic otevřeného
-167|Nic otevřeného!
-168|Tento rodič nemá ověřený e-mail, takže tato cesta není možná. Jiný rodič může vydat propojovací kód.
-169|Tento rodič zatím nemá tajný kód.
-170|Nemáte tajný kód. Nastavte si ho v „Můj účet“ a zkuste to znovu.
-171|Žádný ověřený e-mail
-172|Žádný ověřený e-mail k nahrazení
-173|Na toto jméno už není žádná otevřená žádost. Možná byla smazána nebo byla pokladna zrušena. Můžeš poslat novou žádost.
-174|Bez tajného kódu. Kód můžete nastavit později v „Můj účet“.
-175|Žádné zaplacené zápisy
-176|Chybí směnný kurz pro měnu dluhu
-177|Kurz teď není k dispozici
-178|Kde bydlíte?
-179|Schválit
-180|Potvrzení e-mailem
-181|Potvrdit tajným kódem
-182|Potvrzení žádosti
-183|Potvrdit přidání zařízení
-184|Schválení rodičem
-185|Potvrzení výměny zařízení
-186|Potvrdit odebrání zařízení
-187|Schválit režim přátel
-188|Potvrdit změnu role
-189|Schváleno
-190|schválil(a) vklad na spořicí cíl
-191|Schválil(a) žádost o připojení
-192|Schváleno
-193|schválil(a) vklad na spořicí cíl
-194|Schválil(a) žádost o připojení
-195|Schváleno
-196|schválil(a) vklad na spořicí cíl
-197|Schválil(a) žádost o připojení
-198|Pokud má tento rodič ověřený e-mail, pošleme na něj ověřovací kód. Pokud e-mail není nastaven, může vám nový kód nastavit jiný rodič.
-199|Pokud to není on, doporučujeme nastavit nový kód.
-200|Pokud to není on/ona, doporučujeme nastavit nový kód.
-201|Pokud to není ona, doporučujeme nastavit nový kód.
-202|Pokud má přítel režim přátel, byla mu odeslána žádost 🤝
-203|Pokud kód zapomenete, pošleme na něj resetovací kód. Bez e-mailu může pomoci jen jiný rodič.
-204|Jsem nový(á)
-205|Dlužím
-206|Dlužím {a} • dluží mi {b}
-207|Dlužím peníze
-208|Dlužím: {name}
-209|Dlužím: {to}
-210|Dlužím příteli
-211|Dlužím přátelům
-212|Dlužím
-213|Dlužím peníze
-214|Dlužím: {name}
-215|Dlužím: {to}
-216|Dlužím příteli / kamarádce
-217|Dlužím přátelům
-218|Dlužím
-219|Dlužím peníze
-220|Dlužím: {name}
-221|Dlužím: {to}
-222|Dlužím kamarádce
-223|Dlužím přátelům
-224|Souhlasím, aby rodiče v mé rodině viděli, co jsem napsal(a) do osobního zápisníku. Mohou si ho jen prohlížet, nemohou ho měnit ani mazat.
-225|Nikdo nic nedluží!
-226|Nikdo nic nedluží.
-227|Aplikace
-228|Zrušit lze jen během prvních 10 minut, nebo požádat rodiče
-229|Zrušit lze jen během prvních 10 minut. Pro opravu zapište vrácení
-230|Můžete vrátit nejvýše {max}.
-231|Výměnu můžete dokončit. Zadejte tajný kód a propojte toto zařízení.
-232|K dluhu lze přiřadit jen vrácení
-233|Můžete zapisovat jen dluhy, které se vás týkají
-234|Zapisovat můžete jen se schválenými přáteli
-235|Zařízení, které právě používáte, se odebírá z jiného zařízení.
-236|{day}. den každého měsíce
-237|Který den
-238|Který den v měsíci (1 až 28)
-239|Ověřujeme stav žádosti…
-240|Zjišťujeme, kdo to je…
-241|Ověřujeme…
-242|Vybrat jiný dluh
-243|Vybrat zemi
-244|Vyberte datum
-245|Vyberte avatar
-246|Vyberte, kde bydlíte
-247|Vyberte nový tajný kód ({rule})
-248|Vrátit zpět
-249|Zrušit
-250|Zrušit žádost
-251|Zrušit žádost na tomto zařízení
-252|Odebrat rodičovská oprávnění
-253|Vypnout režim přátel
-254|Mezi přáteli můžete zapsat najednou nejvýše {max}.
-255|Zatím můžete psát do osobního zápisníku, který se ukládá ve vašem zařízení.
-256|Požádal(a) o schválení
-257|požádal(a) o vklad na spořicí cíl
-258|Požádal(a) o schválení
-259|požádal(a) o vklad na spořicí cíl
-260|Požádal(a) o schválení
-261|požádal(a) o vklad na spořicí cíl
-262|Bez kódu se děti přihlašují klepnutím a každé si může kdykoli nastavit vlastní kód. S kódem dostanou všechny děti stejný, a až budete chtít dát každému dítěti vlastního uživatele, resetujte mu kód na kartě „Správa“ a ono si zvolí vlastní.
-263|Toto zařízení nemá otisk prstu ani rozpoznání obličeje, proto potvrďte tajným kódem.
-264|Na novém zařízení: otevřete pokladnu, vyberte své jméno, klepněte na „Nové zařízení / Vyměnit zařízení“ a pak na „Přidat toto zařízení“ a zadejte svůj tajný kód a tento kód. Kód platí 30 minut a jen jednou.
-265|Na starém zařízení: „Můj účet“ > „Moje zařízení“ > Vyměnit zařízení. Kód přijde e-mailem. Všechna předchozí zařízení budou odpojena.
-266|Na už propojeném zařízení: „Můj účet“ > „Moje zařízení“ > Přidat zařízení. Zobrazí se tam kód. Stávající zařízení budou dál fungovat.
-267|V rodině už je rodič propojený se zařízením, takže k propojení tohoto zařízení potřebujete jeho propojovací kód. Odhlaste se a na přihlašovací obrazovce klepněte na „Nové zařízení / Vyměnit zařízení“.
-268|Rodina {name}
-269|Členové rodiny
-270|Celkem mi {name} dluží
+122|🔔 Poslat zkušební oznámení
+123|🔕 Vypnout oznámení
+124|🗑️ Smazat
+125|🗑️ Smazat celý zápisník
+126|🤝 Žádosti o přátelství ({n})
+127|🤝 Žádosti o režim přátel ({n})
+128|🤝 Přátelé
+129|🤝 Režim přátel je zapnutý
+130|🧹 Smazat zaplacené
+131|🙂 Vybrat avatar
+132|3 týdny v řadě
+133|4 číslice
+134|4 až {max} číslic
+135|4 až 8 číslic
+136|6 číslic
+137|8 týdnů v řadě
+138|Táta
+139|Zabezpečení
+140|Člověk nemůže dlužit sám sobě
+141|Takový člověk neexistuje
+142|Přidám je později
+143|Schváleno ✅
+144|Schváleno! Můžeš se přihlásit
+145|Jsi schválen(a)!
+146|Nebezpečná zóna
+147|Nelze vrátit víc, než z dluhu zbývá
+148|Nelze vrátit víc, než z dluhu zbývá ({amount})
+149|Poslední zařízení nelze odebrat. Výměna zařízení má samostatný postup.
+150|Nemůžete odebrat sami sebe
+151|Na tomto zařízení nelze kopírovat
+152|Takto zařízení propojit nelze
+153|Takto propojit nelze. Je potřeba výměna zařízení.
+154|Nemůžete změnit vlastní roli
+155|Sloučení se zápisníkem
+156|Jak se má rodina jmenovat?
+157|Jak se jmenujete?
+158|Máma
+159|Ověřit
+160|Ověření e-mailu
+161|Žádný
+162|Žádná žádost není aktivní, nebo byla zrušena. Můžete podat novou.
+163|Nejste připojeni k internetu. Stav se aktualizuje, jakmile se připojení obnoví.
+164|Žádné připojení k internetu. Zkuste to znovu, až budete online.
+165|Žádné připojení k serveru
+166|Není připojení k serveru. Osobní sešit funguje jako obvykle. Nové dluhy a splátky v rodinné pokladně se uloží do zařízení a odešlou se po obnovení připojení. Ostatní změny se odešlou, jen pokud aplikace zůstane otevřená.
+167|Nic otevřeného
+168|Nic otevřeného!
+169|Tento rodič nemá ověřený e-mail, takže tato cesta není možná. Jiný rodič může vydat propojovací kód.
+170|Tento rodič zatím nemá tajný kód.
+171|Nemáte tajný kód. Nastavte si ho v „Můj účet“ a zkuste to znovu.
+172|Žádný ověřený e-mail
+173|Žádný ověřený e-mail k nahrazení
+174|Na toto jméno už není žádná otevřená žádost. Možná byla smazána nebo byla pokladna zrušena. Můžeš poslat novou žádost.
+175|Bez tajného kódu. Kód můžete nastavit později v „Můj účet“.
+176|Žádné zaplacené zápisy
+177|Chybí směnný kurz pro měnu dluhu
+178|Kurz teď není k dispozici
+179|Kde bydlíte?
+180|Schválit
+181|Potvrzení e-mailem
+182|Potvrdit tajným kódem
+183|Potvrzení žádosti
+184|Potvrdit přidání zařízení
+185|Schválení rodičem
+186|Potvrzení výměny zařízení
+187|Potvrdit odebrání zařízení
+188|Schválit režim přátel
+189|Potvrdit změnu role
+190|Schváleno
+191|schválil(a) vklad na spořicí cíl
+192|Schválil(a) žádost o připojení
+193|Schváleno
+194|schválil(a) vklad na spořicí cíl
+195|Schválil(a) žádost o připojení
+196|Schváleno
+197|schválil(a) vklad na spořicí cíl
+198|Schválil(a) žádost o připojení
+199|Pokud má tento rodič ověřený e-mail, pošleme na něj ověřovací kód. Pokud e-mail není nastaven, může vám nový kód nastavit jiný rodič.
+200|Pokud to není on, doporučujeme nastavit nový kód.
+201|Pokud to není on/ona, doporučujeme nastavit nový kód.
+202|Pokud to není ona, doporučujeme nastavit nový kód.
+203|Pokud má přítel režim přátel, byla mu odeslána žádost 🤝
+204|Pokud kód zapomenete, pošleme na něj resetovací kód. Bez e-mailu může pomoci jen jiný rodič.
+205|Jsem nový(á)
+206|Dlužím
+207|Dlužím {a} • dluží mi {b}
+208|Dlužím peníze
+209|Dlužím: {name}
+210|Dlužím: {to}
+211|Dlužím příteli
+212|Dlužím přátelům
+213|Dlužím
+214|Dlužím peníze
+215|Dlužím: {name}
+216|Dlužím: {to}
+217|Dlužím příteli / kamarádce
+218|Dlužím přátelům
+219|Dlužím
+220|Dlužím peníze
+221|Dlužím: {name}
+222|Dlužím: {to}
+223|Dlužím kamarádce
+224|Dlužím přátelům
+225|Souhlasím, aby rodiče v mé rodině viděli, co jsem napsal(a) do osobního zápisníku. Mohou si ho jen prohlížet, nemohou ho měnit ani mazat.
+226|Nikdo nic nedluží!
+227|Nikdo nic nedluží.
+228|Aplikace
+229|Zrušit lze jen během prvních 10 minut, nebo požádat rodiče
+230|Zrušit lze jen během prvních 10 minut. Pro opravu zapište vrácení
+231|Můžete vrátit nejvýše {max}.
+232|Výměnu můžete dokončit. Zadejte tajný kód a propojte toto zařízení.
+233|K dluhu lze přiřadit jen vrácení
+234|Můžete zapisovat jen dluhy, které se vás týkají
+235|Zapisovat můžete jen se schválenými přáteli
+236|Zařízení, které právě používáte, se odebírá z jiného zařízení.
+237|{day}. den každého měsíce
+238|Který den
+239|Který den v měsíci (1 až 28)
+240|Ověřujeme stav žádosti…
+241|Zjišťujeme, kdo to je…
+242|Ověřujeme…
+243|Vybrat jiný dluh
+244|Vybrat zemi
+245|Vyberte datum
+246|Vyberte avatar
+247|Vyberte, kde bydlíte
+248|Vyberte nový tajný kód ({rule})
+249|Vrátit zpět
+250|Zrušit
+251|Zrušit žádost
+252|Zrušit žádost na tomto zařízení
+253|Odebrat rodičovská oprávnění
+254|Vypnout režim přátel
+255|Mezi přáteli můžete zapsat najednou nejvýše {max}.
+256|Zatím můžete psát do osobního zápisníku, který se ukládá ve vašem zařízení.
+257|Požádal(a) o schválení
+258|požádal(a) o vklad na spořicí cíl
+259|Požádal(a) o schválení
+260|požádal(a) o vklad na spořicí cíl
+261|Požádal(a) o schválení
+262|požádal(a) o vklad na spořicí cíl
+263|Bez kódu se děti přihlašují klepnutím a každé si může kdykoli nastavit vlastní kód. S kódem dostanou všechny děti stejný, a až budete chtít dát každému dítěti vlastního uživatele, resetujte mu kód na kartě „Správa“ a ono si zvolí vlastní.
+264|Toto zařízení nemá otisk prstu ani rozpoznání obličeje, proto potvrďte tajným kódem.
+265|Na novém zařízení: otevřete pokladnu, vyberte své jméno, klepněte na „Nové zařízení / Vyměnit zařízení“ a pak na „Přidat toto zařízení“ a zadejte svůj tajný kód a tento kód. Kód platí 30 minut a jen jednou.
+266|Na starém zařízení: „Můj účet“ > „Moje zařízení“ > Vyměnit zařízení. Kód přijde e-mailem. Všechna předchozí zařízení budou odpojena.
+267|Na už propojeném zařízení: „Můj účet“ > „Moje zařízení“ > Přidat zařízení. Zobrazí se tam kód. Stávající zařízení budou dál fungovat.
+268|V rodině už je rodič propojený se zařízením, takže k propojení tohoto zařízení potřebujete jeho propojovací kód. Odhlaste se a na přihlašovací obrazovce klepněte na „Nové zařízení / Vyměnit zařízení“.
+269|Rodina {name}
+270|Členové rodiny
 271|Celkem mi {name} dluží
 272|Celkem mi {name} dluží
-273|Celkem dlužím: {name}
+273|Celkem mi {name} dluží
 274|Celkem dlužím: {name}
 275|Celkem dlužím: {name}
-276|V zápisníku jsou záznamy pro „{name}“
-277|Zápisník: „{a}“. Pokladna: „{b}“.
-278|Ty nemusíš nic dělat. Po schválení se přihlásíš tajným kódem, který sis zvolil(a).
-279|Nová žádost
-280|Požádat rodiče o schválení
-281|Tvoje žádost o připojení
-282|Vítej v pokladně 🪙
-283|Velké
-284|Velikost písma
-285|Posunout doprava
-286|Posunout doleva
-287|K dispozici je nová verze ({version})
-288|Graf dluhů a splátek podle měsíců
-289|Zamítnuto
-290|zamítl(a) vklad na spořicí cíl
-291|Zamítl(a) žádost o připojení
-292|Zamítnuto
-293|zamítl(a) vklad na spořicí cíl
-294|Zamítl(a) žádost o připojení
-295|Odmítnout
-296|Zamítnuto
-297|zamítl(a) vklad na spořicí cíl
-298|Zamítl(a) žádost o připojení
-299|Avatar
-300|Avatar {avatar}
-301|Kapesné
-302|Pravidelné kapesné
-303|Prohlížeč
-304|minutu
-305|{"one":"{n} minuta","few":"{n} minuty","many":"{n} minuty","other":"{n} minut"}
-306|Ověření zrušeno
-307|Ověření otiskem prstu / rozpoznáním obličeje se nezdařilo
-308|Ověření se nezdařilo. Zkuste to znovu.
-309|Ověření se nezdařilo (neznámá adresa).
-310|Ověření se nezdařilo. Zkuste to znovu.
-311|Lidé, které přidáte, si při prvním přihlášení zvolí tajný kód.
-312|Aplikace narazila na neočekávaný problém. Zkuste to znovu a pokud se to opakuje, aplikaci obnovte.
-313|Aplikace ještě není připojena k serveru
-314|Rozumím
-315|Žádost byla zrušena
-316|Žádost byla přijata. Výměna bude možná {when}. Do té doby starý telefon, pokud se najde, stále funguje a rodiče mohou žádost zrušit.
-317|Žádost už neexistuje
-318|Žádost nebyla schválena
-319|Žádost už neexistuje
-320|Žádost o připojení k pokladně byla odeslána. Tato obrazovka se aktualizuje sama, není třeba obnovovat.
-321|Žádost o připojení k pokladně {name} byla odeslána. Tato obrazovka se aktualizuje sama, není třeba obnovovat.
-322|Žádost byla odmítnuta
-323|Žádost byla odeslána a uložena u rodiny
-324|Žádost byla odeslána rodiči
-325|Žádost byla odeslána vašim rodičům ⏳
-326|Žádost byla odeslána vašim rodičům. Dáme vám vědět, až ji schválí.
-327|Nastavení
-328|Nastavení rodiny
-329|Splněný cíl
-330|Tento avatar už má někdo jiný z rodiny
-331|Tento prohlížeč je příliš starý pro biometrické ověření. Aktualizujte ho a zkuste to znovu.
-332|Stahování se nezdařilo. Zkontrolujte připojení k internetu a zkuste to znovu
-333|Tento rodič je už propojen s jiným zařízením, nebo byl klíč z tohoto zařízení smazán. Pro pokračování odsud je potřeba vyměnit zařízení: odhlaste se a na přihlašovací obrazovce klepněte na „Nové zařízení / Vyměnit zařízení“.
-334|Rodič je už propojen se zařízením. Výměna zařízení má samostatný postup.
-335|Rodič dostal upozornění do telefonu
-336|Tvoji rodiče už tvůj osobní sešit nevidí. Zůstává jen u tebe.
-337|Rodiče dostali upozornění do telefonu
-338|Rodiče v každé rodině vidí kopii tvého sešitu, jen pro čtení. Sdílení můžeš kdykoli pozastavit.
-339|Vrácení neodpovídá tomuto dluhu
-340|Vrácení uloženo ✅
-341|Pokračujte na zařízení uživatele {name}: otevřete pokladnu, vyberte {name}, klepněte na „Nové zařízení / Vyměnit zařízení“ a zadejte tajný kód uživatele {name} a tento kód. Od té chvíle se {name} přihlašuje jako rodič jen z tohoto zařízení.
-342|Poznámka je příliš dlouhá
-343|Vklad schválen ✅
-344|Vklad zamítnut
-345|Vklad přidán 🐷
-346|Oznámení zapnuta 🔔
-347|Oznámení jsou zablokována. Můžete je povolit v nastavení prohlížeče.
-348|Oznámení vypnuta
-349|Ztratí rodičovská oprávnění. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
-350|Ztratí režim přátel. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
-351|Získá plná rodičovská oprávnění: vidět vše, schvalovat, mazat a spravovat rodinu. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
-352|Splaceno
-353|Přidal(a) člena rodiny
+276|Celkem dlužím: {name}
+277|V zápisníku jsou záznamy pro „{name}“
+278|Zápisník: „{a}“. Pokladna: „{b}“.
+279|Ty nemusíš nic dělat. Po schválení se přihlásíš tajným kódem, který sis zvolil(a).
+280|Nová žádost
+281|Požádat rodiče o schválení
+282|Tvoje žádost o připojení
+283|Vítej v pokladně 🪙
+284|Velké
+285|Velikost písma
+286|Posunout doprava
+287|Posunout doleva
+288|K dispozici je nová verze ({version})
+289|Graf dluhů a splátek podle měsíců
+290|Zamítnuto
+291|zamítl(a) vklad na spořicí cíl
+292|Zamítl(a) žádost o připojení
+293|Zamítnuto
+294|zamítl(a) vklad na spořicí cíl
+295|Zamítl(a) žádost o připojení
+296|Odmítnout
+297|Zamítnuto
+298|zamítl(a) vklad na spořicí cíl
+299|Zamítl(a) žádost o připojení
+300|Avatar
+301|Avatar {avatar}
+302|Kapesné
+303|Pravidelné kapesné
+304|Prohlížeč
+305|minutu
+306|{"one": "{n} minuta", "few": "{n} minuty", "many": "{n} minuty", "other": "{n} minut"}
+307|Ověření zrušeno
+308|Ověření otiskem prstu / rozpoznáním obličeje se nezdařilo
+309|Ověření se nezdařilo. Zkuste to znovu.
+310|Ověření se nezdařilo (neznámá adresa).
+311|Ověření se nezdařilo. Zkuste to znovu.
+312|Lidé, které přidáte, si při prvním přihlášení zvolí tajný kód.
+313|Aplikace narazila na neočekávaný problém. Zkuste to znovu a pokud se to opakuje, aplikaci obnovte.
+314|Aplikace ještě není připojena k serveru
+315|Rozumím
+316|Žádost byla zrušena
+317|Žádost byla přijata. Výměna bude možná {when}. Do té doby starý telefon, pokud se najde, stále funguje a rodiče mohou žádost zrušit.
+318|Žádost už neexistuje
+319|Žádost nebyla schválena
+320|Žádost už neexistuje
+321|Žádost o připojení k pokladně byla odeslána. Tato obrazovka se aktualizuje sama, není třeba obnovovat.
+322|Žádost o připojení k pokladně {name} byla odeslána. Tato obrazovka se aktualizuje sama, není třeba obnovovat.
+323|Žádost byla odmítnuta
+324|Žádost byla odeslána a uložena u rodiny
+325|Žádost byla odeslána rodiči
+326|Žádost byla odeslána vašim rodičům ⏳
+327|Žádost byla odeslána vašim rodičům. Dáme vám vědět, až ji schválí.
+328|Nastavení
+329|Nastavení rodiny
+330|Splněný cíl
+331|Tento avatar už má někdo jiný z rodiny
+332|Tento prohlížeč je příliš starý pro biometrické ověření. Aktualizujte ho a zkuste to znovu.
+333|Stahování se nezdařilo. Zkontrolujte připojení k internetu a zkuste to znovu
+334|Tento rodič je už propojen s jiným zařízením, nebo byl klíč z tohoto zařízení smazán. Pro pokračování odsud je potřeba vyměnit zařízení: odhlaste se a na přihlašovací obrazovce klepněte na „Nové zařízení / Vyměnit zařízení“.
+335|Rodič je už propojen se zařízením. Výměna zařízení má samostatný postup.
+336|Rodič dostal upozornění do telefonu
+337|Tvoji rodiče už tvůj osobní sešit nevidí. Zůstává jen u tebe.
+338|Rodiče dostali upozornění do telefonu
+339|Rodiče v každé rodině vidí kopii tvého sešitu, jen pro čtení. Sdílení můžeš kdykoli pozastavit.
+340|Vrácení neodpovídá tomuto dluhu
+341|Vrácení uloženo ✅
+342|Pokračujte na zařízení uživatele {name}: otevřete pokladnu, vyberte {name}, klepněte na „Nové zařízení / Vyměnit zařízení“ a zadejte tajný kód uživatele {name} a tento kód. Od té chvíle se {name} přihlašuje jako rodič jen z tohoto zařízení.
+343|Poznámka je příliš dlouhá
+344|Vklad schválen ✅
+345|Vklad zamítnut
+346|Vklad přidán 🐷
+347|Oznámení zapnuta 🔔
+348|Oznámení jsou zablokována. Můžete je povolit v nastavení prohlížeče.
+349|Oznámení vypnuta
+350|Ztratí rodičovská oprávnění. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
+351|Ztratí režim přátel. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
+352|Získá plná rodičovská oprávnění: vidět vše, schvalovat, mazat a spravovat rodinu. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
+353|Splaceno
 354|Přidal(a) člena rodiny
 355|Přidal(a) člena rodiny
 356|Přidal(a) člena rodiny
@@ -360,717 +360,722 @@
 359|Přidal(a) člena rodiny
 360|Přidal(a) člena rodiny
 361|Přidal(a) člena rodiny
-362|Přidat
-363|Přidat člena rodiny
-364|Přidat toto zařízení a přihlásit se
-365|Přidat přítele
-366|Přidat dítě
-367|Přeneseno zápisů: {n}
-368|Zkopírováno ✅
-369|Rodič
-370|Jiný rodič ve „Správě“ otevře „Propojovací kód“ vedle vašeho jména a předá vám kód.
-371|Tajný kód vám musí nastavit jiný rodič
-372|Rodič schválil připojení. Teď se přihlas: vyber své jméno a zadej tajný kód, který sis zvolil(a).
-373|Rodič v rodině žádost zamítl. Možná tam bylo jméno, které nepoznávají, nebo to tak nebylo myšleno. Promluv si s nimi a pak to můžeš zkusit znovu.
-374|Rodič se přihlásí zde a pak dostane kódy pro zbytek rodiny.
-375|Rodič se přihlašuje jen ze zařízení s ním propojených (další zařízení lze přidat později) a akce rodiče se potvrzují otiskem prstu nebo rozpoznáním obličeje.
-376|Rodič musí nastavit adresu Convex v souboru
-377|Nejdřív se musí přihlásit rodič.
-378|Splněno ✅
-379|Přítel odebrán
-380|Moji přátelé
-381|Dluh je v měně {debtCur}. Platíte v {payCur} podle dnešního kurzu.
-382|Dluh vzrostl o
-383|Tento dluh už je zaplacen
-384|Dluh bude zcela uzavřen ✅
-385|Dluh nenalezen
-386|Dluh uložen ✅
-387|Dluh klesl o
-388|Dluhy mezi vámi a uživatelem {name} budou uzavřeny do této částky a zůstane jen rozdíl. Historie se zachová.
-389|Otevřené dluhy podle měny
-390|Dluhy zaúčtovány navzájem ✅
-391|Vrácení
-392|První splátka
-393|Splátky
-394|Vše splaceno 3 týdny v řadě
-395|Vše splaceno 8 týdnů v řadě
-396|Poprvé splacený dluh
-397|Vrátil(a) jsem dluh: {to}
-398|Změnil(a) kód rodiny
+362|Přidal(a) člena rodiny
+363|Přidat
+364|Přidat člena rodiny
+365|Přidat toto zařízení a přihlásit se
+366|Přidat přítele
+367|Přidat dítě
+368|Přeneseno zápisů: {n}
+369|Zkopírováno ✅
+370|Rodič
+371|Jiný rodič ve „Správě“ otevře „Propojovací kód“ vedle vašeho jména a předá vám kód.
+372|Tajný kód vám musí nastavit jiný rodič
+373|Rodič schválil připojení. Teď se přihlas: vyber své jméno a zadej tajný kód, který sis zvolil(a).
+374|Rodič v rodině žádost zamítl. Možná tam bylo jméno, které nepoznávají, nebo to tak nebylo myšleno. Promluv si s nimi a pak to můžeš zkusit znovu.
+375|Rodič se přihlásí zde a pak dostane kódy pro zbytek rodiny.
+376|Rodič se přihlašuje jen ze zařízení s ním propojených (další zařízení lze přidat později) a akce rodiče se potvrzují otiskem prstu nebo rozpoznáním obličeje.
+377|Rodič musí nastavit adresu Convex v souboru
+378|Nejdřív se musí přihlásit rodič.
+379|Splněno ✅
+380|Přítel odebrán
+381|Moji přátelé
+382|Dluh je v měně {debtCur}. Platíte v {payCur} podle dnešního kurzu.
+383|Dluh vzrostl o
+384|Tento dluh už je zaplacen
+385|Dluh bude zcela uzavřen ✅
+386|Dluh nenalezen
+387|Dluh uložen ✅
+388|Dluh klesl o
+389|Dluhy mezi vámi a uživatelem {name} budou uzavřeny do této částky a zůstane jen rozdíl. Historie se zachová.
+390|Otevřené dluhy podle měny
+391|Dluhy zaúčtovány navzájem ✅
+392|Vrácení
+393|První splátka
+394|Splátky
+395|Vše splaceno 3 týdny v řadě
+396|Vše splaceno 8 týdnů v řadě
+397|Poprvé splacený dluh
+398|Vrátil(a) jsem dluh: {to}
 399|Změnil(a) kód rodiny
 400|Změnil(a) kód rodiny
-401|Změna kódu odpojí všechna zařízení, která si rodinu uložila, proto ji musí schválit rodič. Teď se otevře žádost o ověření zařízení.
-402|Změnit e-mail
-403|Výměna zařízení (odeslání kódu e-mailem)
-404|Změnit kód
-405|Účet s uživatelem {name}
-406|Můj účet
-407|Telefon se rozbil nebo ztratil? Jiný rodič vám může ve „Správě“ vydat propojovací kód. Pokud jiný rodič není, požádejte o výměnu na přihlašovací obrazovce: bude možná po 24 hodinách a dostanete o tom e-mail.
-408|Ztratí rodičovská oprávnění. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
-409|Ztratí režim přátel. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
-410|Získá plná rodičovská oprávnění: vidět vše, schvalovat, mazat a spravovat rodinu. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
-411|Ahoj {name}, malá připomínka: zbývá vrátit {amount}. Díky! 🙏
-412|Ahoj {name}, malá připomínka: zbývá vrátit {amount} za {note}. Díky! 🙏
-413|Ahoj, {name} žádá o připojení k rodinné pokladně. Můžete se přihlásit a schválit: {url}
-414|Historie
-415|Historie s přáteli
-416|Cíle již bylo dosaženo
-417|Cíl neexistuje
-418|Cíl přidán 🎯
-419|Úspěchy
-420|Úspěchy: {name}
-421|Vše: {amount}
-422|Vše vyrovnáno
-423|Vše vyrovnáno ✅
-424|Vše je uloženo jen v tomto zařízení.
-425|Nejdřív nejnovější
-426|Moje peníze
-427|Moje země v seznamu není ($)
-428|Měna rodiny
-429|Měna rodiny je {base} a tento dluh zůstane uložen v {cur}. V zůstatcích se zobrazuje podle kurzu daného dne a při zaplacení se částka přepočte podle kurzu dne platby.
-430|Měna: {cur}
-431|E-mail ověřen ✅
-432|Tento e-mail už používá někdo jiný
-433|Aktuální e-mail: {email}. Pro nahrazení na něj pošleme potvrzovací kód.
-434|E-mail uživatele {name}
-435|E-mail přítele
-436|Váš e-mail pro přátele:
-437|Poloha a měna uloženy ✅
-438|Poloha a měna aktualizovány ✅
-439|Zařízení odebráno ✅
-440|Toto zařízení se už nebude moci přihlásit jako rodič. Později ho můžete přidat znovu.
-441|Toto zařízení už není propojeno s rodičem
-442|Toto zařízení už není propojeno s rodičem. Pro přihlášení je potřeba vyměnit zařízení.
-443|Toto zařízení je už propojené s rodičem
-444|Toto zařízení není propojené s tímto rodičem.
-445|Toto zařízení není propojené s tímto rodičem. Chcete-li ho přidat nebo vyměnit zařízení, klepněte na „Nové zařízení / Vyměnit zařízení“.
-446|Toto zařízení není zaregistrováno pro ověřování. Zaregistrujte ho znovu.
-447|Toto zařízení zatím není propojeno s rodičem.
-448|Zařízení nenalezeno
-449|Zařízení není podporováno
-450|Zařízení odpojeno ✅
-451|Moje zařízení
-452|Tato obrazovka narazila na problém. Zbytek aplikace funguje dál, můžete přepnout na jinou kartu.
-453|Pokračovat
-454|Pokračovat k ověření
-455|Tato rodina zařízení odebrala. Pro opětovný vstup potřebuješ kód rodiny.
-456|Rodina nenalezena
-457|Rodina je plná
-458|Zámek uvolněn ✅
-459|Tento(Tato) teenager(ka) ztratí režim přátel. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
-460|Moje data
-461|Odebral(a) člena rodiny
-462|Odebral(a) člena rodiny
+401|Změnil(a) kód rodiny
+402|Změna kódu odpojí všechna zařízení, která si rodinu uložila, proto ji musí schválit rodič. Teď se otevře žádost o ověření zařízení.
+403|Změnit e-mail
+404|Výměna zařízení (odeslání kódu e-mailem)
+405|Změnit kód
+406|Účet s uživatelem {name}
+407|Můj účet
+408|Telefon se rozbil nebo ztratil? Jiný rodič vám může ve „Správě“ vydat propojovací kód. Pokud jiný rodič není, požádejte o výměnu na přihlašovací obrazovce: bude možná po 24 hodinách a dostanete o tom e-mail.
+409|Ztratí rodičovská oprávnění. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
+410|Ztratí režim přátel. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
+411|Získá plná rodičovská oprávnění: vidět vše, schvalovat, mazat a spravovat rodinu. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
+412|Ahoj {name}, malá připomínka: zbývá vrátit {amount}. Díky! 🙏
+413|Ahoj {name}, malá připomínka: zbývá vrátit {amount} za {note}. Díky! 🙏
+414|Ahoj, {name} žádá o připojení k rodinné pokladně. Můžete se přihlásit a schválit: {url}
+415|Historie
+416|Historie s přáteli
+417|Cíle již bylo dosaženo
+418|Cíl neexistuje
+419|Cíl přidán 🎯
+420|Úspěchy
+421|Úspěchy: {name}
+422|Vše: {amount}
+423|Vše vyrovnáno
+424|Vše vyrovnáno ✅
+425|Vše je uloženo jen v tomto zařízení.
+426|Nejdřív nejnovější
+427|Moje peníze
+428|Moje země v seznamu není ($)
+429|Měna rodiny
+430|Měna rodiny je {base} a tento dluh zůstane uložen v {cur}. V zůstatcích se zobrazuje podle kurzu daného dne a při zaplacení se částka přepočte podle kurzu dne platby.
+431|Měna: {cur}
+432|E-mail ověřen ✅
+433|Tento e-mail už používá někdo jiný
+434|Aktuální e-mail: {email}. Pro nahrazení na něj pošleme potvrzovací kód.
+435|E-mail uživatele {name}
+436|E-mail přítele
+437|Váš e-mail pro přátele:
+438|Poloha a měna uloženy ✅
+439|Poloha a měna aktualizovány ✅
+440|Zařízení odebráno ✅
+441|Toto zařízení se už nebude moci přihlásit jako rodič. Později ho můžete přidat znovu.
+442|Toto zařízení už není propojeno s rodičem
+443|Toto zařízení už není propojeno s rodičem. Pro přihlášení je potřeba vyměnit zařízení.
+444|Toto zařízení je už propojené s rodičem
+445|Toto zařízení není propojené s tímto rodičem.
+446|Toto zařízení není propojené s tímto rodičem. Chcete-li ho přidat nebo vyměnit zařízení, klepněte na „Nové zařízení / Vyměnit zařízení“.
+447|Toto zařízení není zaregistrováno pro ověřování. Zaregistrujte ho znovu.
+448|Toto zařízení zatím není propojeno s rodičem.
+449|Toto zařízení zatím není registrováno pro oznámení. Vypněte je a znovu zapněte.
+450|Zařízení nenalezeno
+451|Zařízení není podporováno
+452|Zařízení odpojeno ✅
+453|Moje zařízení
+454|Tato obrazovka narazila na problém. Zbytek aplikace funguje dál, můžete přepnout na jinou kartu.
+455|Pokračovat
+456|Pokračovat k ověření
+457|Tato rodina zařízení odebrala. Pro opětovný vstup potřebuješ kód rodiny.
+458|Rodina nenalezena
+459|Rodina je plná
+460|Zámek uvolněn ✅
+461|Tento(Tato) teenager(ka) ztratí režim přátel. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
+462|Moje data
 463|Odebral(a) člena rodiny
-464|Odebral(a) zařízení
+464|Odebral(a) člena rodiny
 465|Odebral(a) člena rodiny
-466|Odebral(a) člena rodiny
+466|Odebral(a) zařízení
 467|Odebral(a) člena rodiny
-468|Odebral(a) zařízení
+468|Odebral(a) člena rodiny
 469|Odebral(a) člena rodiny
-470|Odebral(a) člena rodiny
+470|Odebral(a) zařízení
 471|Odebral(a) člena rodiny
-472|Odebral(a) zařízení
-473|Částka je příliš velká
-474|Částka je příliš velká.
-475|Nejdřív největší částky
-476|Částky v zápisníku
-477|Odebrat
-478|Odebrat: {name}
-479|Odebrání rodiče musí schválit rodič. Teď se otevře žádost o ověření zařízení.
-480|Odebrat zařízení
-481|Skrýt
-482|Skrýt kód
-483|Přenést na server
-484|Udělit rodičovská oprávnění
-485|Poznámka
-486|Omezit pohyb
-487|Zápisník je příliš velký ke sdílení
-488|Osobní zápisník: {name}
-489|Zápisník byl vyprázdněn
-490|Zápisník je už prázdný
-491|Sešit není sdílen s tvými rodiči
-492|Zápisník je neplatný
-493|Můj zápisník
-494|Zastavit
-495|Tato akce se potvrzuje jen otiskem prstu nebo rozpoznáním obličeje
-496|Zapnout biometrické ověřování
-497|Zapnout upozornění
-498|Se zapnutými upozorněními vám přijde zpráva do telefonu, když někdo žádá o připojení k rodině nebo zapíše dluh čekající na vaše schválení.
-499|Vklad
-500|Vložil(a) jsem
-501|vložil(a) peníze na spořicí cíl
-502|vložil(a) peníze na spořicí cíl
+472|Odebral(a) člena rodiny
+473|Odebral(a) člena rodiny
+474|Odebral(a) zařízení
+475|Částka je příliš velká
+476|Částka je příliš velká.
+477|Nejdřív největší částky
+478|Částky v zápisníku
+479|Odebrat
+480|Odebrat: {name}
+481|Odebrání rodiče musí schválit rodič. Teď se otevře žádost o ověření zařízení.
+482|Odebrat zařízení
+483|Skrýt
+484|Skrýt kód
+485|Přenést na server
+486|Udělit rodičovská oprávnění
+487|Poznámka
+488|Omezit pohyb
+489|Zápisník je příliš velký ke sdílení
+490|Osobní zápisník: {name}
+491|Zápisník byl vyprázdněn
+492|Zápisník je už prázdný
+493|Sešit není sdílen s tvými rodiči
+494|Zápisník je neplatný
+495|Můj zápisník
+496|Zastavit
+497|Tato akce se potvrzuje jen otiskem prstu nebo rozpoznáním obličeje
+498|Zapnout biometrické ověřování
+499|Zapnout upozornění
+500|Se zapnutými upozorněními vám přijde zpráva do telefonu, když někdo žádá o připojení k rodině nebo zapíše dluh čekající na vaše schválení.
+501|Vklad
+502|Vložil(a) jsem
 503|vložil(a) peníze na spořicí cíl
-504|Zobrazit kód
-505|Zobrazit kód 🔒
-506|Zobrazit kód pro připojení
-507|Připojit se
-508|Soubor je příliš velký
-509|Stažený soubor není nová verze aplikace
-510|Stažený soubor je neplatný. Zkuste to znovu
-511|Kód nahrazen ✅ Můžete ho zobrazit otiskem prstu nebo rozpoznáním obličeje
-512|Nový kód musí mít {rule}.
-513|Aktuální kód
-514|Aktuální kód není správný.
-515|Tajný kód není platný ({rule})
-516|Tajný kód musí mít 4 číslice
-517|Tajný kód musí mít přesně 4 číslice
-518|Tajný kód je nesprávný.
-519|Zadaný tajný kód je nesprávný.
-520|Váš tajný kód
-521|Váš tajný kód pro potvrzení
-522|Kód už neplatí. Požádejte rodiče o nový kód.
-523|Kód není správný. Zkontrolujte ho znovu nebo se zeptejte rodičů.
-524|Kód není správný. Zbývá pokusů: {left}.
-525|Kód z e-mailu
-526|Kód z aktuálního e-mailu je chybný nebo vypršel.
-527|Kód je skrytý
-528|Kód je skrytý a zobrazí se jen po ověření otiskem prstu nebo rozpoznáním obličeje.
-529|Kód byl aktualizován. Přihlaste se novým kódem ze svého zařízení.
-530|Kód musí mít {rule}
-531|Kód musí mít {rule}.
-532|Kód musí mít 4 číslice
-533|Kód musí mít alespoň 4 číslice, nejvýše {max}
-534|Kód je chybný nebo vypršel.
-535|Kód byl změněn ✅
-536|Kód uživatele {name} byl aktualizován
-537|Kódy se neshodovaly. Začneme znovu.
-538|Rodinná pokladna
-539|Pokladna byla smazána
-540|Pokladna je otevřená! Napište jména svých dětí. Teenagera nebo dalšího rodiče můžete přidat níže, nebo později na kartě „Správa“.
-541|Vzájemné zúčtování bylo odesláno rodiči ke schválení ⏳
-542|Vzájemné zúčtování uzavře dluhy na obou stranách do {amount}. Rozdíl zůstane a historie se zachová.
-543|Založte rodinnou pokladnu
-544|Zadejte svůj tajný kód.
-545|Založit pokladnu
-546|Založit rodinnou pokladnu
-547|Příští zápis: {date}
-548|Pravidelný zápis byl zastaven
-549|Pravidelný zápis byl přidán ✅
-550|Záznam bude smazán. Můžete napsat tomu, kdo ho zapsal, proč není správný.
-551|Zápis byl odmítnut
-552|Zápis byl smazán
-553|Seznam
-554|Seznam byl zkopírován
-555|Sdílení je pozastaveno. Tvoji rodiče nic nevidí.
-556|Dokončit výměnu a přihlásit se
-557|Jméno bylo aktualizováno ✅
-558|Kurzy aktualizovány {when}
-559|Úpravy (vrácení zapsaná bez konkrétního dluhu)
-560|Platba v {base} se přepočte podle dnešního kurzu a odečte od dluhu v jeho měně. Po uložení se tento kurz zachová a už se nezmění.
-561|Je to stejná osoba jako „{name}“?
-562|Je to stejná osoba? Pokud ano, které jméno použít?
-563|Toto je demo, takže nelze nic měnit. Založte si vlastní pokladnu!
-564|To je váš e-mail
-565|Tento kód budete používat při každém přihlášení. Stojí za to si ho zapamatovat.
-566|Tím se smaže celá pokladna: všichni lidé i všechny zápisy, a nelze to vrátit.\nPro potvrzení zadejte název rodiny: {name}
-567|Rozpoznání obličeje nebo otisk prstu
-568|Mužský
-569|Přítel mi dluží
-570|Přítel přidán ✅
-571|Přátelé mi dluží
-572|Přátelé přidávají teenagera podle tohoto e-mailu. Nic se na něj neposílá, slouží jen k vyhledávání.
-573|Přátelé přidávají teenagera podle tohoto e-mailu. Nic se na něj neposílá, slouží jen k vyhledávání.
-574|Přátelé přidávají teenagera podle tohoto e-mailu. Nic se na něj neposílá, slouží jen k vyhledávání.
-575|Přátelé se přidávají podle e-mailové adresy. Vše, co se zapíše, uvidíte v přehledu.
-576|Přátelé: {names}
-577|Dluh
-578|Dluh v měně {cur}
-579|Dluhy
-580|Nové dluhy oproti minulému měsíci: {diff}
-581|Další měsíc
-582|Předchozí měsíc
-583|Zpět v otevřeném seznamu
-584|Zpět
-585|Zpět k rodině
-586|Zpět do rodiny {family}
-587|dluží
-588|V rodině musí zůstat alespoň jeden rodič
-589|dluží
-590|mi dluží
-591|Dluží mi
-592|Dluží mi peníze
+504|vložil(a) peníze na spořicí cíl
+505|vložil(a) peníze na spořicí cíl
+506|Zobrazit kód
+507|Zobrazit kód 🔒
+508|Zobrazit kód pro připojení
+509|Připojit se
+510|Soubor je příliš velký
+511|Stažený soubor není nová verze aplikace
+512|Stažený soubor je neplatný. Zkuste to znovu
+513|Kód nahrazen ✅ Můžete ho zobrazit otiskem prstu nebo rozpoznáním obličeje
+514|Nový kód musí mít {rule}.
+515|Aktuální kód
+516|Aktuální kód není správný.
+517|Tajný kód není platný ({rule})
+518|Tajný kód musí mít 4 číslice
+519|Tajný kód musí mít přesně 4 číslice
+520|Tajný kód je nesprávný.
+521|Zadaný tajný kód je nesprávný.
+522|Váš tajný kód
+523|Váš tajný kód pro potvrzení
+524|Kód už neplatí. Požádejte rodiče o nový kód.
+525|Kód není správný. Zkontrolujte ho znovu nebo se zeptejte rodičů.
+526|Kód není správný. Zbývá pokusů: {left}.
+527|Kód z e-mailu
+528|Kód z aktuálního e-mailu je chybný nebo vypršel.
+529|Kód je skrytý
+530|Kód je skrytý a zobrazí se jen po ověření otiskem prstu nebo rozpoznáním obličeje.
+531|Kód byl aktualizován. Přihlaste se novým kódem ze svého zařízení.
+532|Kód musí mít {rule}
+533|Kód musí mít {rule}.
+534|Kód musí mít 4 číslice
+535|Kód musí mít alespoň 4 číslice, nejvýše {max}
+536|Kód je chybný nebo vypršel.
+537|Kód byl změněn ✅
+538|Kód uživatele {name} byl aktualizován
+539|Kódy se neshodovaly. Začneme znovu.
+540|Rodinná pokladna
+541|Pokladna byla smazána
+542|Pokladna je otevřená! Napište jména svých dětí. Teenagera nebo dalšího rodiče můžete přidat níže, nebo později na kartě „Správa“.
+543|Vzájemné zúčtování bylo odesláno rodiči ke schválení ⏳
+544|Vzájemné zúčtování uzavře dluhy na obou stranách do {amount}. Rozdíl zůstane a historie se zachová.
+545|Založte rodinnou pokladnu
+546|Zadejte svůj tajný kód.
+547|Založit pokladnu
+548|Založit rodinnou pokladnu
+549|Příští zápis: {date}
+550|Pravidelný zápis byl zastaven
+551|Pravidelný zápis byl přidán ✅
+552|Záznam bude smazán. Můžete napsat tomu, kdo ho zapsal, proč není správný.
+553|Zápis byl odmítnut
+554|Zápis byl smazán
+555|Seznam
+556|Seznam byl zkopírován
+557|Sdílení je pozastaveno. Tvoji rodiče nic nevidí.
+558|Dokončit výměnu a přihlásit se
+559|Jméno bylo aktualizováno ✅
+560|Kurzy aktualizovány {when}
+561|Úpravy (vrácení zapsaná bez konkrétního dluhu)
+562|Oznámení pokladničky
+563|Zkušební oznámení dorazilo na {sent} z {n} zařízení ({why})
+564|Platba v {base} se přepočte podle dnešního kurzu a odečte od dluhu v jeho měně. Po uložení se tento kurz zachová a už se nezmění.
+565|Je to stejná osoba jako „{name}“?
+566|Je to stejná osoba? Pokud ano, které jméno použít?
+567|Toto je demo, takže nelze nic měnit. Založte si vlastní pokladnu!
+568|To je váš e-mail
+569|Tento kód budete používat při každém přihlášení. Stojí za to si ho zapamatovat.
+570|Tím se smaže celá pokladna: všichni lidé i všechny zápisy, a nelze to vrátit.\nPro potvrzení zadejte název rodiny: {name}
+571|Rozpoznání obličeje nebo otisk prstu
+572|Mužský
+573|Přítel mi dluží
+574|Přítel přidán ✅
+575|Přátelé mi dluží
+576|Přátelé přidávají teenagera podle tohoto e-mailu. Nic se na něj neposílá, slouží jen k vyhledávání.
+577|Přátelé přidávají teenagera podle tohoto e-mailu. Nic se na něj neposílá, slouží jen k vyhledávání.
+578|Přátelé přidávají teenagera podle tohoto e-mailu. Nic se na něj neposílá, slouží jen k vyhledávání.
+579|Přátelé se přidávají podle e-mailové adresy. Vše, co se zapíše, uvidíte v přehledu.
+580|Přátelé: {names}
+581|Dluh
+582|Dluh v měně {cur}
+583|Dluhy
+584|Nové dluhy oproti minulému měsíci: {diff}
+585|Další měsíc
+586|Předchozí měsíc
+587|Zpět v otevřeném seznamu
+588|Zpět
+589|Zpět k rodině
+590|Zpět do rodiny {family}
+591|dluží
+592|V rodině musí zůstat alespoň jeden rodič
 593|dluží
-594|Hledat podle jména, poznámky nebo částky
-595|Šetřil(a) jsi, dokud jsi nedosáhl(a) cíle
-596|Načítání…
-597|Rodič zatím nenastavil
-598|Ztratí rodičovská oprávnění. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
-599|{day}
-600|Neplatný den v měsíci (1 až 28)
-601|Neplatný den
-602|Protokol změn
-603|Bezpečné odhlašování…
-604|Příliš mnoho žádostí o kód. Zkuste to za několik minut
-605|Příliš mnoho žádostí. Zkuste to později
-606|Právě je příliš mnoho nových rodin. Zkuste to za několik minut
-607|Příliš mnoho pokusů. Zkuste to za minutu.
-608|Příliš mnoho pokusů. Zkuste to za několik minut.
-609|Příliš mnoho zápisů. Zkuste to později
-610|Z dluhu zbude {left}.
-611|Dítě
-612|Dítě
-613|Dítě
-614|Nový cíl
-615|Cíl se schválenými vklady lze smazat jen s rodičem
-616|Spořicí cíle
-617|Spořicí cíle jsou pro děti a teenagery
-618|Odhlásit se
-619|Ukončit demo
-620|Získají plná rodičovská oprávnění: vidět vše, schvalovat, mazat a spravovat rodinu. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
-621|Zelená + žlutá
-622|Někteří lidé dluží vám a vy dlužíte jim. Zúčtování uzavře vzájemné dluhy a zůstane jen rozdíl.
-623|V osobním zápisníku jsou dluhy na jména členů rodiny
-624|Čeká příliš mnoho žádostí o připojení. Požádejte rodiče, aby je vyřídili
-625|Mezi oběma je příliš mnoho otevřených dluhů. Uzavřete část dluhů, než přidáte další.
-626|Mezi oběma je příliš mnoho aktivních zápisů. Uzavřete část dluhů, než přidáte další.
-627|Mezi vámi je otevřený zůstatek. Nejdřív ho vyrovnejte
-628|Jsou tu dluhy v jiné měně: budou zúčtovány podle dnešního kurzu a tento kurz se uloží.
-629|„{old}“ už v zápisníku je.
-630|U tohoto cíle už čeká na schválení mnoho vkladů
-631|V seznamu je už hodně přátel
-632|Cílů už je hodně
-633|Už je tu hodně pravidelných zápisů
-634|U tohoto cíle je už příliš mnoho vkladů
-635|Mám kód rodiny
-636|Máte kód rodiny? Vstupte do pokladny
-637|Máte kód rodiny? Zadejte ho sem. Požádejte rodiče o kód pro připojení rodiny.
-638|V rodině je jen jeden rodič. Doporučujeme přidat dalšího rodiče a ověřit e-mail, aby šlo obnovit přístup při ztrátě zařízení.
-639|Na toto jméno jsou zápisy. Nejdřív je smažte
-640|Tady zapisujete dluhy s přáteli: kdo za koho zaplatil a kdo má vrátit. Přítel také potřebuje aplikaci a vaši rodiče musí schválit.
-641|Tady se zapisuje, kdo komu dluží. Klepněte na jedno z velkých tlačítek, vyberte osobu a částku, a je to.
-642|Vypnuto
-643|{"one":"Už {n} den","few":"Už {n} dny","many":"Už {n} dne","other":"Už {n} dní"}
-644|Někdo s tímto jménem už existuje
-645|Někdo s tímto jménem už existuje. Vyberte ho v seznamu nebo změňte jméno
-646|Někdo s tímto jménem už existuje. Odmítněte žádost
-647|Tento profil už má kód
-648|Skoro hotovo…
-649|Už neexistuje
-650|Pokladnu už používáte?
-651|S tímto rodičem je už propojen maximální počet zařízení. Zařízení můžete odebrat v „Moje zařízení“.
-652|Abyste {need}, potřebujete zařízení s nastaveným otiskem prstu nebo rozpoznáním obličeje.
-653|Pro výměnu zařízení z tohoto telefonu je potřeba ověřený e-mail. Přidejte e-mail v „Mém účtu“.
-654|Pro přihlášení jako rodič je potřeba propojit toto zařízení propojovacím kódem od jiného rodiče. Klepněte na „Nové zařízení / Vyměnit zařízení“.
-655|Abys mohl(a) vstoupit, musíš souhlasit, že tvoji rodiče uvidí tvůj osobní zápisník, pouze pro čtení
-656|Pro nastavení nového kódu uživateli {name} pošleme ověřovací kód na {email}.
-657|K propojení zařízení na něm musí být nastaven otisk prstu nebo rozpoznání obličeje.
-658|Aby se dítě nemohlo samo udělat rodičem, přidání jako teenager nebo rodič schvaluje rodič. Nyní se otevře žádost o ověření ze zařízení.
-659|Aby se dítě nemohlo samo udělat rodičem, změnu role schvaluje rodič. Nyní se otevře žádost o ověření ze zařízení.
-660|Novák
-661|Modrá + fialová
-662|Vypnout přátele
-663|Všechny otevřené dluhy
-664|Celá rodina
-665|Všechny částky se zobrazují v této měně. Můžete zapsat dluh v jiné měně (např. 100 dolarů) a při zaplacení se přepočte podle kurzu daného dne.
-666|Každý měsíc
-667|Každý {day}
-668|Jak často
-669|Každý váš záznam čeká na schválení rodiče a teprve potom se zapíše na účet. Pokud jste se spletli, můžete do 10 minut zrušit.
-670|Každý týden
-671|Kolik vrátil(a) {from}: {to}?
-672|Kolik vrátil(a) {from}: {to}?
-673|Kolik vrátila {from}: {to}?
-674|Kolik mi dluží {name}?
-675|Kolik mi dluží {name}?
-676|Kolik mi dluží {name}?
-677|Kolik mi zaplatil(a) {name}?
-678|Kolik mi zaplatil(a) {name}?
-679|Kolik mi zaplatila {name}?
-680|Kolik dlužím: {to}?
-681|Kolik dlužím: {to}?
-682|Kolik dlužím: {to}?
-683|Kolik je potřeba? ({cur})
-684|Kolik jsem zaplatil(a): {to}?
-685|Kolik?
-686|Ano
-687|Ano, stejná osoba. Ponechat „{n}“
-688|Ano, stejná osoba. Změnit vše na „{n}“
-689|Ano, sloučit pod „{n}“ (jméno ze zápisníku)
-690|Ano, sloučit pod „{n}“ (jméno z pokladny)
-691|Ano, pokračovat
-692|Ano, odebrat
-693|Ano, přesunout do pokladny
-694|Ano, zúčtovat
-695|Ano, uložit dluh
-696|Ano, uložit platbu
-697|Přihlásit se
-698|Přihlášení rodiče
-699|Vstoupit do pokladny
-700|Napište své jméno
-701|Zadejte e-mail, který přítel uvedl svým rodičům v aplikaci. Pošle se mu žádost, kterou musí schválit. Funguje to jen tehdy, když má režim přátel i přítel.
-702|Zadejte tajný kód
-703|Zadejte kód znovu pro potvrzení
-704|Zadejte jméno
-705|Napište příjmení rodiny
-706|Zadejte částku
-707|Zadejte částku větší než nula.
-708|Jiná adresa
-709|E-mailová adresa nevypadá platně
-710|E-mailová adresa není platná
-711|E-mailová adresa
-712|Nová e-mailová adresa
-713|Neplatná e-mailová adresa
-714|Oranžová + růžová
-715|Ne
-716|Neschváleno
-717|Na tomto zařízení se nepodařilo zapnout oznámení
-718|Teď se nepodařilo připojit. Tato obrazovka sama zmizí, až se připojení obnoví, a osobní sešit mezitím funguje i bez připojení.
-719|E-mail se nepodařilo propojit. Můžete to zkusit znovu v části „Můj účet“.
-720|Zařízení se nepodařilo propojit. Zkuste to znovu.
-721|Neznámý
-722|Nesprávně
-723|Nic nenalezeno pro „{q}“
-724|V telefonu nebyl nalezen instalátor. Soubor si můžete stáhnout přímo z GitHubu
-725|Tento měsíc nebylo nic zaznamenáno.
-726|Ne, jsou to dvě různé osoby
-727|Ne, je to jiná osoba
-728|Ne, ponechat v zápisníku
-729|K jakému dluhu se vrácení vztahuje?
-730|Pro potvrzení pošleme ověřovací kód na {email}.
-731|Obnovit a nechat zvolit při příštím přihlášení
-732|Zrušit, co jste zapsali?
-733|Zamítnout záznam?
-734|Odmítnout? Zápis bude smazán.
-735|Přidat i teenagera nebo dalšího rodiče
-736|Přidat zařízení
-737|Nový rodič potřebuje tajný kód
-738|Rodiči je třeba nastavit kód (nelze obnovit tak, aby si ho zvolil sám)
-739|Jen pro rodiče. Kdo pokladnu zakládá, je první rodič. Poté dostanete jeden kód pro připojení pro celou rodinu a každému nastavíte roli: dítě, teenager nebo rodič.
-740|Rodiče zatím nemají upozornění v telefonu, takže nevědí, že žádáš o připojení. Bude dobré jim to říct.
-741|Změnit kód
-742|Nahradit kód? Kdo už je uvnitř, zůstane, ale starý kód přestane fungovat a další zařízení, která si rodinu uložila, budou muset zadat nový kód.
-743|Vyměnit zařízení
-744|Výměna vlastního zařízení má jiný postup
-745|Vydat propojovací kód
-746|Odebrat uživatele {name} z přátel?
-747|Odebrat uživatele {name} z rodiny?
-748|Odebrat rodiče
-749|Odebrat zařízení
-750|Přesunout je do rodinné pokladny na jméno {name}?
-751|Zastavit pravidelný zápis? Co už je zapsáno, zůstane.
-752|Zobrazit na hlavní stránce i zaplacené
-753|Klepněte pro podrobnosti výpočtu
-754|Vypnout režim přátel uživatele {name}? Nové zápisy s přáteli nebudou možné.
-755|Neuvedeno
-756|Proč? (nepovinné)
-757|Smazat zaplacené zápisy ({n})?
-758|Smazat cíl „{name}“?
-759|Smazat pokladnu
-760|Smazat zápis: {name}?
-761|Smazat tento zápis?
-762|Smazat všechny zápisy v zápisníku? Nelze to vrátit.
-763|Komu
-764|Komu dlužím?
-765|Komu dlužím?
-766|Komu dlužím?
-767|Komu?
-768|Například: kolo
-769|Například: zmrzlina, vstupenka do kina
-770|Zkusit znovu
-771|Odpojit zařízení? Bude muset znovu zadat kód pro připojení.
-772|Měnu rodiny určuje země. Můžete ji později změnit na kartě Správa.
-773|Podle zařízení
-774|Podle měny
-775|Podle jména (A-Z)
-776|před {n}
-777|Pouze pro čtení. Zápisník zůstává u {name} a odsud ho nelze změnit.
-778|Jen pro čtení. Každý zápis s přítelem čeká i na jeho schválení.
-779|zobrazit kód pro připojení
-780|změnit roli
-781|Vyrovnáno: nikdo nic nedluží
-782|Ověřujeme…
-783|má dostat
-784|má dostat
-785|má dostat
-786|Země není podporována
-787|zásadami ochrany osobních údajů
-788|Zásady ochrany osobních údajů
-789|Země bydliště
-790|Co teenageři zapisují s přáteli
-791|Co je otevřené
-792|Od dneška
-793|Zapnuto
-794|Stahování aktualizace...
-795|Stahování aktualizace... {percent} %
-796|Neplatné ID
-797|Smazat
-798|Smazání pokladny nelze vrátit zpět, proto ho musí schválit rodič. Teď se otevře žádost o ověření zařízení.
-799|Smazat celou pokladnu
-800|Měníte telefon? Klepněte sem, potvrďte otiskem prstu a pošleme vám kód e-mailem. Potom otevřete pokladnu v novém telefonu, vyberte své jméno a klepněte na „Nové zařízení / Vyměnit zařízení“. Všechna předchozí zařízení budou odpojena.
-801|Smazáno
-802|smazal(a) spořicí cíl
-803|Smazáno
-804|smazal(a) spořicí cíl
+594|mi dluží
+595|Dluží mi
+596|Dluží mi peníze
+597|dluží
+598|Hledat podle jména, poznámky nebo částky
+599|Šetřil(a) jsi, dokud jsi nedosáhl(a) cíle
+600|Načítání…
+601|Rodič zatím nenastavil
+602|Ztratí rodičovská oprávnění. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
+603|{day}
+604|Neplatný den v měsíci (1 až 28)
+605|Neplatný den
+606|Protokol změn
+607|Bezpečné odhlašování…
+608|Příliš mnoho žádostí o kód. Zkuste to za několik minut
+609|Příliš mnoho žádostí. Zkuste to později
+610|Právě je příliš mnoho nových rodin. Zkuste to za několik minut
+611|Příliš mnoho pokusů. Zkuste to za minutu.
+612|Příliš mnoho pokusů. Zkuste to za několik minut.
+613|Příliš mnoho zápisů. Zkuste to později
+614|Z dluhu zbude {left}.
+615|Dítě
+616|Dítě
+617|Dítě
+618|Nový cíl
+619|Cíl se schválenými vklady lze smazat jen s rodičem
+620|Spořicí cíle
+621|Spořicí cíle jsou pro děti a teenagery
+622|Odhlásit se
+623|Ukončit demo
+624|Získají plná rodičovská oprávnění: vidět vše, schvalovat, mazat a spravovat rodinu. Poté bude vyžadováno ověření rozpoznáním obličeje nebo otiskem prstu.
+625|Zelená + žlutá
+626|Někteří lidé dluží vám a vy dlužíte jim. Zúčtování uzavře vzájemné dluhy a zůstane jen rozdíl.
+627|V osobním zápisníku jsou dluhy na jména členů rodiny
+628|Čeká příliš mnoho žádostí o připojení. Požádejte rodiče, aby je vyřídili
+629|Mezi oběma je příliš mnoho otevřených dluhů. Uzavřete část dluhů, než přidáte další.
+630|Mezi oběma je příliš mnoho aktivních zápisů. Uzavřete část dluhů, než přidáte další.
+631|Mezi vámi je otevřený zůstatek. Nejdřív ho vyrovnejte
+632|Jsou tu dluhy v jiné měně: budou zúčtovány podle dnešního kurzu a tento kurz se uloží.
+633|„{old}“ už v zápisníku je.
+634|U tohoto cíle už čeká na schválení mnoho vkladů
+635|V seznamu je už hodně přátel
+636|Cílů už je hodně
+637|Už je tu hodně pravidelných zápisů
+638|U tohoto cíle je už příliš mnoho vkladů
+639|Mám kód rodiny
+640|Máte kód rodiny? Vstupte do pokladny
+641|Máte kód rodiny? Zadejte ho sem. Požádejte rodiče o kód pro připojení rodiny.
+642|V rodině je jen jeden rodič. Doporučujeme přidat dalšího rodiče a ověřit e-mail, aby šlo obnovit přístup při ztrátě zařízení.
+643|Na toto jméno jsou zápisy. Nejdřív je smažte
+644|Tady zapisujete dluhy s přáteli: kdo za koho zaplatil a kdo má vrátit. Přítel také potřebuje aplikaci a vaši rodiče musí schválit.
+645|Tady se zapisuje, kdo komu dluží. Klepněte na jedno z velkých tlačítek, vyberte osobu a částku, a je to.
+646|Vypnuto
+647|{"one": "Už {n} den", "few": "Už {n} dny", "many": "Už {n} dne", "other": "Už {n} dní"}
+648|Někdo s tímto jménem už existuje
+649|Někdo s tímto jménem už existuje. Vyberte ho v seznamu nebo změňte jméno
+650|Někdo s tímto jménem už existuje. Odmítněte žádost
+651|Tento profil už má kód
+652|Skoro hotovo…
+653|Už neexistuje
+654|Pokladnu už používáte?
+655|S tímto rodičem je už propojen maximální počet zařízení. Zařízení můžete odebrat v „Moje zařízení“.
+656|Abyste {need}, potřebujete zařízení s nastaveným otiskem prstu nebo rozpoznáním obličeje.
+657|Pro výměnu zařízení z tohoto telefonu je potřeba ověřený e-mail. Přidejte e-mail v „Mém účtu“.
+658|Pro přihlášení jako rodič je potřeba propojit toto zařízení propojovacím kódem od jiného rodiče. Klepněte na „Nové zařízení / Vyměnit zařízení“.
+659|Abys mohl(a) vstoupit, musíš souhlasit, že tvoji rodiče uvidí tvůj osobní zápisník, pouze pro čtení
+660|Pro nastavení nového kódu uživateli {name} pošleme ověřovací kód na {email}.
+661|K propojení zařízení na něm musí být nastaven otisk prstu nebo rozpoznání obličeje.
+662|Aby se dítě nemohlo samo udělat rodičem, přidání jako teenager nebo rodič schvaluje rodič. Nyní se otevře žádost o ověření ze zařízení.
+663|Aby se dítě nemohlo samo udělat rodičem, změnu role schvaluje rodič. Nyní se otevře žádost o ověření ze zařízení.
+664|Novák
+665|Modrá + fialová
+666|Vypnout přátele
+667|Všechny otevřené dluhy
+668|Celá rodina
+669|Všechny částky se zobrazují v této měně. Můžete zapsat dluh v jiné měně (např. 100 dolarů) a při zaplacení se přepočte podle kurzu daného dne.
+670|Každý měsíc
+671|Každý {day}
+672|Jak často
+673|Každý váš záznam čeká na schválení rodiče a teprve potom se zapíše na účet. Pokud jste se spletli, můžete do 10 minut zrušit.
+674|Každý týden
+675|Kolik vrátil(a) {from}: {to}?
+676|Kolik vrátil(a) {from}: {to}?
+677|Kolik vrátila {from}: {to}?
+678|Kolik mi dluží {name}?
+679|Kolik mi dluží {name}?
+680|Kolik mi dluží {name}?
+681|Kolik mi zaplatil(a) {name}?
+682|Kolik mi zaplatil(a) {name}?
+683|Kolik mi zaplatila {name}?
+684|Kolik dlužím: {to}?
+685|Kolik dlužím: {to}?
+686|Kolik dlužím: {to}?
+687|Kolik je potřeba? ({cur})
+688|Kolik jsem zaplatil(a): {to}?
+689|Kolik?
+690|Ano
+691|Ano, stejná osoba. Ponechat „{n}“
+692|Ano, stejná osoba. Změnit vše na „{n}“
+693|Ano, sloučit pod „{n}“ (jméno ze zápisníku)
+694|Ano, sloučit pod „{n}“ (jméno z pokladny)
+695|Ano, pokračovat
+696|Ano, odebrat
+697|Ano, přesunout do pokladny
+698|Ano, zúčtovat
+699|Ano, uložit dluh
+700|Ano, uložit platbu
+701|Přihlásit se
+702|Přihlášení rodiče
+703|Vstoupit do pokladny
+704|Napište své jméno
+705|Zadejte e-mail, který přítel uvedl svým rodičům v aplikaci. Pošle se mu žádost, kterou musí schválit. Funguje to jen tehdy, když má režim přátel i přítel.
+706|Zadejte tajný kód
+707|Zadejte kód znovu pro potvrzení
+708|Zadejte jméno
+709|Napište příjmení rodiny
+710|Zadejte částku
+711|Zadejte částku větší než nula.
+712|Jiná adresa
+713|E-mailová adresa nevypadá platně
+714|E-mailová adresa není platná
+715|E-mailová adresa
+716|Nová e-mailová adresa
+717|Neplatná e-mailová adresa
+718|Oranžová + růžová
+719|Ne
+720|Neschváleno
+721|Na tomto zařízení se nepodařilo zapnout oznámení
+722|Teď se nepodařilo připojit. Tato obrazovka sama zmizí, až se připojení obnoví, a osobní sešit mezitím funguje i bez připojení.
+723|E-mail se nepodařilo propojit. Můžete to zkusit znovu v části „Můj účet“.
+724|Zařízení se nepodařilo propojit. Zkuste to znovu.
+725|Neznámý
+726|Nesprávně
+727|Nic nenalezeno pro „{q}“
+728|V telefonu nebyl nalezen instalátor. Soubor si můžete stáhnout přímo z GitHubu
+729|Tento měsíc nebylo nic zaznamenáno.
+730|Ne, jsou to dvě různé osoby
+731|Ne, je to jiná osoba
+732|Ne, ponechat v zápisníku
+733|K jakému dluhu se vrácení vztahuje?
+734|Pro potvrzení pošleme ověřovací kód na {email}.
+735|Obnovit a nechat zvolit při příštím přihlášení
+736|Zrušit, co jste zapsali?
+737|Zamítnout záznam?
+738|Odmítnout? Zápis bude smazán.
+739|Přidat i teenagera nebo dalšího rodiče
+740|Přidat zařízení
+741|Nový rodič potřebuje tajný kód
+742|Rodiči je třeba nastavit kód (nelze obnovit tak, aby si ho zvolil sám)
+743|Jen pro rodiče. Kdo pokladnu zakládá, je první rodič. Poté dostanete jeden kód pro připojení pro celou rodinu a každému nastavíte roli: dítě, teenager nebo rodič.
+744|Rodiče zatím nemají upozornění v telefonu, takže nevědí, že žádáš o připojení. Bude dobré jim to říct.
+745|Změnit kód
+746|Nahradit kód? Kdo už je uvnitř, zůstane, ale starý kód přestane fungovat a další zařízení, která si rodinu uložila, budou muset zadat nový kód.
+747|Vyměnit zařízení
+748|Výměna vlastního zařízení má jiný postup
+749|Vydat propojovací kód
+750|Odebrat uživatele {name} z přátel?
+751|Odebrat uživatele {name} z rodiny?
+752|Odebrat rodiče
+753|Odebrat zařízení
+754|Přesunout je do rodinné pokladny na jméno {name}?
+755|Zastavit pravidelný zápis? Co už je zapsáno, zůstane.
+756|Zobrazit na hlavní stránce i zaplacené
+757|Klepněte pro podrobnosti výpočtu
+758|Vypnout režim přátel uživatele {name}? Nové zápisy s přáteli nebudou možné.
+759|Neuvedeno
+760|Proč? (nepovinné)
+761|Smazat zaplacené zápisy ({n})?
+762|Smazat cíl „{name}“?
+763|Smazat pokladnu
+764|Smazat zápis: {name}?
+765|Smazat tento zápis?
+766|Smazat všechny zápisy v zápisníku? Nelze to vrátit.
+767|Komu
+768|Komu dlužím?
+769|Komu dlužím?
+770|Komu dlužím?
+771|Komu?
+772|Například: kolo
+773|Například: zmrzlina, vstupenka do kina
+774|Zkusit znovu
+775|Odpojit zařízení? Bude muset znovu zadat kód pro připojení.
+776|Měnu rodiny určuje země. Můžete ji později změnit na kartě Správa.
+777|Podle zařízení
+778|Podle měny
+779|Podle jména (A-Z)
+780|před {n}
+781|Pouze pro čtení. Zápisník zůstává u {name} a odsud ho nelze změnit.
+782|Jen pro čtení. Každý zápis s přítelem čeká i na jeho schválení.
+783|zobrazit kód pro připojení
+784|změnit roli
+785|Vyrovnáno: nikdo nic nedluží
+786|Ověřujeme…
+787|má dostat
+788|má dostat
+789|má dostat
+790|Země není podporována
+791|zásadami ochrany osobních údajů
+792|Zásady ochrany osobních údajů
+793|Země bydliště
+794|Co teenageři zapisují s přáteli
+795|Co je otevřené
+796|Od dneška
+797|Zapnuto
+798|Stahování aktualizace...
+799|Stahování aktualizace... {percent} %
+800|Neplatné ID
+801|Smazat
+802|Smazání pokladny nelze vrátit zpět, proto ho musí schválit rodič. Teď se otevře žádost o ověření zařízení.
+803|Smazat celou pokladnu
+804|Měníte telefon? Klepněte sem, potvrďte otiskem prstu a pošleme vám kód e-mailem. Potom otevřete pokladnu v novém telefonu, vyberte své jméno a klepněte na „Nové zařízení / Vyměnit zařízení“. Všechna předchozí zařízení budou odpojena.
 805|Smazáno
 806|smazal(a) spořicí cíl
-807|Měna
-808|Měna není podporována
-809|Kdo jsou vaše děti?
-810|Kdo dluží nejvíc
-811|Kdo mi dluží?
-812|Kdo komu dluží
-813|Kdo dluží (platící)
-814|Kdo mi dluží?
-815|Kdo se přihlašuje?
-816|Kdo co a kdy změnil, za posledních 6 měsíců.
-817|E-mail pro obnovení kódu
-818|E-mail pro obnovení kódu (nepovinné)
-819|E-mail je jen pro rodiče
-820|Poloha a měna
-821|Někdo
-822|Zařízení
-823|Nové zařízení / Vyměnit zařízení
-824|Zařízení neexistuje
-825|Připojená zařízení
-826|Zařízení, která si rodinu uložila. Karta nepoužitá 180 dní sama vyprší.
-827|Právě teď
-828|Čeká na schválení: {amount}
-829|Čeká na schválení rodiče
-830|Čekáme na schválení rodiče
-831|Neplatné přihlášení k oznámením
-832|Předejte kód uživateli {name} osobně, ne zprávou. Platí 30 minut a jen jednou.
-833|Neplatný klíč
-834|Režim přátel
-835|Režim přátel schválen ✅
-836|Režim přátel je jen pro teenagery
-837|Režim přátel vypnut
-838|Režim přátel pro uživatele {name}
-839|Režim přátel zatím rodiče neschválili
-840|Připojit se k pokladně
-841|Připojujete se k pokladně rodiny {name}. Rodič v rodině musí připojení schválit a určí, zda jste dítě, teenager, nebo rodič.
-842|Vzhled
-843|Něco se pokazilo
-844|Něco se pokazilo. Zkuste to znovu.
-845|Rodina
-846|Jiná rodina
-847|Další rodiny
-848|rodina {name}
-849|Přidáno {date}
-850|Správa
-851|Zkusit znovu
-852|Příliš mnoho pokusů. Zkuste to znovu za {wait}.
-853|Smazat hledání
-854|Odpojit
-855|Přihlašuje se bez kódu
-856|Smazáno
-857|V tomto zařízení byla nalezena data z předchozí verze: lidí — {people}, zápisů — {entries}. Přenést je na server?
-858|Zkusit znovu
-859|Zkuste to znovu
-860|Teenager
-861|Teenager(ka)
-862|Teenagerka
-863|Ženský
-864|Zdá se, že zařízení je v zemi: {name}. Bydlíte tam?
-865|Zaznamenané dluhy
-866|Zbývá {left} z {total}
-867|Z tohoto dluhu zbývá {left}.
-868|Kód se posílá při změně nebo obnovení tajného kódu a také upozornění, když se zablokuje kód někoho z rodiny.
-869|Odesláno rodiči ke schválení ⏳
-870|Odesláno příteli ke schválení ⏳
-871|Na váš ověřený e-mail byl odeslán kód. Po jeho potvrzení bude výměna možná až za 24 hodin a mezitím vám i ostatním rodičům přijde upozornění a budete moci výměnu zrušit.
-872|Uloženo v zařízení, odešle se po obnovení připojení
-873|Zavřít
-874|Pořadí zápisů
-875|Celkem
-876|Celkem v {cur} podle dnešního kurzu
-877|Označeno jako zaplaceno
-878|Hotovo
-879|Měsíční souhrn
-880|Částka ({cur})
-881|Neplatná částka
-882|Neplatná částka. Mezi přáteli můžete zapsat najednou nejvýše 500 šekelů
-883|Už uběhla nějaká doba. Rodič žádost asi ještě neviděl. Můžeš mu poslat zprávu.
-884|Zatím nic nezapsáno.
-885|Aktualizace už probíhá
-886|Aktualizovat
-887|Více
-888|V rodině zatím nikdo další není. Rodič je musí přidat.
-889|Zatím žádní schválení přátelé
-890|Zatím žádní schválení přátelé. Přidejte přítele podle jeho e-mailu.
-891|Zatím žádní přátelé. Přidejte přítele podle jeho e-mailu.
-892|Zatím žádné spořicí cíle.
-893|Seznam je zatím prázdný. Začněte klepnutím na jedno z tlačítek.
-894|Zatím žádné pravidelné zápisy.
-895|V protokolu zatím nejsou žádné změny.
-896|Žádný rodič zatím sešit neotevřel
-897|Další avatary
-898|Ještě ne
-899|Ještě si nezvolil(a) kód
-900|Ještě si nezvolil(a) kód
-901|Ještě si nezvolila kód
-902|S přáteli zatím nic nezapsáno.
-903|Zatím nic nezapsáno.
-904|Zatím nebyla odeslána žádná kopie
-905|Od žádosti ještě neuplynulo 24 hodin.
-906|Další akce
-907|Naposledy aktualizováno: {when}
-908|Vzhled
-909|Teď je na řadě rodič: otevřít aplikaci, přejít na kartu „Správa“ a klepnout na „Schválit“ u tvého jména.
-910|Za: {debt} (= {covers} podle dnešního kurzu).
-911|Za: {debt}.
-912|Na co šetříš?
-913|Za co? (lze přeskočit)
-914|Za co? (nepovinné)
-915|Za: {debt}
-916|S kým?
-917|Obrovské
-918|Platnost ověření vypršela. Zkuste to znovu.
-919|Podrobnosti výpočtu
-920|Neplatná akce
-921|Profil
-922|založil(a) spořicí cíl
-923|založil(a) spořicí cíl
-924|založil(a) spořicí cíl
-925|Barvy obrazovky
-926|Neonové barvy
-927|Oslovení je už nastaveno a nelze je změnit
-928|Oslovení uloženo ✅
-929|Oslovení
-930|Oslovení:
-931|Zvuk
-932|Prohlíželi sešit:
-933|Založte rodinnou pokladnu: všichni vidí stejný účet a dluhy se aktualizují všem.
-934|Je vyžadováno potvrzení otiskem prstu nebo rozpoznáním obličeje
-935|Pro vstup do této rodiny potřebuješ kód rodiny.
-936|Aplikace potřebuje oprávnění instalovat aktualizace: v otevřeném nastavení zapněte „Povolit z tohoto zdroje“ a znovu klepněte na „Aktualizovat“
-937|Musíte souhlasit s podmínkami použití a zásadami ochrany soukromí
-938|Je potřeba souhlasit, že rodiče uvidí tvůj osobní zápisník
-939|Musíte se přihlásit znovu
-940|Musíte se přihlásit znovu kódem rodiny
-941|Zařízení je potřeba propojit znovu
-942|Tento telefon je potřeba propojit jednou.
-943|Zařízení je potřeba propojit
-944|Toto zařízení je potřeba propojit s rodičem. Přihlaste se znovu a propojte ho pomocí propojovacího kódu od jiného rodiče
-945|Toto zařízení a tento prohlížeč je potřeba propojit jednou.
-946|Pro výměnu zařízení je potřeba ověřený e-mail
-947|Nastavit kód
-948|Nastavit kód a přihlásit se
-949|Nastavit oslovení…
-950|Nastavit tajný kód
-951|Jeden kód pro všechny. Kdo se s ním připojí, vstoupí jako dítě. Poté lze v „Členech rodiny“ změnit roli na teenagera nebo rodiče, se schválením otiskem prstu nebo rozpoznáním obličeje.
-952|Kód z e-mailu
-953|Kód z e-mailu je chybný nebo vypršel.
-954|Ověřovací kód je chybný nebo vypršel.
-955|Párovací kód
-956|Kód pro připojení k pokladně rodiny {name}: {code}
-957|Kód pro připojení rodiny
-958|Kód pro připojení rodiny se zobrazí jen po ověření otiskem prstu nebo rozpoznáním obličeje.
-959|Kód rodiny se změnil. Požádejte rodiče o nový kód.
-960|Propojovací kód
-961|Nový kód
-962|Nový kód ({rule})
-963|Kód z aktuálního e-mailu
-964|Kód rodiny
-965|Tajný kód ({rule}; delší = bezpečnější)
-966|Tajný kód (pro rodiče povinný, {rule})
-967|Tajný kód (nepovinný — bez kódu se přihlašuje klepnutím a kód lze nastavit později)
-968|Jeden tajný kód pro všechny děti ({rule}). Může zůstat prázdný
-969|Nový tajný kód
-970|Tajný kód pro uživatele {name}
-971|Váš vlastní tajný kód (4 číslice)
-972|Propojovací kód
-973|Propojovací kód je jen pro rodiče
-974|Propojovací kód pro {name}
-975|Propojovací kód pro zařízení
-976|Kódy pro připojení
-977|Nejdřív je třeba nastavit tajný kód uživateli {name}
-978|Zúčtováno {amount} s {name} ✅
-979|Rodinnou pokladnu může založit jen osoba starší 18 let
-980|Malé
-981|Dostal(a) jsem
-982|Dostal(a) jsem rozdíl ({amount})
-983|Dostal(a) jsem peníze
-984|Vzájemné zúčtování
-985|Zúčtovat vzájemné dluhy
-986|Zúčtovat vzájemné dluhy ({amount})
-987|Odkaz s pozvánkou přidá každého, kdo ho otevře, jako dítě. Sdílejte ho jen s rodinou.
-988|Propojení zařízení
-989|Propojit toto zařízení a přihlásit se
-990|Propojit zařízení s rodičem
-991|Přečetl(a) jsem si {terms} a {privacy} a souhlasím
-992|Přečetl(a) jsem si {terms} a {privacy} a souhlasím
-993|Přečetla jsem si {terms} a {privacy} a souhlasím
-994|Propojeno je už {n} zařízení, to je maximum. Chcete-li přidat další, odeberte zařízení.
-995|Normální
-996|Chvilku, přihlašujeme…
-997|Chvilku, odhlašujeme…
-998|Chcete je sloučit v rodinné pokladně?
-999|Chcete, aby to dlužníci viděli?
-1000|Vibrace
-1001|Zapsat
-1002|Zapsat vrácení
-1003|Automaticky zapisuje dluh každý týden nebo měsíc, bez nutnosti psát ho pokaždé.
-1004|Nový pravidelný zápis
-1005|Záznam uložený offline se neodeslal: {err}
-1006|Obnovit aplikaci
-1007|To mohou dělat jen rodiče
-1008|Cíl pro někoho jiného mohou založit jen rodiče
-1009|Oslovení mohou nastavit jen rodiče
-1010|Jen abychom ověřili, že zakladateli pokladny je přes 18 let. Nikomu se nezobrazuje.
-1011|Zaznamenal(a) splátku
-1012|Zaznamenal(a) dluh
-1013|Zaznamenal(a) splátku
-1014|Zaznamenal(a) dluh
-1015|Zaznamenal(a) splátku
-1016|Zaznamenal(a) dluh
-1017|Zapište si vlastní dluh do sešitu
-1018|Čistý týden
-1019|Celý týden bez otevřených dluhů
-1020|Zaplaceno celé ✅
-1021|Zaplacené ({n})
-1022|Ukládáme vše…
-1023|Uvolnit zámek
-1024|Zaplatil(a) jsem
-1025|Zaplatil(a) jsem rozdíl ({amount})
-1026|Naposledy použito: {date}
-1027|Přejmenoval(a) rodinu
-1028|Změnil(a) zemi a měnu
-1029|Změnil(a) jméno
-1030|Změnil(a) roli
-1031|Přejmenoval(a) rodinu
-1032|Změnil(a) zemi a měnu
-1033|Změnil(a) jméno
-1034|Změnil(a) roli
-1035|Změnit
-1036|Změna měny mění jen symbol. Samotné částky se nepřepočítávají.
-1037|Změnit tajný kód
-1038|Přejmenovat rodinu
-1039|Přejmenoval(a) rodinu
-1040|Změnil(a) zemi a měnu
-1041|Změnil(a) jméno
-1042|Změnil(a) roli
-1043|Sdílet
-1044|Zapomněl(a) jsem kód
-1045|Poslali jsme kód na {email}. Zadejte ho a také novou adresu. Nahradí současnou až po ověření.
-1046|Poslali jsme 6místný kód na {email}. Platí 10 minut.
-1047|Moje
-1048|Odeslat žádost
-1049|Odeslat ověřovací kód
-1050|Odeslat kód e-mailem
-1051|Odeslat kód na aktuální e-mail
-1052|Jméno
-1053|Název cíle může mít nejvýše 40 znaků
-1054|Název rodiny
-1055|Název rodiny se neshoduje
-1056|Neplatný název rodiny
-1057|Neplatné jméno
-1058|Známá jména
-1059|Uložit
-1060|hodinu
-1061|{"one":"{n} hodina","few":"{n} hodiny","many":"{n} hodiny","other":"{n} hodin"}
-1062|Směnné kurzy se zatím nenačetly. Zkuste to za chvíli.
-1063|2 hodiny
-1064|Jazyk
-1065|Neplatné datum
-1066|Datum narození
-1067|Neplatné datum narození
-1068|Odezva
-1069|podmínkami používání
-1070|Podmínky používání
-1071|Role
-1072|Role:
-1073|Hlavní nabídka
-1074|Platba dluhu v jiné měně
-1075|🆘 Staré zařízení se ztratilo nebo rozbilo
+807|Smazáno
+808|smazal(a) spořicí cíl
+809|Smazáno
+810|smazal(a) spořicí cíl
+811|Měna
+812|Měna není podporována
+813|Kdo jsou vaše děti?
+814|Kdo dluží nejvíc
+815|Kdo mi dluží?
+816|Kdo komu dluží
+817|Kdo dluží (platící)
+818|Kdo mi dluží?
+819|Kdo se přihlašuje?
+820|Kdo co a kdy změnil, za posledních 6 měsíců.
+821|E-mail pro obnovení kódu
+822|E-mail pro obnovení kódu (nepovinné)
+823|E-mail je jen pro rodiče
+824|Poloha a měna
+825|Někdo
+826|Zařízení
+827|Nové zařízení / Vyměnit zařízení
+828|Zařízení neexistuje
+829|Připojená zařízení
+830|Zařízení, která si rodinu uložila. Karta nepoužitá 180 dní sama vyprší.
+831|Právě teď
+832|Čeká na schválení: {amount}
+833|Čeká na schválení rodiče
+834|Čekáme na schválení rodiče
+835|Neplatné přihlášení k oznámením
+836|Předejte kód uživateli {name} osobně, ne zprávou. Platí 30 minut a jen jednou.
+837|Neplatný klíč
+838|Režim přátel
+839|Režim přátel schválen ✅
+840|Režim přátel je jen pro teenagery
+841|Režim přátel vypnut
+842|Režim přátel pro uživatele {name}
+843|Režim přátel zatím rodiče neschválili
+844|Připojit se k pokladně
+845|Připojujete se k pokladně rodiny {name}. Rodič v rodině musí připojení schválit a určí, zda jste dítě, teenager, nebo rodič.
+846|Vzhled
+847|Něco se pokazilo
+848|Něco se pokazilo. Zkuste to znovu.
+849|Rodina
+850|Jiná rodina
+851|Další rodiny
+852|rodina {name}
+853|Přidáno {date}
+854|Správa
+855|Zkusit znovu
+856|Příliš mnoho pokusů. Zkuste to znovu za {wait}.
+857|Smazat hledání
+858|Odpojit
+859|Přihlašuje se bez kódu
+860|Smazáno
+861|V tomto zařízení byla nalezena data z předchozí verze: lidí — {people}, zápisů — {entries}. Přenést je na server?
+862|Zkusit znovu
+863|Zkuste to znovu
+864|Teenager
+865|Teenager(ka)
+866|Teenagerka
+867|Ženský
+868|Zdá se, že zařízení je v zemi: {name}. Bydlíte tam?
+869|Zaznamenané dluhy
+870|Zbývá {left} z {total}
+871|Z tohoto dluhu zbývá {left}.
+872|Kód se posílá při změně nebo obnovení tajného kódu a také upozornění, když se zablokuje kód někoho z rodiny.
+873|Odesláno rodiči ke schválení ⏳
+874|Odesláno příteli ke schválení ⏳
+875|Na váš ověřený e-mail byl odeslán kód. Po jeho potvrzení bude výměna možná až za 24 hodin a mezitím vám i ostatním rodičům přijde upozornění a budete moci výměnu zrušit.
+876|Zkušební oznámení bylo odesláno na {n} zařízení. Za chvíli by se mělo objevit.
+877|Uloženo v zařízení, odešle se po obnovení připojení
+878|Zavřít
+879|Pořadí zápisů
+880|Celkem
+881|Celkem v {cur} podle dnešního kurzu
+882|Označeno jako zaplaceno
+883|Hotovo
+884|Měsíční souhrn
+885|Částka ({cur})
+886|Neplatná částka
+887|Neplatná částka. Mezi přáteli můžete zapsat najednou nejvýše 500 šekelů
+888|Už uběhla nějaká doba. Rodič žádost asi ještě neviděl. Můžeš mu poslat zprávu.
+889|Zatím nic nezapsáno.
+890|Aktualizace už probíhá
+891|Aktualizovat
+892|Více
+893|V rodině zatím nikdo další není. Rodič je musí přidat.
+894|Zatím žádní schválení přátelé
+895|Zatím žádní schválení přátelé. Přidejte přítele podle jeho e-mailu.
+896|Zatím žádní přátelé. Přidejte přítele podle jeho e-mailu.
+897|Zatím žádné spořicí cíle.
+898|Seznam je zatím prázdný. Začněte klepnutím na jedno z tlačítek.
+899|Zatím žádné pravidelné zápisy.
+900|V protokolu zatím nejsou žádné změny.
+901|Žádný rodič zatím sešit neotevřel
+902|Další avatary
+903|Ještě ne
+904|Ještě si nezvolil(a) kód
+905|Ještě si nezvolil(a) kód
+906|Ještě si nezvolila kód
+907|S přáteli zatím nic nezapsáno.
+908|Zatím nic nezapsáno.
+909|Zatím nebyla odeslána žádná kopie
+910|Od žádosti ještě neuplynulo 24 hodin.
+911|Další akce
+912|Naposledy aktualizováno: {when}
+913|Vzhled
+914|Teď je na řadě rodič: otevřít aplikaci, přejít na kartu „Správa“ a klepnout na „Schválit“ u tvého jména.
+915|Za: {debt} (= {covers} podle dnešního kurzu).
+916|Za: {debt}.
+917|Na co šetříš?
+918|Za co? (lze přeskočit)
+919|Za co? (nepovinné)
+920|Za: {debt}
+921|S kým?
+922|Obrovské
+923|Platnost ověření vypršela. Zkuste to znovu.
+924|Podrobnosti výpočtu
+925|Neplatná akce
+926|Profil
+927|založil(a) spořicí cíl
+928|založil(a) spořicí cíl
+929|založil(a) spořicí cíl
+930|Barvy obrazovky
+931|Neonové barvy
+932|Oslovení je už nastaveno a nelze je změnit
+933|Oslovení uloženo ✅
+934|Oslovení
+935|Oslovení:
+936|Zvuk
+937|Prohlíželi sešit:
+938|Založte rodinnou pokladnu: všichni vidí stejný účet a dluhy se aktualizují všem.
+939|Je vyžadováno potvrzení otiskem prstu nebo rozpoznáním obličeje
+940|Pro vstup do této rodiny potřebuješ kód rodiny.
+941|Aplikace potřebuje oprávnění instalovat aktualizace: v otevřeném nastavení zapněte „Povolit z tohoto zdroje“ a znovu klepněte na „Aktualizovat“
+942|Musíte souhlasit s podmínkami použití a zásadami ochrany soukromí
+943|Je potřeba souhlasit, že rodiče uvidí tvůj osobní zápisník
+944|Musíte se přihlásit znovu
+945|Musíte se přihlásit znovu kódem rodiny
+946|Zařízení je potřeba propojit znovu
+947|Tento telefon je potřeba propojit jednou.
+948|Zařízení je potřeba propojit
+949|Toto zařízení je potřeba propojit s rodičem. Přihlaste se znovu a propojte ho pomocí propojovacího kódu od jiného rodiče
+950|Toto zařízení a tento prohlížeč je potřeba propojit jednou.
+951|Pro výměnu zařízení je potřeba ověřený e-mail
+952|Nastavit kód
+953|Nastavit kód a přihlásit se
+954|Nastavit oslovení…
+955|Nastavit tajný kód
+956|Jeden kód pro všechny. Kdo se s ním připojí, vstoupí jako dítě. Poté lze v „Členech rodiny“ změnit roli na teenagera nebo rodiče, se schválením otiskem prstu nebo rozpoznáním obličeje.
+957|Kód z e-mailu
+958|Kód z e-mailu je chybný nebo vypršel.
+959|Ověřovací kód je chybný nebo vypršel.
+960|Párovací kód
+961|Kód pro připojení k pokladně rodiny {name}: {code}
+962|Kód pro připojení rodiny
+963|Kód pro připojení rodiny se zobrazí jen po ověření otiskem prstu nebo rozpoznáním obličeje.
+964|Kód rodiny se změnil. Požádejte rodiče o nový kód.
+965|Propojovací kód
+966|Nový kód
+967|Nový kód ({rule})
+968|Kód z aktuálního e-mailu
+969|Kód rodiny
+970|Tajný kód ({rule}; delší = bezpečnější)
+971|Tajný kód (pro rodiče povinný, {rule})
+972|Tajný kód (nepovinný — bez kódu se přihlašuje klepnutím a kód lze nastavit později)
+973|Jeden tajný kód pro všechny děti ({rule}). Může zůstat prázdný
+974|Nový tajný kód
+975|Tajný kód pro uživatele {name}
+976|Váš vlastní tajný kód (4 číslice)
+977|Propojovací kód
+978|Propojovací kód je jen pro rodiče
+979|Propojovací kód pro {name}
+980|Propojovací kód pro zařízení
+981|Kódy pro připojení
+982|Nejdřív je třeba nastavit tajný kód uživateli {name}
+983|Zúčtováno {amount} s {name} ✅
+984|Rodinnou pokladnu může založit jen osoba starší 18 let
+985|Malé
+986|Dostal(a) jsem
+987|Dostal(a) jsem rozdíl ({amount})
+988|Dostal(a) jsem peníze
+989|Vzájemné zúčtování
+990|Zúčtovat vzájemné dluhy
+991|Zúčtovat vzájemné dluhy ({amount})
+992|Odkaz s pozvánkou přidá každého, kdo ho otevře, jako dítě. Sdílejte ho jen s rodinou.
+993|Propojení zařízení
+994|Propojit toto zařízení a přihlásit se
+995|Propojit zařízení s rodičem
+996|Přečetl(a) jsem si {terms} a {privacy} a souhlasím
+997|Přečetl(a) jsem si {terms} a {privacy} a souhlasím
+998|Přečetla jsem si {terms} a {privacy} a souhlasím
+999|Propojeno je už {n} zařízení, to je maximum. Chcete-li přidat další, odeberte zařízení.
+1000|Normální
+1001|Chvilku, přihlašujeme…
+1002|Chvilku, odhlašujeme…
+1003|Chcete je sloučit v rodinné pokladně?
+1004|Chcete, aby to dlužníci viděli?
+1005|Vibrace
+1006|Zapsat
+1007|Zapsat vrácení
+1008|Automaticky zapisuje dluh každý týden nebo měsíc, bez nutnosti psát ho pokaždé.
+1009|Nový pravidelný zápis
+1010|Záznam uložený offline se neodeslal: {err}
+1011|Obnovit aplikaci
+1012|To mohou dělat jen rodiče
+1013|Cíl pro někoho jiného mohou založit jen rodiče
+1014|Oslovení mohou nastavit jen rodiče
+1015|Jen abychom ověřili, že zakladateli pokladny je přes 18 let. Nikomu se nezobrazuje.
+1016|Zaznamenal(a) splátku
+1017|Zaznamenal(a) dluh
+1018|Zaznamenal(a) splátku
+1019|Zaznamenal(a) dluh
+1020|Zaznamenal(a) splátku
+1021|Zaznamenal(a) dluh
+1022|Zapište si vlastní dluh do sešitu
+1023|Čistý týden
+1024|Celý týden bez otevřených dluhů
+1025|Zaplaceno celé ✅
+1026|Zaplacené ({n})
+1027|Ukládáme vše…
+1028|Uvolnit zámek
+1029|Zaplatil(a) jsem
+1030|Zaplatil(a) jsem rozdíl ({amount})
+1031|Naposledy použito: {date}
+1032|Přejmenoval(a) rodinu
+1033|Změnil(a) zemi a měnu
+1034|Změnil(a) jméno
+1035|Změnil(a) roli
+1036|Přejmenoval(a) rodinu
+1037|Změnil(a) zemi a měnu
+1038|Změnil(a) jméno
+1039|Změnil(a) roli
+1040|Změnit
+1041|Změna měny mění jen symbol. Samotné částky se nepřepočítávají.
+1042|Změnit tajný kód
+1043|Přejmenovat rodinu
+1044|Přejmenoval(a) rodinu
+1045|Změnil(a) zemi a měnu
+1046|Změnil(a) jméno
+1047|Změnil(a) roli
+1048|Sdílet
+1049|Zapomněl(a) jsem kód
+1050|Poslali jsme kód na {email}. Zadejte ho a také novou adresu. Nahradí současnou až po ověření.
+1051|Poslali jsme 6místný kód na {email}. Platí 10 minut.
+1052|Moje
+1053|Odeslat žádost
+1054|Odeslat ověřovací kód
+1055|Odeslat kód e-mailem
+1056|Odeslat kód na aktuální e-mail
+1057|Jméno
+1058|Název cíle může mít nejvýše 40 znaků
+1059|Název rodiny
+1060|Název rodiny se neshoduje
+1061|Neplatný název rodiny
+1062|Neplatné jméno
+1063|Známá jména
+1064|Uložit
+1065|hodinu
+1066|{"one": "{n} hodina", "few": "{n} hodiny", "many": "{n} hodiny", "other": "{n} hodin"}
+1067|Směnné kurzy se zatím nenačetly. Zkuste to za chvíli.
+1068|2 hodiny
+1069|Jazyk
+1070|Neplatné datum
+1071|Datum narození
+1072|Neplatné datum narození
+1073|Odezva
+1074|podmínkami používání
+1075|Podmínky používání
+1076|Role
+1077|Role:
+1078|Hlavní nabídka
+1079|Platba dluhu v jiné měně
+1080|🆘 Staré zařízení se ztratilo nebo rozbilo

@@ -6,7 +6,9 @@ import { fmtMoney } from "./currency";
 export const shekel = (agorot: number) => fmtMoney(agorot, "ILS");
 
 // שולח התראה רק למי שיש לו מכשיר רשום, ורק אם הוגדר בשרת ערוץ התראות (Web Push או FCM לאנדרואיד).
-export async function notify(ctx: MutationCtx, personIds: Id<"people">[], title: string, body: string): Promise<void> {
+// tab: הלשונית שהאפליקציה פותחת כשלוחצים על ההתראה (home/friends/history/family/manage).
+export type PushTab = "home" | "friends" | "history" | "family" | "manage";
+export async function notify(ctx: MutationCtx, personIds: Id<"people">[], title: string, body: string, tab?: PushTab): Promise<void> {
   const webOn = !!process.env.VAPID_PRIVATE_KEY && !!process.env.VAPID_PUBLIC_KEY;
   if (!webOn && !process.env.FCM_SERVICE_ACCOUNT) return;
   const withDevice: Id<"people">[] = [];
@@ -15,7 +17,7 @@ export async function notify(ctx: MutationCtx, personIds: Id<"people">[], title:
     if (sub) withDevice.push(id);
   }
   if (!withDevice.length) return;
-  await ctx.scheduler.runAfter(0, internal.pushSend.send, { personIds: withDevice, title, body });
+  await ctx.scheduler.runAfter(0, internal.pushSend.send, { personIds: withDevice, title, body, ...(tab ? { tab } : {}) });
 }
 
 export type EntryLike = { kind: "debt" | "payment"; from: Id<"people">; to: Id<"people">; amount: number; currency?: string };
