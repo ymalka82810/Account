@@ -52,7 +52,7 @@ export default function Join({ current }) {
   // הודעה מוכנה להורה בוואטסאפ, כמו תזכורת החוב (WhatsAppRemind): איש הקשר נבחר שם, ושום מספר לא נשמר.
   // הקישור הוא לאפליקציה בלבד, בלי קוד המשפחה: ההורה כבר מכיר אותו.
   const askParent = () => {
-    const text = t('היי, {name} ביקש/ה להצטרף לקופה המשפחתית. אפשר להיכנס ולאשר: {url}', { name: pending ? pending.name : '', url: (isNativeApp() ? SITE_URL : location.origin + location.pathname) + '#manage' });
+    const text = t('היי, {name} ביקש/ה להצטרף לקופה המשפחתית. אפשר להיכנס ולאשר: {url}', { name: pending ? pending.name : '', url: (isNativeApp ? SITE_URL : location.origin + location.pathname) + '#manage' });
     window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
   };
   if (pending) {
