@@ -21,6 +21,9 @@ import { preloadImages } from './lib/preloadImages.js';
 import { initBarTapSound } from './lib/metalSound.js';
 import { applyMotion } from './lib/feel.js';
 import { initDeepLinks } from './lib/deepLink.js';
+import { initSwipeDebug } from './lib/swipeDebug.js';
+
+initSwipeDebug();
 
 // key={lang}: החלפת שפה בונה את העץ מחדש, כך שכל t() בכל מקום מתרנדר שוב בלי לחבר כל קומפוננטה.
 function Root() {

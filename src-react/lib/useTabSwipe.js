@@ -139,6 +139,9 @@ export function useTabSwipe(tabs, tab, setTab, onDrag = undefined) {
     if (!from) return;
     const el = panel();
     if (!el || reducedMotion()) { clearStyles(el); finish(); return; }
+    // הניקוי של האנימציה הקודמת (finish) הוריד את swiping ממש עכשיו. בלי החיתוך שלו הלשונית שנכנסת מחוץ למסך
+    // יוצרת גלישה לרוחב, והדפדפן גולל את כל הדף (כולל הכותרת) הצידה וחזרה - מההחלקה השנייה ואילך.
+    rootRef.current?.classList.add('swiping');
     el.style.transition = 'none';
     el.style.transform = `translateX(${from * SHIFT * 100}%)`;
     el.style.opacity = '0';

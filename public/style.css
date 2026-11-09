@@ -121,8 +121,8 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible), [role="button"]:f
 main { flex: 1 1 auto; width: 100%; max-width: 640px; margin: 0 auto; padding: 16px; }
 .panel { display: none; }
 .panel.active { display: block; }
-/* בזמן החלקה בין לשוניות (useTabSwipe) הלשונית זזה הצידה - בלי פס גלילה אופקי לכל הדף */
-main.swiping { overflow-x: clip; }
+/* הלשונית זזה הצידה בהחלקה ובכניסה (useTabSwipe): חיתוך קבוע לרוחב, כך שאף פעם לא נוצרת גלישה שהדף כולו נגלל אליה */
+main { overflow-x: clip; }
 /* רק בזמן ההחלקה הלשונית מקבלת שכבה משלה (GPU) - כך התזוזה והדהייה חלקות. לא קבוע: transform קבוע היה הופך את הלשונית ליעד של כל אלמנט fixed שבתוכה */
 main.swiping > .panel.active { will-change: transform, opacity; backface-visibility: hidden; }
 h2 { font-size: 1.1rem; margin: 22px 0 10px; }
