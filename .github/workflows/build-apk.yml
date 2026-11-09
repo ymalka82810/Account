@@ -3,7 +3,7 @@ name: Build Android APK
 # בונה APK חתום ומפרסם אותו כ-GitHub Release (tag: v1.0.<מספר ריצה>). האפליקציה בודקת Releases
 # ומציעה למשתמש לעדכן. מספר הריצה הוא גם ה-versionCode, כי העדכון משווה לפיו.
 # הפעלה: Actions > Build Android APK > Run workflow.
-# נדרשים Secrets: KEYSTORE_B64 (קובץ p12 ב-base64) ו-KEYSTORE_PASSWORD. אותו מפתח בכל גרסה, אחרת אנדרואיד יסרב לעדכן.
+# נדרשים Secrets: KEYSTORE_B64 (קובץ p12 ב-base64) ו-KEYSTORE_PASSWORD. לא חובה: GOOGLE_SERVICES_JSON (להתראות). אותו מפתח בכל גרסה, אחרת אנדרואיד יסרב לעדכן.
 
 on:
   workflow_dispatch:
@@ -34,6 +34,28 @@ jobs:
           APK_BUILD: "1"
       - run: npx cap add android
       - run: npx cap sync android
+
+      # התראות (FCM): הסוד GOOGLE_SERVICES_JSON הוא תוכן קובץ google-services.json מ-Firebase (אפליקציית Android עם com.ymalka.account).
+      # תבנית Capacitor מפעילה את תוסף google-services מעצמה כשהקובץ קיים. בלי הסוד ההתראות כבויות באפליקציה (FCM_ENABLED=false),
+      # כי בלי Firebase הרישום להתראות נתקע או מקריס. הרשאת POST_NOTIFICATIONS נדרשת באנדרואיד 13+ כדי שבקשת ההרשאה תוצג בכלל.
+      - name: Firebase (push notifications)
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          MANIFEST=android/app/src/main/AndroidManifest.xml
+          sed -i 's#<application#<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <application#' $MANIFEST
+          grep -q android.permission.POST_NOTIFICATIONS $MANIFEST
+          CONFIG=android/app/src/main/assets/public/config.js
+          if [ -n "$GOOGLE_SERVICES_JSON" ]; then
+            printf '%s' "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+            python3 -c "import json; d=json.load(open('android/app/google-services.json')); assert any(c['client_info']['android_client_info']['package_name']=='$APP_ID' for c in d['client']), 'google-services.json is not for $APP_ID'"
+            sed -i 's/window.FCM_ENABLED = [a-z]*;/window.FCM_ENABLED = true;/' $CONFIG
+            grep -q 'window.FCM_ENABLED = true;' $CONFIG
+          else
+            echo "::warning::GOOGLE_SERVICES_JSON secret is missing - push notifications are disabled in this APK"
+            sed -i 's/window.FCM_ENABLED = [a-z]*;/window.FCM_ENABLED = false;/' $CONFIG
+            grep -q 'window.FCM_ENABLED = false;' $CONFIG
+          fi
 
       # @capacitor/assets@3 תלוי ב-sharp@0.32, שמוריד את libvips מ-GitHub Releases בזמן ההתקנה. כשההורדה נכשלת (504)
       # npx בולע את השגיאה ויוצא עם 1 בלי שום פלט. sharp@0.33 מגיע עם הקבצים הבינאריים כחבילות npm רגילות,

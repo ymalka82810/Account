@@ -4,6 +4,6 @@ window.CONVEX_URL = "https://flippant-mule-694.eu-west-1.convex.cloud";
 window.CONTACT_EMAIL = "malka.applications@gmail.com";
 // מפתח ציבורי להתראות (Web Push). המפתח הפרטי נשמר רק בשרת Convex.
 window.VAPID_PUBLIC_KEY = "BMAvS9Esvtie9kVeVw1INs-t2mlIBLLRF4hiNzEAENojfVwCrG9ZKBhjSu-TEorWwf1PJdCy67fJxs3HN8WqDSo";
-// התראות באפליקציית האנדרואיד (FCM). להפוך ל-true רק אחרי שהוגדר Firebase: קובץ google-services.json ב-android/app,
-// ומשתנה FCM_SERVICE_ACCOUNT בשרת Convex. בלי זה האפליקציה לא מבקשת רישום להתראות (אחרת היא עלולה לקרוס).
+// התראות באפליקציית האנדרואיד (FCM). בבניית ה-APK הערך נקבע אוטומטית: true רק אם קיים הסוד GOOGLE_SERVICES_JSON ב-GitHub,
+// אחרת false (בלי Firebase הרישום להתראות נתקע או מקריס). בשרת צריך גם FCM_SERVICE_ACCOUNT (workflow: Set Convex env).
 window.FCM_ENABLED = true;

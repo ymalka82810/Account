@@ -1,4 +1,4 @@
-name: Set Convex env (VAPID)
+name: Set Convex env (push keys)
 
 on:
   workflow_dispatch:
@@ -19,6 +19,9 @@ jobs:
           npx convex env set VAPID_PUBLIC_KEY "BMAvS9Esvtie9kVeVw1INs-t2mlIBLLRF4hiNzEAENojfVwCrG9ZKBhjSu-TEorWwf1PJdCy67fJxs3HN8WqDSo"
           npx convex env set VAPID_PRIVATE_KEY "$VAPID_PRIVATE_KEY"
           npx convex env set VAPID_SUBJECT "https://ymalka82810.github.io/Account/"
+          # התראות לאנדרואיד: תוכן קובץ ה-JSON של חשבון השירות מ-Firebase (Project settings > Service accounts)
+          if [ -n "$FCM_SERVICE_ACCOUNT" ]; then npx convex env set FCM_SERVICE_ACCOUNT "$FCM_SERVICE_ACCOUNT"; else echo "::warning::FCM_SERVICE_ACCOUNT secret is missing"; fi
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
           VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          FCM_SERVICE_ACCOUNT: ${{ secrets.FCM_SERVICE_ACCOUNT }}
