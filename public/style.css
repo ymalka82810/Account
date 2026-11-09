@@ -28,7 +28,9 @@ html {
   min-height: 100%;
   /* הרקע וה-color-scheme של הערכה חייבים לשבת גם על html: אחרת הקנבס מאחורי ה-body (גלילה חוצה, פס תחתון, שינוי גובה סרגל הכתובת) נשאר בהיר */
   background: var(--bg);
-  overscroll-behavior-y: none;
+  /* בלי אפקט "מתיחה"/זוהר בקצה הדף בשום כיוון: ב-Chrome לאנדרואיד החלקה הצידה בין לשוניות הזיזה את כל הדף
+     (כולל הכותרת) עם האצבע והחזירה אותו למקום. גם -x, לא רק -y */
+  overscroll-behavior: none;
 }
 html[data-theme="parent"] { background: #0b0d10; color-scheme: dark; }
 html[data-theme="teen"] { background: #000; color-scheme: dark; }
@@ -42,7 +44,7 @@ body {
   color: var(--ink);
   line-height: 1.5;
   padding-bottom: env(safe-area-inset-bottom, 0);
-  overscroll-behavior-y: none;
+  overscroll-behavior: none;
 }
 
 .top {
@@ -51,6 +53,8 @@ body {
   padding: calc(18px + env(safe-area-inset-top, 0)) 20px 22px;
   border-bottom: 6px solid var(--coin);
 }
+/* גם החלקה שמתחילה על הכותרת או על הלשוניות לא גוררת את הדף הצידה */
+.top, .tabs { touch-action: pan-y pinch-zoom; }
 .top h1 { margin: 0; font-size: 1.7rem; font-weight: 800; }
 .sub { margin: 2px 0 0; color: #c3cdee; font-size: .95rem; }
 
