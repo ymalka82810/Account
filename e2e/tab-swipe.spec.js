@@ -85,3 +85,10 @@ test('החלקה ימינה ושמאלה מחליפה לשונית, וגלילה
   await swipe(page, 40, 220);
   await expect(active(page)).toHaveAttribute('data-tab', 'history');
 });
+
+// האזור הריק מתחת לתוכן הוא חלק מיעד ההחלקה: main נמתח עד תחתית המסך.
+test('ה-main נמתח עד תחתית המסך כך שהחלקה באזור הריק עובדת', async ({ page }) => {
+  await enterDemo(page);
+  const bottom = await page.evaluate(() => document.querySelector('main').getBoundingClientRect().bottom);
+  expect(bottom).toBeGreaterThanOrEqual(844 - 1);
+});

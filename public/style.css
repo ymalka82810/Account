@@ -110,7 +110,9 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible), [role="button"]:f
   outline-offset: 2px;
 }
 
-main { max-width: 640px; margin: 0 auto; padding: 16px; }
+/* ה-main הוא היעד של החלקה בין לשוניות (useTabSwipe): הוא נמתח עד תחתית המסך, אחרת האזור הריק מתחת לתוכן לא מגיב להחלקה */
+#root:has(> main) { display: flex; flex-direction: column; min-height: calc(100vh - env(safe-area-inset-bottom, 0px)); min-height: calc(100dvh - env(safe-area-inset-bottom, 0px)); }
+main { flex: 1 1 auto; width: 100%; max-width: 640px; margin: 0 auto; padding: 16px; }
 .panel { display: none; }
 .panel.active { display: block; }
 /* בזמן החלקה בין לשוניות (useTabSwipe) הלשונית זזה הצידה - בלי פס גלילה אופקי לכל הדף */
