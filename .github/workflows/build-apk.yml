@@ -51,9 +51,7 @@ jobs:
             python3 -c "import json; d=json.load(open('android/app/google-services.json')); assert any(c['client_info']['android_client_info']['package_name']=='$APP_ID' for c in d['client']), 'google-services.json is not for $APP_ID'"
             sed -i 's/window.FCM_ENABLED = [a-z]*;/window.FCM_ENABLED = true;/' $CONFIG
             grep -q 'window.FCM_ENABLED = true;' $CONFIG
-            # אייקון ההתראה בשורת הסטטוס (בלעדיו אנדרואיד מציג ריבוע אפור), וערוץ ברירת המחדל "kupa" (כמו ANDROID_CHANNEL בשרת)
-            mkdir -p android/app/src/main/res/drawable
-            cp android-plugin/ic_stat_kupa.xml android/app/src/main/res/drawable/ic_stat_kupa.xml
+            # אייקון ההתראה בשורת הסטטוס (ic_stat_kupa, נוצר ב-apply-currency-icons.py; בלעדיו אנדרואיד מציג ריבוע אפור), וערוץ ברירת המחדל "kupa" (כמו ANDROID_CHANNEL בשרת)
             python3 - <<'PYM'
           p = 'android/app/src/main/AndroidManifest.xml'
           s = open(p, encoding='utf-8').read()

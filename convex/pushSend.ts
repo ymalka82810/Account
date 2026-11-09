@@ -5,6 +5,7 @@ import { v } from "convex/values";
 import { Doc, Id } from "./_generated/dataModel";
 import webpush from "web-push";
 import { createSign } from "node:crypto";
+import ICONS from "../assets/currency-icons.json";
 
 // שולח התראה לכל המכשירים של האנשים האלה: דפדפנים (Web Push) ואפליקציית האנדרואיד (FCM).
 // Web Push: צריך להגדיר בשרת (Convex Environment Variables) VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT.
@@ -14,6 +15,10 @@ export const FCM_PREFIX = "fcm:";
 // ערוץ ההתראות באנדרואיד: נוצר באפליקציה בחשיבות גבוהה (קופץ למעלה עם צליל), וגם מוגדר כברירת המחדל במניפסט.
 export const ANDROID_CHANNEL = "kupa";
 const TABS = ["home", "friends", "history", "family", "manage"];
+// אייקון שורת הסטטוס כמו אייקון האפליקציה: מטבע עם הסמל של מטבע המשפחה (ic_stat_<מטבע>, נוצרים ב-apply-currency-icons.py).
+// חסר = שקלים, כמו בשאר האפליקציה.
+const byCurrency = ICONS.byCurrency as Record<string, string>;
+const statIcon = (currency: string | undefined) => `ic_stat_${(byCurrency[currency || "ILS"] || "USD").toLowerCase()}`;
 
 type ServiceAccount = { project_id: string; client_email: string; private_key: string };
 
@@ -54,7 +59,7 @@ export type PushReport = {
   errors: string[];
 };
 
-async function deliver(subs: Doc<"pushSubs">[], title: string, body: string, tab: string | undefined) {
+async function deliver(subs: Doc<"pushSubs">[], title: string, body: string, tab: string | undefined, currencyOf: Record<string, string | undefined>) {
   const dead: Id<"pushSubs">[] = [];
   const errors: string[] = [];
   const web = subs.filter((s) => !s.endpoint.startsWith(FCM_PREFIX));
@@ -102,7 +107,7 @@ async function deliver(subs: Doc<"pushSubs">[], title: string, body: string, tab
               android: {
                 priority: "HIGH",
                 ttl: "86400s",
-                notification: { channel_id: ANDROID_CHANNEL, sound: "default", icon: "ic_stat_kupa", color: "#E0A526" },
+                notification: { channel_id: ANDROID_CHANNEL, sound: "default", icon: statIcon(currencyOf[s.familyId]), color: "#E0A526" },
               },
             } }),
           });
@@ -130,7 +135,8 @@ export const send = internalAction({
   args: { personIds: v.array(v.id("people")), title: v.string(), body: v.string(), tab: v.optional(v.string()) },
   handler: async (ctx, { personIds, title, body, tab }): Promise<void> => {
     const subs = await ctx.runQuery(internal.push.forPeople, { personIds });
-    const { dead } = await deliver(subs, title, body, tab && TABS.includes(tab) ? tab : undefined);
+    const currencyOf = await ctx.runQuery(internal.push.familyCurrencies, { familyIds: [...new Set(subs.map((s) => s.familyId))] });
+    const { dead } = await deliver(subs, title, body, tab && TABS.includes(tab) ? tab : undefined, currencyOf);
     if (dead.length) await ctx.runMutation(internal.push.removeDead, { ids: dead });
   },
 });
@@ -141,7 +147,8 @@ export const test = action({
   handler: async (ctx, { token }): Promise<PushReport> => {
     const me: Id<"people"> = await ctx.runQuery(internal.push.personForToken, { token });
     const subs = await ctx.runQuery(internal.push.forPeople, { personIds: [me] });
-    const { report, dead } = await deliver(subs, "התראת ניסיון 🔔", "אם רואים את זה, ההתראות עובדות.", "home");
+    const currencyOf = await ctx.runQuery(internal.push.familyCurrencies, { familyIds: [...new Set(subs.map((s) => s.familyId))] });
+    const { report, dead } = await deliver(subs, "התראת ניסיון 🔔", "אם רואים את זה, ההתראות עובדות.", "home", currencyOf);
     if (dead.length) await ctx.runMutation(internal.push.removeDead, { ids: dead });
     return report;
   },

@@ -97,3 +97,13 @@ export const allSubsForDiagnose = internalQuery({
   args: {},
   handler: async (ctx) => (await ctx.db.query("pushSubs").take(50)).map((s) => ({ endpoint: s.endpoint, createdAt: s.createdAt })),
 });
+
+// מטבע כל משפחה (לבחירת אייקון ההתראה). חסר = שקלים.
+export const familyCurrencies = internalQuery({
+  args: { familyIds: v.array(v.id("families")) },
+  handler: async (ctx, { familyIds }) => {
+    const out: Record<string, string | undefined> = {};
+    for (const id of familyIds) out[id] = (await ctx.db.get(id))?.currency;
+    return out;
+  },
+});

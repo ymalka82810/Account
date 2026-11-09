@@ -128,6 +128,22 @@ for key, v in variants.items():
         f'            </intent-filter>\n'
         f'        </activity-alias>\n')
 
+# אייקון ההתראה בשורת הסטטוס לכל מטבע: אנדרואיד מציג רק צללית (לבן על שקוף), אז המטבע שבאייקון האפליקציה
+# מצויר כדיסקה מלאה עם השפה והסמל חתוכים (evenOdd). השרת בוחר ic_stat_<מטבע> לפי מטבע המשפחה (convex/pushSend.ts),
+# ו-ic_stat_kupa (ברירת המחדל במניפסט, שקלים) משמש כשההודעה לא מציינת אייקון.
+STAT_SCALE = 1.63  # הסמל מצויר לקוטר 130 (ראו coin_paths); כאן המטבע ממלא כמעט את כל הקנבס
+def stat_icon(symbol_path):
+    r = lambda x: round(x / STAT_SCALE, 2)
+    d = circle(r(236)) + circle(r(206)) + circle(r(190)) + ' ' + symbol_path
+    return vector(24,
+        f'    <group android:pivotX="256" android:pivotY="256" android:scaleX="{STAT_SCALE * 0.92}" android:scaleY="{STAT_SCALE * 0.92}">\n'
+        f'        <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="{d}"/>\n'
+        '    </group>\n')
+
+for key, v in variants.items():
+    write(f'drawable/ic_stat_{key.lower()}.xml', stat_icon(v['path']))
+write('drawable/ic_stat_kupa.xml', stat_icon(variants['ILS']['path']))
+
 write('drawable/ic_cur_bg.xml',
       vector(108, gradient_path('M0,0h512v512h-512z', 256, 0, 256, 512, (('0', BG_TOP), ('1', BG_BOTTOM)))))
 
