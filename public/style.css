@@ -1542,8 +1542,8 @@ body[data-theme="teen"] .kb-sug:active { background: var(--neon-grad); color: va
 .sum-card .num { font-size: 1.15rem; font-weight: 800; margin-top: 4px; }
 .sum-chart { display: flex; gap: 8px; align-items: flex-end; height: 140px; margin-top: 14px; padding: 8px 10px 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
 .sum-col { flex: 1; display: flex; flex-direction: column; height: 100%; min-width: 0; }
-.sum-bars { flex: 1; display: flex; gap: 3px; align-items: flex-end; }
-.sum-bar { flex: 1; min-height: 2px; border-radius: 4px 4px 0 0; }
+.sum-bars { flex: 1; display: flex; gap: 3px; align-items: flex-end; border-bottom: 1px solid var(--line); }
+.sum-bar { flex: 1; border-radius: 4px 4px 0 0; }
 .sum-bar.debt, .dot.debt { background: var(--owe); }
 .sum-bar.paid, .dot.paid { background: var(--get); }
 .sum-lbl { text-align: center; font-size: .75rem; color: var(--ink-soft); padding: 4px 0; }

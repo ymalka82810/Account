@@ -42,6 +42,9 @@ export default function Summary({ entries, onMore }) {
   );
 }
 
+// גובה עמודה בגרף: ערך 0 = בלי עמודה בכלל (הגרף מתחיל באפס); ערך קטן אך חיובי מקבל לפחות 2px כדי שיראו אותו.
+const barHeight = (v, max) => (v > 0 ? `max(2px, ${(v / max) * 100}%)` : '0');
+
 // הגרף של 6 החודשים האחרונים ו"מי חייב הכי הרבה", בחלון תחתון.
 export function StatsSheet() {
   const { data } = useApp();
@@ -59,8 +62,8 @@ export function StatsSheet() {
             {months.map((m) => (
               <div className="sum-col" key={m.key}>
                 <div className="sum-bars">
-                  <div className="sum-bar debt" style={{ height: `${(m.debts / max) * 100}%` }} title={money(m.debts)} />
-                  <div className="sum-bar paid" style={{ height: `${(m.payments / max) * 100}%` }} title={money(m.payments)} />
+                  <div className="sum-bar debt" style={{ height: barHeight(m.debts, max) }} title={money(m.debts)} />
+                  <div className="sum-bar paid" style={{ height: barHeight(m.payments, max) }} title={money(m.payments)} />
                 </div>
                 <div className="sum-lbl">{new Date(`${m.key}-01T12:00:00`).toLocaleDateString(intlLocale(), { month: 'short' })}</div>
               </div>
