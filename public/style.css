@@ -1630,6 +1630,7 @@ html[dir="rtl"] .acct-more[open]:not(.closing) > summary .arrow { transform: sca
   color: var(--owe); background: var(--owe-bg); border: 2px solid var(--owe); border-radius: 14px;
 }
 .acct-exit:active { transform: translateY(1px); }
+.push-err { margin: 0; padding: 10px 12px; border-radius: 10px; color: var(--owe); background: var(--owe-bg); font-size: .9rem; overflow-wrap: anywhere; user-select: text; }
 .acct-version { color: var(--ink-soft); font-variant-numeric: tabular-nums; text-align: start; }
 .acct-row.primary { background: var(--coin); border-color: var(--coin-deep); color: var(--on-coin, #1d2b4f); font-weight: 700; }
 body[data-theme="teen"] .acct-row, body[data-theme="teen"] .acct-more > summary { border-radius: 16px; }

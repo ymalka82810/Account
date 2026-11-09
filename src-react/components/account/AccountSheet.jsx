@@ -69,6 +69,7 @@ export function AccountSheet() {
   const sheet = useSheet();
   const me = data.me;
   const [pushOn, setPushOn] = useState(null);
+  const [pushErr, setPushErr] = useState('');
   useSheetTitle(t('החשבון שלי'));
   // טעינה מוקדמת: רשימת המכשירים כבר מוכנה כשנפתח "המכשירים שלי", כך שהחלון נפתח בגובהו המלא ולא קופץ אחרי הטעינה.
   useQuery('biometric:deviceStatus', me.role === 'parent' ? { token } : 'skip');
@@ -120,10 +121,11 @@ export function AccountSheet() {
         <h3 className="acct-h" id="acct-h-feel">{t('תחושה')}</h3>
         {pushSupported() && pushOn !== null && (
           <AsyncButton className="acct-row" onClick={async () => {
-            if (pushOn) await disablePush(); else await enablePush();
+            if (pushOn) await disablePush(); else setPushErr(await enablePush());
             setPushOn(await isPushOn());
           }}><span>{withIcons(pushOn ? t('🔕 כיבוי התראות') : t('🔔 הפעלת התראות'))}</span></AsyncButton>
         )}
+        {pushErr && !pushOn && <p className="push-err" role="alert">{pushErr}</p>}
         {pushSupported() && pushOn && (
           <AsyncButton className="acct-row" onClick={testPush}><span>{withIcons(t('🔔 שליחת התראת ניסיון'))}</span></AsyncButton>
         )}

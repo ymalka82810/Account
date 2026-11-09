@@ -65,7 +65,7 @@ async function registerNative() {
     /** @type {any[]} */
     const handles = [];
     const done = (/** @type {() => void} */ fn) => { handles.forEach((h) => h.remove()); fn(); };
-    const timer = setTimeout(() => done(() => reject(new Error('timeout'))), 15000);
+    const timer = setTimeout(() => done(() => reject(new Error(t('אין תשובה מ-Firebase אחרי 20 שניות')))), 20000);
     Promise.all([
       PN.addListener('registration', (/** @type {{ value: string }} */ tok) => { clearTimeout(timer); done(() => resolve(tok.value)); }),
       PN.addListener('registrationError', (/** @type {any} */ err) => { clearTimeout(timer); done(() => reject(err)); }),
@@ -100,36 +100,72 @@ export async function isPushOn() {
 // כל שלב בהפעלה (בקשת הרשאה, רישום ב-FCM, service worker, שמירה בשרת) יכול להיתקע בלי להיכשל, והכפתור היה נשאר על "רגע…" לנצח.
 // לכן ההפעלה כולה מוגבלת בזמן: אחרי הזמן הזה הכפתור משתחרר ומוצגת הודעת כשל.
 const ENABLE_TIMEOUT_MS = 45000;
+
+// הסיבה הטכנית לכשל (טקסט השגיאה מאנדרואיד / Firebase / הדפדפן / השרת), כדי שאפשר יהיה לראות מה נכשל ולא רק "לא הצלחנו".
+function errDetail(/** @type {any} */ e) {
+  if (!e) return '';
+  if (typeof e.data === 'string') return errMsg(e);
+  if (typeof e.error === 'string') return e.error;
+  if (e.error && typeof e.error.message === 'string') return e.error.message;
+  if (typeof e.message === 'string' && e.message) return e.message;
+  if (typeof e.code === 'string') return e.code;
+  try { return typeof e === 'string' ? e : JSON.stringify(e); } catch (x) { return String(e); }
+}
+const STAGES = {
+  permission: () => t('בקשת הרשאה'),
+  register: () => t('רישום ב-Firebase'),
+  worker: () => t('הכנת הדפדפן'),
+  server: () => t('שמירה בשרת'),
+};
+/** @typedef {keyof typeof STAGES} Stage */
+
+// מפעיל התראות. מחזיר '' בהצלחה, או טקסט שמסביר באיזה שלב זה נכשל ולמה (מוצג מתחת לכפתור).
 export async function enablePush() {
+  /** @type {{ stage: Stage }} */
+  const at = { stage: 'permission' };
   /** @type {ReturnType<typeof setTimeout> | undefined} */
   let timer;
+  /** @type {Promise<string>} */
   const timeout = new Promise((resolve) => {
-    timer = setTimeout(() => { toast(t('לא הצלחנו להפעיל התראות במכשיר הזה')); resolve(undefined); }, ENABLE_TIMEOUT_MS);
+    timer = setTimeout(() => resolve(t('לא הצלחנו להפעיל התראות: {stage} לא הגיב תוך 45 שניות', { stage: STAGES[at.stage]() })), ENABLE_TIMEOUT_MS);
   });
-  try { await Promise.race([enablePushNow(), timeout]); } finally { clearTimeout(timer); }
+  /** @type {Promise<string>} */
+  const run = enablePushNow(at).then(() => '', (/** @type {any} */ e) => {
+    if (e && e.denied) return t('ההתראות חסומות. אפשר לאשר אותן בהגדרות הטלפון או הדפדפן.');
+    const d = errDetail(e);
+    console.error('enablePush failed at', at.stage, e);
+    return t('לא הצלחנו להפעיל התראות. שלב: {stage}. סיבה: {detail}', { stage: STAGES[at.stage](), detail: d || '?' });
+  });
+  try {
+    const err = await Promise.race([run, timeout]);
+    toast(err || t('ההתראות הופעלו 🔔'));
+    return err;
+  } finally { clearTimeout(timer); }
 }
 
-async function enablePushNow() {
+async function enablePushNow(/** @type {{ stage: Stage }} */ at) {
   if (isNative()) {
-    try {
-      const PN = await loadNative();
-      const perm = await PN.requestPermissions();
-      await ensureChannel();
-      if (perm.receive !== 'granted') { toast(t('ההתראות חסומות. אפשר לאשר אותן בהגדרות הדפדפן.')); return; }
-      await sendNativeToken(/** @type {string} */ (await registerNative()));
-      toast(t('ההתראות הופעלו 🔔'));
-    } catch (e) { toast(e && /** @type {any} */ (e).data ? errMsg(e) : t('לא הצלחנו להפעיל התראות במכשיר הזה')); }
+    const PN = await loadNative();
+    at.stage = 'permission';
+    const perm = await PN.requestPermissions();
+    if (perm.receive !== 'granted') throw { denied: true };
+    await ensureChannel();
+    at.stage = 'register';
+    const tok = /** @type {string} */ (await registerNative());
+    at.stage = 'server';
+    await sendNativeToken(tok);
     return;
   }
-  try {
-    const perm = await Notification.requestPermission();
-    if (perm !== 'granted') { toast(t('ההתראות חסומות. אפשר לאשר אותן בהגדרות הדפדפן.')); return; }
-    const reg = await navigator.serviceWorker.ready;
-    let sub = await reg.pushManager.getSubscription();
-    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyToBytes(window.VAPID_PUBLIC_KEY) });
-    await sendSubToServer(sub);
-    toast(t('ההתראות הופעלו 🔔'));
-  } catch (e) { toast(e && e.data ? errMsg(e) : t('לא הצלחנו להפעיל התראות במכשיר הזה')); }
+  at.stage = 'permission';
+  const perm = await Notification.requestPermission();
+  if (perm !== 'granted') throw { denied: true };
+  at.stage = 'worker';
+  const reg = await navigator.serviceWorker.ready;
+  let sub = await reg.pushManager.getSubscription();
+  at.stage = 'register';
+  if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyToBytes(window.VAPID_PUBLIC_KEY) });
+  at.stage = 'server';
+  await sendSubToServer(sub);
 }
 
 export async function disablePush() {

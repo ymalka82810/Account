@@ -7,12 +7,14 @@ import AsyncButton from '../shared/AsyncButton.jsx';
 // ההפעלה חבויה ב"החשבון שלי", אז מציעים אותה כאן בלחיצה אחת. נעלם ברגע שההתראות פעילות.
 export default function PushPrompt() {
   const [on, setOn] = useState(/** @type {boolean | null} */ (null));
+  const [err, setErr] = useState('');
   useEffect(() => { if (pushSupported()) isPushOn().then(setOn); }, []);
   if (!pushSupported() || on !== false) return null;
   return (
     <div className="card notice">
       <p><strong>{t('🔔 רוצים לדעת מיד?')}</strong> {t('הפעלת התראות תשלח לטלפון הודעה כשמישהו מבקש להצטרף למשפחה או רושם חוב שממתין לאישור שלך.')}</p>
-      <AsyncButton className="primary" onClick={async () => { await enablePush(); setOn(await isPushOn()); }}>{t('הפעלת התראות')}</AsyncButton>
+      <AsyncButton className="primary" onClick={async () => { setErr(await enablePush()); setOn(await isPushOn()); }}>{t('הפעלת התראות')}</AsyncButton>
+      {err && <p className="push-err" role="alert">{err}</p>}
     </div>
   );
 }
