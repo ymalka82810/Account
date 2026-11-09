@@ -55,7 +55,19 @@ export async function isPushOn() {
   try { return Notification.permission === 'granted' && !!(await getPushSub()); } catch (e) { return false; }
 }
 
+// כל שלב בהפעלה (בקשת הרשאה, רישום ב-FCM, service worker, שמירה בשרת) יכול להיתקע בלי להיכשל, והכפתור היה נשאר על "רגע…" לנצח.
+// לכן ההפעלה כולה מוגבלת בזמן: אחרי הזמן הזה הכפתור משתחרר ומוצגת הודעת כשל.
+const ENABLE_TIMEOUT_MS = 45000;
 export async function enablePush() {
+  /** @type {ReturnType<typeof setTimeout> | undefined} */
+  let timer;
+  const timeout = new Promise((resolve) => {
+    timer = setTimeout(() => { toast(t('לא הצלחנו להפעיל התראות במכשיר הזה')); resolve(undefined); }, ENABLE_TIMEOUT_MS);
+  });
+  try { await Promise.race([enablePushNow(), timeout]); } finally { clearTimeout(timer); }
+}
+
+async function enablePushNow() {
   if (isNative()) {
     try {
       const PN = await loadNative();
