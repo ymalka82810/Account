@@ -44,7 +44,7 @@ export function NewGoalSheet({ ownerId }) {
       <label className="field"><span>{t('על מה חוסכים?')}</span>
         <input type="text" maxLength={40} required placeholder={t('למשל: אופניים')} value={name} onChange={(e) => setName(e.target.value)} /></label>
       <label className="field"><span>{t('כמה צריך? ({cur})', { cur: currencySymbol(data.family.currency) })}</span>
-        <input type="number" inputMode="decimal" min="0.01" step="0.01" required value={target} onChange={(e) => setTarget(e.target.value)} /></label>
+        <input type="text" inputMode="decimal" data-kb="dec" autoComplete="off" required value={target} onChange={(e) => setTarget(e.target.value)} /></label>
       {error && <p className="error" role="alert">{error}</p>}
       <button className="primary" type="submit">{t('הוספה')}</button>
     </form>
@@ -116,7 +116,7 @@ export default function Goals({ data, token, personId }) {
             ))}
             {!done && (
               <div className="goal-dep">
-                <input type="number" inputMode="decimal" min="0.01" step="0.01" aria-label={t('סכום ({cur})', { cur: currencySymbol(goal.currency) })}
+                <input type="text" inputMode="decimal" data-kb="dec" autoComplete="off" aria-label={t('סכום ({cur})', { cur: currencySymbol(goal.currency) })}
                   placeholder={currencySymbol(goal.currency)} value={dep[goal.id] || ''} onChange={(e) => setDep((d) => ({ ...d, [goal.id]: e.target.value }))} />
                 <AsyncButton className="small strongbtn" onClick={() => deposit(goal)}>{isParent ? t('הפקדה') : t('הפקדתי')}</AsyncButton>
               </div>

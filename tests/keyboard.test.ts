@@ -168,3 +168,18 @@ describe("השלמת מילים", () => {
     expect(applySuggestion({ value: "גל", start: 2, end: 2, max: 4 }, "גלידה")).toBeNull();
   });
 });
+
+// באנדרואיד inputmode="none" לא מסתיר את מקלדת המערכת בשדה type="number" (עולה מקלדת המספרים של הטלפון מעל שלנו),
+// לכן שדות סכום הם type="text" עם inputMode="decimal" ו-data-kb="dec".
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
+describe("אין שדות type=number באפליקציה", () => {
+  const walk = (d: string): string[] => readdirSync(d).flatMap((f) => (statSync(join(d, f)).isDirectory() ? walk(join(d, f)) : f.endsWith(".jsx") ? [join(d, f)] : []));
+  it("אף קומפוננטה לא משתמשת ב-type=\"number\"", () => {
+    const bad = walk("src-react").filter((f) => /type=["']number["']/.test(readFileSync(f, "utf8")));
+    expect(bad).toEqual([]);
+  });
+  it("שדה סכום עם data-kb=dec מקבל מקלדת עשרונית", () => {
+    expect(kindOf(el({ type: "text", inputmode: "decimal" }, "INPUT", { dataset: { kb: "dec" } }))).toBe("dec");
+  });
+});
