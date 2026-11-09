@@ -1,5 +1,11 @@
 {
   "appId": "com.ymalka.account",
   "appName": "הקופה המשפחתית",
-  "webDir": "dist"
+  "webDir": "dist",
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "native",
+      "style": "DARK"
+    }
+  }
 }
