@@ -39,8 +39,10 @@ function innerScrolls(/** @type {Element | null} */ from, /** @type {HTMLElement
  * @param {string[]} tabs הלשוניות לפי הסדר בתפריט
  * @param {string} tab הלשונית הנוכחית
  * @param {(id: string) => void} setTab
+ * @param {((next: string | null, progress: number, animate: boolean) => void) | undefined} onDrag
+ *   מדווח על ההתקדמות לפס הלשונית (useTabIndicator): לאיזו לשונית הולכים ועד כמה (0 עד 1). null = חזרה למקום.
  */
-export function useTabSwipe(tabs, tab, setTab) {
+export function useTabSwipe(tabs, tab, setTab, onDrag = undefined) {
   /** @type {import('react').MutableRefObject<HTMLElement | null>} */
   const rootRef = useRef(null);
   /** @type {import('react').MutableRefObject<{ id: number, x: number, y: number, t: number, dx: number, active: boolean, target: Element | null } | null>} */
@@ -120,7 +122,10 @@ export function useTabSwipe(tabs, tab, setTab) {
       const el = panel();
       if (!el) return;
       // בקצה (אין לשונית לשם) - תזוזה קטנה ומתנגדת, רק כדי להרגיש שאין לאן.
-      const move = neighbor(dx) ? dx : dx * 0.2;
+      const next = neighbor(dx);
+      const move = next ? dx : dx * 0.2;
+      const width = e.currentTarget.clientWidth || window.innerWidth;
+      onDrag?.(next, next ? Math.min(1, Math.abs(dx) / width) : 0, false);
       el.style.transform = `translateX(${move}px)`;
       el.style.opacity = String(Math.max(0.4, 1 - Math.abs(move) / (window.innerWidth * 1.2)));
     },
@@ -135,6 +140,7 @@ export function useTabSwipe(tabs, tab, setTab) {
       const width = e.currentTarget.clientWidth || window.innerWidth;
       const fast = Math.abs(d.dx) / Math.max(1, e.timeStamp - d.t) > FAST_PX_PER_MS;
       if (!el || !next || (Math.abs(d.dx) < width * COMMIT_RATIO && !fast)) {
+        onDrag?.(null, 0, true);
         if (el) {
           el.style.transition = `transform 220ms ${EASE_IN}, opacity 220ms ${EASE_IN}`;
           el.style.transform = 'translateX(0)';
@@ -144,6 +150,7 @@ export function useTabSwipe(tabs, tab, setTab) {
         return;
       }
       busy.current = true;
+      onDrag?.(next, 1, true);
       const dir = d.dx > 0 ? 1 : -1;
       if (reducedMotion()) { clearStyles(el); finish(); setTab(next); return; }
       el.style.transition = `transform ${OUT_MS}ms ${EASE_OUT}, opacity ${OUT_MS}ms ${EASE_OUT}`;
@@ -159,7 +166,7 @@ export function useTabSwipe(tabs, tab, setTab) {
     onPointerCancel() {
       const d = drag.current;
       drag.current = null;
-      if (d?.active) { clearStyles(panel()); finish(); }
+      if (d?.active) { clearStyles(panel()); finish(); onDrag?.(null, 0, true); }
     },
     // אחרי החלקה לא נחשב לחיצה על כפתור שהאצבע התחילה עליו.
     onClickCapture(/** @type {import('react').MouseEvent} */ e) {

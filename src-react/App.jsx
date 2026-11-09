@@ -1,6 +1,6 @@
 import { useAvatarsReady } from './lib/avatars.js';
 import Avatar from './components/shared/Avatar.jsx';
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { state, LAST_ROLE_KEY, LAST_PALETTE_KEY, THEME_COLOR, tabLabels, subscribeAuth, authVersion, bumpAuth } from './state/state.js';
 import { t } from './i18n/index.js';
 import { call, callAction, useQuery } from './lib/api.js';
@@ -21,6 +21,7 @@ import { AccountSheet } from './components/account/AccountSheet.jsx';
 import Auth from './components/auth/Auth.jsx';
 import Home from './components/home/Home.jsx';
 import { useTabSwipe } from './lib/useTabSwipe.js';
+import { useTabIndicator } from './lib/useTabIndicator.js';
 import FriendsTab from './components/friends/FriendsTab.jsx';
 import FamilyTab from './components/family/FamilyTab.jsx';
 import ManageTab from './components/manage/ManageTab.jsx';
@@ -444,6 +445,11 @@ function CrashProbe({ tab }) {
   return null;
 }
 
+// התווית של לשונית: כל קטע טקסט עטוף ב-span (ולא טקסט חשוף), כדי שאצל הנוער יופיע מעל הגלולה שמחליקה מאחור.
+const tabLabel = (/** @type {string} */ text) => withIcons(text)
+  .filter((n) => n.type !== Fragment || String(n.props.children).trim())
+  .map((n) => (n.type === Fragment ? <span key={n.key}>{n.props.children}</span> : n));
+
 // ---------- המסך הראשי ----------
 function Shell({ tabSel, setTab, isParent, isTeen }) {
   const { data, fdata, token, me } = useApp();
@@ -466,11 +472,11 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
   const myPending = isParent ? 0 : data.entries.filter((e) => isPending(e) && (e.from === me || e.to === me)).length;
   const badge = { home: myPending, family: isParent ? parentCount : 0, friends: friendsCount };
 
-  const swipe = useTabSwipe(tabs, tab, setTab);
-
   const sheet = useSheet();
   const gearRef = useRef(null);
   const tabsRef = useRef(null);
+  const indicator = useTabIndicator(tabsRef, tab, tabs);
+  const swipe = useTabSwipe(tabs, tab, setTab, indicator.place);
   const [launchRect, setLaunchRect] = useState(null);
   // הורה שהמכשיר שלו עוד לא קשור (ראו biometric.ts) לא ממשיך לפני הקישור.
   const dev = useQuery('biometric:deviceStatus', isParent && !isDemo(token) ? { token } : 'skip');
@@ -529,10 +535,11 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
       <nav className="tabs" ref={tabsRef} role="tablist" aria-label={t('תפריט ראשי')}>
         {tabs.map((id) => (
           <button key={id} id={'tabbtn-' + id} role="tab" aria-controls={'tab-' + id} data-tab={id} className={'tab' + (tab === id ? ' active' : '')} aria-selected={tab === id} onClick={() => setTab(id)}>
-            {withIcons(labels[id] || fallbackLabels[id])}
+            {tabLabel(labels[id] || fallbackLabels[id])}
             {badge[id] ? <span className="badge">{badge[id]}</span> : null}
           </button>
         ))}
+        <span className="tab-indicator" ref={indicator.indRef} aria-hidden="true" />
       </nav>
 
       <main {...swipe}>

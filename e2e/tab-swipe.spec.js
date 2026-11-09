@@ -29,12 +29,43 @@ async function swipe(page, dx, dy = 0) {
 
 const active = (page) => page.locator('nav.tabs [role="tab"][aria-selected="true"]');
 
+// מרכז הפס המודגש נמצא מתחת ללשונית הנבחרת
+async function expectIndicatorUnderActive(page) {
+  await expect.poll(() => page.evaluate(() => {
+    const ind = document.querySelector('nav.tabs .tab-indicator').getBoundingClientRect();
+    const tab = document.querySelector('nav.tabs [aria-selected="true"]').getBoundingClientRect();
+    const mid = ind.left + ind.width / 2;
+    return ind.width > 0 && mid > tab.left && mid < tab.right;
+  })).toBe(true);
+}
+
+// באמצע החלקה (בלי לשחרר) הפס כבר זז מהלשונית הנוכחית לעבר הבאה
+async function indicatorMovesMidSwipe(page, dx) {
+  return page.evaluate((dx) => {
+    const ind = document.querySelector('nav.tabs .tab-indicator');
+    const before = ind.getBoundingClientRect().left;
+    const target = document.querySelector('main .panel.active');
+    const r = target.getBoundingClientRect();
+    const x0 = r.left + r.width / 2, y0 = r.top + 40;
+    const fire = (type, x) => target.dispatchEvent(new PointerEvent(type, { bubbles: true, cancelable: true, pointerId: 9, pointerType: 'touch', isPrimary: true, clientX: x, clientY: y0 }));
+    fire('pointerdown', x0);
+    for (let i = 1; i <= 4; i++) fire('pointermove', x0 + (dx * i) / 4);
+    const mid = ind.getBoundingClientRect().left;
+    fire('pointercancel', x0 + dx);
+    return Math.abs(mid - before);
+  }, dx);
+}
+
 test('החלקה ימינה ושמאלה מחליפה לשונית, וגלילה אנכית לא', async ({ page }) => {
   await enterDemo(page);
+  await expect(active(page)).toHaveAttribute('data-tab', 'family');
+  await expectIndicatorUnderActive(page);
+  expect(await indicatorMovesMidSwipe(page, 60)).toBeGreaterThan(5);
   await expect(active(page)).toHaveAttribute('data-tab', 'family');
 
   await swipe(page, 200);
   await expect(active(page)).toHaveAttribute('data-tab', 'manage');
+  await expectIndicatorUnderActive(page);
 
   // בקצה אין לאן: נשארים
   await swipe(page, 200);
