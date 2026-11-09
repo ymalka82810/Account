@@ -8,6 +8,10 @@ import { pinOk } from '../../lib/pin.js';
 import { PasswordInput } from '../shared/fields.jsx';
 import JoinWait from './JoinWait.jsx';
 import { getJoinPending } from '../../lib/joinPending.js';
+import { isNativeApp } from '../../lib/updater.js';
+
+// כתובת האתר הציבורי. באפליקציית האנדרואיד location.origin הוא כתובת פנימית (localhost) שלא נפתחת אצל ההורה.
+const SITE_URL = 'https://ymalka82810.github.io/Account/';
 
 export default function Join({ current }) {
   const fam = state.fam;
@@ -48,7 +52,7 @@ export default function Join({ current }) {
   // הודעה מוכנה להורה בוואטסאפ, כמו תזכורת החוב (WhatsAppRemind): איש הקשר נבחר שם, ושום מספר לא נשמר.
   // הקישור הוא לאפליקציה בלבד, בלי קוד המשפחה: ההורה כבר מכיר אותו.
   const askParent = () => {
-    const text = t('היי, {name} ביקש/ה להצטרף לקופה המשפחתית. אפשר להיכנס ולאשר: {url}', { name: pending ? pending.name : '', url: location.origin + location.pathname });
+    const text = t('היי, {name} ביקש/ה להצטרף לקופה המשפחתית. אפשר להיכנס ולאשר: {url}', { name: pending ? pending.name : '', url: (isNativeApp() ? SITE_URL : location.origin + location.pathname) + '#manage' });
     window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
   };
   if (pending) {
