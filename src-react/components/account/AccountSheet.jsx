@@ -73,6 +73,7 @@ export function AccountSheet() {
   const [pushErr, setPushErr] = useState('');
   const [pushProgress, setPushProgress] = useState('');
   const enablePush = useEnablePush();
+  const [testMsg, setTestMsg] = useState('');
   useSheetTitle(t('החשבון שלי'));
   // טעינה מוקדמת: רשימת המכשירים כבר מוכנה כשנפתח "המכשירים שלי", כך שהחלון נפתח בגובהו המלא ולא קופץ אחרי הטעינה.
   useQuery('biometric:deviceStatus', me.role === 'parent' ? { token } : 'skip');
@@ -128,10 +129,11 @@ export function AccountSheet() {
             setPushOn(await isPushOn());
           }}><span>{withIcons(pushOn ? t('🔕 כיבוי התראות') : t('🔔 הפעלת התראות'))}</span></AsyncButton>
         )}
+        {testMsg && pushOn && <p className="push-progress" role="status">{testMsg}</p>}
         {pushProgress && <p className="push-progress" role="status">{pushProgress}</p>}
         {pushErr && !pushOn && <p className="push-err" role="alert">{pushErr}</p>}
         {pushSupported() && pushOn && (
-          <AsyncButton className="acct-row" onClick={testPush}><span>{withIcons(t('🔔 שליחת התראת ניסיון'))}</span></AsyncButton>
+          <AsyncButton className="acct-row" onClick={async () => setTestMsg(await testPush())}><span>{withIcons(t('🔔 שליחת התראת ניסיון'))}</span></AsyncButton>
         )}
         <FeelSettings />
       </section>

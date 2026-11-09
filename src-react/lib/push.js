@@ -32,7 +32,7 @@ async function ensureChannel() {
 }
 
 // מאזינים פעם אחת בעליית האפליקציה:
-// - התראה שמגיעה כשהאפליקציה פתוחה: אנדרואיד לא מציג אותה בשורת ההתראות, אז מציגים אותה בתוך האפליקציה.
+// (התראה שמגיעה כשהאפליקציה פתוחה מוצגת בשורת ההתראות בזכות presentationOptions ב-capacitor.config.json.)
 // - לחיצה על התראה: פותחים את הלשונית שהשרת ציין (למשל "ניהול" לבקשת הצטרפות).
 let listening = false;
 export async function initPushListeners() {
@@ -41,24 +41,23 @@ export async function initPushListeners() {
   try {
     const { PN } = await loadNative();
     await ensureChannel();
-    await PN.addListener('pushNotificationReceived', (/** @type {any} */ n) => {
-      const text = [n.title, n.body].filter(Boolean).join(' · ');
-      if (text) toast(text);
-    });
     await PN.addListener('pushNotificationActionPerformed', (/** @type {any} */ a) => openTab(a && a.notification && a.notification.data && a.notification.data.tab));
   } catch (e) { /* בלי הפלאגין אין מאזינים, והאפליקציה עובדת כרגיל */ }
 }
 
-// התראת ניסיון לכל המכשירים של מי שמחובר, ומה קרה בדרך.
+// התראת ניסיון לכל המכשירים של מי שמחובר. מחזיר טקסט שמתאר מה קרה (מוצג מתחת לכפתור).
 export async function testPush() {
+  let msg;
   try {
     const r = await callAction('pushSend:test', { token: state.token });
     const devices = r.web.devices + r.android.devices;
     const sent = r.web.sent + r.android.sent;
-    if (!devices) toast(t('המכשיר הזה עוד לא רשום להתראות. כבו והפעילו אותן מחדש.'));
-    else if (sent === devices) toast(t('נשלחה התראת ניסיון ל-{n} מכשירים. היא אמורה להופיע עוד רגע.', { n: sent }));
-    else toast(t('התראת הניסיון הגיעה ל-{sent} מתוך {n} מכשירים ({why})', { sent, n: devices, why: r.errors.join(', ') || '?' }));
-  } catch (e) { toast(errMsg(e)); }
+    if (!devices) msg = t('המכשיר הזה עוד לא רשום להתראות. כבו והפעילו אותן מחדש.');
+    else if (sent === devices) msg = t('נשלחה התראת ניסיון ל-{n} מכשירים. היא אמורה להופיע עוד רגע.', { n: sent });
+    else msg = t('התראת הניסיון הגיעה ל-{sent} מתוך {n} מכשירים ({why})', { sent, n: devices, why: r.errors.join(', ') || '?' });
+  } catch (e) { msg = errMsg(e); }
+  toast(msg);
+  return msg;
 }
 
 // מבקש אסימון FCM מהמכשיר. נפתר עם האסימון, או נדחה אם הרישום נכשל.
