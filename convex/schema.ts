@@ -11,7 +11,7 @@ export default defineSchema({
     // קוד ההורים הישן. כבר לא בשימוש ולא פותח כלום. נמחק כשמחליפים קוד.
     parentCode: v.optional(v.string()),
     createdAt: v.number(),
-    // מדינת המגורים (קוד ISO, למשל IL) והמטבע הראשי של המשפחה (למשל ILS). חסר = ישראל ושקלים.
+    // מדינת המגורים (קוד ISO, למשל IL) והמטבע הראשי של המשפחה (למשל ILS). חסר = עוד לא נקבע: דולר.
     country: v.optional(v.string()),
     currency: v.optional(v.string()),
   })
@@ -178,7 +178,7 @@ export default defineSchema({
     from: v.id("people"),
     to: v.id("people"),
     amount: v.number(), // במאיות של המטבע (אגורות, סנטים...)
-    // מטבע הרשומה (ILS, USD...). חסר = שקלים (רשומות מלפני המטבעות).
+    // מטבע הרשומה (ILS, USD...). חסר = דולר (DEFAULT_CURRENCY); רשומות ישנות קיבלו ILS במפורש.
     currency: v.optional(v.string()),
     // בהחזר: השערים ברגע התשלום (יחידות לדולר), כדי שהמרת ההחזר לחוב במטבע אחר לא תשתנה בדיעבד.
     fx: v.optional(v.record(v.string(), v.number())),
@@ -250,7 +250,7 @@ export default defineSchema({
     from: v.id("people"),
     to: v.id("people"),
     amount: v.number(), // באגורות
-    currency: v.optional(v.string()), // חסר = שקלים
+    currency: v.optional(v.string()), // חסר = דולר (DEFAULT_CURRENCY)
     note: v.string(),
     frequency: v.union(v.literal("weekly"), v.literal("monthly")),
     weekday: v.optional(v.number()), // 0 = ראשון
@@ -268,7 +268,7 @@ export default defineSchema({
     personId: v.id("people"),
     name: v.string(),
     target: v.number(), // במאיות של מטבע המשפחה
-    currency: v.optional(v.string()), // חסר = שקלים
+    currency: v.optional(v.string()), // חסר = דולר (DEFAULT_CURRENCY)
     createdAt: v.number(),
   })
     .index("by_family", ["familyId"])

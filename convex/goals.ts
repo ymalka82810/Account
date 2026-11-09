@@ -4,7 +4,7 @@ import type { Doc, Id } from "./_generated/dataModel";
 import { MAX_AMOUNT, requirePerson, requireParent, requireSameFamily, type Member } from "./lib";
 import { logActivity } from "./activity";
 import { notify } from "./notify";
-import { LEGACY_CURRENCY, fmtMoney } from "./currency";
+import { DEFAULT_CURRENCY, fmtMoney } from "./currency";
 
 const MAX_GOALS_PER_PERSON = 10;
 const MAX_TARGET = 100_000_000; // באגורות = מיליון ש"ח
@@ -21,7 +21,7 @@ export async function goalsFor(ctx: QueryCtx, me: Doc<"people">, familyId: Id<"f
   return await Promise.all(mine.map(async (g) => {
     const ds = await ctx.db.query("goalDeposits").withIndex("by_goal", (q) => q.eq("goalId", g._id)).collect();
     return {
-      id: g._id, personId: g.personId, name: g.name, target: g.target, currency: g.currency ?? LEGACY_CURRENCY,
+      id: g._id, personId: g.personId, name: g.name, target: g.target, currency: g.currency ?? DEFAULT_CURRENCY,
       saved: ds.filter((d) => d.status !== "pending").reduce((s, d) => s + d.amount, 0),
       pending: ds.filter((d) => d.status === "pending").map((d) => ({ id: d._id, amount: d.amount, createdAt: d.createdAt })),
     };
@@ -67,9 +67,9 @@ export const add = mutation({
     const family = await ctx.db.get(me.familyId);
     const id = await ctx.db.insert("goals", {
       familyId: me.familyId, personId: owner._id, name: clean, target,
-      currency: family?.currency ?? LEGACY_CURRENCY, createdAt: Date.now(),
+      currency: family?.currency ?? DEFAULT_CURRENCY, createdAt: Date.now(),
     });
-    await logActivity(ctx, me, "goal_add", { to: owner.name, subject: clean, amount: target, currency: family?.currency ?? LEGACY_CURRENCY });
+    await logActivity(ctx, me, "goal_add", { to: owner.name, subject: clean, amount: target, currency: family?.currency ?? DEFAULT_CURRENCY });
     return id;
   },
 });
@@ -90,7 +90,7 @@ export const deposit = mutation({
       goalId, familyId: me.familyId, amount, createdBy: me._id, createdAt: Date.now(),
       status: isParent ? undefined : "pending",
     });
-    await logActivity(ctx, me, isParent ? "goal_deposit" : "goal_deposit_pending", { to: (await ctx.db.get(goal.personId))?.name, subject: goal.name, amount, currency: goal.currency ?? LEGACY_CURRENCY });
+    await logActivity(ctx, me, isParent ? "goal_deposit" : "goal_deposit_pending", { to: (await ctx.db.get(goal.personId))?.name, subject: goal.name, amount, currency: goal.currency ?? DEFAULT_CURRENCY });
     if (!isParent) {
       await notify(ctx, await parentIds(ctx, me.familyId), "הפקדה ליעד חיסכון 🐷", `${me.name} רוצה להוסיף ${fmtMoney(amount, goal.currency)} ליעד "${goal.name}"`, "family");
     }
@@ -107,7 +107,7 @@ export const decide = mutation({
     if (approve) await ctx.db.patch(depositId, { status: undefined });
     else await ctx.db.delete(depositId);
     if (goal) {
-      await logActivity(ctx, me, approve ? "goal_deposit_approved" : "goal_deposit_rejected", { to: (await ctx.db.get(goal.personId))?.name, subject: goal.name, amount: d.amount, currency: goal.currency ?? LEGACY_CURRENCY });
+      await logActivity(ctx, me, approve ? "goal_deposit_approved" : "goal_deposit_rejected", { to: (await ctx.db.get(goal.personId))?.name, subject: goal.name, amount: d.amount, currency: goal.currency ?? DEFAULT_CURRENCY });
       await notify(ctx, [goal.personId], approve ? "ההפקדה אושרה 🐷" : "ההפקדה לא אושרה",
         `${fmtMoney(d.amount, goal.currency)} ליעד "${goal.name}"`);
     }
@@ -126,7 +126,7 @@ export const remove = mutation({
     if (me.role !== "parent" && saved > 0) throw new ConvexError("יעד שיש בו הפקדות מאושרות אפשר למחוק רק עם הורה");
     for (const d of ds) await ctx.db.delete(d._id);
     await ctx.db.delete(goalId);
-    await logActivity(ctx, me, "goal_removed", { to: (await ctx.db.get(goal.personId))?.name, subject: goal.name, amount: saved, currency: goal.currency ?? LEGACY_CURRENCY });
+    await logActivity(ctx, me, "goal_removed", { to: (await ctx.db.get(goal.personId))?.name, subject: goal.name, amount: saved, currency: goal.currency ?? DEFAULT_CURRENCY });
   },
 });
 

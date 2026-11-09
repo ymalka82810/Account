@@ -4,7 +4,7 @@ import { Id } from "./_generated/dataModel";
 import { internal } from "./_generated/api";
 import { addDays, jerusalemToday } from "./lib";
 import { notify } from "./notify";
-import { LEGACY_CURRENCY, convert, curOf, fmtMoney } from "./currency";
+import { DEFAULT_CURRENCY, convert, curOf, fmtMoney } from "./currency";
 import { loadRates } from "./fx";
 
 const STALE_DAYS = 14;
@@ -26,7 +26,7 @@ export const forFamily = internalMutation({
   args: { familyId: v.id("families") },
   handler: async (ctx, { familyId }): Promise<void> => {
     const family = await ctx.db.get(familyId);
-    const base = family?.currency ?? LEGACY_CURRENCY;
+    const base = family?.currency ?? DEFAULT_CURRENCY;
     const rates = (await loadRates(ctx))?.rates ?? null;
     const people = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", familyId)).collect();
     const name = new Map(people.map((p) => [p._id, p.name]));

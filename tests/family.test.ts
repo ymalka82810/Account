@@ -42,7 +42,7 @@ describe("פעולות משפחה משפיעות רק על המשפחה של ה�
     await t.mutation(api.family.setLocale, { token: A.tokens["אבא"], country: "US", currency: "USD" });
     expect(await family(A.familyId)).toMatchObject({ name: "בית כהן", currency: "USD", country: "US" });
     expect(await family(B.familyId)).toMatchObject({ name: "B" });
-    expect((await family(B.familyId))?.currency).toBeUndefined();
+    expect((await family(B.familyId))?.currency).toBe("ILS"); // לא השתנה (seedFamily יוצר משפחה בשקלים)
   });
 
   it("מטבע או מדינה לא נתמכים וגם שם ריק נדחים", async () => {

@@ -2,7 +2,7 @@ import { internalMutation, mutation } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { MAX_AMOUNT, advanceDate, firstAfter, jerusalemToday, requireParent, requireSameFamily } from "./lib";
 import { notify } from "./notify";
-import { LEGACY_CURRENCY, fmtMoney } from "./currency";
+import { DEFAULT_CURRENCY, fmtMoney } from "./currency";
 
 const MAX_PER_FAMILY = 30;
 const MAX_CATCH_UP = 8; // כמה רישומים מוחמצים משלימים בריצה אחת
@@ -33,7 +33,7 @@ export const add = mutation({
     if (existing.length >= MAX_PER_FAMILY) throw new ConvexError("יש כבר הרבה רישומים קבועים");
     return await ctx.db.insert("recurring", {
       familyId: me.familyId, from: r.from, to: r.to, amount: r.amount, note,
-      currency: family?.currency ?? LEGACY_CURRENCY,
+      currency: family?.currency ?? DEFAULT_CURRENCY,
       frequency: r.frequency,
       weekday: r.frequency === "weekly" ? r.weekday : undefined,
       monthDay: r.frequency === "monthly" ? r.monthDay : undefined,
@@ -71,7 +71,7 @@ export const runDue = internalMutation({
       while (next <= today && created < MAX_CATCH_UP) {
         await ctx.db.insert("entries", {
           familyId: r.familyId, kind: "debt", from: r.from, to: r.to, amount: r.amount,
-          currency: r.currency ?? LEGACY_CURRENCY, note: r.note, date: next, createdBy: r.createdBy, createdAt: Date.now(),
+          currency: r.currency ?? DEFAULT_CURRENCY, note: r.note, date: next, createdBy: r.createdBy, createdAt: Date.now(),
         });
         next = advanceDate(next, r.frequency, r.monthDay);
         created++;

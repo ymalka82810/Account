@@ -16,9 +16,9 @@ export const FCM_PREFIX = "fcm:";
 export const ANDROID_CHANNEL = "kupa";
 const TABS = ["home", "friends", "history", "family", "manage"];
 // אייקון שורת הסטטוס כמו אייקון האפליקציה: מטבע עם הסמל של מטבע המשפחה (ic_stat_<מטבע>, נוצרים ב-apply-currency-icons.py).
-// חסר = שקלים, כמו בשאר האפליקציה.
+// חסר = דולר, כמו בשאר האפליקציה.
 const byCurrency = ICONS.byCurrency as Record<string, string>;
-const statIcon = (currency: string | undefined) => `ic_stat_${(byCurrency[currency || "ILS"] || "USD").toLowerCase()}`;
+const statIcon = (currency: string | undefined) => `ic_stat_${(byCurrency[currency || "USD"] || "USD").toLowerCase()}`;
 
 type ServiceAccount = { project_id: string; client_email: string; private_key: string };
 

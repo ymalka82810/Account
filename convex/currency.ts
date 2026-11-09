@@ -1,8 +1,12 @@
 // מטבעות, מדינות והמרות. המשפחה בוחרת מדינת מגורים ומטבע ראשי.
 // כל רשומה נשמרת במטבע שלה (amount = מאיות של המטבע, כמו אגורות).
-// רשומה ישנה בלי currency היא בשקלים (כל הנתונים לפני הפיצ'ר היו בשקלים).
-
-export const LEGACY_CURRENCY = "ILS";
+// מטבע חסר (משפחה שעוד לא זוהתה לה מדינה, רשומה בלי currency) = דולר, ברירת המחדל הבינלאומית.
+// הנתונים הישנים שהיו בשקלים בלי currency קיבלו ILS במפורש (maintenance.fillLegacyCurrency).
+export const DEFAULT_CURRENCY = "USD";
+// חובות בין חברים (ממשפחות שונות) נרשמים תמיד בשקלים, בלי שדה מטבע.
+export const FRIENDS_CURRENCY = "ILS";
+// התקרה לסכום רשומה נמדדת בשקלים (10,000 ש"ח או השווי שלהם).
+export const LIMIT_CURRENCY = "ILS";
 
 export const CURRENCIES = [
   "ILS", "USD", "EUR", "GBP", "CAD", "AUD", "NZD", "CHF", "JPY", "CNY", "HKD", "SGD", "INR", "THB",
@@ -21,7 +25,7 @@ export const isCurrency = (c: string) => (CURRENCIES as readonly string[]).inclu
 
 export type Rates = Record<string, number>; // כמה יחידות מכל מטבע שווה דולר אחד
 
-export const curOf = (e: { currency?: string }) => e.currency ?? LEGACY_CURRENCY;
+export const curOf = (e: { currency?: string }) => e.currency ?? DEFAULT_CURRENCY;
 
 // המרה לפי טבלת שערים (יחידות לדולר). null אם חסר שער.
 export function convert(amount: number, from: string, to: string, rates: Rates | null | undefined): number | null {
@@ -33,7 +37,7 @@ export function convert(amount: number, from: string, to: string, rates: Rates |
 const SYMBOLS: Record<string, string> = { ILS: "₪", USD: "$", EUR: "€", GBP: "£", JPY: "¥" };
 
 // סכום להתראות: ₪12.50, $100, 30 CHF.
-export function fmtMoney(amount: number, currency: string = LEGACY_CURRENCY): string {
+export function fmtMoney(amount: number, currency: string = DEFAULT_CURRENCY): string {
   const s = (amount / 100).toFixed(2);
   const n = s.endsWith(".00") ? s.slice(0, -3) : s;
   const sym = SYMBOLS[currency];

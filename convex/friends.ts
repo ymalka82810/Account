@@ -5,6 +5,7 @@ import {
   Member, getSessionPerson, isThrottled, noteHit, normalizeEmail, requireParent, requirePerson, requireSameFamily, validEmail,
 } from "./lib";
 import { entryLine, entryTextFor, notify } from "./notify";
+import { FRIENDS_CURRENCY } from "./currency";
 
 // מצב חברים: בני נוער רושמים חובות זה עם זה (גם ממשפחות שונות).
 // הפעלה דורשת אישור הורה. כל רשומה ממתינה לאישור של החבר/ה השני/ה.
@@ -218,7 +219,7 @@ export const addEntry = mutation({
     });
     const from = e.from === me._id ? me : other;
     const to = e.to === me._id ? me : other;
-    await notify(ctx, [other._id], "ממתין לאישור שלך ⏳", entryTextFor(other._id, e, { from: from.name, to: to.name, creator: me.name }), "friends");
+    await notify(ctx, [other._id], "ממתין לאישור שלך ⏳", entryTextFor(other._id, { ...e, currency: FRIENDS_CURRENCY }, { from: from.name, to: to.name, creator: me.name }), "friends");
     return id;
   },
 });
@@ -238,7 +239,7 @@ export const confirmEntry = mutation({
     await ctx.db.patch(id, { status: undefined });
     const from = await ctx.db.get(hit.e.from);
     const to = await ctx.db.get(hit.e.to);
-    if (from && to) await notify(ctx, [hit.e.createdBy], "אושר ✅", entryLine(hit.e, { from: from.name, to: to.name, creator: hit.me.name }));
+    if (from && to) await notify(ctx, [hit.e.createdBy], "אושר ✅", entryLine({ ...hit.e, currency: FRIENDS_CURRENCY }, { from: from.name, to: to.name, creator: hit.me.name }));
   },
 });
 
@@ -253,7 +254,7 @@ export const rejectEntry = mutation({
     const from = await ctx.db.get(hit.e.from);
     const to = await ctx.db.get(hit.e.to);
     if (from && to) {
-      const line = entryLine(hit.e, { from: from.name, to: to.name, creator: hit.me.name });
+      const line = entryLine({ ...hit.e, currency: FRIENDS_CURRENCY }, { from: from.name, to: to.name, creator: hit.me.name });
       await notify(ctx, [hit.e.createdBy], "לא אושר", why ? `${line}\nסיבה: ${why}` : line);
     }
   },

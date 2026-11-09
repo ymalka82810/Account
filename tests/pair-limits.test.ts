@@ -17,7 +17,7 @@ beforeEach(async () => {
 // מכניסים ישירות למסד (מהר יותר מ-add) רשומות פעילות לכיוון אבא → דנה.
 const seed = (debts: number, payments: number) =>
   t.run(async (ctx) => {
-    const base = { familyId: F.familyId, from: F.ids["אבא"], to: F.ids["דנה"], amount: 100, note: "", date, createdAt: Date.now() };
+    const base = { familyId: F.familyId, from: F.ids["אבא"], to: F.ids["דנה"], amount: 100, currency: "ILS", note: "", date, createdAt: Date.now() };
     for (let i = 0; i < debts; i++) await ctx.db.insert("entries", { ...base, kind: "debt" });
     for (let i = 0; i < payments; i++) await ctx.db.insert("entries", { ...base, kind: "payment" });
   });

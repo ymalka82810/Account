@@ -4,14 +4,14 @@ import { MAX_AMOUNT, requireParent, requirePerson } from "./lib";
 import { logActivity } from "./activity";
 import { entryLine, entryTextFor, notify } from "./notify";
 import { internal } from "./_generated/api";
-import { LEGACY_CURRENCY, Rates, convert, curOf, fmtMoney, isCurrency, paidOnDebt } from "./currency";
+import { DEFAULT_CURRENCY, LIMIT_CURRENCY, Rates, convert, curOf, fmtMoney, isCurrency, paidOnDebt } from "./currency";
 import { loadRates } from "./fx";
 import { archivePair, unarchivePair, MAX_PAIR_ACTIVE, MAX_PAIR_DEBTS } from "./ledger";
 
 // סכום מקסימלי לרשומה: 10,000 ש"ח או השווי שלהם במטבע אחר (בלי שערים: גבול רחב).
 function amountOk(amount: number, currency: string, rates: Rates | null): boolean {
   if (!Number.isInteger(amount) || amount <= 0) return false;
-  const ils = convert(amount, currency, LEGACY_CURRENCY, rates);
+  const ils = convert(amount, currency, LIMIT_CURRENCY, rates);
   return ils === null ? amount <= 100 * MAX_AMOUNT : ils <= MAX_AMOUNT * 1.001;
 }
 
@@ -41,7 +41,7 @@ export const add = mutation({
       if (dup) return dup._id;
     }
     const family = await ctx.db.get(me.familyId);
-    const base = family?.currency ?? LEGACY_CURRENCY;
+    const base = family?.currency ?? DEFAULT_CURRENCY;
     const currency = e.kind === "payment" ? base : (askedCurrency ?? base);
     if (!isCurrency(currency)) throw new ConvexError("מטבע לא נתמך");
     const fxNow = await loadRates(ctx);

@@ -3,7 +3,6 @@ import { internal } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
 import { fmtMoney } from "./currency";
 
-export const shekel = (agorot: number) => fmtMoney(agorot, "ILS");
 
 // שולח התראה רק למי שיש לו מכשיר רשום, ורק אם הוגדר בשרת ערוץ התראות (Web Push או FCM לאנדרואיד).
 // tab: הלשונית שהאפליקציה פותחת כשלוחצים על ההתראה (home/friends/history/family/manage).

@@ -18,7 +18,8 @@ export const familyCode = (name: string) => name.toUpperCase().padEnd(10, "X");
 type Role = "parent" | "child" | "teen";
 
 // משפחה עם אנשים. לכל אחד נוצרת כניסה (session) עם טוקן = "tok-<משפחה>-<שם>".
-export async function seedFamily(t: T, name: string, members: { name: string; role: Role; pin?: string }[], currency?: string) {
+export async function seedFamily(t: T, name: string, members: { name: string; role: Role; pin?: string }[], currency: string | undefined = "ILS") {
+  // ברירת המחדל בבדיקות: משפחה בשקלים (הבדיקות נכתבו כך). undefined במפורש = משפחה שעוד לא נקבע לה מטבע (דולר).
   // convex-test לא מקבל מפתחות בעברית בערך שחוזר מ-t.run, אז מחזירים רשימה ובונים את המפות בחוץ.
   const { familyId, rows } = await t.run(async (ctx) => {
     const familyId = await ctx.db.insert("families", { name, childCode: familyCode(name), createdAt: Date.now(), currency });

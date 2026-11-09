@@ -1,3 +1,4 @@
+import { DEFAULT_CURRENCY } from "./currency";
 import { query } from "./_generated/server";
 import { v } from "convex/values";
 import { ALERT_WINDOW_MS, avatarOf, getSessionPerson, maskEmail } from "./lib";
@@ -46,8 +47,8 @@ export const get = query({
       family: {
         id: family._id,
         name: family.name,
-        currency: family.currency ?? "ILS",
-        country: family.country ?? (family.currency ? null : "IL"),
+        currency: family.currency ?? DEFAULT_CURRENCY,
+        country: family.country ?? null,
         // האם הוגדרו למשפחה מיקום או מטבע (אחרת הערכים למעלה הם ברירת המחדל של הנתונים הישנים)
         localeSet: !!(family.country || family.currency),
       },
@@ -73,14 +74,14 @@ export const get = query({
         : [],
       entries: entries.map((e) => ({
         id: e._id, kind: e.kind, from: e.from, to: e.to, amount: e.amount, note: e.note,
-        currency: e.currency ?? "ILS", fx: e.fx ?? null,
+        currency: e.currency ?? DEFAULT_CURRENCY, fx: e.fx ?? null,
         date: e.date, createdBy: e.createdBy ?? null, createdAt: e.createdAt ?? e._creationTime,
         status: e.status ?? "approved",
         debtId: e.debtId ?? null,
       })),
       goals,
       recurring: recurring.map((r) => ({
-        id: r._id, from: r.from, to: r.to, amount: r.amount, currency: r.currency ?? "ILS", note: r.note, frequency: r.frequency,
+        id: r._id, from: r.from, to: r.to, amount: r.amount, currency: r.currency ?? DEFAULT_CURRENCY, note: r.note, frequency: r.frequency,
         weekday: r.weekday ?? null, monthDay: r.monthDay ?? null, nextDate: r.nextDate,
       })),
     };

@@ -26,8 +26,10 @@ import { OpenDebtsSheet } from "../src-react/components/family/OpenDebts.jsx";
 import { StatsSheet } from "../src-react/components/family/Summary.jsx";
 import { NewGoalSheet } from "../src-react/components/goals/Goals.jsx";
 import { demoData, DEMO_TOKEN } from "../src-react/lib/demo.js";
+import { setFx } from "../src-react/lib/computations.js";
 
 const data: any = demoData();
+setFx(data.family.currency, null); // כמו App.jsx: מטבע הבסיס הוא מטבע המשפחה
 const ctx: any = { data, fdata: null, token: DEMO_TOKEN, me: data.me.id, isParent: true, setTab() {}, openEntryFlow() {}, fx: undefined };
 const render = (el: any) =>
   renderToStaticMarkup(h(ConfirmProvider, null, h(SheetProvider, null, h(AppCtx.Provider, { value: ctx }, el))));

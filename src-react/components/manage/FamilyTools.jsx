@@ -22,9 +22,9 @@ import { convert, curOf } from '../../lib/computations.js';
 function LocaleSettings({ data }) {
   const { token, fx } = useApp();
   const [country, setCountry] = useState(data.family.country || '');
-  const [currency, setCurrency] = useState(data.family.currency || 'ILS');
+  const [currency, setCurrency] = useState(data.family.currency || 'USD');
   const [busy, setBusy] = useState(false);
-  const changed = country !== (data.family.country || '') || currency !== (data.family.currency || 'ILS');
+  const changed = country !== (data.family.country || '') || currency !== (data.family.currency || 'USD');
 
   function pickCountry(c) {
     setCountry(c);
@@ -39,7 +39,7 @@ function LocaleSettings({ data }) {
   }
 
   // מטבעות אחרים שיש בהם רשומות: מציגים את השער שלהם מול המטבע הראשי.
-  const base = data.family.currency || 'ILS';
+  const base = data.family.currency || 'USD';
   const others = [...new Set(data.entries.map(curOf))].filter((c) => c !== base);
   const rates = fx && fx.rates;
 

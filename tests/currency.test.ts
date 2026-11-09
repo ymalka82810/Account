@@ -30,10 +30,10 @@ describe("paidOnDebt", () => {
   const debt = { _id: "d1", currency: "ILS" };
   it("מסכם רק החזרים שקשורים לחוב הזה", () => {
     const all = [
-      { kind: "payment", debtId: "d1", amount: 1000 },
-      { kind: "payment", debtId: "d2", amount: 5000 },
-      { kind: "debt", debtId: "d1", amount: 7000 },
-      { kind: "payment", debtId: "d1", amount: 500 },
+      { kind: "payment", debtId: "d1", amount: 1000, currency: "ILS" },
+      { kind: "payment", debtId: "d2", amount: 5000, currency: "ILS" },
+      { kind: "debt", debtId: "d1", amount: 7000, currency: "ILS" },
+      { kind: "payment", debtId: "d1", amount: 500, currency: "ILS" },
     ];
     expect(paidOnDebt(debt, all, null)).toBe(1500);
   });
@@ -44,13 +44,13 @@ describe("paidOnDebt", () => {
   it("החזר בלי שער מושמט ולא שובר את הסכום", () => {
     const all = [
       { kind: "payment", debtId: "d1", amount: 100, currency: "USD" },
-      { kind: "payment", debtId: "d1", amount: 200 },
+      { kind: "payment", debtId: "d1", amount: 200, currency: "ILS" },
     ];
     expect(paidOnDebt(debt, all, null)).toBe(200);
   });
-  it("חוב בלי currency הוא בשקלים", () => {
+  it("חוב בלי currency הוא בדולרים (ברירת המחדל)", () => {
     const all = [{ kind: "payment", debtId: "d1", amount: 100, currency: "USD" }];
-    expect(paidOnDebt({ _id: "d1" }, all, rates)).toBe(400);
+    expect(paidOnDebt({ _id: "d1" }, all, rates)).toBe(100);
   });
 });
 

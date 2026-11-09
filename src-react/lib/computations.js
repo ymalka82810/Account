@@ -10,10 +10,11 @@ export const isPending = (e) => e.status === 'pending';
 // ---------- מטבעות ושערי המרה ----------
 // App קובע את המטבע הראשי של המשפחה ואת השערים (setFx) לפני שהמסכים מצוירים.
 // רשומה בלי currency היא בשקלים (גם רשומות חברים).
-let FX = { base: 'ILS', rates: null };
-export function setFx(base, rates) { FX = { base: base || 'ILS', rates: rates || null }; }
+let FX = { base: 'USD', rates: null };
+export function setFx(base, rates) { FX = { base: base || 'USD', rates: rates || null }; }
 export const baseCurrency = () => FX.base;
 export const hasRates = () => !!FX.rates;
+// רשומות המשפחה מגיעות מהשרת תמיד עם מטבע. בלי מטבע = רשומת חברים, שהיא תמיד בשקלים (FRIENDS_CURRENCY בשרת).
 export const curOf = (e) => e.currency || 'ILS';
 
 // rates[X] = כמה X שווה דולר אחד. null אם אין שער.

@@ -146,10 +146,10 @@ describe("הריצה היומית (runDue)", () => {
     expect(await t.run((ctx) => ctx.db.get(id))).toBeNull();
   });
 
-  it("רישום ישן בלי מטבע נרשם בשקלים", async () => {
+  it("רישום בלי מטבע נרשם בדולרים (ברירת המחדל)", async () => {
     await insertRecurring(jerusalemToday(), { currency: undefined });
     await t.mutation(internal.recurring.runDue, {});
     const [e] = await entriesOf(A.familyId);
-    expect(e.currency).toBe("ILS");
+    expect(e.currency).toBe("USD");
   });
 });

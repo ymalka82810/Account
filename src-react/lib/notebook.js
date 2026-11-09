@@ -59,7 +59,7 @@ function commit(next) {
 
 export const useNotebook = () => useSyncExternalStore(subscribe, snapshot, snapshot);
 
-export const notebookCurrency = () => data.currency || deviceCurrency() || 'ILS';
+export const notebookCurrency = () => data.currency || deviceCurrency() || 'USD';
 
 // dir: 'iowe' = אני חייב לו/לה, 'owed' = חייב/ת לי. amount באגורות.
 // personId: אדם ידוע שנבחר. בלי זה, שם זהה (אחרי נירמול) לאדם ידוע משתמש בו, ושם חדש נוצר כאדם חדש.
