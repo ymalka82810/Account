@@ -14,7 +14,10 @@ const webSupported = () => !!window.VAPID_PUBLIC_KEY && 'serviceWorker' in navig
   && 'PushManager' in window && 'Notification' in window;
 export const pushSupported = () => (isNative() ? nativeSupported() : webSupported());
 
-const loadNative = async () => (await import('@capacitor/push-notifications')).PushNotifications;
+// חשוב: הפלאגין הוא Proxy של Capacitor שמחזיר פונקציה לכל שם שדה, כולל then. אם מחזירים אותו מפונקציית async
+// (או מ-await / Promise.race), JavaScript חושב שהוא Promise, קורא ל-then שלו כקריאה לאנדרואיד, ומחכה לנצח.
+// לכן הוא תמיד עטוף באובייקט: const { PN } = await loadNative();
+const loadNative = async () => ({ PN: (await import('@capacitor/push-notifications')).PushNotifications });
 
 // ערוץ ההתראות באנדרואיד (אותו שם כמו ANDROID_CHANNEL בשרת). חשיבות גבוהה = ההתראה קופצת למעלה עם צליל ורטט.
 const CHANNEL = 'kupa';
@@ -24,7 +27,7 @@ const openTab = (/** @type {unknown} */ tab) => {
 };
 async function ensureChannel() {
   try {
-    await (await loadNative()).createChannel({ id: CHANNEL, name: t('התראות הקופה'), importance: 5, visibility: 1, vibration: true });
+    await (await loadNative()).PN.createChannel({ id: CHANNEL, name: t('התראות הקופה'), importance: 5, visibility: 1, vibration: true });
   } catch (e) { /* אנדרואיד ישן בלי ערוצים */ }
 }
 
@@ -36,7 +39,7 @@ export async function initPushListeners() {
   if (listening || !nativeSupported()) return;
   listening = true;
   try {
-    const PN = await loadNative();
+    const { PN } = await loadNative();
     await ensureChannel();
     await PN.addListener('pushNotificationReceived', (/** @type {any} */ n) => {
       const text = [n.title, n.body].filter(Boolean).join(' · ');
@@ -60,7 +63,7 @@ export async function testPush() {
 
 // מבקש אסימון FCM מהמכשיר. נפתר עם האסימון, או נדחה אם הרישום נכשל.
 async function registerNative() {
-  const PN = await loadNative();
+  const { PN } = await loadNative();
   return new Promise((resolve, reject) => {
     /** @type {any[]} */
     const handles = [];
@@ -93,7 +96,7 @@ async function sendSubToServer(sub) {
 export async function isPushOn() {
   if (isNative()) {
     // checkPermissions לא אמור להיתקע, אבל אם כן - הכפתור לא נשאר על "רגע…"
-    try { return !!savedNativeToken() && (await withTimeout((async () => (await loadNative()).checkPermissions())(), 5000, 'check')).receive === 'granted'; } catch (e) { return false; }
+    try { return !!savedNativeToken() && (await withTimeout((async () => (await loadNative()).PN.checkPermissions())(), 5000, 'check')).receive === 'granted'; } catch (e) { return false; }
   }
   try { return Notification.permission === 'granted' && !!(await getPushSub()); } catch (e) { return false; }
 }
@@ -155,7 +158,7 @@ export async function enablePush(/** @type {(text: string) => void} */ onProgres
 async function enablePushNow(/** @type {(st: Stage) => void} */ step) {
   const run = (/** @type {Stage} */ st, /** @type {() => Promise<any>} */ fn) => { step(st); return withTimeout(fn(), STAGE_TIMEOUT_MS[st], st); };
   if (isNative()) {
-    const PN = await run('plugin', loadNative);
+    const { PN } = await run('plugin', loadNative);
     const perm = await run('permission', () => PN.requestPermissions());
     if (perm.receive !== 'granted') throw { denied: true };
     await ensureChannel();
@@ -177,7 +180,7 @@ export async function disablePush() {
       const tok = savedNativeToken();
       if (tok) { try { await call('push:unsubscribe', { token: state.token, endpoint: `fcm:${tok}` }); } catch (e) { /* ignore */ } }
       try { localStorage.removeItem(FCM_KEY); } catch (e) { /* */ }
-      try { await (await loadNative()).unregister(); } catch (e) { /* */ }
+      try { await (await loadNative()).PN.unregister(); } catch (e) { /* */ }
       toast(t('ההתראות כובו'));
     } catch (e) { toast(t('משהו השתבש. נסו שוב.')); }
     return;
@@ -201,7 +204,7 @@ export async function syncPush() {
     // האסימון יכול להתחלף, ובמכשיר משותף הוא צריך לעבור למי שמחובר עכשיו.
     if (!savedNativeToken()) return;
     try {
-      if ((await (await loadNative()).checkPermissions()).receive !== 'granted') return;
+      if ((await (await loadNative()).PN.checkPermissions()).receive !== 'granted') return;
       await sendNativeToken(/** @type {string} */ (await registerNative()));
     } catch (e) { /* ignore */ }
     return;
