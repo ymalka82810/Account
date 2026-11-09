@@ -135,7 +135,8 @@ export function leaveToWelcome() {
 export async function submitFamilyCode(code) {
   try {
     const r = await enterFamily(code, true);
-    if (r === true) { state.view = 'welcome'; route(); return ''; }
+    // אחרי הקלדת קוד משפחה תמיד מוצגת רשימת "מי נכנס/ת?" עם "אני חדש/ה", בלי דילוג למישהו קיים.
+    if (r === true) { localStorage.removeItem(LAST_PERSON_KEY); state.view = 'login'; route(); return ''; }
     if (r === 'throttled') return t('יותר מדי ניסיונות. נסו שוב עוד דקה.');
     return t('הקוד לא נכון. בדקו שוב, או בקשו מההורים.');
   } catch (e) { return errMsg(e); }
@@ -200,7 +201,6 @@ export function leaveFamily() {
 // ---------- קוד סודי ----------
 export function startPin(p, legacy) {
   state.pinFlow = { person: p, legacy: !!legacy, mode: p.hasPin ? 'login' : (p.freeEntry && !legacy ? 'free' : 'new'), first: null, entered: '', busy: false, error: '', shakes: 0 };
-  if (!legacy) localStorage.setItem(LAST_PERSON_KEY, p.id);
   route();
 }
 
@@ -213,7 +213,7 @@ function notMe() {
 
 export function pinBack() {
   state.pinFlow = null;
-  // גם במשפחה עם בן משפחה אחד חוזרים למסך הבחירה, אחרת הדילוג האוטומטי מחזיר מיד לקוד הסודי.
+  // חוזרים למסך הבחירה, אחרת הדילוג האוטומטי מחזיר מיד לקוד הסודי.
   if (state.fam) { notMe(); return; }
   route();
 }
@@ -262,7 +262,7 @@ export async function enterFree() {
   renderPin();
   try {
     const res = await call('auth:enterFree', { code: state.fam.code, personId: f.person.id });
-    if (res.ok) { state.pinFlow = null; setToken(res.token); return; }
+    if (res.ok) { signedIn(f, res.token); return; }
     if (res.reason === 'code') { codeGone(); return; }
     if (res.reason === 'throttled') renderPin(t('יותר מדי ניסיונות. נסו שוב עוד דקה.'));
     else { f.mode = 'new'; renderPin(); } // ההורה הגדיר קוד בינתיים
@@ -278,6 +278,14 @@ export async function enterFree() {
 export function codeGone() {
   toast(t('קוד המשפחה השתנה. בקשו קוד חדש מההורים.'));
   leaveFamily();
+}
+
+// כניסה שהצליחה. רק עכשיו המכשיר זוכר את מי שנכנס, כדי לדלג אליו בפעם הבאה:
+// לחיצה על שם של מישהו אחר (בטעות, או ממכשיר חדש) לא תקבע לאן המכשיר ידלג.
+function signedIn(f, token) {
+  state.pinFlow = null;
+  if (!f.legacy) localStorage.setItem(LAST_PERSON_KEY, f.person.id);
+  setToken(token);
 }
 
 async function submitPin() {
@@ -300,7 +308,7 @@ async function submitPin() {
         }
       }
       const res = await call('auth:login', { code, personId: f.person.id, pin: f.entered, proof });
-      if (res.ok) { state.pinFlow = null; setToken(res.token); return; }
+      if (res.ok) { signedIn(f, res.token); return; }
       f.entered = '';
       if (res.reason === 'code') { codeGone(); return; }
       if (res.reason === 'device') { renderPin(t('המכשיר הזה לא קשור להורה הזה. כדי להוסיף אותו או להחליף מכשיר, לחצו על "מכשיר חדש / החלפת מכשיר".')); shake(); return; }
@@ -327,8 +335,7 @@ async function submitPin() {
         shake();
         return;
       }
-      state.pinFlow = null;
-      setToken(res.token);
+      signedIn(f, res.token);
       return;
     }
   } catch (e) {
@@ -342,10 +349,11 @@ async function submitPin() {
 }
 
 // מחליט אם אפשר לדלג ישר למסך הקוד הסודי בלי להציג את רשימת הפרופילים:
-// אם יש רק איש/ה אחת במשפחה, או אם זה/ו האחרון/ה שנכנס/ה מהמכשיר הזה.
+// רק אם זה/ו האחרון/ה שנכנס/ה בהצלחה מהמכשיר הזה.
 export function autoSkipPerson() {
   if (!state.fam || state.view === 'login') return null; // 'login' = המשתמש ביקש לראות את הרשימה (למשל "לא אני")
-  if (state.fam.people.length === 1) return state.fam.people[0];
+  // רק מי שכבר נכנס מהמכשיר הזה. גם במשפחה עם בן משפחה אחד לא מדלגים אליו: מכשיר חדש שהקליד קוד משפחה
+  // הוא בדרך כלל מישהו חדש (למשל הורה שני), והוא צריך לראות את הרשימה ואת "אני חדש/ה".
   const lastId = localStorage.getItem(LAST_PERSON_KEY);
   if (lastId) return state.fam.people.find((p) => p.id === lastId) || null;
   return null;
