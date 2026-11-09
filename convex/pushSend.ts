@@ -146,3 +146,36 @@ export const test = action({
     return report;
   },
 });
+
+// אבחון (מורץ מ-GitHub Actions: push-diagnose.yml). מדפיס רק מידע שאינו סודי:
+// לאיזה פרויקט Firebase שייך חשבון השירות, אם האימות מול גוגל עובד, כמה מכשירים רשומים,
+// ולכל מכשיר אנדרואיד - בדיקת שליחה "יבשה" (validate_only, לא מגיעה לטלפון) והתשובה של FCM.
+export const diagnose = internalAction({
+  args: {},
+  handler: async (ctx): Promise<string[]> => {
+    const out: string[] = [];
+    const sa = readServiceAccount();
+    out.push(`FCM_SERVICE_ACCOUNT: ${sa ? `project_id=${sa.project_id}` : "missing or invalid JSON"}`);
+    const subs = await ctx.runQuery(internal.push.allSubsForDiagnose, {});
+    const native = subs.filter((s) => s.endpoint.startsWith(FCM_PREFIX));
+    out.push(`devices: web=${subs.length - native.length} android=${native.length}`);
+    for (const s of subs) out.push(`  ${s.endpoint.startsWith(FCM_PREFIX) ? "android" : "web"} registered ${new Date(s.createdAt).toISOString()}`);
+    if (!sa) return out;
+    let access = "";
+    try { access = await fcmAccessToken(sa); out.push("google auth: ok"); }
+    catch (e) { out.push(`google auth: FAILED ${String(e).slice(0, 200)}`); return out; }
+    for (const s of native) {
+      const res = await fetch(`https://fcm.googleapis.com/v1/projects/${sa.project_id}/messages:send`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${access}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ validate_only: true, message: { token: s.endpoint.slice(FCM_PREFIX.length), notification: { title: "x", body: "x" } } }),
+      });
+      const text = await res.text();
+      const status = /"status":\s*"([A-Z_]+)"/.exec(text)?.[1] ?? "";
+      const code = /"errorCode":\s*"([A-Z_]+)"/.exec(text)?.[1] ?? "";
+      const msg = /"message":\s*"([^"]{0,160})/.exec(text)?.[1] ?? "";
+      out.push(`  fcm dry-run: HTTP ${res.status} ${status} ${code} ${res.ok ? "" : msg}`);
+    }
+    return out;
+  },
+});

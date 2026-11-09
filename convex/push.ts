@@ -91,3 +91,9 @@ export const personForToken = internalQuery({
   args: { token: v.string() },
   handler: async (ctx, { token }) => (await requirePerson(ctx, token))._id,
 });
+
+// לאבחון בלבד (pushSend.diagnose): כל המכשירים הרשומים, בלי פרטי האדם.
+export const allSubsForDiagnose = internalQuery({
+  args: {},
+  handler: async (ctx) => (await ctx.db.query("pushSubs").take(50)).map((s) => ({ endpoint: s.endpoint, createdAt: s.createdAt })),
+});

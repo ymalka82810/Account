@@ -1,0 +1,22 @@
+name: Diagnose push notifications
+
+# הריפו ציבורי ולכן גם הלוגים: הפונקציה מדפיסה רק מידע שאינו סודי (שם פרויקט, ספירות, קודי שגיאה), בלי אסימונים ומפתחות.
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Run diagnose
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+        run: npx convex run pushSend:diagnose
