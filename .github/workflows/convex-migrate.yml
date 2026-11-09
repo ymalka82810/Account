@@ -1,0 +1,30 @@
+name: Run Convex migration
+
+# מריץ פונקציית תחזוקה פנימית אחת מ-convex/maintenance.ts (רק משם) ומציג את התוצאה כהערה בריצה.
+on:
+  workflow_dispatch:
+    inputs:
+      fn:
+        description: "שם הפונקציה ב-maintenance (למשל fillLegacyCurrency)"
+        required: true
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Run
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          FN: ${{ github.event.inputs.fn }}
+        run: |
+          [[ "$FN" =~ ^[A-Za-z0-9_]+$ ]] || { echo "bad name"; exit 1; }
+          OUT=$(npx convex run "maintenance:$FN" | tr '\n' ' ')
+          echo "::notice title=result::$OUT"

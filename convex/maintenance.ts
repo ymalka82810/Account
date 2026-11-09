@@ -73,3 +73,25 @@ export const cleanup = internalMutation({
     }
   },
 });
+
+// חד-פעמי, לפני שברירת המחדל של מטבע חסר עברה משקלים לדולר: כל מסמך בלי מטבע היה שקלים,
+// אז כותבים לו ILS במפורש כדי שהמשמעות שלו לא תשתנה. משפחה בלי מדינה ובלי מטבע הייתה גם "ישראל".
+export const fillLegacyCurrency = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const counts: Record<string, number> = {};
+    for (const f of await ctx.db.query("families").collect()) {
+      if (f.currency) continue;
+      await ctx.db.patch(f._id, { currency: "ILS", ...(f.country ? {} : { country: "IL" }) });
+      counts.families = (counts.families ?? 0) + 1;
+    }
+    for (const table of ["entries", "recurring", "goals", "activity"] as const) {
+      for (const d of await ctx.db.query(table).collect()) {
+        if (d.currency) continue;
+        await ctx.db.patch(d._id, { currency: "ILS" });
+        counts[table] = (counts[table] ?? 0) + 1;
+      }
+    }
+    return counts;
+  },
+});
