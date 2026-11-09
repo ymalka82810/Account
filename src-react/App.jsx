@@ -21,6 +21,7 @@ import { AccountSheet } from './components/account/AccountSheet.jsx';
 import Auth from './components/auth/Auth.jsx';
 import Home from './components/home/Home.jsx';
 import { useTabSwipe } from './lib/useTabSwipe.js';
+import { isNativeApp } from './lib/updater.js';
 import { useTabIndicator } from './lib/useTabIndicator.js';
 import FriendsTab from './components/friends/FriendsTab.jsx';
 import FamilyTab from './components/family/FamilyTab.jsx';
@@ -292,7 +293,10 @@ function Root() {
   const isTeen = role === 'teen';
   const setTab = useCallback((tabId) => {
     setTabSel(tabId);
-    if (location.hash !== '#' + tabId) history.pushState(null, '', '#' + tabId);
+    // באפליקציה (APK) כל לשונית נכנסת להיסטוריה, וכפתור החזרה של אנדרואיד מחזיר ללשונית הקודמת.
+    // בדפדפן לא: ב-Chrome לאנדרואיד, ברגע שיש לאן לחזור, החלקה משמאל לימין מפעילה את מחוות "חזרה" של הדפדפן
+    // שגוררת את כל הדף (כולל הכותרת) עם האצבע - וזה מתנגש בהחלקה בין הלשוניות.
+    if (location.hash !== '#' + tabId) history[isNativeApp ? 'pushState' : 'replaceState'](null, '', '#' + tabId);
     window.scrollTo({ top: 0 });
   }, []);
   const openEntryFlow = useCallback((opts) => sheet.open('', <EntryFlow opts={opts} />), [sheet]);
