@@ -5,6 +5,7 @@ import PalettePicker from '../shared/PalettePicker.jsx';
 import Arrow from '../shared/Arrow.jsx';
 import { toggleDetails } from '../../lib/motion.js';
 import FeelSettings from './FeelSettings.jsx';
+import VersionSection from './VersionSection.jsx';
 import { call, useQuery } from '../../lib/api.js';
 import { state, CODE_KEY } from '../../state/state.js';
 import { toast, errMsg } from '../../lib/helpers.js';
@@ -149,6 +150,8 @@ export function AccountSheet() {
           )}
         </div>
       </details>
+
+      <VersionSection />
 
       <AsyncButton className="acct-exit" onClick={async () => { sheet.close(); await logout(); }}>{t('יציאה')}</AsyncButton>
 
