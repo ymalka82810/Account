@@ -9,6 +9,7 @@
   --coin: #ffd97d;
   --coin-deep: #e0a640;
   --owe: #f4978e;
+  --owe-text: #a8322a; /* אדום כהה לטקסט הודעות שגיאה: --owe בהיר מדי על הרקע הוורוד-כתום של ערכת הילד */
   --owe-bg: #fde2e4;
   --get: #74c69d;
   --get-bg: #e2f6ec;
@@ -328,7 +329,7 @@ button.primary:active { transform: translateY(1px); }
 }
 .ghost:hover, .ghost:focus-visible, .ghost:active { border-color: var(--coin); }
 button.danger { color: var(--owe); }
-.error { color: var(--owe); font-weight: 500; margin: 0; }
+.error { color: var(--owe-text); font-weight: 600; margin: 0; }
 input.invalid { border-color: var(--owe); box-shadow: 0 0 0 2px var(--owe); }
 
 /* שדה קוד סודי עם כפתור עין בקצה השורה (PasswordInput ב-fields.jsx). ".field > span" מעצב תוויות, לכן המעטפת מבטלת אותו */
@@ -843,9 +844,9 @@ body[data-theme="teen"] .sheet-head { background: #07070b; }
 .danger-ghost { color: var(--owe); border-color: var(--owe); }
 
 /* תנאים ופרטיות */
-.check { display: flex; gap: 10px; align-items: flex-start; font-size: .92rem; text-align: start; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: .95rem; font-weight: 500; color: var(--ink); text-align: start; }
 .check input { width: 22px; height: 22px; flex: none; margin-top: 2px; accent-color: var(--coin-deep); }
-.check input[aria-invalid="true"] { outline: 2px solid var(--owe); outline-offset: 2px; border-radius: 4px; }
+.check input[aria-invalid="true"] { outline: 2px solid var(--owe-text); outline-offset: 2px; border-radius: 4px; }
 .legal { text-align: center; font-size: .88rem; color: var(--ink-soft); margin: 18px 0 0; }
 /* קישורי תנאים ופרטיות: אזור מגע של 44px גם בלי להגדיל את גובה השורה (padding בלבד על אלמנט inline) */
 .legal a, .check a { color: inherit; padding-block: 14px; }
@@ -935,7 +936,7 @@ body[data-theme="child"] .dd-opt.active, body:not([data-theme]) .dd-opt.active {
 body[data-theme="parent"] {
   --ink: #e6e9ee; --ink-soft: #8b95a3; --bg: #0b0d10; --card: #14171c; --line: #262b33;
   --coin: #4ea1d3; --coin-deep: #7cc0e8; --on-coin: #0b0d10;
-  --owe: #f0717a; --owe-bg: #3a1a1f; --get: #3fc590; --get-bg: #10332a;
+  --owe: #f0717a; --owe-text: var(--owe); --owe-bg: #3a1a1f; --get: #3fc590; --get-bg: #10332a;
   --radius: 6px;
   color-scheme: dark;
   font-variant-numeric: tabular-nums;
@@ -981,7 +982,7 @@ body[data-theme="teen"][data-palette="orange"], .palette-pick[data-pal="orange"]
 body[data-theme="teen"] {
   --ink: #f4f4fa; --ink-soft: #a3a3b8; --bg: #000; --card: #0d0d12; --line: #24242f;
   --coin: var(--neon-a); --coin-deep: var(--neon-b); --on-coin: var(--neon-ink);
-  --owe: #ff6b8a; --owe-bg: #3a1a2a; --get: #35e0a1; --get-bg: #103a30;
+  --owe: #ff6b8a; --owe-text: var(--owe); --owe-bg: #3a1a2a; --get: #35e0a1; --get-bg: #103a30;
   --neon-glow: color-mix(in srgb, var(--neon-a) 30%, transparent);
   --neon-grad: linear-gradient(135deg, var(--neon-a), var(--neon-b));
   /* כפתורי "אני חייב" (neon-a) ו"חייבים לי" (neon-b): בדיוק צבעי הניאון של הערכה שנבחרה */
