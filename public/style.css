@@ -43,6 +43,19 @@ body {
   overscroll-behavior-y: none;
 }
 
+/* חסם עליון: האפליקציה מצוירת מקצה לקצה, ולכן בגלילה התוכן עלה מתחת למצלמה, לשעה ולסוללה.
+   פס קבוע בגובה אזור הסטטוס (env הוא 0 במכשירים שבהם המערכת כבר מרפדת את ה-WebView, אז שם הוא לא נראה) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: env(safe-area-inset-top, 0px);
+  background: var(--status-bg, var(--bg));
+  z-index: 1000;
+  pointer-events: none;
+}
+body[data-theme="child"], body:not([data-theme]) { --status-bg: #a9e2f7; }
+
 .top {
   background: #1d2b4f;
   color: #fff;
