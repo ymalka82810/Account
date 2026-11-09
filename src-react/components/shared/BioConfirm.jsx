@@ -4,7 +4,7 @@ import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from './Sheet.jsx';
 import FirstBindForm from '../account/FirstBind.jsx';
 import AsyncButton from './AsyncButton.jsx';
-import { Err, Field, pinProps } from './fields.jsx';
+import { Err, Field, pinProps, PasswordInput } from './fields.jsx';
 import { call } from '../../lib/api.js';
 import { errMsg } from '../../lib/helpers.js';
 import { pinOk } from '../../lib/pin.js';
@@ -72,7 +72,7 @@ function PinFallbackSheet({ onDone, action, why }) {
       <p className="hint">{why}</p>
       <p className="hint">{t('במכשיר הזה אין טביעת אצבע או זיהוי פנים, אז מאשרים עם הקוד הסודי שלכם.')}</p>
       <Field label={t('הקוד הסודי שלכם, לאישור')}>
-        <input {...pinProps('current-password')} value={pin} onChange={(e) => setPin(e.target.value)} />
+        <PasswordInput {...pinProps('current-password')} value={pin} onChange={(e) => setPin(e.target.value)} />
       </Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={confirm}>{t('אישור')}</AsyncButton>

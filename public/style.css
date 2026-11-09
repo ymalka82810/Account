@@ -331,6 +331,17 @@ button.danger { color: var(--owe); }
 .error { color: var(--owe); font-weight: 500; margin: 0; }
 input.invalid { border-color: var(--owe); box-shadow: 0 0 0 2px var(--owe); }
 
+/* שדה קוד סודי עם כפתור עין בקצה השורה (PasswordInput ב-fields.jsx). ".field > span" מעצב תוויות, לכן המעטפת מבטלת אותו */
+.field > .pw-wrap, .pw-wrap { position: relative; display: block; font: inherit; }
+.pw-wrap > input { width: 100%; padding-inline-end: calc(var(--tap) + 4px); }
+.pw-toggle {
+  position: absolute; inset-block: 0; inset-inline-end: 0; width: var(--tap); min-width: 0; min-height: 0; padding: 0;
+  display: grid; place-items: center; background: transparent; border: 0; box-shadow: none; border-radius: 10px;
+  color: var(--ink-soft); cursor: pointer;
+}
+.pw-toggle:hover, .pw-toggle:focus-visible, .pw-toggle[aria-pressed="true"] { color: var(--ink); }
+.pw-toggle:active { transform: none; filter: none; }
+
 /* היסטוריה ואנשים */
 .row {
   display: flex;

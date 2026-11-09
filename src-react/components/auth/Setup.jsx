@@ -15,6 +15,7 @@ import { SETUP_DRAFT_KEY, loadDraft, saveDraft, clearDraft } from '../../lib/dra
 import { useNotebook, isAdult, parseBirth } from '../../lib/notebook.js';
 import FamilyNameField, { buildFamilyName } from '../shared/FamilyNameField.jsx';
 import DatePicker from '../shared/DatePicker.jsx';
+import { PasswordInput } from '../shared/fields.jsx';
 
 // הטופס נבנה מחדש בכל כניסה למסך (המסכים תמיד ב-DOM), כדי שלא יישארו בו פרטים מהקמה קודמת.
 export default function Setup({ current }) {
@@ -101,7 +102,7 @@ function SetupForm({ current }) {
             <small className="hint">{t('רק כדי לוודא שמקימ/ת הקופה מעל גיל 18. לא מוצג לאף אחד.')}</small></label>
           <div className="field" data-f="locale"><span>{t('איפה אתם גרים?')}</span><LocalePicker value={locale} onChange={(l) => { setLocale(l); clearErr(); }} /></div>
           <label className="field" data-f="pin"><span>{t('קוד סודי ({rule}; ארוך יותר = מוגן יותר)', { rule: pinLabel('parent') })}</span>
-            <input type="password" inputMode="numeric" pattern="\d{4,8}" maxLength={pinMax('parent')} required autoComplete="new-password"
+            <PasswordInput inputMode="numeric" pattern="\d{4,8}" maxLength={pinMax('parent')} required autoComplete="new-password"
               aria-invalid={bad === 'pin' || undefined} className={bad === 'pin' ? 'invalid' : undefined} value={v.pin} onChange={set('pin')} />
             <small className="hint">{t('זה הקוד שתשתמשו בו בכל כניסה. כדאי לזכור אותו.')}</small></label>
           <label className="field" data-f="email"><span>{t('מייל לשחזור הקוד (לא חובה)')}</span>

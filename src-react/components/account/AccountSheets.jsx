@@ -7,7 +7,7 @@ import { t } from '../../i18n/index.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
-import { codeProps, pinProps, Err, Field } from '../shared/fields.jsx';
+import { codeProps, pinProps, Err, Field, PasswordInput } from '../shared/fields.jsx';
 import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
 import AvatarPicker from '../shared/AvatarPicker.jsx';
 
@@ -69,7 +69,7 @@ export function EmailSheet({ sentTo = '' }) {
           ? t('שלחנו קוד אל {email}. כתבו אותו, ואת הכתובת החדשה. היא תחליף את הנוכחית רק אחרי אימות.', { email: current })
           : t('נשלח אליו קוד כשמשנים או מאפסים קוד סודי, וגם התראה כשהקוד של מישהו במשפחה ננעל.')}</p>
         {current && <Field label={t('קוד מהמייל הנוכחי')}><input {...codeProps} value={oldCode} onChange={(e) => setOldCode(e.target.value)} /></Field>}
-        {!current && <Field label={t('הקוד הסודי שלכם, לאישור')}><input {...pinProps('current-password', pinMax('parent'))} value={myPin} onChange={(e) => setMyPin(e.target.value)} /></Field>}
+        {!current && <Field label={t('הקוד הסודי שלכם, לאישור')}><PasswordInput {...pinProps('current-password', pinMax('parent'))} value={myPin} onChange={(e) => setMyPin(e.target.value)} /></Field>}
         <Field label={current ? t('כתובת מייל חדשה') : t('כתובת מייל')}>
           <input type="text" inputMode="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" autoComplete="email" placeholder="name@example.com" dir="ltr" value={email} onChange={(e) => setEmail(e.target.value)} />
         </Field>
@@ -129,7 +129,7 @@ export function ChangePinEmailSheet() {
   return (
     <div className="form">
       <Field label={t('הקוד מהמייל')}><input {...codeProps} value={code} onChange={(e) => setCode(e.target.value)} /></Field>
-      <Field label={t('קוד חדש ({rule})', { rule: pinLabel(data.me.role) })}><input {...pinProps('new-password', pinMax(data.me.role))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
+      <Field label={t('קוד חדש ({rule})', { rule: pinLabel(data.me.role) })}><PasswordInput {...pinProps('new-password', pinMax(data.me.role))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
         if (!pinOk(newPin, data.me.role)) { setErr(t('הקוד החדש צריך להיות {rule}.', { rule: pinLabel(data.me.role) })); return; }
@@ -154,8 +154,8 @@ export function ChangePinSheet() {
   useSheetTitle(first ? t('קביעת קוד סודי') : t('שינוי הקוד הסודי'));
   return (
     <div className="form">
-      {!first && <Field label={t('הקוד הנוכחי')}><input {...pinProps('current-password')} value={oldPin} onChange={(e) => setOldPin(e.target.value)} /></Field>}
-      <Field label={t('קוד חדש ({rule})', { rule: pinLabel(data.me.role) })}><input {...pinProps('new-password', pinMax(data.me.role))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
+      {!first && <Field label={t('הקוד הנוכחי')}><PasswordInput {...pinProps('current-password')} value={oldPin} onChange={(e) => setOldPin(e.target.value)} /></Field>}
+      <Field label={t('קוד חדש ({rule})', { rule: pinLabel(data.me.role) })}><PasswordInput {...pinProps('new-password', pinMax(data.me.role))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
         if (!pinOk(newPin, data.me.role)) { setErr(t('הקוד החדש צריך להיות {rule}.', { rule: pinLabel(data.me.role) })); return; }

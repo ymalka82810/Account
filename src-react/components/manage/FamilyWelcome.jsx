@@ -7,7 +7,7 @@ import { state, AVATARS } from '../../state/state.js';
 import { useSheet } from '../shared/Sheet.jsx';
 import Select from '../shared/Select.jsx';
 import Collapsible from '../shared/Collapsible.jsx';
-import { pinProps } from '../shared/fields.jsx';
+import { pinProps, PasswordInput } from '../shared/fields.jsx';
 import { roleLabel } from '../../lib/computations.js';
 import { useNotebook } from '../../lib/notebook.js';
 import { toast, errMsg } from '../../lib/helpers.js';
@@ -66,7 +66,7 @@ function ChildrenForm({ people }) {
         : (
           <>
             <label className="field"><span>{t('קוד סודי אחד לכל הילדים ({rule}). אפשר להשאיר ריק', { rule: pinLabel('child') })}</span>
-              <input {...pinProps('new-password')} pattern="\d{4}" value={pin} onChange={(e) => setPin(e.target.value)} /></label>
+              <PasswordInput {...pinProps('new-password')} pattern="\d{4}" value={pin} onChange={(e) => setPin(e.target.value)} /></label>
             <p className="hint">{t('בלי קוד, הילדים נכנסים בלחיצה, וכל ילד יכול לקבוע קוד משלו מתי שירצה. עם קוד, כל הילדים מקבלים אותו קוד, וכשתרצו לתת לכל ילד את המשתמש שלו תאפסו לו את הקוד מלשונית “ניהול”, והוא יבחר קוד משלו.')}</p>
           </>
         )}

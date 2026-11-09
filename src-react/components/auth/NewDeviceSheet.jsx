@@ -7,7 +7,7 @@ import { errMsg } from '../../lib/helpers.js';
 import { codeGone, setToken } from '../../state/auth.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
-import { codeProps, pinProps, Err, Field } from '../shared/fields.jsx';
+import { codeProps, pinProps, Err, Field, PasswordInput } from '../shared/fields.jsx';
 import { BioError, bioAddDeviceFinish, bioMoveFinish, bioSupported } from '../../lib/biometric.js';
 import { pinOk } from '../../lib/pin.js';
 
@@ -91,7 +91,7 @@ export function NewDeviceSheet() {
           : method === 'parent'
             ? t('הורה אחר פותח ב"ניהול" את "קוד קישור" ליד השם שלכם ומוסר לכם קוד.')
             : t('במכשיר הישן: "החשבון שלי" > "המכשירים שלי" > החלפת מכשיר. הקוד יגיע למייל. כל המכשירים הקודמים ינותקו.')}</p>
-        <Field label={t('הקוד הסודי שלכם')}><input {...pinProps('current-password')} value={pin} onChange={(e) => setPin(e.target.value)} /></Field>
+        <Field label={t('הקוד הסודי שלכם')}><PasswordInput {...pinProps('current-password')} value={pin} onChange={(e) => setPin(e.target.value)} /></Field>
         <Field label={method === 'add' ? t('קוד ההוספה') : method === 'parent' ? t('קוד הקישור') : t('הקוד מהמייל')}><input {...codeProps} value={secret} onChange={(e) => setSecret(e.target.value)} /></Field>
         {err && <Err>{err}</Err>}
         <AsyncButton className="primary" onClick={guard(async () => {
@@ -111,7 +111,7 @@ export function NewDeviceSheet() {
     return (
       <div className="form">
         <p className="hint">{t('נשלח קוד למייל המאומת שלכם. אחרי שתאשרו אותו ההחלפה תתאפשר רק בעוד 24 שעות, ובינתיים תישלח התראה לכם ולהורים האחרים והם יוכלו לבטל.')}</p>
-        <Field label={t('הקוד הסודי שלכם')}><input {...pinProps('current-password')} value={pin} onChange={(e) => setPin(e.target.value)} /></Field>
+        <Field label={t('הקוד הסודי שלכם')}><PasswordInput {...pinProps('current-password')} value={pin} onChange={(e) => setPin(e.target.value)} /></Field>
         {err && <Err>{err}</Err>}
         <AsyncButton className="primary" onClick={async () => {
           setErr('');
@@ -157,7 +157,7 @@ export function NewDeviceSheet() {
       {ready ? (
         <>
           <p className="hint">{t('אפשר להשלים את ההחלפה. הקלידו את הקוד הסודי וקשרו את המכשיר הזה.')}</p>
-          <Field label={t('הקוד הסודי שלכם')}><input {...pinProps('current-password')} value={pin} onChange={(e) => setPin(e.target.value)} /></Field>
+          <Field label={t('הקוד הסודי שלכם')}><PasswordInput {...pinProps('current-password')} value={pin} onChange={(e) => setPin(e.target.value)} /></Field>
           {err && <Err>{err}</Err>}
           <AsyncButton className="primary" onClick={guard(async () => {
             if (!pinOk(pin, 'parent')) { setErr(t('הקלידו את הקוד הסודי שלכם.')); return; }

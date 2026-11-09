@@ -4,7 +4,7 @@ import { call, useQuery } from '../../lib/api.js';
 import { errMsg } from '../../lib/helpers.js';
 import { useApp } from '../../state/appContext.js';
 import AsyncButton from '../shared/AsyncButton.jsx';
-import { codeProps, pinProps, Err, Field } from '../shared/fields.jsx';
+import { codeProps, pinProps, Err, Field, PasswordInput } from '../shared/fields.jsx';
 import { BioError, bioReady, bioRegister, bioSupported } from '../../lib/biometric.js';
 import { pinOk } from '../../lib/pin.js';
 import { isNativeApp } from '../../lib/updater.js';
@@ -62,7 +62,7 @@ export default function FirstBindForm({ onDone }) {
         {isNativeApp ? t('צריך לקשר את הטלפון הזה פעם אחת.') : t('צריך לקשר את המכשיר והדפדפן הזה פעם אחת.')}
       </p>
       <Field label={t('הקוד הסודי שלכם, לאישור')}>
-        <input {...pinProps('current-password')} value={pin} onChange={(e) => setPin(e.target.value)} />
+        <PasswordInput {...pinProps('current-password')} value={pin} onChange={(e) => setPin(e.target.value)} />
       </Field>
       {dev.needsEmailCode && (sent ? (
         <Field label={t('הקוד מהמייל')}><input {...codeProps} value={emailCode} onChange={(e) => setEmailCode(e.target.value)} /></Field>

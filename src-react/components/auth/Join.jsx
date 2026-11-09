@@ -6,6 +6,7 @@ import { goView, joinFamily, openNotebook } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 import { withIcons } from '../shared/UiIcon.jsx';
 import { pinOk } from '../../lib/pin.js';
+import { PasswordInput } from '../shared/fields.jsx';
 
 export default function Join({ current }) {
   const fam = state.fam;
@@ -80,7 +81,7 @@ export default function Join({ current }) {
           <div className="field"><span>{t('בחר/י דמות')}</span>
             <AvatarPicker value={avatar} onChange={setAvatar} /></div>
           <label className="field" data-f="pin"><span>{t('קוד סודי משלך (4 ספרות)')}</span>
-            <input type="password" inputMode="numeric" pattern="\d{4}" maxLength={4} required autoComplete="new-password"
+            <PasswordInput inputMode="numeric" pattern="\d{4}" maxLength={4} required autoComplete="new-password"
               aria-invalid={bad === 'pin' || undefined} className={bad === 'pin' ? 'invalid' : undefined} value={v.pin} onChange={set('pin')} /></label>
           <label className="check" data-f="share"><input type="checkbox" required aria-invalid={bad === 'share' || undefined} checked={shareNb} onChange={(e) => { setShareNb(e.target.checked); clearErr(); }} />
             <span>{t('אני מאשר/ת שההורים במשפחה יראו את מה שרשמתי בפנקס האישי שלי. הם יכולים רק לצפות, לא לשנות או למחוק.')}</span></label>

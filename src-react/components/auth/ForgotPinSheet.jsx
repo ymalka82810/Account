@@ -7,7 +7,7 @@ import { codeGone, route, setToken } from '../../state/auth.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
-import { codeProps, pinProps, Err, Field } from '../shared/fields.jsx';
+import { codeProps, pinProps, Err, Field, PasswordInput } from '../shared/fields.jsx';
 import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
 
 // שכחתי קוד (הורה, במסך הכניסה): קוד למייל המאומת, ואז בוחרים קוד חדש ונכנסים.
@@ -40,7 +40,7 @@ export function ForgotPinSheet() {
   return (
     <div className="form">
       <Field label={t('הקוד מהמייל')}><input {...codeProps} value={emailCode} onChange={(e) => setEmailCode(e.target.value)} /></Field>
-      <Field label={t('קוד חדש ({rule})', { rule: pinLabel('parent') })}><input {...pinProps('new-password', pinMax('parent'))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
+      <Field label={t('קוד חדש ({rule})', { rule: pinLabel('parent') })}><PasswordInput {...pinProps('new-password', pinMax('parent'))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
         if (!pinOk(newPin, 'parent')) { setErr(t('הקוד החדש צריך להיות {rule}.', { rule: pinLabel('parent') })); return; }

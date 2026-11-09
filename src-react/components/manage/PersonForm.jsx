@@ -11,6 +11,7 @@ import { g, GENDER_OPTIONS } from '../../lib/gender.js';
 import { useBioConfirm } from '../shared/BioConfirm.jsx';
 import { BioError } from '../../lib/biometric.js';
 import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
+import { PasswordInput } from '../shared/fields.jsx';
 
 // הוספת בן/בת משפחה (הורים).
 export default function PersonForm() {
@@ -75,7 +76,7 @@ export default function PersonForm() {
       <label className="field"><span>{role === 'parent'
         ? t('קוד סודי (חובה להורה, {rule})', { rule: pinLabel('parent') })
         : t('קוד סודי (לא חובה — בלי קוד נכנסים בלחיצה, ואפשר לקבוע קוד אחר כך)')}</span>
-        <input type="password" inputMode="numeric" pattern={role === 'parent' ? '\\d{4,8}' : '\\d{4}'} maxLength={pinMax(role)} autoComplete="new-password"
+        <PasswordInput inputMode="numeric" pattern={role === 'parent' ? '\\d{4,8}' : '\\d{4}'} maxLength={pinMax(role)} autoComplete="new-password"
           value={pin} onChange={(e) => setPin(e.target.value)} /></label>
       <Reveal show={role !== 'child'}><p className="hint">{t('🔒 הוספה בתור {role} מאושרת בטביעת אצבע או בזיהוי פנים.', { role: role === 'parent' ? t('הורה') : g(gender, 'נער', 'נערה', 'נער/ה') })}</p></Reveal>
       <button className="primary" type="submit" disabled={busy}>{busy ? t('⏳ רגע…') : t('הוספה')}</button>
