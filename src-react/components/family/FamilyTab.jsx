@@ -1,3 +1,4 @@
+import PushPrompt from '../account/PushPrompt.jsx';
 import { t } from '../../i18n/index.js';
 import { useSheet } from '../shared/Sheet.jsx';
 import { openDebts } from '../../lib/computations.js';
@@ -18,6 +19,7 @@ export default function FamilyTab({ data, fdata, token }) {
 
   return (
     <>
+      <PushPrompt />
       <PendingCards data={data} token={token} parentView />
       <NotebookMergeCard />
 
