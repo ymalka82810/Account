@@ -14,8 +14,8 @@ let FX = { base: 'USD', rates: null };
 export function setFx(base, rates) { FX = { base: base || 'USD', rates: rates || null }; }
 export const baseCurrency = () => FX.base;
 export const hasRates = () => !!FX.rates;
-// רשומות המשפחה מגיעות מהשרת תמיד עם מטבע. בלי מטבע = רשומת חברים, שהיא תמיד בשקלים (FRIENDS_CURRENCY בשרת).
-export const curOf = (e) => e.currency || 'ILS';
+// רשומות מהשרת מגיעות תמיד עם מטבע. חסר = דולר, ברירת המחדל (DEFAULT_CURRENCY בשרת).
+export const curOf = (e) => e.currency || 'USD';
 
 // rates[X] = כמה X שווה דולר אחד. null אם אין שער.
 export function convert(amount, from, to, rates = FX.rates) {

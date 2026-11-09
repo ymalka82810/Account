@@ -8,7 +8,7 @@ import { useRun } from '../../lib/useRun.js';
 import { useConfirm } from '../shared/Confirm.jsx';
 import { FRIEND_MAX } from '../../state/state.js';
 import { useApp } from '../../state/appContext.js';
-import { isPending, pairOwes, openDebtsOf, debtLabel, namesFor, money, fmtDate } from '../../lib/computations.js';
+import { baseCurrency, isPending, pairOwes, openDebtsOf, debtLabel, namesFor, money, fmtDate } from '../../lib/computations.js';
 import { g } from '../../lib/gender.js';
 import EntriesList from '../entries/EntriesList.jsx';
 import DebtLines from '../entries/DebtLines.jsx';
@@ -87,18 +87,18 @@ export default function FriendsTab({ data, fdata, token }) {
       );
       continue;
     }
-    const n = pairOwes(me, p.id, entries, 'ILS');
+    const n = pairOwes(me, p.id, entries, baseCurrency());
     const iOwe = n > 0;
     const amount = Math.abs(n);
     if (n > 0) owe += amount; else if (n < 0) get += amount;
     const [dFrom, dTo] = iOwe ? [me, p.id] : [p.id, me];
-    const open = n === 0 ? [] : openDebtsOf(dFrom, dTo, entries, 'ILS');
+    const open = n === 0 ? [] : openDebtsOf(dFrom, dTo, entries, baseCurrency());
     cards.push(
       <div key={f.id} className={'debt' + (n === 0 ? '' : iOwe ? ' owe' : ' get') + (open.length > 1 ? ' multi' : '')}>
         <Avatar value={p.avatar} className="avatar-md" />
         <div className="text">
           <div className="who">{n === 0 ? p.name : iOwe ? owesLine(me, p.id) : owesLine(p.id, me)}</div>
-          <div className="amt">{n === 0 ? t('הכול מסודר ✅') : money(amount, 'ILS')}</div>
+          <div className="amt">{n === 0 ? t('הכול מסודר ✅') : money(amount, baseCurrency())}</div>
           <DebtLines open={open} iOwe={iOwe} onPay={(x) => startFlow({ kind: 'payment', from: dFrom, to: dTo, debtId: x.debt.id })} />
         </div>
         {n !== 0 && (
@@ -107,7 +107,7 @@ export default function FriendsTab({ data, fdata, token }) {
             {iOwe ? t('💰 שילמתי') : t('💰 קיבלתי')}
           </button>
         )}
-        {n < 0 && <WhatsAppRemind name={p.name} open={open} total={money(amount, 'ILS')} display="ILS" />}
+        {n < 0 && <WhatsAppRemind name={p.name} open={open} total={money(amount, baseCurrency())} display={baseCurrency()} />}
         <button className="small danger" type="button" aria-label={t('הסרת {name}', { name: p.name })} onClick={() => removeFriendship(f, p)}>{t('הסרה')}</button>
       </div>
     );
@@ -131,8 +131,8 @@ export default function FriendsTab({ data, fdata, token }) {
   return (
     <>
       <div className="summary">
-        <div className="sum owe"><GoldBarArt /><div className="lbl">{g(data.me.gender, 'אני חייב לחברים', 'אני חייבת לחברים', 'אני חייב/ת לחברים')}</div><SumNum amount={owe} cur="ILS" /></div>
-        <div className="sum get"><GoldBarArt /><div className="lbl">{t('חברים חייבים לי')}</div><SumNum amount={get} cur="ILS" /></div>
+        <div className="sum owe"><GoldBarArt /><div className="lbl">{g(data.me.gender, 'אני חייב לחברים', 'אני חייבת לחברים', 'אני חייב/ת לחברים')}</div><SumNum amount={owe} cur={baseCurrency()} /></div>
+        <div className="sum get"><GoldBarArt /><div className="lbl">{t('חברים חייבים לי')}</div><SumNum amount={get} cur={baseCurrency()} /></div>
       </div>
       <div className="bigbtns">
         <button className="bigbtn owe" type="button" onClick={() => startFlow({ kind: 'debt', from: me })}>
@@ -173,7 +173,7 @@ export default function FriendsTab({ data, fdata, token }) {
                   <div>
                     {gw(e.createdBy, '{who} רשם: {line}', '{who} רשמה: {line}', '{who} רשם/ה: {line}', { who: nameOf(e.createdBy), line: e.kind === 'debt' ? owesLine(e.from, e.to) : repaidLine(e.from, e.to) })}
                   </div>
-                  <div className="meta">{[money(e.amount, 'ILS'), fmtDate(e.date), e.note].filter(Boolean).join(' • ')}</div>
+                  <div className="meta">{[money(e.amount, e.currency), fmtDate(e.date), e.note].filter(Boolean).join(' • ')}</div>
                 </div>
                 <div className="acts">
                   <button className="small okbtn" type="button"
@@ -213,7 +213,7 @@ export default function FriendsTab({ data, fdata, token }) {
 
       <h2>{t('היסטוריה עם חברים')}</h2>
       <div>
-        <EntriesList list={entries} emptyText={t('עוד לא נרשם כלום עם חברים.')} token={token} me={me} isParent={false} display="ILS"
+        <EntriesList list={entries} emptyText={t('עוד לא נרשם כלום עם חברים.')} token={token} me={me} isParent={false} display={baseCurrency()}
           lookup={lookup} debtList={entries} removeEndpoint="friends:removeEntry"
           pendingLabel={(e) => (e.createdBy === me ? t('⏳ ממתין לחבר/ה') : t('⏳ ממתין לאישור שלך'))} />
       </div>

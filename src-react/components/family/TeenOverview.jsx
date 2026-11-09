@@ -27,7 +27,7 @@ export default function TeenOverview({ teens }) {
                 </div>
                 <div className="meta">{[fmtDate(e.date), e.note].filter(Boolean).join(' • ')}</div>
               </div>
-              <strong>{money(e.amount, 'ILS')}</strong>
+              <strong>{money(e.amount, e.currency)}</strong>
             </div>
           ))}
         </Collapsible>

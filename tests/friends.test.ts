@@ -300,3 +300,24 @@ describe("מחיקת אדם מנקה חברויות ורשומות", () => {
     expect(left.e).toHaveLength(0);
   });
 });
+
+describe("מטבע בחובות בין חברים", () => {
+  it("ברירת המחדל היא המטבע של המשפחה של מי שרושם, ואפשר לבחור אחר", async () => {
+    await t.run(async (ctx) => { await ctx.db.patch(B.familyId, { currency: "USD" }); });
+    await befriend();
+    await addDebt(gal, galId, yuvalId, 1000);
+    await addDebt(yuval, yuvalId, galId, 2000);
+    await addDebt(yuval, yuvalId, galId, 300, { currency: "EUR" });
+    const v = await view(yuval);
+    const curs = v.entries.map((e: any) => `${e.amount}:${e.currency}`).sort();
+    expect(curs).toEqual(["1000:USD", "2000:ILS", "300:EUR"]);
+  });
+
+  it("התקרה לרשומה (500 ש\"ח) מומרת למטבע הרשומה", async () => {
+    await t.run(async (ctx) => { await ctx.db.insert("fxRates", { rates: { USD: 1, ILS: 4 }, source: "test", fetchedAt: Date.now() }); });
+    await befriend();
+    // 500 ש"ח = 125 דולר
+    await expect(addDebt(yuval, yuvalId, galId, 12_500, { currency: "USD" })).resolves.toBeDefined();
+    await expect(addDebt(yuval, yuvalId, galId, 13_000, { currency: "USD" })).rejects.toThrow("סכום לא תקין");
+  });
+});

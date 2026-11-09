@@ -3,8 +3,6 @@
 // מטבע חסר (משפחה שעוד לא זוהתה לה מדינה, רשומה בלי currency) = דולר, ברירת המחדל הבינלאומית.
 // הנתונים הישנים שהיו בשקלים בלי currency קיבלו ILS במפורש (maintenance.fillLegacyCurrency).
 export const DEFAULT_CURRENCY = "USD";
-// חובות בין חברים (ממשפחות שונות) נרשמים תמיד בשקלים, בלי שדה מטבע.
-export const FRIENDS_CURRENCY = "ILS";
 // התקרה לסכום רשומה נמדדת בשקלים (10,000 ש"ח או השווי שלהם).
 export const LIMIT_CURRENCY = "ILS";
 

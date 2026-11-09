@@ -23,9 +23,9 @@ export function EntryFlow({ opts }) {
   const sheet = useSheet();
   const confirm = useConfirm();
   const entries = opts.entries ? opts.entries : data.entries;
-  // המטבע הראשי (בין חברים תמיד שקלים). חוב חדש אפשר לרשום במטבע אחר; החזר נרשם במטבע הראשי.
-  const display = opts.endpoint ? 'ILS' : baseCurrency();
-  const canPickCurrency = opts.kind === 'debt' && !opts.endpoint;
+  // המטבע הראשי של המשפחה (גם בין חברים). חוב חדש אפשר לרשום במטבע אחר; החזר נרשם במטבע הראשי.
+  const display = baseCurrency();
+  const canPickCurrency = opts.kind === 'debt';
   const [flow, setFlow] = useState(() => start({ from: opts.from || null, to: opts.to || null, amount: (opts.noDebtPick && opts.suggest) ? String(opts.suggest / 100) : '', agorot: 0, note: '', debtId: null, debtRemaining: null, debtName: '', cur: display, debt: null }));
   const { step, st } = flow;
   const [err, setErr] = useState('');
@@ -135,7 +135,12 @@ export function EntryFlow({ opts }) {
       // עד 10,000 ש"ח לרשומה (או השווי שלהם במטבע אחר).
       const ils = convert(agorot, st.cur, 'ILS');
       if ((ils === null ? agorot > 100_000_000 : ils > 1_000_000 * 1.001)) { setErr(t('הסכום גדול מדי.')); return; }
-      if (opts.maxEntry && agorot > opts.maxEntry) { setErr(t('בין חברים אפשר לרשום עד {max} בכל פעם.', { max: money(opts.maxEntry, display) })); return; }
+      // התקרה בין חברים נקבעת בשקלים (FRIEND_MAX) ומומרת למטבע הרשומה.
+      if (opts.maxEntry) {
+        const maxHere = convert(opts.maxEntry, 'ILS', st.cur);
+        const inIls = convert(agorot, st.cur, 'ILS');
+        if (inIls === null ? agorot > opts.maxEntry : inIls > opts.maxEntry * 1.001) { setErr(t('בין חברים אפשר לרשום עד {max} בכל פעם.', { max: money(Math.floor(maxHere ?? opts.maxEntry), maxHere === null ? 'ILS' : st.cur) })); return; }
+      }
       if (maxAmount && agorot > maxAmount) { setErr(st.debtId ? t('נשאר מהחוב הזה {left}.', { left: money(maxAmount, display) }) : t('אפשר להחזיר עד {max}.', { max: money(maxAmount, display) })); return; }
       setFlow({ step: 'final', st: { ...st, agorot } });
     };
@@ -192,7 +197,7 @@ export function EntryFlow({ opts }) {
     }
     // מטבע שונה מהמטבע של המשפחה זה מקרה פחות נפוץ: לפני השמירה מציגים התראה מיוחדת
     // עם הסכומים בין שני האנשים מקובצים לפי מטבע, עכשיו ואחרי הפעולה.
-    const foreignCase = !opts.endpoint && (isDebt
+    const foreignCase = (isDebt
       ? st.cur !== display
       : (st.debt ? st.debt.foreign : hasForeignOpen(st.from, st.to, entries, display)));
 

@@ -5,12 +5,21 @@ import {
   Member, getSessionPerson, isThrottled, noteHit, normalizeEmail, requireParent, requirePerson, requireSameFamily, validEmail,
 } from "./lib";
 import { entryLine, entryTextFor, notify } from "./notify";
-import { FRIENDS_CURRENCY } from "./currency";
+import { DEFAULT_CURRENCY, LIMIT_CURRENCY, Rates, convert, curOf, fmtMoney, isCurrency, paidOnDebt } from "./currency";
+import { loadRates } from "./fx";
+import { internal } from "./_generated/api";
 
 // מצב חברים: בני נוער רושמים חובות זה עם זה (גם ממשפחות שונות).
 // הפעלה דורשת אישור הורה. כל רשומה ממתינה לאישור של החבר/ה השני/ה.
 
-export const FRIEND_MAX_AMOUNT = 50_000; // באגורות = 500 ש"ח לרשומה
+// תקרה לרשומה בין חברים: 500 ש"ח או השווי שלהם במטבע הרשומה (בלי שערים: אותו מספר במטבע הרשומה).
+export const FRIEND_MAX_AMOUNT = 50_000; // באגורות של LIMIT_CURRENCY
+const friendAmountOk = (amount: number, currency: string, rates: Rates | null) => {
+  if (!Number.isInteger(amount) || amount <= 0) return false;
+  const inLimit = convert(amount, currency, LIMIT_CURRENCY, rates);
+  // מרווח קטן לעיגול רק כשיש המרה
+  return inLimit === null ? amount <= FRIEND_MAX_AMOUNT : inLimit <= FRIEND_MAX_AMOUNT * (currency === LIMIT_CURRENCY ? 1 : 1.001);
+};
 const MAX_FRIENDS = 30;
 const UNDO_MS = 10 * 60 * 1000;
 const HOUR_MS = 60 * 60 * 1000;
@@ -156,14 +165,20 @@ export const removeFriend = mutation({
     if (!f || (f.a !== me._id && f.b !== me._id)) return;
     const other = f.a === me._id ? f.b : f.a;
     if (f.status === "accepted") {
+      // היתרה מחושבת במטבע של המשפחה שלי. רשומות במטבעות שונים מומרות (החזר לפי השער ששמור בו).
+      const base = (await ctx.db.get(me.familyId))?.currency ?? DEFAULT_CURRENCY;
+      const rates = (await loadRates(ctx))?.rates ?? null;
       let bal = 0;
       for (const e of await allFriendEntries(ctx, me._id)) {
         if (e.status === "pending") continue;
         if (e.from !== other && e.to !== other) continue;
         const sign = e.kind === "debt" ? 1 : -1;
-        bal += (e.from === me._id ? 1 : -1) * sign * e.amount;
+        const amt = convert(e.amount, curOf(e), base, e.fx ?? rates);
+        if (amt === null) throw new ConvexError("שערי ההמרה עוד לא נטענו. נסו שוב בעוד רגע.");
+        bal += (e.from === me._id ? 1 : -1) * sign * amt;
       }
-      if (bal !== 0) throw new ConvexError("יש יתרה פתוחה ביניכם. סגרו אותה קודם");
+      // מרווח לעיגול בהמרות: פחות מיחידה אחת (אגורה/סנט) נחשב סגור.
+      if (Math.abs(bal) >= 1) throw new ConvexError("יש יתרה פתוחה ביניכם. סגרו אותה קודם");
     }
     await ctx.db.delete(f._id);
   },
@@ -178,17 +193,22 @@ export const addEntry = mutation({
     from: v.id("people"),
     to: v.id("people"),
     amount: v.number(),
+    // מטבע הרשומה. חסר = המטבע של המשפחה של מי שרושם.
+    currency: v.optional(v.string()),
     note: v.string(),
     date: v.string(),
     // החזר על חוב מסוים (חוב שכבר אושר על ידי שני הצדדים).
     debtId: v.optional(v.id("friendEntries")),
   },
-  handler: async (ctx, { token, ...e }) => {
+  handler: async (ctx, { token, currency: askedCurrency, ...e }) => {
     const me = await requireFriendsOn(ctx, token);
     if (e.from !== me._id && e.to !== me._id) throw new ConvexError("אפשר לרשום רק חובות שקשורים אליך");
     if (e.from === e.to) throw new ConvexError("אדם לא יכול להיות חייב לעצמו");
-    if (!Number.isInteger(e.amount) || e.amount <= 0 || e.amount > FRIEND_MAX_AMOUNT) {
-      throw new ConvexError("סכום לא תקין. בין חברים אפשר לרשום עד 500 ש\"ח בכל פעם");
+    const currency = askedCurrency ?? (await ctx.db.get(me.familyId))?.currency ?? DEFAULT_CURRENCY;
+    if (!isCurrency(currency)) throw new ConvexError("מטבע לא נתמך");
+    const rates = (await loadRates(ctx))?.rates ?? null;
+    if (!friendAmountOk(e.amount, currency, rates)) {
+      throw new ConvexError("סכום לא תקין. בין חברים אפשר לרשום עד 500 ש\"ח (או השווי שלהם) בכל פעם");
     }
     if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date)) throw new ConvexError("תאריך לא תקין");
     const note = e.note.trim();
@@ -197,29 +217,49 @@ export const addEntry = mutation({
     const other = await ctx.db.get(otherId);
     const fr = await findFriendship(ctx, me._id, otherId);
     if (!other || !other.friendsEnabled || !fr || fr.status !== "accepted") throw new ConvexError("אפשר לרשום רק עם חברים מאושרים");
-    // החזר שמקושר לחוב: חוב מאושר, באותו כיוון, ובלי לעבור את מה שנשאר ממנו.
-    if (e.debtId) {
-      if (e.kind !== "payment") throw new ConvexError("אפשר לקשר לחוב רק החזר");
-      const debt = await ctx.db.get(e.debtId);
-      if (!debt || debt.kind !== "debt" || debt.status === "pending" || debt.from !== e.from || debt.to !== e.to) {
-        throw new ConvexError("החוב לא נמצא");
-      }
+    // בהחזר: אם יש בין השניים חובות במטבע אחר, שומרים את שערי הרגע (כמו בחובות המשפחה),
+    // כדי שההמרה של ההחזר לא תזוז אחר כך.
+    let fx: Rates | undefined;
+    if (e.kind === "payment") {
       const mine = await allFriendEntries(ctx, me._id);
-      const paid = mine.filter((x) => x.kind === "payment" && x.debtId === e.debtId).reduce((sum, x) => sum + x.amount, 0);
-      const remaining = debt.amount - paid;
-      if (remaining <= 0) throw new ConvexError("החוב הזה כבר שולם");
-      if (e.amount > remaining) throw new ConvexError("אי אפשר להחזיר יותר ממה שנשאר מהחוב");
+      const curs = new Set(mine.filter((x) => x.kind === "debt" && ((x.from === e.from && x.to === e.to) || (x.from === e.to && x.to === e.from))).map(curOf));
+      curs.add(currency);
+      if (curs.size > 1) {
+        if (!rates) {
+          await ctx.scheduler.runAfter(0, internal.fx.refresh, {});
+          throw new ConvexError("שערי ההמרה עוד לא נטענו. נסו שוב בעוד רגע.");
+        }
+        fx = {};
+        for (const c of curs) if (rates[c]) fx[c] = rates[c];
+      }
+      // החזר שמקושר לחוב: חוב מאושר, באותו כיוון, ובלי לעבור את מה שנשאר ממנו (במטבע של החוב).
+      if (e.debtId) {
+        const debt = await ctx.db.get(e.debtId);
+        if (!debt || debt.kind !== "debt" || debt.status === "pending" || debt.from !== e.from || debt.to !== e.to) {
+          throw new ConvexError("החוב לא נמצא");
+        }
+        const remaining = debt.amount - paidOnDebt(debt, mine, rates);
+        if (remaining < 0.5) throw new ConvexError("החוב הזה כבר שולם");
+        const inDebtCur = convert(e.amount, currency, curOf(debt), fx ?? rates);
+        if (inDebtCur === null) throw new ConvexError("אין שער המרה למטבע של החוב");
+        if (inDebtCur > remaining * 1.02 + 1) {
+          const max = convert(remaining, curOf(debt), currency, fx ?? rates)!;
+          throw new ConvexError(`אי אפשר להחזיר יותר ממה שנשאר מהחוב (${fmtMoney(Math.ceil(max), currency)})`);
+        }
+      }
+    } else if (e.debtId) {
+      throw new ConvexError("אפשר לקשר לחוב רק החזר");
     }
     const key = "friend-entry:" + me._id;
     if (await isThrottled(ctx, key, 30, HOUR_MS)) throw new ConvexError("יותר מדי רישומים. נסו שוב מאוחר יותר");
     await noteHit(ctx, key, HOUR_MS);
 
     const id = await ctx.db.insert("friendEntries", {
-      ...e, note, createdBy: me._id, createdAt: Date.now(), status: "pending" as const,
+      ...e, note, currency, ...(fx ? { fx } : {}), createdBy: me._id, createdAt: Date.now(), status: "pending" as const,
     });
     const from = e.from === me._id ? me : other;
     const to = e.to === me._id ? me : other;
-    await notify(ctx, [other._id], "ממתין לאישור שלך ⏳", entryTextFor(other._id, { ...e, currency: FRIENDS_CURRENCY }, { from: from.name, to: to.name, creator: me.name }), "friends");
+    await notify(ctx, [other._id], "ממתין לאישור שלך ⏳", entryTextFor(other._id, { ...e, currency }, { from: from.name, to: to.name, creator: me.name }), "friends");
     return id;
   },
 });
@@ -239,7 +279,7 @@ export const confirmEntry = mutation({
     await ctx.db.patch(id, { status: undefined });
     const from = await ctx.db.get(hit.e.from);
     const to = await ctx.db.get(hit.e.to);
-    if (from && to) await notify(ctx, [hit.e.createdBy], "אושר ✅", entryLine({ ...hit.e, currency: FRIENDS_CURRENCY }, { from: from.name, to: to.name, creator: hit.me.name }));
+    if (from && to) await notify(ctx, [hit.e.createdBy], "אושר ✅", entryLine({ ...hit.e, currency: curOf(hit.e) }, { from: from.name, to: to.name, creator: hit.me.name }));
   },
 });
 
@@ -254,7 +294,7 @@ export const rejectEntry = mutation({
     const from = await ctx.db.get(hit.e.from);
     const to = await ctx.db.get(hit.e.to);
     if (from && to) {
-      const line = entryLine({ ...hit.e, currency: FRIENDS_CURRENCY }, { from: from.name, to: to.name, creator: hit.me.name });
+      const line = entryLine({ ...hit.e, currency: curOf(hit.e) }, { from: from.name, to: to.name, creator: hit.me.name });
       await notify(ctx, [hit.e.createdBy], "לא אושר", why ? `${line}\nסיבה: ${why}` : line);
     }
   },
@@ -283,7 +323,7 @@ export const removeEntry = mutation({
 const entryOut = (e: Doc<"friendEntries">) => ({
   id: e._id, kind: e.kind, from: e.from, to: e.to, amount: e.amount, note: e.note,
   date: e.date, createdBy: e.createdBy, createdAt: e.createdAt, status: e.status ?? "approved",
-  debtId: e.debtId ?? null,
+  debtId: e.debtId ?? null, currency: curOf(e), fx: e.fx ?? null,
 });
 
 // מידע ציבורי על חבר/ה: שם, דמות ומגדר (לצורת פנייה מותאמת) בלבד.
@@ -348,7 +388,7 @@ export const get = query({
             .slice(0, 30)
             .map((e) => ({
               id: e._id, kind: e.kind, fromName: nameOf(e.from), toName: nameOf(e.to),
-              fromGender: genderOf(e.from), toGender: genderOf(e.to), amount: e.amount,
+              fromGender: genderOf(e.from), toGender: genderOf(e.to), amount: e.amount, currency: curOf(e),
               note: e.note, date: e.date, status: e.status ?? "approved",
             })),
         });
