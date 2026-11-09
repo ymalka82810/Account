@@ -15,30 +15,46 @@ export function useTabIndicator(navRef, tab, tabs) {
   /** @type {import('react').MutableRefObject<HTMLElement | null>} */
   const indRef = useRef(null);
   const placed = useRef(false);
+  /** @type {import('react').MutableRefObject<Record<string, { l: number, w: number, t: number, h: number }> | null>} מדידות הלשוניות, כדי שבזמן גרירה לא יהיו קריאות layout בכל תזוזה */
+  const geo = useRef(null);
+  const lastBox = useRef('');
 
-  const btn = (/** @type {string} */ id) => /** @type {HTMLElement | null} */ (navRef.current?.querySelector(`[data-tab="${id}"]`) ?? null);
+  const measure = (/** @type {string} */ id) => {
+    const cache = (geo.current ??= {});
+    if (!cache[id]) {
+      const el = /** @type {HTMLElement | null} */ (navRef.current?.querySelector(`[data-tab="${id}"]`) ?? null);
+      if (!el) return null;
+      cache[id] = { l: el.offsetLeft, w: el.offsetWidth, t: el.offsetTop, h: el.offsetHeight };
+    }
+    return cache[id];
+  };
 
   // מציב את הפס בין הלשונית הנוכחית ללשונית next, לפי progress (0 = על הנוכחית, 1 = על next).
   const place = useCallback((/** @type {string | null} */ next, /** @type {number} */ progress, /** @type {boolean} */ animate) => {
     const ind = indRef.current;
-    const a = btn(tab);
+    const a = measure(tab);
     if (!ind || !a) return;
-    const b = next ? btn(next) : null;
+    const b = next ? measure(next) : null;
     const p = b ? progress : 0;
-    const left = a.offsetLeft + ((b ? b.offsetLeft : a.offsetLeft) - a.offsetLeft) * p;
-    const width = a.offsetWidth + ((b ? b.offsetWidth : a.offsetWidth) - a.offsetWidth) * p;
+    const left = a.l + ((b ? b.l : a.l) - a.l) * p;
+    const width = a.w + ((b ? b.w : a.w) - a.w) * p;
     ind.style.transition = animate && placed.current && !reducedMotion() ? MOVE : 'none';
     ind.style.transform = `translateX(${left}px)`;
     ind.style.width = `${width}px`;
     // לנוער הפס הוא "גלולה" מאחורי כל הלשונית, אז גם הגובה והמיקום האנכי של הלשונית זמינים ל-CSS.
-    ind.style.setProperty('--ind-top', `${a.offsetTop}px`);
-    ind.style.setProperty('--ind-h', `${a.offsetHeight}px`);
+    const box = `${a.t}:${a.h}`;
+    if (box !== lastBox.current) {
+      lastBox.current = box;
+      ind.style.setProperty('--ind-top', `${a.t}px`);
+      ind.style.setProperty('--ind-h', `${a.h}px`);
+    }
     ind.style.opacity = '1';
     placed.current = true;
   }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // לשונית חדשה (בלחיצה או בסוף החלקה): הפס מחליק אליה. שינוי גודל (סיבוב מסך, שפה) מציב מחדש בלי אנימציה.
   useLayoutEffect(() => {
+    geo.current = null;
     place(null, 0, true);
     const nav = navRef.current;
     if (!nav || typeof ResizeObserver === 'undefined') return undefined;
@@ -50,6 +66,7 @@ export function useTabIndicator(navRef, tab, tabs) {
       const k = key();
       if (k === last) return;
       last = k;
+      geo.current = null;
       place(null, 0, false);
     });
     ro.observe(nav);

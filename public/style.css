@@ -23,6 +23,8 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* הדף כולו (כותרת ולשוניות) לא נגרר הצידה גם אם איזה אלמנט גולש לרוחב; גלילה אופקית פנימית (שורות, טבלאות) נשארת */
+  overflow-x: clip;
   min-height: 100%;
   /* הרקע וה-color-scheme של הערכה חייבים לשבת גם על html: אחרת הקנבס מאחורי ה-body (גלילה חוצה, פס תחתון, שינוי גובה סרגל הכתובת) נשאר בהיר */
   background: var(--bg);
@@ -117,6 +119,8 @@ main { flex: 1 1 auto; width: 100%; max-width: 640px; margin: 0 auto; padding: 1
 .panel.active { display: block; }
 /* בזמן החלקה בין לשוניות (useTabSwipe) הלשונית זזה הצידה - בלי פס גלילה אופקי לכל הדף */
 main.swiping { overflow-x: clip; }
+/* רק בזמן ההחלקה הלשונית מקבלת שכבה משלה (GPU) - כך התזוזה והדהייה חלקות. לא קבוע: transform קבוע היה הופך את הלשונית ליעד של כל אלמנט fixed שבתוכה */
+main.swiping > .panel.active { will-change: transform, opacity; backface-visibility: hidden; }
 h2 { font-size: 1.1rem; margin: 22px 0 10px; }
 
 /* בני המשפחה: שורה קטנה לכל אדם, ודף אישי בחלון תחתון */

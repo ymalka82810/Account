@@ -3,7 +3,10 @@
 // בעברית (RTL) הלשונית הראשונה בימין, אז אצבע שזזה ימינה מושכת את הדף וחושפת את הלשונית שמשמאל - הבאה בסדר.
 // גלילה אנכית נשארת של הדפדפן (touch-action: pan-y). לא מתחילים החלקה משדות קלט, ולא מתוך שורה שנגללת לרוחב
 // (כמו שורת הדמויות) כל עוד היא יכולה עוד לגלול לכיוון הזה. רק מגע (לא עכבר), כדי לא להפריע לבחירת טקסט במחשב.
-import { useRef, useLayoutEffect } from 'react';
+// חלקות: כל המדידות (כיוון, רוחב) נעשות פעם אחת בתחילת ההחלקה, והתזוזה עצמה נכתבת פעם אחת לכל פריים (rAF).
+// החלק העליון (כותרת ולשוניות) לא זז: בזמן ההחלקה אין גלילה של הדף, ובהחלפת הלשונית מיקום הגלילה נשמר.
+import { useRef, useLayoutEffect, useCallback } from 'react';
+import { flushSync } from 'react-dom';
 import { reducedMotion } from './motion.js';
 
 const START_PX = 10;
@@ -45,26 +48,37 @@ function innerScrolls(/** @type {Element | null} */ from, /** @type {HTMLElement
 export function useTabSwipe(tabs, tab, setTab, onDrag = undefined) {
   /** @type {import('react').MutableRefObject<HTMLElement | null>} */
   const rootRef = useRef(null);
-  /** @type {import('react').MutableRefObject<{ id: number, x: number, y: number, t: number, dx: number, active: boolean, target: Element | null } | null>} */
+  /** @type {import('react').MutableRefObject<{ id: number, x: number, y: number, t: number, dx: number, ox: number, active: boolean, target: Element | null, rtl: boolean, width: number } | null>} */
   const drag = useRef(null);
   /** @type {import('react').MutableRefObject<number>} כיוון הכניסה של הלשונית הבאה: 1 מימין, -1 משמאל, 0 בלי אנימציה */
   const enterFrom = useRef(0);
   const busy = useRef(false);
   const suppressClick = useRef(false);
 
+  // בזמן החלקה פעילה הדף לא גולל (אחרת הכותרת והלשוניות זזות יחד עם האצבע). מאזין לא-פסיבי חייב להיות native.
+  const blockTouchMove = useCallback((/** @type {TouchEvent} */ e) => {
+    if (drag.current?.active && e.cancelable) e.preventDefault();
+  }, []);
+  // ref כפונקציה: ה-main לא תמיד קיים בעליית הקומפוננטה (למשל בזמן DeviceGate), והמאזין מתחבר כשהוא מופיע.
+  const setRoot = useCallback((/** @type {HTMLElement | null} */ node) => {
+    rootRef.current?.removeEventListener('touchmove', blockTouchMove);
+    rootRef.current = node;
+    node?.addEventListener('touchmove', blockTouchMove, { passive: false });
+  }, [blockTouchMove]);
+
   const panel = () => /** @type {HTMLElement | null} */ (rootRef.current?.querySelector(':scope > .panel.active') ?? null);
 
   // הלשונית הסמוכה לכיוון האצבע, או null בקצוות. כמו דפדוף בדף אמיתי: האצבע מושכת את התוכן הצידה וחושפת את
   // הלשונית שנמצאת בתפריט בצד השני. ב-RTL (הבאה משמאל) אצבע ימינה מביאה את הבאה; ב-LTR אצבע שמאלה.
-  const neighbor = (/** @type {number} */ dx) => {
+  const neighbor = (/** @type {number} */ dx, /** @type {boolean} */ rtl) => {
     const i = tabs.indexOf(tab);
     if (i < 0) return null;
-    const forward = isRtl() ? dx > 0 : dx < 0;
+    const forward = rtl ? dx > 0 : dx < 0;
     return tabs[i + (forward ? 1 : -1)] ?? null;
   };
 
-  const clearStyles = (/** @type {HTMLElement | null} */ el) => {
-    if (!el) return;
+  const clearStyles = (/** @type {Element | null} */ el) => {
+    if (!(el instanceof HTMLElement)) return;
     el.style.transition = '';
     el.style.transform = '';
     el.style.opacity = '';
@@ -75,13 +89,34 @@ export function useTabSwipe(tabs, tab, setTab, onDrag = undefined) {
     rootRef.current?.classList.remove('swiping');
   };
 
-  // אחרי שהלשונית התחלפה: הלשונית החדשה נכנסת מהצד שממנו הגיעה.
+  // חזרה רכה למקום (שחרור לפני הסף, או ביטול המגע).
+  const snapBack = (/** @type {HTMLElement | null} */ el) => {
+    onDrag?.(null, 0, true);
+    if (!el) { finish(); return; }
+    el.style.transition = `transform 220ms ${EASE_IN}, opacity 220ms ${EASE_IN}`;
+    el.style.transform = 'translateX(0)';
+    el.style.opacity = '1';
+    window.setTimeout(() => { clearStyles(el); finish(); }, 240);
+  };
+
+  // מחליף לשונית בציור סינכרוני אחד (בלי פריים ביניים שבו הלשונית הישנה חוזרת להיראות).
+  // setTab גולל לראש הדף; כאן שומרים את הגלילה כדי שהכותרת והלשוניות לא יקפצו: אם הכותרת כבר גלולה החוצה
+  // הלשוניות נשארות צמודות למעלה והתוכן החדש מתחיל מתחתן, ואם היא נראית חלקית היא נשארת בדיוק איפה שהייתה.
+  const commit = (/** @type {string} */ next, /** @type {number} */ scrollY) => {
+    flushSync(() => setTab(next));
+    const h = document.querySelector('header.top');
+    const max = h instanceof HTMLElement ? h.offsetTop + h.offsetHeight : 0;
+    window.scrollTo(0, Math.min(scrollY, max));
+  };
+
+  // אחרי שהלשונית התחלפה: הלשונית החדשה נכנסת מהצד שממנו הגיעה, והישנה (שנשארה שקופה ומוסטת) מתנקה.
   useLayoutEffect(() => {
+    for (const p of rootRef.current?.querySelectorAll(':scope > .panel:not(.active)') ?? []) clearStyles(p);
     const from = enterFrom.current;
     enterFrom.current = 0;
     if (!from) return;
     const el = panel();
-    if (!el || reducedMotion()) { finish(); return; }
+    if (!el || reducedMotion()) { clearStyles(el); finish(); return; }
     el.style.transition = 'none';
     el.style.transform = `translateX(${from * SHIFT * 100}%)`;
     el.style.opacity = '0';
@@ -94,14 +129,14 @@ export function useTabSwipe(tabs, tab, setTab, onDrag = undefined) {
   }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const props = {
-    ref: rootRef,
+    ref: setRoot,
     style: { touchAction: 'pan-y' },
     onPointerDown(/** @type {import('react').PointerEvent<HTMLElement>} */ e) {
       suppressClick.current = false;
       if (e.pointerType !== 'touch' || busy.current || tabs.length < 2) return;
       const target = /** @type {Element} */ (e.target);
       if (target.closest?.(NO_SWIPE)) return;
-      drag.current = { id: e.pointerId, x: e.clientX, y: e.clientY, t: e.timeStamp, dx: 0, active: false, target };
+      drag.current = { id: e.pointerId, x: e.clientX, y: e.clientY, t: e.timeStamp, dx: 0, ox: 0, active: false, target, rtl: false, width: 0 };
     },
     onPointerMove(/** @type {import('react').PointerEvent<HTMLElement>} */ e) {
       const d = drag.current;
@@ -113,6 +148,11 @@ export function useTabSwipe(tabs, tab, setTab, onDrag = undefined) {
         if (Math.abs(dx) < START_PX || Math.abs(dx) < Math.abs(dy) * 1.3) return;
         if (innerScrolls(d.target, e.currentTarget, dx)) { drag.current = null; return; }
         d.active = true;
+        // כל מה שדורש מדידה נקבע פעם אחת כאן, ולא בכל תזוזה (קריאות layout באמצע גרירה גורמות לקטיעות).
+        d.rtl = isRtl();
+        d.width = e.currentTarget.clientWidth || window.innerWidth;
+        // התוכן מתחיל לזוז מנקודת ההפעלה ולא קופץ בבת אחת את מרחק הסף.
+        d.ox = dx;
         try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* ignore */ }
         e.currentTarget.classList.add('swiping');
         const el = panel();
@@ -122,12 +162,12 @@ export function useTabSwipe(tabs, tab, setTab, onDrag = undefined) {
       const el = panel();
       if (!el) return;
       // בקצה (אין לשונית לשם) - תזוזה קטנה ומתנגדת, רק כדי להרגיש שאין לאן.
-      const next = neighbor(dx);
-      const move = next ? dx : dx * 0.2;
-      const width = e.currentTarget.clientWidth || window.innerWidth;
-      onDrag?.(next, next ? Math.min(1, Math.abs(dx) / width) : 0, false);
+      const next = neighbor(dx, d.rtl);
+      const rel = dx - d.ox;
+      const move = next ? rel : rel * 0.2;
+      onDrag?.(next, next ? Math.min(1, Math.abs(dx) / d.width) : 0, false);
       el.style.transform = `translateX(${move}px)`;
-      el.style.opacity = String(Math.max(0.4, 1 - Math.abs(move) / (window.innerWidth * 1.2)));
+      el.style.opacity = String(Math.max(0.4, 1 - Math.abs(move) / (d.width * 1.2)));
     },
     onPointerUp(/** @type {import('react').PointerEvent<HTMLElement>} */ e) {
       const d = drag.current;
@@ -136,37 +176,29 @@ export function useTabSwipe(tabs, tab, setTab, onDrag = undefined) {
       suppressClick.current = true;
       window.setTimeout(() => { suppressClick.current = false; }, 350);
       const el = panel();
-      const next = neighbor(d.dx);
-      const width = e.currentTarget.clientWidth || window.innerWidth;
+      const next = neighbor(d.dx, d.rtl);
+      const width = d.width;
       const fast = Math.abs(d.dx) / Math.max(1, e.timeStamp - d.t) > FAST_PX_PER_MS;
-      if (!el || !next || (Math.abs(d.dx) < width * COMMIT_RATIO && !fast)) {
-        onDrag?.(null, 0, true);
-        if (el) {
-          el.style.transition = `transform 220ms ${EASE_IN}, opacity 220ms ${EASE_IN}`;
-          el.style.transform = 'translateX(0)';
-          el.style.opacity = '1';
-          window.setTimeout(() => { clearStyles(el); finish(); }, 240);
-        } else finish();
-        return;
-      }
+      if (!el || !next || (Math.abs(d.dx) < width * COMMIT_RATIO && !fast)) { snapBack(el); return; }
       busy.current = true;
       onDrag?.(next, 1, true);
       const dir = d.dx > 0 ? 1 : -1;
-      if (reducedMotion()) { clearStyles(el); finish(); setTab(next); return; }
+      const scrollY = window.scrollY;
+      if (reducedMotion()) { clearStyles(el); finish(); commit(next, scrollY); return; }
       el.style.transition = `transform ${OUT_MS}ms ${EASE_OUT}, opacity ${OUT_MS}ms ${EASE_OUT}`;
       el.style.transform = `translateX(${dir * Math.max(Math.abs(d.dx), width * SHIFT)}px)`;
       el.style.opacity = '0';
       window.setTimeout(() => {
-        clearStyles(el);
+        // הלשונית הישנה נשארת שקופה במקומה עד שהחדשה מצוירת (נוקתה ב-layout effect), בלי הבהוב באמצע.
         // הלשונית החדשה נכנסת מהצד ההפוך לתנועת האצבע.
         enterFrom.current = -dir;
-        setTab(next);
+        commit(next, scrollY);
       }, OUT_MS);
     },
     onPointerCancel() {
       const d = drag.current;
       drag.current = null;
-      if (d?.active) { clearStyles(panel()); finish(); onDrag?.(null, 0, true); }
+      if (d?.active) snapBack(panel());
     },
     // אחרי החלקה לא נחשב לחיצה על כפתור שהאצבע התחילה עליו.
     onClickCapture(/** @type {import('react').MouseEvent} */ e) {
