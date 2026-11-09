@@ -92,3 +92,16 @@ test('ה-main נמתח עד תחתית המסך כך שהחלקה באזור ה�
   const bottom = await page.evaluate(() => document.querySelector('main').getBoundingClientRect().bottom);
   expect(bottom).toBeGreaterThanOrEqual(844 - 1);
 });
+
+// החלק העליון (כותרת ולשוניות) לא קופץ בהחלפת לשונית בהחלקה, גם כשהדף גלול והלשונית החדשה קצרה יותר.
+test('הכותרת והלשוניות נשארות במקום בהחלקה כשהדף גלול', async ({ page }) => {
+  await enterDemo(page);
+  await page.locator('nav.tabs [data-tab="home"]').click();
+  await page.evaluate(() => window.scrollTo(0, 150));
+  const tops = () => page.evaluate(() => [document.querySelector('header.top').getBoundingClientRect().top, document.querySelector('nav.tabs').getBoundingClientRect().top].map(Math.round));
+  await expect.poll(() => page.evaluate(() => Math.round(scrollY))).toBe(150);
+  const before = await tops();
+  await swipe(page, 200); // בית -> היסטוריה (קצרה יותר)
+  await expect(active(page)).toHaveAttribute('data-tab', 'history');
+  expect(await tops()).toEqual(before);
+});

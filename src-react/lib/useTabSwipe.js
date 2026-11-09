@@ -38,6 +38,16 @@ function innerScrolls(/** @type {Element | null} */ from, /** @type {HTMLElement
   return false;
 }
 
+// גובה מינימלי למעטפת בלי אנימציית מעבר (ל-#screen-app יש transition: all, והגובה החדש היה מתעדכן רק בפריים הבא,
+// כך שהגלילה נחתכת בדיוק ברגע שצריך לשמור אותה).
+function setShellMin(/** @type {HTMLElement | null | undefined} */ shell, /** @type {string} */ value) {
+  if (!shell) return;
+  shell.style.transition = 'none';
+  shell.style.minHeight = value;
+  void shell.offsetHeight;
+  requestAnimationFrame(() => { shell.style.transition = ''; });
+}
+
 /**
  * @param {string[]} tabs הלשוניות לפי הסדר בתפריט
  * @param {string} tab הלשונית הנוכחית
@@ -54,6 +64,8 @@ export function useTabSwipe(tabs, tab, setTab, onDrag = undefined) {
   const enterFrom = useRef(0);
   const busy = useRef(false);
   const suppressClick = useRef(false);
+  /** @type {import('react').MutableRefObject<string>} הלשונית שהמעטפת הוגדלה בשבילה (commit); ה-layout effect לא מנקה אותה */
+  const holdFor = useRef('');
 
   // בזמן החלקה פעילה הדף לא גולל (אחרת הכותרת והלשוניות זזות יחד עם האצבע). מאזין לא-פסיבי חייב להיות native.
   const blockTouchMove = useCallback((/** @type {TouchEvent} */ e) => {
@@ -103,14 +115,24 @@ export function useTabSwipe(tabs, tab, setTab, onDrag = undefined) {
   // setTab גולל לראש הדף; כאן שומרים את הגלילה כדי שהכותרת והלשוניות לא יקפצו: אם הכותרת כבר גלולה החוצה
   // הלשוניות נשארות צמודות למעלה והתוכן החדש מתחיל מתחתן, ואם היא נראית חלקית היא נשארת בדיוק איפה שהייתה.
   const commit = (/** @type {string} */ next, /** @type {number} */ scrollY) => {
+    setShellMin(rootRef.current?.parentElement, '');
+    holdFor.current = next;
     flushSync(() => setTab(next));
     const h = document.querySelector('header.top');
     const max = h instanceof HTMLElement ? h.offsetTop + h.offsetHeight : 0;
-    window.scrollTo(0, Math.min(scrollY, max));
+    const target = Math.min(scrollY, max);
+    // לשונית קצרה מהקודמת: אין לדף מספיק גובה לשמור את הגלילה, והדפדפן היה מקצר אותה והכותרת הייתה קופצת פנימה.
+    // מגדילים זמנית את גובה המעטפת (#root) עד שהמיקום אפשרי; מתנקה בהחלפת הלשונית הבאה.
+    const shell = rootRef.current?.parentElement;
+    if (shell && document.documentElement.scrollHeight < target + window.innerHeight) {
+      setShellMin(shell, `${target + window.innerHeight}px`);
+    }
+    window.scrollTo(0, target);
   };
 
   // אחרי שהלשונית התחלפה: הלשונית החדשה נכנסת מהצד שממנו הגיעה, והישנה (שנשארה שקופה ומוסטת) מתנקה.
   useLayoutEffect(() => {
+    if (holdFor.current !== tab) setShellMin(rootRef.current?.parentElement, '');
     for (const p of rootRef.current?.querySelectorAll(':scope > .panel:not(.active)') ?? []) clearStyles(p);
     const from = enterFrom.current;
     enterFrom.current = 0;
