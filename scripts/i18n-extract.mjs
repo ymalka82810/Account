@@ -94,7 +94,8 @@ if (process.argv.includes('--check')) {
   let bad = 0;
   for (const f of readdirSync(dir).filter((x) => x.endsWith('.json'))) {
     const d = JSON.parse(readFileSync(join(dir, f), 'utf8'));
-    const missing = sorted.filter((k) => !(k in d) || d[k] === '' || d[k] == null);
+    // ערך שנשאר בעברית (העתקה של המפתח במקום תרגום) נחשב חסר
+    const missing = sorted.filter((k) => !(k in d) || d[k] === '' || d[k] == null || HEB.test(JSON.stringify(d[k])));
     const extra = Object.keys(d).filter((k) => !keys.has(k));
     if (missing.length || extra.length) {
       bad++;

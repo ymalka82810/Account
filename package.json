@@ -11,7 +11,10 @@
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "node scripts/typecheck.mjs",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "i18n:extract": "node scripts/i18n-extract.mjs",
+    "i18n:check": "node scripts/i18n-extract.mjs --check",
+    "i18n:build": "node scripts/i18n-build.mjs"
   },
   "dependencies": {
     "@capacitor/app": "^8.1.2",
