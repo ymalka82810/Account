@@ -35,6 +35,7 @@ import UiIcon, { withIcons } from './components/shared/UiIcon.jsx';
 import ErrorBoundary from './components/shared/ErrorBoundary.jsx';
 import NoConnection from './components/shared/NoConnection.jsx';
 import { reducedMotion } from './lib/feel.js';
+import { visibleTimeout } from './lib/visibleTimeout.js';
 
 const ICON_CURRENCY_KEY = 'app-icon-currency';
 
@@ -189,8 +190,8 @@ function Root() {
   const [retryTick, setRetryTick] = useState(0);
   useEffect(() => {
     if (rawScreen !== 'loading') { setStalled(false); return undefined; }
-    const timer = setTimeout(() => setStalled(true), stallMs());
-    return () => clearTimeout(timer);
+    // נספר רק זמן שהדף גלוי: בחזרה מהרקע החיבור צריך כמה רגעים להתחבר מחדש, ולא מציגים "אין חיבור" לפני כן.
+    return visibleTimeout(() => setStalled(true), stallMs());
   }, [rawScreen, retryTick]);
   useEffect(() => {
     if (!rosterPause) return undefined;
