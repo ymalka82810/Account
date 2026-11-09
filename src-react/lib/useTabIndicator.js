@@ -43,13 +43,17 @@ export function useTabIndicator(navRef, tab, tabs) {
     const nav = navRef.current;
     if (!nav || typeof ResizeObserver === 'undefined') return undefined;
     // ResizeObserver מדווח גם מיד בהתחלה; מציבים מחדש רק כשהרוחב באמת השתנה, כדי לא לעצור את ההחלקה.
-    let w = nav.clientWidth;
+    // גם הלשוניות עצמן נצפות: גופן שנטען או תווית שהתחלפה משנים את הרוחב שלהן בלי לשנות את הסרגל.
+    const key = () => [...nav.children].map((c) => (c instanceof HTMLElement && c !== indRef.current ? `${c.offsetLeft}:${c.offsetWidth}` : '')).join();
+    let last = key();
     const ro = new ResizeObserver(() => {
-      if (nav.clientWidth === w) return;
-      w = nav.clientWidth;
+      const k = key();
+      if (k === last) return;
+      last = k;
       place(null, 0, false);
     });
     ro.observe(nav);
+    for (const c of nav.children) if (c !== indRef.current) ro.observe(c);
     return () => ro.disconnect();
   }, [place, tabs.join()]); // eslint-disable-line react-hooks/exhaustive-deps
 
