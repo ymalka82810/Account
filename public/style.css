@@ -831,6 +831,7 @@ body[data-theme="teen"] .sheet-head { background: #07070b; }
 /* תנאים ופרטיות */
 .check { display: flex; gap: 10px; align-items: flex-start; font-size: .92rem; text-align: start; }
 .check input { width: 22px; height: 22px; flex: none; margin-top: 2px; accent-color: var(--coin-deep); }
+.check input[aria-invalid="true"] { outline: 2px solid var(--owe); outline-offset: 2px; border-radius: 4px; }
 .legal { text-align: center; font-size: .88rem; color: var(--ink-soft); margin: 18px 0 0; }
 /* קישורי תנאים ופרטיות: אזור מגע של 44px גם בלי להגדיל את גובה השורה (padding בלבד על אלמנט inline) */
 .legal a, .check a { color: inherit; padding-block: 14px; }

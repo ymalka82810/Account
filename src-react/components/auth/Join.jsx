@@ -1,10 +1,11 @@
 import Arrow from '../shared/Arrow.jsx';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { t } from '../../i18n/index.js';
 import { state } from '../../state/state.js';
 import { goView, joinFamily, openNotebook } from '../../state/auth.js';
 import { In, Terms, AvatarPicker, randomAvatar, Tile, useBusy } from './parts.jsx';
 import { withIcons } from '../shared/UiIcon.jsx';
+import { pinOk } from '../../lib/pin.js';
 
 export default function Join({ current }) {
   const fam = state.fam;
@@ -15,10 +16,27 @@ export default function Join({ current }) {
   const [sent, setSent] = useState(false);
   const [shareNb, setShareNb] = useState(false);
   const [sentName, setSentName] = useState('');
-  const set = (k) => (e) => setV((x) => ({ ...x, [k]: e.target.value }));
+  const [terms, setTerms] = useState(false);
+  const [bad, setBad] = useState(''); // השדה השגוי הראשון: name | pin | share | terms
+  const formRef = useRef(null);
+  const errRef = useRef(null);
+  const clearErr = () => { setError(''); setBad(''); };
+  const set = (k) => (e) => { setV((x) => ({ ...x, [k]: e.target.value })); clearErr(); };
+  // שגיאה גלויה בעיצוב האפליקציה (לא בועת הדפדפן, שנדחסת בצד המסך): מסמנים את השדה ומעבירים אליו פוקוס
+  const fail = (msg, field) => {
+    setError(msg); setBad(field);
+    const box = formRef.current && formRef.current.querySelector('[data-f="' + field + '"]');
+    const el = box && (box.matches('input, button') ? box : box.querySelector('input, button'));
+    if (el) el.focus();
+    setTimeout(() => errRef.current && errRef.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 60);
+  };
   const submit = (ev) => {
     ev.preventDefault();
-    setError('');
+    clearErr();
+    if (!v.name.trim()) return fail(t('כתבו איך קוראים לך'), 'name');
+    if (!pinOk(v.pin, 'child')) return fail(t('הקוד הסודי צריך להיות בדיוק 4 ספרות'), 'pin');
+    if (!shareNb) return fail(t('צריך לאשר שההורים יראו את הפנקס האישי שלך'), 'share');
+    if (!terms) return fail(t('צריך לאשר את תנאי השימוש ומדיניות הפרטיות'), 'terms');
     run(async () => {
       const err = await joinFamily({ ...v, avatar });
       if (err && err.pending) { setSentName(v.name); setSent(true); }
@@ -56,18 +74,18 @@ export default function Join({ current }) {
         <p className="hint">
           {fam && t('מצטרפים לקופה של {name}. הורה במשפחה צריך לאשר את ההצטרפות ויקבע אם את/ה ילד/ה, נער/ה או הורה.', { name: fam.name })}
         </p>
-        <form className="form" autoComplete="off" onSubmit={submit}>
-          <label className="field"><span>{t('איך קוראים לך?')}</span>
-            <input type="text" maxLength={20} required value={v.name} onChange={set('name')} /></label>
+        <form className="form" autoComplete="off" noValidate ref={formRef} onSubmit={submit}>
+          <label className="field" data-f="name"><span>{t('איך קוראים לך?')}</span>
+            <input type="text" maxLength={20} required aria-invalid={bad === 'name' || undefined} className={bad === 'name' ? 'invalid' : undefined} value={v.name} onChange={set('name')} /></label>
           <div className="field"><span>{t('בחר/י דמות')}</span>
             <AvatarPicker value={avatar} onChange={setAvatar} /></div>
-          <label className="field"><span>{t('קוד סודי משלך (4 ספרות)')}</span>
+          <label className="field" data-f="pin"><span>{t('קוד סודי משלך (4 ספרות)')}</span>
             <input type="password" inputMode="numeric" pattern="\d{4}" maxLength={4} required autoComplete="new-password"
-              value={v.pin} onChange={set('pin')} /></label>
-          <label className="check"><input type="checkbox" required checked={shareNb} onChange={(e) => setShareNb(e.target.checked)} />
+              aria-invalid={bad === 'pin' || undefined} className={bad === 'pin' ? 'invalid' : undefined} value={v.pin} onChange={set('pin')} /></label>
+          <label className="check" data-f="share"><input type="checkbox" required aria-invalid={bad === 'share' || undefined} checked={shareNb} onChange={(e) => { setShareNb(e.target.checked); clearErr(); }} />
             <span>{t('אני מאשר/ת שההורים במשפחה יראו את מה שרשמתי בפנקס האישי שלי. הם יכולים רק לצפות, לא לשנות או למחוק.')}</span></label>
-          <label className="check"><input type="checkbox" required /><Terms extra={t('. ילדים מצטרפים בהסכמת הורה')} /></label>
-          {error && <p className="error" role="alert">{error}</p>}
+          <label className="check" data-f="terms"><input type="checkbox" required aria-invalid={bad === 'terms' || undefined} checked={terms} onChange={(e) => { setTerms(e.target.checked); clearErr(); }} /><Terms extra={t('. ילדים מצטרפים בהסכמת הורה')} /></label>
+          {error && <p className="error" role="alert" ref={errRef}>{error}</p>}
           <button className="primary" type="submit" disabled={busy} aria-busy={busy}>{busy ? t('⏳ רגע…') : t('הצטרפות')}</button>
         </form>
       </div>
