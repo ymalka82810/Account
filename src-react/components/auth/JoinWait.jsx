@@ -91,7 +91,6 @@ export default function JoinWait({ pending, onNew, askParent }) {
       <button className={slow || (st && !st.notified) ? 'primary' : 'ghost'} type="button" onClick={askParent}>{t('💬 שלחו להורה בוואטסאפ')}</button>
       <p className="hint">{t('בינתיים אפשר לרשום בפנקס האישי, שנשמר במכשיר שלך.')}</p>
       <button className="ghost" type="button" onClick={openNotebook}>{withIcons(t('📒 בינתיים, לפנקס האישי'))}</button>
-      <button className="ghost linkish" type="button" onClick={() => goView('welcome')}>{t('חזרה (הבקשה נשארת פתוחה)')}</button>
     </div>
   );
 }
