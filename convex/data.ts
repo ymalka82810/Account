@@ -74,7 +74,7 @@ export const get = query({
         : [],
       entries: entries.map((e) => ({
         id: e._id, kind: e.kind, from: e.from, to: e.to, amount: e.amount, note: e.note,
-        currency: e.currency ?? DEFAULT_CURRENCY, fx: e.fx ?? null,
+        currency: e.currency ?? DEFAULT_CURRENCY, fx: e.fx ?? null, rateAt: e.rateAt ?? null,
         date: e.date, createdBy: e.createdBy ?? null, createdAt: e.createdAt ?? e._creationTime,
         status: e.status ?? "approved",
         debtId: e.debtId ?? null,
@@ -85,5 +85,29 @@ export const get = query({
         weekday: r.weekday ?? null, monthDay: r.monthDay ?? null, nextDate: r.nextDate,
       })),
     };
+  },
+});
+
+// החובות שלי שכבר נסגרו לגמרי (archived), מהחדש לישן. data:get שולח רק רשומות פעילות, והפנקס האישי
+// צריך לדעת שחוב מהמשפחה שולם (ולא נמחק) כדי להעביר אותו ל"שולמו". עם תקרה מפורשת לקריאה ולתוצאה.
+const CLOSED_SCAN = 300;
+const CLOSED_MAX = 80;
+export const closedDebts = query({
+  args: { token: v.string() },
+  handler: async (ctx, { token }) => {
+    const me = await getSessionPerson(ctx, token);
+    if (!me || !me.familyId) return [];
+    const mine = [
+      ...(await ctx.db.query("entries").withIndex("by_from", (q) => q.eq("from", me._id)).order("desc").take(CLOSED_SCAN)),
+      ...(await ctx.db.query("entries").withIndex("by_to", (q) => q.eq("to", me._id)).order("desc").take(CLOSED_SCAN)),
+    ];
+    return mine
+      .filter((e) => e.archived && e.kind === "debt" && e.familyId === me.familyId && e.status !== "pending")
+      .sort((a, b) => b._creationTime - a._creationTime)
+      .slice(0, CLOSED_MAX)
+      .map((e) => ({
+        id: e._id, from: e.from, to: e.to, amount: e.amount, note: e.note,
+        currency: e.currency ?? DEFAULT_CURRENCY, date: e.date,
+      }));
   },
 });

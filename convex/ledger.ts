@@ -2,7 +2,7 @@ import { internalMutation, MutationCtx } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { v } from "convex/values";
 import { Doc, Id } from "./_generated/dataModel";
-import { Rates, convert, curOf } from "./currency";
+import { Rates, convert, curOf, ratesFor } from "./currency";
 import { loadRates } from "./fx";
 
 // ארכוב: כשכל החובות של כיוון מסוים (from → to) שולמו ואין החזר עודף, כל הרשומות המאושרות של
@@ -26,15 +26,15 @@ const order = (a: Entry, b: Entry) =>
 // קודם החזרים מקושרים, ואז החזרים כלליים מהישן לחדש. בספק (חסר שער, חוב חסר) מחזיר false.
 export function isSettled(entries: Entry[], rates: Rates | null): boolean {
   const debts = entries.filter((e) => e.kind === "debt").sort(order);
-  const state = new Map<Id<"entries">, { cur: string; remaining: number }>();
-  for (const d of debts) state.set(d._id, { cur: curOf(d), remaining: d.amount });
+  const state = new Map<Id<"entries">, { debt: Entry; cur: string; remaining: number }>();
+  for (const d of debts) state.set(d._id, { debt: d, cur: curOf(d), remaining: d.amount });
   const pays = entries.filter((e) => e.kind === "payment").sort(order);
 
   for (const e of pays) {
     if (!e.debtId) continue;
     const st = state.get(e.debtId);
     if (!st) return false;
-    const r = convert(1, st.cur, curOf(e), e.fx ?? rates);
+    const r = convert(1, st.cur, curOf(e), ratesFor(st.debt, e, rates));
     if (r === null) return false;
     const used = Math.min(st.remaining, e.amount / r);
     st.remaining -= used;
@@ -48,7 +48,7 @@ export function isSettled(entries: Entry[], rates: Rates | null): boolean {
       if (left < EPS) break;
       const st = state.get(d._id)!;
       if (st.remaining <= 0) continue;
-      const r = convert(1, st.cur, curOf(e), e.fx ?? rates);
+      const r = convert(1, st.cur, curOf(e), ratesFor(st.debt, e, rates));
       if (r === null) continue;
       const take = Math.min(left, st.remaining * r);
       st.remaining -= take / r;

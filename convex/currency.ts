@@ -42,12 +42,30 @@ export function fmtMoney(amount: number, currency: string = DEFAULT_CURRENCY): s
   return sym ? sym + n : `${n} ${currency}`;
 }
 
+export type RateAt = "loan" | "payment";
+type DebtFx = { currency?: string; fx?: Rates; rateAt?: RateAt };
+
+// השערים שלפיהם החזר יורד מחוב. חוב שנקבע לו "לפי השער ביום ההלוואה" (rateAt = loan) מומר תמיד
+// לפי השערים שנשמרו בו; אחרת לפי השערים שנשמרו בהחזר (יום התשלום), ואם אין - השערים הנוכחיים.
+export function ratesFor(debt: DebtFx, pay: { currency?: string; fx?: Rates }, rates: Rates | null | undefined): Rates | null | undefined {
+  if (debt.rateAt === "loan" && debt.fx && debt.fx[curOf(debt)] && debt.fx[curOf(pay)]) return debt.fx;
+  return pay.fx ?? rates;
+}
+
+// השערים שנשמרים בחוב במטבע זר: רק המטבעות הרלוונטיים (מטבע החוב, המטבעות שבהם ישלמו אותו, ודולר).
+export function debtFx(rates: Rates | null, currencies: string[]): Rates | undefined {
+  if (!rates) return undefined;
+  const out: Rates = {};
+  for (const c of new Set([...currencies, "USD"])) if (rates[c]) out[c] = rates[c];
+  return currencies.every((c) => out[c]) ? out : undefined;
+}
+
 // כמה מחוב מסוים כבר הוחזר (במטבע החוב), לפי ההחזרים שקושרו אליו ושערי ההמרה שנשמרו בהם.
-export function paidOnDebt(debt: { _id: unknown; currency?: string }, all: { kind: string; debtId?: unknown; amount: number; currency?: string; fx?: Rates }[], rates: Rates | null): number {
+export function paidOnDebt(debt: { _id: unknown } & DebtFx, all: { kind: string; debtId?: unknown; amount: number; currency?: string; fx?: Rates }[], rates: Rates | null): number {
   let paid = 0;
   for (const x of all) {
     if (x.kind !== "payment" || x.debtId !== debt._id) continue;
-    const c = convert(x.amount, curOf(x), curOf(debt), x.fx ?? rates);
+    const c = convert(x.amount, curOf(x), curOf(debt), ratesFor(debt, x, rates));
     if (c !== null) paid += c;
   }
   return paid;

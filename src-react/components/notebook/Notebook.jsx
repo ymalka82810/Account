@@ -7,10 +7,10 @@ import PalettePicker from '../shared/PalettePicker.jsx';
 import Reveal from '../shared/Reveal.jsx';
 import { GoldBarArt, SumNum } from '../shared/GoldBar.jsx';
 import { today, toast } from '../../lib/helpers.js';
-import { money, fmtDate } from '../../lib/computations.js';
+import { money, fmtDate, convert } from '../../lib/computations.js';
 import { currencySymbol } from '../../lib/currencies.js';
 import {
-  useNotebook, NB_SHARED_KEY, notebookCurrency, addEntry, setPaid, removeEntry, restoreEntry, setSetting, setCurrencyChoice, clearPaid, clearAll,
+  useNotebook, NB_SHARED_KEY, notebookCurrency, addEntry, setPaid, removeEntry, restoreEntry, setSetting, setCurrencyChoice, clearPaid, clearAll, mirrorEntries,
   topPeople, searchPeople, similarPeople, renamePerson, normName, offsetCandidates, offsetPerson,
 } from '../../lib/notebook.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
@@ -32,6 +32,28 @@ const pageFromHash = () => (location.hash === SETTINGS_HASH ? 'settings' : 'home
 
 // מעל כמה רישומים מופיע חיפוש בעמוד הראשי
 const SEARCH_MIN = 8;
+
+// הרשימה שמוצגת: מה שנרשם בפנקס, ועוד החובות שהועתקו מהמשפחה ומהחברים (src), מהחדש לישן.
+// המיון יציב, כך שרישומי הפנקס מאותו יום נשארים בסדר שבו נרשמו.
+const allEntries = (nb) => {
+  const mirrored = mirrorEntries(nb);
+  return mirrored.length ? [...nb.entries, ...mirrored].sort((a, b) => String(b.date).localeCompare(String(a.date))) : nb.entries;
+};
+// המטבע של רישום: חוב מועתק נשמר במטבע שלו, ורישום של הפנקס במטבע של הפנקס.
+const curOfRow = (e, cur) => e.currency || cur;
+// סכום של רישומים פתוחים במטבע של הפנקס. חוב מועתק במטבע אחר מומר לפי השערים האחרונים שנשמרו במכשיר
+// (או לפי שער יום ההלוואה שנשמר בו); מה שאין לו שער נשאר בנפרד, לפי מטבע (extra).
+function sumOpen(list, cur, rates) {
+  let main = 0;
+  const extra = {};
+  for (const e of list) {
+    const c = curOfRow(e, cur);
+    const v = c === cur ? e.amount : convert(e.amount, c, cur, (e.fx && e.fx[c] && e.fx[cur]) ? e.fx : rates);
+    if (v === null) extra[c] = (extra[c] || 0) + e.amount; else main += v;
+  }
+  return { main: Math.round(main), extra };
+}
+const extraText = (extra) => Object.entries(extra).map(([c, a]) => money(a, c)).join(' + ');
 
 const sharedWithParents = () => { try { return localStorage.getItem(NB_SHARED_KEY) === '1'; } catch (e) { return false; } };
 
@@ -105,23 +127,26 @@ function Home({ nb, onSettings, pulling, returned, family }) {
     sort === 'amount' ? b.amount - a.amount
       : sort === 'name' ? a.name.localeCompare(b.name, intlLocale())
         : 0); // 'new': הרשימה כבר מהחדש לישן
-  const open = sorted(nb.entries.filter((e) => !e.paid));
-  const done = sorted(nb.entries.filter((e) => e.paid));
+  const all = allEntries(nb);
+  const hasMirror = all.length > nb.entries.length;
+  const open = sorted(all.filter((e) => !e.paid));
+  const done = sorted(all.filter((e) => e.paid));
   // חיפוש מופיע רק כשהרשימה ארוכה (מעל SEARCH_MIN רישומים בסך הכול), כדי לא להכביד על המסך כשהיא קצרה.
   // הסיכומים למעלה תמיד מכל הרישומים הפתוחים, גם כשהחיפוש מסנן את הרשימה.
   const [q, setQ] = useState('');
-  const showSearch = nb.entries.length > SEARCH_MIN;
+  const showSearch = all.length > SEARCH_MIN;
   const query = showSearch ? q.trim() : '';
   const matches = (e) => {
     const needle = query.toLowerCase();
     const amt = (e.amount / 100).toFixed(2);
     return e.name.toLowerCase().includes(needle) || (e.note || '').toLowerCase().includes(needle)
-      || amt.includes(needle.replace(',', '.')) || money(e.amount, cur).includes(query);
+      || amt.includes(needle.replace(',', '.')) || money(e.amount, curOfRow(e, cur)).includes(query);
   };
   const shownOpen = query ? open.filter(matches) : open;
   const shownDone = query ? done.filter(matches) : done;
   const nothingFound = !!query && !shownOpen.length && !(showPaid && shownDone.length);
-  const sum = (d) => open.filter((e) => e.dir === d).reduce((s, e) => s + e.amount, 0);
+  const sum = (d) => sumOpen(open.filter((e) => e.dir === d), cur, nb.mirrorRates);
+  const sums = { iowe: sum('iowe'), owed: sum('owed') };
 
   const offers = offsetCandidates(nb);
   const offset = async (c) => {
@@ -149,16 +174,22 @@ function Home({ nb, onSettings, pulling, returned, family }) {
     toast(was ? t('חזר לרשימה הפתוחה') : t('סומן כשולם'), { label: t('בטל'), onClick: () => setPaid(e.id, was) });
   };
   const row = (e) => (
-    <div className={'row' + (e.paid ? ' paid' : '')} key={e.id}>
+    <div className={'row' + (e.paid ? ' paid' : '') + (e.src ? ' nb-mirror' : '')} key={e.id}>
       <div className="text">
         <strong>{e.name}</strong>
-        <div className="meta">{e.dir === 'iowe' ? t('אני חייב') : t('חייב/ת לי')}{e.note ? ' • ' + e.note : ''} • {fmtDate(e.date)}</div>
+        <div className="meta">{e.dir === 'iowe' ? t('אני חייב') : t('חייב/ת לי')}{e.note ? ' • ' + e.note : ''} • {fmtDate(e.date)}
+          {e.src && !e.paid && e.total > e.amount ? ' • ' + t('נשאר {left} מתוך {total}', { left: money(e.amount, curOfRow(e, cur)), total: money(e.total, curOfRow(e, cur)) }) : ''}</div>
       </div>
-      <strong>{money(e.amount, cur)}</strong>
-      <div className="acts">
-        <button className="small" type="button" onClick={() => pay(e)}>{e.paid ? <><Arrow kind="return" /> {t('עוד לא')}</> : withIcons(t('✅ שולם'))}</button>
-        <RowMenu onDelete={() => del(e)} />
-      </div>
+      <strong>{money(e.amount, curOfRow(e, cur))}</strong>
+      {e.src
+        // חוב שהועתק מהמשפחה או מהחברים: לקריאה בלבד. משלמים ומשנים אותו שם, והפנקס מתעדכן לבד.
+        ? <div className="acts"><span className="tag nb-src" title={e.label}>{e.src === 'friends' ? t('מהחברים') : t('מהמשפחה')}</span></div>
+        : (
+          <div className="acts">
+            <button className="small" type="button" onClick={() => pay(e)}>{e.paid ? <><Arrow kind="return" /> {t('עוד לא')}</> : withIcons(t('✅ שולם'))}</button>
+            <RowMenu onDelete={() => del(e)} />
+          </div>
+        )}
     </div>
   );
 
@@ -177,9 +208,16 @@ function Home({ nb, onSettings, pulling, returned, family }) {
       {sharedWithParents() && <p className="hint">{t('🔒 ההורים שלך יכולים לראות את הפנקס הזה, לצפייה בלבד.')}</p>}
 
       <div className="summary">
-        <div className="sum owe"><GoldBarArt /><div className="lbl">{t('אני חייב')}</div><SumNum amount={sum('iowe')} cur={cur} /></div>
-        <div className="sum get"><GoldBarArt /><div className="lbl">{t('חייבים לי')}</div><SumNum amount={sum('owed')} cur={cur} /></div>
+        <div className="sum owe"><GoldBarArt /><div className="lbl">{t('אני חייב')}</div><SumNum amount={sums.iowe.main} cur={cur} /></div>
+        <div className="sum get"><GoldBarArt /><div className="lbl">{t('חייבים לי')}</div><SumNum amount={sums.owed.main} cur={cur} /></div>
       </div>
+      {/* חוב במטבע אחר שאין לו שער שמור במכשיר לא נכנס לסיכום, ומוצג כאן בנפרד */}
+      {(extraText(sums.iowe.extra) || extraText(sums.owed.extra)) && (
+        <p className="hint nb-extra">
+          {[extraText(sums.iowe.extra) && t('אני חייב') + ': ' + t('ועוד {amounts}', { amounts: extraText(sums.iowe.extra) }),
+            extraText(sums.owed.extra) && t('חייבים לי') + ': ' + t('ועוד {amounts}', { amounts: extraText(sums.owed.extra) })].filter(Boolean).join(' • ')}
+        </p>
+      )}
 
       <div className="bigbtns">
         <button className="bigbtn owe" type="button" onClick={() => sheet.open('', <AddEntry initialDir="iowe" />)}>
@@ -207,7 +245,8 @@ function Home({ nb, onSettings, pulling, returned, family }) {
         )
         : open.length > 0
           ? (shownOpen.length > 0 && <div className="list">{shownOpen.map(row)}</div>)
-          : <div className="empty"><div className="big-emoji" aria-hidden="true">{nb.entries.length ? '🎉' : '📝'}</div>{nb.entries.length ? t('אין כלום פתוח!') : t('עוד אין כלום ברשימה. לחצו על אחד הכפתורים כדי להתחיל.')}</div>}
+          : <div className="empty"><div className="big-emoji" aria-hidden="true">{all.length ? '🎉' : '📝'}</div>{all.length ? t('אין כלום פתוח!') : t('עוד אין כלום ברשימה. לחצו על אחד הכפתורים כדי להתחיל.')}</div>}
+      {hasMirror && <p className="hint">{t('חובות מהמשפחה ומהחברים מועתקים לכאן אוטומטית. כדי לשלם או לשנות אותם נכנסים למשפחה.')}</p>}
 
       {offers.length > 0 && (
         <section className="card nb-offset">
@@ -393,8 +432,8 @@ function Opts({ value, options, onPick, label }) {
 }
 
 function listAsText(nb, cur) {
-  const line = (e) => `${e.dir === 'iowe' ? t('אני חייב ל{name}', { name: e.name }) : t('{name} חייב/ת לי', { name: e.name })}: ${money(e.amount, cur)}${e.note ? ` (${e.note})` : ''}`;
-  const open = nb.entries.filter((e) => !e.paid);
+  const line = (e) => `${e.dir === 'iowe' ? t('אני חייב ל{name}', { name: e.name }) : t('{name} חייב/ת לי', { name: e.name })}: ${money(e.amount, curOfRow(e, cur))}${e.note ? ` (${e.note})` : ''}`;
+  const open = allEntries(nb).filter((e) => !e.paid);
   return open.length ? open.map(line).join('\n') : t('אין כלום פתוח');
 }
 

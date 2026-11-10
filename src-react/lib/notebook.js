@@ -3,7 +3,7 @@ import { deviceCurrency } from './appIcon.js';
 import { normName, nameMatch, topPeople, searchPeople } from './names.js';
 
 // הפנקס האישי: רשימת "אני חייב / חייבים לי" שנשמרת על המכשיר בלבד.
-// בלי משתמש, בלי שרת ובלי סיסמה. תאריך הלידה (אופציונלי) נשמר כאן רק כדי שאפשר
+// בלי משתמש, בלי שרת ובלי סיסמה. חובות מהקופה המשפחתית ומהחברים מועתקים אליו אוטומטית (mirror, בהמשך הקובץ). תאריך הלידה (אופציונלי) נשמר כאן רק כדי שאפשר
 // יהיה לדעת אם מותר להקים קופה משפחתית. הקמה בפועל נבדקת שוב בשרת.
 export const NOTEBOOK_KEY = 'kupa-notebook-v1';
 export const ADULT_AGE = 18;
@@ -38,12 +38,26 @@ function withPeople(d) {
   return changed ? { ...d, people, entries } : d;
 }
 
+// ---------- חובות מהמשפחה ומהחברים (העתק אוטומטי) ----------
+// mirror = { [key]: { kind: 'family' | 'friends', person, label, entries: [...] } }. key לכל משפחה ('fam:<id>')
+// ולחובות החברים שלה ('fr:<id>'). הרשימה נבנית ב-mirror.js מנתוני השרת בכל כניסה ובכל שינוי, ונשמרת כאן כדי
+// שהפנקס יציג אותה גם בלי כניסה ובלי חיבור. היא נפרדת מ-entries בכוונה: היא לקריאה בלבד בפנקס (משנים אותה
+// בקופה), לא נשלחת בעותק שההורים רואים (הם רואים את הקופה ממילא, ומשפחה אחת לא רואה חובות של האחרת),
+// ולא משתתפת בקיזוז, באיחוד שמות ובמחיקה. לכל משפחה נשמר אדם אחד: מי שנכנס אליה אחרון מהמכשיר הזה.
+const validMirror = (m) => {
+  const out = {};
+  if (m && typeof m === 'object') {
+    for (const [key, grp] of Object.entries(m)) if (grp && Array.isArray(grp.entries)) out[key] = grp;
+  }
+  return out;
+};
+
 const load = () => {
   try {
     const d = JSON.parse(localStorage.getItem(NOTEBOOK_KEY) || 'null');
-    if (d && Array.isArray(d.entries)) return withPeople({ birthDate: '', currency: '', ...d, settings: { ...DEFAULT_SETTINGS, ...(d.settings || {}) } });
+    if (d && Array.isArray(d.entries)) return withPeople({ birthDate: '', currency: '', ...d, mirror: validMirror(d.mirror), settings: { ...DEFAULT_SETTINGS, ...(d.settings || {}) } });
   } catch (e) { /* פגום: מתחילים מחדש */ }
-  return { entries: [], people: [], birthDate: '', currency: '', settings: { ...DEFAULT_SETTINGS } };
+  return { entries: [], people: [], mirror: {}, birthDate: '', currency: '', settings: { ...DEFAULT_SETTINGS } };
 };
 
 let data = load();
@@ -58,6 +72,32 @@ function commit(next) {
 }
 
 export const useNotebook = () => useSyncExternalStore(subscribe, snapshot, snapshot);
+
+// מחליף את ההעתק של מקור אחד (משפחה או חברים). בלי שינוי בתוכן לא נשמר כלום, כדי שלא יהיו רינדורים מיותרים.
+export function setMirror(key, group) {
+  const prev = (data.mirror || {})[key];
+  if (prev && JSON.stringify(prev) === JSON.stringify(group)) return;
+  commit({ ...data, mirror: { ...(data.mirror || {}), [key]: group } });
+}
+// מסיר את ההעתק של מקור (יצאת מהמשפחה, הקופה נמחקה, מצב חברים כובה).
+export function dropMirror(key) {
+  if (!data.mirror || !(key in data.mirror)) return;
+  const { [key]: gone, ...rest } = data.mirror;
+  commit({ ...data, mirror: rest });
+}
+// כל מה שהועתק ממשפחה אחת (הקופה וחובות החברים שלה).
+export function dropFamilyMirror(familyId) {
+  dropMirror('fam:' + familyId);
+  dropMirror('fr:' + familyId);
+}
+// שערי ההמרה האחרונים שהגיעו מהשרת, כדי שהסיכום בפנקס יחשב חוב במטבע אחר גם בלי חיבור.
+export function setMirrorRates(rates) {
+  if (!rates || JSON.stringify(data.mirrorRates || null) === JSON.stringify(rates)) return;
+  commit({ ...data, mirrorRates: rates });
+}
+// כל החובות המועתקים, עם המקור שלהם (src: 'family' | 'friends', label: שם המשפחה).
+export const mirrorEntries = (nb = data) => Object.values(nb.mirror || {})
+  .flatMap((grp) => grp.entries.map((e) => ({ ...e, src: grp.kind, label: grp.label || '' })));
 
 export const notebookCurrency = () => data.currency || deviceCurrency() || 'USD';
 

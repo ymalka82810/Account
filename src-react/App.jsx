@@ -9,12 +9,13 @@ import { restoreFamily, startPin, autoSkipPerson, dropSession, endDemo, deviceHa
 import { syncPush } from './lib/push.js';
 import { client } from './lib/client.js';
 import { isDemo } from './lib/demo.js';
-import { upsertMembership, forgetMembershipByToken, syncTargets } from './lib/memberships.js';
+import { upsertMembership, forgetMembershipByToken, syncTargets, getMemberships } from './lib/memberships.js';
 import { getCards, upsertCard } from './lib/cards.js';
-import { isPending, setFx } from './lib/computations.js';
+import { isPending, setFx, namesFor } from './lib/computations.js';
+import { buildMirror } from './lib/mirror.js';
 import { applyAppIcon, deviceCurrency } from './lib/appIcon.js';
 import { AppCtx, useApp } from './state/appContext.js';
-import { useNotebook, TEXT_SCALE, NB_SHARED_KEY } from './lib/notebook.js';
+import { useNotebook, TEXT_SCALE, NB_SHARED_KEY, setMirror, dropMirror, dropFamilyMirror, setMirrorRates } from './lib/notebook.js';
 import { useSheet } from './components/shared/Sheet.jsx';
 import { EntryFlow } from './components/entries/EntryFlow.jsx';
 import { AccountSheet } from './components/account/AccountSheet.jsx';
@@ -172,7 +173,14 @@ function Root() {
   // כניסה לא תקפה, או חשבון מהגרסה הישנה (בלי משפחה).
   useEffect(() => {
     if (!token || data === undefined) return;
-    if (data === null) { dropSession(); return; }
+    if (data === null) {
+      // הכניסה כבר לא תקפה שלא ביוזמת המשתמש (הוסר מהמשפחה, הקופה נמחקה): גם ההעתק של חובות המשפחה יוצא מהפנקס.
+      // ביציאה רגילה (state.exiting) ההעתק נשאר, כדי שהפנקס ימשיך להציג אותו בלי כניסה.
+      const gone = state.exiting ? null : getMemberships().find((m) => m.token === token);
+      if (gone) dropFamilyMirror(gone.familyId);
+      dropSession();
+      return;
+    }
     if (!data.legacy || migrating.current) return;
     if (!data.canMigrate) { toast(t('צריך להיכנס מחדש עם קוד המשפחה')); dropSession(); return; }
     migrating.current = true;
@@ -309,6 +317,28 @@ function Root() {
     : null), [screen, data, fdata, token, isParent, setTab, openEntryFlow, fx]);
 
   useEffect(() => { sheet.setAppCtx(ctx); }, [ctx]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // החיבור בין הקופה לפנקס האישי (lib/mirror.js): כל חוב שלי במשפחה, ואצל נוער גם כל חוב עם חברים, מועתק לפנקס
+  // בכל כניסה ובכל שינוי. לכיוון אחד בלבד: מה שנרשם בפנקס לא עובר לקופה.
+  const closed = useQuery('data:closedDebts', token && !isDemo(token) ? { token } : 'skip');
+  useEffect(() => {
+    if (screen !== 'app' || isDemo(token)) return;
+    if (fx && fx.rates) setMirrorRates(fx.rates);
+    const meId = data.me.id;
+    const famId = data.family.id;
+    if (closed !== undefined) {
+      setMirror('fam:' + famId, {
+        kind: 'family', person: meId, label: data.family.name,
+        entries: buildMirror({ me: meId, entries: data.entries, closed, nameOf: namesFor(meId, (id) => data.people.find((p) => p.id === id)).nameOf }),
+      });
+    }
+    if (fdata && fdata.kind === 'teen' && fdata.enabled) {
+      setMirror('fr:' + famId, {
+        kind: 'friends', person: meId, label: data.family.name,
+        entries: buildMirror({ me: meId, entries: fdata.entries, nameOf: namesFor(meId, (id) => fdata.people[id]).nameOf }),
+      });
+    } else if (fdata) dropMirror('fr:' + famId);
+  }, [screen, token, data, fdata, closed, fx]);
 
   // המשפחה הנוכחית נרשמת ברשימת המשפחות של המכשיר (ילד/ה בהורים גרושים מחובר/ת לשתיים).
   const shareNb = screen === 'app' && !!data.me.notebookShared && !data.me.notebookPaused && !isDemo(token);

@@ -1086,6 +1086,10 @@ body[data-theme="teen"] .dd-opt.sel.active { background: var(--neon-grad); filte
 .debt-pick { text-align: start; width: 100%; padding: 14px 16px; border-radius: 16px; border: 2px solid var(--line, #e5e7eb); background: var(--card, #fff); font: inherit; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .debt-pick:active, .debt-pick:focus-visible { border-color: var(--accent, #4f46e5); }
 .dp-name { font-weight: 700; }
+/* בחירת שער לחוב במטבע זר: שתי אפשרויות, שם מעל הסבר, והנבחרת מודגשת */
+.rate-pick { flex-direction: column; align-items: flex-start; gap: 4px; }
+.rate-pick .dp-amt { white-space: normal; }
+.debt-pick.active { border-color: var(--accent, #4f46e5); box-shadow: 0 0 0 2px var(--accent, #4f46e5) inset; }
 .dp-amt { opacity: .8; white-space: nowrap; }
 .debt-info { text-align: center; font-weight: 600; margin: 4px 0 8px; opacity: .85; }
 .debt-lines { margin-top: 8px; display: grid; gap: 6px; }
@@ -1371,6 +1375,9 @@ body[data-theme] .sum .lbl, body:not([data-theme]) .sum .lbl { font-weight: 800;
 #screen-notebook .nb-head h1 { min-width: 0; overflow-wrap: anywhere; }
 #screen-notebook .nb-gear { flex: none; }
 #screen-notebook .row .text, #screen-notebook .row .meta { min-width: 0; overflow-wrap: anywhere; }
+/* חוב שהועתק מהמשפחה או מהחברים: תווית מקור במקום כפתורים (הוא לקריאה בלבד בפנקס) */
+#screen-notebook .nb-src { white-space: nowrap; background: rgba(127, 127, 127, .16); }
+#screen-notebook .nb-extra { text-align: center; margin-top: -4px; }
 #screen-notebook button, #screen-notebook .ghost { max-width: 100%; overflow-wrap: anywhere; white-space: normal; }
 #screen-notebook { overflow-x: clip; }
 

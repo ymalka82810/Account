@@ -181,7 +181,11 @@ export default defineSchema({
     // מטבע הרשומה (ILS, USD...). חסר = דולר (DEFAULT_CURRENCY); רשומות ישנות קיבלו ILS במפורש.
     currency: v.optional(v.string()),
     // בהחזר: השערים ברגע התשלום (יחידות לדולר), כדי שהמרת ההחזר לחוב במטבע אחר לא תשתנה בדיעבד.
+    // בחוב במטבע זר (לא המטבע של המשפחה): השערים ביום הרישום, כדי להציג מה היה השער באותו יום.
     fx: v.optional(v.record(v.string(), v.number())),
+    // חוב במטבע זר: לפי איזה שער הוא מוחזר. loan = השער ביום ההלוואה (fx של החוב), payment = השער ביום ההחזר.
+    // חסר = payment (כך עבדו החובות לפני שהשאלה נוספה).
+    rateAt: v.optional(v.union(v.literal("loan"), v.literal("payment"))),
     note: v.string(),
     date: v.string(), // YYYY-MM-DD
     createdBy: v.optional(v.id("people")),
@@ -224,7 +228,10 @@ export default defineSchema({
     // מטבע הרשומה: מי שרושם בוחר, ברירת המחדל היא המטבע של המשפחה שלו. חסר = דולר; רשומות ישנות קיבלו ILS במפורש.
     currency: v.optional(v.string()),
     // בהחזר: שערי ההמרה ברגע התשלום, כמו ב-entries (כשיש חובות במטבע אחר בין השניים).
+    // בחוב במטבע זר (לא המטבע של המשפחה של מי שרשם): השערים ביום הרישום.
     fx: v.optional(v.record(v.string(), v.number())),
+    // כמו ב-entries: לפי איזה שער החוב מוחזר. חסר = payment.
+    rateAt: v.optional(v.union(v.literal("loan"), v.literal("payment"))),
     note: v.string(),
     date: v.string(), // YYYY-MM-DD
     createdBy: v.id("people"),

@@ -3,6 +3,7 @@ import { state, CODE_KEY } from '../../state/state.js';
 import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { dropSession } from '../../state/auth.js';
+import { dropFamilyMirror } from '../../lib/notebook.js';
 import { useApp } from '../../state/appContext.js';
 import { useState } from 'react';
 import Reveal from '../shared/Reveal.jsx';
@@ -18,7 +19,7 @@ import { COUNTRIES, CURRENCIES, currencyLabel, currencySymbol, countryName } fro
 import { convert, curOf } from '../../lib/computations.js';
 
 // מיקום המגורים והמטבע הראשי של המשפחה (הורים). בחירת מדינה קובעת גם את המטבע שלה,
-// ואפשר לשנות את המטבע בנפרד. חובות במטבע אחר נשארים במטבע שלהם ומומרים לפי השער של היום.
+// ואפשר לשנות את המטבע בנפרד. חובות במטבע אחר נשארים במטבע שלהם ומומרים לפי השער של היום (או של יום ההלוואה, אם כך נקבע להם).
 function LocaleSettings({ data }) {
   const { token, fx } = useApp();
   const [country, setCountry] = useState(data.family.country || '');
@@ -52,7 +53,7 @@ function LocaleSettings({ data }) {
       <div className="field"><span>{t('המטבע של המשפחה')}</span>
         <Select value={currency} onChange={setCurrency}
           options={CURRENCIES.map((c) => ({ value: c, label: currencyLabel(c) }))} /></div>
-      <p className="hint">{t('כל הסכומים מוצגים במטבע הזה. אפשר לרשום חוב במטבע אחר (למשל 100 דולר), וכשמשלמים אותו הוא מומר לפי השער של אותו יום.')}</p>
+      <p className="hint">{t('כל הסכומים מוצגים במטבע הזה. אפשר לרשום חוב במטבע אחר (למשל 100 דולר), ובזמן הרישום בוחרים אם הוא יוחזר לפי השער ביום ההלוואה או לפי השער ביום ההחזר.')}</p>
       <Reveal show={changed}><button className="primary" type="button" disabled={busy} onClick={save}>{t('שמירה')}</button></Reveal>
       <Reveal show={others.length > 0}>
         <div className="fx-rates">
@@ -123,6 +124,7 @@ export function DangerZone({ data, token }) {
       await call('family:remove', { token, confirmName: typed, proof });
       localStorage.removeItem(CODE_KEY);
       state.fam = null;
+      dropFamilyMirror(data.family.id); // הקופה נמחקה: גם ההעתק של החובות שלה יוצא מהפנקס האישי
       toast(t('הקופה נמחקה'));
       dropSession();
     } catch (e) {

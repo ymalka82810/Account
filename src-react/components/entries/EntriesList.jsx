@@ -2,7 +2,7 @@ import { t } from '../../i18n/index.js';
 import { useConfirm } from '../shared/Confirm.jsx';
 import { call } from '../../lib/api.js';
 import { toast, errMsg } from '../../lib/helpers.js';
-import { isPending, debtStates, canDelete, namesFor, money, moneyWithValue, curOf, fmtDate } from '../../lib/computations.js';
+import { isPending, debtStates, canDelete, namesFor, money, moneyWithValue, curOf, fmtDate, debtRateNote } from '../../lib/computations.js';
 
 // רשימת רשומות. lookup(id) מחזיר אדם לפי מזהה.
 export default function EntriesList({
@@ -48,8 +48,10 @@ export default function EntriesList({
             {' '}{isDebt ? owesLine(e.from, e.to) : repaidLine(e.from, e.to)}
           </div>
           <div className="meta">{[fmtDate(e.date), e.note, extra].filter(Boolean).join(' • ')}</div>
+          {/* חוב במטבע זר: מה היה השער ביום הרישום, ולפי איזה שער הוא מוחזר */}
+          {isDebt && debtRateNote(e, display || undefined) && <div className="meta">{debtRateNote(e, display || undefined)}</div>}
         </div>
-        <strong>{isDebt && !isPending(e) && !e.archived && !(st && st.remaining <= 0) ? moneyWithValue(e.amount, curOf(e), display || undefined) : money(e.amount, curOf(e))}</strong>
+        <strong>{isDebt && !isPending(e) && !e.archived && !(st && st.remaining <= 0) ? moneyWithValue(e.amount, curOf(e), display || undefined, e) : money(e.amount, curOf(e))}</strong>
         {canDelete(e, me, isParent) && (
           <button className="small danger" type="button" onClick={() => remove(e)}>{isParent ? t('מחיקה') : t('ביטול')}</button>
         )}

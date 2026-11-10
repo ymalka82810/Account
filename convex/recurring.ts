@@ -2,7 +2,8 @@ import { internalMutation, mutation } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { MAX_AMOUNT, advanceDate, firstAfter, jerusalemToday, requireParent, requireSameFamily } from "./lib";
 import { notify } from "./notify";
-import { DEFAULT_CURRENCY, fmtMoney } from "./currency";
+import { DEFAULT_CURRENCY, debtFx, fmtMoney } from "./currency";
+import { loadRates } from "./fx";
 
 const MAX_PER_FAMILY = 30;
 const MAX_CATCH_UP = 8; // כמה רישומים מוחמצים משלימים בריצה אחת
@@ -58,6 +59,7 @@ export const runDue = internalMutation({
   args: {},
   handler: async (ctx): Promise<void> => {
     const today = jerusalemToday();
+    const rates = (await loadRates(ctx))?.rates ?? null;
     const due = await ctx.db.query("recurring").withIndex("by_nextDate", (q) => q.lte("nextDate", today)).take(200);
     for (const r of due) {
       const from = await ctx.db.get(r.from);
@@ -66,12 +68,17 @@ export const runDue = internalMutation({
         await ctx.db.delete(r._id);
         continue;
       }
+      const cur = r.currency ?? DEFAULT_CURRENCY;
+      const base = (await ctx.db.get(r.familyId))?.currency ?? DEFAULT_CURRENCY;
+      const loanFx = cur !== base ? debtFx(rates, [cur, base]) : undefined;
       let next = r.nextDate;
       let created = 0;
       while (next <= today && created < MAX_CATCH_UP) {
         await ctx.db.insert("entries", {
           familyId: r.familyId, kind: "debt", from: r.from, to: r.to, amount: r.amount,
-          currency: r.currency ?? DEFAULT_CURRENCY, note: r.note, date: next, createdBy: r.createdBy, createdAt: Date.now(),
+          currency: cur, note: r.note, date: next, createdBy: r.createdBy, createdAt: Date.now(),
+          // חוב קבוע במטבע זר: נשמר בו השער של היום, והוא מוחזר לפי השער ביום ההחזר.
+          ...(loanFx ? { fx: loanFx, rateAt: "payment" as const } : {}),
         });
         next = advanceDate(next, r.frequency, r.monthDay);
         created++;

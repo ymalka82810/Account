@@ -7,7 +7,7 @@ import { call } from '../../lib/api.js';
 import { isDemo } from '../../lib/demo.js';
 import { isOffline, enqueueEntry, newClientId } from '../../lib/outbox.js';
 import { today, toast, errMsg } from '../../lib/helpers.js';
-import { openDebtsOf, debtLabel, debtLeftText, namesFor, money, moneyWithValue, baseCurrency, convert, totalsByCurrency, hasForeignOpen, draftEntry, pairOwes } from '../../lib/computations.js';
+import { openDebtsOf, debtLabel, debtLeftText, namesFor, money, moneyWithValue, baseCurrency, convert, totalsByCurrency, hasForeignOpen, draftEntry, pairOwes, valueRates, rateText } from '../../lib/computations.js';
 import { useConfirm } from '../shared/Confirm.jsx';
 import { CURRENCIES, currencyLabel, currencySymbol } from '../../lib/currencies.js';
 import Select from '../shared/Select.jsx';
@@ -26,7 +26,7 @@ export function EntryFlow({ opts }) {
   // המטבע הראשי של המשפחה (גם בין חברים). חוב חדש אפשר לרשום במטבע אחר; החזר נרשם במטבע הראשי.
   const display = baseCurrency();
   const canPickCurrency = opts.kind === 'debt';
-  const [flow, setFlow] = useState(() => start({ from: opts.from || null, to: opts.to || null, amount: (opts.noDebtPick && opts.suggest) ? String(opts.suggest / 100) : '', agorot: 0, note: '', debtId: null, debtRemaining: null, debtName: '', cur: display, debt: null }));
+  const [flow, setFlow] = useState(() => start({ from: opts.from || null, to: opts.to || null, amount: (opts.noDebtPick && opts.suggest) ? String(opts.suggest / 100) : '', agorot: 0, note: '', debtId: null, debtRemaining: null, debtName: '', cur: display, debt: null, rateAt: '' }));
   const { step, st } = flow;
   const [err, setErr] = useState('');
   useEffect(() => { setErr(''); }, [step]);
@@ -56,7 +56,7 @@ export function EntryFlow({ opts }) {
     return (!s.from || !s.to) ? { step: 'person', st: s } : afterPeople(s);
   }
   function pickDebt(s, x) {
-    // debtRemaining = כמה אפשר לשלם במטבע הראשי (חוב במטבע אחר מומר לפי השער של עכשיו).
+    // debtRemaining = כמה אפשר לשלם במטבע הראשי (חוב במטבע אחר מומר לפי השער של עכשיו, או של יום ההלוואה אם כך נקבע לו).
     return { step: 'amount', st: { ...s, debtId: x.debt.id, debtRemaining: x.foreign ? x.value : x.remaining, debtName: debtLabel(x.debt), debt: x } };
   }
   const patch = (p) => setFlow((f) => ({ ...f, st: { ...f.st, ...p } }));
@@ -152,14 +152,19 @@ export function EntryFlow({ opts }) {
         <p className="flow-q">{question}</p>
         {st.debtId && <div className="debt-info">{t('על: {debt}', { debt: st.debtName })} • {st.debt ? debtLeftText(st.debt) : money(st.debtRemaining, display)}</div>}
         {st.debt && st.debt.foreign && (
-          <div className="debt-info">{t('החוב ב{debtCur}. משלמים ב{payCur} לפי השער של היום.', { debtCur: currencyLabel(st.debt.cur), payCur: currencySymbol(display) })}</div>
+          <div className="debt-info">{st.debt.loanRate
+            ? t('החוב ב{debtCur}. משלמים ב{payCur} לפי השער ביום ההלוואה ({rate}).', { debtCur: currencyLabel(st.debt.cur), payCur: currencySymbol(display), rate: rateText(st.debt.cur, display, st.debt.debt.fx) })
+            : t('החוב ב{debtCur}. משלמים ב{payCur} לפי השער של היום.', { debtCur: currencyLabel(st.debt.cur), payCur: currencySymbol(display) })}</div>
         )}
         <div className="amount-display" aria-live="polite">{sym}{st.amount || '0'}</div>
         {canPickCurrency && (
           <div className="field currency-pick"><span>{t('מטבע')}</span>
-            <Select value={st.cur} onChange={(c) => patch({ cur: c })}
+            <Select value={st.cur} onChange={(c) => patch({ cur: c, rateAt: '' })}
               options={[display, ...CURRENCIES.filter((c) => c !== display)].map((c) => ({ value: c, label: currencyLabel(c) }))} />
           </div>
+        )}
+        {canPickCurrency && st.cur !== display && rateText(st.cur, display) && (
+          <div className="debt-info">{t('השער היום: {rate}', { rate: rateText(st.cur, display) })}</div>
         )}
         <div className="chips">
           {[5, 10, 20, 50].map((n) => <button key={n} type="button" className="chip" onClick={() => setAmount(String(n))}>{sym}{n}</button>)}
@@ -186,11 +191,14 @@ export function EntryFlow({ opts }) {
     const isDebt = opts.kind === 'debt';
     let sentence = `${isDebt ? owesLine(st.from, st.to) : repaidLine(st.from, st.to)} ${isDebt ? moneyWithValue(st.agorot, st.cur, display) : money(st.agorot, display)}`;
     if (st.debtId && st.debt && st.debt.foreign) {
-      // החזר על חוב במטבע אחר: כמה מהחוב זה מכסה לפי השער של היום.
-      const covers = convert(st.agorot, display, st.debt.cur) ?? 0;
+      // החזר על חוב במטבע אחר: כמה מהחוב זה מכסה, לפי השער של היום או (אם כך נקבע לחוב) של יום ההלוואה.
+      const covers = convert(st.agorot, display, st.debt.cur, valueRates(st.debt.debt, display)) ?? 0;
       const left = st.debt.remaining - covers;
-      sentence += ' ' + t('על {debt} (= {covers} לפי השער של היום).', { debt: st.debtName, covers: money(Math.round(Math.min(covers, st.debt.remaining)), st.debt.cur) }) + ' '
-        + (left >= 1 ? t('יישאר {left} מהחוב.', { left: moneyWithValue(Math.round(left), st.debt.cur, display) }) : t('החוב ייסגר במלואו ✅'));
+      const coversText = money(Math.round(Math.min(covers, st.debt.remaining)), st.debt.cur);
+      sentence += ' ' + (st.debt.loanRate
+        ? t('על {debt} (= {covers} לפי השער ביום ההלוואה).', { debt: st.debtName, covers: coversText })
+        : t('על {debt} (= {covers} לפי השער של היום).', { debt: st.debtName, covers: coversText })) + ' '
+        + (left >= 1 ? t('יישאר {left} מהחוב.', { left: moneyWithValue(Math.round(left), st.debt.cur, display, st.debt.debt) }) : t('החוב ייסגר במלואו ✅'));
     } else if (st.debtId) {
       const left = st.debtRemaining - st.agorot;
       sentence += ' ' + t('על {debt}.', { debt: st.debtName }) + ' ' + (left > 0 ? t('יישאר {left} מהחוב.', { left: money(left, display) }) : t('החוב ייסגר במלואו ✅'));
@@ -200,11 +208,16 @@ export function EntryFlow({ opts }) {
     const foreignCase = (isDebt
       ? st.cur !== display
       : (st.debt ? st.debt.foreign : hasForeignOpen(st.from, st.to, entries, display)));
+    // חוב חדש במטבע זר: חייבים לבחור לפי איזה שער הוא יוחזר (ביום ההלוואה או ביום ההחזר).
+    const foreignDebt = isDebt && st.cur !== display;
+    const todayValue = foreignDebt ? convert(st.agorot, st.cur, display) : null;
+    const todayRate = foreignDebt ? rateText(st.cur, display) : '';
 
     async function confirmForeign() {
       const after = [...entries, draftEntry({
         kind: opts.kind, from: st.from, to: st.to, amount: st.agorot,
         currency: isDebt ? st.cur : display, debtId: st.debtId || undefined,
+        ...(foreignDebt && st.rateAt ? { rateAt: st.rateAt } : {}),
       })];
       const before = totalsByCurrency(st.from, st.to, entries);
       const next = totalsByCurrency(st.from, st.to, after);
@@ -223,8 +236,12 @@ export function EntryFlow({ opts }) {
         title: isDebt ? t('חוב ב{cur}', { cur: currencyLabel(st.cur) }) : t('תשלום על חוב במטבע אחר'),
         amount: isDebt ? money(st.agorot, st.cur) : money(st.agorot, display),
         message: isDebt
-          ? t('המטבע של המשפחה הוא {base}, והחוב הזה יישמר ב{cur}. ביתרות הוא יוצג לפי השער של אותו יום, וכשמשלמים אותו הסכום יומר לפי השער ביום התשלום.', { base: currencyLabel(display), cur: currencyLabel(st.cur) })
-          : t('התשלום ב{base} יומר לפי השער של היום ויורד מהחוב במטבע שלו. אחרי השמירה השער הזה נשמר ולא ישתנה.', { base: currencyLabel(display) }),
+          ? (st.rateAt === 'loan'
+            ? t('המטבע של המשפחה הוא {base}, והחוב הזה יישמר ב{cur}. הוא יוחזר לפי השער של היום ({rate}), גם אם השער ישתנה עד ההחזר.', { base: currencyLabel(display), cur: currencyLabel(st.cur), rate: todayRate })
+            : t('המטבע של המשפחה הוא {base}, והחוב הזה יישמר ב{cur}. ביתרות הוא יוצג לפי השער של אותו יום, וכשמשלמים אותו הסכום יומר לפי השער ביום התשלום.', { base: currencyLabel(display), cur: currencyLabel(st.cur) }))
+          : (st.debt && st.debt.loanRate
+            ? t('התשלום ב{base} יומר לפי השער שנקבע ביום ההלוואה ויורד מהחוב במטבע שלו.', { base: currencyLabel(display) })
+            : t('התשלום ב{base} יומר לפי השער של היום ויורד מהחוב במטבע שלו. אחרי השמירה השער הזה נשמר ולא ישתנה.', { base: currencyLabel(display) })),
         rowsTitle: t('{debtLine}, לפי מטבע (עכשיו ← אחרי)', { debtLine: owesLine(st.from, st.to) }),
         rows,
         okText: isDebt ? t('כן, לשמור את החוב') : t('כן, לשמור את התשלום'),
@@ -233,6 +250,7 @@ export function EntryFlow({ opts }) {
     }
 
     const save = async () => {
+      if (foreignDebt && !st.rateAt) { setErr(t('בחרו לפי איזה שער החוב יוחזר.')); return; }
       if (foreignCase && !(await confirmForeign())) return;
       // בלי חיבור לשרת: רישום חדש בקופה המשפחתית נשמר במכשיר ונשלח כשהחיבור חוזר (גם אם האפליקציה נסגרה).
       if (!opts.endpoint && !isDemo(state.token) && isOffline()) {
@@ -241,6 +259,7 @@ export function EntryFlow({ opts }) {
           note: isDebt ? st.note.trim() : (st.note.trim() || t('החזר')), date: today(),
           ...(st.debtId ? { debtId: st.debtId } : {}),
           ...(canPickCurrency ? { currency: st.cur } : {}),
+          ...(foreignDebt ? { rateAt: st.rateAt } : {}),
         });
         if (queued) { sheet.close(); toast(t('נשמר במכשיר, יישלח כשהחיבור יחזור')); setTab(opts.returnTab || 'home'); return; }
       }
@@ -251,6 +270,7 @@ export function EntryFlow({ opts }) {
           note: isDebt ? st.note.trim() : (st.note.trim() || t('החזר')), date: today(),
           ...(st.debtId ? { debtId: st.debtId } : {}),
           ...(canPickCurrency ? { currency: st.cur } : {}),
+          ...(foreignDebt ? { rateAt: st.rateAt } : {}),
           ...(opts.endpoint ? {} : { clientId: newClientId() }),
         }));
         sheet.close();
@@ -266,6 +286,22 @@ export function EntryFlow({ opts }) {
     return (
       <div className="flow">
         <div className="summary-line">{sentence}</div>
+        {foreignDebt && (
+          <>
+            <p className="flow-q">{t('לפי איזה שער החוב יוחזר?')}</p>
+            {todayRate && <div className="debt-info">{t('השער היום: {rate}', { rate: todayRate })}</div>}
+            <div className="debt-picks" role="radiogroup" aria-label={t('לפי איזה שער החוב יוחזר?')}>
+              <button type="button" role="radio" aria-checked={st.rateAt === 'loan'} className={'debt-pick rate-pick' + (st.rateAt === 'loan' ? ' active' : '')} onClick={() => { setErr(''); patch({ rateAt: 'loan' }); }}>
+                <div className="dp-name">{t('לפי השער ביום ההלוואה')}</div>
+                <div className="dp-amt">{todayValue === null ? t('הסכום נקבע היום ולא משתנה') : t('יוחזר {amount}, גם אם השער ישתנה', { amount: money(Math.round(todayValue), display) })}</div>
+              </button>
+              <button type="button" role="radio" aria-checked={st.rateAt === 'payment'} className={'debt-pick rate-pick' + (st.rateAt === 'payment' ? ' active' : '')} onClick={() => { setErr(''); patch({ rateAt: 'payment' }); }}>
+                <div className="dp-name">{t('לפי השער ביום ההחזר')}</div>
+                <div className="dp-amt">{todayValue === null ? t('הסכום ישתנה עם השער') : t('היום זה {amount}, והסכום ישתנה עם השער', { amount: money(Math.round(todayValue), display) })}</div>
+              </button>
+            </div>
+          </>
+        )}
         {isDebt && (
           <>
             <p className="flow-q">{t('על מה? (לא חובה)')}</p>

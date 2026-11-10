@@ -179,3 +179,58 @@ test.describe('קיזוז חובות הדדיים', () => {
     await expect(offer).toHaveCount(0);
   });
 });
+
+// החיבור בין הקופה לפנקס: חובות מהמשפחה ומהחברים מועתקים לפנקס אוטומטית (lib/mirror.js).
+// בבדיקות אין שרת, אז ההעתק נכתב ישר דרך המודול של הפנקס (כמו ש-App.jsx עושה אחרי כל שינוי בנתונים).
+test.describe('חובות מהמשפחה ומהחברים בפנקס', () => {
+  test('מופיעים ברשימה ובסיכום, לקריאה בלבד, ונשמרים בנפרד מרישומי הפנקס', async ({ page }) => {
+    await addEntry(page, 'iowe', 'דני', '10');
+    await page.evaluate(async () => {
+      const nb = await import('/src-react/lib/notebook.js');
+      nb.setMirrorRates({ USD: 1, ILS: 4 });
+      nb.setMirror('fam:f1', {
+        kind: 'family', person: 'p1', label: 'משפחת כהן', entries: [
+          { id: 'm:1', dir: 'iowe', name: 'אבא', amount: 2000, total: 5000, currency: 'ILS', note: 'גלידה', date: '2020-01-02', paid: false },
+          { id: 'm:2', dir: 'owed', name: 'נועה', amount: 1000, total: 1000, currency: 'USD', note: '', date: '2020-01-01', paid: false },
+        ],
+      });
+      nb.setMirror('fr:f1', {
+        kind: 'friends', person: 'p1', label: 'משפחת כהן', entries: [
+          { id: 'm:3', dir: 'owed', name: 'יובל', amount: 500, total: 500, currency: 'ILS', note: '', date: '2020-01-01', paid: false },
+        ],
+      });
+    });
+    await expect(openRows(page)).toHaveCount(4);
+    // 10 מהפנקס + 20 מהמשפחה; ומהצד השני $10 (= ₪40 לפי השער שנשמר במכשיר) + ₪5 מחבר
+    await expectSum(page, 'iowe', '30.00');
+    await expectSum(page, 'owed', '45.00');
+
+    const fromFamily = openRows(page).filter({ hasText: 'אבא' });
+    await expect(fromFamily).toContainText('גלידה');
+    await expect(fromFamily).toContainText('מהמשפחה');
+    await expect(fromFamily).toContainText('50.00'); // נשאר 20 מתוך 50
+    await expect(fromFamily.getByRole('button')).toHaveCount(0);
+    await expect(openRows(page).filter({ hasText: 'יובל' })).toContainText('מהחברים');
+    // רישום של הפנקס עצמו נשאר עם הכפתורים שלו
+    await expect(openRows(page).filter({ hasText: 'דני' }).getByRole('button', { name: /שולם/ })).toBeVisible();
+
+    const saved = await savedNotebook(page);
+    expect(saved.entries).toHaveLength(1);
+    expect(saved.people.map((p) => p.name)).toEqual(['דני']);
+  });
+
+  test('חוב שנסגר במשפחה עובר ל"שולמו", וחוב שנעלם מהמשפחה נעלם מהפנקס', async ({ page }) => {
+    const set = (entries) => page.evaluate(async (list) => {
+      const nb = await import('/src-react/lib/notebook.js');
+      nb.setMirror('fam:f1', { kind: 'family', person: 'p1', label: 'משפחת כהן', entries: list });
+    }, entries);
+    const debt = { id: 'm:1', dir: 'iowe', name: 'אבא', amount: 2000, total: 2000, currency: 'ILS', note: '', date: '2020-01-02', paid: false };
+    await set([debt]);
+    await expectSum(page, 'iowe', '20.00');
+    await set([{ ...debt, paid: true }]);
+    await expectSum(page, 'iowe', '0.00');
+    await expect(page.getByText('שולמו (1)')).toBeVisible();
+    await set([]);
+    await expect(page.getByText('עוד אין כלום ברשימה')).toBeVisible();
+  });
+});

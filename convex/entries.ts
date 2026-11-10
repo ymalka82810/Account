@@ -4,7 +4,7 @@ import { MAX_AMOUNT, requireParent, requirePerson } from "./lib";
 import { logActivity } from "./activity";
 import { entryLine, entryTextFor, notify } from "./notify";
 import { internal } from "./_generated/api";
-import { DEFAULT_CURRENCY, LIMIT_CURRENCY, Rates, convert, curOf, fmtMoney, isCurrency, paidOnDebt } from "./currency";
+import { DEFAULT_CURRENCY, LIMIT_CURRENCY, RateAt, Rates, convert, curOf, debtFx, fmtMoney, isCurrency, paidOnDebt, ratesFor } from "./currency";
 import { loadRates } from "./fx";
 import { archivePair, unarchivePair, MAX_PAIR_ACTIVE, MAX_PAIR_DEBTS } from "./ledger";
 
@@ -26,6 +26,8 @@ export const add = mutation({
     amount: v.number(),
     // מטבע הרשומה. חסר = המטבע הראשי של המשפחה. החזר נרשם תמיד במטבע הראשי ומומר לחוב לפי השער הנוכחי.
     currency: v.optional(v.string()),
+    // חוב במטבע זר: לפי איזה שער הוא יוחזר (ביום ההלוואה או ביום ההחזר). חסר = ביום ההחזר.
+    rateAt: v.optional(v.union(v.literal("loan"), v.literal("payment"))),
     note: v.string(),
     date: v.string(),
     // החזר על חוב מסוים (רשומת חוב שכבר אושרה).
@@ -33,7 +35,7 @@ export const add = mutation({
     // מזהה אקראי שהמכשיר יצר לפני השליחה. שליחה חוזרת של אותה רשומה (למשל אחרי ניתוק, או מתור ההמתנה של המכשיר) לא תיצור כפילות.
     clientId: v.optional(v.string()),
   },
-  handler: async (ctx, { token, currency: askedCurrency, clientId, ...e }) => {
+  handler: async (ctx, { token, currency: askedCurrency, rateAt: askedRateAt, clientId, ...e }) => {
     const me = await requirePerson(ctx, token);
     if (clientId !== undefined) {
       if (clientId.length < 8 || clientId.length > 64) throw new ConvexError("מזהה לא תקין");
@@ -59,6 +61,19 @@ export const add = mutation({
     const from = await ctx.db.get(e.from);
     const to = await ctx.db.get(e.to);
     if (!from || !to || from.familyId !== me.familyId || to.familyId !== me.familyId) throw new ConvexError("אדם לא קיים");
+
+    // חוב במטבע זר: נשמרים בו שערי היום (כדי להציג מה היה השער ביום הרישום) והבחירה לפי איזה שער הוא יוחזר.
+    // "לפי השער ביום ההלוואה" חייב שערים שמורים, אז בלי שערים הוא לא נרשם.
+    let rateAt: RateAt | undefined;
+    let loanFx: Rates | undefined;
+    if (e.kind === "debt" && currency !== base) {
+      rateAt = askedRateAt ?? "payment";
+      loanFx = debtFx(rates, [currency, base]);
+      if (rateAt === "loan" && !loanFx) {
+        await ctx.scheduler.runAfter(0, internal.fx.refresh, {});
+        throw new ConvexError("שערי ההמרה עוד לא נטענו. נסו שוב בעוד רגע.");
+      }
+    }
 
     // בהחזר: שומרים את שערי ההמרה של הרגע הזה לכל מטבע של חוב באותו כיוון, כדי שהחלוקה של
     // ההחזר על חובות במטבע אחר (למשל 100 דולר) תהיה לפי השער ביום התשלום ולא תזוז אחר כך.
@@ -92,11 +107,13 @@ export const add = mutation({
         const linked = await ctx.db.query("entries").withIndex("by_debt", (q) => q.eq("debtId", debt._id)).take(MAX_PAIR_ACTIVE);
         const remaining = debt.amount - paidOnDebt(debt, linked, rates);
         if (remaining < 0.5) throw new ConvexError("החוב הזה כבר שולם");
-        const inDebtCur = convert(e.amount, currency, curOf(debt), fx ?? rates);
+        // חוב שמוחזר לפי השער ביום ההלוואה מומר לפי השערים שנשמרו בו, ולא לפי שערי היום.
+        const use = ratesFor(debt, { currency, fx }, rates);
+        const inDebtCur = convert(e.amount, currency, curOf(debt), use);
         if (inDebtCur === null) throw new ConvexError("אין שער המרה למטבע של החוב");
         // מרווח קטן לעיגול ולשינוי קל בשער בין המסך לשרת.
         if (inDebtCur > remaining * 1.02 + 1) {
-          const max = convert(remaining, curOf(debt), currency, fx ?? rates)!;
+          const max = convert(remaining, curOf(debt), currency, use)!;
           throw new ConvexError(`אי אפשר להחזיר יותר ממה שנשאר מהחוב (${fmtMoney(Math.ceil(max), currency)})`);
         }
       }
@@ -107,7 +124,8 @@ export const add = mutation({
     // מה שילד/ה רושם/ת ממתין לאישור הורה. מה שהורה רושם מאושר מיד.
     const pending = me.role !== "parent";
     const id = await ctx.db.insert("entries", {
-      ...e, note, currency, ...(fx ? { fx } : {}), familyId: me.familyId, createdBy: me._id, createdAt: Date.now(),
+      ...e, note, currency, ...(fx ? { fx } : loanFx ? { fx: loanFx } : {}), ...(rateAt ? { rateAt } : {}),
+      familyId: me.familyId, createdBy: me._id, createdAt: Date.now(),
       ...(clientId !== undefined ? { clientId } : {}),
       ...(pending ? { status: "pending" as const } : {}),
     });

@@ -4,6 +4,7 @@
 
 import { g } from './gender.js';
 import { t, intlLocale } from '../i18n/index.js';
+import { currencySymbol } from './currencies.js';
 
 export const isPending = (e) => e.status === 'pending';
 
@@ -26,6 +27,34 @@ export function convert(amount, from, to, rates = FX.rates) {
 // שער: כמה יחידות של to שווה יחידה אחת של from.
 export const rateOf = (from, to, rates) => convert(1, from, to, rates);
 
+// ---------- חוב במטבע זר: לפי איזה שער הוא מוחזר ----------
+// בחוב במטבע זר נשמרים שערי יום הרישום (debt.fx) והבחירה rateAt: 'loan' = מוחזר לפי השער ביום ההלוואה,
+// 'payment' (או חסר) = לפי השער ביום ההחזר. אותו כלל כמו ratesFor בשרת (convex/currency.ts).
+const loanRates = (debt, other) => (debt.rateAt === 'loan' && debt.fx && debt.fx[curOf(debt)] && debt.fx[other] ? debt.fx : null);
+// השערים שלפיהם החזר e יורד מהחוב
+const payRates = (debt, e) => loanRates(debt, curOf(e)) || e.fx || FX.rates;
+// השערים שלפיהם חוב פתוח שווה במטבע התצוגה: שער יום ההלוואה אם כך נקבע, אחרת השער של עכשיו
+export const valueRates = (debt, display = FX.base) => loanRates(debt, display) || FX.rates;
+export const isLoanRate = (debt, display = FX.base) => !!loanRates(debt, display);
+
+// "$1 = ₪3.70": שער בין שני מטבעות (עד 4 ספרות אחרי הנקודה, למטבעות קטנים כמו ין). '' אם אין שער.
+export function rateText(from, to, rates = FX.rates) {
+  const r = rateOf(from, to, rates);
+  if (r === null) return '';
+  let shown;
+  try { shown = r.toLocaleString(intlLocale(), { style: 'currency', currency: to, minimumFractionDigits: 2, maximumFractionDigits: r < 1 ? 4 : 2 }); }
+  catch (e) { shown = r.toFixed(2) + ' ' + to; }
+  return `${currencySymbol(from)}1 = ${shown}`;
+}
+
+// מה כתוב על חוב במטבע זר: השער ביום הרישום, ולפי איזה שער הוא מוחזר. '' לחוב במטבע של המשפחה.
+export function debtRateNote(debt, display = FX.base) {
+  if (debt.kind !== 'debt' || curOf(debt) === display) return '';
+  const day = debt.fx ? rateText(curOf(debt), display, debt.fx) : '';
+  const how = isLoanRate(debt, display) ? t('מוחזר לפי השער ביום ההלוואה') : t('מוחזר לפי השער ביום ההחזר');
+  return (day ? t('השער ביום הרישום: {rate}', { rate: day }) + ' • ' : '') + how;
+}
+
 const EPS = 0.5; // פחות מחצי אגורה/סנט = שולם
 
 // חלוקת ההחזרים על החובות. החזר שמקושר לחוב הולך אליו; החזר כללי מתחלק על החובות
@@ -43,7 +72,7 @@ function ledger(entries) {
     if (!e.debtId) continue;
     const st = byId.get(e.debtId);
     if (!st) { leftovers.push({ e, left: e.amount }); continue; }
-    const r = rateOf(st.cur, curOf(e), e.fx || FX.rates); // כמה מטבע-החזר ליחידת חוב
+    const r = rateOf(st.cur, curOf(e), payRates(st.debt, e)); // כמה מטבע-החזר ליחידת חוב
     if (r === null) continue;
     const used = Math.min(st.remaining, e.amount / r);
     st.paid += used; st.remaining -= used;
@@ -59,7 +88,7 @@ function ledger(entries) {
       if (d.from !== e.from || d.to !== e.to) continue;
       const st = byId.get(d.id);
       if (st.remaining <= 0) continue;
-      const r = rateOf(st.cur, curOf(e), e.fx || FX.rates);
+      const r = rateOf(st.cur, curOf(e), payRates(st.debt, e));
       if (r === null) continue;
       const take = Math.min(left, st.remaining * r);
       st.paid += take / r; st.remaining -= take / r; left -= take;
@@ -100,7 +129,7 @@ export function pairOwes(a, b, entries, display = FX.base) {
     if (st.remaining <= 0) continue;
     const sign = st.debt.from === a && st.debt.to === b ? 1 : st.debt.from === b && st.debt.to === a ? -1 : 0;
     if (!sign) continue;
-    const v = convert(st.remaining, st.cur, display);
+    const v = convert(st.remaining, st.cur, display, valueRates(st.debt, display));
     if (v !== null) sum += sign * v;
   }
   for (const { e, left } of leftovers) {
@@ -118,8 +147,8 @@ export function openDebtsOf(a, b, entries, display = FX.base) {
   return [...debtStates(entries).values()]
     .filter((x) => x.debt.from === a && x.debt.to === b && x.remaining > 0)
     .map((x) => {
-      const v = convert(x.remaining, x.cur, display);
-      return { ...x, paid: Math.round(x.paid), remaining: Math.round(x.remaining), value: v === null ? 0 : Math.round(v), valueCur: display, foreign: x.cur !== display };
+      const v = convert(x.remaining, x.cur, display, valueRates(x.debt, display));
+      return { ...x, paid: Math.round(x.paid), remaining: Math.round(x.remaining), value: v === null ? 0 : Math.round(v), valueCur: display, foreign: x.cur !== display, loanRate: isLoanRate(x.debt, display) };
     })
     .filter((x) => x.remaining > 0)
     .sort((x, y) => x.debt.date.localeCompare(y.debt.date) || x.debt.createdAt - y.debt.createdAt);
@@ -139,15 +168,18 @@ export const money = (amount, currency = FX.base) =>
 export function debtLeftText(x) {
   const rem = money(x.remaining, x.cur);
   const base = x.paid > 0 ? t('נשאר {left} מתוך {total}', { left: rem, total: money(x.debt.amount, x.cur) }) : rem;
-  return x.foreign && x.value ? `${base} (≈ ${money(x.value, x.valueCur)})` : base;
+  // חוב לפי השער ביום ההלוואה: השווי קבוע (=), אחרת הוא לפי השער של עכשיו (≈)
+  return x.foreign && x.value ? `${base} (${x.loanRate ? '=' : '≈'} ${money(x.value, x.valueCur)})` : base;
 }
 
 // "$100 (≈ ₪370)": סכום במטבע שלו, ואם הוא לא המטבע הראשי - גם השווי הנוכחי.
-export function moneyWithValue(amount, currency, display = FX.base) {
+// debt (לא חובה): חוב שנקבע לו השער של יום ההלוואה מוצג בשווי הקבוע שלו (=).
+export function moneyWithValue(amount, currency, display = FX.base, debt = null) {
   const s = money(amount, currency);
   if (currency === display) return s;
-  const v = convert(amount, currency, display);
-  return v === null ? s : `${s} (≈ ${money(Math.round(v), display)})`;
+  const fixed = !!debt && isLoanRate(debt, display);
+  const v = convert(amount, currency, display, fixed ? debt.fx : FX.rates);
+  return v === null ? s : `${s} (${fixed ? '=' : '≈'} ${money(Math.round(v), display)})`;
 }
 
 export const roleLabel = (r, gender) =>

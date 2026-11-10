@@ -320,4 +320,36 @@ describe("מטבע בחובות בין חברים", () => {
     await expect(addDebt(yuval, yuvalId, galId, 12_500, { currency: "USD" })).resolves.toBeDefined();
     await expect(addDebt(yuval, yuvalId, galId, 13_000, { currency: "USD" })).rejects.toThrow("סכום לא תקין");
   });
+
+  it("חוב במטבע זר לפי השער ביום ההלוואה: נשמרים השערים של שתי המשפחות, וההחזר לפיהם גם כשהשער זז", async () => {
+    await t.run(async (ctx) => {
+      await ctx.db.insert("fxRates", { rates: { USD: 1, ILS: 4, EUR: 0.5 }, source: "test", fetchedAt: Date.now() });
+      await ctx.db.patch(B.familyId, { currency: "EUR" });
+    });
+    await befriend();
+    // יובל (משפחה בשקלים) חייב לגל $100 = ₪400 ביום ההלוואה
+    const debt = await addDebt(yuval, yuvalId, galId, 10_000, { currency: "USD", rateAt: "loan" });
+    const row: any = await t.run((ctx) => ctx.db.get(debt));
+    expect(row.rateAt).toBe("loan");
+    expect(row.fx).toEqual({ USD: 1, ILS: 4, EUR: 0.5 });
+    await t.mutation(api.friends.confirmEntry, { token: gal, id: debt });
+    await t.run(async (ctx) => {
+      const r = await ctx.db.query("fxRates").first();
+      await ctx.db.patch(r!._id, { rates: { USD: 1, ILS: 2, EUR: 0.5 } });
+    });
+    // לפי שער היום ₪400 היו פי שניים מהחוב; לפי שער יום ההלוואה זה בדיוק החוב
+    const pay = await t.mutation(api.friends.addEntry, { token: yuval, kind: "payment", from: yuvalId, to: galId, amount: 40_000, note: "", date: DATE, debtId: debt });
+    await t.mutation(api.friends.confirmEntry, { token: gal, id: pay });
+    await expect(t.mutation(api.friends.addEntry, { token: yuval, kind: "payment", from: yuvalId, to: galId, amount: 1000, note: "", date: DATE, debtId: debt }))
+      .rejects.toThrow("כבר שולם");
+    expect((await view(yuval)).entries.find((e: any) => e.id === debt).rateAt).toBe("loan");
+  });
+
+  it("חוב במטבע של המשפחה שלי לא מקבל שער ולא בחירה", async () => {
+    await befriend();
+    const debt = await addDebt(yuval, yuvalId, galId, 1000, { rateAt: "loan" });
+    const row: any = await t.run((ctx) => ctx.db.get(debt));
+    expect(row.rateAt).toBeUndefined();
+    expect(row.fx).toBeUndefined();
+  });
 });

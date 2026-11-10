@@ -28,7 +28,7 @@ export const page = query({
       ...res,
       page: await Promise.all(res.page.map(async (e) => ({
         id: e._id, kind: e.kind, from: e.from, to: e.to, amount: e.amount, note: e.note,
-        currency: e.currency ?? DEFAULT_CURRENCY, fx: e.fx ?? null,
+        currency: e.currency ?? DEFAULT_CURRENCY, fx: e.fx ?? null, rateAt: e.rateAt ?? null,
         date: e.date, createdBy: e.createdBy ?? null, createdAt: e.createdAt ?? e._creationTime,
         status: e.status ?? "approved",
         debtId: e.debtId ?? null,
