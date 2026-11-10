@@ -66,6 +66,8 @@ export default defineSchema({
     email: v.optional(v.string()),
     emailVerified: v.optional(v.boolean()),
     pendingEmail: v.optional(v.string()),
+    // מזהה חשבון הגוגל שחובר להורה (sub של Firebase). המייל שלו הוא המייל המאומת.
+    googleSub: v.optional(v.string()),
     // להתראה להורה: כמה נעילות היו ומתי הייתה האחרונה. מתאפס כשקובעים קוד חדש.
     lockCount: v.optional(v.number()),
     lastLockAt: v.optional(v.number()),

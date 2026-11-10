@@ -25,6 +25,8 @@ import type * as family from "../family.js";
 import type * as friends from "../friends.js";
 import type * as fx from "../fx.js";
 import type * as goals from "../goals.js";
+import type * as googleAuth from "../googleAuth.js";
+import type * as googleLink from "../googleLink.js";
 import type * as history from "../history.js";
 import type * as ledger from "../ledger.js";
 import type * as lib from "../lib.js";
@@ -61,6 +63,8 @@ declare const fullApi: ApiFromModules<{
   friends: typeof friends;
   fx: typeof fx;
   goals: typeof goals;
+  googleAuth: typeof googleAuth;
+  googleLink: typeof googleLink;
   history: typeof history;
   ledger: typeof ledger;
   lib: typeof lib;

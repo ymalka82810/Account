@@ -37,6 +37,7 @@ export const get = query({
         // מייל מוסתר חלקית (למסך ההגדרות). מאומת = אפשר לשלוח אליו קודים.
         email: me.emailVerified && me.email ? maskEmail(me.email) : null,
         pendingEmail: me.pendingEmail ? maskEmail(me.pendingEmail) : null,
+        googleLinked: !!me.googleSub,
         // ילד/ה שאישר/ה שההורים יראו את הפנקס האישי: המכשיר משלח עותק (notebook:sync).
         notebookShared: me.role === "child" && !!me.notebookShared,
         notebookPaused: me.role === "child" && !!me.notebookShared && !!me.notebookPaused,

@@ -1,7 +1,8 @@
 // החלונות של החשבון האישי: מייל לשחזור ושינוי הקוד הסודי של עצמי.
 import { useState } from 'react';
 import { state, AVATARS, PARENT_AVATARS } from '../../state/state.js';
-import { call } from '../../lib/api.js';
+import { call, callAction } from '../../lib/api.js';
+import { googleAvailable, googleIdToken } from '../../lib/google.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { t } from '../../i18n/index.js';
 import { useApp } from '../../state/appContext.js';
@@ -32,6 +33,28 @@ export function AvatarSheet() {
   );
 }
 
+// חיבור עם חשבון גוגל: מאמת את המייל בלי לשלוח קוד. בלי מייל מאומת נדרש גם הקוד הסודי של ההורה (myPin).
+function GoogleLink({ myPin, onDone, setErr }) {
+  if (!googleAvailable()) return null;
+  return (
+    <>
+      <AsyncButton className="primary" onClick={async () => {
+        setErr('');
+        try {
+          const idToken = await googleIdToken();
+          if (!idToken) return;
+          const res = await callAction('googleAuth:link', { token: state.token, idToken, myPin: myPin || undefined });
+          if (res.ok) { onDone(); toast(t('חשבון הגוגל חובר ✅')); }
+          else if (res.reason === 'myPin') setErr(myPin ? t('הקוד הסודי שגוי.') : t('כתבו את הקוד הסודי שלכם, לאישור.'));
+          else if (res.reason === 'locked') setErr(t('יותר מדי ניסיונות. נסו שוב עוד כמה דקות.'));
+          else if (res.reason === 'differentEmail') setErr(t('חשבון הגוגל הזה במייל אחר מהמייל המאומת. כדי להחליף מייל, השתמשו בהחלפת מייל.'));
+          else setErr(t('חשבון הגוגל הזה כבר מחובר להורה אחר.'));
+        } catch (e) { setErr(e && e.data ? errMsg(e) : t('ההתחברות עם גוגל נכשלה. נסו שוב.')); }
+      }}>{t('חיבור עם גוגל')}</AsyncButton>
+    </>
+  );
+}
+
 // הוספה או החלפה של מייל להורה: כתובת, ואז קוד אימות שנשלח אליה.
 export function EmailSheet({ sentTo = '' }) {
   const { data } = useApp();
@@ -59,6 +82,7 @@ export function EmailSheet({ sentTo = '' }) {
           try { await call('emailAuth:requestEmailChangeCode', { token: state.token }); go('email'); }
           catch (e) { setErr(errMsg(e)); }
         }}>{t('שליחת קוד למייל הנוכחי')}</AsyncButton>
+        {!data.me.googleLinked && <GoogleLink onDone={() => sheet.close()} setErr={setErr} />}
       </div>
     );
   }
@@ -84,6 +108,7 @@ export function EmailSheet({ sentTo = '' }) {
             else setErr(t('הקוד מהמייל הנוכחי שגוי או שפג תוקפו.'));
           } catch (e) { setErr(errMsg(e)); }
         }}>{t('שליחת קוד אימות')}</AsyncButton>
+        {!current && <GoogleLink myPin={myPin} onDone={() => sheet.close()} setErr={setErr} />}
       </div>
     );
   }
