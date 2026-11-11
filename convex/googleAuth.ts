@@ -3,11 +3,11 @@ import { v, ConvexError } from "convex/values";
 import { internal } from "./_generated/api";
 import { createRemoteJWKSet, jwtVerify } from "jose";
 import { normalizeEmail, validEmail } from "./lib";
-import type { LinkResult } from "./googleLink";
+import { proofPurpose, type LinkResult, type ProofResult } from "./googleLink";
 
-// ---------- חיבור חשבון גוגל להורה ----------
+// ---------- חשבון גוגל (לכל אחד: הורה, נער/ה, ילד/ה) ----------
 // הלקוח מתחבר עם גוגל דרך Firebase Auth ושולח לכאן את ה-ID token. השרת מאמת את החתימה מול המפתחות הציבוריים
-// של גוגל, ורק אז מחבר: מייל מאומת בלי לשלוח קוד, ובלי דומיין לשליחת מיילים.
+// של גוגל, ורק אז מחבר או מאשר. אין שליחת מיילים בכלל.
 // FIREBASE_PROJECT_ID (משתנה סביבה ב-Convex) מחליף את ברירת המחדל אם צריך פרויקט אחר.
 const DEFAULT_PROJECT = "account-9da16";
 const JWKS = createRemoteJWKSet(new URL("https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com"));
@@ -49,10 +49,29 @@ export async function verifyGoogleIdToken(idToken: string): Promise<GoogleIdenti
   return identityFromClaims(claims, Math.floor(Date.now() / 1000));
 }
 
+// חיבור (או החלפה, עם changeProof מאימות בחשבון הנוכחי) של חשבון הגוגל לאדם המחובר.
 export const link = action({
-  args: { token: v.string(), idToken: v.string(), myPin: v.optional(v.string()) },
-  handler: async (ctx, { token, idToken, myPin }): Promise<LinkResult> => {
+  args: { token: v.string(), idToken: v.string(), myPin: v.optional(v.string()), changeProof: v.optional(v.string()) },
+  handler: async (ctx, { token, idToken, myPin, changeProof }): Promise<LinkResult> => {
     const id = await verifyGoogleIdToken(idToken);
-    return await ctx.runMutation(internal.googleLink.applyLink, { token, sub: id.sub, email: id.email, myPin });
+    return await ctx.runMutation(internal.googleLink.applyLink, { token, sub: id.sub, email: id.email, myPin, changeProof });
+  },
+});
+
+// אימות עם חשבון הגוגל המחובר לפני פעולה רגישה של מי שמחובר/ת. מחזיר קוד חד-פעמי לפעולה עצמה.
+export const prove = action({
+  args: { token: v.string(), idToken: v.string(), purpose: proofPurpose },
+  handler: async (ctx, { token, idToken, purpose }): Promise<ProofResult> => {
+    const id = await verifyGoogleIdToken(idToken);
+    return await ctx.runMutation(internal.googleLink.issueProof, { token, sub: id.sub, purpose });
+  },
+});
+
+// אותו דבר לפני כניסה (שכחתי קוד, מכשיר שאבד): לפי קוד המשפחה (או כרטיס מכשיר) והאדם.
+export const proveFor = action({
+  args: { code: v.string(), personId: v.id("people"), idToken: v.string(), purpose: proofPurpose, device: v.optional(v.string()) },
+  handler: async (ctx, { code, personId, idToken, purpose, device }): Promise<ProofResult> => {
+    const id = await verifyGoogleIdToken(idToken);
+    return await ctx.runMutation(internal.googleLink.issueProof, { code, personId, device, sub: id.sub, purpose });
   },
 });

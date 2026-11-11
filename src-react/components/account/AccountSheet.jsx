@@ -16,7 +16,8 @@ import { useEnablePush } from './useEnablePush.js';
 import { pushSupported, isPushOn, disablePush, releasePushDevice, testPush } from '../../lib/push.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
-import { ChangePinSheet, ChangePinEmailSheet, EmailSheet, AvatarSheet } from './AccountSheets.jsx';
+import { ChangePinSheet, ChangePinGoogleSheet, GoogleSheet, AvatarSheet } from './AccountSheets.jsx';
+import { AdminSheet } from './AdminSheet.jsx';
 import { DeviceSheet } from './DeviceSheet.jsx';
 import NotebookSharing from './NotebookSharing.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
@@ -114,10 +115,11 @@ export function AccountSheet() {
       <section className="acct-group" aria-labelledby="acct-h-security">
         <h3 className="acct-h" id="acct-h-security">{t('אבטחה')}</h3>
         {row(withIcons(me.hasPin ? t('🔑 שינוי הקוד הסודי') : t('🔑 קביעת קוד סודי')),
-          () => sheet.open(me.hasPin ? t('שינוי הקוד הסודי') : t('קביעת קוד סודי'), me.email ? <ChangePinEmailSheet /> : <ChangePinSheet />))}
-        {me.role === 'parent' && row(withIcons(me.email ? t('✉️ מייל לשחזור: {email}', { email: me.email }) : t('✉️ הוספת מייל לשחזור קוד')),
-          () => sheet.open('', <EmailSheet />))}
+          () => sheet.open(me.hasPin ? t('שינוי הקוד הסודי') : t('קביעת קוד סודי'), me.hasPin && me.googleLinked ? <ChangePinGoogleSheet /> : <ChangePinSheet />))}
+        {row(withIcons(me.googleLinked ? t('🔐 חשבון גוגל: {email}', { email: me.email }) : t('🔐 חיבור חשבון גוגל')),
+          () => sheet.open(t('חשבון גוגל'), <GoogleSheet />))}
         {me.role === 'parent' && row(withIcons(t('📱 המכשירים שלי')), () => sheet.open(t('המכשירים שלי'), <DeviceSheet />))}
+        {me.admin && row(withIcons(t('🛠️ לוח מנהל')), () => sheet.open(t('לוח מנהל'), <AdminSheet />))}
         {me.role === 'child' && me.notebookShared && row(withIcons(t('👁️ מי רואה את הפנקס שלי')), () => sheet.open(t('👁️ מי רואה את הפנקס שלי'), <NotebookSharing />))}
       </section>
 

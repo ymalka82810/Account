@@ -10,16 +10,15 @@
 
 import type * as activity from "../activity.js";
 import type * as admin from "../admin.js";
+import type * as alerts from "../alerts.js";
 import type * as auth from "../auth.js";
+import type * as authCodes from "../authCodes.js";
 import type * as biometric from "../biometric.js";
 import type * as crons from "../crons.js";
 import type * as currency from "../currency.js";
 import type * as data from "../data.js";
 import type * as der from "../der.js";
 import type * as deviceMove from "../deviceMove.js";
-import type * as email from "../email.js";
-import type * as emailAuth from "../emailAuth.js";
-import type * as emailCodes from "../emailCodes.js";
 import type * as entries from "../entries.js";
 import type * as family from "../family.js";
 import type * as friends from "../friends.js";
@@ -38,6 +37,7 @@ import type * as push from "../push.js";
 import type * as pushSend from "../pushSend.js";
 import type * as recurring from "../recurring.js";
 import type * as reminders from "../reminders.js";
+import type * as superAdmin from "../superAdmin.js";
 
 import type {
   ApiFromModules,
@@ -48,16 +48,15 @@ import type {
 declare const fullApi: ApiFromModules<{
   activity: typeof activity;
   admin: typeof admin;
+  alerts: typeof alerts;
   auth: typeof auth;
+  authCodes: typeof authCodes;
   biometric: typeof biometric;
   crons: typeof crons;
   currency: typeof currency;
   data: typeof data;
   der: typeof der;
   deviceMove: typeof deviceMove;
-  email: typeof email;
-  emailAuth: typeof emailAuth;
-  emailCodes: typeof emailCodes;
   entries: typeof entries;
   family: typeof family;
   friends: typeof friends;
@@ -76,6 +75,7 @@ declare const fullApi: ApiFromModules<{
   pushSend: typeof pushSend;
   recurring: typeof recurring;
   reminders: typeof reminders;
+  superAdmin: typeof superAdmin;
 }>;
 
 /**

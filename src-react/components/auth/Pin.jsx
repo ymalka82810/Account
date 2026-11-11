@@ -51,7 +51,7 @@ export default function Pin({ current }) {
             aria-label={k === 'del' ? t('מחיקה') : k === 'ok' ? t('אישור') : k} onClick={() => pressKey(k)}>{k === 'del' ? '⌫' : k === 'ok' ? '✓' : k}</button>
         )))}
       </div>
-      {f.mode === 'login' && f.person.role === 'parent' && !f.legacy && (
+      {f.mode === 'login' && !f.legacy && (
         <button className="ghost linkish" type="button" onClick={() => sheet.open(t('שכחתי את הקוד'), <ForgotPinSheet />)}>{t('שכחתי את הקוד')}</button>
       )}
       {f.mode === 'login' && f.person.role === 'parent' && !f.legacy && (

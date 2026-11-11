@@ -62,12 +62,12 @@ export default defineSchema({
     trustedDevices: v.optional(v.array(v.string())),
     // נעילה מדורגת: רמה עולה בכל נעילה (דקה, 5 דקות, שעה...). מתאפסת בכניסה מוצלחת.
     lockLevel: v.optional(v.number()),
-    // מייל להורים בלבד (לשינוי/איפוס קוד ולהתראות נעילה). pendingEmail = ממתין לאימות.
+    // חשבון גוגל מחובר (לכל תפקיד): googleSub = המזהה של Firebase, email = המייל המאומת שלו.
     email: v.optional(v.string()),
+    googleSub: v.optional(v.string()),
+    // ישן: אימות מייל בקוד (הוסר). maintenance:clearEmailOnly מנקה, ואז מסירים מכאן.
     emailVerified: v.optional(v.boolean()),
     pendingEmail: v.optional(v.string()),
-    // מזהה חשבון הגוגל שחובר להורה (sub של Firebase). המייל שלו הוא המייל המאומת.
-    googleSub: v.optional(v.string()),
     // להתראה להורה: כמה נעילות היו ומתי הייתה האחרונה. מתאפס כשקובעים קוד חדש.
     lockCount: v.optional(v.number()),
     lastLockAt: v.optional(v.number()),
@@ -155,17 +155,20 @@ export default defineSchema({
     .index("by_person", ["personId"])
     .index("by_expires", ["expiresAt"]),
 
-  // קודי אימות חד-פעמיים שנשלחים למייל (נשמרים כגיבוב בלבד).
+  // קודי אימות חד-פעמיים (נשמרים כגיבוב בלבד). השם נשאר מהתקופה שבה נשלחו במייל; היום אף קוד לא נשלח. ראו authCodes.ts.
   emailCodes: defineTable({
     personId: v.id("people"),
-    email: v.string(),
-    purpose: v.union(v.literal("verify"), v.literal("pinChange"), v.literal("pinReset"), v.literal("childReset"), v.literal("emailChange"),
-      // החלפת מכשיר להורה: deviceMove נשלח למייל המאומת, deviceBind הורה אחר מוסר ביד (לא נשלח)
-      v.literal("deviceMove"), v.literal("deviceBind"),
-      // הוספת מכשיר נוסף להורה שכבר קשור: קוד שההורה מנפיק לעצמו ממכשיר קשור ומקליד במכשיר החדש (לא נשלח)
-      v.literal("deviceAdd"),
-      // החלפת מכשיר שאבד (המתנה של 24 שעות): קוד נפרד מ-deviceMove, כדי שלא יהיה אפשר להשתמש בו ב-moveStart ולדלג על ההמתנה
-      v.literal("deviceRecovery")),
+    email: v.string(), // ישן, תמיד ריק
+    purpose: v.union(
+      // ישן: אימות מייל בקוד (הוסר). נשאר רק עד שהשורות הישנות פגות ונמחקות (maintenance.cleanup).
+      v.literal("verify"),
+      // אחרי אימות עם חשבון הגוגל המחובר (googleAuth:prove / proveFor)
+      v.literal("pinChange"), v.literal("pinReset"), v.literal("childReset"), v.literal("emailChange"), v.literal("deviceFirst"),
+      // החלפת מכשיר שאבד (המתנה של 24 שעות): נפרד מ-deviceMove, כדי שלא יהיה אפשר להשתמש בו ב-moveStart ולדלג על ההמתנה
+      v.literal("deviceRecovery"),
+      // מוצג במכשיר קשור / נמסר ביד: deviceMove = קוד החלפה מהמכשיר הישן, deviceBind = קוד קישור מהורה אחר,
+      // deviceAdd = קוד להוספת מכשיר נוסף
+      v.literal("deviceMove"), v.literal("deviceBind"), v.literal("deviceAdd")),
     codeHash: v.string(),
     salt: v.string(),
     expiresAt: v.number(),

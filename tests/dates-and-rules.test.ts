@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  addDays, advanceDate, cleanFamilyName, cleanName, deviceKey, firstAfter, generateEmailCode,
+  addDays, advanceDate, cleanFamilyName, cleanName, deviceKey, firstAfter, generateCode,
   maskEmail, normalizeCode, normalizeEmail, validEmail, validPin, weekdayOf,
 } from "../convex/lib";
 
@@ -87,7 +87,7 @@ describe("מייל", () => {
   it("maskEmail מסתיר את השם", () => {
     expect(maskEmail("yochai@gmail.com")).toBe("y***@gmail.com");
   });
-  it("generateEmailCode: תמיד 6 ספרות (כולל אפסים מובילים)", () => {
-    for (let i = 0; i < 300; i++) expect(generateEmailCode()).toMatch(/^\d{6}$/);
+  it("generateCode: תמיד 6 ספרות (כולל אפסים מובילים)", () => {
+    for (let i = 0; i < 300; i++) expect(generateCode()).toMatch(/^\d{6}$/);
   });
 });

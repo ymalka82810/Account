@@ -33,3 +33,7 @@ jobs:
       - run: npx convex run maintenance:clearPinPlain
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+      # זמני: מנקה את שדות אימות המייל הישן (emailVerified, pendingEmail, ומייל שלא הגיע מחשבון גוגל). להסיר ביחד עם השדות מה-schema אחרי ריצה אחת.
+      - run: npx convex run maintenance:clearEmailOnly
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}

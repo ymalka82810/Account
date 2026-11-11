@@ -89,10 +89,10 @@ async function makeKey(userId, name, challenge) {
 }
 
 // קישור ראשון של המכשיר להורה (בהקמת קופה, או הורה מהגרסה הקודמת). דורש את הקוד הסודי,
-// ואם יש להורה מייל מאומת גם קוד מהמייל (deviceMove:requestFirstCode).
-// מחזיר {ok:true} או {ok:false, reason:'wrong'|'locked'|'nopin'|'needEmailCode'|'emailCode'|'bound'|'needBindCode'}.
-export async function bioRegister(token, myPin, emailCode) {
-  const start = await call('biometric:registerStart', { token, myPin, emailCode });
+// ואם ההורה חיבר חשבון גוגל גם קוד מאימות בגוגל (googleAuth:prove עם deviceFirst).
+// מחזיר {ok:true} או {ok:false, reason:'wrong'|'locked'|'nopin'|'needGoogle'|'proof'|'bound'|'needBindCode'}.
+export async function bioRegister(token, myPin, proof) {
+  const start = await call('biometric:registerStart', { token, myPin, proof });
   if (!start.ok) return start;
   const { payload, local } = await makeKey(start.userId, start.name, start.challenge);
   await call('biometric:registerFinish', { token, ...payload });

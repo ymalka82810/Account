@@ -25,7 +25,27 @@ export const clearPinPlain = internalMutation({
   },
 });
 
-// מוחק כניסות וקודי מייל שפג תוקפם ומוני הגבלת קצב ישנים. רץ פעם ביום (crons.ts).
+// מעבר לחשבון גוגל: מנקה את שרידי אימות המייל בקוד. מייל נשאר רק אצל מי שחיבר חשבון גוגל (המייל של החשבון),
+// וקודי "verify" ישנים נמחקים. רץ אחרי כל פריסה עד שמסירים את השדות מה-schema (convex-deploy.yml).
+export const clearEmailOnly = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    let cleared = 0;
+    for (const p of await ctx.db.query("people").collect()) {
+      const stale = p.emailVerified !== undefined || p.pendingEmail !== undefined || (!p.googleSub && p.email !== undefined);
+      if (!stale) continue;
+      await ctx.db.patch(p._id, { emailVerified: undefined, pendingEmail: undefined, ...(p.googleSub ? {} : { email: undefined }) });
+      cleared++;
+    }
+    let codes = 0;
+    for (const c of await ctx.db.query("emailCodes").collect()) {
+      if (c.purpose === "verify") { await ctx.db.delete(c._id); codes++; }
+    }
+    return { cleared, codes };
+  },
+});
+
+// מוחק כניסות וקודי אימות שפג תוקפם ומוני הגבלת קצב ישנים. רץ פעם ביום (crons.ts).
 // אם יש יותר מ-BATCH רשומות, מתזמן את עצמו שוב כדי לא לחרוג ממגבלות הפעולה.
 export const cleanup = internalMutation({
   args: {},

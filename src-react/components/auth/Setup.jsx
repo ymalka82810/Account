@@ -1,15 +1,12 @@
 import Arrow from '../shared/Arrow.jsx';
 import { useEffect, useRef, useState } from 'react';
 import { t } from '../../i18n/index.js';
-import { state, PARENT_AVATARS } from '../../state/state.js';
+import { PARENT_AVATARS } from '../../state/state.js';
 import { backFromFamily, createFamily } from '../../state/auth.js';
 import { In, Terms, randomAvatar, useBusy } from './parts.jsx';
 import LocalePicker from '../shared/LocalePicker.jsx';
 import { deviceCountry, localeFor } from '../../lib/currencies.js';
-import { today, toast, errMsg } from '../../lib/helpers.js';
-import { call } from '../../lib/api.js';
-import { useSheet } from '../shared/Sheet.jsx';
-import { EmailSheet } from '../account/AccountSheets.jsx';
+import { today } from '../../lib/helpers.js';
 import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
 import { SETUP_DRAFT_KEY, loadDraft, saveDraft, clearDraft } from '../../lib/draft.js';
 import { useNotebook, isAdult, parseBirth } from '../../lib/notebook.js';
@@ -30,10 +27,9 @@ export default function Setup({ current }) {
 
 function SetupForm({ current }) {
   const nb = useNotebook();
-  const sheet = useSheet();
   // טיוטה (ראו lib/draft.js): רק שם המשפחה והשם. תאריך הלידה, הקוד הסודי והמייל לא נשמרים לעולם.
   const [draft] = useState(() => loadDraft(SETUP_DRAFT_KEY) || {});
-  const [v, setV] = useState({ familyName: String(draft.familyName || '').slice(0, 30), name: String(draft.name || '').slice(0, 20), pin: '', email: '' });
+  const [v, setV] = useState({ familyName: String(draft.familyName || '').slice(0, 30), name: String(draft.name || '').slice(0, 20), pin: '' });
   // אם כבר הוזן תאריך לידה בפנקס האישי, משתמשים בו.
   const [birthDate, setBirthDate] = useState(nb.birthDate || '');
   useEffect(() => { saveDraft(SETUP_DRAFT_KEY, { familyName: v.familyName, name: v.name }); }, [v.familyName, v.name]);
@@ -43,7 +39,7 @@ function SetupForm({ current }) {
   const [avatar] = useState(() => randomAvatar(PARENT_AVATARS));
   const [locale, setLocale] = useState(() => { const c = deviceCountry(); return c ? localeFor(c) : null; });
   const [error, setError] = useState('');
-  const [bad, setBad] = useState(''); // השדה השגוי הראשון: familyName | name | birth | locale | pin | email | terms
+  const [bad, setBad] = useState(''); // השדה השגוי הראשון: familyName | name | birth | locale | pin | terms
   const [busy, run] = useBusy();
   const formRef = useRef(null);
   const errRef = useRef(null);
@@ -66,23 +62,12 @@ function SetupForm({ current }) {
     if (!isAdult(birthDate)) return fail(t('קופה משפחתית נפתחת רק על ידי מי שמעל גיל 18'), 'birth');
     if (!locale) return fail(t('בחרו איפה אתם גרים'), 'locale');
     if (!pinOk(v.pin, 'parent')) return fail(t('הקוד הסודי לא תקין ({rule})', { rule: pinLabel('parent') }), 'pin');
-    if (v.email.trim() && !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(v.email.trim())) return fail(t('כתובת המייל לא נראית תקינה'), 'email');
     if (!formRef.current.querySelector('[data-f="terms"] input').checked) return fail(t('צריך לאשר את תנאי השימוש ומדיניות הפרטיות'), 'terms');
     run(async () => {
-      const { email, familyName, ...rest } = v;
-      const myPin = rest.pin;
+      const { familyName, ...rest } = v;
       const err = await createFamily({ ...rest, familyName: buildFamilyName(familyName), birthDate, avatar, ...locale });
       if (err) { setError(err); return; }
       setV((x) => ({ ...x, pin: '' }));
-      // מייל לשחזור (לא חובה): שולחים קוד אימות ופותחים ישר את שלב ההקלדה.
-      const addr = email.trim();
-      if (addr) {
-        try {
-          const res = await call('emailAuth:requestVerify', { token: state.token, email: addr, myPin });
-          if (!res.ok) { toast(t('לא הצלחנו לחבר את המייל. אפשר לנסות שוב ב"החשבון שלי".')); return; }
-          sheet.open(t('אימות המייל'), <EmailSheet sentTo={addr.toLowerCase()} />);
-        } catch (e) { toast(errMsg(e)); }
-      }
     });
   };
   return (
@@ -105,10 +90,6 @@ function SetupForm({ current }) {
             <PasswordInput inputMode="numeric" pattern="\d{4,8}" maxLength={pinMax('parent')} required autoComplete="new-password"
               aria-invalid={bad === 'pin' || undefined} className={bad === 'pin' ? 'invalid' : undefined} value={v.pin} onChange={set('pin')} />
             <small className="hint">{t('זה הקוד שתשתמשו בו בכל כניסה. כדאי לזכור אותו.')}</small></label>
-          <label className="field" data-f="email"><span>{t('מייל לשחזור הקוד (לא חובה)')}</span>
-            <input type="text" inputMode="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" maxLength={254} autoComplete="email" dir="ltr" placeholder="name@example.com"
-              aria-invalid={bad === 'email' || undefined} className={bad === 'email' ? 'invalid' : undefined} value={v.email} onChange={set('email')} />
-            <small className="hint">{t('אם תשכחו את הקוד, נשלח אליו קוד לאיפוס. בלי מייל, רק הורה אחר יוכל לעזור.')}</small></label>
           <label className="check" data-f="terms"><input type="checkbox" required aria-invalid={bad === 'terms' || undefined} onChange={clearErr} /><Terms /></label>
           {error && <p className="error" role="alert" ref={errRef}>{error}</p>}
           <button className="primary" type="submit" disabled={busy} aria-busy={busy}>{busy ? t('⏳ רגע…') : t('הקמת הקופה')}</button>

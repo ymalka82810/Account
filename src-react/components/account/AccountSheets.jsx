@@ -1,14 +1,15 @@
-// החלונות של החשבון האישי: מייל לשחזור ושינוי הקוד הסודי של עצמי.
+// החלונות של החשבון האישי: חשבון גוגל ושינוי הקוד הסודי של עצמי.
 import { useState } from 'react';
 import { state, AVATARS, PARENT_AVATARS } from '../../state/state.js';
 import { call, callAction } from '../../lib/api.js';
-import { googleAvailable, googleIdToken } from '../../lib/google.js';
+import { googleIdToken } from '../../lib/google.js';
+import { googleErrMsg, proveWithGoogle } from '../../lib/googleProof.js';
 import { toast, errMsg } from '../../lib/helpers.js';
 import { t } from '../../i18n/index.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
-import { codeProps, pinProps, Err, Field, PasswordInput } from '../shared/fields.jsx';
+import { pinProps, Err, Field, PasswordInput } from '../shared/fields.jsx';
 import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
 import AvatarPicker from '../shared/AvatarPicker.jsx';
 
@@ -33,142 +34,85 @@ export function AvatarSheet() {
   );
 }
 
-// חיבור עם חשבון גוגל: מאמת את המייל בלי לשלוח קוד. בלי מייל מאומת נדרש גם הקוד הסודי של ההורה (myPin).
-function GoogleLink({ myPin, onDone, setErr }) {
-  if (!googleAvailable()) return null;
-  return (
-    <>
-      <AsyncButton className="primary" onClick={async () => {
-        setErr('');
-        try {
-          const idToken = await googleIdToken();
-          if (!idToken) return;
-          const res = await callAction('googleAuth:link', { token: state.token, idToken, myPin: myPin || undefined });
-          if (res.ok) { onDone(); toast(t('חשבון הגוגל חובר ✅')); }
-          else if (res.reason === 'myPin') setErr(myPin ? t('הקוד הסודי שגוי.') : t('כתבו את הקוד הסודי שלכם, לאישור.'));
-          else if (res.reason === 'locked') setErr(t('יותר מדי ניסיונות. נסו שוב עוד כמה דקות.'));
-          else if (res.reason === 'differentEmail') setErr(t('חשבון הגוגל הזה במייל אחר מהמייל המאומת. כדי להחליף מייל, השתמשו בהחלפת מייל.'));
-          else setErr(t('חשבון הגוגל הזה כבר מחובר להורה אחר.'));
-        } catch (e) { setErr(e && e.data ? errMsg(e) : t('ההתחברות עם גוגל נכשלה. נסו שוב.')); }
-      }}>{t('חיבור עם גוגל')}</AsyncButton>
-    </>
-  );
-}
-
-// הוספה או החלפה של מייל להורה: כתובת, ואז קוד אימות שנשלח אליה.
-export function EmailSheet({ sentTo = '' }) {
+// חשבון גוגל (לכל תפקיד): חיבור, או החלפה לחשבון אחר. אחרי החיבור מאשרים בו פעולות רגישות במקום קוד במייל.
+// חיבור ראשון דורש גם את הקוד הסודי (אם יש), החלפה דורשת קודם אימות בחשבון הנוכחי.
+export function GoogleSheet() {
   const { data } = useApp();
   const sheet = useSheet();
-  const current = data?.me?.email;
-  // נקודת ההתחלה: בלי מייל, ישר לכתובת. עם מייל מאומת, קודם שולחים קוד למייל הישן.
-  // sentTo: קוד כבר נשלח לכתובת הזו (מההקמה), ולכן מתחילים ישר באימות.
-  const [step, setStep] = useState(sentTo ? 'code' : current ? 'start' : 'email');
-  const [addr, setAddr] = useState(sentTo);
-  const [email, setEmail] = useState('');
-  const [oldCode, setOldCode] = useState('');
+  const me = data.me;
   const [myPin, setMyPin] = useState('');
-  const [code, setCode] = useState('');
   const [err, setErr] = useState('');
-  useSheetTitle(step === 'start' ? t('החלפת מייל') : step === 'email' ? t('מייל לשחזור הקוד') : t('אימות המייל'));
+  useSheetTitle(t('חשבון גוגל'));
 
-  const go = (s) => { setErr(''); setStep(s); };
-
-  if (step === 'start') {
-    return (
-      <div className="form">
-        <p className="hint">{t('המייל הנוכחי: {email}. להחלפה נשלח אליו קוד אישור.', { email: current })}</p>
-        {err && <Err>{err}</Err>}
-        <AsyncButton className="primary" onClick={async () => {
-          try { await call('emailAuth:requestEmailChangeCode', { token: state.token }); go('email'); }
-          catch (e) { setErr(errMsg(e)); }
-        }}>{t('שליחת קוד למייל הנוכחי')}</AsyncButton>
-        {!data.me.googleLinked && <GoogleLink onDone={() => sheet.close()} setErr={setErr} />}
-      </div>
-    );
+  async function link(changeProof) {
+    let idToken;
+    try { idToken = await googleIdToken(); } catch (e) { setErr(googleErrMsg(e)); return; }
+    if (!idToken) return;
+    try {
+      const res = await callAction('googleAuth:link', { token: state.token, idToken, myPin: myPin || undefined, changeProof });
+      if (res.ok) { sheet.close(); toast(t('חשבון הגוגל חובר ✅')); }
+      else if (res.reason === 'myPin') setErr(myPin ? t('הקוד הסודי שגוי.') : t('כתבו את הקוד הסודי שלכם, לאישור.'));
+      else if (res.reason === 'locked') setErr(t('יותר מדי ניסיונות. נסו שוב עוד כמה דקות.'));
+      else if (res.reason === 'otherAccount') setErr(t('זה לא חשבון הגוגל שמחובר אליכם. בחרו את החשבון הנכון.'));
+      else setErr(t('חשבון הגוגל הזה כבר מחובר למישהו אחר.'));
+    } catch (e) { setErr(googleErrMsg(e)); }
   }
-  if (step === 'email') {
+
+  if (me.googleLinked) {
     return (
       <div className="form">
-        <p className="hint">{current
-          ? t('שלחנו קוד אל {email}. כתבו אותו, ואת הכתובת החדשה. היא תחליף את הנוכחית רק אחרי אימות.', { email: current })
-          : t('נשלח אליו קוד כשמשנים או מאפסים קוד סודי, וגם התראה כשהקוד של מישהו במשפחה ננעל.')}</p>
-        {current && <Field label={t('קוד מהמייל הנוכחי')}><input {...codeProps} value={oldCode} onChange={(e) => setOldCode(e.target.value)} /></Field>}
-        {!current && <Field label={t('הקוד הסודי שלכם, לאישור')}><PasswordInput {...pinProps('current-password', pinMax('parent'))} value={myPin} onChange={(e) => setMyPin(e.target.value)} /></Field>}
-        <Field label={current ? t('כתובת מייל חדשה') : t('כתובת מייל')}>
-          <input type="text" inputMode="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" autoComplete="email" placeholder="name@example.com" dir="ltr" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </Field>
+        <p className="hint">{t('מחובר: {email}. בו מאשרים שינוי או איפוס של הקוד הסודי ופעולות רגישות אחרות.', { email: me.email })}</p>
         {err && <Err>{err}</Err>}
-        <AsyncButton className="primary" onClick={async () => {
+        <AsyncButton className="ghost" onClick={async () => {
           setErr('');
-          try {
-            const res = await call('emailAuth:requestVerify', { token: state.token, email, oldCode: current ? oldCode : undefined, myPin: current ? undefined : myPin });
-            if (res.ok) { setAddr(email.trim().toLowerCase()); go('code'); }
-            else if (res.reason === 'myPin') setErr(t('הקוד הסודי שגוי.'));
-            else if (res.reason === 'locked') setErr(t('יותר מדי ניסיונות. נסו שוב עוד כמה דקות.'));
-            else setErr(t('הקוד מהמייל הנוכחי שגוי או שפג תוקפו.'));
-          } catch (e) { setErr(errMsg(e)); }
-        }}>{t('שליחת קוד אימות')}</AsyncButton>
-        {!current && <GoogleLink myPin={myPin} onDone={() => sheet.close()} setErr={setErr} />}
+          // קודם אימות בחשבון הנוכחי, ואז בחירת החשבון החדש.
+          const r = await proveWithGoogle('emailChange', { token: state.token });
+          if (!r) return;
+          if (r.error) { setErr(r.error); return; }
+          toast(t('עכשיו בחרו את החשבון החדש'));
+          await link(r.proof);
+        }}>{t('החלפה לחשבון גוגל אחר')}</AsyncButton>
       </div>
     );
   }
   return (
     <div className="form">
-      <p className="hint">{t('שלחנו קוד בן 6 ספרות אל {email}. הוא תקף ל-10 דקות.', { email: addr })}</p>
-      <Field label={t('הקוד מהמייל')}><input {...codeProps} value={code} onChange={(e) => setCode(e.target.value)} /></Field>
+      <p className="hint">{t('לא חובה. עם חשבון גוגל אפשר לאפס את הקוד הסודי אם שוכחים אותו, ומאשרים בו פעולות רגישות.')}</p>
+      {me.hasPin && <Field label={t('הקוד הסודי שלכם, לאישור')}><PasswordInput {...pinProps('current-password', pinMax(me.role))} value={myPin} onChange={(e) => setMyPin(e.target.value)} /></Field>}
       {err && <Err>{err}</Err>}
-      <AsyncButton className="primary" onClick={async () => {
-        try {
-          const res = await call('emailAuth:confirmEmail', { token: state.token, code });
-          if (res.ok) { sheet.close(); toast(t('המייל אומת ✅')); }
-          else setErr(t('הקוד שגוי או שפג תוקפו.'));
-        } catch (e) { setErr(errMsg(e)); }
-      }}>{t('אימות')}</AsyncButton>
-      <button className="ghost" type="button" onClick={() => go(current ? 'start' : 'email')}>{t('כתובת אחרת')}</button>
+      <AsyncButton className="primary" onClick={async () => { setErr(''); await link(undefined); }}>{t('חיבור עם גוגל')}</AsyncButton>
     </div>
   );
 }
 
-// שינוי הקוד הסודי של הורה עם מייל מאומת: קוד מהמייל במקום הקוד הנוכחי.
-export function ChangePinEmailSheet() {
+// שינוי הקוד הסודי של מי שחיבר חשבון גוגל: אימות בגוגל במקום הקוד הנוכחי.
+export function ChangePinGoogleSheet() {
   const { data } = useApp();
   const sheet = useSheet();
-  const [step, setStep] = useState('send');
-  const [code, setCode] = useState('');
   const [newPin, setNewPin] = useState('');
   const [err, setErr] = useState('');
   useSheetTitle(t('שינוי הקוד הסודי'));
-
-  if (step === 'send') {
-    return (
-      <div className="form">
-        <p className="hint">{t('לאישור נשלח קוד אימות ל-{email}.', { email: data.me.email })}</p>
-        {err && <Err>{err}</Err>}
-        <AsyncButton className="primary" onClick={async () => {
-          try { await call('emailAuth:requestChangeCode', { token: state.token }); setErr(''); setStep('form'); }
-          catch (e) { setErr(errMsg(e)); }
-        }}>{t('שליחת קוד למייל')}</AsyncButton>
-      </div>
-    );
-  }
   return (
     <div className="form">
-      <Field label={t('הקוד מהמייל')}><input {...codeProps} value={code} onChange={(e) => setCode(e.target.value)} /></Field>
       <Field label={t('קוד חדש ({rule})', { rule: pinLabel(data.me.role) })}><PasswordInput {...pinProps('new-password', pinMax(data.me.role))} value={newPin} onChange={(e) => setNewPin(e.target.value)} /></Field>
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
+        setErr('');
         if (!pinOk(newPin, data.me.role)) { setErr(t('הקוד החדש צריך להיות {rule}.', { rule: pinLabel(data.me.role) })); return; }
+        const r = await proveWithGoogle('pinChange', { token: state.token });
+        if (!r) return;
+        if (r.error) { setErr(r.error); return; }
         try {
-          const res = await call('emailAuth:changePinWithCode', { token: state.token, code, newPin });
+          const res = await call('googleLink:changePinWithProof', { token: state.token, proof: r.proof, newPin });
           if (res.ok) { sheet.close(); toast(t('הקוד שונה ✅')); }
-          else setErr(t('קוד האימות שגוי או שפג תוקפו.'));
+          else setErr(t('משהו השתבש. נסו שוב.'));
         } catch (e) { setErr(errMsg(e)); }
-      }}>{t('שמירה')}</AsyncButton>
+      }}>{t('אישור עם גוגל ושמירה')}</AsyncButton>
     </div>
   );
 }
 
-// שינוי הקוד הסודי שלי (בלי מייל מאומת): הקוד הנוכחי והקוד החדש.
+// שינוי הקוד הסודי שלי (בלי חשבון גוגל): הקוד הנוכחי והקוד החדש.
 export function ChangePinSheet() {
   const sheet = useSheet();
   const { data } = useApp();
@@ -189,7 +133,7 @@ export function ChangePinSheet() {
           if (res.ok) { sheet.close(); toast(t('הקוד שונה ✅')); }
           else if (res.reason === 'wrong') setErr(t('הקוד הנוכחי לא נכון.'));
           else if (res.reason === 'locked') setErr(t('יותר מדי ניסיונות. נסו שוב עוד דקה.'));
-          else if (res.reason === 'useEmail') { sheet.back(); sheet.open(t('שינוי הקוד הסודי'), <ChangePinEmailSheet />); }
+          else if (res.reason === 'useGoogle') { sheet.back(); sheet.open(t('שינוי הקוד הסודי'), <ChangePinGoogleSheet />); }
           else setErr(t('משהו השתבש. נסו שוב.'));
         } catch (e) { setErr(errMsg(e)); }
       }}>{t('שמירה')}</AsyncButton>

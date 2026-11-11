@@ -80,19 +80,36 @@ jobs:
       - name: Currency launcher icons
         run: python3 android-plugin/apply-currency-icons.py
 
-      - name: Add native plugins (self-update, biometric, app icon)
+      - name: Add native plugins (self-update, biometric, app icon, Google sign-in)
         run: |
           JAVA_DIR=android/app/src/main/java/com/ymalka/account
           sed "s/PACKAGE_PLACEHOLDER/com.ymalka.account/" android-plugin/AppUpdaterPlugin.java > $JAVA_DIR/AppUpdaterPlugin.java
           sed "s/PACKAGE_PLACEHOLDER/com.ymalka.account/" android-plugin/BiometricAuthPlugin.java > $JAVA_DIR/BiometricAuthPlugin.java
           sed "s/PACKAGE_PLACEHOLDER/com.ymalka.account/" android-plugin/AppIconPlugin.java > $JAVA_DIR/AppIconPlugin.java
+          sed "s/PACKAGE_PLACEHOLDER/com.ymalka.account/" android-plugin/GoogleSignInPlugin.java > $JAVA_DIR/GoogleSignInPlugin.java
           # רישום הפלאגינים לפני super.onCreate
-          sed -i 's/public class MainActivity extends BridgeActivity {}/public class MainActivity extends BridgeActivity {\n    @Override\n    public void onCreate(android.os.Bundle savedInstanceState) {\n        registerPlugin(AppUpdaterPlugin.class);\n        registerPlugin(BiometricAuthPlugin.class);\n        registerPlugin(AppIconPlugin.class);\n        super.onCreate(savedInstanceState);\n    }\n}/' $JAVA_DIR/MainActivity.java
+          sed -i 's/public class MainActivity extends BridgeActivity {}/public class MainActivity extends BridgeActivity {\n    @Override\n    public void onCreate(android.os.Bundle savedInstanceState) {\n        registerPlugin(AppUpdaterPlugin.class);\n        registerPlugin(BiometricAuthPlugin.class);\n        registerPlugin(AppIconPlugin.class);\n        registerPlugin(GoogleSignInPlugin.class);\n        super.onCreate(savedInstanceState);\n    }\n}/' $JAVA_DIR/MainActivity.java
           grep -q "registerPlugin(BiometricAuthPlugin.class)" $JAVA_DIR/MainActivity.java
           grep -q "registerPlugin(AppIconPlugin.class)" $JAVA_DIR/MainActivity.java
+          grep -q "registerPlugin(GoogleSignInPlugin.class)" $JAVA_DIR/MainActivity.java
           # ספריית BiometricPrompt של androidx
           sed -i '0,/^dependencies {/s//dependencies {\n    implementation "androidx.biometric:biometric:1.1.0"/' android/app/build.gradle
           grep -q "androidx.biometric:biometric" android/app/build.gradle
+          # התחברות עם גוגל: Credential Manager וספריית Google ID
+          sed -i '0,/^dependencies {/s//dependencies {\n    implementation "androidx.credentials:credentials:1.3.0"\n    implementation "androidx.credentials:credentials-play-services-auth:1.3.0"\n    implementation "com.google.android.libraries.identity.googleid:googleid:1.1.1"/' android/app/build.gradle
+          grep -q "identity.googleid:googleid" android/app/build.gradle
+          # מזהה לקוח הווב (client_type 3) מ-google-services.json, למשאב google_web_client_id. בלעדיו הכפתור מסביר שחסרה הגדרה.
+          python3 - <<'PYG'
+          import json, os
+          cid = ''
+          if os.path.exists('android/app/google-services.json'):
+              d = json.load(open('android/app/google-services.json'))
+              for c in d.get('client', []):
+                  for o in c.get('oauth_client', []):
+                      if o.get('client_type') == 3: cid = o['client_id']
+          if not cid: print('::warning::No web OAuth client in google-services.json - Google sign-in is disabled in this APK. Enable Google in Firebase Authentication and download google-services.json again.')
+          open('android/app/src/main/res/values/google_signin.xml', 'w').write('<?xml version="1.0" encoding="utf-8"?>\n<resources>\n    <string name="google_web_client_id" translatable="false">' + cid + '</string>\n</resources>\n')
+          PYG
           MANIFEST=android/app/src/main/AndroidManifest.xml
           # אזור הסטטוס (מצלמה/שעון/סוללה): ה-WebView מרופד מתחתיו (SystemBars native), והרקע שמאחורי הרפידה שחור
           sed -i 's#<item name="android:background">@null</item>#<item name="android:background">@null</item>\n        <item name="android:windowBackground">@android:color/black</item>#' android/app/src/main/res/values/styles.xml
@@ -151,6 +168,8 @@ jobs:
           $APKSIGNER sign --ks $RUNNER_TEMP/release.p12 --ks-type pkcs12 --ks-pass env:KEYSTORE_PASSWORD \
             --out account.apk android/app/build/outputs/apk/release/app-release-unsigned.apk
           $APKSIGNER verify account.apk
+          # טביעת האצבע של מפתח החתימה (ציבורית, לא סוד): צריך להוסיף אותה ב-Firebase לאפליקציית האנדרואיד, אחרת ההתחברות עם גוגל נכשלת
+          $APKSIGNER verify --print-certs account.apk | grep -E "SHA-1|SHA-256" | sed 's/^/::notice title=Signing cert::/'
 
       - uses: actions/upload-artifact@v6
         with:

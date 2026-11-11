@@ -115,13 +115,13 @@ test.describe('הקמת קופה: שגיאות בשפת הממשק', () => {
 });
 
 test.describe('הקמת קופה: המקלדת הפנימית לא מסתירה', () => {
-  test('שדות השם, הקוד והמייל נשארים מעל המקלדת, וכפתור "הקמת הקופה" גלוי כשהמייל פעיל', async ({ page }) => {
+  test('שדות השם והקוד נשארים מעל המקלדת, וכפתור "הקמת הקופה" גלוי כשהקוד פעיל', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 640 });
     await openSetup(page);
     const kbTop = () => page.evaluate(() => document.querySelector('.kb').getBoundingClientRect().top);
     const bottom = (sel) => page.locator(sel).evaluate((e) => e.getBoundingClientRect().bottom);
     const state = () => page.evaluate(() => JSON.stringify({ scrollY: Math.round(scrollY), innerHeight, docHeight: document.documentElement.scrollHeight, kbHeight: document.querySelector('.kb').offsetHeight }));
-    for (const f of ['name', 'pin', 'email']) {
+    for (const f of ['name', 'pin']) {
       await page.locator(`#screen-setup [data-f="${f}"] input`).focus();
       await page.waitForTimeout(1200);
       expect(await bottom(`#screen-setup [data-f="${f}"] input`), `${f} ${await state()}`).toBeLessThanOrEqual(await kbTop());
@@ -144,7 +144,7 @@ test.describe('הקמת קופה: המקלדת הפנימית לא מסתירה'
     const kbTop = () => page.evaluate(() => document.querySelector('.kb').getBoundingClientRect().top);
     const bottom = (sel) => page.locator(sel).evaluate((e) => e.getBoundingClientRect().bottom);
     const state = () => page.evaluate(() => JSON.stringify({ scrollY: Math.round(scrollY), innerHeight, docHeight: document.documentElement.scrollHeight, kbHeight: document.querySelector('.kb').offsetHeight }));
-    for (const f of ['name', 'pin', 'email']) {
+    for (const f of ['name', 'pin']) {
       await page.locator(`#screen-setup [data-f="${f}"] input`).focus();
       await page.waitForTimeout(1600);
       expect(await bottom(`#screen-setup [data-f="${f}"] input`), `${f} ${await state()}`).toBeLessThanOrEqual(await kbTop());
@@ -176,16 +176,14 @@ test.describe('טיוטה', () => {
     expect(await page.evaluate(() => localStorage.getItem('kupa-draft-notebook-owed'))).toBeNull();
   });
 
-  test('בהקמת קופה נשמרים רק שמות, והקוד הסודי והמייל אף פעם', async ({ page }) => {
+  test('בהקמת קופה נשמרים רק שמות, והקוד הסודי אף פעם', async ({ page }) => {
     await openSetup(page);
     await page.locator('#screen-setup [data-f="familyName"] input').fill('כהן');
     await page.locator('#screen-setup [data-f="name"] input').fill('דנה');
     await page.locator('#screen-setup [data-f="pin"] input').fill('123456');
-    await page.locator('#screen-setup [data-f="email"] input').fill('a@b.co');
     const raw = await page.evaluate(() => localStorage.getItem('kupa-draft-setup'));
     expect(raw).toContain('כהן');
     expect(raw).not.toContain('123456');
-    expect(raw).not.toContain('a@b.co');
     // תאריך הלידה לא נשמר בטיוטה, ורק השדות האחרים כן
     expect(Object.keys(JSON.parse(raw).v).sort()).toEqual(['familyName', 'name']);
     expect(raw).not.toContain('birthDate');

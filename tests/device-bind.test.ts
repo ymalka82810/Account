@@ -56,8 +56,8 @@ async function loginProof(personId: any, d: Dev, device = "dev-x") {
 const login = (personId: any, pin: string, proof?: any, device = "dev-x") =>
   t.mutation(api.auth.login, { code: CODE, personId, pin, device, proof });
 
-// קוד שנשלח למייל, בלי לקרוא מייל: שותלים קוד ידוע במקום שהשרת היה שומר.
-async function plantCode(personId: any, purpose: "deviceMove" | "deviceBind" | "deviceAdd" | "deviceRecovery", code: string) {
+// קוד שהשרת היה מנפיק (אחרי אימות בגוגל, או במכשיר אחר): שותלים קוד ידוע במקום.
+async function plantCode(personId: any, purpose: "deviceMove" | "deviceBind" | "deviceAdd" | "deviceRecovery" | "deviceFirst" | "pinReset", code: string) {
   await t.run(async (ctx) => {
     // מוחקים קוד אמיתי שהשרת כבר הנפיק, כדי שהקוד הידוע יהיה היחיד.
     for (const old of await ctx.db.query("emailCodes").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) {
@@ -66,7 +66,7 @@ async function plantCode(personId: any, purpose: "deviceMove" | "deviceBind" | "
     await ctx.db.insert("emailCodes", { personId, email: "", purpose, codeHash: await hashPin(code, "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
   });
 }
-const verifyEmail = (id: any) => t.run(async (ctx) => { await ctx.db.patch(id, { email: "p@example.com", emailVerified: true }); });
+const linkGoogle = (id: any) => t.run(async (ctx) => { await ctx.db.patch(id, { email: "p@example.com", googleSub: "g-" + id }); });
 const sessionsOf = (id: any) => t.run((ctx) => ctx.db.query("sessions").withIndex("by_person", (q) => q.eq("personId", id)).collect());
 
 let dad: Dev, mom: Dev, kid: Dev;
@@ -146,10 +146,10 @@ describe("כניסה כהורה דורשת את המכשיר", () => {
     expect(await t.mutation(api.biometric.registerStart, { token: A.tokens["אבא"], myPin: "1111" })).toMatchObject({ ok: false, reason: "bound" });
   });
 
-  it("איפוס קוד במייל לא פותח סשן להורה קשור (הוא נכנס מהמכשיר שלו)", async () => {
-    await verifyEmail(A.ids["אבא"]);
-    await t.run(async (ctx) => { await ctx.db.insert("emailCodes", { personId: A.ids["אבא"], email: "p@example.com", purpose: "pinReset", codeHash: await hashPin("123456", "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 }); });
-    const res: any = await t.mutation(api.emailAuth.resetWithCode, { code: CODE, personId: A.ids["אבא"], emailCode: "123456", newPin: "5555", device: "kid" });
+  it("איפוס קוד באישור גוגל לא פותח סשן להורה קשור (הוא נכנס מהמכשיר שלו)", async () => {
+    await linkGoogle(A.ids["אבא"]);
+    await plantCode(A.ids["אבא"], "pinReset", "123456");
+    const res: any = await t.mutation(api.googleLink.resetWithProof, { code: CODE, personId: A.ids["אבא"], proof: "123456", newPin: "5555", device: "kid" });
     expect(res.ok).toBe(true);
     expect(res.token).toBeUndefined();
     const proof = await loginProof(A.ids["אבא"], dad);
@@ -214,23 +214,26 @@ describe("הורה שני", () => {
 });
 
 describe("החלפת מכשיר מהמכשיר הישן", () => {
-  beforeEach(async () => { await firstBind("אבא", dad, "1111"); await verifyEmail(A.ids["אבא"]); });
+  beforeEach(async () => { await firstBind("אבא", dad, "1111"); });
   const newPhone = async () => newDevice("dad-new");
 
-  it("דורשת טביעת אצבע במכשיר הישן ומייל מאומת", async () => {
+  it("דורשת טביעת אצבע במכשיר הישן, ומציגה בו קוד החלפה", async () => {
     await expect(t.mutation(api.deviceMove.requestMoveCode, { token: A.tokens["אבא"] })).rejects.toThrow();
     await expect(t.mutation(api.deviceMove.requestMoveCode, { token: A.tokens["אבא"], proof: await prove("אבא", dad, "role:x:y") })).rejects.toThrow();
-    expect(await t.mutation(api.deviceMove.requestMoveCode, { token: A.tokens["אבא"], proof: await prove("אבא", dad, "move-device") })).toMatchObject({ ok: true });
-    // בלי מייל מאומת
-    await t.run(async (ctx) => { await ctx.db.patch(A.ids["אבא"], { emailVerified: false }); });
-    await expect(t.mutation(api.deviceMove.requestMoveCode, { token: A.tokens["אבא"], proof: await prove("אבא", dad, "move-device") })).rejects.toThrow();
+    const r: any = await t.mutation(api.deviceMove.requestMoveCode, { token: A.tokens["אבא"], proof: await prove("אבא", dad, "move-device") });
+    expect(r).toMatchObject({ ok: true });
+    expect(r.code).toMatch(/^\d{6}$/);
+    const phone = await newPhone();
+    const start: any = await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "old", secretCode: r.code, device: "n" });
+    expect(start.ok).toBe(true);
+    expect((await t.mutation(api.deviceMove.moveFinish, { ticket: start.ticket, ...(await keyPayload(phone, start.challenge)) }) as any).ok).toBe(true);
   });
 
-  it("המכשיר החדש צריך קוד סודי וקוד מהמייל; אחרי ההחלפה הישן נותק", async () => {
+  it("המכשיר החדש צריך קוד סודי וקוד ההחלפה; אחרי ההחלפה הישן נותק", async () => {
     await plantCode(A.ids["אבא"], "deviceMove", "424242");
     const phone = await newPhone();
-    expect(await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "email", secretCode: "111111", device: "n" })).toMatchObject({ ok: false, reason: "secretCode" });
-    const start: any = await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "email", secretCode: "424242", device: "n" });
+    expect(await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "old", secretCode: "111111", device: "n" })).toMatchObject({ ok: false, reason: "secretCode" });
+    const start: any = await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "old", secretCode: "424242", device: "n" });
     expect(start.ok).toBe(true);
     // כרטיס שגוי לא עובד
     await expect(t.mutation(api.deviceMove.moveFinish, { ticket: "x".repeat(64), ...(await keyPayload(phone, start.challenge)) })).rejects.toThrow();
@@ -247,7 +250,7 @@ describe("החלפת מכשיר מהמכשיר הישן", () => {
   it("הכרטיס חד-פעמי ופג תוקף", async () => {
     await plantCode(A.ids["אבא"], "deviceMove", "424242");
     const phone = await newPhone();
-    const start: any = await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "email", secretCode: "424242", device: "n" });
+    const start: any = await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "old", secretCode: "424242", device: "n" });
     vi.advanceTimersByTime(11 * 60 * 1000);
     await expect(t.mutation(api.deviceMove.moveFinish, { ticket: start.ticket, ...(await keyPayload(phone, start.challenge)) })).rejects.toThrow();
   });
@@ -300,9 +303,8 @@ describe("הוספת מכשיר נוסף להורה (בלי לנתק את הקי
     const start: any = await t.mutation(api.deviceMove.addDeviceStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", secretCode: issued.code, device: "tab" });
     await expect(t.mutation(api.deviceMove.moveFinish, { ticket: start.ticket, ...(await keyPayload(tablet, start.challenge)) })).rejects.toThrow();
     expect(await login(A.ids["אבא"], "1111", await loginProof(A.ids["אבא"], dad, "d1"), "d1")).toMatchObject({ ok: true });
-    await verifyEmail(A.ids["אבא"]);
     await plantCode(A.ids["אבא"], "deviceMove", "424242");
-    const mv: any = await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "email", secretCode: "424242", device: "n" });
+    const mv: any = await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "old", secretCode: "424242", device: "n" });
     await expect(t.mutation(api.deviceMove.addDeviceFinish, { ticket: mv.ticket, ...(await keyPayload(tablet, mv.challenge)) })).rejects.toThrow();
   });
 
@@ -355,10 +357,9 @@ describe("הוספת מכשיר נוסף להורה (בלי לנתק את הקי
 
   it("החלפת מכשיר (במקום הוספה) עדיין מוחקת את כל המכשירים הקודמים", async () => {
     await addTablet(tablet);
-    await verifyEmail(A.ids["אבא"]);
     await plantCode(A.ids["אבא"], "deviceMove", "424242");
     const phone = await newDevice("dad-new");
-    const start: any = await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "email", secretCode: "424242", device: "n" });
+    const start: any = await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "old", secretCode: "424242", device: "n" });
     const fin: any = await t.mutation(api.deviceMove.moveFinish, { ticket: start.ticket, ...(await keyPayload(phone, start.challenge)) });
     expect(fin.ok).toBe(true);
     expect(await login(A.ids["אבא"], "1111", await loginProof(A.ids["אבא"], dad, "o1"), "o1")).toMatchObject({ ok: false, reason: "device" });
@@ -368,13 +369,13 @@ describe("הוספת מכשיר נוסף להורה (בלי לנתק את הקי
 });
 
 describe("מכשיר שאבד: בקשה עם המתנה של 24 שעות", () => {
-  beforeEach(async () => { await firstBind("אבא", dad, "1111"); await verifyEmail(A.ids["אבא"]); });
+  beforeEach(async () => { await firstBind("אבא", dad, "1111"); await linkGoogle(A.ids["אבא"]); });
 
   async function request(device = "n") {
     const r: any = await t.mutation(api.deviceMove.recoveryRequest, { code: CODE, personId: A.ids["אבא"], pin: "1111", device });
     expect(r.ok).toBe(true);
     await plantCode(A.ids["אבא"], "deviceRecovery", "777777");
-    return await t.mutation(api.deviceMove.recoveryConfirm, { code: CODE, personId: A.ids["אבא"], pin: "1111", emailCode: "777777", device });
+    return await t.mutation(api.deviceMove.recoveryConfirm, { code: CODE, personId: A.ids["אבא"], pin: "1111", proof: "777777", device });
   }
 
   it("אי אפשר להשלים לפני שעברו 24 שעות, ואחריהן אפשר", async () => {
@@ -407,9 +408,9 @@ describe("מכשיר שאבד: בקשה עם המתנה של 24 שעות", () =>
     expect(await t.mutation(api.deviceMove.recoveryFinish, { code: CODE, personId: A.ids["אבא"], pin: "1111", secret: c.secret, device: "n" })).toMatchObject({ ok: false, reason: "none" });
   });
 
-  it("בלי מייל מאומת אי אפשר להגיש בקשה", async () => {
-    await t.run(async (ctx) => { await ctx.db.patch(A.ids["אבא"], { emailVerified: false }); });
-    expect(await t.mutation(api.deviceMove.recoveryRequest, { code: CODE, personId: A.ids["אבא"], pin: "1111", device: "n" })).toMatchObject({ ok: false, reason: "noEmail" });
+  it("בלי חשבון גוגל מחובר אי אפשר להגיש בקשה", async () => {
+    await t.run(async (ctx) => { await ctx.db.patch(A.ids["אבא"], { googleSub: undefined }); });
+    expect(await t.mutation(api.deviceMove.recoveryRequest, { code: CODE, personId: A.ids["אבא"], pin: "1111", device: "n" })).toMatchObject({ ok: false, reason: "noGoogle" });
   });
 
   it("קוד סודי שגוי ממכשיר זר מוגבל ולא נועל את ההורה", async () => {
@@ -424,12 +425,15 @@ describe("קישור ראשון", () => {
     expect(await login(A.ids["אבא"], "1111")).toMatchObject({ ok: true, needBind: true });
   });
 
-  it("הורה עם מייל מאומת חייב קוד מהמייל גם לקישור הראשון", async () => {
-    await verifyEmail(A.ids["אבא"]);
-    expect(await t.mutation(api.biometric.registerStart, { token: A.tokens["אבא"], myPin: "1111" })).toMatchObject({ ok: false, reason: "needEmailCode" });
-    expect(await t.mutation(api.biometric.registerStart, { token: A.tokens["אבא"], myPin: "1111", emailCode: "000000" })).toMatchObject({ ok: false, reason: "emailCode" });
+  it("הורה שחיבר חשבון גוגל חייב אימות בגוגל גם לקישור הראשון", async () => {
+    await linkGoogle(A.ids["אבא"]);
+    expect(await t.mutation(api.biometric.registerStart, { token: A.tokens["אבא"], myPin: "1111" })).toMatchObject({ ok: false, reason: "needGoogle" });
+    expect(await t.mutation(api.biometric.registerStart, { token: A.tokens["אבא"], myPin: "1111", proof: "000000" })).toMatchObject({ ok: false, reason: "proof" });
+    // קוד של מטרה אחרת לא מתקבל
     await plantCode(A.ids["אבא"], "deviceMove", "123123");
-    expect(await t.mutation(api.biometric.registerStart, { token: A.tokens["אבא"], myPin: "1111", emailCode: "123123" })).toMatchObject({ ok: true });
+    expect(await t.mutation(api.biometric.registerStart, { token: A.tokens["אבא"], myPin: "1111", proof: "123123" })).toMatchObject({ ok: false, reason: "proof" });
+    await plantCode(A.ids["אבא"], "deviceFirst", "123123");
+    expect(await t.mutation(api.biometric.registerStart, { token: A.tokens["אבא"], myPin: "1111", proof: "123123" })).toMatchObject({ ok: true });
   });
 
   it("ילד לא יכול לקשור מכשיר", async () => {

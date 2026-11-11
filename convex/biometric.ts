@@ -1,13 +1,13 @@
 import { mutation, query, MutationCtx, QueryCtx } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
-import { internal } from "./_generated/api";
 import { Doc, Id } from "./_generated/dataModel";
 import { concat, derToRaw } from "./der";
 import {
   LOGIN_CHALLENGES_PER_DEVICE, LOGIN_CHALLENGES_PER_PERSON, MAX_PARENT_DEVICES, Member, cleanDeviceId, codeThrottled, failCode, findFamilyByCode, randomHex, registerPinFail,
   requireParent, upgradePinHash, verifyPin,
 } from "./lib";
-import { verifyCode } from "./emailCodes";
+import { verifyCode } from "./authCodes";
+import { alertLock } from "./alerts";
 
 // אימות ביומטרי (טביעת אצבע / זיהוי פנים) לפעולות רגישות של הורים, כמו שינוי תפקיד.
 //
@@ -181,10 +181,10 @@ export const startRegistration = (ctx: MutationCtx, personId: Id<"people">) => n
 // ---------- רישום מכשיר ראשון ----------
 // זה הקישור הראשון של הורה למכשיר, ולכן הוא אפשרי רק כשאין עדיין הורה קשור במשפחה
 // (בהקמת הקופה, או הורה מהגרסה הקודמת). הורה נוסף נקשר בקוד קישור: deviceMove:bindStart.
-// שלב 1: ההורה מאשר עם הקוד הסודי שלו (ועם קוד מהמייל, אם יש לו מייל מאומת) ומקבל אתגר לרישום.
+// שלב 1: ההורה מאשר עם הקוד הסודי שלו (ובחשבון הגוגל, אם חיבר) ומקבל אתגר לרישום.
 export const registerStart = mutation({
-  args: { token: v.string(), myPin: v.string(), emailCode: v.optional(v.string()) },
-  handler: async (ctx, { token, myPin, emailCode }) => {
+  args: { token: v.string(), myPin: v.string(), proof: v.optional(v.string()) },
+  handler: async (ctx, { token, myPin, proof }) => {
     const me = await requireParent(ctx, token, { allowUnbound: true });
     if (await isBound(ctx, me._id)) return { ok: false as const, reason: "bound" as const };
     if (await familyHasBoundParent(ctx, me.familyId)) return { ok: false as const, reason: "needBindCode" as const };
@@ -193,13 +193,13 @@ export const registerStart = mutation({
     if (me.lockedUntil && me.lockedUntil > now) return { ok: false as const, reason: "locked" as const };
     if (!(await verifyPin(myPin, me.pinSalt, me.pinHash))) {
       const r = await registerPinFail(ctx, me);
-      if (r.locked) await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: me._id });
+      if (r.locked) await alertLock(ctx, me);
       return { ok: false as const, reason: "wrong" as const };
     }
-    // הורה עם מייל מאומת מאשר גם בקוד מהמייל (deviceMove:requestFirstCode), כדי שמי שרק יודע את הקוד הסודי לא יקשור מכשיר.
-    if (me.emailVerified) {
-      if (!emailCode) return { ok: false as const, reason: "needEmailCode" as const };
-      if (!(await verifyCode(ctx, me._id, "deviceMove", emailCode))) return { ok: false as const, reason: "emailCode" as const };
+    // הורה שחיבר חשבון גוגל מאשר גם בגוגל (googleAuth:prove עם deviceFirst), כדי שמי שרק יודע את הקוד הסודי לא יקשור מכשיר.
+    if (me.googleSub) {
+      if (!proof) return { ok: false as const, reason: "needGoogle" as const };
+      if (!(await verifyCode(ctx, me._id, "deviceFirst", proof))) return { ok: false as const, reason: "proof" as const };
     }
     await ctx.db.patch(me._id, { failedAttempts: 0 });
     await upgradePinHash(ctx, me, myPin);
@@ -285,7 +285,7 @@ export const deviceStatus = query({
     return {
       bound,
       canBindSelf: !bound && !(await familyHasBoundParent(ctx, me.familyId)),
-      needsEmailCode: !!me.emailVerified,
+      needsGoogle: !!me.googleSub,
       kind: keys[0]?.kind ?? null,
       boundAt: keys[0]?.createdAt ?? null,
       max: MAX_PARENT_DEVICES,
@@ -331,7 +331,7 @@ export const pinConfirm = mutation({
     if (me.lockedUntil && me.lockedUntil > Date.now()) return { ok: false as const, reason: "locked" as const };
     if (!(await verifyPin(myPin, me.pinSalt, me.pinHash))) {
       const r = await registerPinFail(ctx, me);
-      if (r.locked) await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: me._id });
+      if (r.locked) await alertLock(ctx, me);
       return { ok: false as const, reason: "wrong" as const };
     }
     await ctx.db.patch(me._id, { failedAttempts: 0 });

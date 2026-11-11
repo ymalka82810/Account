@@ -6,7 +6,8 @@ import { toast, errMsg } from '../../lib/helpers.js';
 import { useApp } from '../../state/appContext.js';
 import { useSheet, useSheetTitle } from '../shared/Sheet.jsx';
 import AsyncButton from '../shared/AsyncButton.jsx';
-import { codeProps, pinProps, Err, Field, PasswordInput } from '../shared/fields.jsx';
+import { pinProps, Err, Field, PasswordInput } from '../shared/fields.jsx';
+import { proveWithGoogle } from '../../lib/googleProof.js';
 import { g } from '../../lib/gender.js';
 import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
 
@@ -14,39 +15,29 @@ import { pinLabel, pinMax, pinOk } from '../../lib/pin.js';
 export function ResetPinSheet({ person: p }) {
   const { data } = useApp();
   const sheet = useSheet();
-  const emailRequired = !!data.me.email;
-  const [step, setStep] = useState(emailRequired ? 'send' : 'form');
-  const [emailCode, setEmailCode] = useState('');
+  // הורה שחיבר חשבון גוגל מאשר בגוגל; בלי גוגל - בקוד הסודי שלו.
+  const viaGoogle = !!data.me.googleLinked;
   const [myPin, setMyPin] = useState('');
   const [pin, setPin] = useState('');
   const [err, setErr] = useState('');
-  useSheetTitle(step === 'send' ? t('אישור במייל') : t('קוד סודי ל{name}', { name: p.name }));
-
-  if (step === 'send') {
-    return (
-      <div className="form">
-        <p className="hint">{t('כדי לקבוע קוד חדש ל{name} נשלח קוד אימות ל-{email}.', { name: p.name, email: data.me.email })}</p>
-        {err && <Err>{err}</Err>}
-        <AsyncButton className="primary" onClick={async () => {
-          try { await call('emailAuth:requestChildResetCode', { token: state.token }); setErr(''); setStep('form'); }
-          catch (e) { setErr(errMsg(e)); }
-        }}>{t('שליחת קוד למייל')}</AsyncButton>
-      </div>
-    );
-  }
+  useSheetTitle(t('קוד סודי ל{name}', { name: p.name }));
 
   const run = async (newPin) => {
-    if (!emailRequired && !pinOk(myPin, 'parent')) { setErr(t('הקלידו את הקוד הסודי שלכם.')); return; }
+    setErr('');
+    if (!viaGoogle && !pinOk(myPin, 'parent')) { setErr(t('הקלידו את הקוד הסודי שלכם.')); return; }
+    let proof;
+    if (viaGoogle) {
+      const r = await proveWithGoogle('childReset', { token: state.token });
+      if (!r) return;
+      if (r.error) { setErr(r.error); return; }
+      proof = r.proof;
+    }
     try {
-      const res = await call('auth:resetPin', {
-        token: state.token, personId: p.id, pin: newPin,
-        emailCode: emailRequired ? emailCode : undefined,
-        myPin: emailRequired ? undefined : myPin,
-      });
+      const res = await call('auth:resetPin', { token: state.token, personId: p.id, pin: newPin, proof, myPin: viaGoogle ? undefined : myPin });
       if (res && res.ok === false) {
         setErr(res.reason === 'wrongMyPin' ? t('הקוד הסודי שהקלדתם שגוי.')
           : res.reason === 'locked' ? t('יותר מדי ניסיונות. נסו שוב עוד כמה דקות.')
-            : t('קוד האימות מהמייל שגוי או שפג תוקפו.'));
+            : t('משהו השתבש. נסו שוב.'));
         return;
       }
       sheet.close();
@@ -56,9 +47,9 @@ export function ResetPinSheet({ person: p }) {
 
   return (
     <div className="form">
-      {emailRequired && <Field label={t('קוד אימות מהמייל')}><input {...codeProps} value={emailCode} onChange={(e) => setEmailCode(e.target.value)} /></Field>}
-      {!emailRequired && <Field label={t('הקוד הסודי שלכם, לאישור')}><PasswordInput {...pinProps('current-password')} value={myPin} onChange={(e) => setMyPin(e.target.value)} /></Field>}
+      {!viaGoogle && <Field label={t('הקוד הסודי שלכם, לאישור')}><PasswordInput {...pinProps('current-password')} value={myPin} onChange={(e) => setMyPin(e.target.value)} /></Field>}
       <Field label={t('קוד חדש ({rule})', { rule: pinLabel(p.role) })}><PasswordInput {...pinProps('new-password', pinMax(p.role))} value={pin} onChange={(e) => setPin(e.target.value)} /></Field>
+      {viaGoogle && <p className="hint">{t('לאישור ייפתח חשבון הגוגל שלכם.')}</p>}
       {err && <Err>{err}</Err>}
       <AsyncButton className="primary" onClick={async () => {
         if (!pinOk(pin, p.role)) { setErr(t('הקוד צריך להיות {rule}.', { rule: pinLabel(p.role) })); return; }

@@ -2,6 +2,7 @@ import { DEFAULT_CURRENCY } from "./currency";
 import { query } from "./_generated/server";
 import { v } from "convex/values";
 import { ALERT_WINDOW_MS, avatarOf, getSessionPerson, maskEmail } from "./lib";
+import { isAdmin } from "./superAdmin";
 import { isBound } from "./biometric";
 import { goalsFor } from "./goals";
 
@@ -34,10 +35,11 @@ export const get = query({
         id: me._id, name: me.name, role: me.role, avatar: avatarOf(me), gender: me.gender ?? null,
         hasPin: !!me.pinHash,
         palette: me.palette ?? "blue",
-        // מייל מוסתר חלקית (למסך ההגדרות). מאומת = אפשר לשלוח אליו קודים.
-        email: me.emailVerified && me.email ? maskEmail(me.email) : null,
-        pendingEmail: me.pendingEmail ? maskEmail(me.pendingEmail) : null,
+        // חשבון הגוגל המחובר (המייל שלו מוסתר חלקית, למסך ההגדרות). מאשרים בו פעולות רגישות.
+        email: me.googleSub && me.email ? maskEmail(me.email) : null,
         googleLinked: !!me.googleSub,
+        // לוח מנהל (זמני): חשבון גוגל מחובר שהמייל שלו ברשימת המנהלים. ראו superAdmin.ts.
+        admin: isAdmin(me),
         // ילד/ה שאישר/ה שההורים יראו את הפנקס האישי: המכשיר משלח עותק (notebook:sync).
         notebookShared: me.role === "child" && !!me.notebookShared,
         notebookPaused: me.role === "child" && !!me.notebookShared && !!me.notebookPaused,

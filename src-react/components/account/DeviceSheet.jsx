@@ -17,11 +17,11 @@ const dateOf = (ms) => new Date(ms).toLocaleDateString(intlLocale(), { dateStyle
 // "המכשירים שלי" להורה: הורה נכנס רק מהמכשירים שקשורים אליו (עד כמה שהשרת מתיר, למשל האפליקציה והדפדפן).
 // כאן מוסיפים מכשיר נוסף, מסירים מכשיר, ומחליפים מכשיר (כשמעבר לטלפון חדש).
 export function DeviceSheet() {
-  const { token, me, data } = useApp();
+  const { token, me } = useApp();
   const bioConfirm = useBioConfirm();
   const confirm = useConfirm();
   const dev = useQuery('biometric:deviceStatus', { token });
-  const [sent, setSent] = useState(false);
+  const [moveCode, setMoveCode] = useState('');
   const [addCode, setAddCode] = useState('');
   const [err, setErr] = useState('');
   useSheetTitle(t('המכשירים שלי'));
@@ -33,8 +33,8 @@ export function DeviceSheet() {
     setErr('');
     try {
       const proof = await bioConfirm('move-device', { title: t('אישור החלפת מכשיר'), need: t('להחליף מכשיר') });
-      await call('deviceMove:requestMoveCode', { token, proof });
-      setSent(true);
+      const res = await call('deviceMove:requestMoveCode', { token, proof });
+      setMoveCode(res.code);
     } catch (e) { setErr(e instanceof BioError ? e.message : errMsg(e)); }
   }
 
@@ -101,12 +101,16 @@ export function DeviceSheet() {
           ? <p className="hint">{t('קשורים כבר {n} מכשירים, וזה המקסימום. כדי להוסיף עוד, מסירים מכשיר.', { n: devices.length })}</p>
           : <AsyncButton className="primary" onClick={addDevice}>{t('➕ הוספת מכשיר (למשל דפדפן)')}</AsyncButton>}
       </Reveal>
-      <p className="hint">{t('מחליפים טלפון? לוחצים כאן, מאשרים בטביעת אצבע, ונשלח קוד למייל. אחר כך פותחים את הקופה בטלפון החדש, בוחרים את השם שלכם ולוחצים "מכשיר חדש / החלפת מכשיר". כל המכשירים הקודמים ינותקו.')}</p>
-      <p className="hint">{t('הטלפון נהרס או אבד? הורה אחר יכול להנפיק לכם קוד קישור ב"ניהול". אם אין הורה אחר, בקשו החלפה במסך הכניסה: היא תתאפשר אחרי 24 שעות, ותקבלו על כך מייל.')}</p>
-      {!data.me.email && <p className="hint">{t('כדי להחליף מכשיר מהטלפון הזה צריך מייל מאומת. הוסיפו מייל ב"החשבון שלי".')}</p>}
-      <Reveal show={!!sent} appear><p className="hint">{t('✅ נשלח קוד למייל. הזינו אותו בטלפון החדש.')}</p></Reveal>
+      <p className="hint">{t('מחליפים טלפון? לוחצים כאן ומאשרים בטביעת אצבע, ויופיע קוד. אחר כך פותחים את הקופה בטלפון החדש, בוחרים את השם שלכם, לוחצים "מכשיר חדש / החלפת מכשיר" ומקלידים אותו. כל המכשירים הקודמים ינותקו.')}</p>
+      <p className="hint">{t('הטלפון נהרס או אבד? הורה אחר יכול להנפיק לכם קוד קישור ב"ניהול". אם אין הורה אחר ויש לכם חשבון גוגל מחובר, בקשו החלפה במסך הכניסה: היא תתאפשר אחרי 24 שעות.')}</p>
+      <Reveal show={!!moveCode} appear>
+        <div className="form">
+          <div className="big-emoji code-display" aria-label={t('קוד ההחלפה')}>{moveCode}</div>
+          <p className="hint">{t('הקוד תקף 30 דקות ופעם אחת.')}</p>
+        </div>
+      </Reveal>
       {err && <Err>{err}</Err>}
-      {data.me.email && <AsyncButton className="ghost" onClick={requestMove}>{t('החלפת מכשיר (שליחת קוד למייל)')}</AsyncButton>}
+      {!moveCode && dev?.bound && <AsyncButton className="ghost" onClick={requestMove}>{t('החלפת מכשיר')}</AsyncButton>}
     </div>
   );
 }

@@ -3,8 +3,8 @@ import { mutation, query, MutationCtx, QueryCtx } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { COUNTRIES, isCurrency } from "./currency";
 import { Doc, Id } from "./_generated/dataModel";
-import { internal } from "./_generated/api";
-import { verifyCode } from "./emailCodes";
+import { verifyCode } from "./authCodes";
+import { alertLock } from "./alerts";
 import { notify } from "./notify";
 import { checkBiometric, familyHasBoundParent, isBound, proofValidator } from "./biometric";
 import {
@@ -304,7 +304,7 @@ export const login = mutation({
       }
       const r = await registerPinFail(ctx, p);
       if (r.locked) {
-        await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: p._id });
+        await alertLock(ctx, p);
         return { ok: false as const, reason: "locked" as const, waitSeconds: r.waitSeconds };
       }
       return { ok: false as const, reason: "wrong" as const, left: r.left };
@@ -464,17 +464,17 @@ export const changeMyPin = mutation({
     const p = await ctx.db.get(session.personId);
     if (!p || !p.pinHash || !p.pinSalt) return { ok: false as const, reason: "session" as const };
     if (!validPin(newPin, p.role)) return { ok: false as const, reason: "format" as const };
-    // הורה עם מייל מאומת משנה קוד רק באישור קוד מהמייל (emailAuth:changePinWithCode).
-    if (p.emailVerified) return { ok: false as const, reason: "useEmail" as const };
+    // מי שחיבר חשבון גוגל משנה קוד רק באישור גוגל (googleLink:changePinWithProof).
+    if (p.googleSub) return { ok: false as const, reason: "useGoogle" as const };
     const now = Date.now();
     if (p.lockedUntil && p.lockedUntil > now) return { ok: false as const, reason: "locked" as const };
     if (!(await verifyPin(oldPin, p.pinSalt, p.pinHash))) {
       const r = await registerPinFail(ctx, p);
-      if (r.locked) await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: p._id });
+      if (r.locked) await alertLock(ctx, p);
       return { ok: false as const, reason: "wrong" as const };
     }
     await setPin(ctx, p._id, newPin);
-    // כמו בשינוי קוד באישור מייל: מנתקים את שאר המכשירים ומשאירים את הנוכחי. מי שהחליף קוד כי חשש
+    // כמו בשינוי קוד באישור גוגל: מנתקים את שאר המכשירים ומשאירים את הנוכחי. מי שהחליף קוד כי חשש
     // שמישהו אחר נכנס לא רוצה שהסשן של המישהו הזה ימשיך לעבוד.
     for (const s of await ctx.db.query("sessions").withIndex("by_person", (q) => q.eq("personId", p._id)).collect()) {
       if (s._id !== session._id) await ctx.db.delete(s._id);
@@ -485,23 +485,23 @@ export const changeMyPin = mutation({
 
 // הורה קובע קוד חדש למישהו (או מנקה אותו, והאדם יבחר קוד בעצמו).
 export const resetPin = mutation({
-  args: { token: v.string(), personId: v.id("people"), pin: v.optional(v.string()), emailCode: v.optional(v.string()), myPin: v.optional(v.string()) },
-  handler: async (ctx, { token, personId, pin, emailCode, myPin }) => {
+  args: { token: v.string(), personId: v.id("people"), pin: v.optional(v.string()), proof: v.optional(v.string()), myPin: v.optional(v.string()) },
+  handler: async (ctx, { token, personId, pin, proof, myPin }) => {
     const me = await requireParent(ctx, token);
     await requireSameFamily(ctx, me, personId);
-    // הורה עם מייל מאומת מאשר כל קוד חדש בקוד מהמייל (emailAuth:requestChildResetCode).
-    if (me.emailVerified) {
-      if (!emailCode) return { ok: false as const, reason: "needEmailCode" as const };
-      if (!(await verifyCode(ctx, me._id, "childReset", emailCode))) return { ok: false as const, reason: "emailCode" as const };
+    // הורה שחיבר חשבון גוגל מאשר כל קוד חדש בגוגל (googleAuth:prove עם childReset).
+    if (me.googleSub) {
+      if (!proof) return { ok: false as const, reason: "needGoogle" as const };
+      if (!(await verifyCode(ctx, me._id, "childReset", proof))) return { ok: false as const, reason: "proof" as const };
     } else {
-      // בלי מייל מאומת: ההורה מאשר עם הקוד הסודי שלו עצמו, כדי שלא כל מי שתופס מכשיר פתוח יוכל לאפס קוד לילד.
+      // בלי חשבון גוגל: ההורה מאשר עם הקוד הסודי שלו עצמו, כדי שלא כל מי שתופס מכשיר פתוח יוכל לאפס קוד לילד.
       if (!me.pinHash || !me.pinSalt) return { ok: false as const, reason: "needMyPin" as const };
       if (!myPin) return { ok: false as const, reason: "needMyPin" as const };
       const now = Date.now();
       if (me.lockedUntil && me.lockedUntil > now) return { ok: false as const, reason: "locked" as const };
       if (!(await verifyPin(myPin, me.pinSalt, me.pinHash))) {
         const r = await registerPinFail(ctx, me);
-        if (r.locked) await ctx.scheduler.runAfter(0, internal.email.notifyLock, { personId: me._id });
+        if (r.locked) await alertLock(ctx, me);
         return { ok: false as const, reason: "wrongMyPin" as const };
       }
       await upgradePinHash(ctx, me, myPin);

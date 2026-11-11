@@ -1,12 +1,12 @@
 import { mutation, query, MutationCtx } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
-import { internal } from "./_generated/api";
 import { Doc, Id } from "./_generated/dataModel";
 import { checkPinForeign, openSession } from "./auth";
 import {
-  acceptKey, boundKeys, familyHasBoundParent, isBound, keyArgs, proofValidator, requireBiometric, startRegistration,
+  acceptKey, boundKeys, isBound, keyArgs, proofValidator, requireBiometric, startRegistration,
 } from "./biometric";
-import { issueCode, issueLocalCode, verifyCode } from "./emailCodes";
+import { issueLocalCode, verifyCode } from "./authCodes";
+import { alertDeviceChange } from "./alerts";
 import {
   BIND_CODE_TTL_MS, MAX_PARENT_DEVICES, RECOVERY_TTL_MS, RECOVERY_WAIT_MS, TICKET_TTL_MS,
   codeThrottled, failCode, findFamilyByCode, hashToken, randomHex, requireParent, requireSameFamily,
@@ -21,18 +21,15 @@ import {
 //  ב. החלפת מכשיר (מכשיר שאבד, או מעבר טלפון): כל המפתחות הקודמים נמחקים והמכשיר החדש הוא היחיד.
 //     אפשרית רק בשלוש דרכים:
 //
-//  1. המכשיר הישן עדיין קיים: טביעת אצבע בו + קוד שנשלח למייל המאומת, ובמכשיר החדש קוד סודי + הקוד מהמייל.
+//  1. המכשיר הישן עדיין קיים: טביעת אצבע בו מציגה קוד החלפה, ובמכשיר החדש קוד סודי + הקוד הזה.
 //     (requestMoveCode, moveStart, moveFinish)
 //  2. הורה אחר (קשור) מחליף להורה: טביעת אצבע שלו, והוא מוסר ביד קוד קישור. זה גם הדרך לקשר הורה חדש
 //     ולהורה שהטלפון שלו נהרס. (issueBindCode, bindStart, moveFinish)
-//  3. המכשיר אבד ואין הורה אחר: קוד סודי + קוד מהמייל, ואז המתנה של 24 שעות שבהן ההורים מקבלים מייל
-//     ויכולים לבטל. (recoveryRequest, recoveryConfirm, recoveryFinish, cancelRecovery)
+//  3. המכשיר אבד ואין הורה אחר: קוד סודי + אימות בחשבון הגוגל המחובר, ואז המתנה של 24 שעות שבהן ההורים
+//     מקבלים התראה ויכולים לבטל. (recoveryRequest, googleAuth:proveFor, recoveryConfirm, recoveryFinish, cancelRecovery)
 //
 // בכל דרכי ההחלפה הקשירה מסתיימת באותו שלב: המכשיר החדש יוצר מפתח, ו-moveFinish מחליף את המפתחות הקודמים
 // (המכשירים הישנים מפסיקים לעבוד ונותקים אותם מכל הסשנים).
-//
-// ערוץ האימות החיצוני הוא המייל, והוא עובר רק דרך issueCode (emailCodes.ts) ו-email.ts. כשיעברו
-// לחשבון גוגל מחליפים רק אותם, ושאר ההיגיון נשאר.
 
 const hashSecret = (s: string) => hashToken("device:" + s);
 
@@ -64,32 +61,14 @@ async function issueTicket(ctx: MutationCtx, p: Doc<"people">, add = false) {
   return { ok: true as const, ticket, challenge: await startRegistration(ctx, p._id), userId: p._id, name: p.name };
 }
 
-const needVerifiedEmail = (me: Doc<"people">) => {
-  if (!me.emailVerified || !me.email) throw new ConvexError("צריך מייל מאומת כדי להחליף מכשיר");
-  return me.email;
-};
-
 // ---------- 1. מהמכשיר הישן ----------
-// קוד למייל. דורש טביעת אצבע במכשיר הישן (המפתח הקשור), כך שמי שרק יודע את הקוד הסודי לא יכול להתחיל.
+// קוד החלפה שמוצג במכשיר הישן ומוקלד בחדש. דורש טביעת אצבע במכשיר הישן (המפתח הקשור), כך שמי שרק יודע את הקוד הסודי לא יכול להתחיל.
 export const requestMoveCode = mutation({
   args: { token: v.string(), proof: v.optional(proofValidator) },
   handler: async (ctx, { token, proof }) => {
     const me = await requireParent(ctx, token);
-    const email = needVerifiedEmail(me);
     await requireBiometric(ctx, me, "move-device", proof);
-    await issueCode(ctx, me, email, "deviceMove");
-    return { ok: true as const };
-  },
-});
-
-// קוד למייל לקישור הראשון (הורה עם מייל מאומת שעוד לא קשור ואין במשפחה הורה קשור).
-export const requestFirstCode = mutation({
-  args: { token: v.string() },
-  handler: async (ctx, { token }) => {
-    const me = await requireParent(ctx, token, { allowUnbound: true });
-    if (await isBound(ctx, me._id) || await familyHasBoundParent(ctx, me.familyId)) throw new ConvexError("אי אפשר לקשור מכשיר ככה");
-    await issueCode(ctx, me, needVerifiedEmail(me), "deviceMove");
-    return { ok: true as const };
+    return { ok: true as const, code: await issueLocalCode(ctx, me, "deviceMove", BIND_CODE_TTL_MS) };
   },
 });
 
@@ -108,16 +87,16 @@ export const issueBindCode = mutation({
 });
 
 // ---------- שלב משותף: במכשיר החדש ----------
-// method "email": הקוד שנשלח למייל (דרך 1). method "parent": קוד הקישור של הורה אחר (דרך 2).
+// method "old": קוד ההחלפה מהמכשיר הישן (דרך 1). method "parent": קוד הקישור של הורה אחר (דרך 2).
 export const moveStart = mutation({
   args: {
     code: v.optional(v.string()), personId: v.id("people"), pin: v.string(),
-    method: v.union(v.literal("email"), v.literal("parent")), secretCode: v.string(), device: v.optional(v.string()),
+    method: v.union(v.literal("old"), v.literal("parent")), secretCode: v.string(), device: v.optional(v.string()),
   },
   handler: async (ctx, { code, personId, pin, method, secretCode, device }) => {
     const g = await gate(ctx, { code, personId, pin, device });
     if (!g.ok) return asFail(g);
-    const row = await verifyCode(ctx, personId, method === "email" ? "deviceMove" : "deviceBind", secretCode);
+    const row = await verifyCode(ctx, personId, method === "old" ? "deviceMove" : "deviceBind", secretCode);
     if (!row) return { ok: false as const, reason: "secretCode" as const };
     return await issueTicket(ctx, g.person);
   },
@@ -138,7 +117,7 @@ export const moveFinish = mutation({
     await ctx.db.delete(row._id);
     for (const s of await ctx.db.query("sessions").withIndex("by_person", (q) => q.eq("personId", p._id)).collect()) await ctx.db.delete(s._id);
     for (const r of await ctx.db.query("deviceRecoveries").withIndex("by_person", (q) => q.eq("personId", p._id)).collect()) await ctx.db.delete(r._id);
-    await ctx.scheduler.runAfter(0, internal.email.notifyDeviceChange, { personId: p._id, kind: "changed" });
+    await alertDeviceChange(ctx, p._id, "changed");
     return { ok: true as const, token: await openSession(ctx, p._id) };
   },
 });
@@ -184,7 +163,7 @@ export const addDeviceFinish = mutation({
     if (!p || p.role !== "parent" || !p.familyId) throw new ConvexError("פג תוקף האימות. נסו שוב.");
     await acceptKey(ctx, p._id, a, { keepOthers: true });
     await ctx.db.delete(row._id);
-    await ctx.scheduler.runAfter(0, internal.email.notifyDeviceChange, { personId: p._id, kind: "added" });
+    await alertDeviceChange(ctx, p._id, "added");
     return { ok: true as const, token: await openSession(ctx, p._id) };
   },
 });
@@ -209,33 +188,33 @@ export const removeDevice = mutation({
 });
 
 // ---------- 3. מכשיר שאבד ----------
-// שלב א: קוד סודי נכון, ואז קוד למייל. אם אין מייל מאומת אי אפשר (הורה אחר מחליף לו, דרך 2).
+// שלב א: קוד סודי נכון, ויש חשבון גוגל מחובר. בלי חשבון גוגל אי אפשר (הורה אחר מחליף לו, דרך 2).
+// אחריו הלקוח מאמת בגוגל (googleAuth:proveFor עם deviceRecovery) ומקבל קוד לשלב ב.
 export const recoveryRequest = mutation({
   args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string(), device: v.optional(v.string()) },
   handler: async (ctx, { code, personId, pin, device }) => {
     const g = await gate(ctx, { code, personId, pin, device });
     if (!g.ok) return asFail(g);
-    if (!g.person.emailVerified || !g.person.email) return { ok: false as const, reason: "noEmail" as const };
-    // מטרה נפרדת מ-deviceMove: קוד שנשלח כאן לא פותח את moveStart (שמדלג על ההמתנה של 24 שעות).
-    await issueCode(ctx, g.person, g.person.email, "deviceRecovery");
+    if (!g.person.googleSub) return { ok: false as const, reason: "noGoogle" as const };
     return { ok: true as const };
   },
 });
 
-// שלב ב: הקוד מהמייל נכון. פותחים בקשה שתבשיל בעוד 24 שעות, והמכשיר החדש מקבל סוד שיצטרך בסוף.
+// שלב ב: האימות בגוגל נכון. פותחים בקשה שתבשיל בעוד 24 שעות, והמכשיר החדש מקבל סוד שיצטרך בסוף.
+// מטרה נפרדת מ-deviceMove: הקוד כאן לא פותח את moveStart (שמדלג על ההמתנה של 24 שעות).
 export const recoveryConfirm = mutation({
-  args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string(), emailCode: v.string(), device: v.optional(v.string()) },
-  handler: async (ctx, { code, personId, pin, emailCode, device }) => {
+  args: { code: v.optional(v.string()), personId: v.id("people"), pin: v.string(), proof: v.string(), device: v.optional(v.string()) },
+  handler: async (ctx, { code, personId, pin, proof, device }) => {
     const g = await gate(ctx, { code, personId, pin, device });
     if (!g.ok) return asFail(g);
-    if (!(await verifyCode(ctx, personId, "deviceRecovery", emailCode))) return { ok: false as const, reason: "secretCode" as const };
+    if (!(await verifyCode(ctx, personId, "deviceRecovery", proof))) return { ok: false as const, reason: "secretCode" as const };
     for (const r of await ctx.db.query("deviceRecoveries").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) await ctx.db.delete(r._id);
     const secret = randomHex(32);
     const now = Date.now();
     await ctx.db.insert("deviceRecoveries", {
       personId, secretHash: await hashSecret(secret), requestedAt: now, readyAt: now + RECOVERY_WAIT_MS, expiresAt: now + RECOVERY_TTL_MS,
     });
-    await ctx.scheduler.runAfter(0, internal.email.notifyDeviceChange, { personId, kind: "requested" });
+    await alertDeviceChange(ctx, personId, "requested");
     return { ok: true as const, secret, readyAt: now + RECOVERY_WAIT_MS };
   },
 });

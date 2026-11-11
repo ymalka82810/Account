@@ -53,10 +53,10 @@ describe("biometric:challenge לא מנפיק אתגרים של מסלול הק�
   });
 });
 
-describe("החלפת מכשיר שאבד: קוד המייל של ההמתנה לא עוקף אותה", () => {
+describe("החלפת מכשיר שאבד: הקוד של ההמתנה לא עוקף אותה", () => {
   beforeEach(async () => {
     await bindKey(A.ids["אבא"]);
-    await t.run(async (ctx) => { await ctx.db.patch(A.ids["אבא"], { email: "p@example.com", emailVerified: true }); });
+    await t.run(async (ctx) => { await ctx.db.patch(A.ids["אבא"], { email: "p@example.com", googleSub: "g-dad" }); });
   });
 
   const plant = (purpose: "deviceMove" | "deviceRecovery", code: string) => t.run(async (ctx) => {
@@ -66,26 +66,25 @@ describe("החלפת מכשיר שאבד: קוד המייל של ההמתנה ל
     await ctx.db.insert("emailCodes", { personId: A.ids["אבא"], email: "", purpose, codeHash: await hashPin(code, "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
   });
 
-  it("recoveryRequest שולח קוד במטרה deviceRecovery ולא deviceMove", async () => {
+  it("recoveryRequest רק בודק את הקוד הסודי ולא מנפיק קוד", async () => {
     const r: any = await t.mutation(api.deviceMove.recoveryRequest, { code: CODE, personId: A.ids["אבא"], pin: "1111", device: "n" });
     expect(r.ok).toBe(true);
-    const rows = await t.run((ctx) => ctx.db.query("emailCodes").collect());
-    expect(rows.map((x) => x.purpose)).toEqual(["deviceRecovery"]);
+    expect(await t.run((ctx) => ctx.db.query("emailCodes").collect())).toHaveLength(0);
   });
 
-  it("קוד המייל של בקשת ההחלפה לא מתקבל ב-moveStart (בלי לחכות 24 שעות)", async () => {
+  it("הקוד של בקשת ההחלפה לא מתקבל ב-moveStart (בלי לחכות 24 שעות)", async () => {
     await plant("deviceRecovery", "777777");
-    const res: any = await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "email", secretCode: "777777", device: "n" });
+    const res: any = await t.mutation(api.deviceMove.moveStart, { code: CODE, personId: A.ids["אבא"], pin: "1111", method: "old", secretCode: "777777", device: "n" });
     expect(res).toMatchObject({ ok: false, reason: "secretCode" });
     expect(await t.run((ctx) => ctx.db.query("deviceTickets").collect())).toHaveLength(0);
   });
 
   it("קוד deviceMove לא מתקבל ב-recoveryConfirm, וקוד deviceRecovery כן ופותח המתנה של 24 שעות", async () => {
     await plant("deviceMove", "424242");
-    expect(await t.mutation(api.deviceMove.recoveryConfirm, { code: CODE, personId: A.ids["אבא"], pin: "1111", emailCode: "424242", device: "n" }))
+    expect(await t.mutation(api.deviceMove.recoveryConfirm, { code: CODE, personId: A.ids["אבא"], pin: "1111", proof: "424242", device: "n" }))
       .toMatchObject({ ok: false, reason: "secretCode" });
     await plant("deviceRecovery", "777777");
-    const c: any = await t.mutation(api.deviceMove.recoveryConfirm, { code: CODE, personId: A.ids["אבא"], pin: "1111", emailCode: "777777", device: "n" });
+    const c: any = await t.mutation(api.deviceMove.recoveryConfirm, { code: CODE, personId: A.ids["אבא"], pin: "1111", proof: "777777", device: "n" });
     expect(c.ok).toBe(true);
     expect(c.readyAt - Date.now()).toBeGreaterThan(RECOVERY_WAIT_MS - 5000);
     expect(await t.mutation(api.deviceMove.recoveryFinish, { code: CODE, personId: A.ids["אבא"], pin: "1111", secret: c.secret, device: "n" }))
@@ -204,13 +203,13 @@ describe("requireParent: הורה לא קשור לא פועל כהורה כשי�
     expect(await t.query(api.data.get, { token: mom() })).not.toBeNull();
   });
 
-  it("סשן שנפתח באיפוס קוד במייל להורה לא קשור לא נותן הרשאות הורה כשיש הורה קשור", async () => {
+  it("סשן שנפתח באיפוס קוד בגוגל להורה לא קשור לא נותן הרשאות הורה כשיש הורה קשור", async () => {
     await bindKey(A.ids["אבא"]);
     await t.run(async (ctx) => {
-      await ctx.db.patch(A.ids["אמא"], { email: "m@example.com", emailVerified: true });
-      await ctx.db.insert("emailCodes", { personId: A.ids["אמא"], email: "m@example.com", purpose: "pinReset", codeHash: await hashPin("123456", "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
+      await ctx.db.patch(A.ids["אמא"], { email: "m@example.com", googleSub: "g-mom" });
+      await ctx.db.insert("emailCodes", { personId: A.ids["אמא"], email: "", purpose: "pinReset", codeHash: await hashPin("123456", "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
     });
-    const res: any = await t.mutation(api.emailAuth.resetWithCode, { code: CODE, personId: A.ids["אמא"], emailCode: "123456", newPin: "5555", device: "m" });
+    const res: any = await t.mutation(api.googleLink.resetWithProof, { code: CODE, personId: A.ids["אמא"], proof: "123456", newPin: "5555", device: "m" });
     expect(res.ok).toBe(true);
     await expect(t.mutation(api.family.rename, { token: res.token, name: "x" })).rejects.toThrow("לקשר את המכשיר");
   });
@@ -254,35 +253,6 @@ describe("פעולות הרסניות של הורה דורשות אישור (ב�
     }
     await expect(t.mutation(api.biometric.pinConfirm, { token: dad(), action: "reveal-code", myPin: "1111" })).rejects.toThrow();
     await expect(t.mutation(api.biometric.pinConfirm, { token: dad(), action: "family-removeX", myPin: "1111" })).rejects.toThrow();
-  });
-});
-
-describe("emailAuth:requestVerify: חיבור מייל ראשון דורש את הקוד הסודי", () => {
-  const verify = (myPin?: string, token = dad()) => t.mutation(api.emailAuth.requestVerify, { token, email: "Dad@Example.com", myPin });
-  const pendingOf = async () => ((await t.run((ctx) => ctx.db.get(A.ids["אבא"]))) as any).pendingEmail;
-
-  it("בלי קוד סודי או עם קוד שגוי המייל לא מחובר ולא נשלח קוד", async () => {
-    expect(await verify()).toMatchObject({ ok: false, reason: "myPin" });
-    expect(await verify("9999")).toMatchObject({ ok: false, reason: "myPin" });
-    expect(await pendingOf()).toBeUndefined();
-    expect(await t.run((ctx) => ctx.db.query("emailCodes").collect())).toHaveLength(0);
-    expect(((await t.run((ctx) => ctx.db.get(A.ids["אבא"]))) as any).failedAttempts).toBe(1);
-  });
-
-  it("ניחושים חוזרים של הקוד הסודי נועלים", async () => {
-    for (let i = 0; i < 5; i++) await verify("9999");
-    expect(await verify("1111")).toMatchObject({ ok: false, reason: "locked" });
-  });
-
-  it("עם הקוד הסודי הנכון נשלח קוד אימות לכתובת", async () => {
-    expect(await verify("1111")).toMatchObject({ ok: true });
-    expect(await pendingOf()).toBe("dad@example.com");
-    expect((await t.run((ctx) => ctx.db.query("emailCodes").collect())).map((c) => c.purpose)).toEqual(["verify"]);
-  });
-
-  it("הורה עם מייל מאומת עדיין מחליף מייל רק עם קוד מהמייל הישן (הקוד הסודי לא מספיק)", async () => {
-    await t.run(async (ctx) => { await ctx.db.patch(A.ids["אבא"], { email: "old@example.com", emailVerified: true }); });
-    expect(await verify("1111")).toMatchObject({ ok: false, reason: "oldCode" });
   });
 });
 

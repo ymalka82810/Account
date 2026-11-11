@@ -400,11 +400,12 @@ export function advanceDate(d: string, frequency: "weekly" | "monthly", monthDay
   return fmtUTC(Date.UTC(y, m, monthDay ?? parseDay(d).day));
 }
 
-// ---------- מייל וקודי אימות ----------
-export const EMAIL_CODE_TTL_MS = 10 * 60 * 1000;
-export const EMAIL_CODE_MAX_ATTEMPTS = 5;
-export const EMAIL_SEND_LIMIT = 5; // בקשות קוד לאדם
-export const EMAIL_SEND_WINDOW_MS = 10 * 60 * 1000;
+// ---------- קודי אימות וחשבון גוגל ----------
+// קוד שמונפק אחרי אימות עם גוגל משמש מיד, ולכן תוקף קצר.
+export const PROOF_TTL_MS = 10 * 60 * 1000;
+export const CODE_MAX_ATTEMPTS = 5;
+export const PROOF_LIMIT = 10; // אימותי גוגל לאדם בחלון
+export const PROOF_WINDOW_MS = 10 * 60 * 1000;
 
 export function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
@@ -415,7 +416,7 @@ export function validEmail(email: string): boolean {
 }
 
 // קוד של 6 ספרות בלי הטיה (דגימה עם דחייה).
-export function generateEmailCode(): string {
+export function generateCode(): string {
   const a = new Uint32Array(1);
   const limit = Math.floor(0x100000000 / 1_000_000) * 1_000_000;
   do crypto.getRandomValues(a); while (a[0] >= limit);
