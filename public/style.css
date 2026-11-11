@@ -1706,3 +1706,10 @@ body[data-theme="parent"] :is(.ghost, button.small, .tab, .tile, .fam-row, .acct
 }
 /* הניווט במקלדת נשאר ברור כמו קודם */
 body[data-theme="parent"] :is(button, [role="button"], .tab, .tile, .fam-row, .acct-row, .dd-btn, .dd-opt):focus-visible { outline-color: var(--coin-deep); }
+
+/* מנהל (זמני): פס מעבר בין תצוגת הורה / נער / ילד */
+.admin-roles { display: flex; align-items: center; gap: 4px; padding: 4px 8px; background: #1f2937; color: #fff; font-size: .85rem; touch-action: pan-y; }
+.admin-roles-tag { padding: 0 4px; }
+.admin-roles button { flex: 1; min-height: 36px; border: 0; border-radius: 999px; background: transparent; color: inherit; font: inherit; cursor: pointer; transition: background .2s ease; }
+.admin-roles button.on { background: #fff; color: #1f2937; font-weight: 700; }
+.admin-roles[aria-busy="true"] { opacity: .7; }

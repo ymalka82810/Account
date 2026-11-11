@@ -150,6 +150,8 @@ export default defineSchema({
     personId: v.id("people"),
     tokenHash: v.string(),
     expiresAt: v.number(),
+    // מנהל בלבד (זמני): התפקיד שהסשן הזה רואה ופועל בו (הורה / נער/ה / ילד/ה). ראו superAdmin:viewAs.
+    viewAs: v.optional(v.union(v.literal("parent"), v.literal("teen"), v.literal("child"))),
   })
     .index("by_token", ["tokenHash"])
     .index("by_person", ["personId"])

@@ -302,7 +302,21 @@ export async function adoptLegacy(ctx: MutationCtx): Promise<Id<"families"> | nu
 }
 
 // ---------- כניסה והרשאות ----------
-export async function getSessionPerson(ctx: QueryCtx, token: string): Promise<Doc<"people"> | null> {
+// מנהל (זמני, לתקופת הפיתוח) = חשבון גוגל מחובר שהמייל שלו ברשימה. ADMIN_EMAILS ב-Convex (מופרד בפסיקים)
+// גובר על ברירת המחדל, ו-"none" מכבה. ראו superAdmin.ts.
+const DEFAULT_ADMINS = ["ymalka82810@gmail.com"];
+export function adminEmails(): string[] {
+  const raw = process.env.ADMIN_EMAILS;
+  if (raw === undefined || !raw.trim()) return DEFAULT_ADMINS;
+  return raw.split(",").map((s) => s.trim().toLowerCase()).filter((s) => s && s !== "none");
+}
+export const isAdmin = (p: Doc<"people"> | null | undefined): boolean =>
+  !!p && !!p.googleSub && !!p.email && adminEmails().includes(p.email);
+
+// מי שמחובר/ת בסשן. מנהל שבחר "לראות כ..." (sessions.viewAs) מקבל את התפקיד הזה בכל הבדיקות של הסשן,
+// בלי שהתפקיד שלו במשפחה משתנה: realRole = התפקיד האמיתי, adminView = מצב תצוגה של מנהל.
+export type SessionPerson = Doc<"people"> & { adminView?: boolean; realRole?: Doc<"people">["role"] };
+export async function getSessionPerson(ctx: QueryCtx, token: string): Promise<SessionPerson | null> {
   if (!token || token.length > 200) return null;
   const tokenHash = await hashToken(token);
   const session = await ctx.db
@@ -310,7 +324,9 @@ export async function getSessionPerson(ctx: QueryCtx, token: string): Promise<Do
     .withIndex("by_token", (q) => q.eq("tokenHash", tokenHash))
     .first();
   if (!session || session.expiresAt < Date.now()) return null;
-  return await ctx.db.get(session.personId);
+  const p = await ctx.db.get(session.personId);
+  if (p && session.viewAs && session.viewAs !== p.role && isAdmin(p)) return { ...p, role: session.viewAs, adminView: true, realRole: p.role };
+  return p;
 }
 
 // דמות ליד השם, עם ברירת מחדל אם לא נבחרה (למשל אצל הורים מלפני הפיצ'ר).
@@ -320,7 +336,7 @@ export function avatarOf(p: Doc<"people">): string | undefined {
   return "🙂";
 }
 
-export type Member = Doc<"people"> & { familyId: Id<"families"> };
+export type Member = SessionPerson & { familyId: Id<"families"> };
 
 export async function requirePerson(ctx: QueryCtx, token: string): Promise<Member> {
   const me = await getSessionPerson(ctx, token);
@@ -339,7 +355,8 @@ const hasBioKey = async (ctx: QueryCtx, personId: Id<"people">) =>
 export async function requireParent(ctx: QueryCtx, token: string, opts?: { allowUnbound?: boolean }): Promise<Member> {
   const me = await requirePerson(ctx, token);
   if (me.role !== "parent") throw new ConvexError("רק הורים יכולים לעשות את זה");
-  if (!opts?.allowUnbound && !(await hasBioKey(ctx, me._id))) {
+  // מנהל במצב "לראות כהורה" לא נדרש לקשירת מכשיר (הוא לא באמת הורה במשפחה הזו).
+  if (!opts?.allowUnbound && !me.adminView && !(await hasBioKey(ctx, me._id))) {
     const people = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
     for (const p of people) {
       if (p.role === "parent" && p._id !== me._id && (await hasBioKey(ctx, p._id))) {

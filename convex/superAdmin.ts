@@ -1,24 +1,29 @@
-import { query, QueryCtx } from "./_generated/server";
+import { mutation, query, QueryCtx } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
 import { Doc, Id } from "./_generated/dataModel";
-import { avatarOf, getSessionPerson } from "./lib";
+import { avatarOf, getSessionPerson, hashToken, isAdmin } from "./lib";
 
 // ---------- לוח מנהל (זמני, לתקופת הפיתוח) ----------
 // מי שחיבר לעצמו (בכל תפקיד, בכל משפחה) חשבון גוגל שהמייל שלו ברשימת המנהלים, רואה מכאן את כל המערכת
 // במקום אחד, בלי לעבור בין הורה לילד: כל המשפחות, כל האנשים, החובות, החברויות ויומן השינויים.
 // קריאה בלבד: אין כאן שום פעולה שמשנה נתונים.
-// הרשימה: משתנה הסביבה ADMIN_EMAILS ב-Convex (מופרד בפסיקים) גובר על ברירת המחדל. "none" מכבה את הלוח.
-const DEFAULT_ADMINS = ["ymalka82810@gmail.com"];
+// מנהל יכול גם לעבור בין תצוגת הורה, נער/ה וילד/ה (viewAs) במשפחה שבה הוא נמצא, בלי לשנות את התפקיד האמיתי שלו.
+// רשימת המנהלים ו-isAdmin נמצאים ב-lib.ts (getSessionPerson צריך אותם).
+export { adminEmails, isAdmin } from "./lib";
 
-export function adminEmails(): string[] {
-  const raw = process.env.ADMIN_EMAILS;
-  if (raw === undefined || !raw.trim()) return DEFAULT_ADMINS;
-  return raw.split(",").map((s) => s.trim().toLowerCase()).filter((s) => s && s !== "none");
-}
-
-// מנהל = חשבון גוגל מחובר (googleSub) שהמייל המאומת שלו ברשימה. מייל בלי חשבון גוגל לא מספיק.
-export const isAdmin = (p: Doc<"people"> | null | undefined): boolean =>
-  !!p && !!p.googleSub && !!p.email && adminEmails().includes(p.email);
+// מעבר בין תצוגות: role = parent / teen / child, או null לחזרה לתפקיד האמיתי. משפיע רק על הסשן הזה.
+export const viewAs = mutation({
+  args: { token: v.string(), role: v.union(v.literal("parent"), v.literal("teen"), v.literal("child"), v.null()) },
+  handler: async (ctx, { token, role }) => {
+    const hash = await hashToken(token);
+    const session = await ctx.db.query("sessions").withIndex("by_token", (q) => q.eq("tokenHash", hash)).first();
+    if (!session || session.expiresAt < Date.now()) throw new ConvexError("צריך להיכנס מחדש");
+    const p = await ctx.db.get(session.personId);
+    if (!isAdmin(p)) throw new ConvexError("אין הרשאת מנהל");
+    await ctx.db.patch(session._id, { viewAs: role && role !== p!.role ? role : undefined });
+    return { ok: true as const };
+  },
+});
 
 async function requireAdmin(ctx: QueryCtx, token: string): Promise<Doc<"people">> {
   const me = await getSessionPerson(ctx, token);

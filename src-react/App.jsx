@@ -32,6 +32,7 @@ import LocaleSheet from './components/manage/LocaleSheet.jsx';
 import FamilyWelcome from './components/manage/FamilyWelcome.jsx';
 import DeviceGate from './components/account/DeviceGate.jsx';
 import PendingMoves from './components/account/PendingMoves.jsx';
+import AdminRoleBar from './components/account/AdminRoleBar.jsx';
 import UiIcon, { withIcons } from './components/shared/UiIcon.jsx';
 import ErrorBoundary from './components/shared/ErrorBoundary.jsx';
 import NoConnection from './components/shared/NoConnection.jsx';
@@ -541,10 +542,12 @@ function Shell({ tabSel, setTab, isParent, isTeen }) {
     return () => { if (ro) ro.disconnect(); };
   }, [tabs.length, isParent, dev && dev.bound]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (isParent && dev && !dev.bound) return <DeviceGate />;
+  // מנהל בתצוגת הורה (לא התפקיד האמיתי שלו) לא נדרש לקשירת מכשיר.
+  if (isParent && dev && !dev.bound && data.me.role === data.me.realRole) return <DeviceGate />;
 
   return (
     <>
+      {data.me.admin && !isDemo(token) && <AdminRoleBar />}
       {isParent && !isDemo(token) && <PendingMoves />}
       {isDemo(token) && (
         <div className="demo-banner" role="status">

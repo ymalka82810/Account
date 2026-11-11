@@ -165,3 +165,24 @@ describe("maintenance:clearEmailOnly", () => {
     expect(mom.pendingEmail).toBeUndefined();
   });
 });
+
+describe("מנהל: מעבר בין תצוגת הורה, נער/ה וילד/ה", () => {
+  it("רק מנהל עובר, התפקיד מתחלף רק בסשן, והתפקיד האמיתי לא משתנה", async () => {
+    await expect(t.mutation(api.superAdmin.viewAs, { token: A.tokens["דני"], role: "parent" })).rejects.toThrow("אין הרשאת מנהל");
+    await link("דני", { myPin: undefined, sub: "g-admin", email: "ymalka82810@gmail.com" });
+    await t.mutation(api.superAdmin.viewAs, { token: A.tokens["דני"], role: "parent" });
+    const asParent: any = await t.query(api.data.get, { token: A.tokens["דני"] });
+    expect(asParent.me).toMatchObject({ role: "parent", realRole: "child", admin: true });
+    // פעולת הורה עובדת בלי קשירת מכשיר
+    await t.mutation(api.family.rename, { token: A.tokens["דני"], name: "B" });
+    await t.mutation(api.superAdmin.viewAs, { token: A.tokens["דני"], role: "teen" });
+    expect(((await t.query(api.data.get, { token: A.tokens["דני"] })) as any).me.role).toBe("teen");
+    await expect(t.mutation(api.family.rename, { token: A.tokens["דני"], name: "C" })).rejects.toThrow();
+    expect(((await person("דני")) as any).role).toBe("child");
+    // ההורים רואים אותו כילד כמו תמיד
+    const dad: any = await t.query(api.data.get, { token: A.tokens["אבא"] });
+    expect(dad.people.find((p: any) => p.name === "דני").role).toBe("child");
+    await t.mutation(api.superAdmin.viewAs, { token: A.tokens["דני"], role: null });
+    expect(((await t.query(api.data.get, { token: A.tokens["דני"] })) as any).me.role).toBe("child");
+  });
+});

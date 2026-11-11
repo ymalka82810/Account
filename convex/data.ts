@@ -1,8 +1,7 @@
 import { DEFAULT_CURRENCY } from "./currency";
 import { query } from "./_generated/server";
 import { v } from "convex/values";
-import { ALERT_WINDOW_MS, avatarOf, getSessionPerson, maskEmail } from "./lib";
-import { isAdmin } from "./superAdmin";
+import { ALERT_WINDOW_MS, avatarOf, getSessionPerson, isAdmin, maskEmail } from "./lib";
 import { isBound } from "./biometric";
 import { goalsFor } from "./goals";
 
@@ -40,6 +39,8 @@ export const get = query({
         googleLinked: !!me.googleSub,
         // לוח מנהל (זמני): חשבון גוגל מחובר שהמייל שלו ברשימת המנהלים. ראו superAdmin.ts.
         admin: isAdmin(me),
+        // התפקיד האמיתי של מנהל שעובר בין תצוגות (role הוא התצוגה הנוכחית).
+        realRole: me.realRole ?? me.role,
         // ילד/ה שאישר/ה שההורים יראו את הפנקס האישי: המכשיר משלח עותק (notebook:sync).
         notebookShared: me.role === "child" && !!me.notebookShared,
         notebookPaused: me.role === "child" && !!me.notebookShared && !!me.notebookPaused,
