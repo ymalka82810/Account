@@ -43,9 +43,10 @@ export const applyLink = internalMutation({
   args: { token: v.string(), sub: v.string(), email: v.string(), myPin: v.optional(v.string()), changeProof: v.optional(v.string()) },
   handler: async (ctx, { token, sub, email, myPin, changeProof }): Promise<LinkResult> => {
     const me = await requirePerson(ctx, token);
-    // חשבון גוגל אחד מחובר לאדם אחד.
-    const sameSub = await ctx.db.query("people").filter((q) => q.eq(q.field("googleSub"), sub)).first();
-    if (sameSub && sameSub._id !== me._id) return { ok: false as const, reason: "taken" as const };
+    // אותו חשבון גוגל יכול להיות מחובר לאותו אדם בכמה משפחות (למשל ילד/ה של הורים גרושים, שיש לו/ה
+    // רשומה נפרדת בכל משפחה), אבל לא לשני אנשים באותה משפחה.
+    const family = await ctx.db.query("people").withIndex("by_family", (q) => q.eq("familyId", me.familyId)).collect();
+    if (family.some((p) => p._id !== me._id && p.googleSub === sub)) return { ok: false as const, reason: "taken" as const };
     if (me.googleSub && me.googleSub !== sub) {
       // החלפת חשבון: קודם מאמתים בחשבון הנוכחי (prove עם emailChange), כדי שמי שמחזיק סשן פתוח לא יחליף לחשבון שלו.
       if (!changeProof || !(await verifyCode(ctx, me._id, "emailChange", changeProof))) return { ok: false as const, reason: "otherAccount" as const };

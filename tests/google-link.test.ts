@@ -58,9 +58,20 @@ describe("googleLink:applyLink", () => {
     expect(await link("דני", { myPin: undefined, sub: "g-kid", email: "kid@example.com" })).toEqual({ ok: true, email: "kid@example.com" });
     expect(await person("דני")).toMatchObject({ googleSub: "g-kid" });
   });
-  it("חשבון גוגל אחד לא מתחבר לשני אנשים", async () => {
+  it("חשבון גוגל אחד לא מתחבר לשני אנשים באותה משפחה", async () => {
     await link("אבא");
     expect(await link("אמא", { myPin: "5678" })).toEqual({ ok: false, reason: "taken" });
+  });
+  it("אותו חשבון גוגל מתחבר לאותו אדם בשתי משפחות, ומאשר בכל אחת בנפרד", async () => {
+    const B = await seedFamily(t, "B", [{ name: "אבא2", role: "parent", pin: "4444" }, { name: "דני", role: "child" }]);
+    expect(await link("דני", { myPin: undefined, sub: "g-kid", email: "kid@example.com" })).toMatchObject({ ok: true });
+    const r: any = await t.mutation(internal.googleLink.applyLink, { token: B.tokens["דני"], sub: "g-kid", email: "kid@example.com" });
+    expect(r).toMatchObject({ ok: true });
+    const pa: any = await t.mutation(internal.googleLink.issueProof, { code: familyCode("A"), personId: A.ids["דני"], sub: "g-kid", purpose: "pinReset", device: "d" });
+    const pb: any = await t.mutation(internal.googleLink.issueProof, { code: familyCode("B"), personId: B.ids["דני"], sub: "g-kid", purpose: "pinReset", device: "d" });
+    expect(pa.ok && pb.ok).toBe(true);
+    // קוד שהונפק במשפחה אחת לא מאפס את הרשומה במשפחה השנייה
+    expect(await t.mutation(api.googleLink.resetWithProof, { code: familyCode("B"), personId: B.ids["דני"], proof: pa.proof, newPin: "9876", device: "d" })).toMatchObject({ ok: false });
   });
   it("אותו חשבון מתחבר שוב בלי קוד סודי; חשבון אחר רק עם אימות בחשבון הנוכחי", async () => {
     await link("אבא");
