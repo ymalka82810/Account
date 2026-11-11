@@ -545,6 +545,10 @@ body[data-theme="teen"] #screen-loading p {
   column-gap: 10px;
   position: relative;
 }
+/* כרטיס רגיל (לא details), כמו "מי רואה את הפנקס שלי": ריפוד פנימי כדי שהטקסט לא ייצמד לקצה */
+.tile-section.nb-share-card { padding: 16px 18px; display: grid; gap: 10px; }
+.tile-section.nb-share-card > p { margin: 0; }
+.tile-section.nb-share-card > button { justify-self: start; }
 .tile-section > summary::-webkit-details-marker { display: none; }
 .tile-section > summary .tile-marker { grid-area: marker; position: relative; width: 1.3rem; height: 1.3rem; transition: transform .26s cubic-bezier(.2, .8, .2, 1); }
 .tile-section[open]:not(.closing) > summary .tile-marker { transform: rotate(90deg); }

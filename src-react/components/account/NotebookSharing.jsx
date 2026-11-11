@@ -28,7 +28,7 @@ function FamilyRow({ m }) {
   }
 
   return (
-    <div className="tile-section">
+    <div className="tile-section nb-share-card">
       <strong>{m.familyName}</strong>
       {st.paused ? (
         <p className="hint">{t('השיתוף מושהה. ההורים לא רואים כלום.')}</p>
