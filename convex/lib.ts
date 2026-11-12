@@ -304,7 +304,7 @@ export async function adoptLegacy(ctx: MutationCtx): Promise<Id<"families"> | nu
 // ---------- כניסה והרשאות ----------
 // מנהל (זמני, לתקופת הפיתוח) = חשבון גוגל מחובר שהמייל שלו ברשימה. ADMIN_EMAILS ב-Convex (מופרד בפסיקים)
 // גובר על ברירת המחדל, ו-"none" מכבה. ראו superAdmin.ts.
-const DEFAULT_ADMINS = ["ymalka82810@gmail.com"];
+const DEFAULT_ADMINS = ["ymalka82810@gmail.com", "yanivmalka@gmail.com"];
 export function adminEmails(): string[] {
   const raw = process.env.ADMIN_EMAILS;
   if (raw === undefined || !raw.trim()) return DEFAULT_ADMINS;
