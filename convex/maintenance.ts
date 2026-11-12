@@ -8,43 +8,6 @@ const THROTTLE_KEEP_MS = 24 * 60 * 60 * 1000;
 // תוצאת בקשת הצטרפות (אושרה/נדחתה) נשמרת שבוע, כדי שמי שביקש/ה יראה מה קרה גם אם חזר/ה אחרי כמה ימים.
 const JOIN_OUTCOME_KEEP_MS = 7 * 24 * 60 * 60 * 1000;
 
-// מחיקה חד-פעמית של קודים שנשמרו בעבר בטקסט גלוי (pinPlain). להרצה ידנית:
-// npx convex run maintenance:clearPinPlain. אחרי שהחזירה cleared=0 אפשר להסיר את השדה מה-schema.
-export const clearPinPlain = internalMutation({
-  args: {},
-  handler: async (ctx) => {
-    const people = await ctx.db.query("people").collect();
-    let cleared = 0;
-    for (const p of people) {
-      if (p.pinPlain !== undefined) {
-        await ctx.db.patch(p._id, { pinPlain: undefined });
-        cleared++;
-      }
-    }
-    return { cleared };
-  },
-});
-
-// מעבר לחשבון גוגל: מנקה את שרידי אימות המייל בקוד. מייל נשאר רק אצל מי שחיבר חשבון גוגל (המייל של החשבון),
-// וקודי "verify" ישנים נמחקים. רץ אחרי כל פריסה עד שמסירים את השדות מה-schema (convex-deploy.yml).
-export const clearEmailOnly = internalMutation({
-  args: {},
-  handler: async (ctx) => {
-    let cleared = 0;
-    for (const p of await ctx.db.query("people").collect()) {
-      const stale = p.emailVerified !== undefined || p.pendingEmail !== undefined || (!p.googleSub && p.email !== undefined);
-      if (!stale) continue;
-      await ctx.db.patch(p._id, { emailVerified: undefined, pendingEmail: undefined, ...(p.googleSub ? {} : { email: undefined }) });
-      cleared++;
-    }
-    let codes = 0;
-    for (const c of await ctx.db.query("emailCodes").collect()) {
-      if (c.purpose === "verify") { await ctx.db.delete(c._id); codes++; }
-    }
-    return { cleared, codes };
-  },
-});
-
 // מוחק כניסות וקודי אימות שפג תוקפם ומוני הגבלת קצב ישנים. רץ פעם ביום (crons.ts).
 // אם יש יותר מ-BATCH רשומות, מתזמן את עצמו שוב כדי לא לחרוג ממגבלות הפעולה.
 export const cleanup = internalMutation({

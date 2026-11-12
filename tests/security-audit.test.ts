@@ -63,7 +63,7 @@ describe("החלפת מכשיר שאבד: הקוד של ההמתנה לא עוק
     for (const old of await ctx.db.query("emailCodes").withIndex("by_person", (q) => q.eq("personId", A.ids["אבא"])).collect()) {
       if (old.purpose === purpose) await ctx.db.delete(old._id);
     }
-    await ctx.db.insert("emailCodes", { personId: A.ids["אבא"], email: "", purpose, codeHash: await hashPin(code, "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
+    await ctx.db.insert("emailCodes", { personId: A.ids["אבא"], purpose, codeHash: await hashPin(code, "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
   });
 
   it("recoveryRequest רק בודק את הקוד הסודי ולא מנפיק קוד", async () => {
@@ -207,7 +207,7 @@ describe("requireParent: הורה לא קשור לא פועל כהורה כשי�
     await bindKey(A.ids["אבא"]);
     await t.run(async (ctx) => {
       await ctx.db.patch(A.ids["אמא"], { email: "m@example.com", googleSub: "g-mom" });
-      await ctx.db.insert("emailCodes", { personId: A.ids["אמא"], email: "", purpose: "pinReset", codeHash: await hashPin("123456", "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
+      await ctx.db.insert("emailCodes", { personId: A.ids["אמא"], purpose: "pinReset", codeHash: await hashPin("123456", "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
     });
     const res: any = await t.mutation(api.googleLink.resetWithProof, { code: CODE, personId: A.ids["אמא"], proof: "123456", newPin: "5555", device: "m" });
     expect(res.ok).toBe(true);

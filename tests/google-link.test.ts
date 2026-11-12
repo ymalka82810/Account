@@ -150,22 +150,6 @@ describe("לוח מנהל", () => {
   });
 });
 
-describe("maintenance:clearEmailOnly", () => {
-  it("מנקה מייל ישן שלא מגוגל ואת שדות האימות הישנים, ומשאיר את המייל של גוגל", async () => {
-    await link("אבא");
-    await t.run(async (ctx) => {
-      await ctx.db.patch(A.ids["אבא"], { emailVerified: true });
-      await ctx.db.patch(A.ids["אמא"], { email: "old@example.com", emailVerified: true, pendingEmail: "p@example.com" });
-    });
-    expect(await t.mutation(internal.maintenance.clearEmailOnly, {})).toMatchObject({ cleared: 2 });
-    expect(await person("אבא")).toMatchObject({ email: "dad@example.com", googleSub: "g-1" });
-    expect(((await person("אבא")) as any).emailVerified).toBeUndefined();
-    const mom: any = await person("אמא");
-    expect(mom.email).toBeUndefined();
-    expect(mom.pendingEmail).toBeUndefined();
-  });
-});
-
 describe("מנהל: מעבר בין תצוגת הורה, נער/ה וילד/ה", () => {
   it("רק מנהל עובר, התפקיד מתחלף רק בסשן, והתפקיד האמיתי לא משתנה", async () => {
     await expect(t.mutation(api.superAdmin.viewAs, { token: A.tokens["דני"], role: "parent" })).rejects.toThrow("אין הרשאת מנהל");

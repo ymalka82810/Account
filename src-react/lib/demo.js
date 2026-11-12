@@ -23,7 +23,7 @@ export function demoData() {
   });
   return {
     legacy: false,
-    me: { id: DANA, name: 'דנה', role: 'parent', avatar: '👩', gender: 'f', palette: 'blue', email: null, pendingEmail: null },
+    me: { id: DANA, name: 'דנה', role: 'parent', avatar: '👩', gender: 'f', palette: 'blue', email: null },
     family: { name: 'משפחת כהן (דמו)', currency: 'ILS', country: 'IL', localeSet: true },
     people: [
       person(DANA, 'דנה', 'parent', '👩', 'f'),

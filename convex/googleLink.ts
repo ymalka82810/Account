@@ -55,7 +55,7 @@ export const applyLink = internalMutation({
       const bad = await checkMyPin(ctx, me, myPin);
       if (bad) return { ok: false as const, reason: bad };
     }
-    await ctx.db.patch(me._id, { email, googleSub: sub, emailVerified: undefined, pendingEmail: undefined });
+    await ctx.db.patch(me._id, { email, googleSub: sub });
     return { ok: true as const, email };
   },
 });

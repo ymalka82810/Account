@@ -34,7 +34,6 @@ export async function setPin(ctx: MutationCtx, personId: Id<"people">, pin: stri
     pinSalt,
     pinHash: await hashPin(pin, pinSalt),
     pinLength: pin.length,
-    pinPlain: undefined,
     freeEntry: undefined,
     failedAttempts: 0,
     lockedUntil: undefined,
@@ -515,7 +514,7 @@ export const resetPin = mutation({
       if (!validPin(pin, target?.role)) throw new ConvexError(pinRuleMessage(target?.role));
       await setPin(ctx, personId, pin);
     } else {
-      await ctx.db.patch(personId, { pinHash: undefined, pinSalt: undefined, pinPlain: undefined, failedAttempts: 0, lockedUntil: undefined, lockLevel: 0, lockCount: 0, lastLockAt: undefined });
+      await ctx.db.patch(personId, { pinHash: undefined, pinSalt: undefined, failedAttempts: 0, lockedUntil: undefined, lockLevel: 0, lockCount: 0, lastLockAt: undefined });
     }
     return { ok: true as const };
   },

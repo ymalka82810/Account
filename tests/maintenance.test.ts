@@ -33,9 +33,9 @@ describe("ניקוי יומי (maintenance.cleanup)", () => {
     expect(left.map((x) => x.key)).toEqual(["new"]);
   });
 
-  it("מוחק קודי מייל שפג תוקפם", async () => {
+  it("מוחק קודי אימות שפג תוקפם", async () => {
     await t.run(async (ctx) => {
-      const base = { personId: A.ids["אבא"], email: "a@b.co", purpose: "verify" as const, codeHash: "h", salt: "s", attempts: 0 };
+      const base = { personId: A.ids["אבא"], purpose: "pinChange" as const, codeHash: "h", salt: "s", attempts: 0 };
       await ctx.db.insert("emailCodes", { ...base, expiresAt: Date.now() - 1 });
       await ctx.db.insert("emailCodes", { ...base, purpose: "pinReset", expiresAt: Date.now() + 60_000 });
     });
@@ -74,15 +74,5 @@ describe("ניקוי יומי (maintenance.cleanup)", () => {
     expect(await count("entries")).toBe(1);
     expect(await count("people")).toBe(2);
     expect(await count("families")).toBe(1);
-  });
-});
-
-describe("clearPinPlain", () => {
-  it("מוחק קודים גלויים ישנים ומחזיר כמה נוקו; ריצה שנייה מחזירה 0", async () => {
-    await t.run((ctx) => ctx.db.patch(A.ids["דנה"], { pinPlain: "1111" } as any));
-    expect(await t.mutation(internal.maintenance.clearPinPlain, {})).toEqual({ cleared: 1 });
-    expect(await t.mutation(internal.maintenance.clearPinPlain, {})).toEqual({ cleared: 0 });
-    const p: any = await t.run((ctx) => ctx.db.get(A.ids["דנה"]));
-    expect(p.pinPlain).toBeUndefined();
   });
 });

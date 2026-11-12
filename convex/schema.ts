@@ -54,8 +54,6 @@ export default defineSchema({
     pinLength: v.optional(v.number()),
     // נוסף בלי קוד סודי (ילד/ה או נער/ה): נכנס/ת בלי קוד, ויכול/ה לקבוע קוד מתי שרוצה. נמחק כשנקבע קוד.
     freeEntry: v.optional(v.boolean()),
-    // הוצא משימוש: כבר לא נכתב. נשאר רק עד שמריצים maintenance:clearPinPlain, ואז מסירים.
-    pinPlain: v.optional(v.string()),
     failedAttempts: v.optional(v.number()),
     lockedUntil: v.optional(v.number()),
     // גיבובי מכשירים מהימנים (עד 5). רק כשלונות מהם נועלים את האדם; ראו lib.ts.
@@ -65,9 +63,6 @@ export default defineSchema({
     // חשבון גוגל מחובר (לכל תפקיד): googleSub = המזהה של Firebase, email = המייל המאומת שלו.
     email: v.optional(v.string()),
     googleSub: v.optional(v.string()),
-    // ישן: אימות מייל בקוד (הוסר). maintenance:clearEmailOnly מנקה, ואז מסירים מכאן.
-    emailVerified: v.optional(v.boolean()),
-    pendingEmail: v.optional(v.string()),
     // להתראה להורה: כמה נעילות היו ומתי הייתה האחרונה. מתאפס כשקובעים קוד חדש.
     lockCount: v.optional(v.number()),
     lastLockAt: v.optional(v.number()),
@@ -160,10 +155,8 @@ export default defineSchema({
   // קודי אימות חד-פעמיים (נשמרים כגיבוב בלבד). השם נשאר מהתקופה שבה נשלחו במייל; היום אף קוד לא נשלח. ראו authCodes.ts.
   emailCodes: defineTable({
     personId: v.id("people"),
-    email: v.string(), // ישן, תמיד ריק
+    email: v.optional(v.string()), // ישן: כבר לא נכתב. להסיר אחרי שהשורות הישנות פגות ונמחקות (maintenance.cleanup)
     purpose: v.union(
-      // ישן: אימות מייל בקוד (הוסר). נשאר רק עד שהשורות הישנות פגות ונמחקות (maintenance.cleanup).
-      v.literal("verify"),
       // אחרי אימות עם חשבון הגוגל המחובר (googleAuth:prove / proveFor)
       v.literal("pinChange"), v.literal("pinReset"), v.literal("childReset"), v.literal("emailChange"), v.literal("deviceFirst"),
       // החלפת מכשיר שאבד (המתנה של 24 שעות): נפרד מ-deviceMove, כדי שלא יהיה אפשר להשתמש בו ב-moveStart ולדלג על ההמתנה

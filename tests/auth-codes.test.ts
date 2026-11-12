@@ -15,7 +15,7 @@ beforeEach(async () => {
 // קוד ידוע מראש (הקוד האמיתי אקראי ומוחזר רק למי שביקש)
 const plant = (code: string, extra: object = {}) =>
   t.run(async (ctx) => ctx.db.insert("emailCodes", {
-    personId: A.ids["אבא"], email: "", purpose: "pinReset", salt: "s", codeHash: await hashPin(code, "s"),
+    personId: A.ids["אבא"], purpose: "pinReset", salt: "s", codeHash: await hashPin(code, "s"),
     expiresAt: Date.now() + 60_000, attempts: 0, ...extra,
   } as any));
 const verify = (code: string, purpose: any = "pinReset") =>

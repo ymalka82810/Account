@@ -6,7 +6,6 @@ import { CODE_MAX_ATTEMPTS, generateCode, hashPin, randomHex, verifyPin } from "
 // אף קוד לא נשלח בשום ערוץ: הוא מוחזר למי שביקש ומשמש מיד, או נמסר ביד.
 //   - אחרי אימות עם חשבון הגוגל המחובר (googleAuth.ts): pinChange, pinReset, childReset, emailChange, deviceFirst, deviceRecovery.
 //   - מוצג על מכשיר קשור / נמסר ביד: deviceMove, deviceBind, deviceAdd.
-// "verify" ישן (אימות מייל בקוד): כבר לא נוצר, ונשאר בסכמה רק עד שהשורות הישנות פגות ונמחקות.
 export type CodePurpose = "pinChange" | "pinReset" | "childReset" | "emailChange" | "deviceMove" | "deviceBind" | "deviceAdd" | "deviceRecovery" | "deviceFirst";
 
 // בודק קוד. מחזיר null (ולא זורק) כדי שספירת הניסיונות תישמר. קוד נכון נמחק (חד-פעמי).
@@ -33,7 +32,6 @@ export async function issueLocalCode(ctx: MutationCtx, person: Doc<"people">, pu
   const salt = randomHex(16);
   await ctx.db.insert("emailCodes", {
     personId: person._id,
-    email: "",
     purpose,
     codeHash: await hashPin(code, salt),
     salt,

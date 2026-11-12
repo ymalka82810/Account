@@ -63,7 +63,7 @@ async function plantCode(personId: any, purpose: "deviceMove" | "deviceBind" | "
     for (const old of await ctx.db.query("emailCodes").withIndex("by_person", (q) => q.eq("personId", personId)).collect()) {
       if (old.purpose === purpose) await ctx.db.delete(old._id);
     }
-    await ctx.db.insert("emailCodes", { personId, email: "", purpose, codeHash: await hashPin(code, "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
+    await ctx.db.insert("emailCodes", { personId, purpose, codeHash: await hashPin(code, "s"), salt: "s", expiresAt: Date.now() + 600_000, attempts: 0 });
   });
 }
 const linkGoogle = (id: any) => t.run(async (ctx) => { await ctx.db.patch(id, { email: "p@example.com", googleSub: "g-" + id }); });
